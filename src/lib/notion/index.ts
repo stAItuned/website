@@ -13,8 +13,6 @@ const notion = new Client({
 const n2m = new NotionToMarkdown({ notionClient: notion })
 
 export async function getArticleMetas() {
-	console.log(import.meta.env.VITE_NOTION_API_KEY)
-
 	const rawArticles = await notion.databases.query({
 		database_id: CONFIG.notion.articlesDatabaseId
 	})
@@ -25,11 +23,23 @@ export async function getArticleMetas() {
 			const mdString = n2m.toMarkdownString(mdblocks)
 			const parsedContent = marked.parse(mdString)
 
+			//console.log(JSON.stringify(raw, null, 4))
+
+			const authorPage = await notion.pages.retrieve({
+				page_id: raw?.properties?.Author?.relation[0].id
+			})
+
+			const author = authorPage?.properties?.Name.title[0].plain_text
+
+			//console.log(JSON.stringify(raw, null, 4))
+
 			return {
+				author,
 				title: raw?.properties?.Name?.title[0]?.plain_text,
-				tags: raw?.properties?.Tags.multi_select.map((x) => x.name),
+				tags: raw?.properties?.Topic.multi_select.map((x) => x.name),
 				slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
-				description: raw?.properties?.Description?.rich_text[0]?.plain_text
+				description: raw?.properties?.Description?.rich_text[0]?.plain_text,
+				publishDate: raw?.properties['Publish Date'].date?.start
 			} as ArticleMeta
 		})
 	)
@@ -38,8 +48,6 @@ export async function getArticleMetas() {
 }
 
 export async function getArticleBySlug(slug: string) {
-	console.log(import.meta.env.VITE_NOTION_API_KEY)
-
 	const rawArticles = await notion.databases.query({
 		database_id: CONFIG.notion.articlesDatabaseId,
 		filter: {
@@ -57,10 +65,12 @@ export async function getArticleBySlug(slug: string) {
 	const parsedContent = marked.parse(mdString)
 
 	const article = {
-		title: raw?.properties?.Name?.title[0]?.plain_text,
-		tags: raw?.properties?.Tags.multi_select.map((x) => x.name),
-		slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
-		description: raw?.properties?.Description?.rich_text[0]?.plain_text,
+		meta: {
+			title: raw?.properties?.Name?.title[0]?.plain_text,
+			tags: raw?.properties?.Topic.multi_select.map((x) => x.name),
+			slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
+			description: raw?.properties?.Description?.rich_text[0]?.plain_text
+		},
 		parsedContent
 	} as Article
 

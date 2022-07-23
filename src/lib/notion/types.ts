@@ -3,6 +3,8 @@ export interface ArticleMeta {
 	description: string
 	tags: string[]
 	slug: string
+	author: string
+	publishDate: string
 }
 
 export interface Article {

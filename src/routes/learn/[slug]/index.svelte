@@ -6,7 +6,7 @@
 </script>
 
 <article class="prose prose-xl m-auto">
-	<h1 class="text-6xl w-max m-auto">{article.title}</h1>
+	<h1 class="text-6xl w-max m-auto">{article.meta.title.trim()}</h1>
 
 	{@html article.parsedContent}
 </article>

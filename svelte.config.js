@@ -1,5 +1,5 @@
-import adapter from '@sveltejs/adapter-auto';
-import preprocess from 'svelte-preprocess';
+import adapter from '@sveltejs/adapter-auto'
+import preprocess from 'svelte-preprocess'
 import path from 'path'
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -21,11 +21,12 @@ const config = {
 					'@lib': path.resolve('./src/lib'),
 					'@config': path.resolve('./src/config'),
 					'@components': path.resolve('./src/components'),
-					'@stores': path.resolve('./src/stores')
+					'@stores': path.resolve('./src/stores'),
+					'@features': path.resolve('./src/features')
 				}
-			},
+			}
 		}
-	},
-};
+	}
+}
 
-export default config;
+export default config
