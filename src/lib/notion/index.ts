@@ -35,7 +35,7 @@ export async function getArticleMetas() {
 
 			return {
 				author,
-				title: raw?.properties?.Name?.title[0]?.plain_text,
+				title: raw?.properties?.Title?.title[0]?.plain_text,
 				tags: raw?.properties?.Topic.multi_select.map((x) => x.name),
 				slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
 				description: raw?.properties?.Description?.rich_text[0]?.plain_text,
@@ -66,7 +66,7 @@ export async function getArticleBySlug(slug: string) {
 
 	const article = {
 		meta: {
-			title: raw?.properties?.Name?.title[0]?.plain_text,
+			title: raw?.properties?.Title?.title[0]?.plain_text,
 			tags: raw?.properties?.Topic.multi_select.map((x) => x.name),
 			slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
 			description: raw?.properties?.Description?.rich_text[0]?.plain_text
