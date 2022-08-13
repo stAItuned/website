@@ -3,7 +3,7 @@
 </script>
 
 <footer
-	class="flex shadow-xl px-16 py-4 rounded-tl-[30px] rounded-tr-[30px] bg-primary-600 w-full h-[90px] justify-between"
+	class="flex shadow-xl px-16 py-4 rounded-tl-[30px] bg-primary-600 w-full h-[90px] justify-between"
 >
 
     <div class="grid grid-cols-3 bg-primary-600 pb-4 uppercase">
