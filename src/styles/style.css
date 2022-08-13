@@ -1,0 +1,23 @@
+.bg-themes {
+    text-align: center;
+    position: relative;
+    padding:0
+}
+
+.bg-themes img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    opacity: 0.4;
+}
+
+.bg-themes p {
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  color: white;
+}
+
+.no-padding {
+    padding: 0;
+}

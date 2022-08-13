@@ -1264,6 +1264,14 @@ video {
   height: 40px;
 }
 
+.h-\[500px\] {
+  height: 500px;
+}
+
+.h-\[200px\] {
+  height: 200px;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1288,10 +1296,6 @@ video {
 
 .w-\[50px\] {
   width: 50px;
-}
-
-.w-\[700px\] {
-  width: 700px;
 }
 
 .grid-cols-6 {
@@ -1332,6 +1336,10 @@ video {
 
 .gap-16 {
   gap: 4rem;
+}
+
+.gap-0 {
+  gap: 0px;
 }
 
 .self-start {

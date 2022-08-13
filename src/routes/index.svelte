@@ -38,3 +38,34 @@
 		<div class="self-end  text-center text-xl font-bold pt-4">Relevant Articles</div>
 	</div>
 </section>
+
+<section class="bg-stayYellow-600 h-full  text-white py-4">
+	<div class="grid grid-cols-2 bg-primary-600 pb-4 uppercase no-padding">
+		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+			<center>
+				<img src="assets/general/bg-1.jpeg" />
+				<p>Machine Learning Theory</p>
+			</center>
+		</div>
+		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+			<center>
+				<img src="assets/general/bg-1.jpeg" />
+				<p>Natural Language Processing</p>
+			</center>		
+		</div>
+	</div>
+	<div class="grid grid-cols-2 bg-primary-600 pb-4 uppercase no-padding">
+		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+			<center>
+				<img src="assets/general/bg-1.jpeg" />
+				<p>Computer Vision</p>
+			</center>
+		</div>
+		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+			<center>
+				<img src="assets/general/bg-1.jpeg" />
+				<p>Edge AI</p>
+			</center>		
+		</div>
+	</div>
+</section>
