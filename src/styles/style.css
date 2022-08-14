@@ -66,3 +66,29 @@
     background-color: rgb(26 30 59);
     color: white;
 }
+
+/* --- MEET US --- */
+
+.motto {
+    margin: auto;
+    border-radius: 50px;
+}
+
+.team-card {
+    height: 300px;
+    width: 300px;
+    background-color:#efeeee;
+    border-radius: 20px;
+    position: relative;
+}
+
+.button-team {
+    height: 50px;
+    width: 80%;
+    background-color:rgb(26 30 59);
+    border-radius: 20px;
+    position: absolute;
+    bottom: 30px;
+    left: 10%;
+    padding: 3%;
+}
