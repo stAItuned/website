@@ -18,8 +18,8 @@
     </p>
 
     <form class="container-form">
-        <input type="text" id="fname" name="fname" placeholder="Name*" required><br>
-        <input type="text" id="fsurname" name="fsurname" placeholder="Surname*" required><br>
+        <input type="text" id="fname" name="fname" placeholder="Name and surname*" required><br>
+        <input type="text" id="fobject" name="fobject" placeholder="Object*" required><br>
         <input type="text" id="femail" name="femail" placeholder="Email*" required><br>
         <input type="textarea" id="ftext" name="ftext" placeholder="Text*" required><br>
         <input type="submit" value="Send">
