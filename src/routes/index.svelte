@@ -2,7 +2,7 @@
 </script>
 
 <section class="bg-bgGradient w-full py-[50px]">
-	<!-- <img src="/assets/general/bock.svg w-full" alt="stAI" /> -->
+
 	<div class="relative bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl">
 		<img
 			class="absolute top-[50px] left-[100px] w-[60vw] object-contain]"
@@ -18,52 +18,55 @@
 			<p class="text-white text-xl">your sharing spot</p>
 		</div>
 	</div>
-</section>
+</section> 
 
-<section class="bg-stayYellow-600 h-full  text-white py-4">
-	<div class="grid grid-cols-6 gap-4 bg-black h-[100px] text-2xl font-bold">
-		<div class="bg-primary-600 text-center pt-4">120</div>
-		<div class="bg-primary-600 text-center pt-4">50</div>
-		<div class="bg-primary-600 text-center pt-4">15</div>
-		<div class="bg-primary-600 text-center pt-4">20</div>
-		<div class="bg-primary-600 text-center pt-4">200</div>
-		<div class="bg-primary-600 text-center pt-4">25</div>
+<section class="bg-stayYellow-600 h-full  text-white py-4 w-full">
+	<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-4 bg-black h-full md:text-2xl sm:text-xl font-bold">
+		<div class="bg-primary-600 text-center py-4 w-auto">120</div>
+		<div class="bg-primary-600 text-center py-4 w-auto">50</div>
+		<div class="bg-primary-600 text-center py-4 w-auto">15</div>
+		<div class="bg-primary-600 text-center py-4 w-auto">20</div>
+		<div class="bg-primary-600 text-center py-4 w-auto">200</div>
+		<div class="bg-primary-600 text-center py-4 w-auto">25</div>
 	</div>
 </section>
-<section class="bg-stayYellow-600 h-full  text-white py-4">
-	<div class="grid grid-cols-2 gap-4 bg-primary-600 pb-4 h-[100px] uppercase">
-		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4">
-			Recent Articles
+
+<section class="bg-stayYellow-600 h-full  text-white pb-4">
+	<div class="grid grid-cols-2 gap-4 bg-primary-600 h-[100px] uppercase">
+		<div class="text-center md:text-xl sm:text-l font-bold text-stayYellow-600 py-4">
+			Recent <br /> Articles
 		</div>
-		<div class="self-end  text-center text-xl font-bold pt-4">Relevant Articles</div>
+		<div class="text-center md:text-xl sm:text-l font-bold py-4">
+			Relevant <br /> Articles
+		</div>
 	</div>
 </section>
 
-<section class="bg-stayYellow-600 h-full  text-white py-4">
-	<div class="grid grid-cols-2 bg-primary-600 pb-4 uppercase no-padding">
-		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+<section class="bg-stayYellow-600 h-full  text-white pb-4">
+	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 pb-4 uppercase no-padding">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" />
+				<img src="assets/general/bg-1.jpeg" alt="bg" />
 				<p>Machine Learning Theory</p>
 			</center>
 		</div>
-		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" />
+				<img src="assets/general/bg-1.jpeg" alt="bg" />
 				<p>Natural Language Processing</p>
 			</center>		
 		</div>
 	</div>
-	<div class="grid grid-cols-2 bg-primary-600 pb-4 uppercase no-padding">
-		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 pb-4 uppercase no-padding">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" />
+				<img src="assets/general/bg-1.jpeg" alt="bg" />
 				<p>Computer Vision</p>
 			</center>
 		</div>
-		<div class="self-end  text-center text-xl font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" />
+				<img src="assets/general/bg-1.jpeg" alt="bg" />
 				<p>Edge AI</p>
 			</center>		
 		</div>
