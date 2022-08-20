@@ -4,7 +4,8 @@
 	import { Header, Footer } from '@features/header/index.ts'
 </script>
 
-<Header />
+
+<!-- <Header /> -->
 
 <main>
 	<slot />

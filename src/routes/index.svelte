@@ -45,14 +45,13 @@
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 pb-4 uppercase no-padding">
 		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
-			<center>
-				<img src="assets/general/bg-1.jpeg" alt="bg" />
+				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
 				<p>Machine Learning Theory</p>
-			</center>
+
 		</div>
 		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" alt="bg" />
+				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
 				<p>Natural Language Processing</p>
 			</center>		
 		</div>
@@ -60,13 +59,13 @@
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 pb-4 uppercase no-padding">
 		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" alt="bg" />
+				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
 				<p>Computer Vision</p>
 			</center>
 		</div>
 		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
 			<center>
-				<img src="assets/general/bg-1.jpeg" alt="bg" />
+				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
 				<p>Edge AI</p>
 			</center>		
 		</div>
