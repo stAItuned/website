@@ -3,15 +3,17 @@
 
 <section class="bg-bgGradient w-full py-[50px]">
 
-	<div class="relative bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl">
-		<img
-			class="absolute top-[50px] left-[100px] w-[60vw] object-contain]"
-			src="/assets/general/logo.svg"
-			alt="logo"
-		/>
-		<div class="absolute bottom-[100px] right-[100px] flex flex-col items-end">
+	<div class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center">
+		<center>
 			<img
-				class="w-[500px] text-white  ml-[100px] mt-[200px]"
+				class="top-[50px] left-[100px] w-[50vw] object-contain] self-end"
+				src="/assets/general/logo.svg"
+				alt="logo"
+			/>
+		</center>
+		<div class="flex flex-col items-end p-10">
+			<img
+				class="w-[500px] text-white  ml-[100px] mt-[200px] mt-0"
 				src="/assets/general/logo-text.svg"
 				alt="logo"
 			/>
