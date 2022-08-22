@@ -62,7 +62,14 @@ export async function getArticleBySlug(slug: string) {
 
 	const mdblocks = await n2m.pageToMarkdown(raw.id)
 	const mdString = n2m.toMarkdownString(mdblocks)
-	const parsedContent = marked.parse(mdString)
+
+	let imageRegex: RegExp = /<img[^>]+src="([^">]+)[^>]+?alt="([^">]+)"?>/;
+	let parsedContent = marked.parse(mdString)
+
+	/* center images */
+	parsedContent = parsedContent.replace(imageRegex,'<center><img src="$1" alt="$2" /></center>')
+
+	
 
 	const article = {
 		meta: {
@@ -73,6 +80,7 @@ export async function getArticleBySlug(slug: string) {
 		},
 		parsedContent
 	} as Article
+
 
 	return article
 }
