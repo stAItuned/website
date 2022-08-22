@@ -9,13 +9,13 @@
     <div class="grid grid-cols-3 bg-primary-600 pb-4 uppercase text-white text-sm">
         
         <div class="self-end pt-4 bg-themes social">
-			<center><img src="static/assets/general/ig-logo.png" alt="ig-logo"/></center>
+			<center><img src="assets/general/ig-logo.png" alt="ig-logo"/></center>
 		</div>
         <div class="self-end pt-4 bg-themes social">
-			<center><img src="static/assets/general/ig-logo.png" alt="ig-logo"/></center>
+			<center><img src="assets/general/ig-logo.png" alt="ig-logo"/></center>
 		</div>
         <div class="self-end pt-4 bg-themes social">
-			<center><img src="static/assets/general/ig-logo.png" alt="ig-logo"/></center>
+			<center><img src="assets/general/ig-logo.png" alt="ig-logo"/></center>
 		</div>
 
     </div>
