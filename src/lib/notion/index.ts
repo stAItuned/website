@@ -38,6 +38,7 @@ export async function getArticleMetas() {
 				title: raw?.properties?.Title?.title[0]?.plain_text,
 				tags: raw?.properties?.Topic.multi_select.map((x) => x.name),
 				slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
+				meta: raw?.properties?.Meta?.rich_text[0]?.plain_text,
 				description: raw?.properties?.Description?.rich_text[0]?.plain_text,
 				publishDate: raw?.properties['Publish Date'].date?.start
 			} as ArticleMeta

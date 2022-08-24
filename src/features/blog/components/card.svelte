@@ -1,10 +1,58 @@
 <script lang="ts">
-	import type { Article, ArticleMeta } from '@lib/notion'
+	import type { ArticleMeta } from '@lib/notion'
 
 	export let articleMeta: ArticleMeta
+
+	import {
+    Card,
+    CardTitle,
+    CardSubtitle,
+    CardActions,
+    Button,
+    Icon,
+    Divider,
+    MaterialApp } from 'svelte-materialify';
+  import { slide } from 'svelte/transition';
+
+
+  let active = false;
+  function toggle() {
+    active = !active;
+  }
 </script>
 
 
+  <div class="d-flex m-4 max-w-xs">
+	<Card class="w-max">
+		<a class="text-3xl" href="/learn/{articleMeta.slug}">
+			<img src="assets/general/bg-1.jpeg" alt="background" class="max-w-xs h-auto "/>
+		
+			<div class="h-72">
+				<p class="text-bold text-sm p-4 pb-0 uppercase">{articleMeta.tags[0]}</p>
+				<p class="text-bold text-md text-bold pl-4 pb-4 pt-0">{articleMeta.title}</p>
+
+				<p class="text-bold text-sm text-left text-bold pl-4 pb-4 pt-0">{articleMeta.meta}</p>
+			</div>
+		</a>
+		
+	  	<hr />
+	  
+		<div class="flex p-2 max-h-12">
+				<div class="pr-4">
+					<img src="assets/general/avatar.png" alt="avatar" class="max-h-8"/>
+				</div>
+				<div class="grid grod-cols-1 p-0">
+					<span><p class="flex text-xs mb-0">{articleMeta.author}</p></span>
+					<span><p class="flex text-xs">{articleMeta.publishDate}</p></span>
+				</div>
+		</div>
+	</Card>
+  </div>
+
+
+
+
+<!-- 
 <a class="text-3xl" href="/learn/{articleMeta.slug}">
 	<div
 		class="flex flex-col rounded-md shadow-lg hover:cursor-pointer w-[400px] h-[450px] bg-bgLearnCard bg-no-repeat bg-[length:200%_200%] bg-center"
@@ -31,4 +79,4 @@
 			</div>
 		</div>
 	</div>
-</a>
+</a> -->
