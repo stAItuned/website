@@ -3,7 +3,7 @@
 
 <div class="grid grid-cols-1 justify-between"> <!-- generalize! -->
     
-    <div class="w-9/12 sm:text-l md:text-xl m-auto w-[300px] h-max py-10">
+    <div class="w-9/12 sm:text-xl md:text-2xl m-auto h-max py-10">
         
         <!-- adjust text ? -->
         <p style="text-color:rgb(26 30 59)"><b>Have you always wanted to exchange opinions about Artificial Intelligence?</b></p>

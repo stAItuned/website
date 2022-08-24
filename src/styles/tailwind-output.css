@@ -1176,6 +1176,14 @@ video {
   margin-bottom: 0;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
 .absolute {
   position: absolute;
 }
@@ -1206,6 +1214,10 @@ video {
 
 .m-10 {
   margin: 2.5rem;
+}
+
+.m-5 {
+  margin: 1.25rem;
 }
 
 .ml-\[100px\] {
@@ -1254,6 +1266,30 @@ video {
 
 .mt-10 {
   margin-top: 2.5rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
 }
 
 .flex {
@@ -1344,6 +1380,34 @@ video {
 
 .h-40 {
   height: 10rem;
+}
+
+.h-\[50px\] {
+  height: 50px;
+}
+
+.h-\[40pc\] {
+  height: 40pc;
+}
+
+.h-12 {
+  height: 3rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-20 {
+  height: 5rem;
+}
+
+.h-96 {
+  height: 24rem;
 }
 
 .max-h-12 {
@@ -1641,6 +1705,10 @@ video {
   padding: 3rem;
 }
 
+.p-5 {
+  padding: 1.25rem;
+}
+
 .py-\[50px\] {
   padding-top: 50px;
   padding-bottom: 50px;
@@ -1830,6 +1898,26 @@ video {
   -webkit-line-clamp: 5;
 }
 
+.hover\:visible:hover {
+  visibility: visible;
+}
+
+.hover\:invisible:hover {
+  visibility: hidden;
+}
+
+.hover\:h-\[30px\]:hover {
+  height: 30px;
+}
+
+.hover\:h-\[80px\]:hover {
+  height: 80px;
+}
+
+.hover\:h-\[100px\]:hover {
+  height: 100px;
+}
+
 .hover\:cursor-pointer:hover {
   cursor: pointer;
 }
@@ -1839,9 +1927,21 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.hover\:ring:hover {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+.focus-visible\:ring:focus-visible {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
 @media (min-width: 640px) {
