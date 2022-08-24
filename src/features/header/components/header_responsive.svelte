@@ -12,7 +12,7 @@
 			<Hamburger bind:open={sidebar}/>
 		</nav>
 
-		<img class="w-80px h-[40px]" src="/assets/general/logo-text.svg" alt="logo" />
+		<a href="/"><img class="w-80px h-[40px]" src="/assets/general/logo-text.svg" alt="logo" /></a>
 	</div>
 
 	<nav class="text-white justify-self-end font-semibold text-xl self-center hidden lg:block">
