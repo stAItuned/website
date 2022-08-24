@@ -24,12 +24,12 @@
 
 <section class="bg-stayYellow-600 h-full  text-white py-4 w-full">
 	<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-4 bg-black h-full md:text-2xl sm:text-xl font-bold">
-		<div class="bg-primary-600 text-center py-4 w-auto">120</div>
-		<div class="bg-primary-600 text-center py-4 w-auto">50</div>
-		<div class="bg-primary-600 text-center py-4 w-auto">15</div>
-		<div class="bg-primary-600 text-center py-4 w-auto">20</div>
-		<div class="bg-primary-600 text-center py-4 w-auto">200</div>
-		<div class="bg-primary-600 text-center py-4 w-auto">25</div>
+		<div class="bg-primary-600 text-center py-4 w-auto uppercase">120 <br />reading hours</div>
+		<div class="bg-primary-600 text-center py-4 w-auto uppercase">50<br />articles</div>
+		<div class="bg-primary-600 text-center py-4 w-auto uppercase">15<br />topics</div>
+		<div class="bg-primary-600 text-center py-4 w-auto uppercase">20<br />resources</div>
+		<div class="bg-primary-600 text-center py-4 w-auto uppercase">200<br />active users</div>
+		<div class="bg-primary-600 text-center py-4 w-auto uppercase">25<br />team members</div>
 	</div>
 </section>
 
