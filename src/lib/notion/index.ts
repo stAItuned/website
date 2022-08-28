@@ -31,7 +31,8 @@ export async function getArticleMetas() {
 
 			const author = authorPage?.properties?.Name.title[0].plain_text
 
-			//console.log(JSON.stringify(raw, null, 4))
+
+			// console.log(JSON.stringify(raw, null, 4))
 
 			return {
 				author,
@@ -40,7 +41,8 @@ export async function getArticleMetas() {
 				slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
 				meta: raw?.properties?.Meta?.rich_text[0]?.plain_text,
 				description: raw?.properties?.Description?.rich_text[0]?.plain_text,
-				publishDate: raw?.properties['Publish Date'].date?.start
+				publishDate: raw?.properties['Publish Date'].date?.start,
+				readingTime: Math.round(parseFloat(JSON.stringify(raw?.properties?.ReadingTime?.formula?.number))),
 			} as ArticleMeta
 		})
 	)
