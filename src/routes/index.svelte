@@ -6,14 +6,14 @@
 	<div class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center">
 		<center>
 			<img
-				class="top-[50px] left-[100px] w-[50vw] object-contain] self-end"
+				class="z-1 top-[50px] left-[100px] w-[50vw] object-contain] self-end"
 				src="/assets/general/logo.svg"
 				alt="logo"
 			/>
 		</center>
 		<div class="flex flex-col items-end p-10">
 			<img
-				class="w-[500px] text-white  ml-[100px] mt-[200px] mt-0"
+				class="z-1 w-[500px] text-white  ml-[100px] mt-[200px] mt-0"
 				src="/assets/general/logo-text.svg"
 				alt="logo"
 			/>

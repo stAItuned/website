@@ -3,7 +3,7 @@
 	export let open = false
 </script>
 
-<aside class="absolute w-full h-full bg-primary-600 border-r-2 shadow-lg" class:open>
+<aside class="absolute z-20 w-full h-full bg-primary-600 border-r-2 shadow-lg" class:open>
 	<center>
 		
 		<nav class="p-12 text-3xl text-white text-bold">

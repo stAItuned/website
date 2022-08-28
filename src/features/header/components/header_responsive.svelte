@@ -8,7 +8,8 @@
 <header class="flex shadow-xl px-16 py-4 rounded-bl-[30px] bg-primary-600 w-full h-[90px] justify-between">
 	
 	<div class="flex"> 
-		<nav class="flex">
+		
+		<nav class="flex z-20">
 			<Hamburger bind:open={sidebar}/>
 		</nav>
 
