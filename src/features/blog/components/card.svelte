@@ -37,13 +37,13 @@
 		
 	  	<hr />
 	  
-		<div class="flex p-2 max-h-12">
+		<div class="flex p-2 max-h-20">
 				<div class="pr-4">
 					<img src="assets/general/avatar.png" alt="avatar" class="max-h-8"/>
 				</div>
 				<div class="grid grod-cols-1 p-0">
 					<span><p class="flex text-xs mb-0">{articleMeta.author}</p></span>
-					<span><p class="flex text-xs">{articleMeta.publishDate}</p></span>
+					<span><p class="flex text-xs">{articleMeta.publishDate} • {articleMeta.readingTime} min</p></span>
 				</div>
 		</div>
 	</Card>
