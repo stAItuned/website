@@ -8,7 +8,7 @@
 
 
 <Sidebar bind:open/>
-	<HeaderResponsive bind:sidebar={open}/>
+<HeaderResponsive bind:sidebar={open}/>
 
 
 <main>
