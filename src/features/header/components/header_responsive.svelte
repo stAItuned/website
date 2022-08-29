@@ -9,7 +9,7 @@
 	
 	<div class="flex"> 
 		
-		<nav class="flex z-20">
+		<nav class="flex z-20 lg:invisible">
 			<Hamburger bind:open={sidebar}/>
 		</nav>
 
