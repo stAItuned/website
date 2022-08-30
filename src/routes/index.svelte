@@ -6,7 +6,7 @@
 	<div class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center">
 		<center>
 			<img
-				class="z-1 top-[50px] left-[100px] w-[50vw] object-contain] self-end"
+				class="z-1 top-[50px] left-[100px] w-[50vw] max-h-[380px] object-contain  self-end"
 				src="/assets/general/logo.svg"
 				alt="logo"
 			/>
