@@ -26,7 +26,7 @@
 
 
 
-<article class="prose prose-xl m-auto mt-10 mb-20">
+<article class="prose prose-xl text-sm md:text-md lg:text-lg m-auto mt-10 mb-20">
 	<!-- the title is already inside the article -->
 		
 	<!--
