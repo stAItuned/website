@@ -45,30 +45,30 @@
 </section>
 
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
-	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 pb-4 uppercase no-padding">
-		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
-				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
-				<p>Machine Learning Theory</p>
+	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding m-0">
+		<div class="self-center  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
+				<img src="assets/general/bg-1.jpeg" class="w-full object-fill" alt="bg"  />
+				<p class="text-left">Machine Learning Theory</p>
 
 		</div>
-		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
 			<center>
 				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
-				<p>Natural Language Processing</p>
+				<p class="text-left">Natural Language Processing</p>
 			</center>		
 		</div>
 	</div>
-	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 pb-4 uppercase no-padding">
-		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
 			<center>
 				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
-				<p>Computer Vision</p>
+				<p class="text-left">Computer Vision</p>
 			</center>
 		</div>
-		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 pt-4 h-[200px] bg-themes">
+		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
 			<center>
 				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
-				<p>Edge AI</p>
+				<p class="text-left">Edge AI</p>
 			</center>		
 		</div>
 	</div>
