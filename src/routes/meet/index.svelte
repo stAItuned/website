@@ -3,7 +3,7 @@
 
 <div class="grid grid-cols-1 justify-between"> <!-- generalize! -->
     
-    <div class="w-9/12 sm:text-xl md:text-2xl m-auto h-max py-10">
+    <div class="w-9/12 sm:text-sm md:text-lg  m-auto h-max py-10">
         
         <!-- adjust text ? -->
         <p style="text-color:rgb(26 30 59)"><b>Have you always wanted to exchange opinions about Artificial Intelligence?</b></p>
@@ -32,11 +32,21 @@
 
 </div>
 
-<section class="items-center">
+<section class="items-center ">
     <center>
-    <div class="w-4/6 h-4/6 bg-primary-600 motto text-center sm:text-xl md:text-2xl lg:text-3xl font-bold text-white content-center">
-        <p><br /><br /><br />This is our motto.</p><br /><br />
-    </div>
+        <div class="sm:w-6/6 md:w-5/6 lg:w-4/6 bg-primary-500 bg-bgGraph bg-cover bg-center rounded-3xl">
+            <img src="assets/mission/Ai logo.svg" alt="logo" class="top-[50px] left-[100px] w-[50vw] max-h-[380px] object-contain  self-end"/>
+
+            <div class="flex flex-col items-end p-10">
+                <img
+                    class="z-1 w-[500px] text-white  ml-[100px] mt-[200px] mt-0"
+                    src="/assets/general/logo-text.svg"
+                    alt="logo"
+                />
+                <p class="text-white text-xl">your sharing spot</p>
+            </div>
+        </div>
+        
     </center>
 </section>
 
