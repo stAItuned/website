@@ -5,6 +5,7 @@ export interface ArticleMeta {
 	slug: string
 	author: string
 	publishDate: string
+	readingTime: number
 }
 
 export interface Article {
