@@ -17,7 +17,7 @@
                 shadow-xl" placeholder="  Search">
 
 
-    <HamburgerFilters bind:open_filters={open_filters}/>
+    <HamburgerFilters bind:open_filters/>
 
     <SidebarFilters bind:open_filters/>
 
