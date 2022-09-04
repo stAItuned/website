@@ -1612,6 +1612,12 @@ select {
   width: 1.5rem;
 }
 
+.w-min {
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+}
+
 .min-w-full {
   min-width: 100%;
 }
