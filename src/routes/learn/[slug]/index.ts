@@ -1,7 +1,8 @@
-import { getArticleBySlug } from '@lib/notion'
+import { getArticleBySlug, type Article } from '@lib/notion'
+import type { RequestHandler } from './__types'
 
-/** @type {import('./__types/[slug]').RequestHandler} */
-export async function get({ params }) {
+
+export const get: RequestHandler<{article: Article}> = async ({ params }) => {
 	const article = await getArticleBySlug(params.slug)
 
 	return {

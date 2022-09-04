@@ -1,6 +1,6 @@
-import marked from 'marked'
 import { CONFIG } from '@config'
 import { Client } from '@notionhq/client'
+import { marked } from 'marked'
 import { NotionToMarkdown } from 'notion-to-md'
 import type { Article, ArticleMeta } from './types'
 export * from './types'
@@ -66,20 +66,27 @@ export async function getArticleBySlug(slug: string) {
 	const mdblocks = await n2m.pageToMarkdown(raw.id)
 	const mdString = n2m.toMarkdownString(mdblocks)
 
-	let imageRegex: RegExp = /<img[^>]+src="([^">]+)[^>]+?alt="([^">]+)"?>/;
+	let imageRegex: RegExp = /<img[^>]+src="([^">]+)[^>]+?alt="([^">]*)"?>/ig;
 	let parsedContent = marked.parse(mdString)
 
 	/* center images */
-	parsedContent = parsedContent.replace(imageRegex,'<center><img src="$1" alt="$2" /></center>')
+	parsedContent = parsedContent.replaceAll(imageRegex,'<center><img class="article-img" src="$1" alt="$2" /></center>')
 
-	
+	const authorPage = await notion.pages.retrieve({
+		page_id: raw?.properties?.Author?.relation[0].id
+	})
+
+	const author = authorPage?.properties?.Name.title[0].plain_text
 
 	const article = {
 		meta: {
+			author,
 			title: raw?.properties?.Title?.title[0]?.plain_text,
 			tags: raw?.properties?.Topic.multi_select.map((x) => x.name),
 			slug: raw?.properties?.Slug?.rich_text[0]?.plain_text,
-			description: raw?.properties?.Description?.rich_text[0]?.plain_text
+			description: raw?.properties?.Description?.rich_text[0]?.plain_text,
+			readingTime: Math.round(parseFloat(JSON.stringify(raw?.properties?.ReadingTime?.formula?.number))),
+			publishDate: raw?.properties['Publish Date'].date?.start,
 		},
 		parsedContent
 	} as Article
