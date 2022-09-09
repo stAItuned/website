@@ -1,13 +1,11 @@
-import { getArticleMetas } from '@lib/notion'
-
-/** @type {import('./__types/[id]').RequestHandler} */
+import { getAllArticles } from '@lib/git'
 export async function get() {
 	// `params.id` comes from [id].js
 
-	const articleMetas = await getArticleMetas()
-
+	const articles = getAllArticles()
+	console.log(`Loaded /learn - Read ${articles.length} articles`)
 	return {
-		body: { articleMetas }
+		body: { articles: articles }
 	}
 
 }

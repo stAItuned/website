@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Article } from '@lib/notion'
+	import type { Article } from '@lib/git/types'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
 	import { onMount } from 'svelte'
@@ -29,7 +29,7 @@
 		}
 	})
 
-	const localtime = new Date(article.meta.publishDate).toLocaleDateString(undefined, {
+	const localtime = new Date(article.metadata.date).toLocaleDateString(undefined, {
 		year: '2-digit',
 		month: 'long',
 		day: 'numeric'
@@ -37,8 +37,8 @@
 
 	const share = async () => {
 		const shareData = {
-			title: article.meta.title,
-			text: article.meta.description,
+			title: article.metadata.title,
+			// text: article.meta.description,
 			url: window.location.href
 		}
 		try {
@@ -80,7 +80,7 @@
 				/>
 			</svg>
 
-			{article.meta.author}
+			{article.metadata.author}
 		</div>
 		<div class="article-metadata-item">
 			<svg
@@ -97,7 +97,7 @@
 					d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
 				/>
 			</svg>
-			<time datetime={article.meta.publishDate}>{localtime}</time>
+			<time datetime={article.metadata.date}>{localtime}</time>
 		</div>
 		<div class="article-metadata-item">
 			<svg
@@ -114,7 +114,8 @@
 					d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
 				/>
 			</svg>
-			{article.meta.readingTime}m
+			2m
+			<!-- {article.meta.readingTime}m -->
 		</div>
 		<div class="article-metadata-item">
 			{#if shared}
@@ -154,7 +155,7 @@
 			{/if}
 		</div>
 	</div>
-	{@html article.parsedContent}
+	{@html article.content}
 </article>
 
 <style>
