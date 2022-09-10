@@ -2169,10 +2169,6 @@ select {
     visibility: hidden;
   }
 
-  .lg\:relative {
-    position: relative;
-  }
-
   .lg\:block {
     display: block;
   }
