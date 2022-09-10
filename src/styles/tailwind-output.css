@@ -1359,6 +1359,10 @@ select {
   position: absolute;
 }
 
+.relative {
+  position: relative;
+}
+
 .top-\[50px\] {
   top: 50px;
 }

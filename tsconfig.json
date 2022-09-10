@@ -14,7 +14,10 @@
 			"@components/*": ["src/components/*"],
 			"@stores/*": ["src/stores/*"],
 			"@config": ["src/config"],
-			"@features/*": ["src/features/*"]
+			"@features/*": ["src/features/*"],
+			"@posts/*": ["posts/*"],
+			"$lib":["src/lib"],
+			"$lib/*":["src/lib/*"]
 		}
 	}
 }

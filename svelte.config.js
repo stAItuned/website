@@ -16,16 +16,23 @@ const config = {
 			allowed: ['PATCH', 'DELETE']
 		},
 		vite: {
+			server: {
+				fs: {
+					allow: "./static"
+				}
+			},
 			resolve: {
 				alias: {
 					'@lib': path.resolve('./src/lib'),
 					'@config': path.resolve('./src/config'),
 					'@components': path.resolve('./src/components'),
 					'@stores': path.resolve('./src/stores'),
-					'@features': path.resolve('./src/features')
+					'@features': path.resolve('./src/features'),
+					'@posts': path.resolve('./posts')
 				}
 			}
-		}
+		},
+		
 	}
 }
 

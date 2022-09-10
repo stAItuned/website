@@ -1,56 +1,61 @@
 <script lang="ts">
+	import type { Article } from '@lib/git/types'
+
 	import type { ArticleMeta } from '@lib/notion'
 
-	export let articleMeta: ArticleMeta
+	// export let articleMeta: ArticleMeta
+	export let article: Article
 
 	import {
-    Card,
-    CardTitle,
-    CardSubtitle,
-    CardActions,
-    Button,
-    Icon,
-    Divider,
-    MaterialApp } from 'svelte-materialify';
-  import { slide } from 'svelte/transition';
+		Card,
+		CardTitle,
+		CardSubtitle,
+		CardActions,
+		Button,
+		Icon,
+		Divider,
+		MaterialApp
+	} from 'svelte-materialify'
+	import { slide } from 'svelte/transition'
 
+	let active = false
+	function toggle() {
+		active = !active
+	}
 
-  let active = false;
-  function toggle() {
-    active = !active;
-  }
+	const cleanDate = new Date(article.metadata.date).toLocaleDateString(undefined, {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	})
 </script>
 
-
-  <div class="d-flex m-4 max-w-xs">
+<div class="d-flex m-4 max-w-xs">
 	<Card class="w-max">
-		<a class="text-3xl" href="/learn/{articleMeta.slug}">
-			<img src="assets/general/bg-1.jpeg" alt="background" class="max-w-xs h-auto "/>
-		
-			<div class="h-72">
-				<p class="text-bold text-sm p-4 pb-0 uppercase">{articleMeta.tags[0]}</p>
-				<p class="text-bold text-md text-bold pl-4 pb-4 pt-0">{articleMeta.title}</p>
+		<a class="text-3xl" href="/learn/{article.slug}">
+			<img src="assets/general/bg-1.jpeg" alt="background" class="max-w-xs h-auto " />
 
-				<p class="text-bold text-sm text-left text-bold pl-4 pb-4 pt-0">{articleMeta.meta}</p>
+			<div class="h-72">
+				<p class="text-bold text-sm p-4 pb-0 uppercase">{article.metadata.tags.at(0) || ''}</p>
+				<p class="text-bold text-md text-bold pl-4 pb-4 pt-0">{article.metadata.title}</p>
+
+				<p class="text-bold text-sm text-left text-bold pl-4 pb-4 pt-0">{cleanDate}</p>
 			</div>
 		</a>
-		
-	  	<hr />
-	  
+
+		<hr />
+
 		<div class="flex p-2 max-h-20">
-				<div class="pr-4">
-					<img src="assets/general/avatar.png" alt="avatar" class="max-h-8"/>
-				</div>
-				<div class="grid grod-cols-1 p-0">
-					<span><p class="flex text-xs mb-0">{articleMeta.author}</p></span>
-					<span><p class="flex text-xs">{articleMeta.publishDate} • {articleMeta.readingTime} min</p></span>
-				</div>
+			<div class="pr-4">
+				<img src="assets/general/avatar.png" alt="avatar" class="max-h-8" />
+			</div>
+			<div class="grid grod-cols-1 p-0">
+				<span><p class="flex text-xs mb-0">{article.metadata.author}</p></span>
+				<!-- <span><p class="flex text-xs">{articleMeta.publishDate} • {articleMeta.readingTime} min</p></span> -->
+			</div>
 		</div>
 	</Card>
-  </div>
-
-
-
+</div>
 
 <!-- 
 <a class="text-3xl" href="/learn/{articleMeta.slug}">
