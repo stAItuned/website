@@ -38,6 +38,14 @@
 			}, 3000)
 		}
 	}
+	let readingTime: number
+	if (article.content !== undefined){
+		readingTime = (article.content.split(" ").length * 0.9)/200
+		readingTime = Math.floor(readingTime) + 1		
+	}
+	else {
+		readingTime = 5
+	}
 </script>
 
 <svelte:head>
@@ -116,7 +124,7 @@
 					d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
 				/>
 			</svg>
-			WIP <!-- Word count / 250 = minutes -->
+			{readingTime}m <!-- Word count / 250 = minutes -->
 			<!-- {article.meta.readingTime}m -->
 		</div>
 		<div class="article-metadata-item">

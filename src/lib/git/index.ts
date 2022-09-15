@@ -27,7 +27,9 @@ const validMetadata: Record<keyof ArticleMetadata, string> = {
 }
 
 function isValidMetadata(input: any): input is ArticleMetadata {
-	return Object.keys(validMetadata).filter((key) => input[key] === undefined).length === 0
+	const missing_keys = Object.keys(validMetadata).filter((key) => input[key] === undefined)
+	if(missing_keys.length > 0) console.log(missing_keys)
+	return missing_keys.length === 0
 }
 function isValidUrl(url: string): boolean {
 	try {
@@ -97,7 +99,7 @@ export const getSingleArticle = async (folderName: string): Promise<Article | un
 	}
 	metadata = temporary_metadata
 	if (!isValidUrl(metadata.cover)) {
-		metadata.cover = CONFIG.git.imageBasePath + folderName + metadata.cover
+		metadata.cover = CONFIG.git.imageBasePath + folderName + "/" + metadata.cover
 	}
 	const article: Article = {
 		slug: folderName,
