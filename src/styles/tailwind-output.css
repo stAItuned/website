@@ -1739,6 +1739,10 @@ select {
   overflow: scroll;
 }
 
+.text-clip {
+  text-overflow: clip;
+}
+
 .break-words {
   overflow-wrap: break-word;
 }

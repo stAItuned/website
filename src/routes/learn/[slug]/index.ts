@@ -3,7 +3,7 @@ import {getSingleArticle} from '@lib/git/index'
 import type { Article } from '@lib/git/types'
 
 export const get: RequestHandler<{article: Article | undefined}> = async ({ params }) => {
-	const article = getSingleArticle(params.slug)
+	const article = await getSingleArticle(params.slug)
 	console.log(`Opening ${params.slug} - ${article?.metadata.title}`)
 
 	return {

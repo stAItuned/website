@@ -1,11 +1,11 @@
 import { getAllArticles } from '@lib/git'
-export async function get() {
-	// `params.id` comes from [id].js
+import type { Article } from '@lib/git/types'
+import type { RequestHandler } from './__types'
 
-	const articles = getAllArticles()
-	console.log(`Loaded /learn - Read ${articles.length} articles`)
+export const get: RequestHandler<{ articles: Article[] }> = async () => {
 	return {
-		body: { articles: articles }
+		body: {
+			articles: (await getAllArticles()).filter((article) => article !== undefined) as Article[]
+		}
 	}
-
 }

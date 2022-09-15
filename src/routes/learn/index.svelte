@@ -1,12 +1,10 @@
 <script lang="ts">
-	import type { ArticleMeta } from '@lib/notion'
 	import { BlogCard } from '@features/blog/index'
 	import { Filters } from '@features/header/index'
 	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
 	import type { Article } from '@lib/git/types'
-
-	// populated with data from the endpoint
 	export let articles: Article[]
+	// populated with data from the endpoint
 	let currentPage = 1
 	let pageSize = 2 // * 5 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
 	$: paginatedItems = paginate(articles, pageSize, currentPage) as Article[]

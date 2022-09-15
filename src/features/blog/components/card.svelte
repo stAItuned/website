@@ -1,8 +1,5 @@
 <script lang="ts">
 	import type { Article } from '@lib/git/types'
-
-	import type { ArticleMeta } from '@lib/notion'
-
 	// export let articleMeta: ArticleMeta
 	export let article: Article
 
@@ -30,16 +27,25 @@
 	})
 </script>
 
-<div class="d-flex m-4 max-w-xs">
-	<Card class="w-max">
+<div class="d-flex m-4 max-w-xs ">
+	<Card class="w-max h-max">
 		<a class="text-3xl" href="/learn/{article.slug}">
-			<img src="assets/general/bg-1.jpeg" alt="background" class="max-w-xs h-auto " />
+			<img
+				src={article.metadata.cover || 'assets/general/bg-1.jpeg'}
+				alt="background"
+				class="max-w-xs h-auto "
+			/>
 
 			<div class="h-72">
-				<p class="text-bold text-sm p-4 pb-0 uppercase">{article.metadata.tags.at(0) || ''}</p>
-				<p class="text-bold text-md text-bold pl-4 pb-4 pt-0">{article.metadata.title}</p>
-
-				<p class="text-bold text-sm text-left text-bold pl-4 pb-4 pt-0">{cleanDate}</p>
+				<p class="text-bold text-sm p-4 pb-0 uppercase">
+					{article.metadata.topics.reduce(
+						(prev, curr) => `${prev}${prev === '' ? '' : ','} ${curr}`,
+						''
+					)}
+				</p>
+				<p class="text-bold text-md pl-4 pb-4 pt-0">{article.metadata.title}</p>
+				<p class="text-xs text-clip text-left pl-4 pb-4 pt-0">{article.metadata.meta}</p>
+				<!-- <p class="text-bold text-sm text-left text-bold pl-4 pb-4 pt-0">{cleanDate}</p> -->
 			</div>
 		</a>
 
