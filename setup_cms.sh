@@ -1,3 +1,5 @@
-git clone https://github.com/stAItuned/articles posts
-cd static/assets/
-ln -s ../../posts/ cms
+#!/bin/bash
+cd cms
+git pull
+cd ../static/assets/
+ln -s -f ../../cms/ cms

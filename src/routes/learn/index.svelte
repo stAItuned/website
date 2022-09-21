@@ -5,15 +5,23 @@
 	import type { Article } from '@lib/git/types'
 	export let articles: Article[]
 	// populated with data from the endpoint
+	let filteredArticles = articles
 	let currentPage = 1
-	let pageSize = 2 // * 5 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
-	$: paginatedItems = paginate(articles, pageSize, currentPage) as Article[]
+	const pageSize = 2 * 5 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
+	$: paginatedItems = paginate(filteredArticles, pageSize, currentPage) as Article[]
 	const setPage = (e: { detail: { page: number } }) => {
 		currentPage = e.detail.page
 	}
+
+	const filterArticles: (filter: (articles: Article[]) => Article[]) => void = (
+		filter
+	) => {
+		filteredArticles = filter(articles)
+		console.log(filteredArticles.length)
+}
 </script>
 
-<Filters />
+<Filters action={filterArticles}/>
 
 <center class="mb-32">
 	<div

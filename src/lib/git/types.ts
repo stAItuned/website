@@ -5,7 +5,8 @@ export interface ArticleMetadata{
     topics: string[],
     meta: string,
     target: string,
-    cover: string
+    cover: string,
+    language: string
 }
 
 export interface Article {
