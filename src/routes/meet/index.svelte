@@ -59,7 +59,9 @@
     
         <div class="py-5">
             <div class="team-card shadow-xl">
-                <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">TECH</div></center>
+                <center>
+                    <a href="/meet/tech"><div class="button-team sm:text-xl md:text-2xl font-bold text-white">TECH</div></a>
+                </center>
             </div>
         </div>
 

@@ -10,13 +10,5 @@
             <!-- Iterate for each collaborator and give its data as input-->
 			<TeamCard  />
             <TeamCard  />
-            <TeamCard  />
-            <TeamCard  />
-            <TeamCard  />
-            <TeamCard  />
-            <TeamCard  />
-            <TeamCard  />
-            <TeamCard  />
-            
 
 		</div>
