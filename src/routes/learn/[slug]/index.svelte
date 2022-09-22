@@ -2,7 +2,6 @@
 	import type { Article } from '@lib/git/types'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
-	import { onMount } from 'svelte'
 
 	// populated with data from the endpoint
 	export let article: Article
@@ -10,24 +9,6 @@
 	// allows the little animation when sharing
 	let shared = false
 
-	onMount(() => {
-		let script = document.createElement('script')
-		script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
-		document.head.append(script)
-
-		script.onload = () => {
-			// @ts-ignore
-			MathJax = {
-				tex: {
-					inlineMath: [
-						['$', '$'],
-						['\\(', '\\)']
-					]
-				},
-				svg: { fontCache: 'global' }
-			}
-		}
-	})
 
 	const localtime = new Date(article.metadata.date).toLocaleDateString(undefined, {
 		year: '2-digit',
@@ -57,7 +38,36 @@
 			}, 3000)
 		}
 	}
+	let readingTime: number
+	if (article.content !== undefined){
+		readingTime = (article.content.split(" ").length * 0.9)/200
+		readingTime = Math.floor(readingTime) + 1		
+	}
+	else {
+		readingTime = 5
+	}
 </script>
+
+<svelte:head>
+	<script>
+		MathJax = {
+			tex: {
+				inlineMath: [
+					['$', '$'],
+					['\\(', '\\)']
+				]
+			},
+			svg: {
+				fontCache: 'global'
+			}
+		}
+	</script>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script
+		id="MathJax-script"
+		async
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</svelte:head>
 
 <article class="prose prose-xl text-sm md:text-md lg:text-lg mt-10 mb-20 px-4 mx-auto">
 	<div
@@ -114,7 +124,7 @@
 					d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
 				/>
 			</svg>
-			2m
+			{readingTime}m <!-- Word count / 250 = minutes -->
 			<!-- {article.meta.readingTime}m -->
 		</div>
 		<div class="article-metadata-item">
@@ -164,5 +174,9 @@
 		grid-template-columns: min-content auto;
 		column-gap: 0.5em;
 		align-items: center;
+	}
+	:global(article > * > img) {
+		margin-left: auto;
+		margin-right: auto;
 	}
 </style>

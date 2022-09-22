@@ -1,25 +1,26 @@
-<script>
+<script lang="ts">
+	import type { Article } from '@lib/git/types'
 	import HamburgerFilters from './hamburger_filters.svelte'
-    import SidebarFilters from './sidebar_filters.svelte'
-	
+	import SidebarFilters from './sidebar_filters.svelte'
+
+	export let action: (filterArticles: (articles: Article[]) => Article[]) => void
 	export let open_filters = false
-    
 </script>
 
 <div class="grid grid-cols-5">
-		
-    <input type="text" class="
+	<input
+		type="text"
+		class="
                 mt-10 mb-10 m-auto
                 col-span-4
                 block
                 w-4/6
                 rounded-xl
-                shadow-xl" placeholder="  Search">
+                shadow-xl"
+		placeholder="  Search"
+	/>
 
+	<HamburgerFilters bind:open_filters />
 
-    <HamburgerFilters bind:open_filters/>
-
-    <SidebarFilters bind:open_filters/>
-
-
+	<SidebarFilters  {action} bind:open_filters />
 </div>

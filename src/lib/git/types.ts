@@ -2,7 +2,11 @@ export interface ArticleMetadata{
     title: string,
     author: string,
     date: string,
-    tags: string[]
+    topics: string[],
+    meta: string,
+    target: string,
+    cover: string,
+    language: string
 }
 
 export interface Article {

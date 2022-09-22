@@ -1,4 +1,3 @@
-import { toVFile, readSync } from 'to-vfile'
 import { unified } from 'unified'
 import parse from 'remark-parse'
 import gfm from 'remark-gfm'
@@ -21,11 +20,44 @@ const validMetadata: Record<keyof ArticleMetadata, string> = {
 	author: 'string',
 	title: 'string',
 	date: 'string',
-	tags: 'array'
+	topics: 'array',
+	meta: 'string',
+	target: 'string',
+	cover: 'string',
+	language: 'string'
 }
 
 function isValidMetadata(input: any): input is ArticleMetadata {
-	return Object.keys(validMetadata).filter((key) => input[key] === undefined).length === 0
+	const missing_keys = Object.keys(validMetadata).filter((key) => input[key] === undefined)
+	if (missing_keys.length > 0) console.log(missing_keys)
+	return missing_keys.length === 0
+}
+function isValidUrl(url: string): boolean {
+	try {
+		new URL(url)
+	} catch {
+		return false
+	}
+	return true
+}
+
+function prependBasePathToImages(html: string, slug: string): string {
+	const imgregex = /<img[^>]+src="([^">]+)[^>]+?alt="([^">]*)"?>/gi
+	const imageBasePath = CONFIG.git.imageBasePath.endsWith('/')
+		? CONFIG.git.imageBasePath
+		: CONFIG.git.imageBasePath + '/'
+	const matches = html.matchAll(imgregex)
+	for (const match of matches) {
+		const imgUrl = match[1]
+		if (isValidUrl(imgUrl)) {
+			continue
+		}
+		const new_url = imageBasePath + slug + '/' + imgUrl
+		let imageMatch = match[0]
+		imageMatch = imageMatch.replace(imgUrl, new_url)
+		html = html.replaceAll(match[0], imageMatch)
+	}
+	return html
 }
 
 /*
@@ -35,25 +67,24 @@ Folder structure
         - [Article-Slug]/
             - images...
     - [Article-Slug]
-        - filename.md (where the article is, the relative images are inside /assets/Article-Slug/...)
+        - filename.md (the article, the relative images are inside /assets/Article-Slug/...)
 */
 
-export const getSingleArticle = (folderName: string): Article | undefined => {
+export const getSingleArticle = async (folderName: string): Promise<Article | undefined> => {
 	const folderPath = pjoin(BASE_PATH, folderName)
 
 	if (!fs.lstatSync(folderPath).isDirectory()) {
 		console.log(`${folderName} is not a folder`)
 		return undefined
 	}
-	const markdown_file = fs
-		.readdirSync(folderPath)
+	const markdown_file = (await fs.promises.readdir(folderPath))
 		.filter((file) => file.endsWith('.md'))
 		.at(0)
 	if (markdown_file === undefined) {
 		console.log(`${folderName} does not contain a markdown file`)
 		return
 	}
-	let tree = parser.parse(readSync(pjoin(folderPath, markdown_file)))
+	let tree = parser.parse(await fs.promises.readFile(pjoin(folderPath, markdown_file)))
 	let temporary_metadata = null
 	if (tree.children.length > 0 && tree.children[0].type == 'yaml') {
 		temporary_metadata = yaml.load(tree.children[0].value)
@@ -68,20 +99,21 @@ export const getSingleArticle = (folderName: string): Article | undefined => {
 		return
 	}
 	metadata = temporary_metadata
+	if (!isValidUrl(metadata.cover)) {
+		metadata.cover = CONFIG.git.imageBasePath + folderName + '/' + metadata.cover
+	}
 	const article: Article = {
 		slug: folderName,
 		metadata: metadata,
-		content: content
+		content: prependBasePathToImages(content, folderName)
 	}
 	return article
 }
 
-export const getAllArticles = (): Article[] => {
-	const article_folders = fs
-		.readdirSync(BASE_PATH)
-		.filter((item) => fs.lstatSync(pjoin(BASE_PATH, item)).isDirectory() && !item.startsWith('.'))
-	console.log(article_folders)
-	return article_folders
-		.map((folder) => getSingleArticle(folder))
-		.filter((art) => art !== undefined) as Article[]
+export const getAllArticles = async (): Promise<(Article | undefined)[]> => {
+	const article_folders = (await fs.promises.readdir(BASE_PATH)).filter(
+		(item) => fs.lstatSync(pjoin(BASE_PATH, item)).isDirectory() && !item.startsWith('.')
+	)
+	// console.log( `Cartelle: ${article_folders}`)
+	return Promise.all(article_folders.map(async (folder) => await getSingleArticle(folder)))
 }
