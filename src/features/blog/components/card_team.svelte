@@ -22,7 +22,7 @@
   <div class="d-flex m-4 max-w-xs ">
 	<div class="w-max h-auto color-white">
 
-		<img src="../assets/general/avatar.png" alt="avatar" class="max-w-xs h-64 "/>
+		<img src="../assets/cms/team/Francesco-Di-Salvo/propic.jpg" alt="avatar" class="w-auto h-48 rounded-full"/>
 	
 		<p class="text-bold text-xl p-4 pb-0 ">Name and Surname</p>
 		<p class="text-bold text-md text-bold pt-0">Role</p> 
