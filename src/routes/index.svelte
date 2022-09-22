@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<section class="bg-bgGradient w-full py-[50px]">
+<section class="w-full py-[50px]">
 
 	<div class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center">
 		<center>
