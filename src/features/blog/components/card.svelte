@@ -21,9 +21,9 @@
 	}
 
 	const cleanDate = new Date(article.metadata.date).toLocaleDateString(undefined, {
-		year: 'numeric',
-		month: 'numeric',
-		day: 'numeric'
+		year: '2-digit',
+		month: '2-digit',
+		day: '2-digit'
 	})
 </script>
 
