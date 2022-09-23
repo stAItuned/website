@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<section class="bg-bgGradient w-full py-[50px]">
+<section class="w-full py-[50px]">
 
 	<div class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center">
 		<center>
@@ -22,6 +22,7 @@
 	</div>
 </section> 
 
+<!--
 <section class="bg-stayYellow-600 h-full  text-white py-4 w-full">
 	<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-4 bg-black h-full md:text-2xl sm:text-xl font-bold">
 		<div class="bg-primary-600 text-center py-4 w-auto uppercase">120 <br />reading hours</div>
@@ -31,8 +32,9 @@
 		<div class="bg-primary-600 text-center py-4 w-auto uppercase">200<br />active users</div>
 		<div class="bg-primary-600 text-center py-4 w-auto uppercase">25<br />team members</div>
 	</div>
-</section>
+</section>-->
 
+<!--
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
 	<div class="grid grid-cols-2 gap-4 bg-primary-600 h-[100px] uppercase">
 		<div class="text-center md:text-xl sm:text-l font-bold text-stayYellow-600 py-4">
@@ -43,6 +45,7 @@
 		</div>
 	</div>
 </section>
+
 
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding m-0">
@@ -73,3 +76,4 @@
 		</div>
 	</div>
 </section>
+-->

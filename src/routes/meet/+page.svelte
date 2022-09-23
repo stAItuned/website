@@ -13,8 +13,7 @@
 
         <p>
             In January 2022, after years of University spent wishing to find a place
-            for sharing ideas, we wondered if it was the right time for us to create our community. <br />
-            Hence, stAI tuned was created: a place where everyone can share his own knowledge and research projects. <br /><br />
+            for sharing ideas, we wondered if it was the right time for us to create our community. Hence, stAI tuned was created: a place where everyone can share his own knowledge and research projects. <br /><br />
 
             Nowadays Artificial Intelligence became a buzzword, and you can hear it wherever you go. <br />
         </p>
@@ -24,14 +23,12 @@
         <p style="text-color:rgb(26 30 59)"><b>But how many people are really conscious about it?</b></p>
         <p>Our goal is make Artificial Intelligence accessible to anyone!</p>
 
-
-
-
     </div>
 
 
 </div>
 
+<!--
 <section class="items-center ">
     <center>
         <div class="sm:w-6/6 md:w-5/6 lg:w-4/6 bg-primary-500 bg-bgGraph bg-cover bg-center rounded-3xl">
@@ -48,7 +45,7 @@
         </div>
         
     </center>
-</section>
+</section> -->
 
 <!-- roadmap !! -->
 
@@ -58,19 +55,26 @@
 <section class="mt-20 mb-20 grid sm:grid-cols-1 md:grid-cols-3">
     
         <div class="py-5">
-            <div class="team-card shadow-xl">
-                <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">TECH</div></center>
-            </div>
+            <a href="/meet/tech">
+                <div class="team-card shadow-xl">
+                    <img src="static/assets/team/tech_large.svg" class="h-3/5 pt-5" alt="tech"/>
+                    <center>
+                        <div class="button-team sm:text-xl md:text-2xl font-bold text-white">TECH</div>
+                    </center>
+                </div>
+            </a>
         </div>
 
         <div class="py-5">
             <div class="team-card">
+                <img src="static/assets/team/marketing_large.svg" class="h-3/5 pt-5" alt="tech"/>
                 <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">MARKETING</div></center>
             </div>
         </div>
 
         <div class="py-5">
             <div class="team-card">
+                <img src="static/assets/team/writers_large.svg" class="h-3/5 pt-5" alt="tech"/>
                 <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">WRITERS</div></center>
             </div>
         </div>
