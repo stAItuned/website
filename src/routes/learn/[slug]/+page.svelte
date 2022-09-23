@@ -2,13 +2,13 @@
 	import type { Article } from '@lib/git/types'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
+	import type { PageData } from '.svelte-kit/types/src/routes/learn/[slug]/$types'
 
-	// populated with data from the endpoint
-	export let article: Article
+	export let data: PageData
+	const article: Article = data.article
 
 	// allows the little animation when sharing
 	let shared = false
-
 
 	const localtime = new Date(article.metadata.date).toLocaleDateString(undefined, {
 		year: '2-digit',
@@ -39,11 +39,10 @@
 		}
 	}
 	let readingTime: number
-	if (article.content !== undefined){
-		readingTime = (article.content.split(" ").length * 0.9)/200
-		readingTime = Math.floor(readingTime) + 1		
-	}
-	else {
+	if (article.content !== undefined) {
+		readingTime = (article.content.split(' ').length * 0.9) / 200
+		readingTime = Math.floor(readingTime) + 1
+	} else {
 		readingTime = 5
 	}
 </script>

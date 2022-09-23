@@ -1,3 +1,8 @@
+import { browser } from '$app/environment'
+
+if (browser) {
+	throw new Error(`posts can only be imported server-side`)
+}
 import { unified } from 'unified'
 import parse from 'remark-parse'
 import gfm from 'remark-gfm'
@@ -27,18 +32,18 @@ function isValidAuthor(input: any): input is Author {
 	return missing_keys.length === 0
 }
 
-export async function getSingleAuthor(authorName: string) {
+async function getSingleAuthor(authorName: string) {
 	const authorFolder = pjoin(BASE_PATH, authorName)
 	if (!(await fs.promises.lstat(authorFolder)).isDirectory()) {
 		console.log(`${authorFolder} is not a folder, aborting`)
-		return null
+		return undefined
 	}
 	const folderContent = await fs.promises.readdir(authorFolder)
 	const propicPath = folderContent.filter((file) => file.startsWith('propic')).at(0) ?? ''
 	const markdownFile = folderContent.filter((file) => file.endsWith('.md')).at(0)
 	if (markdownFile === undefined) {
 		console.log(`No markdown file inside ${authorFolder} folder, aborting`)
-		return null
+		return undefined
 	}
 	let tree = parser.parse(await fs.promises.readFile(pjoin(authorFolder, markdownFile)))
 	let author: any
@@ -50,12 +55,12 @@ export async function getSingleAuthor(authorName: string) {
 		console.log(
 			`Author ${authorName} doesn't contain the necessary info in ${markdownFile}, aborting`
 		)
-		return null
+		return undefined
 	}
 	return author
 }
 
-export async function getAllAuthors() {
+async function getAllAuthors() {
 	const authorFolders = (await fs.promises.readdir(BASE_PATH)).filter(
 		async (item) =>
 			(await fs.promises.lstat(pjoin(BASE_PATH, item))).isDirectory() && !item.startsWith('.')
@@ -63,3 +68,5 @@ export async function getAllAuthors() {
 	// console.log( `Cartelle: ${article_folders}`)
 	return Promise.all(authorFolders.map(async (folder) => await getSingleAuthor(folder)))
 }
+const authors = (await getAllAuthors()).filter(a => a !== undefined) as Author[]
+export default authors

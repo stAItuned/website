@@ -1,3 +1,8 @@
+import { browser } from '$app/environment'
+
+if (browser) {
+	throw new Error(`posts can only be imported server-side`)
+}
 import { unified } from 'unified'
 import parse from 'remark-parse'
 import gfm from 'remark-gfm'
@@ -70,7 +75,7 @@ Folder structure
         - filename.md (the article, the relative images are inside /assets/Article-Slug/...)
 */
 
-export const getSingleArticle = async (folderName: string): Promise<Article | undefined> => {
+const getSingleArticle = async (folderName: string): Promise<Article | undefined> => {
 	const folderPath = pjoin(BASE_PATH, folderName)
 
 	if (!fs.lstatSync(folderPath).isDirectory()) {
@@ -110,7 +115,7 @@ export const getSingleArticle = async (folderName: string): Promise<Article | un
 	return article
 }
 
-export const getAllArticles = async (): Promise<(Article | undefined)[]> => {
+const getAllArticles = async (): Promise<(Article | undefined)[]> => {
 	const article_folders = (await fs.promises.readdir(BASE_PATH)).filter(
 		async (item) =>
 			(await fs.promises.lstat(pjoin(BASE_PATH, item))).isDirectory() && !item.startsWith('.')
@@ -118,3 +123,6 @@ export const getAllArticles = async (): Promise<(Article | undefined)[]> => {
 	// console.log( `Cartelle: ${article_folders}`)
 	return Promise.all(article_folders.map(async (folder) => await getSingleArticle(folder)))
 }
+const articles = (await getAllArticles()).filter((a) => a !== undefined) as Article[]
+
+export default articles

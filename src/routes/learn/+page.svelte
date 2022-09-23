@@ -1,10 +1,15 @@
 <script lang="ts">
+	// throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
 	import { BlogCard } from '@features/blog/index'
 	import { Filters } from '@features/header/index'
 	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
 	import type { Article } from '@lib/git/types'
-	export let articles: Article[]
+	import type { PageData } from '.svelte-kit/types/src/routes/learn/$types'
+	export let data: PageData
+	const articles: Article[] = data.articles
 	// populated with data from the endpoint
+	$: console.log(`Articoli: ${articles.length}`)
 	let filteredArticles = articles
 	let currentPage = 1
 	const pageSize = 2 * 5 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
@@ -13,15 +18,13 @@
 		currentPage = e.detail.page
 	}
 
-	const filterArticles: (filter: (articles: Article[]) => Article[]) => void = (
-		filter
-	) => {
+	const filterArticles: (filter: (articles: Article[]) => Article[]) => void = (filter) => {
 		filteredArticles = filter(articles)
 		// console.log(filteredArticles.length)
-}
+	}
 </script>
 
-<Filters action={filterArticles}/>
+<Filters action={filterArticles} />
 
 <center class="mb-32">
 	<div
