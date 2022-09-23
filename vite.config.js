@@ -4,12 +4,13 @@ import path from 'path'
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	manifest: false,
 	// allows vite access to ./posts
-	// server: {
-	// 	fs: {
-	// 		allow: ["."]
-	// 	}
-	// },
+	server: {
+		fs: {
+			allow: ["."]
+		}
+	},
 	resolve: {
 		alias: {
 			'@lib': path.resolve('./src/lib'),
@@ -17,7 +18,6 @@ export default defineConfig({
 			'@components': path.resolve('./src/components'),
 			'@stores': path.resolve('./src/stores'),
 			'@features': path.resolve('./src/features'),
-			// '@posts': path.resolve('./posts')
 		}
 	}
 })
