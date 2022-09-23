@@ -5,11 +5,11 @@ import path from 'path'
 export default defineConfig({
 	plugins: [sveltekit()],
 	// allows vite access to ./posts
-	server: {
-		fs: {
-			allow: ['./static']
-		}
-	},
+	// server: {
+	// 	fs: {
+	// 		allow: ["."]
+	// 	}
+	// },
 	resolve: {
 		alias: {
 			'@lib': path.resolve('./src/lib'),
