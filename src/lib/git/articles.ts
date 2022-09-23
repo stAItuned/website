@@ -43,9 +43,9 @@ function isValidUrl(url: string): boolean {
 
 function prependBasePathToImages(html: string, slug: string): string {
 	const imgregex = /<img[^>]+src="([^">]+)[^>]+?alt="([^">]*)"?>/gi
-	const imageBasePath = CONFIG.git.imageBasePath.endsWith('/')
-		? CONFIG.git.imageBasePath
-		: CONFIG.git.imageBasePath + '/'
+	const imageBasePath = CONFIG.git.articleImageBasePath.endsWith('/')
+		? CONFIG.git.articleImageBasePath
+		: CONFIG.git.articleImageBasePath + '/'
 	const matches = html.matchAll(imgregex)
 	for (const match of matches) {
 		const imgUrl = match[1]
@@ -100,7 +100,7 @@ export const getSingleArticle = async (folderName: string): Promise<Article | un
 	}
 	metadata = temporary_metadata
 	if (!isValidUrl(metadata.cover)) {
-		metadata.cover = CONFIG.git.imageBasePath + folderName + '/' + metadata.cover
+		metadata.cover = CONFIG.git.articleImageBasePath + folderName + '/' + metadata.cover
 	}
 	const article: Article = {
 		slug: folderName,
@@ -112,7 +112,8 @@ export const getSingleArticle = async (folderName: string): Promise<Article | un
 
 export const getAllArticles = async (): Promise<(Article | undefined)[]> => {
 	const article_folders = (await fs.promises.readdir(BASE_PATH)).filter(
-		(item) => fs.lstatSync(pjoin(BASE_PATH, item)).isDirectory() && !item.startsWith('.')
+		async (item) =>
+			(await fs.promises.lstat(pjoin(BASE_PATH, item))).isDirectory() && !item.startsWith('.')
 	)
 	// console.log( `Cartelle: ${article_folders}`)
 	return Promise.all(article_folders.map(async (folder) => await getSingleArticle(folder)))

@@ -1,8 +1,10 @@
 export const CONFIG = {
 	git: {
 		postsPath: "./cms/articles",
+		authorsPath: "./cms/team",
 		// Probably this needs to end with a /
-		imageBasePath: "/assets/cms/articles/",
+		articleImageBasePath: "/assets/cms/articles/",
+		authorImageBasePath: "/assets/cms/team/"
 	},
 	navigation: {
 		pages: [

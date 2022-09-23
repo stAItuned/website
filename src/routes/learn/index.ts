@@ -1,4 +1,4 @@
-import { getAllArticles } from '@lib/git'
+import { getAllArticles } from '@lib/git/articles'
 import type { Article } from '@lib/git/types'
 import type { RequestHandler } from './__types'
 

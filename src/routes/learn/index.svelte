@@ -17,7 +17,7 @@
 		filter
 	) => {
 		filteredArticles = filter(articles)
-		console.log(filteredArticles.length)
+		// console.log(filteredArticles.length)
 }
 </script>
 
