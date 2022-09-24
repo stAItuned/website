@@ -19,5 +19,7 @@ export default defineConfig({
 			'@stores': path.resolve('./src/stores'),
 			'@features': path.resolve('./src/features'),
 		}
-	}
+	},
+
+	
 })

@@ -6,6 +6,7 @@
 
 	export let data: PageData
 	const article: Article = data.article
+	const component = data.component
 
 	// allows the little animation when sharing
 	let shared = false
@@ -68,13 +69,10 @@
 		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </svelte:head>
 
-
-
 <article class="prose prose-xl text-sm md:text-md lg:text-lg mt-10 mb-20 px-4 mx-auto">
-
 	<!-- COVER IMAGE -->
-	<img src={article.metadata.cover} class="w-full h-auto" alt="cover">
-	
+	<img src={article.metadata.cover} class="w-full h-auto" alt="cover" />
+
 	<div
 		class="grid justify-items-center mb-2"
 		style="column-gap: 1em; grid-template-columns: minmax(min-content, 1fr) max-content minmax(min-content, 1fr) min-content"
@@ -170,7 +168,8 @@
 			{/if}
 		</div>
 	</div>
-	{@html article.content}
+	<!-- {@html article.content} -->
+	<svelte:component this={component} />
 </article>
 
 <style>

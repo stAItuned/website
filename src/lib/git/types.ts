@@ -14,13 +14,14 @@ export interface Article {
      * The name of the folder where the post is
      */
     slug: string 
+    filename: string
     metadata: ArticleMetadata,
     content?: string | undefined,
     assets?: string | undefined
 }
 
 export interface Author {
-    name: string,
+    name: string
     team: string[],
     title: string,
     linkedin: string,
