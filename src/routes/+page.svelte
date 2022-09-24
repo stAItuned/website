@@ -9,7 +9,7 @@
 	<meta name="description" content={info.longDescription} />
 
 	<!-- Facebook Meta Tags -->
-	<meta property="og:url" content={window.location.hostname} />
+	<!-- <meta property="og:url" content={window.location.hostname} /> -->
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={info.siteName} />
 	<meta property="og:description" content={info.longDescription} />
@@ -18,7 +18,7 @@
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta property="twitter:domain" content="tptp.vercel.app" />
-	<meta property="twitter:url" content={window.location.hostname} />
+	<!-- <meta property="twitter:url" content={window.location.hostname} /> -->
 	<meta name="twitter:title" content={info.siteName} />
 	<meta name="twitter:description" content={info.longDescription} />
 	<meta name="twitter:image" content={info.logoPath} />
