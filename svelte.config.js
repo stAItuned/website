@@ -1,31 +1,26 @@
+import { mdsvex } from 'mdsvex'
+import mdsvexConfig from './mdsvex.config.js'
 import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
-import path from 'path'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
+	extensions: ['.svelte', ...mdsvexConfig.extensions],
+
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
-	preprocess: preprocess(),
+	preprocess: [
+		mdsvex(mdsvexConfig),
+		preprocess({
+			// postcss: true
+			
+		})
+	],
 
 	kit: {
 		adapter: adapter(),
-
-		// Override http methods in the Todo forms
-		methodOverride: {
-			allowed: ['PATCH', 'DELETE']
-		},
-		vite: {
-			resolve: {
-				alias: {
-					'@lib': path.resolve('./src/lib'),
-					'@config': path.resolve('./src/config'),
-					'@components': path.resolve('./src/components'),
-					'@stores': path.resolve('./src/stores'),
-					'@features': path.resolve('./src/features'),
-					'@posts': path.resolve('./posts')
-				}
-			}
+		prerender: {
+			entries: ['*']
 		}
 	}
 }

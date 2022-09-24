@@ -21,20 +21,23 @@
 	}
 
 	const cleanDate = new Date(article.metadata.date).toLocaleDateString(undefined, {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
+		year: '2-digit',
+		month: '2-digit',
+		day: '2-digit'
 	})
 </script>
 
 <div class="d-flex m-4 max-w-xs ">
 	<Card class="w-max h-max">
 		<a class="text-3xl" href="/learn/{article.slug}">
-			<img
-				src={article.metadata.cover || 'assets/general/bg-1.jpeg'}
-				alt="background"
-				class="max-w-xs h-auto "
-			/>
+			
+			<div class="bg-cover bg-center">
+				<img
+					src={article.metadata.cover || 'assets/general/bg-1.jpeg'}
+					alt="background"
+					class="h-[180px] w-full"
+				/>
+			</div>
 
 			<div class="h-72">
 				<p class="text-bold text-sm p-4 pb-0 uppercase">
@@ -45,19 +48,19 @@
 				</p>
 				<p class="text-bold text-md pl-4 pb-4 pt-0">{article.metadata.title}</p>
 				<p class="text-xs text-clip text-left pl-4 pb-4 pt-0">{article.metadata.meta}</p>
-				<!-- <p class="text-bold text-sm text-left text-bold pl-4 pb-4 pt-0">{cleanDate}</p> -->
 			</div>
 		</a>
 
 		<hr />
 
-		<div class="flex p-2 max-h-20">
+		<div class="flex p-2 max-h-12">
 			<div class="pr-4">
 				<img src="assets/general/avatar.png" alt="avatar" class="max-h-8" />
 			</div>
 			<div class="grid grod-cols-1 p-0">
 				<span><p class="flex text-xs mb-0">{article.metadata.author}</p></span>
-				<!-- <span><p class="flex text-xs">{articleMeta.publishDate} • {articleMeta.readingTime} min</p></span> -->
+				<span><p class="flex text-xs">{cleanDate} </p></span>
+				<!-- <span><p class="flex text-xs">{cleanDate} • {readingTime} </p></span> -->
 			</div>
 		</div>
 	</Card>
