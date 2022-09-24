@@ -16,7 +16,6 @@
 		"tailwind:build": "TAILWIND_MODE=build NODE_ENV=production tailwindcss -c tailwind.config.cjs -m -i src/styles/tailwind.css -o src/styles/tailwind-output.css",
 		"dev": "concurrently \"npm run dev:only\" \"npm run tailwind:watch\"",
 		"build": "npm run tailwind:build && npm run build:only",
-		"vite": "vite --help"
 	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^17.0.0",
