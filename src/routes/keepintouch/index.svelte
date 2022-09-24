@@ -1,4 +1,9 @@
 <script lang="ts">
+
+    function submitForm() {
+        alert("ciao");
+    }
+
 </script>
 
 
@@ -23,11 +28,11 @@
         </div>
         </center>
         
-        <form class="container-form w-4/5 xl:w-3/5 m-auto mt-10 text-sm">
+        <form class="container-form w-4/5 xl:w-3/5 m-auto mt-10 text-sm" on:submit|preventDefault={submitForm}>
             <input type="text" id="fname" name="fname" placeholder="Name and surname*" required><br>
             <input type="text" id="fobject" name="fobject" placeholder="Object*" required><br>
-            <input type="text" id="femail" name="femail" placeholder="Email*" required><br>
-            <input type="textarea" id="ftext" name="ftext" placeholder="Text*" class="overflow-scroll self-start" required><br>
+            <input type="email" id="femail" name="femail" placeholder="Email*" required><br>
+            <textarea id="ftext" name="ftext" placeholder="Text*" class="overflow-scroll self-start" required></textarea>
             <input type="submit" value="Send">
         </form>
 

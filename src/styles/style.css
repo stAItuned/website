@@ -47,13 +47,25 @@
     padding-left: 15px;
 }
 
-.container-form > input[type=textarea] {
+.container-form > input[type=email] {
+    width: 90%;
+    height: 30px;
+    margin-top: 20px;
+    border-radius: 50px;
+    padding-left: 15px;
+}
+
+.container-form > textarea {
     width: 90%;
     height: 150px;
     margin-top: 20px;
-    border-radius: 15px;
     padding-left: 15px;
+    border-radius: 15px 0px 0px 15px;
+    overflow-x: hidden;
+
 }
+
+
 
 .container-form > input[type=submit] {
     width: 50%;
