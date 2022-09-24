@@ -1,9 +1,32 @@
 <script lang="ts">
+	import info from '@lib/info'
 </script>
 
-<section class="w-full py-[50px]">
+<svelte:head>
+	<title>{info.siteName}</title>
+	<!-- HTML Meta Tags -->
+	<title>{info.siteName}</title>
+	<meta name="description" content={info.longDescription} />
 
-	<div class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center">
+	<!-- Facebook Meta Tags -->
+	<meta property="og:url" content={window.location.hostname} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={info.siteName} />
+	<meta property="og:description" content={info.longDescription} />
+	<meta property="og:image" content={info.logoPath} />
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta property="twitter:domain" content="tptp.vercel.app" />
+	<meta property="twitter:url" content={window.location.hostname} />
+	<meta name="twitter:title" content={info.siteName} />
+	<meta name="twitter:description" content={info.longDescription} />
+	<meta name="twitter:image" content={info.logoPath} />
+</svelte:head>
+<section class="w-full py-[50px]">
+	<div
+		class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center"
+	>
 		<center>
 			<img
 				class="z-1 top-[50px] left-[100px] w-[50vw] max-h-[380px] object-contain  self-end"
@@ -20,7 +43,7 @@
 			<p class="text-white text-xl">your sharing spot</p>
 		</div>
 	</div>
-</section> 
+</section>
 
 <!--
 <section class="bg-stayYellow-600 h-full  text-white py-4 w-full">

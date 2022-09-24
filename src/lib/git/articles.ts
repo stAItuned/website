@@ -35,24 +35,23 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 		const slug = filepath.split('/').at(-2) as string
 		const filename = (filepath.split('/').at(-1) as string).slice(0, -3)
 		console.log(slug)
-		// const html: string = post.default.render().html
 		if (!isValidMetadata(post.metadata)) {
 			return undefined
 		}
+		const metadata : ArticleMetadata = post.metadata
 
 		let cover: string | undefined
-		if (post.metadata.cover === undefined) {
-			cover = ""
-		} else if (isValidUrl(post.metadata.cover)) {
-			cover = post.metadata.cover
+		if (isValidUrl(metadata.cover)) {
+			cover = metadata.cover
 		} else {
-			cover = `/cms/articles/${slug}/${post.metadata.cover}`
+			cover = `https://og-image.vercel.app/${encodeURI(post.metadata.title)}.png?theme=dark&fontSize=150px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-bw-logo.svg&&images=https://i.imgur.com/YAKfI5F.png&widths=0&heights=0`
 		}
 		const article: Article = {
 			slug,
 			filename,
+
 			metadata: {
-				...post.metadata,
+				...metadata,
 				cover
 			}
 		}

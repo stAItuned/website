@@ -3,6 +3,7 @@
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
 	import type { PageData } from '.svelte-kit/types/src/routes/learn/[slug]/$types'
+	import info from '@lib/info'
 
 	export let data: PageData
 	const article: Article = data.article
@@ -49,7 +50,7 @@
 </script>
 
 <svelte:head>
-	<script>
+	<!-- <script>
 		MathJax = {
 			tex: {
 				inlineMath: [
@@ -66,7 +67,25 @@
 	<script
 		id="MathJax-script"
 		async
-		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+	<!-- HTML Meta Tags -->
+	<title>{article.metadata.title} | {info.siteName}</title>
+	<meta name="description" content={article.metadata.meta} />
+
+	<!-- Facebook Meta Tags -->
+	<!-- <meta property="og:url" content={window.location.hostname} /> -->
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={article.metadata.title + " | " + info.siteName}/>
+	<meta property="og:description" content={article.metadata.meta} />
+	<meta property="og:image" content={article.metadata.cover} />
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<!-- <meta property="twitter:domain" content={window.location.hostname} />
+	<meta property="twitter:url" content={window.location.host} /> -->
+	<meta name="twitter:title" content={article.metadata.title + " | " + info.siteName}/>
+	<meta name="twitter:description" content={article.metadata.meta} />
+	<meta name="twitter:image" content={article.metadata.cover} />
 </svelte:head>
 
 <article class="prose prose-xl text-sm md:text-md lg:text-lg mt-10 mb-20 px-4 mx-auto">
