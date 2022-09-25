@@ -79,16 +79,7 @@
 						<span><p class="flex text-lg mb-0">{article.metadata.readingTime} min.</p></span>
 					</div>
 				</div>
-
-				<!-- LANGUAGE 
-				<div class="flex p-2 pt-0 pb-0 max-h-12">
-					<div class="pl-3 pt-2">
-						<img src="/assets/learn/language.png" alt="avatar" class="max-h-5" />
-					</div>
-					<div class="p-1 pl-3">
-						<span><p class="flex text-lg mb-0">{article.metadata.language}</p></span>
-					</div>
-				</div> -->
+				
 			</div>
 		</a>
 
@@ -96,7 +87,7 @@
 
 		<div class="grid grid-cols-6 p-2 max-h-12">
 			<div class="pr-4">
-				<img src="assets/general/avatar.png" alt="avatar" class="max-h-8" />
+				<img src="assets/cms/team/{article.metadata.author.replaceAll(' ','-')}/propic.jpg" alt="avatar" class="max-h-8 rounded-full" />
 			</div>
 			<div class="p-1 col-span-4">
 				<span><p class="flex text-md mb-0">{article.metadata.author}</p></span>
