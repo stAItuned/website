@@ -27,7 +27,7 @@ const authors = Object.entries(import.meta.glob('/cms/team/**/*.md', { eager: tr
 		if (!isValidAuthor(member.metadata)) {
 			return undefined
 		}
-		let propic: string = `/cms/team/${folderName}/propic.jpg`
+		let propic: string = `/assets/cms/team/${folderName}/propic.jpg`
 		const author: Author = {
 			...member.metadata,
 			propic
