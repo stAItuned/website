@@ -2,7 +2,7 @@
 	export let open_filters = false
 </script>
 
-<button class="z-10 text-[#1A1E3B] hover:text-[#1A1E3B] cursor-pointer mr-4 border-none focus:outline-none" class:open_filters on:click={() => open_filters = !open_filters}>
+<button class="float-right z-10 text-[#1A1E3B] hover:text-[#1A1E3B] cursor-pointer mr-4 border-none focus:outline-none" class:open_filters on:click={() => open_filters = !open_filters}>
 	<svg width=32 height=24>
 		<line id="top" x1=0 y1=2  x2=32 y2=2/>
 		<line id="middle" x1=12 y1=12 x2=32 y2=12/>
