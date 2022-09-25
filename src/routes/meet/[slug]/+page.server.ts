@@ -1,7 +1,7 @@
-import authors from '@lib/git/authors'
+import data from '@lib/git/index'
 
 export const load = () => {
 	return {
-		authors
+		authors: data.authors
 	}
 }

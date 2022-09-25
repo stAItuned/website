@@ -49,7 +49,7 @@
 				<!-- TOPIC -->
 				<div class="flex p-2 pb-0 pt-0 max-h-12">
 					<div class="pl-3 pt-2">
-						<img src="static/assets/learn/topic.png" alt="avatar" class="max-h-[15px]" />
+						<img src="/assets/learn/Topic.png" alt="avatar" class="max-h-[15px]" />
 					</div>
 					<div class="pb-1 pl-3">
 						<span><p class="flex text-lg mb-0 uppercase">{article.metadata.topics.reduce(
@@ -63,7 +63,7 @@
 				<!-- DATE -->
 				<div class="flex p-2 pt-0 pb-0 max-h-12">
 					<div class="pl-3 pt-2">
-						<img src="static/assets/learn/Agenda.svg" alt="avatar" class="max-h-8" />
+						<img src="/assets/learn/Agenda.svg" alt="avatar" class="max-h-8" />
 					</div>
 					<div class="p-1 pl-3">
 						<span><p class="flex text-lg mb-0 uppercase">{cleanDate}</p></span>
@@ -73,17 +73,17 @@
 				<!-- READING TIME -->
 				<div class="flex p-2 pt-0 pb-0 max-h-12">
 					<div class="pl-3 pt-2">
-						<img src="static/assets/learn/clock.svg" alt="avatar" class="max-h-8" />
+						<img src="/assets/learn/Clock.svg" alt="avatar" class="max-h-8" />
 					</div>
 					<div class="p-1 pl-3">
-						<span><p class="flex text-lg mb-0">3 min.</p></span>
+						<span><p class="flex text-lg mb-0">{article.metadata.readingTime} min.</p></span>
 					</div>
 				</div>
 
 				<!-- LANGUAGE 
 				<div class="flex p-2 pt-0 pb-0 max-h-12">
 					<div class="pl-3 pt-2">
-						<img src="static/assets/learn/language.png" alt="avatar" class="max-h-5" />
+						<img src="/assets/learn/language.png" alt="avatar" class="max-h-5" />
 					</div>
 					<div class="p-1 pl-3">
 						<span><p class="flex text-lg mb-0">{article.metadata.language}</p></span>

@@ -40,13 +40,6 @@
 			}, 3000)
 		}
 	}
-	let readingTime: number
-	if (article.content !== undefined) {
-		readingTime = (article.content.split(' ').length * 0.9) / 200
-		readingTime = Math.floor(readingTime) + 1
-	} else {
-		readingTime = 5
-	}
 </script>
 
 <svelte:head>
@@ -75,7 +68,7 @@
 	<!-- Facebook Meta Tags -->
 	<!-- <meta property="og:url" content={window.location.hostname} /> -->
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={article.metadata.title + " | " + info.siteName}/>
+	<meta property="og:title" content={article.metadata.title + ' | ' + info.siteName} />
 	<meta property="og:description" content={article.metadata.meta} />
 	<meta property="og:image" content={article.metadata.cover} />
 
@@ -83,7 +76,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<!-- <meta property="twitter:domain" content={window.location.hostname} />
 	<meta property="twitter:url" content={window.location.host} /> -->
-	<meta name="twitter:title" content={article.metadata.title + " | " + info.siteName}/>
+	<meta name="twitter:title" content={article.metadata.title + ' | ' + info.siteName} />
 	<meta name="twitter:description" content={article.metadata.meta} />
 	<meta name="twitter:image" content={article.metadata.cover} />
 </svelte:head>
@@ -111,8 +104,11 @@
 					d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
 				/>
 			</svg>
-
-			{article.metadata.author}
+			{#if article.author !== undefined}
+				<a href={`/meet/${article.author.team.at(0)}`}>{article.author.name}</a>
+			{:else}
+				{article.metadata.author}
+			{/if}
 		</div>
 		<div class="article-metadata-item">
 			<svg
@@ -146,8 +142,7 @@
 					d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
 				/>
 			</svg>
-			{readingTime}m <!-- Word count / 250 = minutes -->
-			<!-- {article.meta.readingTime}m -->
+			{article.metadata.readingTime}m
 		</div>
 		<div class="article-metadata-item">
 			{#if shared}
