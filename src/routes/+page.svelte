@@ -2,7 +2,7 @@
 	import type { PageData } from './$types'
 	import info from '@lib/info'
 	import type { Article } from '@lib/git/types'
-	const amountOfArticles = 3
+	const amountOfArticles = 4
 	export let data: PageData
 	const recentArticles = data.articles
 		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
@@ -38,6 +38,8 @@
 	<meta name="twitter:description" content={info.longDescription} />
 	<meta name="twitter:image" content={info.logoPath} />
 </svelte:head>
+
+
 <section class="w-full py-[50px]">
 	<div
 		class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center"
@@ -72,7 +74,7 @@
 	</div>
 </section>-->
 
-<section class="bg-stayYellow-600 h-full  text-white pb-4">
+<!-- <section class="bg-stayYellow-600 h-full  text-white pb-4">
 	<div class="grid grid-cols-2 gap-4 bg-primary-600 h-[100px] uppercase">
 		<div class="grid grid-cols-1 gap-4 bg-primary-600 h-[100px] w-full justify-items-center">
 			<div class="text-center md:text-xl sm:text-l font-bold text-stayYellow-600 py-4">
@@ -99,15 +101,27 @@
 			{/each}
 		</div>
 	</div>
-</section>
-<!--
+</section> -->
+
 
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
+	<div class="text-center md:text-xl sm:text-l font-bold text-primary-600 py-4 uppercase">
+		<div class="text-center md:text-xl sm:text-l font-bold bg-primary-600 p-4 uppercase text-stayYellow-600">
+			Recent Articles
+		</div>
+	</div>
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding m-0">
-		<div class="self-center  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
+		{#each recentArticles as recent}
+			<div class="self-center  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px] ">
+				<a href="/learn/{recent.slug}">
+					<img src="{recent.metadata.cover}" class="opacity-100" alt="bg"  />
+					<p class="text-left">{recent.metadata.title}</p>
+				</a>
+			</div>
+		{/each}
+		<!--<div class="self-center  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
 				<img src="assets/general/bg-1.jpeg" class="w-full object-fill" alt="bg"  />
 				<p class="text-left">Machine Learning Theory</p>
-
 		</div>
 		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
 			<center>
@@ -115,8 +129,6 @@
 				<p class="text-left">Natural Language Processing</p>
 			</center>		
 		</div>
-	</div>
-	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding">
 		<div class="self-end  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]">
 			<center>
 				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
@@ -128,7 +140,7 @@
 				<img src="assets/general/bg-1.jpeg" class="w-full object-cover" alt="bg" />
 				<p class="text-left">Edge AI</p>
 			</center>		
-		</div>
+		</div>-->
 	</div>
 </section>
--->
+
