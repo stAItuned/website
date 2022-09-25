@@ -1,5 +1,20 @@
 <script lang="ts">
+	import type { PageData } from './$types'
 	import info from '@lib/info'
+	import type { Article } from '@lib/git/types'
+	const amountOfArticles = 3
+	export let data: PageData
+	const recentArticles = data.articles
+		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
+		.slice(0, amountOfArticles)
+	const relevantArticlesSlug = [
+		'gan',
+		'machine-learning-intro',
+		'time-series-forecasting-with-fraction-differentiation'
+	]
+	const relevantArticles = relevantArticlesSlug
+		.map((slug) => data.articles.find((e) => e.slug === slug))
+		.filter((a) => a !== undefined) as Article[]
 </script>
 
 <svelte:head>
@@ -36,7 +51,7 @@
 		</center>
 		<div class="flex flex-col items-end p-10">
 			<img
-				class="z-1 w-[500px] text-white  ml-[100px] mt-[200px] mt-0"
+				class="z-1 w-[500px] text-white  ml-[100px] mt-0"
 				src="/assets/general/logo-text.svg"
 				alt="logo"
 			/>
@@ -57,18 +72,35 @@
 	</div>
 </section>-->
 
-<!--
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
 	<div class="grid grid-cols-2 gap-4 bg-primary-600 h-[100px] uppercase">
-		<div class="text-center md:text-xl sm:text-l font-bold text-stayYellow-600 py-4">
-			Recent <br /> Articles
+		<div class="grid grid-cols-1 gap-4 bg-primary-600 h-[100px] w-full justify-items-center">
+			<div class="text-center md:text-xl sm:text-l font-bold text-stayYellow-600 py-4">
+				Recent <br /> Articles
+			</div>
+			{#each recentArticles as recent}
+				<a href="/learn/{recent.slug}">
+					<div class="w-full h-[100px] bg-primary-600 text-center align-middle">
+						{recent.metadata.title}
+					</div>
+				</a>
+			{/each}
 		</div>
-		<div class="text-center md:text-xl sm:text-l font-bold py-4">
-			Relevant <br /> Articles
+		<div class="grid grid-cols-1 gap-4 bg-primary-600 h-[100px] w-full justify-items-center">
+			<div class="text-center md:text-xl sm:text-l font-bold text-stayYellow-600 py-4">
+				Relevant <br /> Articles
+			</div>
+			{#each relevantArticles as relevant}
+				<a href="/learn/{relevant.slug}">
+					<div class="w-full h-[100px] bg-primary-600 text-center align-middle">
+						{relevant.metadata.title}
+					</div>
+				</a>
+			{/each}
 		</div>
 	</div>
 </section>
-
+<!--
 
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding m-0">
