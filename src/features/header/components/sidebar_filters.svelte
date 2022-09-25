@@ -10,7 +10,7 @@
 		'Machine Learning',
 		'Computer Vision',
 		'Finance',
-		'Natural Language Processing',
+		'NLP',
 		'Edge AI',
 		'Healthcare',
 		'Deep Learning'
