@@ -14,7 +14,7 @@ const config = defineConfig({
 		dashes: 'oldschool'
 	},
 
-	remarkPlugins: [remarkMath, relativeImages, videos], //, ],
+	remarkPlugins: [remarkMath, relativeImages, videos],
 	rehypePlugins: [rehypeKatexSvelte, rehypeSlug, rehypeAutolinkHeadings, rehypeFigure]
 })
 /**

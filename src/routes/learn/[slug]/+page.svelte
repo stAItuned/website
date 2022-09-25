@@ -79,6 +79,7 @@
 	<meta name="twitter:title" content={article.metadata.title + ' | ' + info.siteName} />
 	<meta name="twitter:description" content={article.metadata.meta} />
 	<meta name="twitter:image" content={article.metadata.cover} />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 </svelte:head>
 
 <article class="prose prose-xl text-sm md:text-md lg:text-lg mt-10 mb-20 px-4 mx-auto">
