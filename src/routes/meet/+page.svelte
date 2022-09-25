@@ -66,17 +66,21 @@
         </div>
 
         <div class="py-5">
-            <div class="team-card">
-                <img src="static/assets/team/marketing_large.svg" class="h-3/5 pt-5" alt="tech"/>
-                <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">MARKETING</div></center>
-            </div>
+            <a href="/meet/marketing">
+                <div class="team-card">
+                    <img src="static/assets/team/marketing_large.svg" class="h-3/5 pt-5" alt="tech"/>
+                    <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">MARKETING</div></center>
+                </div>
+            </a>
         </div>
 
         <div class="py-5">
-            <div class="team-card">
-                <img src="static/assets/team/writers_large.svg" class="h-3/5 pt-5" alt="tech"/>
-                <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">WRITERS</div></center>
-            </div>
+            <a href="/meet/writers">
+                <div class="team-card">
+                    <img src="static/assets/team/writers_large.svg" class="h-3/5 pt-5" alt="tech"/>
+                    <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">WRITERS</div></center>
+                </div>
+            </a>
         </div>
 </section>
 </center>

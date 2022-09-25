@@ -6,5 +6,7 @@ if [ -d ./cms ]; then
 else 
     git clone https://github.com/stAItuned/content-manager.git cms 
 fi
+
+
 cd ./static/assets/
-ln -s -f ../../cms/ cms
+ln -s -f ../../cms/ .
