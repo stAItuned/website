@@ -10,11 +10,19 @@
 	const relevantArticlesSlug = [
 		'gan',
 		'machine-learning-intro',
-		'time-series-forecasting-with-fraction-differentiation'
-	]
+		'time-series-forecasting-with-fraction-differentiation',
+		'natural-language-processing-course'
+	] as const // Length must be at least ${amountOfArticles}
 	const relevantArticles = relevantArticlesSlug
 		.map((slug) => data.articles.find((e) => e.slug === slug))
-		.filter((a) => a !== undefined) as Article[]
+		.filter((a) => a !== undefined)
+		.slice(0, amountOfArticles) as Article[]
+
+	let articlesToShow: 'relevant' | 'recent' = 'recent'
+	const setShow = (newState: typeof articlesToShow) => {
+		articlesToShow = newState
+	}
+	$: articles = articlesToShow === 'recent' ? recentArticles : relevantArticles
 </script>
 
 <svelte:head>
@@ -38,7 +46,6 @@
 	<meta name="twitter:description" content={info.longDescription} />
 	<meta name="twitter:image" content={info.logoPath} />
 </svelte:head>
-
 
 <section class="w-full py-[50px]">
 	<div
@@ -103,19 +110,35 @@
 	</div>
 </section> -->
 
-
 <section class="bg-stayYellow-600 h-full  text-white pb-4">
-	<div class="text-center md:text-xl sm:text-l font-bold text-primary-600 py-4 uppercase">
-		<div class="text-center md:text-xl sm:text-l font-bold bg-primary-600 p-4 uppercase text-stayYellow-600">
+	<div
+		class="text-center grid grid-cols-2 md:text-xl sm:text-l font-bold text-primary-600 py-4 uppercase"
+	>
+		<div
+			class="text-center md:text-xl sm:text-l font-bold bg-primary-600 p-4 uppercase cursor-pointer"
+			class:text-stayYellow-600={articlesToShow === 'recent'}
+			class:text-gray-400={articlesToShow !== 'recent'}
+			on:click={() => setShow('recent')}
+		>
 			Recent Articles
+		</div>
+		<div
+			class="text-center md:text-xl sm:text-l font-bold bg-primary-600 p-4 uppercase cursor-pointer"
+			class:text-stayYellow-600={articlesToShow === 'relevant'}
+			class:text-gray-400={articlesToShow !== 'relevant'}
+			on:click={() => setShow('relevant')}
+		>
+			Relevant Articles
 		</div>
 	</div>
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding m-0">
-		{#each recentArticles as recent}
-			<div class="self-center  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px] ">
+		{#each articles as recent}
+			<div
+				class="self-center align-middle  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px] "
+			>
 				<a href="/learn/{recent.slug}">
-					<img src="{recent.metadata.cover}" class="opacity-100" alt="bg"  />
-					<p class="text-left">{recent.metadata.title}</p>
+					<img src={recent.metadata.cover} class="opacity-100 object-cover blur-sm" alt="bg" />
+					<p class="text-left align-middle max-w-[80%]">{recent.metadata.title}</p>
 				</a>
 			</div>
 		{/each}
@@ -143,4 +166,3 @@
 		</div>-->
 	</div>
 </section>
-
