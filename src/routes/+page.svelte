@@ -23,6 +23,8 @@
 		articlesToShow = newState
 	}
 	$: articles = articlesToShow === 'recent' ? recentArticles : relevantArticles
+
+	const colors = ['#ffb347','#A7C7E7','#47efff','#77dd77']
 </script>
 
 <svelte:head>
@@ -47,7 +49,7 @@
 	<meta name="twitter:image" content={info.logoPath} />
 </svelte:head>
 
-<section class="w-full py-[50px]">
+<section class="w-full py-[30px]">
 	<div
 		class="bg-primary-500 bg-bgGraph bg-cover bg-center w-full h-[600px] shadow-2xl grid grid-cols-1 content-center"
 	>
@@ -110,7 +112,7 @@
 	</div>
 </section> -->
 
-<section class="bg-stayYellow-600 h-full  text-white pb-4">
+<section class="bg-stayYellow-600 h-full  text-white mb-10">
 	<div
 		class="text-center grid grid-cols-2 md:text-xl sm:text-l font-bold text-primary-600 py-4 uppercase"
 	>
@@ -132,12 +134,13 @@
 		</div>
 	</div>
 	<div class="grid md:grid-cols-2 sm:grid-cols-1 bg-primary-600 uppercase no-padding m-0">
-		{#each articles as recent}
+		{#each articles as recent,idx}
 			<div
-				class="self-center align-middle  text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px] "
+				class="self-center align-middle text-center md:text-xl sm:text-l font-bold text-stayYellow-600 bg-themes max-h-[200px]"
+				style="background: {colors[idx]}; overflow: hidden; height: 100%; z-index: 2; opacity: 1"
 			>
 				<a href="/learn/{recent.slug}">
-					<img src={recent.metadata.cover} class="opacity-100 object-cover blur-sm" alt="bg" />
+					<img src={recent.metadata.cover} class="opacity-100 object-cover" alt="bg" style="opacity: 0.3"/>
 					<p class="text-left align-middle max-w-[80%]">{recent.metadata.title}</p>
 				</a>
 			</div>
@@ -165,4 +168,8 @@
 			</center>		
 		</div>-->
 	</div>
+	<div class="bg-stayYellow-600 h-5">
+
+	</div>
+	
 </section>
