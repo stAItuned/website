@@ -39,14 +39,14 @@
 				/>
 			</div>
 
-			<div class="h-54">
+			<div class="h-42">
 
 				<div class="h-24">
 				
-					<p class="text-bold text-2xl text-left p-4 m-0">{article.metadata.title}</p>
+					<p class="text-bold text-xl text-left p-4 m-0">{article.metadata.title}</p>
 				
 				</div>
-				<!-- TOPIC -->
+				<!-- TOPIC 
 				<div class="flex p-2 pb-0 pt-0 max-h-12">
 					<div class="pl-3 pt-2">
 						<img src="/assets/learn/Topic.png" alt="avatar" class="max-h-[15px]" />
@@ -58,7 +58,7 @@
 						)}
 						</p></span>
 					</div>
-				</div>
+				</div>-->
 
 				<!-- DATE -->
 				<div class="flex p-2 pt-0 pb-0 max-h-12">

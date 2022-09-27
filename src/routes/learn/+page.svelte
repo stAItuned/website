@@ -24,7 +24,9 @@
 	}
 </script>
 
-<Filters action={filterArticles} />
+<!-- <Filters action={filterArticles} /> -->
+
+<br /><br />
 
 <center class="mb-32">
 	<div
@@ -39,6 +41,8 @@
 		{/if}
 
 	</div>
+
+	<br />
 	{#if articles.length > pageSize}
 		<div class="w-min">
 			<LightPaginationNav

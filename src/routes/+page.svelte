@@ -8,8 +8,8 @@
 		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
 		.slice(0, amountOfArticles)
 	const relevantArticlesSlug = [
-		'gan',
-		'machine-learning-intro',
+		'cos-è-un-algoritmo-e-per-cosa-si-utilizza',
+		'introduzione-e-primi-passi-sul-deep-learning',
 		'time-series-forecasting-with-fraction-differentiation',
 		'natural-language-processing-course'
 	] as const // Length must be at least ${amountOfArticles}
