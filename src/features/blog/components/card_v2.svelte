@@ -31,12 +31,19 @@
 	<Card class="w-max h-max">
 		<a class="text-3xl" href="/learn/{article.slug}">
 			
-			<div class="bg-cover bg-center">
+			<div class="bg-cover bg-center relative inline">
 				<img
 					src={article.metadata.cover || 'assets/general/bg-1.jpeg'}
 					alt="background"
 					class="h-[180px] w-full"
 				/>
+
+				<img
+				src='assets/learn/star-{article.metadata.target}.png'
+				alt="difficulty"
+				class="w-full z-3 absolute h-[20px] w-auto mr-2 mt-2"
+				style="top:0; right:0"
+			/>
 			</div>
 
 			<div class="h-42">
