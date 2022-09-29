@@ -7,7 +7,7 @@ export async function GET() {
 		const lowerThreshold = new Date('1970-01-01')
 		return date.getTime() >= lowerThreshold.getTime()
 	}) // publish only articles that have a date greater than 1970-01-01
-  
+
 	return new Response(
 		`
       <?xml version="1.0" encoding="UTF-8" ?>
@@ -27,7 +27,15 @@ export async function GET() {
       <url>
       <loc>${siteURL}/keepintouch/</loc>
       <changefreq>weekly</changefreq>
-  </url>
+      </url>
+      <url>
+      <loc>${siteURL}/meet/</loc>
+      <changefreq>weekly</changefreq>
+      </url>
+      <url>
+      <loc>${siteURL}/learn/</loc>
+      <changefreq>weekly</changefreq>
+      </url>
       ${articlesToAnnounce
 				.map(
 					(article) => `
