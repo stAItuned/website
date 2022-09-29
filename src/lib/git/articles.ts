@@ -36,6 +36,8 @@ function calculateReadingTime(html: string) {
 	return Math.ceil(words / wordsPerMinute)
 }
 
+
+
 const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eager: true }))
 	.map(([filepath, post]: [string, any]) => {
 		const slug = filepath.split('/').at(-2) as string
@@ -69,6 +71,11 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 			}
 		}
 		return article
+	})
+	.filter((article) => {
+		const date = new Date(article.metadata.date)
+		const lowerThreshold = new Date('1970-01-01')
+		return date.getTime() > lowerThreshold.getTime()
 	})
 	.filter((article) => article !== undefined) as Article[]
 

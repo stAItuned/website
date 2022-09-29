@@ -2,11 +2,7 @@ import { siteURL } from '$lib/info'
 import data from '$lib/git/index'
 
 export async function GET() {
-	const articlesToAnnounce = data.articles.filter((article) => {
-		const date = new Date(article.metadata.date)
-		const lowerThreshold = new Date('1970-01-01')
-		return date.getTime() >= lowerThreshold.getTime()
-	}) // publish only articles that have a date greater than 1970-01-01
+	
 
 	return new Response(
 		`
@@ -36,7 +32,7 @@ export async function GET() {
       <loc>${siteURL}/learn/</loc>
       <changefreq>weekly</changefreq>
       </url>
-      ${articlesToAnnounce
+      ${data.articles
 				.map(
 					(article) => `
       <url>

@@ -4,7 +4,7 @@
 	import type { Article } from '@lib/git/types'
 	const amountOfArticles = 1
 	export let data: PageData
-	const recentArticles = data.articles.filter(article => article.metadata.date > '01/01/70') // show only published articles
+	const recentArticles = data.articles // show only published articles
 		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
 		.slice(0, amountOfArticles)
 	const relevantArticlesSlug = [
