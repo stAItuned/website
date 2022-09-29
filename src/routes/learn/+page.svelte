@@ -24,20 +24,25 @@
 	}
 </script>
 
-<Filters action={filterArticles} />
+<!-- <Filters action={filterArticles} /> -->
+
+<br /><br />
 
 <center class="mb-32">
 	<div
 		class="w-max sm:m-2px md:m-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5"
 	>
-		{#each paginatedItems as article}
-			<BlogCard {article} />
-		{/each}
+		{#if filteredArticles.length > 0}
+			{#each paginatedItems as article}
+				<BlogCard {article} />
+			{/each}
+		{:else}
+			<p>No article found with your selected criteria</p>
+		{/if}
 
-		<!-- {#each articleMetas as articleMeta}
-				<BlogCard {articleMeta} />
-			{/each} -->
 	</div>
+
+	<br />
 	{#if articles.length > pageSize}
 		<div class="w-min">
 			<LightPaginationNav

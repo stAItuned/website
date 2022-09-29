@@ -6,7 +6,7 @@ if (browser) {
 
 import type { ArticleMetadata, Article } from './types'
 
-const validMetadata: Record<keyof Omit<ArticleMetadata, "cover">, string> = {
+const validMetadata: Record<keyof Omit<ArticleMetadata, 'cover' | 'readingTime'>, string> = {
 	author: 'string',
 	title: 'string',
 	date: 'string',
@@ -16,7 +16,7 @@ const validMetadata: Record<keyof Omit<ArticleMetadata, "cover">, string> = {
 	language: 'string'
 }
 
-function isValidMetadata(input: any): input is Omit<ArticleMetadata, "cover"> {
+function isValidMetadata(input: any): input is Omit<ArticleMetadata, 'cover'> {
 	const missing_keys = Object.keys(validMetadata).filter((key) => input[key] === undefined)
 	if (missing_keys.length > 0) console.log(missing_keys)
 	return missing_keys.length === 0
@@ -30,6 +30,12 @@ function isValidUrl(url: string): boolean {
 	return true
 }
 
+function calculateReadingTime(html: string) {
+	const wordsPerMinute = 250 as const
+	const words = html.trim().split(/\s+/).length
+	return Math.ceil(words / wordsPerMinute)
+}
+
 const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eager: true }))
 	.map(([filepath, post]: [string, any]) => {
 		const slug = filepath.split('/').at(-2) as string
@@ -38,18 +44,19 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 		if (!isValidMetadata(post.metadata)) {
 			return undefined
 		}
-		const metadata : ArticleMetadata = post.metadata
+		const metadata: ArticleMetadata = post.metadata
+
 
 		let cover: string | undefined
 		if (isValidUrl(metadata.cover)) {
 			cover = metadata.cover
-		}
-		else if (metadata.cover !== undefined){
+		} else if (metadata.cover !== undefined) {
 			cover = `/assets/cms/articles/${slug}/${metadata.cover}`
 			console.log(cover)
-		} 
-		else {
-			cover = `https://og-image.vercel.app/${encodeURI(post.metadata.title)}.png?theme=dark&fontSize=150px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-bw-logo.svg&&images=https://i.imgur.com/YAKfI5F.png&widths=0&heights=0`
+		} else {
+			cover = `https://og-image.vercel.app/${encodeURI(
+				post.metadata.title
+			)}.png?theme=dark&fontSize=150px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-bw-logo.svg&&images=https://i.imgur.com/YAKfI5F.png&widths=0&heights=0`
 		}
 		const article: Article = {
 			slug,
@@ -57,7 +64,8 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 
 			metadata: {
 				...metadata,
-				cover
+				cover,
+				readingTime: calculateReadingTime(post.default.render().html)
 			}
 		}
 		return article

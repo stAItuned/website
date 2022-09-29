@@ -12,7 +12,7 @@
                 <a href="https://www.linkedin.com/company/stai-tuned/" target="_blank" class="mr-1">
                     <img src="/assets/footer/LinkedIn.svg" alt="ig-logo"/>
                 </a>
-                <a href="https://www.linkedin.com/company/stai-tuned/" target="_blank" class="ml-1">
+                <a href="https://www.instagram.com/stai.tuned/" target="_blank" class="ml-1">
                     <img src="/assets/footer/Instagram.svg" alt="ig-logo"/>
                 </a>
                 
@@ -22,11 +22,11 @@
     <div class="my-1">
 	    <!--<p class="text-center text-3xl lg:text-4xl font-bold text-stayYellow-600" style="text-shadow: 3px 3px #ffE700">JOIN US</p>-->
         <center>
-            <a href="/join"><img class=""  src="/assets/footer/JoinUS.svg" alt="JoinUS" /></a>
+            <a href="/keepintouch"><img class=""  src="/assets/footer/JoinUS.svg" alt="JoinUS" /></a>
         </center>
         <p class="text-center text-s text-gray-500 ">Copyright ©stAItuned</p>
     </div>
     
-    <p class="text-center text-xl font-bold text-white uppercase"> Keep in touch </p>
+    <!--<p class="text-center text-xl font-bold text-white uppercase"> Keep in touch </p>-->
 
 </footer>

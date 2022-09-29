@@ -1,7 +1,7 @@
-import articles from '@lib/git/articles'
+import data from '@lib/git/index'
 
 export const load = () => {
 	return {
-		articles
+		articles: data.articles
 	}
 }

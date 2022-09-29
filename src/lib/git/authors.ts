@@ -3,10 +3,9 @@ import { browser } from '$app/environment'
 if (browser) {
 	throw new Error(`posts can only be imported server-side`)
 }
-import { unified } from 'unified'
 import type { Author } from './types'
 
-const validAuthorMetadata: Record<keyof Omit<Author, 'propic'>, string> = {
+const validAuthorMetadata: Record<keyof Omit<Author, 'propic' | 'articles'>, string> = {
 	description: 'string',
 	email: 'string',
 	linkedin: 'string',

@@ -24,13 +24,15 @@
 		dates: typeof dates[number]
 		readingTime: typeof reading_times[number]
 		languages: typeof languages[number][]
+		searchFilter: string
 	}
 
 	const activeFilters: Filters = {
 		tags: [...tags],
 		dates: 'Always',
 		readingTime: 'Any',
-		languages: [...languages]
+		languages: [...languages],
+		searchFilter: ''
 	}
 	const updateArticles = (activeFilters: Filters) => {
 		action((articles) => {
@@ -62,6 +64,12 @@
 						return false
 					}
 				}
+				if (
+					activeFilters.searchFilter !== '' &&
+					!article.metadata.title.toLowerCase().includes(activeFilters.searchFilter)
+				) {
+					return false
+				}
 				return true
 			}
 
@@ -92,9 +100,22 @@
 	}
 </script>
 
+<input
+	type="text"
+	class="
+                mt-10 mb-10 m-auto
+                col-span-4
+                block
+                w-4/6
+                rounded-xl
+                shadow-xl"
+	placeholder="  Search"
+	bind:value={activeFilters.searchFilter}
+/>
+
 {#if open_filters}
 	<aside
-		class="inline-block  absolute mt-24 z-10 sm:w-4/5 md:w-2/5 lg:w-1/5 h-full bg-[#F5F5F5] border-r-2 shadow-lg pl-10 "
+		class="inline-block  absolute mt-0 z-10 sm:w-4/5 md:w-2/5 lg:w-1/5 h-full bg-[#F5F5F5] border-r-2 shadow-lg pl-10 "
 		transition:fly={{ duration: 300, easing: backInOut, x: 200 }}
 	>
 		<!-- TAGS -->
@@ -121,7 +142,7 @@
 					p-2 m-2
 					inline-block
 					sm:text-sm md:text-md
-					hover:bg-primary-600
+					hover:bg-primary-500
 					hover:text-white"
 						for={t}>{t}</label
 					>
@@ -137,7 +158,7 @@
 				{#each dates as d}
 					<input
 						type="radio"
-						class="check-with-label ml-1 "
+						class="radio-with-label ml-1 "
 						id={d}
 						on:click={() => addOrRemove(d, 'dates')}
 						name="date"
@@ -152,7 +173,7 @@
 						p-2 m-2
 						inline-block
 						sm:text-sm md:text-md
-						hover:bg-primary-600
+						hover:bg-primary-500
 						hover:text-white"
 						for={d}>{d}</label
 					><br />
@@ -186,7 +207,7 @@
 						p-2 m-2
 						inline-block
 						sm:text-sm md:text-md
-						hover:bg-primary-600
+						hover:bg-primary-500
 						hover:text-white"
 						for={l}>{l}</label
 					>
