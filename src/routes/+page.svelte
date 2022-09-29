@@ -55,7 +55,12 @@
 	>
 		<center>
 			<img
-				class="z-1 top-[50px] left-[100px] h-[60vh] w-auto object-contain  self-end p-5"
+				class="z-1 top-[50px] left-[100px] object-contain  self-end p-5
+					   sm:h-auto sm:w-[100vw] 
+					   md:h-auto md:w-[90vw] 
+					   lg:h-auto lg:w-[70vw] 
+					   xl:h-auto xl:w-[60vw]
+					   2xl:h-auto 2xl:w-[40vw]"
 				src="/assets/general/home_logo.png"
 				alt="logo"
 			/>
