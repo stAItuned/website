@@ -2,9 +2,9 @@
 	import type { PageData } from './$types'
 	import info from '@lib/info'
 	import type { Article } from '@lib/git/types'
-	const amountOfArticles = 4
+	const amountOfArticles = 1
 	export let data: PageData
-	const recentArticles = data.articles
+	const recentArticles = data.articles.filter(article => article.metadata.date > '01/01/70') // show only published articles
 		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
 		.slice(0, amountOfArticles)
 	const relevantArticlesSlug = [
@@ -55,19 +55,24 @@
 	>
 		<center>
 			<img
-				class="z-1 top-[50px] left-[100px] w-[50vw] max-h-[380px] object-contain  self-end"
+				class="z-1 top-[50px] left-[100px] w-[60vw] max-h-[380px] object-contain  self-end"
 				src="/assets/general/logo.svg"
 				alt="logo"
 			/>
 		</center>
-		<div class="flex flex-col items-end p-10">
+		<div class="flex flex-col items-center">
 			<img
-				class="z-1 w-[500px] text-white  ml-[100px] mt-0"
+				class="z-1 w-[400px] text-white"
 				src="/assets/general/logo-text.svg"
 				alt="logo"
 			/>
-			<p class="text-white text-xl">your sharing spot</p>
+			<img
+				class="z-1 text-white  mt-0"
+				src="/assets/general/your-sharing-spot.svg"
+				alt="logo"
+			/>
 		</div>
+	
 	</div>
 </section>
 
