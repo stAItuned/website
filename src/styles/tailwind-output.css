@@ -1784,6 +1784,10 @@ select {
   height: 20px;
 }
 
+.h-\[60vh\] {
+  height: 60vh;
+}
+
 .max-h-\[380px\] {
   max-height: 380px;
 }
@@ -2141,6 +2145,10 @@ select {
 
 .p-12 {
   padding: 3rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
 }
 
 .py-\[30px\] {

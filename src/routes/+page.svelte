@@ -55,23 +55,11 @@
 	>
 		<center>
 			<img
-				class="z-1 top-[50px] left-[100px] w-[60vw] max-h-[380px] object-contain  self-end"
-				src="/assets/general/logo.svg"
+				class="z-1 top-[50px] left-[100px] h-[60vh] w-auto object-contain  self-end p-5"
+				src="/assets/general/home_logo.png"
 				alt="logo"
 			/>
 		</center>
-		<div class="flex flex-col items-center">
-			<img
-				class="z-1 w-[400px] text-white"
-				src="/assets/general/logo-text.svg"
-				alt="logo"
-			/>
-			<img
-				class="z-1 text-white  mt-0"
-				src="/assets/general/your-sharing-spot.svg"
-				alt="logo"
-			/>
-		</div>
 	
 	</div>
 </section>
