@@ -1528,6 +1528,14 @@ select {
   left: 100px;
 }
 
+.right-0 {
+  right: 0px;
+}
+
+.left-0 {
+  left: 0px;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -1538,10 +1546,6 @@ select {
 
 .col-span-4 {
   grid-column: span 4 / span 4;
-}
-
-.col-span-3 {
-  grid-column: span 3 / span 3;
 }
 
 .float-right {
@@ -1586,10 +1590,6 @@ select {
   margin-right: auto;
 }
 
-.mt-0 {
-  margin-top: 0px;
-}
-
 .mb-10 {
   margin-bottom: 2.5rem;
 }
@@ -1608,6 +1608,10 @@ select {
 
 .mt-\[200px\] {
   margin-top: 200px;
+}
+
+.mt-0 {
+  margin-top: 0px;
 }
 
 .mt-20 {
@@ -1634,8 +1638,16 @@ select {
   margin-left: 0.25rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 
 .mr-4 {
@@ -1646,16 +1658,12 @@ select {
   margin-bottom: 0.5rem;
 }
 
-.mt-4 {
-  margin-top: 1rem;
+.mr-0 {
+  margin-right: 0px;
 }
 
-.mr-2 {
-  margin-right: 0.5rem;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
+.mr-10 {
+  margin-right: 2.5rem;
 }
 
 .block {
@@ -1740,6 +1748,10 @@ select {
   height: 2.5rem;
 }
 
+.h-\[20px\] {
+  height: 20px;
+}
+
 .h-24 {
   height: 6rem;
 }
@@ -1768,32 +1780,12 @@ select {
   height: 1.5rem;
 }
 
-.h-3 {
-  height: 0.75rem;
-}
-
-.h-\[5px\] {
-  height: 5px;
-}
-
-.h-\[10px\] {
-  height: 10px;
-}
-
-.h-\[20px\] {
-  height: 20px;
-}
-
-.h-\[60vh\] {
-  height: 60vh;
+.max-h-\[200px\] {
+  max-height: 200px;
 }
 
 .max-h-\[380px\] {
   max-height: 380px;
-}
-
-.max-h-\[200px\] {
-  max-height: 200px;
 }
 
 .max-h-12 {
@@ -1814,14 +1806,6 @@ select {
 
 .w-full {
   width: 100%;
-}
-
-.w-\[60vw\] {
-  width: 60vw;
-}
-
-.w-\[400px\] {
-  width: 400px;
 }
 
 .w-auto {
@@ -1856,6 +1840,10 @@ select {
   width: 500px;
 }
 
+.w-\[400px\] {
+  width: 400px;
+}
+
 .w-\[50px\] {
   width: 50px;
 }
@@ -1864,12 +1852,24 @@ select {
   width: 250px;
 }
 
+.w-screen {
+  width: 100vw;
+}
+
 .w-4\/6 {
   width: 66.666667%;
 }
 
 .w-6 {
   width: 1.5rem;
+}
+
+.w-2\/5 {
+  width: 40%;
+}
+
+.w-3\/5 {
+  width: 60%;
 }
 
 .min-w-full {
@@ -1904,8 +1904,8 @@ select {
   grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -1932,12 +1932,20 @@ select {
   align-items: center;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
 
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-items-end {
+  justify-items: end;
 }
 
 .justify-items-center {
@@ -2123,6 +2131,10 @@ select {
      object-fit: fill;
 }
 
+.p-5 {
+  padding: 1.25rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -2145,10 +2157,6 @@ select {
 
 .p-12 {
   padding: 3rem;
-}
-
-.p-5 {
-  padding: 1.25rem;
 }
 
 .py-\[30px\] {
@@ -2230,6 +2238,10 @@ select {
   padding-top: 1rem;
 }
 
+.pl-8 {
+  padding-left: 2rem;
+}
+
 .pl-10 {
   padding-left: 2.5rem;
 }
@@ -2240,6 +2252,10 @@ select {
 
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .align-middle {
@@ -2397,6 +2413,14 @@ select {
 }
 
 @media (min-width: 640px) {
+  .sm\:h-auto {
+    height: auto;
+  }
+
+  .sm\:w-\[100vw\] {
+    width: 100vw;
+  }
+
   .sm\:w-4\/5 {
     width: 80%;
   }
@@ -2425,8 +2449,16 @@ select {
     margin: auto;
   }
 
+  .md\:h-auto {
+    height: auto;
+  }
+
   .md\:h-\[30px\] {
     height: 30px;
+  }
+
+  .md\:w-\[90vw\] {
+    width: 90vw;
   }
 
   .md\:w-5\/6 {
@@ -2475,8 +2507,16 @@ select {
     display: block;
   }
 
+  .lg\:h-auto {
+    height: auto;
+  }
+
   .lg\:h-\[40px\] {
     height: 40px;
+  }
+
+  .lg\:w-\[70vw\] {
+    width: 70vw;
   }
 
   .lg\:w-4\/6 {
@@ -2517,6 +2557,14 @@ select {
 }
 
 @media (min-width: 1280px) {
+  .xl\:h-auto {
+    height: auto;
+  }
+
+  .xl\:w-\[60vw\] {
+    width: 60vw;
+  }
+
   .xl\:w-3\/5 {
     width: 60%;
   }
@@ -2531,6 +2579,14 @@ select {
 }
 
 @media (min-width: 1536px) {
+  .\32xl\:h-auto {
+    height: auto;
+  }
+
+  .\32xl\:w-\[40vw\] {
+    width: 40vw;
+  }
+
   .\32xl\:grid-cols-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
