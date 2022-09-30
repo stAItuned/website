@@ -61,7 +61,7 @@
 					   lg:h-auto lg:w-[70vw] 
 					   xl:h-auto xl:w-[60vw]
 					   2xl:h-auto 2xl:w-[40vw]"
-				src="/assets/general/home_logo.png"
+				src="/assets/general/home_logo_3.png"
 				alt="logo"
 			/>
 		</center>
