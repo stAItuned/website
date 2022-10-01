@@ -1,25 +1,26 @@
-<script>
+<script lang="ts">
 	import Hamburger from './hamburger.svelte'
 	import Menu from './menu.svelte'
-	
-	export let sidebar = false
+
+	import logo from '../../../assets/general/logo-text.svg'
+
+	export let sidebar: boolean
 </script>
 
-<header class="flex shadow-xl px-16 py-4 rounded-bl-[30px] bg-primary-600 w-full h-[90px] justify-between">
-	
-	<div class="flex grid content-center grid-cols-4"> 
-		
-		<nav class="flex z-20 lg:invisible" class:fixed={sidebar} class:py-4={sidebar}>
-			<Hamburger bind:open={sidebar}/>
+<header
+	class="lg:flex shadow-xl px-16 py-6 rounded-b-[30px] bg-primary-600 w-full h-[90px] justify-between items-baseline"
+>
+	<div class="flex justify-between items-center">
+		<nav class="flex z-20 lg:hidden">
+			<Hamburger bind:open={sidebar} />
 		</nav>
 
-		<a href="/" class="col-span-3">
-			<img class="h-[30px] md:h-[30px] lg:h-[40px]" src="/assets/general/logo-text.svg" alt="logo" />
+		<a href="/">
+			<img class="h-[30px] lg:h-[40px]" src={logo} alt="logo" />
 		</a>
 	</div>
 
-	<nav class="text-white justify-self-end font-semibold text-xl self-center hidden lg:block">
-		<Menu/>
+	<nav class="text-white font-semibold text-xl hidden lg:block">
+		<Menu />
 	</nav>
-	
 </header>
