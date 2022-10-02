@@ -1,38 +1,35 @@
-<script lang="ts">
-	import { CONFIG } from '@config'
-	</script>
+<script>
+	import Instagram from '../../../assets/footer/Instagram.svg'
+	import LinkedIn from '../../../assets/footer/LinkedIn.svg'
+	import JoinUS from '../../../assets/footer/JoinUS.svg'
+</script>
 
 <footer
-	class="shadow-xl px-8 py-4 rounded-tl-[30px] bg-primary-600 w-full h-auto items-center grid sm:grid-cols-3 xs:grid-cols-1"
+	class="px-16 py-6 rounded-t-[30px] bg-primary-600 items-center flex lg:flex-row flex-col gap-y-10 justify-between"
 >
+	<div class=" bg-themes flex gap-x-4">
+		<a href="https://www.linkedin.com/company/stai-tuned/" target="_blank">
+			<img src={LinkedIn} alt="linkedin-logo" />
+		</a>
+		<a href="https://www.instagram.com/stai.tuned/" target="_blank">
+			<img src={Instagram} alt="ig-logo" />
+		</a>
+    <a href="https://www.facebook.com/stAItuned" target="_blank">
+      <img src="/assets/footer/Facebook.svg" alt="facebook-logo"/>
+    </a>
+    <a href="https://www.tiktok.com/@staituned?lang=en" target="_blank">
+      <img src="/assets/footer/Tiktok.svg" alt="tiktok-logo"/>
+    </a>
+	</div>
 
-    <div class="bg-primary-600 uppercase text-white text-sm">
-        
-            <div class="items-center pt-4 bg-themes social flex place-content-center">
-                <a href="https://www.linkedin.com/company/stai-tuned/" target="_blank" class="ml-2">
-                    <img src="/assets/footer/LinkedIn.svg" alt="ig-logo"/>
-                </a>
-                <a href="https://www.instagram.com/stai.tuned/" target="_blank" class="ml-2">
-                    <img src="/assets/footer/Instagram.svg" alt="ig-logo"/>
-                </a>
-                <a href="https://www.facebook.com/stAItuned" target="_blank" class="ml-2">
-                    <img src="/assets/footer/Facebook.svg" alt="ig-logo"/>
-                </a>
-                <a href="https://www.tiktok.com/@staituned?lang=en" target="_blank" class="ml-2">
-                    <img src="/assets/footer/Tiktok.svg" alt="ig-logo"/>
-                </a>
-                
-            </div>
-    </div>
+	<div class="justify-self-center">
+		<a href="/keepintouch">
+			<img class="" src={JoinUS} alt="JoinUS" />
+		</a>
+		<p class="mt-2 text-center text-sm text-gray-500">Copyright ©stAItuned</p>
+	</div>
 
-    <div class="my-1">
-	    <!--<p class="text-center text-3xl lg:text-4xl font-bold text-stayYellow-600" style="text-shadow: 3px 3px #ffE700">JOIN US</p>-->
-        <center>
-            <a href="/keepintouch"><img class=""  src="/assets/footer/JoinUS.svg" alt="JoinUS" /></a>
-        </center>
-        <p class="text-center text-s text-gray-500 ">Copyright ©stAItuned</p>
-    </div>
-    
-    <!--<p class="text-center text-xl font-bold text-white uppercase"> Keep in touch </p>-->
-
+	<a href="/keepintouch" class="text-center text-xl font-bold text-white uppercase m-0">
+		Keep in touch
+	</a>
 </footer>

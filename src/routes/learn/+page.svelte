@@ -26,8 +26,6 @@
 
 <!-- <Filters action={filterArticles} /> -->
 
-<br /><br />
-
 <center class="mb-32">
 	<div
 		class="w-max sm:m-2px md:m-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5"
