@@ -17,7 +17,9 @@
 
     // clean this part and add it on an external file? 
     const techOrder = ['Daniele Moltisanti','Francesco Di Salvo','Davide Nardini','Alex Buffa','Francesco Di Gangi']
-    const marketingOrder = ['Roberta Ghidini']
+    const marketingOrder = ['Roberta Ghidini','Alessandra Lo Chirco', 'Alice Ghidini', 'Davide Scurto',
+                            'Emanuele Migliore', 'Francesca Cancelliere', 'Gerarda Malanga','Sofia Pedrini',
+                            'Valeria Tardio']
     let order: string[] = []
 
     if (capitalizedSlug == 'Tech') {
