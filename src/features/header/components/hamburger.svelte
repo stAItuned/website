@@ -2,7 +2,7 @@
 	export let open = false
 </script>
 
-<button class="text-white hover:text-white cursor-pointer border-none focus:outline-none mt-2" class:open on:click={() => open = !open}>
+<button class="text-white hover:text-white cursor-pointer border-none focus:outline-none " class:open on:click={() => open = !open}>
 	<svg width=32 height=24>
 		<line id="top" x1=0 y1=2  x2=22 y2=2/>
 		<line id="middle" x1=22 y1=12 x2=6 y2=12/>
@@ -39,6 +39,6 @@
 	}
 	
   .open #bottom {
-		transform: translate(-12px, 9px) rotate(-45deg)
+		transform: translate(-12px, 6px) rotate(-45deg)
 	}
 </style>
