@@ -7,9 +7,9 @@
 </script>
 
 <footer
-	class="px-16 py-6 rounded-t-[30px] bg-primary-600 items-center flex lg:flex-row flex-col gap-y-10 justify-between"
+	class="px-16 py-8 rounded-t-[30px] bg-primary-600 lg:grid lg:grid-cols-3 flex flex-col items-center space-y-10 lg:space-y-0"
 >
-	<div class=" bg-themes flex gap-x-4">
+	<div class=" bg-themes flex space-x-4 justify-start">
 		<a href="https://www.linkedin.com/company/stai-tuned/" target="_blank">
 			<img src={LinkedIn} alt="linkedin-logo" />
 		</a>
@@ -26,12 +26,12 @@
 
 	<div class="justify-self-center">
 		<a href="/keepintouch">
-			<img class="" src={JoinUS} alt="JoinUS" />
+			<img src={JoinUS} alt="JoinUS" />
 		</a>
-		<p class="mt-2 text-center text-sm text-gray-500">Copyright ©stAItuned</p>
+		<p class="mt-3 text-center text-sm text-gray-500">Copyright ©stAItuned</p>
 	</div>
 
-	<a href="/keepintouch" class="text-center text-xl font-bold text-white uppercase m-0">
+	<a href="/keepintouch" class="text-end text-xl font-bold text-white uppercase m-0">
 		Keep in touch
 	</a>
 </footer>
