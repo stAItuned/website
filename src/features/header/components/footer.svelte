@@ -9,11 +9,17 @@
     <div class="bg-primary-600 uppercase text-white text-sm">
         
             <div class="items-center pt-4 bg-themes social flex place-content-center">
-                <a href="https://www.linkedin.com/company/stai-tuned/" target="_blank" class="mr-1">
+                <a href="https://www.linkedin.com/company/stai-tuned/" target="_blank" class="ml-2">
                     <img src="/assets/footer/LinkedIn.svg" alt="ig-logo"/>
                 </a>
-                <a href="https://www.instagram.com/stai.tuned/" target="_blank" class="ml-1">
+                <a href="https://www.instagram.com/stai.tuned/" target="_blank" class="ml-2">
                     <img src="/assets/footer/Instagram.svg" alt="ig-logo"/>
+                </a>
+                <a href="https://www.facebook.com/stAItuned" target="_blank" class="ml-2">
+                    <img src="/assets/footer/Facebook.svg" alt="ig-logo"/>
+                </a>
+                <a href="https://www.tiktok.com/@staituned?lang=en" target="_blank" class="ml-2">
+                    <img src="/assets/footer/Tiktok.svg" alt="ig-logo"/>
                 </a>
                 
             </div>

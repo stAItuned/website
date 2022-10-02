@@ -4,3 +4,6 @@ export default {
     longDescription: "stAI tuned per un'intelligenza artificiale alla portata di tutti 🦾 TRANSLATE INTO ENGLISH",
     logoPath: "/assets/general/logo.svg",
 } as const
+
+
+export const siteURL = 'https://www.staituned.com' 

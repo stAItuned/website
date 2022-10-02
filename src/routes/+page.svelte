@@ -4,7 +4,7 @@
 	import type { Article } from '@lib/git/types'
 	const amountOfArticles = 1
 	export let data: PageData
-	const recentArticles = data.articles.filter(article => article.metadata.date > '01/01/70') // show only published articles
+	const recentArticles = data.articles // show only published articles
 		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
 		.slice(0, amountOfArticles)
 	const relevantArticlesSlug = [
@@ -55,23 +55,16 @@
 	>
 		<center>
 			<img
-				class="z-1 top-[50px] left-[100px] w-[60vw] max-h-[380px] object-contain  self-end"
-				src="/assets/general/logo.svg"
+				class="z-1 top-[50px] left-[100px] object-contain  self-end p-5
+					   sm:h-auto sm:w-[100vw] 
+					   md:h-auto md:w-[90vw] 
+					   lg:h-auto lg:w-[70vw] 
+					   xl:h-auto xl:w-[60vw]
+					   2xl:h-auto 2xl:w-[40vw]"
+				src="/assets/general/home_logo_3.png"
 				alt="logo"
 			/>
 		</center>
-		<div class="flex flex-col items-center">
-			<img
-				class="z-1 w-[400px] text-white"
-				src="/assets/general/logo-text.svg"
-				alt="logo"
-			/>
-			<img
-				class="z-1 text-white  mt-0"
-				src="/assets/general/your-sharing-spot.svg"
-				alt="logo"
-			/>
-		</div>
 	
 	</div>
 </section>
