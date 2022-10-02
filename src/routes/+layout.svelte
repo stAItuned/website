@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../styles/tailwind-output.css'
+	import '../styles/tailwind.css'
 	import '../styles/style.css'
 	import { Footer, HeaderResponsive, Sidebar } from '@features/header/index'
 
