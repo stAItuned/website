@@ -10,8 +10,6 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        bgGradient: "url('/assets/general/bg-gradient.svg')",
-        bgGraph: "url('/assets/general/bg-graph.svg')",
         bgLearnCard: "url('/assets/general/learn-card.svg')"
       },
       colors: {
