@@ -11,16 +11,12 @@
 	class="lg:flex shadow-xl px-16 py-6 rounded-b-[30px] bg-primary-600 w-full h-[90px] justify-between items-baseline"
 >
 	<div class="flex justify-between items-center">
-		<nav class="flex z-20 lg:hidden">
-			<Hamburger bind:open={sidebar} />
-		</nav>
-
 		<a href="/">
 			<img class="h-[30px] lg:h-[40px]" src={logo} alt="logo" />
 		</a>
-
-		<nav class="flex z-20 lg:invisible right justify-self-end" class:fixed={sidebar} class:py-4={sidebar}>
-			<Hamburger bind:open={sidebar}/>
+		
+		<nav class="flex z-20 lg:hidden">
+			<Hamburger bind:open={sidebar} />
 		</nav>
 	</div>
 

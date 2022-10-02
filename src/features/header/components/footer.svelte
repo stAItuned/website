@@ -1,6 +1,8 @@
 <script>
 	import Instagram from '../../../assets/footer/Instagram.svg'
 	import LinkedIn from '../../../assets/footer/LinkedIn.svg'
+	import Facebook from '../../../assets/footer/Facebook.svg'
+	import TikTok from '../../../assets/footer/TikTok.svg'
 	import JoinUS from '../../../assets/footer/JoinUS.svg'
 </script>
 
@@ -14,12 +16,12 @@
 		<a href="https://www.instagram.com/stai.tuned/" target="_blank">
 			<img src={Instagram} alt="ig-logo" />
 		</a>
-    <a href="https://www.facebook.com/stAItuned" target="_blank">
-      <img src="/assets/footer/Facebook.svg" alt="facebook-logo"/>
-    </a>
-    <a href="https://www.tiktok.com/@staituned?lang=en" target="_blank">
-      <img src="/assets/footer/Tiktok.svg" alt="tiktok-logo"/>
-    </a>
+		<a href="https://www.facebook.com/stAItuned" target="_blank">
+			<img src={Facebook} alt="facebook-logo" />
+		</a>
+		<a href="https://www.tiktok.com/@staituned?lang=en" target="_blank">
+			<img src={TikTok} alt="tiktok-logo" />
+		</a>
 	</div>
 
 	<div class="justify-self-center">
