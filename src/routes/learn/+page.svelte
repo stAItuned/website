@@ -7,7 +7,7 @@
 	import type { Article } from '@lib/git/types'
 	import type { PageData } from '.svelte-kit/types/src/routes/learn/$types'
 	export let data: PageData
-	const articles: Article[] = data.articles.filter(article => article.metadata.date > '01/01/70') // show only published articles
+	const articles: Article[] = data.articles
 	// populated with data from the endpoint
 	$: console.log(`Articoli: ${articles.length}`)
 	let filteredArticles = articles

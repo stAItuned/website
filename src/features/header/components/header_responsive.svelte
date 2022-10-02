@@ -18,6 +18,10 @@
 		<a href="/">
 			<img class="h-[30px] lg:h-[40px]" src={logo} alt="logo" />
 		</a>
+
+		<nav class="flex z-20 lg:invisible right justify-self-end" class:fixed={sidebar} class:py-4={sidebar}>
+			<Hamburger bind:open={sidebar}/>
+		</nav>
 	</div>
 
 	<nav class="text-white font-semibold text-xl hidden lg:block">
