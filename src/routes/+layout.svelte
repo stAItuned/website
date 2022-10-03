@@ -1,22 +1,22 @@
 <script lang="ts">
-	import '../styles/tailwind-output.css'
+	import '../styles/tailwind.css'
 	import '../styles/style.css'
-	import { Footer, HeaderResponsive, Sidebar } from '@features/header/index'
-
+	import bgGradient from '../assets/general/bg-gradient.svg'
+	import { Footer, HeaderResponsive } from '@features/header/index'
 	import { page } from '$app/stores'
 
-	let open = false
+	$: homepage = $page.url.pathname === '/'
 
-	export function getBgColor(url: string) {
-		if (url == '/') return 'bg-bgGradient'
-		else return ''
-	}
+	let openedSidebar = false
 </script>
 
 <!-- Add gradient background only for the index page -->
-<section class={getBgColor($page.url.pathname) + ' min-h-screen flex flex-col justify-between'}>
-	<Sidebar bind:open />
-	<HeaderResponsive bind:sidebar={open} />
+<section class="relative min-h-screen flex flex-col justify-between">
+	{#if homepage}
+		<img src={bgGradient} alt="bg-gradient" class="absolute h-full w-full object-cover -z-50" />
+	{/if}
+
+	<HeaderResponsive bind:openedSidebar />
 
 	<main class="h-full">
 		<slot />
