@@ -2,7 +2,7 @@
 	import Instagram from '../../../assets/footer/Instagram.svg'
 	import LinkedIn from '../../../assets/footer/LinkedIn.svg'
 	import Facebook from '../../../assets/footer/Facebook.svg'
-	import TikTok from '../../../assets/footer/TikTok.svg'
+	import TikTok from '../../../assets/footer/Tiktok.svg'
 	import JoinUS from '../../../assets/footer/JoinUS.svg'
 </script>
 
