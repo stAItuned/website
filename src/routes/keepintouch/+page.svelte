@@ -5,6 +5,7 @@
 		email: '',
 		body: ''
 	}
+	
 	function submitForm() {
 		const subject = encodeURI(`${formData.subject} | ${formData.name} | ${formData.email}`)
 		const url = `mailto:staituned.owner@gmail.com?subject=${subject}&body=${encodeURI(
