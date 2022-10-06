@@ -61,6 +61,7 @@
 		id="MathJax-script"
 		async
 		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+
 	<!-- HTML Meta Tags -->
 	<title>{article.metadata.title} | {info.siteName}</title>
 	<meta name="description" content={article.metadata.meta} />
@@ -79,10 +80,15 @@
 	<meta name="twitter:title" content={article.metadata.title + ' | ' + info.siteName} />
 	<meta name="twitter:description" content={article.metadata.meta} />
 	<meta name="twitter:image" content={article.metadata.cover} />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+	<link
+		rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+		integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+		crossorigin="anonymous"
+	/>
 </svelte:head>
 
-<article class="prose prose-xl text-sm md:text-md lg:text-lg mt-10 mb-20 px-4 mx-auto">
+<article class="prose prose-xl max-w-4xl text-sm md:text-md lg:text-lg my-16 px-8 mx-auto">
 	<!-- COVER IMAGE -->
 	<img src={article.metadata.cover} class="w-full h-auto" alt="cover" />
 
