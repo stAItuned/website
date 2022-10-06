@@ -26,31 +26,25 @@
 
 <!-- <Filters action={filterArticles} /> -->
 
-<center class="mb-32">
-	<div
-		class="w-max sm:m-2px md:m-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5"
-	>
-		{#if filteredArticles.length > 0}
-			{#each paginatedItems as article}
-				<BlogCard {article} />
-			{/each}
-		{:else}
-			<p>No article found with your selected criteria</p>
-		{/if}
-
-	</div>
-
-	<br />
-	{#if articles.length > pageSize}
-		<div class="w-min">
-			<LightPaginationNav
-				totalItems={articles.length}
-				{pageSize}
-				{currentPage}
-				limit={1}
-				showStepOptions={true}
-				on:setPage={setPage}
-			/>
-		</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row place-items-center gap-10 px-8 py-16">
+	{#if filteredArticles.length > 0}
+		{#each paginatedItems as article}
+			<BlogCard {article} />
+		{/each}
+	{:else}
+		<p>No article found with your selected criteria</p>
 	{/if}
-</center>
+</div>
+
+{#if articles.length > pageSize}
+	<div class="w-min my-16 mx-auto">
+		<LightPaginationNav
+			totalItems={articles.length}
+			{pageSize}
+			{currentPage}
+			limit={1}
+			showStepOptions={true}
+			on:setPage={setPage}
+		/>
+	</div>
+{/if}
