@@ -49,7 +49,7 @@
 			class="h-2/3 absolute top-0 w-full rounded-bl-[45px] object-cover"
 		/>
 		<div class="flex flex-col justify-between h-1/2 bg-stayYellow-600 rounded-tr-[45px] p-4 z-10">
-			<h1 class="font-bold text-2xl">{article.metadata.title}</h1>
+			<h1 class="font-bold text-xl">{article.metadata.title}</h1>
 			<div>
 				<div class="flex space-x-2">
 					<img src={agendaIcon} alt="agenda icon" class="max-h-6" />

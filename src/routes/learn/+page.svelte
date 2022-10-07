@@ -26,7 +26,7 @@
 
 <!-- <Filters action={filterArticles} /> -->
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row place-items-center gap-10 px-8 py-16">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-flow-row place-items-center gap-10 px-8 py-16">
 	{#if filteredArticles.length > 0}
 		{#each paginatedItems as article}
 			<BlogCard {article} />
