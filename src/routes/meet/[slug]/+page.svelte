@@ -57,23 +57,11 @@
 	}
 </script>
 
-<div class="min-h-screen">
-	<h1 class="text-bold text-5xl m-auto mt-20 w-max mb-20 uppercase">{capitalizedSlug} team</h1>
-
-	<center>
-		<div
-			class="px-4 justify-center m-20 
-                grid 
-                sm:grid-cols-1 
-                md:grid-cols-2
-                lg:grid-cols-3
-                xl:grid-cols-5"
-		>
-			{#each filterAuthors as author}
-				<div class="justify-self-center">
-					<TeamCard {author} />
-				</div>
-			{/each}
-		</div>
-	</center>
+<div class="my-16 space-y-16 px-4">
+	<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">{capitalizedSlug} team</h1>
+	<div class="flex flex-wrap justify-center gap-16">
+		{#each filterAuthors as author}
+			<TeamCard {author} />
+		{/each}
+	</div>
 </div>
