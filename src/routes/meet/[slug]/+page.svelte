@@ -20,6 +20,7 @@
 		'Francesco Di Salvo',
 		'Davide Nardini',
 		'Alex Buffa',
+		'Andrea Deluca',
 		'Francesco Di Gangi'
 	]
 	const marketingOrder = [
