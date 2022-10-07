@@ -31,7 +31,7 @@
 		<p class="mt-3 text-center text-sm text-gray-500">Copyright ©stAItuned</p>
 	</div>
 
-	<a href="/keepintouch" class="text-end text-xl font-bold text-white uppercase m-0">
+	<!--<a href="/keepintouch" class="text-end text-xl font-bold text-white uppercase m-0">
 		Keep in touch
-	</a>
+	</a>-->
 </footer>

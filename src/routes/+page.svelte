@@ -15,9 +15,7 @@
 		.slice(0, amountOfArticles)
 	const relevantArticlesSlug = [
 		'cos-è-un-algoritmo-e-per-cosa-si-utilizza',
-		'introduzione-e-primi-passi-sul-deep-learning',
-		'time-series-forecasting-with-fraction-differentiation',
-		'natural-language-processing-course'
+		'cos-è-un-computer'
 	] as const // Length must be at least ${amountOfArticles}
 	const relevantArticles = relevantArticlesSlug
 		.map((slug) => data.articles.find((e: Article) => e.slug === slug))

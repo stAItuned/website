@@ -43,25 +43,17 @@
 
 	if (capitalizedSlug == 'Tech' || capitalizedSlug == 'Marketing') {
 		let arr: Author[] = []
-
-		// iterate in order to fill the new array
-		for (let i = 0; i < order.length; i++) {
-			// iterate the current array in order to match the relative team member
-			for (let j = 0; j < filterAuthors.length; j++) {
-				if (filterAuthors[j].name == order[i]) {
-					arr.push(filterAuthors[j])
-				}
-			}
-		}
+		order.forEach((name) => {
+			const authFound = filterAuthors.find((a) => a.name === name)
+			if (authFound) arr.push(authFound)
+		})
 		filterAuthors = arr
 	} else {
-		let arr: Author[] = []
-
-		console.log(filterAuthors[0])
-
-		/*filterAuthors.sort((a,b) => 
-            a.articles.reduce((total, curr)=>total+curr.metadata.readingTime, 0) >= 
-            b.articles.reduce((total, curr)=>total+curr.metadata.readingTime, 0))*/
+		filterAuthors = filterAuthors.sort(
+			(a, b) =>
+				(b.articles?.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0) -
+				(a.articles?.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0)
+		)
 	}
 </script>
 
