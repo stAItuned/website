@@ -88,7 +88,7 @@
 	/>
 </svelte:head>
 
-<article class="prose prose-xl max-w-4xl text-sm md:text-md lg:text-lg my-16 px-8 mx-auto">
+<article class="prose prose-xl max-w-4xl text-base lg:text-lg my-16 px-8 mx-auto">
 	<!-- COVER IMAGE -->
 	<img src={article.metadata.cover} class="w-full" alt="cover" />
 
