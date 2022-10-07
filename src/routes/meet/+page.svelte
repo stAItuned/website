@@ -1,31 +1,79 @@
 <script lang="ts">
+	import techLogo from '../../assets/team/tech_large.svg'
+	import marketingLogo from '../../assets/team/marketing_large.svg'
+	import writersLogo from '../../assets/team/writers_large.svg'
 </script>
 
-<div class="grid grid-cols-1 justify-between"> <!-- generalize! -->
-    
-    <div class="w-9/12 sm:text-sm md:text-lg  m-auto h-max py-10">
-        
-        <!-- adjust text ? -->
-        <p style="text-color:rgb(26 30 59)"><b>Have you always wanted to exchange opinions about Artificial Intelligence?</b></p>
-        <p>You're in the right place then!</p> 
-        
-        <br />
+<!-- generalize! -->
+<div class="max-w-7xl mx-auto my-16 px-8 space-y-24">
+	<section class="md:text-lg space-y-8">
+		<!-- adjust text ? -->
+		<div class="space-y-1">
+			<p class="text-primary-600 font-bold m-0 mb-1 text-2xl">
+				Have you always wanted to exchange opinions about AI practical applications?
+			</p>
+			<p>Then you’re in the right place.</p>
+		</div>
 
-        <p>
-            In January 2022, after years of University spent wishing to find a place
-            for sharing ideas, we wondered if it was the right time for us to create our community. Hence, stAI tuned was created: a place where everyone can share his own knowledge and research projects. <br /><br />
+		<div class="space-y-2">
+			<p>
+				In January 2022, after years of university spent wishing to find a space for sharing ideas,
+				we wondered if it was the right time for us to create an AI community to share knowledge. As
+				a consequence, stAI tuned was created: an open community in which everyone can share their
+				knowledge, research projects and insights related to the AI topic.
+			</p>
+			<p>
+				After the beginning of the project we realized that it’s very common to hear conversations
+				about Artificial Intelligence in many contexts, like work, television, with friends and so
+				on.
+			</p>
+		</div>
+		<div class="space-y-1">
+			<p class="font-bold text-primary-600 text-2xl m-0">
+				But how many people do actually know what Artificial Intelligence is? And how many are
+				familiar with its possible applications?
+			</p>
+			<p>Hence the idea to make everyone aware of AI potentialities in real life.</p>
+		</div>
+	</section>
 
-            Nowadays Artificial Intelligence became a buzzword, and you can hear it wherever you go. <br />
-        </p>
+	<!-- roadmap !! -->
 
-        <br />
-
-        <p style="text-color:rgb(26 30 59)"><b>But how many people are really conscious about it?</b></p>
-        <p>Our goal is make Artificial Intelligence accessible to anyone!</p>
-
-    </div>
-
-
+	<section class="space-y-16">
+		<h1 class="text-6xl font-bold text-primary-600 text-center uppercase">Our team</h1>
+		<div class="flex flex-col flex-wrap gap-8 md:flex-row justify-between">
+			<a href="/meet/tech" class="">
+				<div class="flex flex-col py-8 px-16 bg-gray-100 rounded-lg shadow-lg space-y-6">
+					<img src={techLogo} class="h-48" alt="tech" />
+					<div
+						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-pill"
+					>
+						<span class="font-semibold text-2xl uppercase">Tech</span>
+					</div>
+				</div>
+			</a>
+			<a href="/meet/marketing" class="">
+				<div class="flex flex-col py-8 px-16 bg-gray-100 rounded-lg shadow-lg space-y-6">
+					<img src={marketingLogo} class="h-48" alt="tech" />
+					<div
+						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-pill"
+					>
+						<span class="font-semibold text-2xl uppercase">Marketing</span>
+					</div>
+				</div>
+			</a>
+			<a href="/meet/writers" class="">
+				<div class="flex flex-col py-8 px-16 bg-gray-100 rounded-lg shadow-lg space-y-6">
+					<img src={writersLogo} class="h-48" alt="tech" />
+					<div
+						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-pill"
+					>
+						<span class="font-semibold text-2xl uppercase">Writers</span>
+					</div>
+				</div>
+			</a>
+		</div>
+	</section>
 </div>
 
 <!--
@@ -46,41 +94,3 @@
         
     </center>
 </section> -->
-
-<!-- roadmap !! -->
-
-<p class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-600 uppercase text-center mt-20">Our team</p>
-
-<center>
-<section class="mt-20 mb-20 grid sm:grid-cols-1 md:grid-cols-3">
-    
-        <div class="py-5">
-            <a href="/meet/tech">
-                <div class="team-card shadow-xl">
-                    <img src="/assets/team/tech_large.svg" class="h-3/5 pt-5" alt="tech"/>
-                    <center>
-                        <div class="button-team sm:text-xl md:text-2xl font-bold text-white">TECH</div>
-                    </center>
-                </div>
-            </a>
-        </div>
-
-        <div class="py-5">
-            <a href="/meet/marketing">
-                <div class="team-card">
-                    <img src="/assets/team/marketing_large.svg" class="h-3/5 pt-5" alt="tech"/>
-                    <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">MARKETING</div></center>
-                </div>
-            </a>
-        </div>
-
-        <div class="py-5">
-            <a href="/meet/writers">
-                <div class="team-card">
-                    <img src="/assets/team/writers_large.svg" class="h-3/5 pt-5" alt="tech"/>
-                    <center><div class="button-team sm:text-xl md:text-2xl font-bold text-white">WRITERS</div></center>
-                </div>
-            </a>
-        </div>
-</section>
-</center>
