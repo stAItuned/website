@@ -18,7 +18,7 @@
 			<img class="h-[30px] lg:h-[40px]" src={logo} alt="logo" />
 		</a>
 
-		<nav class="flex z-20 lg:hidden">
+		<nav class="flex z-30 lg:hidden">
 			<Hamburger bind:open={openedSidebar} />
 		</nav>
 	</div>

@@ -2,7 +2,7 @@
 	export let open: boolean
 </script>
 
-<button class="text-white" class:open on:click={() => (open = !open)}>
+<button class="text-white z-20" class:open on:click={() => (open = !open)}>
 	<svg width="32" height="24">
 		<line id="top" x1=0 y1=2 x2=22 y2=2 />
 		<line id="middle" x1=22 y1=12 x2=6 y2=12 />
@@ -21,10 +21,6 @@
 		stroke: currentColor;
 		stroke-width: 3;
 		transition: transform 0.3s ease-in-out;
-	}
-
-	button {
-		z-index: 20;
 	}
 
 	.open svg {

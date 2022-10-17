@@ -1,16 +1,8 @@
 <script lang="ts">
-	import {
-		Card,
-		CardTitle,
-		CardSubtitle,
-		CardActions,
-		Button,
-		Icon,
-		Divider,
-		MaterialApp
-	} from 'svelte-materialify'
-	import { slide } from 'svelte/transition'
-
+	
+	import LinkedIn from "../../../assets/general/linkedin.png"
+	import Email from "../../../assets/general/email.png"
+	
 	let active = false
 	function toggle() {
 		active = !active
@@ -30,10 +22,10 @@
 
 	<div class="flex space-x-2">
 		<a href={author.linkedin} target="_blank">
-			<img src="../assets/general/linkedin.png" alt="avatar" class="h-10" />
+			<img src={LinkedIn} alt="linkedin" class="h-10" />
 		</a>
 		<a href="mailto:{author.email}" target="_blank">
-			<img src="../assets/general/email.png" alt="avatar" class="h-10" />
+			<img src={Email} alt="email" class="h-10" />
 		</a>
 	</div>
 </div>

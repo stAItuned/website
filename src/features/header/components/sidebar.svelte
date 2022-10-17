@@ -11,7 +11,7 @@
 
 {#if open}
 	<aside
-		class="fixed z-20 w-full h-full bg-primary-600 lg:hidden"
+		class="fixed z-30 w-full h-full bg-primary-600 lg:hidden"
 		transition:fly={{ duration: 300, easing: backInOut, x: -1000 }}
 	>
 		<center>

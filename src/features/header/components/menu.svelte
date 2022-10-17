@@ -7,7 +7,7 @@
 	export let onClick: () => void = () => {}
 </script>
 
-<ul class="flex flex-col lg:flex-row py-8 lg:py-0 lg:space-x-16">
+<ul class="flex flex-col lg:flex-row py-8 lg:py-0 space-x-0 lg:space-x-16">
 	{#each CONFIG.navigation.pages as page}
 		<li>
 			<a

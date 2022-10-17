@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition'
 	import { backInOut } from 'svelte/easing'
+	import dayjs from 'dayjs'
 	import type { Article } from '@lib/git/types'
 
 	export let open_filters = false
-	export let action: (filterArticles: (articles: Article[]) => Article[]) => void
+	export let articles: Article[]
+	export let filteredArticles: Article[]
+	// export let action: (filterArticles: (articles: Article[]) => Article[]) => void
 
 	const tags = [
+		'Basic',
 		'Machine Learning',
 		'Computer Vision',
 		'Finance',
@@ -34,196 +38,207 @@
 		languages: [...languages],
 		searchFilter: ''
 	}
-	const updateArticles = (activeFilters: Filters) => {
-		action((articles) => {
-			const filter = (article: Article): boolean => {
-				if (
-					activeFilters.tags.length > 0 &&
-					article.metadata.topics.every((tag) => !activeFilters.tags.includes(tag as any))
-				) {
-					// If articles topics dont match any active filter tags, filter out
-					return false
-				}
-				if (
-					activeFilters.languages.length > 0 &&
-					!activeFilters.languages.includes(article.metadata.language as any)
-				) {
-					return false
-				}
-				const dayInMs: number = 1000 * 60 * 60 * 24
-				let timeSlice: number = 0
-				if (activeFilters.dates === 'Last month') {
-					timeSlice = dayInMs * 31
-				}
-				if (activeFilters.dates === 'Last week') {
-					timeSlice = dayInMs * 7
-				}
-				if (activeFilters.dates !== 'Always') {
-					const diffFromToday = new Date().valueOf() - new Date(article.metadata.date).valueOf()
-					if (diffFromToday >= timeSlice) {
-						return false
-					}
-				}
-				if (
-					activeFilters.searchFilter !== '' &&
-					!article.metadata.title.toLowerCase().includes(activeFilters.searchFilter)
-				) {
-					return false
-				}
-				return true
-			}
 
-			return articles.filter(filter)
+	const applyFilters = () => {
+		filteredArticles = articles
+		filteredArticles = filteredArticles.filter((article) => {
+			return (
+				article.metadata.topics.some((topic) => activeFilters.tags.includes(topic as any)) &&
+				((activeFilters.dates !== 'Always' &&
+					((activeFilters.dates === 'Last month' &&
+						dayjs(article.metadata.date).isAfter(dayjs().subtract(1, 'month'))) ||
+						(activeFilters.dates === 'Last week' &&
+							dayjs(article.metadata.date).isAfter(dayjs().subtract(1, 'week'))))) ||
+					activeFilters.dates === 'Always') &&
+				activeFilters.languages.includes(article.metadata.language as any)
+			)
 		})
+		open_filters = !open_filters
 	}
 
-	$: updateArticles(activeFilters)
+	// const updateArticles = (activeFilters: Filters) => {
+	// 	action((articles) => {
+	// 		const filter = (article: Article): boolean => {
+	// 			if (
+	// 				activeFilters.tags.length > 0 &&
+	// 				article.metadata.topics.every((tag) => !activeFilters.tags.includes(tag as any))
+	// 			) {
+	// 				// If articles topics dont match any active filter tags, filter out
+	// 				return false
+	// 			}
+	// 			if (
+	// 				activeFilters.languages.length > 0 &&
+	// 				!activeFilters.languages.includes(article.metadata.language as any)
+	// 			) {
+	// 				return false
+	// 			}
+	// 			const dayInMs: number = 1000 * 60 * 60 * 24
+	// 			let timeSlice: number = 0
+	// 			if (activeFilters.dates === 'Last month') {
+	// 				timeSlice = dayInMs * 31
+	// 			}
+	// 			if (activeFilters.dates === 'Last week') {
+	// 				timeSlice = dayInMs * 7
+	// 			}
+	// 			if (activeFilters.dates !== 'Always') {
+	// 				const diffFromToday = new Date().valueOf() - new Date(article.metadata.date).valueOf()
+	// 				if (diffFromToday >= timeSlice) {
+	// 					return false
+	// 				}
+	// 			}
+	// 			if (
+	// 				activeFilters.searchFilter !== '' &&
+	// 				!article.metadata.title.toLowerCase().includes(activeFilters.searchFilter)
+	// 			) {
+	// 				return false
+	// 			}
+	// 			return true
+	// 		}
 
-	const addOrRemove = <T extends keyof Filters = keyof Filters>(value: any, place: T) => {
-		if (place === 'tags') {
-			if (activeFilters.tags.includes(value)) {
-				activeFilters.tags = activeFilters.tags.filter((t) => t !== value)
-			} else {
-				activeFilters.tags = [value, ...activeFilters.tags]
-			}
+	// 		return articles.filter(filter)
+	// 	})
+	// }
+
+	// $: updateArticles(activeFilters)
+
+	// const addOrRemove = <T extends keyof Filters = keyof Filters>(value: any, place: T) => {
+	// 	if (place === 'tags') {
+	// 		if (activeFilters.tags.includes(value)) {
+	// 			activeFilters.tags = activeFilters.tags.filter((t) => t !== value)
+	// 		} else {
+	// 			activeFilters.tags = [value, ...activeFilters.tags]
+	// 		}
+	// 	}
+	// 	if (place === 'dates') {
+	// 		activeFilters.dates = value
+	// 	}
+	// 	if (place === 'languages') {
+	// 		if (activeFilters.languages.includes(value)) {
+	// 			activeFilters.languages = activeFilters.languages.filter((l) => l !== value)
+	// 		} else {
+	// 			activeFilters.languages = [value, ...activeFilters.languages]
+	// 		}
+	// 	}
+	// }
+
+	const add = <T extends keyof Filters = keyof Filters>(value: any, place: T) => {
+		switch (place) {
+			case 'tags':
+				activeFilters.tags = [...activeFilters.tags, value]
+				break
+			case 'dates':
+				activeFilters.dates = value
+				break
+			case 'languages':
+				activeFilters.languages = [...activeFilters.languages, value]
+				break
+			default:
+				break
 		}
-		if (place === 'dates') {
-			activeFilters.dates = value
-		}
-		if (place === 'languages') {
-			if (activeFilters.languages.includes(value)) {
-				activeFilters.languages = activeFilters.languages.filter((l) => l !== value)
-			} else {
-				activeFilters.languages = [value, ...activeFilters.languages]
-			}
+	}
+
+	const remove = <T extends keyof Filters = keyof Filters>(value: any, place: T) => {
+		switch (place) {
+			case 'tags':
+				activeFilters.tags = activeFilters.tags.filter((tag) => tag !== value)
+				break
+			case 'languages':
+				activeFilters.languages = activeFilters.languages.filter((lang) => lang !== value)
+				break
+			default:
+				break
 		}
 	}
 </script>
 
-<input
-	type="text"
-	class="
-                mt-10 mb-10 m-auto
-                col-span-4
-                block
-                w-4/6
-                rounded-xl
-                shadow-xl"
-	placeholder="  Search"
-	bind:value={activeFilters.searchFilter}
-/>
-
 {#if open_filters}
 	<aside
-		class="inline-block  absolute mt-0 z-10 sm:w-4/5 md:w-2/5 lg:w-1/5 h-full bg-[#F5F5F5] border-r-2 shadow-lg pl-10 "
+		class="absolute w-full md:w-1/2 xl:w-1/3 bg-[#F5F5F5] h-full top-0 z-20 right-0"
 		transition:fly={{ duration: 300, easing: backInOut, x: 200 }}
 	>
-		<!-- TAGS -->
-		<div class="inline-block min-w-full">
-			<p class="text-bold underline text-xl lg:text-2xl mt-10 text-primary-500">Tags</p>
+		<div class="h-screen flex flex-col justify-between p-16">
+			<h1 class="font-bold text-2xl text-primary-500 uppercase">Filters</h1>
 
-			<div class="w-full ">
-				{#each tags as t}
-					<input
-						type="checkbox"
-						class="check-with-label"
-						style="display: none;"
-						on:click={() => addOrRemove(t, 'tags')}
-						id={t}
-						checked={activeFilters.tags.includes(t)}
-					/>
-					<label
-						class="
-					label-for-check
-					left
-					rounded-lg 
-					bg-gray-200
-					border-[#1A1E3B]
-					p-2 m-2
-					inline-block
-					sm:text-sm md:text-md
-					hover:bg-primary-500
-					hover:text-white"
-						for={t}>{t}</label
-					>
-				{/each}
+			<!-- TAGS -->
+			<div class="space-y-4">
+				<h1 class="font-bold text-xl text-primary-500">Tags</h1>
+				<div class="flex flex-wrap gap-2">
+					{#each tags as tag}
+						{#if activeFilters.tags.includes(tag)}
+							<button
+								class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+								on:click={() => remove(tag, 'tags')}
+							>
+								<span>{tag}</span>
+							</button>
+						{:else}
+							<button
+								class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+								on:click={() => add(tag, 'tags')}
+							>
+								<span>{tag}</span>
+							</button>
+						{/if}
+					{/each}
+				</div>
 			</div>
-		</div>
 
-		<!-- DATE -->
-		<!-- Always should be activated by default, but how could I -->
-		<div class="inline-block min-w-full mt-2">
-			<p class="text-bold underline text-xl lg:text-2xl pt-30 text-primary-500">Creation date</p>
-			<div class="overflow-hidden float-left">
-				{#each dates as d}
-					<input
-						type="radio"
-						class="radio-with-label ml-1 "
-						id={d}
-						on:click={() => addOrRemove(d, 'dates')}
-						name="date"
-					/>
-					<label
-						class="
-						label-for-check
-						left
-						rounded-lg 
-						bg-gray-200
-						border-[#1A1E3B]
-						p-2 m-2
-						inline-block
-						sm:text-sm md:text-md
-						hover:bg-primary-500
-						hover:text-white"
-						for={d}>{d}</label
-					><br />
-				{/each}
+			<!-- DATE -->
+			<!-- Always should be activated by default, but how could I -->
+			<div class="space-y-4">
+				<h1 class="font-bold text-xl text-primary-500">Creation Date</h1>
+				<div class="flex flex-col gap-2 w-fit">
+					{#each dates as date}
+						{#if activeFilters.dates.includes(date)}
+							<button
+								class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+							>
+								<span>{date}</span>
+							</button>
+						{:else}
+							<button
+								class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+								on:click={() => add(date, 'dates')}
+							>
+								<span>{date}</span>
+							</button>
+						{/if}
+					{/each}
+				</div>
 			</div>
-		</div>
 
-		<!-- Reading time -->
-		<!-- As before -->
+			<!-- Reading time -->
+			<!-- As before -->
 
-		<div class="inline-block min-w-full mt-2">
-			<p class="text-bold underline text-xl lg:text-2xl pt-30 text-primary-500">Languages</p>
-			<div class="overflow-hidden float-left">
-				{#each languages as l}
-					<input
-						type="checkbox"
-						class="check-with-label"
-						style="display: none;"
-						id={l}
-						name="languages"
-						on:click={() => addOrRemove(l, 'languages')}
-						checked={activeFilters.languages.includes(l)}
-					/>
-					<label
-						class="
-						label-for-check
-						left
-						rounded-lg 
-						bg-gray-200
-						border-[#1A1E3B]
-						p-2 m-2
-						inline-block
-						sm:text-sm md:text-md
-						hover:bg-primary-500
-						hover:text-white"
-						for={l}>{l}</label
-					>
-				{/each}
+			<div class="space-y-4">
+				<h1 class="font-bold text-xl text-primary-500">Languages</h1>
+				<div class="flex gap-2 w-fit">
+					{#each languages as lang}
+						{#if activeFilters.languages.includes(lang)}
+							<button
+								class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+								on:click={() => remove(lang, 'languages')}
+							>
+								<span>{lang}</span>
+							</button>
+						{:else}
+							<button
+								class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+								on:click={() => add(lang, 'languages')}
+							>
+								<span>{lang}</span>
+							</button>
+						{/if}
+					{/each}
+				</div>
 			</div>
+
+			<button
+				class="p-3 bg-stayYellow-600 hover:bg-stayYellow-400 active:bg-stayYellow-500 transition text-primary-500 rounded-lg"
+				on:click={applyFilters}
+			>
+				<span class="font-semibold">Apply</span>
+			</button>
 		</div>
 	</aside>
 {/if}
-
-<style>
-	aside {
-		right: 0;
-	}
-
-	.check-with-label:checked + .label-for-check {
-		background-color: rgb(26 30 59);
-		color: white;
-	}
-</style>
