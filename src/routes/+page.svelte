@@ -5,6 +5,7 @@
 	import type { PageData } from './$types'
 	import info from '@lib/info'
 	import type { Article } from '@lib/git/types'
+	import { getHomeSchema } from '@lib/seo'
 	const amountOfArticles = 6
 	export let data: PageData
 	const recentArticles = data.articles // show only published articles
@@ -16,7 +17,7 @@
 	const relevantArticlesSlug = [
 		'cos-è-un-algoritmo-e-per-cosa-si-utilizza',
 		'cos-è-un-computer',
-		'cos\'è-l-intelligenza-artificiale',
+		"cos'è-l-intelligenza-artificiale",
 		'quando-è-nata-l-intelligenza-artificiale'
 	] as const // Length must be at least ${amountOfArticles}
 	const relevantArticles = relevantArticlesSlug
@@ -48,11 +49,12 @@
 
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:domain" content="tptp.vercel.app" />
-	<!-- <meta property="twitter:url" content={window.location.hostname} /> -->
+	<meta property="twitter:domain" content={info.basePath} />
+	<meta property="twitter:url" content={info.basePath} />
 	<meta name="twitter:title" content={info.siteName} />
 	<meta name="twitter:description" content={info.longDescription} />
 	<meta name="twitter:image" content={info.logoPath} />
+	{@html getHomeSchema()}
 </svelte:head>
 
 <section class="my-[30px]">
