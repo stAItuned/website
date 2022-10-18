@@ -57,7 +57,7 @@
 					</div>
 					<div class="flex space-x-2">
 						<img src={clockIcon} alt="clock icon" class="max-h-6" />
-						<p class="text-md mb-0">{article.metadata.readingTime} min.</p>
+						<p class="text-md mb-0">{article.metadata.readingTime} min</p>
 					</div>
 				</div>
 
