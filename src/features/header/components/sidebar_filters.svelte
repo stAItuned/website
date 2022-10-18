@@ -17,7 +17,7 @@
 			case 'tags':
 				activeFilters.tags = [...activeFilters.tags, value]
 				break
-			case 'dates':
+			case 'creationDate':
 				activeFilters.creationDate = value
 				break
 			case 'languages':
