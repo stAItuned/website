@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TeamCard } from '@features/blog/index'
+	import { Cards } from '@features/ui-core'
 
 	import type { Author } from '@lib/git/types'
 	import type { PageData } from '.svelte-kit/types/src/routes/meet/[slug]/$types'
@@ -57,11 +57,11 @@
 	}
 </script>
 
-<div class="my-16 space-y-16 px-4">
+<div class="mb-16 mt-[150px] space-y-16 px-4">
 	<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">{capitalizedSlug} team</h1>
 	<div class="flex flex-wrap justify-center gap-16">
 		{#each filterAuthors as author}
-			<TeamCard {author} />
+			<Cards.Team {author} />
 		{/each}
 	</div>
 </div>

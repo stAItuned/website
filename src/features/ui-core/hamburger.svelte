@@ -1,13 +1,13 @@
 <script lang="ts">
 	export let open: boolean
+	export let className: string
 </script>
 
-<button class="text-white z-20" class:open on:click={() => (open = !open)}>
-	<svg width="32" height="24">
-		<line id="top" x1=0 y1=2 x2=22 y2=2 />
-		<line id="middle" x1=22 y1=12 x2=6 y2=12 />
-		<line id="bottom" x1=0 y1=22 x2=22 y2=22 />
-
+<button class={className} class:open on:click={() => (open = !open)}>
+	<svg width="24" height="16">
+		<line id="top" x1="0" y1="2" x2="22" y2="2" />
+		<line id="middle" x1="22" y1="12" x2="6" y2="12" />
+		<line id="bottom" x1="0" y1="22" x2="22" y2="22" />
 	</svg>
 </button>
 

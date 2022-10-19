@@ -1,15 +1,9 @@
 <script lang="ts">
-	
-	import LinkedIn from "../../../assets/general/linkedin.png"
-	import Email from "../../../assets/general/email.png"
-	
-	let active = false
-	function toggle() {
-		active = !active
-	}
+	import LinkedIn from '../../../assets/general/linkedin.png'
+	import Email from '../../../assets/general/email.png'
 
 	import type { Author } from '@lib/git/types'
-	// export let articleMeta: ArticleMeta
+
 	export let author: Author
 </script>
 

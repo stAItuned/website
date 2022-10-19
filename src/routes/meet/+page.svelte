@@ -2,12 +2,12 @@
 	import techLogo from '../../assets/team/tech_large.svg'
 	import marketingLogo from '../../assets/team/marketing_large.svg'
 	import writersLogo from '../../assets/team/writers_large.svg'
+
+	import { Button } from '@features/ui-core'
 </script>
 
-<!-- generalize! -->
-<div class="max-w-7xl mx-auto my-16 px-8 space-y-24">
+<div class="max-w-7xl mx-auto mb-16 mt-[150px] px-8 space-y-24">
 	<section class="md:text-lg space-y-8">
-		<!-- adjust text ? -->
 		<div class="space-y-1">
 			<p class="text-primary-600 font-bold m-0 mb-1 text-2xl">
 				Have you always wanted to exchange opinions about AI practical applications?
@@ -42,21 +42,19 @@
 	<section class="space-y-16">
 		<h1 class="text-6xl font-bold text-primary-600 text-center uppercase">Our team</h1>
 		<div class="flex flex-col flex-wrap gap-8 md:flex-row justify-between">
-			<a href="/meet/tech" class="">
+			<a href="/meet/tech">
 				<div class="flex flex-col py-8 px-16 bg-gray-100 rounded-lg shadow-lg space-y-6">
 					<img src={techLogo} class="h-48" alt="tech" />
-					<div
-						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-pill"
-					>
+					<Button variant="primary" rounded="full" width="full">
 						<span class="font-semibold text-2xl uppercase">Tech</span>
-					</div>
+					</Button>
 				</div>
 			</a>
 			<a href="/meet/marketing" class="">
 				<div class="flex flex-col py-8 px-16 bg-gray-100 rounded-lg shadow-lg space-y-6">
 					<img src={marketingLogo} class="h-48" alt="tech" />
 					<div
-						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-pill"
+						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-full"
 					>
 						<span class="font-semibold text-2xl uppercase">Marketing</span>
 					</div>
@@ -66,7 +64,7 @@
 				<div class="flex flex-col py-8 px-16 bg-gray-100 rounded-lg shadow-lg space-y-6">
 					<img src={writersLogo} class="h-48" alt="tech" />
 					<div
-						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-pill"
+						class="p-4 text-center bg-primary-600 hover:bg-primary-500 active:bg-primary-600 transition w-full text-white rounded-full"
 					>
 						<span class="font-semibold text-2xl uppercase">Writers</span>
 					</div>

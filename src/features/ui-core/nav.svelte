@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { CONFIG } from '@config'
 	import { page } from '$app/stores'
 
-	$: active = $page.url.pathname
+	import { CONFIG } from '@config'
 
 	export let onClick: () => void = () => {}
+
+	$: active = $page.url.pathname
 </script>
 
 <ul class="flex flex-col lg:flex-row py-8 lg:py-0 space-x-0 lg:space-x-16">

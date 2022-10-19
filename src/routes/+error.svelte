@@ -1,4 +1,8 @@
-<div class="text-center space-y-6">
+<script lang="ts">
+	import { Button } from '@features/ui-core'
+</script>
+
+<section class="text-center space-y-6 mt-[270px] mb-16">
 	<div class="space-y-0">
 		<h1 class="text-xl font-semibold">Oops... Something went wrong</h1>
 		<p>Looks like there's been a mistake, either on your side or on our side. We're sorry :(</p>
@@ -6,11 +10,9 @@
 
 	<div>
 		<a href="/">
-			<button
-				class="p-4 bg-primary-400 hover:bg-primary-500 active:bg-primary-600 transition w-fit text-white rounded-lg"
-			>
-				<span class="font-semibold">Go back to the homepage</span>
-			</button>
+			<Button variant="primary" rounded="lg" width="fit">
+				Go back to the homepage
+			</Button>
 		</a>
 	</div>
-</div>
+</section>

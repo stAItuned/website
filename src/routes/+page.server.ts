@@ -1,7 +1,7 @@
-import data from '@lib/git/index'
+// import data from '@lib/git/index'
 
-export const load = () => {
-	return {
-		...data
-	}
-}
+// export const load = async () => {
+// 	return {
+// 		...data
+// 	}
+// }

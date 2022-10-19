@@ -89,7 +89,11 @@
 </svelte:head>
 
 <section>
-	<img src={article.metadata.cover} class="w-screen h-[20rem] object-cover" alt="cover" />
+	<img
+		src={article.metadata.cover}
+		class="w-screen h-[25rem] lg:h-[30rem] object-cover"
+		alt="cover"
+	/>
 	<!-- COVER IMAGE -->
 
 	<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-16 px-4 ">

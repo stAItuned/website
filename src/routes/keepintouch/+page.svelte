@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { Button } from '@features/ui-core'
+
 	let formData = {
 		subject: '',
 		name: '',
 		email: '',
 		body: ''
 	}
-	
+
 	function submitForm() {
 		const subject = encodeURI(`${formData.subject} | ${formData.name} | ${formData.email}`)
 		const url = `mailto:staituned.owner@gmail.com?subject=${subject}&body=${encodeURI(
@@ -15,8 +17,9 @@
 	}
 </script>
 
-<div class="flex lg:flex-row flex-col max-w-7xl mx-auto items-center px-8 lg:px-16 space-y-16 lg:space-y-0 py-24 lg:space-x-24">
-	<!-- generalize! -->
+<div
+	class="flex lg:flex-row flex-col max-w-7xl mx-auto items-center px-8 lg:px-16 space-y-16 lg:space-y-0 mb-16 mt-[240px] lg:space-x-24"
+>
 	<center class="relative bg-primary-600 text-white p-16 rounded w-full">
 		<div
 			class="bg-stayYellow-600 absolute -top-5 lg:-top-10 right-5 lg:right-10 w-full h-full -z-10 rounded"
@@ -32,13 +35,6 @@
 				<h1 class="text-2xl">Be part of our community!</h1>
 				<h3 class="text-xl">Present yourself!</h3>
 			</div>
-			<!-- <p class="text-md md:text-xl">
-				Do you want to <b>collaborate</b> with us? <br />
-				Do you want to <b>share</b> some brilliant ideas? <br />
-				Do you want to get some <b>reading tips</b>? <br />
-				<br />
-				We are looking forward to hearing from you!
-			</p> -->
 		</div>
 	</center>
 
@@ -50,7 +46,7 @@
 			class="bg-primary-600 absolute -top-5 lg:-top-10 right-5 lg:right-10 w-full h-full -z-10 rounded"
 		/>
 		<input
-			class="w-full rounded p-3 border-0 shadow"
+			class="w-full rounded-lg p-3 border-0 shadow"
 			bind:value={formData.name}
 			type="text"
 			id="fname"
@@ -59,7 +55,7 @@
 			required
 		/><br />
 		<input
-			class="w-full rounded p-3 border-0 shadow"
+			class="w-full rounded-lg p-3 border-0 shadow"
 			bind:value={formData.subject}
 			type="text"
 			id="fobject"
@@ -68,7 +64,7 @@
 			required
 		/><br />
 		<input
-			class="w-full rounded p-3 border-0 shadow"
+			class="w-full rounded-lg p-3 border-0 shadow"
 			bind:value={formData.email}
 			type="email"
 			id="femail"
@@ -81,16 +77,11 @@
 			id="ftext"
 			name="ftext"
 			placeholder="Text*"
-			class="w-full rounded p-3 border-0 shadow"
+			class="w-full rounded-lg p-3 border-0 shadow"
 			rows="4"
 			required
 		/>
 
-		<button
-			type="submit"
-			class="p-4 bg-primary-400 px-8 w-full hover:bg-primary-500 active:bg-primary-600 transition w-fit text-white rounded"
-		>
-			<span class="font-semibold">Send</span>
-		</button>
+		<Button type="submit" variant="primary" width="full" rounded="lg">Send</Button>
 	</form>
 </div>

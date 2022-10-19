@@ -14,6 +14,12 @@ export const CREATION_DATES = [
     'Last month'
 ] as const;
 
+export const READING_TIME = [
+    'Less than 5 min',
+    '5 - 10 min',
+    'More than 10 min'
+] as const;
+
 export const LANGUAGES = [
     'English',
     'Italian'
