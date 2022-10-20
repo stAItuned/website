@@ -15,7 +15,8 @@
 		"tailwind:watch": "TAILWIND_MODE=watch NODE_ENV=development tailwindcss -c tailwind.config.cjs -i src/styles/tailwind.css -o src/styles/tailwind-output.css --watch",
 		"tailwind:build": "TAILWIND_MODE=build NODE_ENV=production tailwindcss -c tailwind.config.cjs -m -i src/styles/tailwind.css -o src/styles/tailwind-output.css",
 		"dev": "concurrently \"npm run dev:only\" \"npm run tailwind:watch\"",
-		"build": "npm run tailwind:build && npm run build:only"
+		"build": "npm run tailwind:build && npm run build:only",
+		"update:cms": "git submodule update --remote"
 	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^17.0.0",

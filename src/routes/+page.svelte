@@ -100,7 +100,7 @@
 				class="relative w-full md:w-1/2 sm:text-xl font-bold"
 				style="background: {HOME_CONFIG.ARTICLE_CARD_COLORS[idx]};"
 			>
-				<a href="/learn/{article.slug}">
+				<a href="/learn/{article.metadata.target}/{article.slug}">
 					<img
 						src={article.metadata.cover}
 						class="w-full max-h-[200px] object-cover opacity-[40%]"

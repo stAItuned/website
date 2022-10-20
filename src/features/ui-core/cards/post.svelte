@@ -4,6 +4,8 @@
 	import expertTag from '../../../assets/learn/star-Expert.png'
 	import agendaIcon from '../../../assets/learn/Agenda.svg'
 	import clockIcon from '../../../assets/learn/Clock.svg'
+	import itFlag from '../../../assets/learn/Italian.png'
+	import enFlag from '../../../assets/learn/English.png'
 
 	import dayjs from 'dayjs'
 
@@ -13,7 +15,7 @@
 </script>
 
 <div class="w-full md:w-1/2 2xl:w-1/4 p-4">
-	<a href="/learn/{article.slug}">
+	<a href="/learn/{article.metadata.target}/{article.slug}">
 		<div class="relative h-[420px] flex flex-col justify-end rounded shadow-lg">
 			<img
 				src={article.metadata.target === 'Newbie' ? newbieTag : expertTag}
@@ -41,13 +43,17 @@
 				<div class="flex items-center justify-between">
 					<div class="flex space-x-2 items-center">
 						<img
-							src="assets/cms/team/{article.metadata.author.replaceAll(' ', '-')}/propic.jpg"
+							src="/assets/cms/team/{article.metadata.author.replaceAll(' ', '-')}/propic.jpg"
 							alt="avatar"
 							class="max-h-8 rounded-full"
 						/>
 						<p class="text-lg mb-0">{article.metadata.author}</p>
 					</div>
-					<img src="assets/learn/{article.metadata.language}.png" class="h-4" alt="Lang" />
+					<img
+						src={article.metadata.language === 'Italian' ? itFlag : enFlag}
+						class="h-4"
+						alt="Lang"
+					/>
 				</div>
 			</div>
 		</div>

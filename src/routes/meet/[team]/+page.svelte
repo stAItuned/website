@@ -9,10 +9,9 @@
 	export let data: PageData
 	const authors: Author[] = data.authors
 
-	let slug = $page.url.pathname.split('/')[2]
-	const capitalizedSlug = slug.charAt(0).toUpperCase() + slug.slice(1)
-
-	let filterAuthors = authors.filter((author) => author.team.indexOf(capitalizedSlug) > -1)
+	let filterAuthors = authors.filter((author) =>
+		author.team.map((t) => t.toLowerCase()).includes($page.params.team)
+	)
 
 	// clean this part and add it on an external file?
 	const techOrder = [
@@ -35,13 +34,13 @@
 	]
 	let order: string[] = []
 
-	if (capitalizedSlug == 'Tech') {
+	if ($page.params.team == 'tech') {
 		order = techOrder
-	} else if (capitalizedSlug == 'Marketing') {
+	} else if ($page.params.team == 'marketing') {
 		order = marketingOrder
 	}
 
-	if (capitalizedSlug == 'Tech' || capitalizedSlug == 'Marketing') {
+	if ($page.params.team == 'tech' || $page.params.team == 'marketing') {
 		let arr: Author[] = []
 		order.forEach((name) => {
 			const authFound = filterAuthors.find((a) => a.name === name)
@@ -58,7 +57,9 @@
 </script>
 
 <div class="mb-16 mt-[150px] space-y-16 px-4">
-	<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">{capitalizedSlug} team</h1>
+	<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">
+		{$page.params.team} team
+	</h1>
 	<div class="flex flex-wrap justify-center gap-16">
 		{#each filterAuthors as author}
 			<Cards.Team {author} />
