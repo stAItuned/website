@@ -22,13 +22,13 @@ const config = defineConfig({
 	remarkPlugins: [remarkMath, relativeImages, videos, remarkGFM],
 	rehypePlugins: [
 		rehypeKatexSvelte,
-		rehypeHighlight,
 		rehypeSlug,
 		rehypeAutolinkHeadings,
 		rehypeFigure,
 		[rehypeExternalLinks, { rel: ['nofollow'] }],
 		imageLazyLoading
-	]
+	],
+
 })
 /**
  * Adds support to video files in markdown image links
