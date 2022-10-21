@@ -13,7 +13,7 @@
 
 	export let data: PageData
 
-	const recentArticles = date.sort
+	const recentArticles: Article[] = date.sort
 		.mostRecentArticleFirst(data.articles)
 		.slice(0, HomeConfigs.AMOUNT_OF_ARTICLES)
 
