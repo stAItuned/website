@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import type { Article } from '@lib/git/types'
+import type { Article } from '@lib/interfaces'
 
 const mostRecentArticleFirst = (articles: Article[]): Article[] => {
     return articles.sort((a: Article, b: Article) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Cards } from '@features/ui-core'
 
-	import type { Author } from '@lib/git/types'
+	import type { Author } from '@lib/interfaces'
 	import type { PageData } from '.svelte-kit/types/src/routes/meet/[slug]/$types'
 
 	import { page } from '$app/stores'

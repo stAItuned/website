@@ -1,4 +1,4 @@
-import type { Filters } from "@lib/constants"
+import type { Filters } from "@lib/configs"
 
 type Tag = typeof Filters.TAGS[number]
 type CreationDate = typeof Filters.CREATION_DATES[number]

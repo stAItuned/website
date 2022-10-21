@@ -1,4 +1,4 @@
-import type { HOME_CONFIG } from '@lib/configs'
+import type { HomeConfigs } from '@lib/configs'
 
-type Category = typeof HOME_CONFIG.CATEGORIES[number]
+type Category = typeof HomeConfigs.CATEGORIES[number]
 export default Category

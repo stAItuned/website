@@ -9,9 +9,6 @@ module.exports = {
       //mono: 'JetBrains Mono, monospace'
     },
     extend: {
-      backgroundImage: {
-        bgLearnCard: "url('/assets/general/learn-card.svg')"
-      },
       colors: {
         primary: {
           400: '#566096',

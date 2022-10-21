@@ -1,3 +1,4 @@
 import * as date from './date'
+import * as cms from './cms'
 
-export { date }
+export { date, cms }

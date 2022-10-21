@@ -18,8 +18,6 @@ export interface Article {
 	slug: string
 	filename: string
 	metadata: ArticleMetadata
-	content?: string | undefined
-	assets?: string | undefined
 	author?: Author | undefined
 }
 

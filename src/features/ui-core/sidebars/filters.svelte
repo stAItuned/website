@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Filters } from '@lib/constants'
+	import { Filters } from '@lib/configs'
 	import type { Filter } from '@lib/interfaces'
 
 	import SidebarWrapper from './wrapper.svelte'

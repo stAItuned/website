@@ -5,27 +5,27 @@
 	import { date } from '@lib/helpers'
 
 	import type { PageData } from './$types'
-	import type { Article } from '@lib/git/types'
+	import type { Article } from '@lib/interfaces'
 	import info from '@lib/info'
 
-	import { HOME_CONFIG } from '@lib/configs'
+	import { HomeConfigs } from '@lib/configs'
 	import type { Category } from '@lib/types'
 
 	export let data: PageData
 
 	const recentArticles = date.sort
 		.mostRecentArticleFirst(data.articles)
-		.slice(0, HOME_CONFIG.AMOUNT_OF_ARTICLES)
+		.slice(0, HomeConfigs.AMOUNT_OF_ARTICLES)
 
-	const relevantArticles = HOME_CONFIG.RELEVANT_ARTICLES_SLUG.map((slug) =>
-		data.articles.find((e: Article) => e.slug === slug)
+	const relevantArticles = HomeConfigs.RELEVANT_ARTICLES_SLUG.map((slug) =>
+		data.articles.find((article: Article) => article.slug === slug)
 	)
-		.filter((a) => a !== undefined)
-		.slice(0, HOME_CONFIG.AMOUNT_OF_ARTICLES) as Article[]
+		.filter((article) => article !== undefined)
+		.slice(0, HomeConfigs.AMOUNT_OF_ARTICLES) as Article[]
 
 	let articlesToShow: Category = 'Recent'
 
-	const setShow = (newState: typeof articlesToShow) => {
+	const setShow = (newState: Category) => {
 		articlesToShow = newState
 	}
 
@@ -83,7 +83,7 @@
 <!-- Home Articles Cards -->
 <section class="bg-stayYellow-600 text-white py-5 mb-10">
 	<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
-		{#each HOME_CONFIG.CATEGORIES as category}
+		{#each HomeConfigs.CATEGORIES as category}
 			<div
 				class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-stayYellow-600 transition"
 				class:text-stayYellow-600={articlesToShow === category}
@@ -98,7 +98,9 @@
 		{#each articles as article, idx}
 			<div
 				class="relative w-full md:w-1/2 sm:text-xl font-bold"
-				style="background: {HOME_CONFIG.ARTICLE_CARD_COLORS[idx]};"
+				style="background: {HomeConfigs.ARTICLE_CARD_COLORS[
+					idx % HomeConfigs.ARTICLE_CARD_COLORS.length
+				]};"
 			>
 				<a href="/learn/{article.metadata.target}/{article.slug}">
 					<img

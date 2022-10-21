@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Article } from '@lib/git/types'
+	import type { Article } from '@lib/interfaces'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
 	import type { PageData } from '.svelte-kit/types/src/routes/learn/[slug]/$types'
@@ -89,33 +89,27 @@
 </svelte:head>
 
 <section>
+	<!-- COVER IMAGE -->
 	<img
 		src={article.metadata.cover}
 		class="w-screen h-[25rem] lg:h-[30rem] object-cover"
 		alt="cover"
 	/>
-	<!-- COVER IMAGE -->
 
 	<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-16 px-4 ">
 		<div class="flex justify-between mb-8">
 			<!-- Author -->
 			<div class="flex items-center space-x-2">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="w-6 h-6"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
-					/>
-				</svg>
+				<img
+					src="/assets/cms/team/{article.metadata.author.replaceAll(' ', '-')}/propic.jpg"
+					alt="avatar"
+					class="max-h-8 rounded-full"
+				/>
+
 				{#if article.author !== undefined}
-					<a class="no-underline hover:underline" href={`/meet/${article.author.team.at(0)}`}
+					<a
+						class="no-underline hover:underline"
+						href={`/meet/${article.author.team.at(0)?.toLocaleLowerCase()}`}
 						>{article.author.name}</a
 					>
 				{:else}
@@ -127,16 +121,17 @@
 			<div class="flex items-center space-x-2">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
 					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
+					fill="currentColor"
 					class="w-6 h-6"
 				>
 					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+						d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z"
+					/>
+					<path
+						fill-rule="evenodd"
+						d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z"
+						clip-rule="evenodd"
 					/>
 				</svg>
 				<time datetime={article.metadata.date}>{localtime}</time>
@@ -146,16 +141,14 @@
 			<div class="flex items-center space-x-2">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
 					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
+					fill="currentColor"
 					class="w-6 h-6"
 				>
 					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+						fill-rule="evenodd"
+						d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+						clip-rule="evenodd"
 					/>
 				</svg>
 				<p>{article.metadata.readingTime}m</p>

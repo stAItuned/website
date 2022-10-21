@@ -1,3 +1,8 @@
+export const TARGETS = [
+    "Newbie",
+    "Expert"
+] as const
+
 export const TAGS = [
     'Basic',
     'Machine Learning',
@@ -11,7 +16,7 @@ export const TAGS = [
 export const CREATION_DATES = [
     'Always',
     'Last week',
-    'Last month'
+    'Last month',
 ] as const;
 
 export const READING_TIME = [

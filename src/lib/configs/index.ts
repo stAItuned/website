@@ -1,3 +1,4 @@
-import * as HOME_CONFIG from './home'
+import * as HomeConfigs from './home'
+import * as Filters from './filters'
 
-export { HOME_CONFIG }
+export { HomeConfigs, Filters }
