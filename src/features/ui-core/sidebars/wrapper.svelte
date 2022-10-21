@@ -3,7 +3,7 @@
 	import { backInOut } from 'svelte/easing'
 
 	export let className = ''
-	export let open = false
+	export let open: boolean
 </script>
 
 {#if open}

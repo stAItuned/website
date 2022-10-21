@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let open: boolean
-	export let className: string
+	export let className: string = ""
 </script>
 
 <button class={className} class:open on:click={() => (open = !open)}>

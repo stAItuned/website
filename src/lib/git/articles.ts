@@ -30,5 +30,5 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 	.filter((article) => {
 		return article && article.metadata.date
 	}) as Article[]
-	
+
 export default articles

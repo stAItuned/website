@@ -2,7 +2,8 @@
 	import '../styles/tailwind.css'
 	import '../styles/style.css'
 
-	import bgGradient from '../assets/general/bg-gradient.svg'
+	// @ts-ignore
+	import bgGradient from '../assets/general/bg-gradient.svg?w=200?webp'
 
 	import { page } from '$app/stores'
 
@@ -14,9 +15,10 @@
 </script>
 
 <Header bind:open_header />
+
 <section class="relative min-h-screen flex flex-col justify-between">
 	{#if homepage}
-		<img src={bgGradient} alt="bg-gradient" class="absolute h-full w-full object-cover -z-50" />
+		<img srcset={bgGradient} alt="bg-gradient" class="absolute h-full w-full object-cover -z-50" />
 	{/if}
 
 	<main class="h-full flex flex-col justify-center">

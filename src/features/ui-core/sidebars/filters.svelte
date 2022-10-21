@@ -4,9 +4,9 @@
 
 	import SidebarWrapper from './wrapper.svelte'
 	import Hamburger from '../hamburger.svelte'
-	import Button from '../button.svelte';
+	import Button from '../button.svelte'
 
-	export let open = false
+	export let open: boolean
 	export let activeFilters: Filter
 	export let filter: () => void
 
@@ -149,8 +149,6 @@
 				{/each}
 			</div>
 		</div>
-		<Button variant="secondary" rounded="lg" width="full" onClick={filter}>
-			Apply
-		</Button>
+		<Button variant="secondary" rounded="lg" width="full" onClick={filter}>Apply</Button>
 	</div>
 </SidebarWrapper>

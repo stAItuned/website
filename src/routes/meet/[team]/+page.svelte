@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { Cards } from '@features/ui-core'
-
-	import type { Author } from '@lib/interfaces'
-	import type { PageData } from '.svelte-kit/types/src/routes/meet/[slug]/$types'
+	import type { PageData } from './$types'
 
 	import { page } from '$app/stores'
+
+	import type { Author } from '@lib/interfaces'
+	import { Cards, Breadcrumb, PageTransition } from '@features/ui-core'
 
 	export let data: PageData
 	const authors: Author[] = data.authors
 
+	const team = $page.params.team
+
 	let filterAuthors = authors.filter((author) =>
-		author.team.map((t) => t.toLowerCase()).includes($page.params.team)
+		author.team.map((t) => t.toLowerCase()).includes(team)
 	)
 
 	// clean this part and add it on an external file?
@@ -34,13 +36,13 @@
 	]
 	let order: string[] = []
 
-	if ($page.params.team == 'tech') {
+	if (team == 'tech') {
 		order = techOrder
-	} else if ($page.params.team == 'marketing') {
+	} else if (team == 'marketing') {
 		order = marketingOrder
 	}
 
-	if ($page.params.team == 'tech' || $page.params.team == 'marketing') {
+	if (team == 'tech' || team == 'marketing') {
 		let arr: Author[] = []
 		order.forEach((name) => {
 			const authFound = filterAuthors.find((a) => a.name === name)
@@ -56,13 +58,16 @@
 	}
 </script>
 
-<div class="mb-16 mt-[150px] space-y-16 px-4">
-	<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">
-		{$page.params.team} team
-	</h1>
-	<div class="flex flex-wrap justify-center gap-16">
-		{#each filterAuthors as author}
-			<Cards.Team {author} />
-		{/each}
+<PageTransition>
+	<div class="max-w-7xl mx-auto mb-16 mt-[150px] space-y-16 px-8 lg:px-4">
+		<Breadcrumb />
+		<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">
+			{team} team
+		</h1>
+		<div class="flex flex-wrap justify-center">
+			{#each filterAuthors as author}
+				<Cards.Team {author} />
+			{/each}
+		</div>
 	</div>
-</div>
+</PageTransition>

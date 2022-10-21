@@ -8,7 +8,7 @@
 
 	import dayjs from 'dayjs'
 
-	import type { Article } from '@lib/git/types'
+	import type { Article } from '@lib/interfaces'
 
 	export let article: Article
 </script>

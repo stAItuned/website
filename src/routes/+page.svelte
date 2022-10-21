@@ -1,15 +1,17 @@
 <script lang="ts">
-	import homeLogo from '../assets/general/home_logo_3.png'
-	import bgGraph from '../assets/general/bg-graph.svg'
-
-	import { date } from '@lib/helpers'
+	// @ts-ignore-line
+	import homeLogo from '../assets/general/home_logo_3.png?w=1024?webp'
+	// @ts-ignore
+	import bgGraph from '../assets/general/bg-graph.svg?w=200?webp'
 
 	import type { PageData } from './$types'
-	import type { Article } from '@lib/interfaces'
+
 	import info from '@lib/info'
 
-	import { HomeConfigs } from '@lib/configs'
 	import type { Category } from '@lib/types'
+	import type { Article } from '@lib/interfaces'
+	import { HomeConfigs } from '@lib/configs'
+	import { date } from '@lib/helpers'
 
 	export let data: PageData
 
@@ -55,13 +57,14 @@
 </svelte:head>
 
 <!-- Hero -->
+
 <section class="mb-[30px] mt-[120px]">
 	<div class="relative bg-primary-500 h-[600px] shadow-2xl flex flex-col justify-center">
 		<img src={bgGraph} alt="bg-graph" class="absolute object-cover w-full h-full" />
 		<center class="z-10">
 			<img
 				class="p-5 h-auto sm:w-[100vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] 2xl:w-[40vw]"
-				src={homeLogo}
+				srcset={homeLogo}
 				alt="logo"
 			/>
 		</center>

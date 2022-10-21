@@ -11,7 +11,7 @@
 
 	import { page } from '$app/stores'
 
-	import { Sidebars, Cards, Button } from '@features/ui-core'
+	import { Sidebars, Cards, Button, Breadcrumb, PageTransition } from '@features/ui-core'
 
 	import { Filters } from '@lib/configs'
 	import type { Filter } from '@lib/interfaces'
@@ -81,70 +81,71 @@
 	}
 </script>
 
-{#if $page.params.target !== 'newbie' && $page.params.target !== 'expert'}
-	<Error />
-{:else}
-	<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
+<PageTransition>
+	{#if $page.params.target !== 'newbie' && $page.params.target !== 'expert'}
+		<Error />
+	{:else}
+		<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
 
-	<section class="lg:px-8 mt-[150px] mb-16">
-		<div class="px-4 mb-16 space-x-8 flex flex-row justify-end items-center">
-			<form on:submit|preventDefault={filter} class="w-full flex justify-end -space-x-16">
-				<input
-					on:change|preventDefault={handleChange}
-					name="search"
-					placeholder="Search by titles or authors..."
-					type="search"
-					class="bg-gray-200 py-4 px-8 w-full lg:w-1/3 rounded-full border-0 focus:ring-0"
-				/>
+		<section class="lg:px-8 mt-[150px] mb-16">
+			<div class="px-4 mb-16 space-x-8 flex flex-row justify-end items-end lg:items-center">
+				<div
+					class="flex flex-col lg:flex-row w-full justify-between lg:items-center space-y-8 lg:space-y-0"
+				>
+					<Breadcrumb />
+					<form on:submit|preventDefault={filter} class="w-full flex justify-end -space-x-16">
+						<input
+							on:change|preventDefault={handleChange}
+							name="search"
+							placeholder="Search by titles or authors..."
+							type="search"
+							class="bg-gray-200 py-4 px-8 w-full lg:w-1/3 rounded-full border-0 focus:ring-0"
+						/>
 
-				<Button type="submit" variant="secondary" rounded="full" className="lg:px-8 shadow">
-					Search
-				</Button>
-			</form>
-
-			<svg
-				on:click={() => (open_filters = !open_filters)}
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				fill="currentColor"
-				class="w-10 h-10 hover:cursor-pointer hover:scale-125 transition"
-			>
-				<path
-					d="M18.75 12.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5zM12 6a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 6zM12 18a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 18zM3.75 6.75h1.5a.75.75 0 100-1.5h-1.5a.75.75 0 000 1.5zM5.25 18.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM3 12a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 013 12zM9 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM12.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0zM9 15.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"
-				/>
-			</svg>
-
-			<!-- <Hamburger
-				className="p-4 bg-stayYellow-600 hover:bg-stayYellow-500 active:bg-stayYellow-600 transition rounded-full"
-				bind:open={open_filters}
-			/> -->
-		</div>
-
-		{#if filteredArticles.length > 0}
-			<div class="flex flex-wrap">
-				{#each paginatedItems as article}
-					<Cards.Post {article} />
-				{/each}
+						<Button type="submit" variant="secondary" rounded="full" className="lg:px-8 shadow">
+							Search
+						</Button>
+					</form>
+				</div>
+				<svg
+					on:click={() => (open_filters = !open_filters)}
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class="w-10 h-10 hover:cursor-pointer hover:scale-125 transition"
+				>
+					<path
+						d="M18.75 12.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5zM12 6a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 6zM12 18a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 18zM3.75 6.75h1.5a.75.75 0 100-1.5h-1.5a.75.75 0 000 1.5zM5.25 18.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM3 12a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 013 12zM9 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM12.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0zM9 15.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"
+					/>
+				</svg>
 			</div>
-		{:else}
-			<div class="h-full">
-				<h1 class="text-center text-2xl font-bold text-primary-500">
-					No article found with your selected criteria
-				</h1>
-			</div>
-		{/if}
 
-		{#if articles.length > pageSize}
-			<div class="w-min my-16 mx-auto">
-				<LightPaginationNav
-					totalItems={articles.length}
-					{pageSize}
-					{currentPage}
-					limit={1}
-					showStepOptions={true}
-					on:setPage={setPage}
-				/>
-			</div>
-		{/if}
-	</section>
-{/if}
+			{#if filteredArticles.length > 0}
+				<div class="flex flex-wrap">
+					{#each paginatedItems as article}
+						<Cards.Post {article} />
+					{/each}
+				</div>
+			{:else}
+				<div class="h-full">
+					<h1 class="text-center text-2xl font-bold text-primary-500">
+						No article found with your selected criteria
+					</h1>
+				</div>
+			{/if}
+
+			{#if articles.length > pageSize}
+				<div class="w-min my-16 mx-auto">
+					<LightPaginationNav
+						totalItems={articles.length}
+						{pageSize}
+						{currentPage}
+						limit={1}
+						showStepOptions={true}
+						on:setPage={setPage}
+					/>
+				</div>
+			{/if}
+		</section>
+	{/if}
+</PageTransition>
