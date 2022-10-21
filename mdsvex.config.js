@@ -9,7 +9,6 @@ import remarkGFM from 'remark-gfm'
 import rehypeExternalLinks from 'rehype-external-links'
 import { visit } from 'unist-util-visit'
 import imageLazyLoading from 'rehype-plugin-image-native-lazy-loading'
-import rehypeHighlight from 'rehype-highlight'
 
 
 const config = defineConfig({
