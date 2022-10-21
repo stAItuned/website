@@ -42,7 +42,6 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 	.map(([filepath, post]: [string, any]) => {
 		const slug = filepath.split('/').at(-2) as string
 		const filename = (filepath.split('/').at(-1) as string).slice(0, -3)
-		// console.log(slug)
 		if (!isValidMetadata(post.metadata)) {
 			return undefined
 		}
