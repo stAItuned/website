@@ -5,7 +5,12 @@ import relativeImages from 'mdsvex-relative-images'
 import rehypeFigure from 'rehype-figure'
 import rehypeKatexSvelte from 'rehype-katex-svelte'
 import remarkMath from 'remark-math'
+import remarkGFM from 'remark-gfm'
+import rehypeExternalLinks from 'rehype-external-links'
 import { visit } from 'unist-util-visit'
+import imageLazyLoading from 'rehype-plugin-image-native-lazy-loading'
+import rehypeHighlight from 'rehype-highlight'
+
 
 const config = defineConfig({
 	extensions: ['.svelte.md', '.md', '.svx'],
@@ -14,8 +19,16 @@ const config = defineConfig({
 		dashes: 'oldschool'
 	},
 
-	remarkPlugins: [remarkMath, relativeImages, videos],
-	rehypePlugins: [rehypeKatexSvelte, rehypeSlug, rehypeAutolinkHeadings, rehypeFigure]
+	remarkPlugins: [remarkMath, relativeImages, videos, remarkGFM],
+	rehypePlugins: [
+		rehypeKatexSvelte,
+		rehypeHighlight,
+		rehypeSlug,
+		rehypeAutolinkHeadings,
+		rehypeFigure,
+		[rehypeExternalLinks, { rel: ['nofollow'] }],
+		imageLazyLoading
+	]
 })
 /**
  * Adds support to video files in markdown image links
