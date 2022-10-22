@@ -1,5 +1,6 @@
 <script lang="ts">
-	import logo from '../../assets/general/logo-text.svg'
+	// @ts-ignore
+	import logo from '../../assets/general/logo-text.svg?w=30;40?webp'
 
 	import { slide } from 'svelte/transition'
 	import { backInOut } from 'svelte/easing'
@@ -31,16 +32,16 @@
 	<Sidebars.Header bind:open={open_header} />
 
 	<header
-		class="fixed z-20 lg:flex shadow-xl px-16 py-6 rounded-b-[30px] bg-primary-600 w-full h-[90px] justify-between items-baseline"
+		class="fixed z-20 lg:flex  px-16 py-6 rounded-b-[30px] bg-primary-600 w-full h-[90px] justify-between items-baseline"
 		transition:slide={{ duration: 300, easing: backInOut }}
 	>
 		<div class="flex justify-between items-center">
 			<a href="/">
-				<img class="h-[30px] lg:h-[40px]" src={logo} alt="logo" />
+				<img class="h-[30px] lg:h-[40px]" srcset={logo} alt="logo" />
 			</a>
 
 			<nav class="flex z-30 lg:hidden">
-				<Hamburger className="text-white z-20" bind:open={open_header} />
+				<Hamburger className="text-white" bind:open={open_header} />
 			</nav>
 		</div>
 

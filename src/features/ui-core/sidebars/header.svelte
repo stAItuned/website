@@ -1,6 +1,4 @@
 <script lang="ts">
-	import logo from '../../../assets/general/logo-text.svg'
-
 	import SidebarWrapper from './wrapper.svelte'
 	import Nav from '../nav.svelte'
 
@@ -9,13 +7,7 @@
 
 <SidebarWrapper {open} className="bg-primary-600 lg:hidden">
 	<center>
-		<nav class="py-4 text-3xl text-white font-bold divide-y-2 px-10">
-			<div class="mb-10">
-				<a on:click={() => (open = false)} href="/">
-					<img class="h-[40px]" src={logo} alt="logo" />
-				</a>
-			</div>
-
+		<nav class="py-4 text-3xl text-white font-bold border-t-2 border-slate-500 mx-10 mt-32">
 			<Nav onClick={() => (open = false)} />
 		</nav>
 	</center>

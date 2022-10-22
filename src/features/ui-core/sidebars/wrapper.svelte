@@ -8,7 +8,7 @@
 
 {#if open}
 	<aside
-		class={'fixed w-full h-full z-30 ' + className}
+		class={'fixed w-full h-full z-20 ' + className}
 		transition:fly={{ duration: 300, easing: backInOut, x: 200 }}
 	>
 		<slot />

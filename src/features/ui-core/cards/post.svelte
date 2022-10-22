@@ -1,10 +1,14 @@
 <script lang="ts">
-	import defaultBg from '../../../assets/general/bg-1.jpeg'
-	import newbieTag from '../../../assets/learn/star-Newbie.png'
-	import expertTag from '../../../assets/learn/star-Expert.png'
-
-	import itFlag from '../../../assets/learn/Italian.png'
-	import enFlag from '../../../assets/learn/English.png'
+	// @ts-ignore
+	import defaultBg from '../../../assets/general/bg-1.jpeg?w=1024?webp'
+	// @ts-ignore
+	import newbieTag from '../../../assets/learn/star-Newbie.png?h=64?webp'
+	// @ts-ignore
+	import expertTag from '../../../assets/learn/star-Expert.png?h=64?webp'
+	// @ts-ignore
+	import itFlag from '../../../assets/learn/Italian.png?h=64?webp'
+	// @ts-ignore
+	import enFlag from '../../../assets/learn/English.png?h=64?webp'
 
 	import dayjs from 'dayjs'
 

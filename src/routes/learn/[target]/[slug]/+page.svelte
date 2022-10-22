@@ -2,10 +2,10 @@
 	import type { Article } from '@lib/interfaces'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
-	import type { PageData } from '.svelte-kit/types/src/routes/learn/[slug]/$types'
+	import type { PageData } from './$types'
 	import info from '@lib/info'
 
-	import { PageTransition } from '@features/ui-core'
+	import { PageTransition, Breadcrumb } from '@features/ui-core'
 
 	export let data: PageData
 	const article: Article = data.article
@@ -99,6 +99,10 @@
 			alt="cover"
 		/>
 
+		<!-- <div class="hidden lg:block lg:absolute top-96 px-4">
+			<Breadcrumb />
+		</div> -->
+		
 		<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-16 px-4 ">
 			<div class="flex justify-between mb-8">
 				<!-- Author -->

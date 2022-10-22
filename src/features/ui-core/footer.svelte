@@ -1,6 +1,7 @@
 <script>
+	// @ts-ignore
+	import JoinUS from '../../assets/footer/JoinUS.svg?h=30?webp'
 	import { SOCIALS } from '@lib/constants'
-	import JoinUS from '../../assets/footer/JoinUS.svg'
 </script>
 
 <footer
@@ -16,7 +17,7 @@
 
 	<div class="justify-self-center">
 		<a href="/keepintouch">
-			<img src={JoinUS} alt="JoinUS" />
+			<img srcset={JoinUS} alt="JoinUS" />
 		</a>
 		<p class="mt-3 text-center text-sm text-gray-500">Copyright ©stAItuned</p>
 	</div>
