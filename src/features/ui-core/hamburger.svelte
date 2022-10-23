@@ -3,7 +3,7 @@
 	export let className: string = ""
 </script>
 
-<button class={className} class:open on:click={() => (open = !open)}>
+<button class={className} class:open on:click={() => open = !open}>
 	<svg width="24" height="16">
 		<line id="top" x1="0" y1="2" x2="22" y2="2" />
 		<line id="middle" x1="22" y1="12" x2="6" y2="12" />

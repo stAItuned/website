@@ -36,8 +36,8 @@
 		transition:slide={{ duration: 300, easing: backInOut }}
 	>
 		<div class="flex justify-between items-center">
-			<a href="/">
-				<img class="h-[30px] lg:h-[40px]" srcset={logo} alt="logo" />
+			<a href="/" on:click={() => (open_header = false)}>
+				<img class="h-[30px] lg:h-[40px] hover:cursor-pointer" srcset={logo} alt="logo" />
 			</a>
 
 			<nav class="flex z-30 lg:hidden">
