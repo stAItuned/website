@@ -1,5 +1,3 @@
-import type { Article } from './article'
-
 interface Author {
     name: string
     team: string[]
@@ -8,7 +6,6 @@ interface Author {
     email: string
     description: string
     propic: string
-    articles?: Article[] | undefined
 }
 
 export default Author

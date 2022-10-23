@@ -1,7 +1,5 @@
 <script lang="ts">
 	// @ts-ignore
-	import defaultBg from '../../../assets/general/bg-1.jpeg?w=1024?webp'
-	// @ts-ignore
 	import newbieTag from '../../../assets/learn/star-Newbie.png?h=64?webp'
 	// @ts-ignore
 	import expertTag from '../../../assets/learn/star-Expert.png?h=64?webp'
@@ -18,7 +16,7 @@
 </script>
 
 <div class="w-full md:w-1/2 2xl:w-1/4 p-4">
-	<a href="/learn/{article.metadata.target}/{article.slug}">
+	<a href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}">
 		<div class="relative h-[420px] flex flex-col justify-end rounded shadow-lg">
 			<img
 				src={article.metadata.target === 'Newbie' ? newbieTag : expertTag}
@@ -26,7 +24,7 @@
 				class="absolute top-10 right-5 z-10 h-3"
 			/>
 			<img
-				src={article.metadata.cover || defaultBg}
+				src={article.metadata.cover}
 				alt="background"
 				class="h-2/3 absolute top-0 w-full rounded-bl-[45px] object-cover"
 			/>

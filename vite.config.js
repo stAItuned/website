@@ -5,7 +5,7 @@ import { imagetools } from 'vite-imagetools'
 import path from 'path'
 
 export default defineConfig({
-	plugins: [sveltekit(), imagetools()],
+	plugins: [sveltekit(), imagetools({ include: ['**\/*.{png,jpg,svg,webp}?*'] })],
 	manifest: false,
 	// allows vite access to ./posts
 	server: {

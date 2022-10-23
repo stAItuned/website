@@ -1,10 +1,10 @@
 <script lang="ts">
 	// @ts-ignore
-	import techLogo from '../../assets/team/tech_large.svg?h=48?webp'
+	import techLogo from '../../assets/team/tech_large.svg?h=512?webp'
 	// @ts-ignore
-	import marketingLogo from '../../assets/team/marketing_large.svg?h=48?webp'
+	import marketingLogo from '../../assets/team/marketing_large.svg?h=512?webp'
 	// @ts-ignore
-	import writersLogo from '../../assets/team/writers_large.svg?h=48?webp'
+	import writersLogo from '../../assets/team/writers_large.svg?h=512?webp'
 
 	import { Button, Breadcrumb, PageTransition } from '@features/ui-core'
 
@@ -56,14 +56,13 @@
 				{#each TEAMS as team}
 					<a href={`/meet/${team.name.toLowerCase()}`}>
 						<div
-							class="flex flex-col space-y-8 opacity-50 hover:opacity-100 duration-500 transition"
+							class="flex flex-col items-center gap-8 opacity-50 hover:opacity-100 duration-500 transition"
 						>
-							<img
-								srcset={team.logo}
-								class="h-48 hover:scale-150 duration-500 transition"
-								alt="tech"
-							/>
-							<Button variant="primary" rounded="full" className="w-1/2 md:w-full mx-auto">
+							<div class="hover:scale-125 duration-500 transition">
+								<img srcset={team.logo} class="h-[200px]" alt="tech" />
+							</div>
+
+							<Button variant="primary" width="full" rounded="full" className="w-1/2 md:w-full">
 								<span class="font-semibold text-2xl uppercase">{team.name}</span>
 							</Button>
 						</div>

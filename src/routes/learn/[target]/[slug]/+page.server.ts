@@ -1,14 +1,15 @@
-import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import data from '@lib/git/index'
+import { error } from '@sveltejs/kit'
+
+import { git } from '@lib/git'
 
 export const load: PageServerLoad = async ({ params }) => {
-	const articles = data.articles
-	const article = articles.find((article) => article.slug === params.slug)
-	if (article === undefined) {
-		throw error(404, 'Article not found')
-	}
-	return {
-		article
-	}
+    const articles = (await git.loadData()).articles
+    const article = articles.find((article) => article.slug === params.slug)
+    if (!article)
+        throw error(404, 'Article not found')
+
+    return {
+        article
+    }
 }

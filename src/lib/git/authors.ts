@@ -15,6 +15,7 @@ const authors = Object.entries(import.meta.glob('/cms/team/**/*.md', { eager: tr
 
 		const folder = cms.author.getFolderFromPath(filepath)
 		const propic: string = `/assets/cms/team/${folder}/propic.jpg`
+
 		const author: Author = {
 			...member.metadata,
 			propic

@@ -3,6 +3,7 @@
 
 	import { page } from '$app/stores'
 
+	import { Meet } from '@lib/configs'
 	import type { Author } from '@lib/interfaces'
 	import { Cards, Breadcrumb, PageTransition } from '@features/ui-core'
 
@@ -15,31 +16,12 @@
 		author.team.map((t) => t.toLowerCase()).includes(team)
 	)
 
-	// clean this part and add it on an external file?
-	const techOrder = [
-		'Daniele Moltisanti',
-		'Francesco Di Salvo',
-		'Davide Nardini',
-		'Alex Buffa',
-		'Francesco Di Gangi'
-	]
-	const marketingOrder = [
-		'Roberta Ghidini',
-		'Alessandra Lo Chirco',
-		'Alice Ghidini',
-		'Davide Scurto',
-		'Emanuele Migliore',
-		'Francesca Cancelliere',
-		'Gerarda Malanga',
-		'Sofia Pedrini',
-		'Valeria Tardio'
-	]
 	let order: string[] = []
 
 	if (team == 'tech') {
-		order = techOrder
+		order = Meet.TECH_ORDER
 	} else if (team == 'marketing') {
-		order = marketingOrder
+		order = Meet.MARKETING_ORDER
 	}
 
 	if (team == 'tech' || team == 'marketing') {
@@ -60,10 +42,12 @@
 
 <PageTransition>
 	<div class="max-w-7xl mx-auto mb-16 mt-[150px] space-y-16 px-8 lg:px-4">
-		<Breadcrumb />
-		<h1 class="font-bold text-5xl text-primary-600 text-center uppercase">
-			{team} team
-		</h1>
+		<div class="flex flex-col md:flex-row gap-8 items-center justify-between px-8">
+			<Breadcrumb />
+			<h1 class="font-bold text-4xl text-center text-primary-500 uppercase">
+				{team} team
+			</h1>
+		</div>
 		<div class="flex flex-wrap justify-center">
 			{#each filterAuthors as author}
 				<Cards.Team {author} />

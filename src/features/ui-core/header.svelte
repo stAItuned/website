@@ -1,6 +1,6 @@
 <script lang="ts">
 	// @ts-ignore
-	import logo from '../../assets/general/logo-text.svg?w=30;40?webp'
+	import logo from '../../assets/general/logo-text.svg?w=512?webp'
 
 	import { slide } from 'svelte/transition'
 	import { backInOut } from 'svelte/easing'

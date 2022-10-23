@@ -1,7 +1,6 @@
-import data from '@lib/git/index'
+import { git } from '@lib/git'
+import type { CMSData } from '@lib/interfaces'
 
 export const load = async () => {
-	return {
-		...data
-	}
+	return await git.loadData() as CMSData
 }

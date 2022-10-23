@@ -1,4 +1,4 @@
-import type { ArticleMetadata } from "@lib/interfaces";
+import type { ArticleMetadata, Article, Cover } from "@lib/interfaces";
 
 const validMetadata: Record<keyof Omit<ArticleMetadata, 'cover' | 'readingTime'>, string> = {
     title: 'string',
@@ -11,7 +11,7 @@ const validMetadata: Record<keyof Omit<ArticleMetadata, 'cover' | 'readingTime'>
 }
 
 const isValidMetadata = (input: any): input is Omit<ArticleMetadata, 'cover' | 'readingTime'> => {
-    const missing_keys = Object.keys(validMetadata).filter((key) => input[key] === undefined)
+    const missing_keys = Object.keys(validMetadata).filter((key) => !input[key])
     return missing_keys.length === 0
 }
 
@@ -36,14 +36,36 @@ const computeReadingTime = (html: string): number => {
     return Math.ceil(words / wordsPerMinute)
 }
 
-const defineCover = (slug: string, title: string, cover: string): string => {
-    if (isValidUrl(cover)) {
-        return cover;
-    } else if (cover) {
-        return `/assets/cms/articles/${slug}/${cover}`
-    } else {
-        return `https://og-image.vercel.app/${encodeURI(title)}.png?theme=dark&fontSize=150px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-bw-logo.svg&&images=https://i.imgur.com/YAKfI5F.png&widths=0&heights=0`
-    }
+const getPublishedArticles = (articles: (Article | undefined)[]): Article[] => {
+    const filteredArticles: (Article | undefined)[] = articles.filter((article: Article | undefined) => {
+        return article !== undefined
+    })
+
+    return filteredArticles as Article[]
 }
 
-export { getInfoFromPath, isValidMetadata, computeReadingTime, defineCover }
+const loadCovers = (articles: Article[]): Promise<Cover[]> => {
+    return new Promise((resolve) => {
+        const covers: Cover[] = []
+        articles.forEach((article: Article, idx) => {
+            import(/* @vite-ignore */`/cms/articles/${article.slug}/${article.metadata.cover}?w=1280?webp`)
+                .then(image => {
+                    covers.push({
+                        image: image.default,
+                        article: article.slug
+                    })
+                })
+                .catch(() => {
+                    if (isValidUrl(article.metadata.cover))
+                        covers.push({ article: article.slug, image: article.metadata.cover })
+                    else covers.push({ article: article.slug, image: `https://og-image.vercel.app/${encodeURI(article.metadata.title)}.png?theme=dark&fontSize=150px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-bw-logo.svg&&images=https://i.imgur.com/YAKfI5F.png&widths=0&heights=0` })
+                })
+                .finally(() => {
+                    if (idx === articles.length - 1)
+                        resolve(covers)
+                })
+        })
+    })
+}
+
+export { getInfoFromPath, isValidMetadata, computeReadingTime, getPublishedArticles, loadCovers }

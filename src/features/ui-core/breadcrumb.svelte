@@ -8,7 +8,7 @@
 </script>
 
 <nav
-	class="flex items-center space-x-4 text-primary-500 w-fit bg-slate-100 px-8 py-4 rounded-lg text-lg font-semibold"
+	class="flex items-center space-x-4 text-primary-500 w-full md:w-fit bg-slate-100 px-8 py-4 rounded-lg text-lg font-semibold"
 >
 	{#each tabs as tab, idx}
 		{#if idx === tabs.length - 1}

@@ -9,6 +9,7 @@
 
 	export let data: PageData
 	const article: Article = data.article
+
 	const component = data.component
 
 	// allows the little animation when sharing
@@ -106,7 +107,7 @@
 		<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-16 px-4 ">
 			<div class="flex justify-between mb-8">
 				<!-- Author -->
-				<div class="flex items-center space-x-2">
+				<div class="flex items-center gap-2">
 					<img
 						src="/assets/cms/team/{article.metadata.author.replaceAll(' ', '-')}/propic.jpg"
 						alt="avatar"

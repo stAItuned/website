@@ -1,8 +1,6 @@
 <script lang="ts">
 	// throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
 
-	import dayjs from 'dayjs'
-
 	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
 	import type { Article } from '@lib/interfaces'
 	import type { PageData } from './$types'
@@ -13,6 +11,7 @@
 
 	import { Filters } from '@lib/configs'
 	import type { Filter } from '@lib/interfaces'
+	import { date } from '@lib/helpers'
 
 	export let data: PageData
 
@@ -20,10 +19,8 @@
 		(article: Article) => article.metadata.target.toLowerCase() === $page.params.target
 	)
 
-	$: filteredArticles = articles.sort((a1, a2) => {
-		if (dayjs(a1.metadata.date).isAfter(dayjs(a2.metadata.date))) return -1
-		else return 1
-	})
+	$: filteredArticles = date.sort.mostRecentArticleFirst(articles)
+
 	let currentPage = 1
 
 	const activeFilters: Filter = {
@@ -49,9 +46,9 @@
 				// Creation Date filter
 				((activeFilters.creationDate !== 'Always' &&
 					((activeFilters.creationDate === 'Last month' &&
-						dayjs(article.metadata.date).isAfter(dayjs().subtract(1, 'month'))) ||
+						date.isArticleCreatedLastMonth(article)) ||
 						(activeFilters.creationDate === 'Last week' &&
-							dayjs(article.metadata.date).isAfter(dayjs().subtract(1, 'week'))))) ||
+							date.isArticleCreatedLastWeek(article)))) ||
 					activeFilters.creationDate === 'Always') &&
 				// Reading Time filter
 				((activeFilters.readingTime.includes('Less than 5 min') &&

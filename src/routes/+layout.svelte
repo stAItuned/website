@@ -3,7 +3,7 @@
 	import '../styles/style.css'
 
 	// @ts-ignore
-	import bgGradient from '../assets/general/bg-gradient.svg?w=200?webp'
+	import bgGradient from '../assets/general/bg-gradient.svg?w=1024?webp'
 
 	import { page } from '$app/stores'
 
