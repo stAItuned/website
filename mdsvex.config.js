@@ -50,7 +50,7 @@ const config = defineConfig({
 		rehypeSlug,
 		[rehypeAutolinkHeadings, autoLinkConfig],
 		rehypeFigure,
-		[rehypeExternalLinks, { rel: ['nofollow'] }],
+		[rehypeExternalLinks, { rel: ['nofollow', "ugc"] }],
 		imageLazyLoading
 	]
 })

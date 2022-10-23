@@ -3,8 +3,7 @@
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
 	import type { PageData } from '.svelte-kit/types/src/routes/learn/[slug]/$types'
-	import info from '@lib/info'
-	import { getArticleSchema } from '@lib/seo'
+	import ArticleMetaTags from '@lib/seo/ArticleMetaTags.svelte'
 
 	export let data: PageData
 	const article: Article = data.article
@@ -45,24 +44,24 @@
 
 <svelte:head>
 	<!-- HTML Meta Tags -->
-	<title>{article.metadata.title} | {info.siteName}</title>
-	<meta name="description" content={article.metadata.meta} />
+	<!-- <title>{article.metadata.title} | {info.siteName}</title> -->
+	<!-- <meta name="description" content={article.metadata.meta} /> -->
 
 	<!-- Facebook Meta Tags -->
-	<meta property="og:url" content={info.basePath} />
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content={article.metadata.title} />
-	<meta property="og:description" content={article.metadata.meta} />
-	<meta property="og:image" content={article.metadata.cover} />
+	<!-- <meta property="og:url" content={info.basePath} /> -->
+	<!-- <meta property="og:type" content="website" /> -->
+	<!-- <meta property="og:title" content={article.metadata.title} /> -->
+	<!-- <meta property="og:description" content={article.metadata.meta} /> -->
+	<!-- <meta property="og:image" content={article.metadata.cover} /> -->
 
 	<!-- Twitter Meta Tags -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:domain" content={info.basePath} />
-	<meta property="twitter:url" content={info.basePath} />
-	<meta name="twitter:title" content={article.metadata.title} />
-	<meta name="twitter:description" content={article.metadata.meta} />
-	<meta name="twitter:image" content={article.metadata.cover} />
-	{@html getArticleSchema(article)}
+	<!-- <meta name="twitter:card" content="summary_large_image" /> -->
+	<!-- <meta property="twitter:domain" content={info.basePath} /> -->
+	<!-- <meta property="twitter:url" content={info.basePath} /> -->
+	<!-- <meta name="twitter:title" content={article.metadata.title} /> -->
+	<!-- <meta name="twitter:description" content={article.metadata.meta} /> -->
+	<!-- <meta name="twitter:image" content={article.metadata.cover} /> -->
+	<!-- {@html getArticleSchema(article)} -->
 	<link
 		rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
@@ -70,6 +69,8 @@
 		crossorigin="anonymous"
 	/>
 </svelte:head>
+
+<ArticleMetaTags article={article} />
 
 <article class="prose prose-xl max-w-4xl text-base lg:text-lg my-16 px-8 mx-auto">
 	<!-- COVER IMAGE -->

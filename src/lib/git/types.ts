@@ -5,6 +5,7 @@ export interface ArticleMetadata {
 	topics: string[]
 	meta: string
 	target: string
+	/** absolute path (without base url) to the assets folder containing the cover image */
 	cover: string
 	language: string
 	/**in minutes */
