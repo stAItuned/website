@@ -5,6 +5,7 @@ export const load: PageLoad = async ({ data }) => {
 	const component = await import(/* @vite-ignore */`../../../../cms/articles/${article.slug}/${article.filename}.md`)
     return {
         article,
-        component: component.default
+        componentToRender: component.default,
+        component: component
     }
 }
