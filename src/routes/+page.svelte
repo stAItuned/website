@@ -3,8 +3,8 @@
 	import bgGraph from '../assets/general/bg-graph.svg'
 
 	import type { PageData } from './$types'
-	import info from '@lib/info'
 	import type { Article } from '@lib/git/types'
+	import HomePageMetaTags from '@lib/seo/HomePageMetaTags.svelte'
 	const amountOfArticles = 6
 	export let data: PageData
 	const recentArticles = data.articles // show only published articles
@@ -16,7 +16,7 @@
 	const relevantArticlesSlug = [
 		'cos-è-un-algoritmo-e-per-cosa-si-utilizza',
 		'cos-è-un-computer',
-		'cos\'è-l-intelligenza-artificiale',
+		"cos'è-l-intelligenza-artificiale",
 		'quando-è-nata-l-intelligenza-artificiale'
 	] as const // Length must be at least ${amountOfArticles}
 	const relevantArticles = relevantArticlesSlug
@@ -34,26 +34,28 @@
 </script>
 
 <svelte:head>
-	<title>{info.siteName}</title>
 	<!-- HTML Meta Tags -->
-	<title>{info.siteName}</title>
-	<meta name="description" content={info.longDescription} />
+	<!-- <title>{info.siteName}</title> -->
+	<!-- <meta name="description" content={info.longDescription} /> -->
 
 	<!-- Facebook Meta Tags -->
 	<!-- <meta property="og:url" content={window.location.hostname} /> -->
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content={info.siteName} />
-	<meta property="og:description" content={info.longDescription} />
-	<meta property="og:image" content={info.logoPath} />
+	<!-- <meta property="og:type" content="website" /> -->
+	<!-- <meta property="og:title" content={info.siteName} /> -->
+	<!-- <meta property="og:description" content={info.longDescription} /> -->
+	<!-- <meta property="og:image" content={info.logoPath} /> -->
 
 	<!-- Twitter Meta Tags -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:domain" content="tptp.vercel.app" />
-	<!-- <meta property="twitter:url" content={window.location.hostname} /> -->
-	<meta name="twitter:title" content={info.siteName} />
-	<meta name="twitter:description" content={info.longDescription} />
-	<meta name="twitter:image" content={info.logoPath} />
-</svelte:head>
+	<!-- <meta name="twitter:card" content="summary_large_image" /> -->
+	<!-- <meta property="twitter:domain" content={info.basePath} /> -->
+	<!-- <meta property="twitter:url" content={info.basePath} /> -->
+	<!-- <meta name="twitter:title" content={info.siteName} /> -->
+	<!-- <meta name="twitter:description" content={info.longDescription} /> -->
+	<!-- <meta name="twitter:image" content={info.logoPath} /> -->
+	<!-- {@html getHomeSchema()} -->
+</svelte:head> 
+
+<HomePageMetaTags/>
 
 <section class="my-[30px]">
 	<div class="relative bg-primary-500 h-[600px] shadow-2xl flex flex-col justify-center">

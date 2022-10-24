@@ -6,6 +6,7 @@
 	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
 	import type { Article } from '@lib/git/types'
 	import type { PageData } from '.svelte-kit/types/src/routes/learn/$types'
+	import LearnPageMetaTags from '@lib/seo/LearnPageMetaTags.svelte'
 	export let data: PageData
 	const articles: Article[] = data.articles
 	// populated with data from the endpoint
@@ -23,6 +24,10 @@
 		// console.log(filteredArticles.length)
 	}
 </script>
+
+
+
+<LearnPageMetaTags articles={articles} />
 
 <!-- <Filters action={filterArticles} /> -->
 

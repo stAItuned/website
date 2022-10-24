@@ -42,7 +42,6 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 	.map(([filepath, post]: [string, any]) => {
 		const slug = filepath.split('/').at(-2) as string
 		const filename = (filepath.split('/').at(-1) as string).slice(0, -3)
-		console.log(slug)
 		if (!isValidMetadata(post.metadata)) {
 			return undefined
 		}
@@ -54,7 +53,7 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 			cover = metadata.cover
 		} else if (metadata.cover !== undefined) {
 			cover = `/assets/cms/articles/${slug}/${metadata.cover}`
-			console.log(cover)
+			// console.log(cover)
 		} else {
 			cover = `https://og-image.vercel.app/${encodeURI(
 				post.metadata.title
@@ -73,6 +72,7 @@ const articles = Object.entries(import.meta.glob('/cms/articles/**/*.md', { eage
 		return article
 	})
 	.filter((article) => {
+		if (article === undefined) return false
 		const date = new Date(article.metadata.date)
 		const lowerThreshold = new Date('1970-01-01')
 		return date.getTime() > lowerThreshold.getTime()

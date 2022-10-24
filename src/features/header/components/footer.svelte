@@ -10,16 +10,16 @@
 	class="px-16 py-8 rounded-t-[30px] bg-primary-600 lg:grid lg:grid-cols-3 flex flex-col items-center space-y-10 lg:space-y-0"
 >
 	<div class=" bg-themes flex space-x-4 justify-start">
-		<a href="https://www.linkedin.com/company/stai-tuned/" target="_blank">
+		<a href="https://www.linkedin.com/company/stai-tuned/" target="_blank" rel="noreferrer">
 			<img src={LinkedIn} alt="linkedin-logo" />
 		</a>
-		<a href="https://www.instagram.com/stai.tuned/" target="_blank">
+		<a href="https://www.instagram.com/stai.tuned/" target="_blank" rel="noreferrer">
 			<img src={Instagram} alt="ig-logo" />
 		</a>
-		<a href="https://www.facebook.com/stAItuned" target="_blank">
+		<a href="https://www.facebook.com/stAItuned" target="_blank" rel="noreferrer">
 			<img src={Facebook} alt="facebook-logo" />
 		</a>
-		<a href="https://www.tiktok.com/@staituned?lang=en" target="_blank">
+		<a href="https://www.tiktok.com/@staituned?lang=en" target="_blank" rel="noreferrer">
 			<img src={TikTok} alt="tiktok-logo" />
 		</a>
 	</div>

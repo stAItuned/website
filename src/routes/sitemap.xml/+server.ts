@@ -1,4 +1,4 @@
-import { siteURL } from '$lib/info'
+import info from '$lib/info'
 import data from '$lib/git/index'
 
 export async function GET() {
@@ -16,27 +16,27 @@ export async function GET() {
         xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
       >
       <url>
-          <loc>${siteURL}/</loc>
+          <loc>${info.basePath}/</loc>
           <changefreq>weekly</changefreq>
           <priority>0.7</priority>
       </url>
       <url>
-      <loc>${siteURL}/keepintouch/</loc>
+      <loc>${info.basePath}/keepintouch/</loc>
       <changefreq>weekly</changefreq>
       </url>
       <url>
-      <loc>${siteURL}/meet/</loc>
+      <loc>${info.basePath}/meet/</loc>
       <changefreq>weekly</changefreq>
       </url>
       <url>
-      <loc>${siteURL}/learn/</loc>
+      <loc>${info.basePath}/learn/</loc>
       <changefreq>weekly</changefreq>
       </url>
       ${data.articles
 				.map(
 					(article) => `
       <url>
-      <loc>${siteURL}/learn/${article.slug}</loc>
+      <loc>${info.basePath}/learn/${article.slug}</loc>
       <lastmod>${new Date(article.metadata.date).toISOString().split('T')[0]}</lastmod>
       <changefreq>weekly</changefreq>
       </url>
