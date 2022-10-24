@@ -12,7 +12,7 @@
     title={pageTitle}
     titleTemplate="%s | {info.siteName}"
     description={pageDescription}
-    canonical={info.basePath}
+    canonical={`${info.basePath}/learn`}
     openGraph={{
         site_name: info.siteName,
         type: "website",

@@ -12,7 +12,7 @@
     title={pageTitle}
     titleTemplate="%s | {info.siteName}"
     description={pageDescription}
-    canonical={info.basePath}
+    canonical={`${info.basePath}/learn/${article.slug}`}
     openGraph={{
         site_name: info.siteName,
         type: "article",
@@ -33,10 +33,6 @@
         site: info.basePath,
         image: article.metadata.cover,
     }}
-    additionalLinkTags={[
-        {rel: "canonical", 
-        href: `${info.basePath}/learn/${article.slug}`}
-    ]}
 />
 
 
