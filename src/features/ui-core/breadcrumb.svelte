@@ -13,11 +13,11 @@
 	{#each tabs as tab, idx}
 		{#if idx === tabs.length - 1}
 			<a
-				class="text-xl"
+				class="text-xl truncate"
 				href={`/${tabs
 					.slice(0, idx + 1)
 					.join('/')
-					.toLowerCase()}`}>{tab}</a
+					.toLowerCase()}`}>{decodeURIComponent(tab).replaceAll("-", " ")}</a
 			>
 		{:else}
 			<a

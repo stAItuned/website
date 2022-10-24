@@ -16,13 +16,13 @@
 </script>
 
 <PageTransition>
-	<div class="max-w-7xl mx-auto mb-16 mt-[150px] px-8 space-y-24">
+	<div class="max-w-7xl mx-auto mb-32 mt-[150px] px-8 xl:px-4 space-y-16">
 		<Breadcrumb />
-		<section class="md:text-lg space-y-8">
-			<div class="space-y-1">
-				<p class="text-primary-600 font-bold m-0 mb-1 text-2xl">
+		<section class="text-primary-600 md:text-lg space-y-8">
+			<div class="space-y-2">
+				<h3 class="font-bold text-2xl">
 					Have you always wanted to exchange opinions about AI practical applications?
-				</p>
+				</h3>
 				<p>Then you’re in the right place.</p>
 			</div>
 
@@ -39,11 +39,11 @@
 					on.
 				</p>
 			</div>
-			<div class="space-y-1">
-				<p class="font-bold text-primary-600 text-2xl m-0">
+			<div class="space-y-2">
+				<h3 class="font-bold text-2xl">
 					But how many people do actually know what Artificial Intelligence is? And how many are
 					familiar with its possible applications?
-				</p>
+				</h3>
 				<p>Hence the idea to make everyone aware of AI potentialities in real life.</p>
 			</div>
 		</section>

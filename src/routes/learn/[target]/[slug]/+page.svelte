@@ -92,7 +92,7 @@
 </svelte:head>
 
 <PageTransition>
-	<section>
+	<section class="relative">
 		<!-- COVER IMAGE -->
 		<img
 			src={article.metadata.cover}
@@ -100,11 +100,11 @@
 			alt="cover"
 		/>
 
-		<!-- <div class="hidden lg:block lg:absolute top-96 px-4">
+		<div class="lg:absolute lg:top-96 top-32 p-4">
 			<Breadcrumb />
-		</div> -->
+		</div>
 		
-		<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-16 px-4 ">
+		<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-8 px-4 ">
 			<div class="flex justify-between mb-8">
 				<!-- Author -->
 				<div class="flex items-center gap-2">

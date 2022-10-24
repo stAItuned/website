@@ -51,7 +51,7 @@
 		<div class="flex align-center justify-between">
 			<h1 class="font-bold text-2xl text-primary-500 uppercase">Filters</h1>
 			<Hamburger
-				className="p-4 bg-stayYellow-600 hover:bg-stayYellow-500 active:bg-stayYellow-600 transition rounded-full"
+				className="p-4 bg-secondary-600 hover:bg-secondary-500 active:bg-secondary-600 transition rounded-full"
 				bind:open
 			/>
 		</div>

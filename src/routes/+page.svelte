@@ -77,7 +77,7 @@
 	</section>
 
 	<!-- Stats -->
-	<!-- <section class="bg-stayYellow-600 h-full  text-white py-4 w-full">
+	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-4 bg-black h-full md:text-2xl sm:text-xl font-bold">
 			<div class="bg-primary-600 text-center py-4 w-auto uppercase">120 <br />reading hours</div>
 			<div class="bg-primary-600 text-center py-4 w-auto uppercase">50<br />articles</div>
@@ -89,12 +89,12 @@
 	</section> -->
 
 	<!-- Home Articles Cards -->
-	<section class="bg-stayYellow-600 text-white py-5 mb-10">
+	<section class="bg-secondary-600 text-white py-5 mb-10">
 		<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
 			{#each HomeConfigs.CATEGORIES as category}
 				<div
-					class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-stayYellow-600 transition"
-					class:text-stayYellow-600={articlesToShow === category}
+					class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition"
+					class:text-secondary-600={articlesToShow === category}
 					class:text-gray-400={articlesToShow !== category}
 					on:click={() => setShow(category)}
 				>

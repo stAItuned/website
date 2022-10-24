@@ -14,8 +14,8 @@
 			<a
 				on:click={onClick}
 				href={page.path}
-				class="hover:text-stayYellow-500 transition"
-				class:text-stayYellow-500={page.path === active}
+				class="hover:text-secondary-500 transition"
+				class:text-secondary-500={page.path === active}
 			>
 				{page.name}
 			</a>

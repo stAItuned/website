@@ -41,8 +41,8 @@
 </script>
 
 <PageTransition>
-	<div class="max-w-7xl mx-auto mb-16 mt-[150px] space-y-16 px-8 lg:px-4">
-		<div class="flex flex-col md:flex-row gap-8 items-center justify-between px-8">
+	<div class="max-w-7xl mx-auto mb-32 mt-[150px] space-y-16 px-8 xl:px-4">
+		<div class="flex flex-col md:flex-row gap-16 items-center justify-between xl:px-8">
 			<Breadcrumb />
 			<h1 class="font-bold text-4xl text-center text-primary-500 uppercase">
 				{team} team

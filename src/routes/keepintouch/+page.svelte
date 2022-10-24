@@ -23,7 +23,7 @@
 	>
 		<center class="relative bg-primary-600 text-white p-16 rounded w-full">
 			<div
-				class="bg-stayYellow-600 absolute -top-5 lg:-top-10 right-5 lg:right-10 w-full h-full -z-10 rounded"
+				class="bg-secondary-600 absolute -top-5 lg:-top-10 right-5 lg:right-10 w-full h-full -z-10 rounded"
 			/>
 			<div class="space-y-10">
 				<h1 class="text-4xl font-semibold">Wanna stAI with us?</h1>
@@ -32,7 +32,7 @@
 					<p>From practical AI applications to AI curiosities</p>
 					<p>It's your time to spread AI culture!</p>
 				</div>
-				<div class="space-y-2 font-semibold text-stayYellow-600">
+				<div class="space-y-2 font-semibold text-secondary-600">
 					<h1 class="text-2xl">Be part of our community!</h1>
 					<h3 class="text-xl">Present yourself!</h3>
 				</div>
@@ -40,7 +40,7 @@
 		</center>
 
 		<form
-			class="relative p-8 w-full sm:w-2/3 text-sm bg-stayYellow-600 rounded space-y-4"
+			class="relative p-8 w-full sm:w-2/3 text-sm bg-secondary-600 rounded space-y-4"
 			on:submit|preventDefault={submitForm}
 		>
 			<div

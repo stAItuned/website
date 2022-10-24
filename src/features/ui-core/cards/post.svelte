@@ -15,9 +15,9 @@
 	export let article: Article
 </script>
 
-<div class="w-full md:w-1/2 2xl:w-1/4 p-4">
+<div class="w-full md:w-1/2 xl:w-1/3 py-4 md:p-4 hover:scale-105 transition duration-300 z-0">
 	<a href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}">
-		<div class="relative h-[420px] flex flex-col justify-end rounded shadow-lg">
+		<div class="relative h-[420px] flex flex-col justify-end rounded ">
 			<img
 				src={article.metadata.target === 'Newbie' ? newbieTag : expertTag}
 				alt="difficulty"
@@ -28,7 +28,7 @@
 				alt="background"
 				class="h-2/3 absolute top-0 w-full rounded-bl-[45px] object-cover"
 			/>
-			<div class="flex flex-col justify-between h-1/2 bg-stayYellow-600 rounded-tr-[45px] p-4 z-10">
+			<div class="flex flex-col justify-between h-1/2 bg-secondary-600 rounded-tr-[45px] p-4 z-10">
 				<h1 class="font-bold text-xl">{article.metadata.title}</h1>
 				<div class="space-y-1">
 					<div class="flex space-x-2">

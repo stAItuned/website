@@ -15,7 +15,7 @@ module.exports = {
           500: '#383F74',
           600: '#1A1E3B'
         },
-        stayYellow: {
+        secondary: {
           400: '#FFF7A8',
           500: '#FFF272',
           600: '#FFE700'
