@@ -53,7 +53,7 @@ export const listArticleSchema = (articles: Article[]) => {
 	const mapArticleToItemList = (a: Article, index: number): JsonLdProps["schema"] => {
 		return {
 			'@type': 'ListItem',
-			position: index,
+			position: index + 1,
 			url: `${info.basePath}/learn/${a.slug}`,
 			item: articleSchema(a)
 		} as const

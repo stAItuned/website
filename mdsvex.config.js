@@ -9,7 +9,8 @@ import remarkGFM from 'remark-gfm'
 import rehypeExternalLinks from 'rehype-external-links'
 import { visit } from 'unist-util-visit'
 import imageLazyLoading from 'rehype-plugin-image-native-lazy-loading'
-import {h, s} from 'hastscript';
+import rehypeTOC from 'rehype-toc'
+import { h, s } from 'hastscript'
 
 /** @type {import('rehype-autolink-headings').Options}  */
 const autoLinkConfig = {
@@ -17,13 +18,13 @@ const autoLinkConfig = {
 	properties: {
 		class: 'autolink-header',
 		ariaHidden: true,
-		tabIndex: -1,
+		tabIndex: -1
 	},
 	content: [
 		s(
 			'svg.autolink-svg',
 			{
-				style: "display: inline-block; margin-left: 4px;",
+				style: 'display: inline-block; margin-left: 4px;',
 				xmlns: 'http://www.w3.org/2000/svg',
 				width: 30,
 				height: 30,
@@ -35,6 +36,13 @@ const autoLinkConfig = {
 			})
 		)
 	]
+}
+
+/** @type {import('rehype-toc').Options} */
+const tocConfig = {
+	customizeTOC: (toc) => {
+		return h('div.toc', h('hr'), h('h2.ToCTitle', 'Table of Contents'), toc, h('hr'))
+	}
 }
 
 const config = defineConfig({
@@ -50,8 +58,9 @@ const config = defineConfig({
 		rehypeSlug,
 		[rehypeAutolinkHeadings, autoLinkConfig],
 		rehypeFigure,
-		[rehypeExternalLinks, { rel: ['nofollow', "ugc"] }],
-		imageLazyLoading
+		[rehypeExternalLinks, { rel: ['nofollow', 'ugc'] }],
+		imageLazyLoading,
+		[rehypeTOC, tocConfig]
 	]
 })
 /**

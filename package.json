@@ -47,6 +47,7 @@
 		"rehype-plugin-image-native-lazy-loading": "^1.2.0",
 		"rehype-slug": "^5.0.1",
 		"rehype-stringify": "^9.0.3",
+		"rehype-toc": "^3.0.2",
 		"remark-frontmatter": "^4.0.1",
 		"remark-gfm": "^3.0.1",
 		"remark-math": "^3.0.0",
