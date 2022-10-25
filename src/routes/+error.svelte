@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, PageTransition } from '@features/ui-core'
+	import { Button, PageTransition } from '@components/ui-core'
 </script>
 
 <PageTransition>

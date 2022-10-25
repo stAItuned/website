@@ -1,7 +1,7 @@
-import Instagram from '../../assets/footer/Instagram.svg'
-import LinkedIn from '../../assets/footer/LinkedIn.svg'
-import Facebook from '../../assets/footer/Facebook.svg'
-import TikTok from '../../assets/footer/Tiktok.svg'
+import Instagram from '@assets/footer/Instagram.svg'
+import LinkedIn from '@assets/footer/LinkedIn.svg'
+import Facebook from '@assets/footer/Facebook.svg'
+import TikTok from '@assets/footer/Tiktok.svg'
 
 interface Social {
     name: string,

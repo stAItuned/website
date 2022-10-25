@@ -1,16 +1,20 @@
 <script lang="ts">
 	import type { Article } from '@lib/interfaces'
+	import { page } from '$app/stores'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
 	import type { PageData } from './$types'
 	import info from '@lib/info'
 
-	import { PageTransition, Breadcrumb } from '@features/ui-core'
+	import { PageTransition, Breadcrumb } from '@components/ui-core'
+	import { utils } from '@lib/helpers'
 
 	export let data: PageData
 	const article: Article = data.article
 
 	const component = data.component
+
+	const pathname = $page.url.pathname
 
 	// allows the little animation when sharing
 	let shared = false
@@ -101,15 +105,15 @@
 		/>
 
 		<div class="lg:absolute lg:top-96 top-32 p-4">
-			<Breadcrumb />
+			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 		</div>
-		
+
 		<article class="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-8 px-4 ">
 			<div class="flex justify-between mb-8">
 				<!-- Author -->
 				<div class="flex items-center gap-2">
 					<img
-						src="/assets/cms/team/{article.metadata.author.replaceAll(' ', '-')}/propic.jpg"
+						src="/cms/team/{article.metadata.author.replaceAll(' ', '-')}/propic.jpg"
 						alt="avatar"
 						class="max-h-8 rounded-full"
 					/>

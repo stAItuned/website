@@ -4,13 +4,17 @@
 	import { page } from '$app/stores'
 
 	import { Meet } from '@lib/configs'
-	import type { Author } from '@lib/interfaces'
-	import { Cards, Breadcrumb, PageTransition } from '@features/ui-core'
+	import type { Article, Author } from '@lib/interfaces'
+	import { Breadcrumb, PageTransition } from '@components/ui-core'
+	import { Cards } from '@components/features'
+	import { utils } from '@lib/helpers'
 
 	export let data: PageData
 	const authors: Author[] = data.authors
+	const articles: Article[] = data.articles
 
 	const team = $page.params.team
+	const pathname = $page.url.pathname
 
 	let filterAuthors = authors.filter((author) =>
 		author.team.map((t) => t.toLowerCase()).includes(team)
@@ -32,25 +36,30 @@
 		})
 		filterAuthors = arr
 	} else {
-		filterAuthors = filterAuthors.sort(
-			(a, b) =>
-				(b.articles?.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0) -
-				(a.articles?.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0)
-		)
+		filterAuthors = filterAuthors
+			.sort(
+				(a, b) =>
+					(articles
+						.filter((article) => article.author === b)
+						.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0) -
+					(articles
+						.filter((article) => article.author === a)
+						.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0)
+			)
 	}
 </script>
 
 <PageTransition>
 	<div class="max-w-7xl mx-auto mb-32 mt-[150px] space-y-16 px-8 xl:px-4">
 		<div class="flex flex-col md:flex-row gap-16 items-center justify-between xl:px-8">
-			<Breadcrumb />
+			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 			<h1 class="font-bold text-4xl text-center text-primary-500 uppercase">
 				{team} team
 			</h1>
 		</div>
 		<div class="flex flex-wrap justify-center">
 			{#each filterAuthors as author}
-				<Cards.Team {author} />
+				<Cards.TeamMember {author} />
 			{/each}
 		</div>
 	</div>

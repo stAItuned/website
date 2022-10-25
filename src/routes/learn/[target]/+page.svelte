@@ -7,13 +7,16 @@
 
 	import { page } from '$app/stores'
 
-	import { Sidebars, Cards, Breadcrumb, Searchbar, PageTransition } from '@features/ui-core'
+	import { Breadcrumb, Searchbar, PageTransition } from '@components/ui-core'
+	import { Sidebars, Cards } from '@components/features'
 
 	import { Filters } from '@lib/configs'
 	import type { Filter } from '@lib/interfaces'
-	import { date } from '@lib/helpers'
+	import { date, utils } from '@lib/helpers'
 
 	export let data: PageData
+
+	const pathname = $page.url.pathname
 
 	let articles: Article[] = data.articles.filter(
 		(article: Article) => article.metadata.target.toLowerCase() === $page.params.target
@@ -73,7 +76,7 @@
 	const handleInput = (e: Event) => {
 		const currentTarget: HTMLInputElement = e.target as HTMLInputElement
 		activeFilters.searchParam = currentTarget.value.toLowerCase()
-		filter();
+		filter()
 	}
 </script>
 
@@ -82,7 +85,7 @@
 
 	<section class="max-w-7xl mx-auto mb-32 px-8 xl:px-4 mt-[150px] space-y-16">
 		<div class="flex flex-col md:flex-row items-center gap-8">
-			<Breadcrumb />
+			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 			<div class="flex w-full items-center space-x-4">
 				<Searchbar {handleInput} handleSubmit={filter} />
 				<svg
@@ -98,7 +101,6 @@
 				</svg>
 			</div>
 		</div>
-
 
 		{#if filteredArticles.length > 0}
 			<div class="flex flex-wrap">

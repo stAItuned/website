@@ -1,12 +1,18 @@
 <script lang="ts">
 	// @ts-ignore
-	import techLogo from '../../assets/team/tech_large.svg?h=512?webp'
+	import techLogo from '@assets/team/tech_large.svg?h=512?webp'
 	// @ts-ignore
-	import marketingLogo from '../../assets/team/marketing_large.svg?h=512?webp'
+	import marketingLogo from '@assets/team/marketing_large.svg?h=512?webp'
 	// @ts-ignore
-	import writersLogo from '../../assets/team/writers_large.svg?h=512?webp'
+	import writersLogo from '@assets/team/writers_large.svg?h=512?webp'
 
-	import { Button, Breadcrumb, PageTransition } from '@features/ui-core'
+	import { page } from '$app/stores'
+	import { utils } from '@lib/helpers'
+
+	import { Breadcrumb, PageTransition } from '@components/ui-core'
+	import { Cards } from '@components/features'
+
+	const pathname = $page.url.pathname
 
 	const TEAMS = [
 		{ name: 'Tech', logo: techLogo },
@@ -17,7 +23,7 @@
 
 <PageTransition>
 	<div class="max-w-7xl mx-auto mb-32 mt-[150px] px-8 xl:px-4 space-y-16">
-		<Breadcrumb />
+		<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 		<section class="text-primary-600 md:text-lg space-y-8">
 			<div class="space-y-2">
 				<h3 class="font-bold text-2xl">
@@ -54,19 +60,7 @@
 			<h1 class="text-6xl font-bold text-primary-600 text-center uppercase">Our team</h1>
 			<div class="flex flex-col md:flex-row gap-16 justify-center">
 				{#each TEAMS as team}
-					<a href={`/meet/${team.name.toLowerCase()}`}>
-						<div
-							class="flex flex-col items-center gap-8 opacity-50 hover:opacity-100 duration-500 transition"
-						>
-							<div class="hover:scale-125 duration-500 transition">
-								<img srcset={team.logo} class="h-[200px]" alt="tech" />
-							</div>
-
-							<Button variant="primary" width="full" rounded="full" className="w-1/2 md:w-full">
-								<span class="font-semibold text-2xl uppercase">{team.name}</span>
-							</Button>
-						</div>
-					</a>
+					<Cards.Team {team} />
 				{/each}
 			</div>
 		</section>

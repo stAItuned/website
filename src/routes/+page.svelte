@@ -1,12 +1,10 @@
 <script lang="ts">
 	// @ts-ignore-line
-	import homeLogo from '../assets/general/home_logo_3.png?h=600?webp'
+	import homeLogo from '@assets/general/home_logo_3.png?h=600?webp'
 	// @ts-ignore
-	import bgGraph from '../assets/general/bg-graph.svg?h=600?webp'
+	import bgGraph from '@assets/general/bg-graph.svg?h=600?webp'
 
 	import type { PageData } from './$types'
-
-	import { fly } from 'svelte/transition'
 
 	import info from '@lib/info'
 
@@ -14,7 +12,8 @@
 	import type { Article } from '@lib/interfaces'
 	import { HomeConfigs } from '@lib/configs'
 	import { date } from '@lib/helpers'
-	import { PageTransition } from '@features/ui-core'
+	import { PageTransition } from '@components/ui-core'
+	import { Cards } from '@components/features'
 
 	export let data: PageData
 
@@ -104,22 +103,10 @@
 		</div>
 		<div class="flex flex-wrap bg-primary-600 uppercase transition">
 			{#each articles as article, idx}
-				<div
-					transition:fly={{ duration: 300 }}
-					class="relative w-full md:w-1/2 sm:text-xl font-bold"
-					style="background: {HomeConfigs.ARTICLE_CARD_COLORS[
-						idx % HomeConfigs.ARTICLE_CARD_COLORS.length
-					]};"
-				>
-					<a href="/learn/{article.metadata.target}/{article.slug}">
-						<img
-							srcset={article.metadata.cover}
-							class="w-full max-h-[200px] object-cover opacity-[40%]"
-							alt="bg"
-						/>
-						<span class="absolute top-[30%] left-[10%]">{article.metadata.title}</span>
-					</a>
-				</div>
+				<Cards.Home
+					{article}
+					color={HomeConfigs.ARTICLE_CARD_COLORS[idx % HomeConfigs.ARTICLE_CARD_COLORS.length]}
+				/>
 			{/each}
 		</div>
 	</section>
