@@ -3,7 +3,7 @@
 
 	import { page } from '$app/stores'
 
-	import { Meet } from '@lib/configs'
+	import { Teams } from '@lib/configs'
 	import type { Article, Author } from '@lib/interfaces'
 	import { Breadcrumb, PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
@@ -23,9 +23,9 @@
 	let order: string[] = []
 
 	if (team == 'tech') {
-		order = Meet.TECH_ORDER
+		order = Teams.TECH_ORDER
 	} else if (team == 'marketing') {
-		order = Meet.MARKETING_ORDER
+		order = Teams.MARKETING_ORDER
 	}
 
 	if (team == 'tech' || team == 'marketing') {

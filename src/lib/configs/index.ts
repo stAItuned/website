@@ -1,5 +1,6 @@
 import * as HomeConfigs from './home'
 import * as Filters from './filters'
-import * as Meet from './meet'
+import * as Teams from './teams'
+import SOCIALS from './socials'
 
-export { HomeConfigs, Filters, Meet }
+export { HomeConfigs, Filters, Teams, SOCIALS }

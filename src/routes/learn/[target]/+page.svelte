@@ -7,7 +7,7 @@
 
 	import { page } from '$app/stores'
 
-	import { Breadcrumb, Searchbar, PageTransition } from '@components/ui-core'
+	import { Breadcrumb, Searchbar, PageTransition, Icons } from '@components/ui-core'
 	import { Sidebars, Cards } from '@components/features'
 
 	import { Filters } from '@lib/configs'
@@ -84,21 +84,16 @@
 	<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
 
 	<section class="max-w-7xl mx-auto mb-32 px-8 xl:px-4 mt-[150px] space-y-16">
-		<div class="flex flex-col md:flex-row items-center gap-8">
+		<div class="flex flex-col md:flex-row items-center gap-8 lg:gap-16">
 			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
-			<div class="flex w-full items-center space-x-4">
-				<Searchbar {handleInput} handleSubmit={filter} />
-				<svg
+			<div class="flex w-full items-center lg:space-x-16 space-x-4">
+				<Searchbar {handleInput} name="searchbar" placeholder="Search by title or author..." />
+				<div
 					on:click={() => (open_filters = !open_filters)}
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					fill="currentColor"
-					class="w-10 h-10 hover:cursor-pointer transition hover:opacity-100 opacity-50 text-slate-800"
+					class="transition hover:opacity-100 opacity-50 text-slate-800"
 				>
-					<path
-						d="M18.75 12.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5zM12 6a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 6zM12 18a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 18zM3.75 6.75h1.5a.75.75 0 100-1.5h-1.5a.75.75 0 000 1.5zM5.25 18.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM3 12a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 013 12zM9 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM12.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0zM9 15.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"
-					/>
-				</svg>
+					<Icons.Filter clickable class="w-8 h-8" />
+				</div>
 			</div>
 		</div>
 
