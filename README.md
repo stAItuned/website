@@ -279,6 +279,10 @@ Ir renders a modal where the user can search an article by title, included in th
 
 ### `Icons`
 
+## Configs
+
+## Types
+
 ## Interfaces
 
 Here a list of the interfaces implemented.
@@ -358,7 +362,21 @@ interface CMSData {
 }
 ```
 
-## Configs
+### Interfaces for filters
+
+#### `Filter`
+
+This interface defines the filter for articles.
+
+```ts
+export default interface Filter {
+    tags: Tag[], // list of tags
+    creationDate: CreationDate, // publication date range
+    readingTime: ReadingTime[], // list of reading time ranges
+    languages: Language[], // list of languages
+    searchParam: string, // searching for this string
+}
+```
 
 ## Helpers
 
