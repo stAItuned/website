@@ -8,7 +8,6 @@
 
 	import { PageTransition, Breadcrumb, Icons } from '@components/ui-core'
 	import { utils } from '@lib/helpers'
-	import Calendar from '@lib/components/ui-core/icons/calendar.svelte'
 
 	export let data: PageData
 	const article: Article = data.article

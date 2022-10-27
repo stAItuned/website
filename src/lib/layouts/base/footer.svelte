@@ -16,7 +16,7 @@
 					<social.icon class="w-10 h-10" />
 					<svelte:component
 						this={social.icon}
-						class="w-10 h-10 text-slate-200 opacity-25 hover:opacity-100 transition"
+						class="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
 					/>
 				</a>
 			{/each}

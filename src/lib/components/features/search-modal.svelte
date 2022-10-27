@@ -51,8 +51,8 @@
 				/>
 				<CloseButton bind:open={isOpen} />
 			</div>
-			<h1 class="text-lg font-bold text-slate-400">Articles</h1>
-			<div class="space-y-4 max-h-80 overflow-y-scroll">
+			<h1 class="text-lg font-bold text-slate-400 px-4">Articles</h1>
+			<div class="space-y-4 max-h-80 overflow-y-scroll px-4">
 				{#if filteredArticles.length}
 					{#each filteredArticles as article}
 						<a
