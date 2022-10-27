@@ -1,13 +1,14 @@
 <script lang="ts">
-	import type { Article } from '@lib/interfaces'
+	import type { PageData } from './$types'
 	import { page } from '$app/stores'
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
-	import type { PageData } from './$types'
+
 	import info from '@lib/info'
 
-	import { PageTransition, Breadcrumb, Icons } from '@components/ui-core'
+	import type { Article } from '@lib/interfaces'
 	import { utils } from '@lib/helpers'
+	import { PageTransition, Breadcrumb, Icons } from '@components/ui-core'
 
 	export let data: PageData
 	const article: Article = data.article

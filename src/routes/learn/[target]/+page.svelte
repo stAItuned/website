@@ -1,30 +1,28 @@
 <script lang="ts">
 	// throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
 
-	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
-	import type { Article } from '@lib/interfaces'
 	import type { PageData } from './$types'
-
 	import { page } from '$app/stores'
 
-	import { Breadcrumb, Searchbar, PageTransition, Icons } from '@components/ui-core'
-	import { Sidebars, Cards } from '@components/features'
+	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
 
 	import { Filters } from '@lib/configs'
-	import type { Filter } from '@lib/interfaces'
-	import { date, utils } from '@lib/helpers'
+	import type { Article, Filter } from '@lib/interfaces'
+	import { date, utils, articles as articlesHelper } from '@lib/helpers'
+	import { Breadcrumb, Searchbar, PageTransition, Icons } from '@components/ui-core'
+	import { Sidebars, Cards } from '@components/features'
 
 	export let data: PageData
 
 	const pathname = $page.url.pathname
 
-	let articles: Article[] = data.articles.filter(
-		(article: Article) => article.metadata.target.toLowerCase() === $page.params.target
+	const target: typeof Filters.TARGETS[number] = utils.toSentenceCase(
+		$page.params.target
+	) as typeof Filters.TARGETS[number]
+
+	const articles: Article[] = data.articles.filter(
+		(article: Article) => article.metadata.target === target
 	)
-
-	$: filteredArticles = date.sort.mostRecentArticleFirst(articles)
-
-	let currentPage = 1
 
 	const activeFilters: Filter = {
 		tags: [...Filters.TAGS],
@@ -34,50 +32,36 @@
 		searchParam: ''
 	}
 
+	let open_filters = false
+
+	let currentPage = 1
 	const pageSize = 2 * 5 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
-	$: paginatedItems = paginate(filteredArticles, pageSize, currentPage) as Article[]
+
 	const setPage = (e: { detail: { page: number } }) => {
 		currentPage = e.detail.page
 	}
 
 	const filter = () => {
 		filteredArticles = articles
-		filteredArticles = filteredArticles.filter((article) => {
-			return (
-				// Topic filter
-				article.metadata.topics.some((topic) => activeFilters.tags.includes(topic as any)) &&
-				// Creation Date filter
-				((activeFilters.creationDate !== 'Always' &&
-					((activeFilters.creationDate === 'Last month' &&
-						date.isArticleCreatedLastMonth(article)) ||
-						(activeFilters.creationDate === 'Last week' &&
-							date.isArticleCreatedLastWeek(article)))) ||
-					activeFilters.creationDate === 'Always') &&
-				// Reading Time filter
-				((activeFilters.readingTime.includes('Less than 5 min') &&
-					article.metadata.readingTime < 5) ||
-					(activeFilters.readingTime.includes('5 - 10 min') &&
-						article.metadata.readingTime >= 5 &&
-						article.metadata.readingTime <= 10) ||
-					(activeFilters.readingTime.includes('More than 10 min') &&
-						article.metadata.readingTime > 10)) &&
-				// Language filter
-				activeFilters.languages.includes(article.metadata.language as any) &&
-				// Title and author name filter
-				(article.metadata.title.toLowerCase().includes(activeFilters.searchParam) ||
-					article.author?.name.toLowerCase().includes(activeFilters.searchParam))
+		filteredArticles = articlesHelper
+			.applyFilters(articles, activeFilters)
+			.filter(
+				(article) =>
+					article.metadata.title.toLowerCase().includes(activeFilters.searchParam) ||
+					article.author?.name.toLowerCase().includes(activeFilters.searchParam)
 			)
-		})
+
 		open_filters = false
 	}
-
-	let open_filters = false
 
 	const handleInput = (e: Event) => {
 		const currentTarget: HTMLInputElement = e.target as HTMLInputElement
 		activeFilters.searchParam = currentTarget.value.toLowerCase()
 		filter()
 	}
+
+	$: filteredArticles = date.sort.mostRecentArticleFirst(articles)
+	$: paginatedItems = paginate(filteredArticles, pageSize, currentPage) as Article[]
 </script>
 
 <PageTransition>

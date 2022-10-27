@@ -1,24 +1,12 @@
 <script lang="ts">
-	// @ts-ignore
-	import techLogo from '@assets/team/tech_large.svg?h=512?webp'
-	// @ts-ignore
-	import marketingLogo from '@assets/team/marketing_large.svg?h=512?webp'
-	// @ts-ignore
-	import writersLogo from '@assets/team/writers_large.svg?h=512?webp'
-
 	import { page } from '$app/stores'
-	import { utils } from '@lib/helpers'
 
+	import { Teams } from '@lib/configs'
+	import { utils } from '@lib/helpers'
 	import { Breadcrumb, PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
 
 	const pathname = $page.url.pathname
-
-	const TEAMS = [
-		{ name: 'Tech', logo: techLogo },
-		{ name: 'Marketing', logo: marketingLogo },
-		{ name: 'Writers', logo: writersLogo }
-	] as const
 </script>
 
 <PageTransition>
@@ -59,7 +47,7 @@
 		<section class="space-y-16">
 			<h1 class="text-6xl font-bold text-primary-600 text-center uppercase">Our team</h1>
 			<div class="flex flex-col md:flex-row gap-16 justify-center">
-				{#each TEAMS as team}
+				{#each Teams.TEAMS_DATA as team}
 					<Cards.Team {team} />
 				{/each}
 			</div>

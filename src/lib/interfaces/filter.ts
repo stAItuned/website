@@ -1,9 +1,4 @@
-import type { Filters } from "@lib/configs"
-
-type Tag = typeof Filters.TAGS[number]
-type CreationDate = typeof Filters.CREATION_DATES[number]
-type ReadingTime = typeof Filters.READING_TIME[number]
-type Language = typeof Filters.LANGUAGES[number]
+import type { Tag, CreationDate, ReadingTime, Language } from "@lib/types"
 
 export default interface Filter {
     tags: Tag[],

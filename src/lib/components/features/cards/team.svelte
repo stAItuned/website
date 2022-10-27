@@ -1,12 +1,8 @@
 <script lang="ts">
+	import type { Teams } from '@lib/configs'
 	import { Button } from '@components/ui-core'
 
-	interface Team {
-		name: string
-		logo: string
-	}
-
-	export let team: Team
+	export let team: typeof Teams.TEAMS_DATA[number]
 </script>
 
 <a href={`/meet/${team.name.toLowerCase()}`}>

@@ -2,7 +2,7 @@
 	// @ts-ignore
 	import JoinUS from '@assets/footer/JoinUS.svg?w=256?webp'
 
-	import { SOCIALS } from '@lib/configs'
+	import { Socials } from '@lib/configs'
 </script>
 
 <footer
@@ -11,7 +11,7 @@
 	<div class="flex flex-col gap-4">
 		<h3 class="text-lg uppercase text-slate-200 opacity-25 font-bold">Follow us</h3>
 		<div class="flex space-x-8 justify-start">
-			{#each SOCIALS as social}
+			{#each Socials.ICON_LINKS as social}
 				<a href={social.url} target="_blank">
 					<social.icon class="w-10 h-10" />
 					<svelte:component

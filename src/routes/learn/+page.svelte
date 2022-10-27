@@ -2,8 +2,8 @@
 	import { page } from '$app/stores'
 
 	import { Filters } from '@lib/configs'
-	import { Button, Breadcrumb, PageTransition } from '@components/ui-core'
 	import { utils } from '@lib/helpers'
+	import { Button, Breadcrumb, PageTransition } from '@components/ui-core'
 
 	const pathname = $page.url.pathname
 </script>

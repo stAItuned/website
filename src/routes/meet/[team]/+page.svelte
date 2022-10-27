@@ -1,52 +1,31 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-
 	import { page } from '$app/stores'
 
 	import { Teams } from '@lib/configs'
 	import type { Article, Author } from '@lib/interfaces'
+	import { utils, authors as authorsHelper } from '@lib/helpers'
 	import { Breadcrumb, PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
-	import { utils } from '@lib/helpers'
 
 	export let data: PageData
+
 	const authors: Author[] = data.authors
 	const articles: Article[] = data.articles
 
-	const team = $page.params.team
+	const team: typeof Teams.NAMES[number] = utils.toSentenceCase(
+		$page.params.team
+	) as typeof Teams.NAMES[number]
+
 	const pathname = $page.url.pathname
 
-	let filterAuthors = authors.filter((author) =>
-		author.team.map((t) => t.toLowerCase()).includes(team)
-	)
+	const order: string[] =
+		team === 'Tech' ? Teams.TECH_ORDER : team === 'Marketing' ? Teams.MARKETING_ORDER : []
 
-	let order: string[] = []
-
-	if (team == 'tech') {
-		order = Teams.TECH_ORDER
-	} else if (team == 'marketing') {
-		order = Teams.MARKETING_ORDER
-	}
-
-	if (team == 'tech' || team == 'marketing') {
-		let arr: Author[] = []
-		order.forEach((name) => {
-			const authFound = filterAuthors.find((a) => a.name === name)
-			if (authFound) arr.push(authFound)
-		})
-		filterAuthors = arr
-	} else {
-		filterAuthors = filterAuthors
-			.sort(
-				(a, b) =>
-					(articles
-						.filter((article) => article.author === b)
-						.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0) -
-					(articles
-						.filter((article) => article.author === a)
-						.reduce((prev, curr) => prev + curr.metadata.readingTime, 0) ?? 0)
-			)
-	}
+	const filteredAuthors: Author[] =
+		team !== 'Writers'
+			? authorsHelper.sortByOrder(authorsHelper.filterByTeam(authors, team), order)
+			: authorsHelper.sortByArticlesReadingTime(authorsHelper.filterByTeam(authors, team), articles)
 </script>
 
 <PageTransition>
@@ -58,7 +37,7 @@
 			</h1>
 		</div>
 		<div class="flex flex-wrap justify-center">
-			{#each filterAuthors as author}
+			{#each filteredAuthors as author}
 				<Cards.TeamMember {author} />
 			{/each}
 		</div>

@@ -4,74 +4,74 @@
 
 ## Client Application Routes
 
-### `/`
+- ### `/`
 
-_This is the index route_
+  _This is the index route_
 
-Homepage for guest users. It shows the brand logo and a section where the most recent and the most relevant articles are shown.
+  Homepage for guest users. It shows the brand logo and a section where the most recent and the most relevant articles are shown.
 
-The most relevant articles are set at configuration time from the corresponding config file.
+  The most relevant articles are set at configuration time from the corresponding config file.
 
-See also [`Cards.Home` component API]() and [`Config.Home`]().
+  See also [`Cards.Home` component API]() and [`Config.Home`]().
 
-### `/meet`
+- ### `/meet`
 
-This page shows a brief story about the brand and some cards to navigate to the team page.
+  This page shows a brief story about the brand and some cards to navigate to the team page.
 
-The team cards are set at configuration time from the corresponding config file.
+  The team cards are set at configuration time from the corresponding config file.
 
-See also See also [`Cards.Team` component API]() and [`Config.Teams`]().
+  See also See also [`Cards.Team` component API]() and [`Config.Teams`]().
 
-### `/meet/:[team]`
+- ### `/meet/:[team]`
 
-**A page not found error is shown if not allowed param is passed.**
+  **A page not found error is shown if not allowed param is passed.**
 
-```ts
-$page.params.team: "tech" | "marketing" | "writers"
-```
+  ```ts
+  $page.params.team: "tech" | "marketing" | "writers"
+  ```
 
-This page shows the list of members associated with the corresponding team, with their role in StAItuned and their contacts.
+  This page shows the list of members associated with the corresponding team, with their role in StAItuned and their contacts.
 
-Some team members orders are set at configuration time from the corresponding config file.
+  Some team members orders are set at configuration time from the corresponding config file.
 
-See also See also [`Cards.TeamMember` component API]() and [`Config.Teams`]().
+  See also See also [`Cards.TeamMember` component API]() and [`Config.Teams`]().
 
-### `/learn`
+- ### `/learn`
 
-This page allows the user to select a target, i.e. Newbie and Expert.
+  This page allows the user to select a target, i.e. Newbie and Expert.
 
-### `/learn/:[target]`
+- ### `/learn/:[target]`
 
-**A page not found error is shown if not allowed param is passed.**
+  **A page not found error is shown if not allowed param is passed.**
 
-```ts
-$page.params.target: "newbie" | "expert"
-```
+  ```ts
+  $page.params.target: "newbie" | "expert"
+  ```
 
-Based on the selected target, this page shows the published articles.
+  Based on the selected target, this page shows the published articles.
 
-Articles can be filtered by topic, creation date, reading time and languages and they also can be searched by title and author.
+  Articles can be filtered by topic, creation date, reading time and languages and they also can be searched by title and author.
 
-See also See also [`Cards.Post` component API]() and [`Config.Filters`]().
+  See also See also [`Cards.Post` component API]() and [`Config.Filters`]().
 
-### `/learn/:[target]/:[slug]`
+- ### `/learn/:[target]/:[slug]`
 
-**A page not found error is shown if not allowed param is passed.**
+  **A page not found error is shown if not allowed param is passed.**
 
-```ts
-$page.params.target: "newbie" | "expert"
-$page.params.slug: // slug associated with an article
-```
+  ```ts
+  $page.params.target: "newbie" | "expert"
+  $page.params.slug: // slug associated with an article
+  ```
 
-Based on the selected article, the `.md` file containing the article content is downloaded from the cms and the page shows the info and the article content.
+  Based on the selected article, the `.md` file containing the article content is downloaded from the cms and the page shows the info and the article content.
 
-### `/keepintouch`
+- ### `/keepintouch`
 
-This page shows a contact form and the user can send an email to the staff.
+  This page shows a contact form and the user can send an email to the staff.
 
-### `/*`
+- ### `/*`
 
-For any other route the application shows a page not found error.
+  For any other route the application shows a page not found error.
 
 ## Server APIs
 
@@ -83,191 +83,191 @@ _There is no Database at the moment._
 
 ## Svelte Components APIs
 
-### `UI core components APIs`
+- ### `UI core components APIs`
 
-UI core module includes all the UI components used and the icons submodule.
+  UI core module includes all the UI components used and the icons submodule.
 
-#### `Breadcrumb`
+  - #### `Breadcrumb`
 
-The component allows the user to navigate from a _sub-route_ to a _super-route_, so that navigating between routes is simpler and smarter.
+    The component allows the user to navigate from a _sub-route_ to a _super-route_, so that navigating between routes is simpler and smarter.
 
-| Prop   | Type       | Description               | Default | Required |
-| ------ | ---------- | ------------------------- | ------- | -------- |
-| `tabs` | `string[]` | Array of breadcrumb tabs. | _None_  | Yes      |
+    | Prop   | Type       | Description               | Default | Required |
+    | ------ | ---------- | ------------------------- | ------- | -------- |
+    | `tabs` | `string[]` | Array of breadcrumb tabs. | _None_  | Yes      |
 
-See also See also [`utils` Helper]().
+    See also See also [`utils` Helper]().
 
-#### `Button`
+  - #### `Button`
 
-The component renders a styled clickable button.
+    The component renders a styled clickable button.
 
-| Prop        | Type                                    | Description                         | Default     | Required |
-| ----------- | --------------------------------------- | ----------------------------------- | ----------- | -------- |
-| `variant`   | `"primary", "secondary", "transparent"` | Style variant used for the button.  | `"primary"` | No       |
-| `rounded`   | `"lg", "full"`                          | Border radius of the button         | `"lg"`      | No       |
-| `width`     | `"full", "fit"`                         | Width of the button.                | `"fit"`     | No       |
-| `type`      | `"button", "reset", "submit"`           | Type of the button.                 | `"button"`  | No       |
-| `onClick`   | `() => void`                            | Handle click fuction of the button. | `() => {}`  | No       |
-| `className` | `string`                                | Classes of the button.              | `""`        | No       |
+    | Prop        | Type                                    | Description                         | Default     | Required |
+    | ----------- | --------------------------------------- | ----------------------------------- | ----------- | -------- |
+    | `variant`   | `"primary", "secondary", "transparent"` | Style variant used for the button.  | `"primary"` | No       |
+    | `rounded`   | `"lg", "full"`                          | Border radius of the button         | `"lg"`      | No       |
+    | `width`     | `"full", "fit"`                         | Width of the button.                | `"fit"`     | No       |
+    | `type`      | `"button", "reset", "submit"`           | Type of the button.                 | `"button"`  | No       |
+    | `onClick`   | `() => void`                            | Handle click fuction of the button. | `() => {}`  | No       |
+    | `className` | `string`                                | Classes of the button.              | `""`        | No       |
 
-#### `CloseButton`
+  - #### `CloseButton`
 
-The component render a close icon and it can be used with a openable component to manage its current state, i.e. open or closed.
+    The component render a close icon and it can be used with a openable component to manage its current state, i.e. open or closed.
 
-| Prop   | Type      | Description                              | Default | Required |
-| ------ | --------- | ---------------------------------------- | ------- | -------- |
-| `open` | `boolean` | Current state of the openable component. | _None_  | Yes      |
+    | Prop   | Type      | Description                              | Default | Required |
+    | ------ | --------- | ---------------------------------------- | ------- | -------- |
+    | `open` | `boolean` | Current state of the openable component. | _None_  | Yes      |
 
-#### `Hamburger`
+  - #### `Hamburger`
 
-The component render an hamburger icon, that change based on the current state, and it can be used with a openable component to manage its current state, i.e. open or closed.
+    The component render an hamburger icon, that change based on the current state, and it can be used with a openable component to manage its current state, i.e. open or closed.
 
-| Prop        | Type      | Description                              | Default | Required |
-| ----------- | --------- | ---------------------------------------- | ------- | -------- |
-| `open`      | `boolean` | Current state of the openable component. | _None_  | Yes      |
-| `className` | `string`  | Classes of the Hamburger.                | `""`    | No       |
+    | Prop        | Type      | Description                              | Default | Required |
+    | ----------- | --------- | ---------------------------------------- | ------- | -------- |
+    | `open`      | `boolean` | Current state of the openable component. | _None_  | Yes      |
+    | `className` | `string`  | Classes of the Hamburger.                | `""`    | No       |
 
-#### `Modal`
+  - #### `Modal`
 
-This submodule define all components useful to define a Modal.
+    This submodule define all components useful to define a Modal.
 
-##### `Modal.Dialog`
+    - #### `Modal.Dialog`
 
-This component renders the modal itself, i.e. a block of content on top the page content.
+      This component renders the modal itself, i.e. a block of content on top the page content.
 
-| Prop     | Type      | Description                 | Default | Required |
-| -------- | --------- | --------------------------- | ------- | -------- |
-| `isOpen` | `boolean` | Current state of the modal. | _None_  | Yes      |
+      | Prop     | Type      | Description                 | Default | Required |
+      | -------- | --------- | --------------------------- | ------- | -------- |
+      | `isOpen` | `boolean` | Current state of the modal. | _None_  | Yes      |
 
-##### `Modal.Content`
+    - #### `Modal.Content`
 
-This component renders the container for the content of the modal, with a title if it is set.
+      This component renders the container for the content of the modal, with a title if it is set.
 
-| Prop    | Type     | Description         | Default | Required |
-| ------- | -------- | ------------------- | ------- | -------- |
-| `title` | `string` | Title of the modal. | `""`    | No       |
+      | Prop    | Type     | Description         | Default | Required |
+      | ------- | -------- | ------------------- | ------- | -------- |
+      | `title` | `string` | Title of the modal. | `""`    | No       |
 
-##### `Modal.Actions`
+    - #### `Modal.Actions`
 
-This component renders the container of the call to actions of the modal.
+      This component renders the container of the call to actions of the modal.
 
-| Prop    | Type     | Description         | Default | Required |
-| ------- | -------- | ------------------- | ------- | -------- |
-| `title` | `string` | Title of the modal. | `""`    | No       |
+      | Prop    | Type     | Description         | Default | Required |
+      | ------- | -------- | ------------------- | ------- | -------- |
+      | `title` | `string` | Title of the modal. | `""`    | No       |
 
-##### `Modal.Overlay`
+    - #### `Modal.Overlay`
 
-This component renders the overlay of the modal, shown when the modal is open.
+      This component renders the overlay of the modal, shown when the modal is open.
 
-| Prop     | Type      | Description                 | Default | Required |
-| -------- | --------- | --------------------------- | ------- | -------- |
-| `isOpen` | `boolean` | Current state of the modal. | _None_  | Yes      |
+      | Prop     | Type      | Description                 | Default | Required |
+      | -------- | --------- | --------------------------- | ------- | -------- |
+      | `isOpen` | `boolean` | Current state of the modal. | _None_  | Yes      |
 
-#### `Nav`
+  - #### `Nav`
 
-This component renders a list a links to navigate between routes and it highlights the active one.
+    This component renders a list a links to navigate between routes and it highlights the active one.
 
-| Prop      | Type         | Description                         | Default    | Required |
-| --------- | ------------ | ----------------------------------- | ---------- | -------- |
-| `onClick` | `() => void` | Handle click function of nav items. | `() => {}` | No       |
+    | Prop      | Type         | Description                         | Default    | Required |
+    | --------- | ------------ | ----------------------------------- | ---------- | -------- |
+    | `onClick` | `() => void` | Handle click function of nav items. | `() => {}` | No       |
 
-#### `Searchbar`
+  - #### `Searchbar`
 
-This component renders a styled searchbar and you can set what it should do when its input value change.
+    This component renders a styled searchbar and you can set what it should do when its input value change.
 
-| Prop           | Type                     | Description                                                                                     | Default    | Required |
-| -------------- | ------------------------ | ----------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `inconStart`   | `boolean`                | It set the position of the search icon. If `true`, the icon is on the right of the input field. | `false`    | No       |
-| `variant`      | `"solid", "transparent"` | Style used for the input field.                                                                 | `"solid"`  | No       |
-| `name`         | `string`                 | Name of the input field.                                                                        | _None_     | Yes      |
-| `placeholder`  | `string`                 | Placeholder of the input field.                                                                 | _None_     | Yes      |
-| `handleInput`  | `(e: Event) => void`     | Function to execute on input event.                                                             | `() => {}` | No       |
-| `handleChange` | `(e: Event) => void`     | Function to execute on change event.                                                            | `() => {}` | No       |
+    | Prop           | Type                     | Description                                                                                     | Default    | Required |
+    | -------------- | ------------------------ | ----------------------------------------------------------------------------------------------- | ---------- | -------- |
+    | `inconStart`   | `boolean`                | It set the position of the search icon. If `true`, the icon is on the right of the input field. | `false`    | No       |
+    | `variant`      | `"solid", "transparent"` | Style used for the input field.                                                                 | `"solid"`  | No       |
+    | `name`         | `string`                 | Name of the input field.                                                                        | _None_     | Yes      |
+    | `placeholder`  | `string`                 | Placeholder of the input field.                                                                 | _None_     | Yes      |
+    | `handleInput`  | `(e: Event) => void`     | Function to execute on input event.                                                             | `() => {}` | No       |
+    | `handleChange` | `(e: Event) => void`     | Function to execute on change event.                                                            | `() => {}` | No       |
 
-#### `Sidebar`
+  - #### `Sidebar`
 
-This component is a wrapper to define sidebars that are shown based on their current state.
+    This component is a wrapper to define sidebars that are shown based on their current state.
 
-| Prop        | Type         | Description                         | Default    | Required |
-| ----------- | ------------ | ----------------------------------- | ---------- | -------- |
-| `open`      | `boolean`    | Current state of the Sidebar.       | _None_     | Yes      |
-| `onClose`   | `() => void` | Function to execute on close event. | `() => {}` | No       |
-| `className` | `string`     | Classes of the Sidebar.             | `""`       | No       |
+    | Prop        | Type         | Description                         | Default    | Required |
+    | ----------- | ------------ | ----------------------------------- | ---------- | -------- |
+    | `open`      | `boolean`    | Current state of the Sidebar.       | _None_     | Yes      |
+    | `onClose`   | `() => void` | Function to execute on close event. | `() => {}` | No       |
+    | `className` | `string`     | Classes of the Sidebar.             | `""`       | No       |
 
-#### `TransitionPage`
+  - #### `TransitionPage`
 
-This component is a wrapper that allows transition when the user navigate between routes.
+    This component is a wrapper that allows transition when the user navigate between routes.
 
-### `Features components APIs`
+- ### `Features components APIs`
 
-Features module includes specific implementations of UI components used inside the website.
+  Features module includes specific implementations of UI components used inside the website.
 
-#### `Cards`
+  - #### `Cards`
 
-Cards submodule includes all the cards used.
+    Cards submodule includes all the cards used.
 
-##### `Cards.Home`
+    - #### `Cards.Home`
 
-It renders the article card with the color overlay, used in the homepage.
+      It renders the article card with the color overlay, used in the homepage.
 
-| Prop      | Type      | Description                       | Default | Required |
-| --------- | --------- | --------------------------------- | ------- | -------- |
-| `article` | `Article` | The article that has to be shown. | _None_  | Yes      |
-| `color`   | `string`  | The overlay color of the card.    | _None_  | Yes      |
+      | Prop      | Type      | Description                       | Default | Required |
+      | --------- | --------- | --------------------------------- | ------- | -------- |
+      | `article` | `Article` | The article that has to be shown. | _None_  | Yes      |
+      | `color`   | `string`  | The overlay color of the card.    | _None_  | Yes      |
 
-##### `Cards.Post`
+    - #### `Cards.Post`
 
-It renders the article post, used in the learn pages.
+      It renders the article post, used in the learn pages.
 
-| Prop      | Type      | Description                       | Default | Required |
-| --------- | --------- | --------------------------------- | ------- | -------- |
-| `article` | `Article` | The article that has to be shown. | _None_  | Yes      |
+      | Prop      | Type      | Description                       | Default | Required |
+      | --------- | --------- | --------------------------------- | ------- | -------- |
+      | `article` | `Article` | The article that has to be shown. | _None_  | Yes      |
 
-##### `Cards.TeamMember`
+    - #### `Cards.TeamMember`
 
-It renders the info of a team member, used in the meet pages.
+      It renders the info of a team member, used in the meet pages.
 
-| Prop     | Type     | Description                      | Default | Required |
-| -------- | -------- | -------------------------------- | ------- | -------- |
-| `author` | `Author` | The member that has to be shown. | _None_  | Yes      |
+      | Prop     | Type     | Description                      | Default | Required |
+      | -------- | -------- | -------------------------------- | ------- | -------- |
+      | `author` | `Author` | The member that has to be shown. | _None_  | Yes      |
 
-##### `Cards.Team`
+    - #### `Cards.Team`
 
-It renders the team card that allows to navigate to the specific team page, used in the meet pages.
+      It renders the team card that allows to navigate to the specific team page, used in the meet pages.
 
-| Prop   | Type   | Description                    | Default | Required |
-| ------ | ------ | ------------------------------ | ------- | -------- |
-| `team` | `Team` | The team that has to be shown. | _None_  | Yes      |
+      | Prop   | Type   | Description                    | Default | Required |
+      | ------ | ------ | ------------------------------ | ------- | -------- |
+      | `team` | `Team` | The team that has to be shown. | _None_  | Yes      |
 
-#### `Sidebars`
+  - #### `Sidebars`
 
-Sidebars submodule includes all the sidebars used.
+    Sidebars submodule includes all the sidebars used.
 
-##### `Sidebars.Filters`
+    - #### `Sidebars.Filters`
 
-Ir renders the filter sidebar, where the user can select params to filter the list of articles shown.
+      It renders the filter sidebar, where the user can select params to filter the list of articles shown.
 
-| Prop            | Type         | Description                   | Default | Required |
-| --------------- | ------------ | ----------------------------- | ------- | -------- |
-| `open`          | `boolean`    | Current state of the Sidebar. | _None_  | Yes      |
-| `activeFilters` | `Filter`     | Filters currently active.     | _None_  | Yes      |
-| `filter`        | `() => void` | Filter function.              | _None_  | Yes      |
+      | Prop            | Type         | Description                   | Default | Required |
+      | --------------- | ------------ | ----------------------------- | ------- | -------- |
+      | `open`          | `boolean`    | Current state of the Sidebar. | _None_  | Yes      |
+      | `activeFilters` | `Filter`     | Filters currently active.     | _None_  | Yes      |
+      | `filter`        | `() => void` | Filter function.              | _None_  | Yes      |
 
-##### `Sidebars.Header`
+    - #### `Sidebars.Header`
 
-It renders the mobile main navigation component, included in the header.
+      It renders the mobile main navigation component, included in the header.
 
-| Prop   | Type      | Description                   | Default | Required |
-| ------ | --------- | ----------------------------- | ------- | -------- |
-| `open` | `boolean` | Current state of the Sidebar. | _None_  | Yes      |
+      | Prop   | Type      | Description                   | Default | Required |
+      | ------ | --------- | ----------------------------- | ------- | -------- |
+      | `open` | `boolean` | Current state of the Sidebar. | _None_  | Yes      |
 
-#### `SearchModal`
+  - #### `SearchModal`
 
-Ir renders a modal where the user can search an article by title, included in the header.
+    It renders a modal where the user can search an article by title, included in the header.
 
-| Prop     | Type      | Description                 | Default | Required |
-| -------- | --------- | --------------------------- | ------- | -------- |
-| `isOpen` | `boolean` | Current state of the Modal. | _None_  | Yes      |
+    | Prop     | Type      | Description                 | Default | Required |
+    | -------- | --------- | --------------------------- | ------- | -------- |
+    | `isOpen` | `boolean` | Current state of the Modal. | _None_  | Yes      |
 
 ### `Layouts`
 
@@ -287,96 +287,96 @@ Ir renders a modal where the user can search an article by title, included in th
 
 Here a list of the interfaces implemented.
 
-### Interfaces for articles
+- ### Interfaces for articles
 
-#### `Cover`
+    - #### `Cover`
 
-This interface is useful to associate each cover image, dynamically imported, with the corresponding article.
+        This interface is useful to associate each cover image, dynamically imported, with the corresponding article.
 
-```ts
-export interface Cover {
-	image: string // cover image, dynamically imported
-	article: string // slug of the corresponding article
-}
-```
+        ```ts
+        export interface Cover {
+            image: string // cover image, dynamically imported
+            article: string // slug of the corresponding article
+        }
+        ```
 
-#### `ArticleMetadata`
+    - #### `ArticleMetadata`
 
-This interface defines all the information associated with an article as metadata.
+        This interface defines all the information associated with an article as metadata.
 
-```ts
-export interface ArticleMetadata {
-	title: string // title of the article
-	author: string // name of the author of the article
-	date: string // publication date
-	topics: string[] // list of tags, e.g. Basic, Machine Learning, ...
-	meta: string // brief introduction or description
-	target: string // users target, e.g. Newbie or Expert
-	cover: string // cover image
-	language: string // language, e.g. Italian or English
-	readingTime: number // reading time in minutes
-}
-```
+        ```ts
+        export interface ArticleMetadata {
+            title: string // title of the article
+            author: string // name of the author of the article
+            date: string // publication date
+            topics: string[] // list of tags, e.g. Basic, Machine Learning, ...
+            meta: string // brief introduction or description
+            target: string // users target, e.g. Newbie or Expert
+            cover: string // cover image
+            language: string // language, e.g. Italian or English
+            readingTime: number // reading time in minutes
+        }
+        ```
 
-#### `Article`
+    - #### `Article`
 
-This interface defines an artile.
+        This interface defines an artile.
 
-```ts
-export interface Article {
-	slug: string // folder where the post is in the cms (used as an id)
-	filename: string // name of the content file (.md file)
-	metadata: ArticleMetadata // metadata of the article
-	author?: Author | undefined // author with all its info
-}
-```
+        ```ts
+        export interface Article {
+            slug: string // folder where the post is in the cms (used as an id)
+            filename: string // name of the content file (.md file)
+            metadata: ArticleMetadata // metadata of the article
+            author?: Author | undefined // author with all its info
+        }
+        ```
 
-### Interfaces for authors
+- ### Interfaces for authors
 
-#### `Author`
+    - #### `Author`
 
-This interface defines an author.
+        This interface defines an author.
 
-```ts
-interface Author {
-	name: string // name of the author
-	team: string[] // list of teams to which he belongs
-	title: string // role
-	linkedin: string // LinkedIn profile url
-	email: string // contact email address
-	description: string // a brief introduction
-	propic: string // path to the propic
-}
-```
+        ```ts
+        interface Author {
+            name: string // name of the author
+            team: string[] // list of teams to which he belongs
+            title: string // role
+            linkedin: string // LinkedIn profile url
+            email: string // contact email address
+            description: string // a brief introduction
+            propic: string // path to the propic
+        }
+        ```
 
-### Interfaces for CMS data
+- ### Interfaces for CMS data
 
-#### `CMSData`
+    - #### `CMSData`
 
-This interface defines the CMS data.
+        This interface defines the CMS data.
 
-```ts
-interface CMSData {
-	articles: Article[] // list of articles
-	authors: Author[] // list of authors
-}
-```
+        ```ts
+        interface CMSData {
+            articles: Article[] // list of articles
+            authors: Author[] // list of authors
+        }
+        ```
 
-### Interfaces for filters
+- ### Interfaces for filters
 
-#### `Filter`
+    - #### `Filter`
 
-This interface defines the filter for articles.
+        This interface defines the filter for articles.
 
-```ts
-export default interface Filter {
-    tags: Tag[], // list of tags
-    creationDate: CreationDate, // publication date range
-    readingTime: ReadingTime[], // list of reading time ranges
-    languages: Language[], // list of languages
-    searchParam: string, // searching for this string
-}
-```
+        ```ts
+        export default interface Filter {
+            tags: Tag[] // list of tags
+            creationDate: CreationDate // publication date range
+            readingTime: ReadingTime[] // list of reading time ranges
+            languages: Language[] // list of languages
+            searchParam: string // searching for this string
+        }
+        ```
 
 ## Helpers
 

@@ -1,3 +1,11 @@
-import type Category from "./category";
+import type { Category } from "./utils";
 
-export { Category }
+import type { Tag, CreationDate, ReadingTime, Language } from "./filters";
+
+export {
+    Category,
+    Tag,
+    CreationDate,
+    ReadingTime,
+    Language
+}

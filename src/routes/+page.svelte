@@ -8,9 +8,9 @@
 
 	import info from '@lib/info'
 
+	import { Home } from '@lib/configs'
 	import type { Category } from '@lib/types'
 	import type { Article } from '@lib/interfaces'
-	import { HomeConfigs } from '@lib/configs'
 	import { date } from '@lib/helpers'
 	import { PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
@@ -19,14 +19,14 @@
 
 	const recentArticles: Article[] = date.sort
 		.mostRecentArticleFirst(data.articles)
-		.slice(0, HomeConfigs.AMOUNT_OF_ARTICLES)
+		.slice(0, Home.AMOUNT_OF_ARTICLES)
 
 	const relevantArticles = date.sort.mostRecentArticleFirst(
-		HomeConfigs.RELEVANT_ARTICLES_SLUG.map((slug) =>
+		Home.RELEVANT_ARTICLES_SLUG.map((slug) =>
 			data.articles.find((article: Article) => article.slug === slug)
 		)
 			.filter((article) => article !== undefined)
-			.slice(0, HomeConfigs.AMOUNT_OF_ARTICLES) as Article[]
+			.slice(0, Home.AMOUNT_OF_ARTICLES) as Article[]
 	)
 
 	let articlesToShow: Category = 'Recent'
@@ -90,7 +90,7 @@
 	<!-- Home Articles Cards -->
 	<section class="bg-secondary-600 text-white py-5 mb-10">
 		<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
-			{#each HomeConfigs.CATEGORIES as category}
+			{#each Home.CATEGORIES as category}
 				<div
 					class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition"
 					class:text-secondary-600={articlesToShow === category}
@@ -105,7 +105,7 @@
 			{#each articles as article, idx}
 				<Cards.Home
 					{article}
-					color={HomeConfigs.ARTICLE_CARD_COLORS[idx % HomeConfigs.ARTICLE_CARD_COLORS.length]}
+					color={Home.ARTICLE_CARD_COLORS[idx % Home.ARTICLE_CARD_COLORS.length]}
 				/>
 			{/each}
 		</div>

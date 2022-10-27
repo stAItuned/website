@@ -44,7 +44,7 @@
 	}
 </script>
 
-<Sidebar {open} className="md:w-1/2 xl:w-1/3 bg-[#F5F5F5] top-0 right-0">
+<Sidebar {open} className="md:w-1/2 xl:w-1/3 bg-slate-50 top-0 right-0">
 	<div class="h-screen flex flex-col justify-between p-16">
 		<div class="flex align-center justify-between">
 			<h1 class="font-bold text-2xl text-primary-500 uppercase">Filters</h1>
