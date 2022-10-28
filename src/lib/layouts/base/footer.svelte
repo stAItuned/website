@@ -12,7 +12,7 @@
 		<h3 class="text-lg uppercase text-slate-200 opacity-25 font-bold">Follow us</h3>
 		<div class="flex space-x-8 justify-start">
 			{#each Socials.ICON_LINKS as social}
-				<a href={social.url} target="_blank">
+				<a href={social.url} target="_blank" rel="noreferrer">
 					<social.icon class="w-10 h-10" />
 					<svelte:component
 						this={social.icon}

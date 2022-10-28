@@ -4,7 +4,7 @@
 	import { draw } from 'svelte/transition'
 	import { sineIn } from 'svelte/easing'
 
-	import info from '@lib/info'
+	import ArticleMetaTags from '@lib/seo/ArticleMetaTags.svelte'
 
 	import type { Article } from '@lib/interfaces'
 	import { utils } from '@lib/helpers'
@@ -13,7 +13,11 @@
 	export let data: PageData
 	const article: Article = data.article
 
-	const component = data.component
+	const componentToRender = data.componentToRender
+	const isArticleGuide: boolean =
+		data.component.metadata.layout !== undefined &&
+		typeof data.component.metadata.layout === 'string' &&
+		data.component.metadata.layout.toLowerCase() === 'guide'
 
 	const pathname = $page.url.pathname
 
@@ -51,50 +55,22 @@
 </script>
 
 <svelte:head>
-	<!-- <script>
-		MathJax = {
-			tex: {
-				inlineMath: [
-					['$', '$'],
-					['\\(', '\\)']
-				]
-			},
-			svg: {
-				fontCache: 'global'
-			}
-		}
-	</script>
-	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-	<script
-		id="MathJax-script"
-		async
-		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
-
-	<!-- HTML Meta Tags -->
-	<title>{article.metadata.title} | {info.siteName}</title>
-	<meta name="description" content={article.metadata.meta} />
-
-	<!-- Facebook Meta Tags -->
-	<!-- <meta property="og:url" content={window.location.hostname} /> -->
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content={article.metadata.title + ' | ' + info.siteName} />
-	<meta property="og:description" content={article.metadata.meta} />
-	<meta property="og:image" content={article.metadata.cover} />
-
-	<!-- Twitter Meta Tags -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<!-- <meta property="twitter:domain" content={window.location.hostname} />
-	<meta property="twitter:url" content={window.location.host} /> -->
-	<meta name="twitter:title" content={article.metadata.title + ' | ' + info.siteName} />
-	<meta name="twitter:description" content={article.metadata.meta} />
-	<meta name="twitter:image" content={article.metadata.cover} />
 	<link
 		rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
 		integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
 		crossorigin="anonymous"
 	/>
+	{#if !isArticleGuide}
+		<style>
+			div.toc {
+				display: none;
+			}
+		</style>
+	{/if}
 </svelte:head>
+
+<ArticleMetaTags {article} />
 
 <PageTransition>
 	<section class="relative">
@@ -180,7 +156,7 @@
 				{/if}
 			</div>
 			<!-- {@html article.content} -->
-			<svelte:component this={component} />
+			<svelte:component this={componentToRender} />
 		</article>
 	</section>
 </PageTransition>
