@@ -22,13 +22,12 @@ const generateXML = (articles: CMSData['articles']) =>
     <title>${info.siteName}</title>
     <link>${info.basePath}</link>
     <description>${info.longDescription}</description>
-	<atom:link rel="self" type="application/rss+xml"> href="${info.basePath}/feed.xml" />
+	<atom:link rel="self" type="application/rss+xml"> href="${info.basePath}/feed.xml"></atom:link>
 
     ${articles
 			.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
 			.map(
-				(article) => `
-    <item>
+				(article) => `\t<item>
     <title>${article.metadata.title}</title>
     <link>${encodeURI(
 			`${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`
@@ -44,4 +43,5 @@ const generateXML = (articles: CMSData['articles']) =>
     `
 			)
 			.join('')}
-</channel>`
+</channel>
+</rss>`.trim()
