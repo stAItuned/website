@@ -23,7 +23,7 @@ const loadArticles = (): Promise<(Article | undefined)[]> => {
 					filename,
 					metadata: {
 						...metadata,
-						cover: metadata.cover,
+						cover: `/cms/articles/${slug}/${metadata.cover}`,
 						readingTime: cms.article.computeReadingTime(post.default.render().html)
 					}
 				}

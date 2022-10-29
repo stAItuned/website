@@ -10,10 +10,10 @@ const loadData = (): Promise<CMSData> => {
 		loadArticles().then((articles: (Article | undefined)[]) => {
 			const publishedArticles = cms.article.getPublishedArticles(articles)
 
-			cms.article.loadCovers(publishedArticles).then((covers: Cover[]) => {
+			// cms.article.loadCovers(publishedArticles).then((covers: Cover[]) => {
 				publishedArticles.forEach((article: Article, idx) => {
 					const author = authors.find((a: Author) => a.name === article.metadata.author)
-					const cover = covers.find((c: Cover) => c.article === article.slug)
+					// const cover = covers.find((c: Cover) => c.article === article.slug)
 
 					if (author) {
 						article.author = author
@@ -24,15 +24,15 @@ const loadData = (): Promise<CMSData> => {
 						// }
 					}
 
-					if (cover) {
-						article.metadata.cover = cover.image
-					}
+					// if (cover) {
+					// 	article.metadata.cover = cover.image
+					// }
 
 					if (idx === publishedArticles.length - 1)
 						resolve({ articles: publishedArticles, authors } as CMSData)
 
 				})
-			})
+			// })
 
 		})
 	})

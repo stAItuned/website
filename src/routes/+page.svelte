@@ -2,7 +2,7 @@
 	// @ts-ignore-line
 	import homeLogo from '@assets/general/home_logo_3.png?h=600?webp'
 	// @ts-ignore
-	import bgGraph from '@assets/general/bg-graph.svg?h=600?webp'
+	import bgGraph from '@assets/general/bg-graph.png?h=600?webp'
 
 	import type { PageData } from './$types'
 
@@ -66,7 +66,7 @@
 <PageTransition>
 	<section class="mb-[30px] mt-[120px]">
 		<div class="relative bg-primary-500 h-[600px] shadow-2xl flex flex-col justify-center">
-			<img src={bgGraph} alt="bg-graph" class="absolute object-cover w-full h-full" />
+			<img srcset={bgGraph} alt="bg-graph" class="absolute object-cover w-full h-full" />
 			<center class="z-10">
 				<img
 					class="p-5 h-auto sm:w-[100vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] 2xl:w-[40vw]"

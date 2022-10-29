@@ -1,6 +1,6 @@
 <script lang="ts">
 	// @ts-ignore
-	import JoinUS from '@assets/footer/JoinUS.svg?w=256?webp'
+	import JoinUS from '@assets/footer/JoinUS.png?w=256?webp'
 
 	import { Socials } from '@lib/configs'
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	// @ts-ignore
-	import bgGradient from '@assets/general/bg-gradient.svg?w=1024?webp'
+	import bgGradient from '@assets/general/bg-gradient.png?w=1024?webp'
 
 	import { fade } from 'svelte/transition'
 

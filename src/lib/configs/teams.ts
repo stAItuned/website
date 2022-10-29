@@ -1,9 +1,9 @@
 // @ts-ignore
-import techLogo from '@assets/team/tech_large.svg?h=512?webp'
+import techLogo from '@assets/team/tech_large.png?h=512?webp'
 // @ts-ignore
-import marketingLogo from '@assets/team/marketing_large.svg?h=512?webp'
+import marketingLogo from '@assets/team/marketing_large.png?h=512?webp'
 // @ts-ignore
-import writersLogo from '@assets/team/writers_large.svg?h=512?webp'
+import writersLogo from '@assets/team/writers_large.png?h=512?webp'
 
 export const NAMES = ["Tech", "Marketing", "Writers"] as const
 
