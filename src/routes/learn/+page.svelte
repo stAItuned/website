@@ -4,9 +4,12 @@
 	import { Filters } from '@lib/configs'
 	import { utils } from '@lib/helpers'
 	import { Button, Breadcrumb, PageTransition } from '@components/ui-core'
+	import LearnPageMetaTags from '@lib/seo/LearnPageMetaTags.svelte'
 
 	const pathname = $page.url.pathname
 </script>
+
+<LearnPageMetaTags />
 
 <PageTransition>
 	<section class="max-w-7xl mx-auto mt-[150px] mb-32 px-8 xl:px-4 space-y-16">

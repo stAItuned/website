@@ -40,7 +40,9 @@
 				position: 1,
 				item: {
 					'@id': `${info.basePath}/learn/newbie`,
-					name: 'Newbie'
+					name: 'Newbie',
+					url: `${info.basePath}/learn/newbie`,
+
 				}
 			},
 			{
@@ -48,7 +50,8 @@
 				position: 2,
 				item: {
 					'@id': `${info.basePath}/learn/expert`,
-					name: 'Expert'
+					name: 'Expert',
+					url: `${info.basePath}/learn/expert`,
 				}
 			}
 		]
