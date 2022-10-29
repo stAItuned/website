@@ -7,6 +7,7 @@
 	export let article: Article
 	const pageTitle = article.metadata.title
 	const pageDescription = article.metadata.meta
+	const language = article.metadata.language === 'Italian' ? 'it' : 'en'
 </script>
 
 <MetaTags
@@ -34,13 +35,19 @@
 		site: info.basePath,
 		image: article.metadata.cover
 	}}
+	languageAlternates={[
+		{
+			hrefLang: language,
+			href: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`
+		}
+	]}
 />
 
 <JsonLd output="head" schema={articleSchema(article)} />
 
 <BreadcrumbsMetaTags
 	pages={[
-		{title: info.siteName, path: '/'},
+		{ title: info.siteName, path: '/' },
 		{ title: 'Learn', path: '/learn' },
 		{ title: article.metadata.target, path: `/learn/${article.metadata.target.toLowerCase()}` },
 		{

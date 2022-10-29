@@ -42,6 +42,7 @@ export async function GET() {
       <loc>${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}</loc>
       <lastmod>${new Date(article.metadata.date).toISOString().split('T')[0]}</lastmod>
       <changefreq>weekly</changefreq>
+      <xhtml:link rel="alternate" hreflang="${article.metadata.language === 'Italian' ? 'it' : 'en'}" href="${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}"/>
       </url>
       `
         )
