@@ -5,9 +5,16 @@
 	import { utils } from '@lib/helpers'
 	import { Breadcrumb, PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
+	import SecondaryPageMetaTags from '@lib/seo/SecondaryPageMetaTags.svelte'
 
 	const pathname = $page.url.pathname
 </script>
+
+<SecondaryPageMetaTags
+	pageTitle="Meet the Team"
+	pageDescription="Meet the team behind stAI tuned."
+	pagePath={pathname}
+/>
 
 <PageTransition>
 	<div class="max-w-7xl mx-auto mb-32 mt-[150px] px-8 xl:px-4 space-y-16">
