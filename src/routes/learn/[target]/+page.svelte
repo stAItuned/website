@@ -11,7 +11,7 @@
 	import { date, utils, articles as articlesHelper } from '@lib/helpers'
 	import { Breadcrumb, Searchbar, PageTransition, Icons } from '@components/ui-core'
 	import { Sidebars, Cards } from '@components/features'
-	import LearnPageMetaTags from '@lib/seo/NewbieExpertMetaTags.svelte'
+	import NewbieExpertMetaTags from '@lib/seo/NewbieExpertMetaTags.svelte'
 
 	export let data: PageData
 
@@ -65,7 +65,7 @@
 	$: paginatedItems = paginate(filteredArticles, pageSize, currentPage) as Article[]
 </script>
 
-<LearnPageMetaTags filteredArticles={articles} target={target} />
+<NewbieExpertMetaTags filteredArticles={articles} target={target} />
 
 <PageTransition>
 	<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
