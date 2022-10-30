@@ -1,11 +1,14 @@
 import info from '$lib/info'
-import data from '$lib/git/index'
+
+import { git } from '@lib/git'
+import type { CMSData } from '@lib/interfaces'
 
 export async function GET() {
-	
 
-	return new Response(
-		`
+  const data: CMSData = await git.loadData()
+
+  return new Response(
+    `
       <?xml version="1.0" encoding="UTF-8" ?>
       <urlset
         xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
@@ -33,21 +36,22 @@ export async function GET() {
       <changefreq>weekly</changefreq>
       </url>
       ${data.articles
-				.map(
-					(article) => `
+        .map(
+          (article) => `
       <url>
-      <loc>${info.basePath}/learn/${article.slug}</loc>
+      <loc>${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}</loc>
       <lastmod>${new Date(article.metadata.date).toISOString().split('T')[0]}</lastmod>
       <changefreq>weekly</changefreq>
+      <xhtml:link rel="alternate" hreflang="${article.metadata.language === 'Italian' ? 'it' : 'en'}" href="${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}"/>
       </url>
       `
-				)
-				.join('')}
+        )
+        .join('')}
       </urlset>`.trim(),
-		{
-			headers: {
-				'Content-Type': 'application/xml'
-			}
-		}
-	)
+    {
+      headers: {
+        'Content-Type': 'application/xml'
+      }
+    }
+  )
 }

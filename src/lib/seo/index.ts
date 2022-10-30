@@ -1,9 +1,9 @@
-import type { Article } from '@lib/git/types'
+import type { Article } from '@lib/interfaces'
 
 import info from '@lib/info'
 import type { JsonLdProps } from 'svelte-meta-tags'
 
-export const ORGANIZATION_SCHEMA: JsonLdProps["schema"] = {
+export const ORGANIZATION_SCHEMA: JsonLdProps['schema'] = {
 	'@context': 'https://schema.org',
 	'@type': 'Organization',
 	url: info.basePath,
@@ -18,12 +18,12 @@ export const ORGANIZATION_SCHEMA: JsonLdProps["schema"] = {
 	}
 }
 
-export const articleSchema = (article: Article): JsonLdProps["schema"] => ({
+export const articleSchema = (article: Article): JsonLdProps['schema'] => ({
 	'@context': 'https://schema.org',
 	'@type': 'TechArticle',
 	image: [article.metadata.cover],
 	thumbnailUrl: article.metadata.cover,
-	url: `${info.basePath}/learn/${article.slug}`,
+	url: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`,
 	dateCreated: `${article.metadata.date}`,
 	datePublished: `${article.metadata.date}`,
 	dateModified: `${article.metadata.date}`,
@@ -45,23 +45,47 @@ export const articleSchema = (article: Article): JsonLdProps["schema"] => ({
 		name: `${article.metadata.author}`
 	},
 	publisher: ORGANIZATION_SCHEMA,
-	mainEntityOfPage: `${info.basePath}/learn/${article.slug}`,
+	mainEntityOfPage: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${
+		article.slug
+	}`,
 	isAccessibleForFree: 'https://schema.org/True'
 })
 
 export const listArticleSchema = (articles: Article[]) => {
-	const mapArticleToItemList = (a: Article, index: number): JsonLdProps["schema"] => {
+	const mapArticleToItemList = (a: Article, index: number): JsonLdProps['schema'] => {
 		return {
 			'@type': 'ListItem',
 			position: index + 1,
-			url: `${info.basePath}/learn/${a.slug}`,
+			url: `${info.basePath}/learn/${a.metadata.target.toLowerCase()}/${a.slug}`,
 			item: articleSchema(a)
 		} as const
 	}
-	const schema: JsonLdProps["schema"] = {
+	const schema: JsonLdProps['schema'] = {
 		'@context': 'https://schema.org',
 		'@type': 'ItemList',
-		itemListElement: articles.map(mapArticleToItemList) 
-	} as any as JsonLdProps["schema"]
+		itemListElement: articles.map(mapArticleToItemList)
+	} as any as JsonLdProps['schema']
+	return schema
+}
+
+export const breadcrumbSchema = (
+	pages: { title: string; path: string }[]
+): JsonLdProps['schema'] => {
+	const mapPageToBreadcrumb = (
+		p: { title: string; path: string },
+		index: number
+	): JsonLdProps['schema'] => {
+		return {
+			'@type': 'ListItem',
+			position: index + 1,
+			name: p.title,
+			item: `${info.basePath}${p.path}`
+		} as const
+	}
+	const schema: JsonLdProps['schema'] = {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: pages.map(mapPageToBreadcrumb)
+	} as any as JsonLdProps['schema']
 	return schema
 }

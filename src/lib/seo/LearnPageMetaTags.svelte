@@ -1,37 +1,66 @@
 <script lang="ts">
 	import info from '@lib/info'
-	import { MetaTags, JsonLd } from 'svelte-meta-tags';
-    import { listArticleSchema } from '@lib/seo'
-	import type { Article } from '@lib/git/types'
-    export let articles: Article[]
-    const pageTitle = "Learn"
-    const pageDescription = info.longDescription // TODO: Change description for Learn Page
+	import { JsonLd, MetaTags } from 'svelte-meta-tags'
+	import { ORGANIZATION_SCHEMA } from '.'
+	import BreadcrumbsMetaTags from './BreadcrumbsMetaTags.svelte'
+	const pageTitle = 'Learn'
+	const pageDescription = info.longDescription
 </script>
 
 <MetaTags
-    title={pageTitle}
-    titleTemplate="%s | {info.siteName}"
-    description={pageDescription}
-    canonical={`${info.basePath}/learn`}
-    openGraph={{
-        site_name: info.siteName,
-        type: "website",
-        description: pageDescription,
-        title: pageTitle,
-        images: [{url: info.logo.relPath}],
-        url: info.basePath,
-    }}
-    twitter={{
-        title: pageTitle,
-        description: pageDescription,
-        cardType: "summary_large_image",
-        site: info.basePath,
-        image: info.logo.relPath,
-    }}
+	canonical={`${info.basePath}/learn`}
+	description={pageDescription}
+	openGraph={{
+		site_name: info.siteName,
+		type: 'website',
+		description: pageDescription,
+		title: pageTitle,
+		images: [{ url: info.logo.relPath }],
+		url: info.basePath
+	}}
+	title={pageTitle}
+	titleTemplate="%s | {info.siteName}"
+	twitter={{
+		title: pageTitle,
+		description: pageDescription,
+		cardType: 'summary_large_image',
+		site: info.basePath,
+		image: info.logo.relPath
+	}}
 />
 
+<JsonLd
+	output="head"
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'ItemList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				item: {
+					'@id': `${info.basePath}/learn/newbie`,
+					name: 'Newbie',
+					url: `${info.basePath}/learn/newbie`,
 
-<JsonLd 
-    output="head"
-    schema={listArticleSchema(articles)}
+				}
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				item: {
+					'@id': `${info.basePath}/learn/expert`,
+					name: 'Expert',
+					url: `${info.basePath}/learn/expert`,
+				}
+			}
+		]
+	}}
+/>
+
+<BreadcrumbsMetaTags
+	pages={[
+		{ title: 'Home', path: '/' },
+		{ title: 'Learn', path: '/learn' }
+	]}
 />

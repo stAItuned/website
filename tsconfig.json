@@ -11,10 +11,10 @@
 		"strict": true,
 		"paths": {
 			"@lib/*": ["src/lib/*"],
-			"@components/*": ["src/components/*"],
+			"@components/*": ["src/lib/components/*"],
 			"@stores/*": ["src/stores/*"],
 			"@config": ["src/config"],
-			"@features/*": ["src/features/*"],
+			"@assets/*": ["src/assets/*"],
 			"@posts/*": ["posts/*"],
 			"$lib":["src/lib"],
 			"$lib/*":["src/lib/*"]
