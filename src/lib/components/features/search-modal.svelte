@@ -41,7 +41,7 @@
 <Modal.Dialog bind:isOpen>
 	<Modal.Content>
 		<div class="space-y-8">
-			<div class="flex items-center text-slate-500">
+			<div class="flex items-center text-slate-500 px-2">
 				<Searchbar
 					iconStart
 					variant="transparent"
@@ -51,8 +51,8 @@
 				/>
 				<CloseButton bind:open={isOpen} />
 			</div>
-			<h1 class="text-lg font-bold text-slate-400 px-4">Articles</h1>
-			<div class="space-y-4 max-h-80 overflow-y-scroll px-4">
+			<h1 class="text-lg font-bold text-slate-400 px-2">Articles</h1>
+			<div class="space-y-4 max-h-80 overflow-y-scroll px-2">
 				{#if filteredArticles.length}
 					{#each filteredArticles as article}
 						<a
