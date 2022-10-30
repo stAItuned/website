@@ -55,12 +55,6 @@
 </script>
 
 <svelte:head>
-	<link
-		rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
-		integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
-		crossorigin="anonymous"
-	/>
 	{#if !isArticleGuide}
 		<style>
 			div.toc {
@@ -136,7 +130,7 @@
 						/>
 					</svg>
 				{:else}
-					<button on:click={share}>
+					<button on:click={share} aria-label="Share Button">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -160,3 +154,10 @@
 		</article>
 	</section>
 </PageTransition>
+
+<link
+	rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+	integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+	crossorigin="anonymous"
+/>
