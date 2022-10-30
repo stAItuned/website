@@ -70,7 +70,7 @@
 <PageTransition>
 	<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
 
-	<section class="max-w-7xl mx-auto mb-32 px-8 xl:px-4 mt-[150px] space-y-16">
+	<section class="max-w-7xl mx-auto mb-32 px-4 mt-[150px] space-y-16">
 		<div class="flex flex-col md:flex-row items-center gap-8 lg:gap-16">
 			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 			<div class="flex w-full items-center lg:space-x-16 space-x-4">

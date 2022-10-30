@@ -17,7 +17,7 @@
 <LearnPageMetaTags />
 
 <PageTransition>
-	<section class="max-w-7xl mx-auto mt-[150px] mb-32 px-8 xl:px-4 space-y-16">
+	<section class="max-w-7xl mx-auto mt-[150px] mb-32 px-4 space-y-16">
 		<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 		<div class="flex lg:flex-row flex-col justify-between gap-16">
 			{#each Filters.TARGETS as target}

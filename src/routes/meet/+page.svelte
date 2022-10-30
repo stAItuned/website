@@ -17,7 +17,7 @@
 />
 
 <PageTransition>
-	<div class="max-w-7xl mx-auto mb-32 mt-[150px] px-8 xl:px-4 space-y-16">
+	<div class="max-w-7xl mx-auto mb-32 mt-[150px] px-4 space-y-16">
 		<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
 		<section class="text-primary-600 md:text-lg space-y-8">
 			<div class="space-y-2">
