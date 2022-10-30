@@ -45,7 +45,7 @@
 </script>
 
 <Sidebar {open} className="md:w-1/2 xl:w-1/3 bg-slate-50 top-0 right-0">
-	<div class="h-screen flex flex-col justify-between p-16">
+	<div class="h-screen flex flex-col justify-between p-8 lg:p-16">
 		<div class="flex align-center justify-between">
 			<h1 class="font-bold text-2xl text-primary-500 uppercase">Filters</h1>
 			<Hamburger
@@ -61,14 +61,14 @@
 				{#each Filters.TAGS as tag}
 					{#if activeFilters.tags.includes(tag)}
 						<button
-							class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
 							on:click={() => remove(tag, 'tags')}
 						>
 							<span>{tag}</span>
 						</button>
 					{:else}
 						<button
-							class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
 							on:click={() => add(tag, 'tags')}
 						>
 							<span>{tag}</span>
@@ -82,17 +82,17 @@
 		<!-- Always should be activated by default, but how could I -->
 		<div class="space-y-4">
 			<h1 class="font-bold text-xl text-primary-500">Creation Date</h1>
-			<div class="flex flex-col gap-2 w-fit">
+			<div class="flex lg:flex-col gap-2 w-fit">
 				{#each Filters.CREATION_DATES as date}
 					{#if activeFilters.creationDate.includes(date)}
 						<button
-							class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
 						>
 							<span>{date}</span>
 						</button>
 					{:else}
 						<button
-							class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
 							on:click={() => add(date, 'creationDate')}
 						>
 							<span>{date}</span>
@@ -108,14 +108,14 @@
 				{#each Filters.READING_TIME as time}
 					{#if activeFilters.readingTime.includes(time)}
 						<button
-							class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
 							on:click={() => remove(time, 'readingTime')}
 						>
 							<span>{time}</span>
 						</button>
 					{:else}
 						<button
-							class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
 							on:click={() => add(time, 'readingTime')}
 						>
 							<span>{time}</span>
@@ -131,14 +131,14 @@
 				{#each Filters.LANGUAGES as lang}
 					{#if activeFilters.languages.includes(lang)}
 						<button
-							class="rounded-lg p-2 text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
+							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
 							on:click={() => remove(lang, 'languages')}
 						>
 							<span>{lang}</span>
 						</button>
 					{:else}
 						<button
-							class="rounded-lg text-primary-500 p-2 text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
+							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
 							on:click={() => add(lang, 'languages')}
 						>
 							<span>{lang}</span>
@@ -147,6 +147,6 @@
 				{/each}
 			</div>
 		</div>
-		<Button variant="secondary" rounded="lg" width="full" onClick={filter}>Apply</Button>
+		<Button className="mb-16 sm:mb-0" variant="secondary" rounded="lg" width="full" onClick={filter}>Apply</Button>
 	</div>
 </Sidebar>
