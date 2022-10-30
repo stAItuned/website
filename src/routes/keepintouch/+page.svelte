@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button, PageTransition } from '@components/ui-core'
+	import SecondaryPageMetaTags from '@lib/seo/SecondaryPageMetaTags.svelte'
 
 	let formData = {
 		subject: '',
@@ -16,6 +17,8 @@
 		if (formData.subject !== '' && formData.body !== '' && formData.email !== '') window.open(url)
 	}
 </script>
+
+<SecondaryPageMetaTags pageTitle="Keep in touch" pageDescription="Contact us" pagePath="/keepintouch"/>
 
 <PageTransition>
 	<div
