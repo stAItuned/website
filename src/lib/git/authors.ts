@@ -18,6 +18,7 @@ const authors = Object.entries(import.meta.glob('/cms/team/**/*.md', { eager: tr
 
 		const author: Author = {
 			...member.metadata,
+			slug: folder,
 			propic
 		}
 

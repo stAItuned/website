@@ -6,6 +6,7 @@ interface Author {
     email: string
     description: string
     propic: string
+    slug: string
 }
 
 export default Author
