@@ -11,17 +11,13 @@
 		(article) => article.metadata.author === author.name
 	)
 	const authorHasWrittenArticles = articlesWrittebByAuthor !== undefined
-	const html = data.componentToRender.render()
 	let openTab: 'overview' | 'articles'
-	if ('articles' === 'articles') {
-		openTab = 'articles'
-	} else {
-		openTab = 'overview'
-	}
-	// onMount(() => {
-	// 	if(window.location.href.endsWith("#articles"))
-	// 		openTab = "articles"
-	// })
+	// if ('araticles' === 'articles') {
+	// 	openTab = 'articles'
+	// } else {
+	openTab = 'overview'
+	// }
+	$: console.log(openTab)
 </script>
 
 <svelte:head>
@@ -59,73 +55,41 @@
 				</div>
 			</div>
 			<div class="main-content">
-				<ul
-					class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4"
-					id="tabs-tab"
-					role="tablist"
-				>
-					<li class="nav-item" role="presentation">
-						<a
-							href="#overview"
-							class=" nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
-							id="overview-tab"
-							data-bs-toggle="pill"
-							data-bs-target="#overview"
-							role="tab"
-							aria-controls="overview"
-							aria-selected="true"
-							on:click={() => (openTab = 'overview')}
-							on:keydown={(e) => {
-								if (e.key === 'Enter') {
-									openTab = 'overview'
-								}
-							}}
-							>Overview
-						</a>
-					</li>
-					<li class="nav-item" role="presentation">
-						<a
-							href="#articles"
-							class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
-							id="articles-tab"
-							data-bs-toggle="pill"
-							data-bs-target="#articles-tab"
-							role="tab"
-							aria-controls="articles-tab"
-							aria-selected="false"
-							on:click={() => (openTab = 'articles')}
-							on:keydown={(e) => {
-								if (e.key === 'Enter') {
-									openTab = 'articles'
-								}
-							}}
-							>Articles
-						</a>
-					</li>
-				</ul>
-				<div
-					style:display={openTab === 'articles' ? 'flex' : 'none'}
-					class="flex  flex-col gap-2"
-				>
-					{#if authorHasWrittenArticles}
-						{#each articlesWrittebByAuthor as article}
-							<a
-								target="_self"
-								href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}"
-								class="block"
-							>
-								<SearchArticleCard {article} />
-							</a>
-						{/each}
-					{:else}
-						<div class="text-center">
-							<h1 class="text-2xl font-semibold">No articles written by {author.name} yet</h1>
-						</div>
-					{/if}
+				<div class="tab-chooser w-full flex justify-around h-10">
+					<button
+						class="tab-chooser-tab border-b-2 p-2"
+						on:click={() => {
+							openTab = 'overview'
+							console.log('Camurria overview')
+						}}
+					>
+						Overview
+					</button>
+					<button class="tab-chooser-tab border-b-2 p-2" on:click={() => (openTab = 'articles')}>
+						Articles
+					</button>
 				</div>
-				<div style:display={openTab === 'overview' ? 'flex' : 'none'} class="">
-					OVERVIEW
-					<svelte:component this={data.componentToRender} />
+				<div class="pt-4">
+					<div class:hidden={openTab !== 'articles'} class="flex flex-col  gap-2">
+						{#if authorHasWrittenArticles}
+							{#each articlesWrittebByAuthor as article}
+								<a
+									target="_self"
+									href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}"
+									class="block"
+								>
+									<SearchArticleCard {article} />
+								</a>
+							{/each}
+						{:else}
+							<div class="text-center">
+								<h1 class="text-2xl font-semibold">No articles written by {author.name} yet</h1>
+							</div>
+						{/if}
+					</div>
+					<div class:hidden={openTab !== 'overview'}>
+						<svelte:component this={data.component.default} />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -164,13 +128,14 @@
 	.profile {
 		display: grid;
 		grid-template-columns: 1fr;
-		grid-template-rows: 1fr 1fr;
+		grid-template-rows: min-content min-content;
 		gap: 0px 0px;
 		grid-auto-flow: row;
 		grid-template-areas:
 			'propic'
 			'profile-description';
 		grid-area: profile;
+		align-items: start;
 	}
 
 	.profile-description {

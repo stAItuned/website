@@ -38,7 +38,7 @@
 		</div>
 		<div class="flex flex-wrap justify-center">
 			{#each filteredAuthors as author}
-				<Cards.TeamMember {author} />
+					<Cards.TeamMember {author} />
 			{/each}
 		</div>
 	</div>
