@@ -10,8 +10,12 @@
 	const articlesWrittebByAuthor = data.articles.filter(
 		(article) => article.metadata.author === author.name
 	)
+	const emptyPageHtml =
+	'<div class="toc"><hr><h2 class="ToCTitle">Table of Contents</h2><nav class="toc"><ol class="toc-level toc-level-1"></ol></nav><hr></div>'
+
+	const hasEmptyOverview = data.component.default.render().html === emptyPageHtml
+	const hasWrittenArticles = articlesWrittebByAuthor.length > 0
 	let openTab: 'overview' | 'articles' = 'overview'
-	$: console.log(openTab)
 </script>
 
 <svelte:head>
@@ -23,48 +27,63 @@
 </svelte:head>
 
 <PageTransition>
-	<div class="max-w-7xl mx-auto mb-32 mt-[150px] space-y-16 px-8 xl:px-4">
-		<div class="container">
-			<div class="breadcrumbs justify-self-start md:justify-self-end">
-				<Breadcrumb tabs={['Meet', author.team[0], author.name]} />
-			</div>
-			<div class="profile">
-				<div class="profile-description text">
+	<div class="max-w-7xl mx-auto mb-32 mt-[150px] space-y-16 px-8 xl:px-4 container w-full">
+		<div class="breadcrumbs justify-self-start md:justify-self-end">
+			<Breadcrumb tabs={['Meet', author.team[0], author.name]} />
+		</div>
+		<div class="profile">
+			<div class="profile-description text">
+				{#if !hasEmptyOverview || hasWrittenArticles}
 					{author.description}
-				</div>
-				<div class="propic flex flex-row md:flex-col gap-2 mb-3 items-center text-center">
-					<img
-						src={author.propic}
-						alt="{author.name} propic"
-						class="max-h-[200px] rounded-full object-cover"
-					/>
-					<div>
-						<h1 class="text-3xl font-semibold ">
-							{author.name}
-						</h1>
-						<h2 class="text-xl font-medium text-gray-700">
-							{author.title}
-						</h2>
-					</div>
+				{/if}
+			</div>
+			<div class="propic flex flex-row md:flex-col gap-2 mb-3 items-center text-center">
+				<img
+					src={author.propic}
+					alt="{author.name} propic"
+					class="max-h-[200px] rounded-full object-cover"
+				/>
+				<div>
+					<h1 class="text-3xl font-semibold ">
+						{author.name}
+					</h1>
+					<h2 class="text-xl font-medium text-gray-700">
+						{author.title}
+					</h2>
 				</div>
 			</div>
-			<div class="main-content w-full">
-				<div class="tab-chooser w-full flex justify-around h-10">
+		</div>
+		<div class="main-content w-full">
+			{#if hasEmptyOverview && !hasWrittenArticles}
+				<p>
+					{author.description}
+				</p>
+			{:else}
+				<div
+					class="tab-chooser w-full flex justify-around h-10"
+					class:hidden={!hasWrittenArticles || hasEmptyOverview}
+				>
 					<button
-						class="tab-chooser-tab border-b-2 p-2"
-						on:click={() => {
-							openTab = 'overview'
-							console.log('Camurria overview')
-						}}
+						class="tab-chooser-tab border-b-2 p-2 hover:border-gray-400 hover:shadow-lg"
+						class:shadow-lg={openTab === 'overview'}
+						on:click={() => (openTab = 'overview')}
 					>
 						Overview
 					</button>
-					<button class="tab-chooser-tab border-b-2 p-2" on:click={() => (openTab = 'articles')}>
+					<button
+						class="tab-chooser-tab border-b-2 p-2 hover:border-gray-400 hover:shadow-lg"
+						class:shadow-lg={openTab === 'articles'}
+						class:hidden={articlesWrittebByAuthor.length === 0}
+						on:click={() => (openTab = 'articles')}
+					>
 						Articles
 					</button>
 				</div>
 				<div class="pt-4">
-					<div class:hidden={openTab !== 'articles'} class="flex flex-col  gap-2">
+					<div
+						class:hidden={openTab !== 'articles' || !hasWrittenArticles}
+						class="flex flex-col  gap-2"
+					>
 						{#each articlesWrittebByAuthor as article}
 							<a
 								target="_self"
@@ -73,17 +92,13 @@
 							>
 								<SearchArticleCard {article} />
 							</a>
-						{:else}
-							<div class="text-center">
-								<h1 class="text-2xl font-semibold">No articles written by {author.name} yet</h1>
-							</div>
 						{/each}
 					</div>
-					<div class:hidden={openTab !== 'overview'}>
+					<div class:hidden={openTab !== 'overview' || hasEmptyOverview}>
 						<svelte:component this={data.component.default} />
 					</div>
 				</div>
-			</div>
+			{/if}
 		</div>
 	</div>
 </PageTransition>
@@ -136,7 +151,7 @@
 
 	.propic {
 		grid-area: propic;
-		justify-content: space-between;
+		justify-content: space-around;
 	}
 
 	.main-content {
