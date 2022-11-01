@@ -10,13 +10,7 @@
 	const articlesWrittebByAuthor = data.articles.filter(
 		(article) => article.metadata.author === author.name
 	)
-	const authorHasWrittenArticles = articlesWrittebByAuthor !== undefined
-	let openTab: 'overview' | 'articles'
-	// if ('araticles' === 'articles') {
-	// 	openTab = 'articles'
-	// } else {
-	openTab = 'overview'
-	// }
+	let openTab: 'overview' | 'articles' = 'overview'
 	$: console.log(openTab)
 </script>
 
@@ -54,7 +48,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="main-content">
+			<div class="main-content w-full">
 				<div class="tab-chooser w-full flex justify-around h-10">
 					<button
 						class="tab-chooser-tab border-b-2 p-2"
@@ -71,21 +65,19 @@
 				</div>
 				<div class="pt-4">
 					<div class:hidden={openTab !== 'articles'} class="flex flex-col  gap-2">
-						{#if authorHasWrittenArticles}
-							{#each articlesWrittebByAuthor as article}
-								<a
-									target="_self"
-									href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}"
-									class="block"
-								>
-									<SearchArticleCard {article} />
-								</a>
-							{/each}
+						{#each articlesWrittebByAuthor as article}
+							<a
+								target="_self"
+								href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}"
+								class="block"
+							>
+								<SearchArticleCard {article} />
+							</a>
 						{:else}
 							<div class="text-center">
 								<h1 class="text-2xl font-semibold">No articles written by {author.name} yet</h1>
 							</div>
-						{/if}
+						{/each}
 					</div>
 					<div class:hidden={openTab !== 'overview'}>
 						<svelte:component this={data.component.default} />
