@@ -34,6 +34,8 @@
 		<div class="profile">
 			<div class="profile-description text">
 				{#if !hasEmptyOverview || hasWrittenArticles}
+				<!-- If Member has no overview or no articles, show description in main-content -->
+				<!-- Otherwise, show it in the profile section -->
 					{author.description}
 				{/if}
 			</div>
