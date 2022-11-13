@@ -2,12 +2,12 @@
 	import info from '@lib/info'
 	import { MetaTags, JsonLd } from 'svelte-meta-tags'
 	import { ORGANIZATION_SCHEMA } from '@lib/seo'
-	const pageTitle = 'Home'
+	const pageTitle = info.siteName
 </script>
 
 <MetaTags
 	title={pageTitle}
-	titleTemplate="%s | {info.siteName}"
+	titleTemplate=""
 	description={info.longDescription}
 	canonical={info.basePath}
 	openGraph={{
@@ -29,3 +29,6 @@
 />
 
 <JsonLd output="head" schema={ORGANIZATION_SCHEMA} />
+
+<h1 class="hidden">{pageTitle}</h1>
+<p class="hidden">{info.longDescription}</p>
