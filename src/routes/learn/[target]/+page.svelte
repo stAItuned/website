@@ -4,7 +4,7 @@
 	import type { PageData } from './$types'
 	import { page } from '$app/stores'
 
-	import { paginate, LightPaginationNav } from 'svelte-better-paginate' // https://github.com/kudadam/svelte-better-paginate
+	import { paginate, LightPaginationNav } from 'svelte-paginate' // https://github.com/kudadam/svelte-better-paginate
 
 	import { Filters } from '@lib/configs'
 	import type { Article, Filter } from '@lib/interfaces'
@@ -62,7 +62,7 @@
 	}
 
 	$: filteredArticles = date.sort.mostRecentArticleFirst(articles)
-	$: paginatedItems = paginate(filteredArticles, pageSize, currentPage) as Article[]
+	$: paginatedItems = paginate({items: filteredArticles, pageSize, currentPage}) as Article[]
 </script>
 
 <NewbieExpertMetaTags filteredArticles={articles} target={target} />
