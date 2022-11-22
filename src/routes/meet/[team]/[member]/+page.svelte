@@ -1,15 +1,30 @@
 <script lang="ts">
 	import type { PageData } from './$types'
 
-	import type { Author } from '@lib/interfaces'
+	import type { Article, Author } from '@lib/interfaces'
 	import { PageTransition } from '@lib/components/ui-core'
 	import Breadcrumb from '@lib/components/ui-core/breadcrumb.svelte'
 	import SearchArticleCard from '@lib/components/features/cards/search-article-card.svelte'
+	import { paginate, LightPaginationNav } from 'svelte-paginate'
+
 	export let data: PageData
 	const author: Author = data.author
 	const articlesWrittebByAuthor = data.articles.filter(
 		(article) => article.metadata.author === author.name
 	)
+
+	// Pagination
+	const pageSize = 5;
+	let currentPage = 1;
+	const setPage = (e: { detail: { page: number } }) => {
+		currentPage = e.detail.page
+	}
+	$: paginatedItems = paginate({
+		items: articlesWrittebByAuthor,
+		pageSize,
+		currentPage
+	}) as Article[]
+
 	/**
 	 * Ugly way to understand if the author has written a custom overview page
 	 */
@@ -125,33 +140,12 @@
 					</ul>
 				</div>
 
-				<!-- <div
-					class="tab-chooser w-full flex justify-center h-10"
-					class:hidden={!hasWrittenArticles || hasEmptyOverview}
-				>
-					<button
-						class="tab-chooser-tab border-b-2 p-2 hover:border-gray-400 hover:shadow-lg"
-						class:shadow-lg={openTab === 'overview'}
-						on:click={() => (openTab = 'overview')}
-					>
-						Overview
-					</button>
-					<button
-						class="tab-chooser-tab border-b-2 p-2 hover:border-gray-400 hover:shadow-lg"
-						class:shadow-lg={openTab === 'articles'}
-						class:hidden={articlesWrittebByAuthor.length === 0}
-						on:click={() => (openTab = 'articles')}
-					>
-						Articles
-					</button>
-				</div>
-				-->
 				<div class="pt-4">
 					<div
 						class:hidden={openTab !== 'articles' || !hasWrittenArticles}
 						class="flex flex-col  gap-2"
 					>
-						{#each articlesWrittebByAuthor as article}
+						{#each paginatedItems as article}
 							<a
 								target="_self"
 								href="/learn/{article.metadata.target.toLowerCase()}/{article.slug}"
@@ -160,6 +154,18 @@
 								<SearchArticleCard {article} />
 							</a>
 						{/each}
+						{#if articlesWrittebByAuthor.length > pageSize}
+							<div class="w-min my-16 mx-auto">
+								<LightPaginationNav
+									totalItems={articlesWrittebByAuthor.length}
+									{pageSize}
+									{currentPage}
+									limit={1}
+									showStepOptions={true}
+									on:setPage={setPage}
+								/>
+							</div>
+						{/if}
 					</div>
 					<div class:hidden={openTab !== 'overview' || hasEmptyOverview}>
 						<svelte:component this={data.component.default} />
