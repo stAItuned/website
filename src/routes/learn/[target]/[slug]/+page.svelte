@@ -92,7 +92,7 @@
 					{#if article.author !== undefined}
 						<a
 							class="no-underline hover:underline"
-							href={`/meet/${article.author.team.at(0)?.toLocaleLowerCase()}`}
+							href={`/meet/member/${article.author.slug}`}
 							>{article.author.name}</a
 						>
 					{:else}

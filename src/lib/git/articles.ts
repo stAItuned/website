@@ -7,7 +7,7 @@ if (browser) {
 import type { ArticleMetadata, Article } from '@lib/interfaces'
 import { cms } from '@lib/helpers'
 
-const loadArticles = (): Promise<(Article | undefined)[]> => {
+const loadArticles = (): Promise<(Article)[]> => {
 	return new Promise((resolve) => {
 		resolve(Object.entries(import.meta.glob('/cms/articles/**/*.md', { eager: true }))
 			.map(([filepath, post]: [string, any]) => {
@@ -28,7 +28,8 @@ const loadArticles = (): Promise<(Article | undefined)[]> => {
 					}
 				}
 				return article
-			}))
+			})
+			.filter((article: Article | undefined) => article !== undefined) as Article[])
 	})
 }
 

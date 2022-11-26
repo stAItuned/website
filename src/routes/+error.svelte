@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { Button, PageTransition } from '@components/ui-core'
+	import { page } from '$app/stores';
+	const statusCode = $page.status;
+	const message = $page.error?.message
+	$: console.log($page.params, statusCode, message)
 </script>
 
 <PageTransition>

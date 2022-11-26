@@ -6,8 +6,9 @@
 	export let author: Author
 </script>
 
-<div
-	class="w-full md:w-1/2 lg:w-1/3 xl:w-1/5 p-8 flex flex-col items-center justify-between space-y-6"
+<a
+	href="/meet/member/{author.slug.toLowerCase()}"
+	class="w-full md:w-1/2 lg:w-1/3 xl:w-1/5 p-8 flex flex-col items-center justify-between space-y-6 border-2 border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-lg m-2"
 >
 	<img src={author.propic} alt="avatar" class="w-auto h-48 rounded-full" />
 	<div class="text-center">
@@ -27,4 +28,4 @@
 			</div>
 		</a>
 	</div>
-</div>
+</a>

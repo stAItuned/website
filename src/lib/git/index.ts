@@ -1,7 +1,7 @@
 import loadArticles from "./articles";
-import authors from "./authors";
+import loadAuthors from "./authors";
 import loadData from "./cms";
 
-const git = { loadArticles, authors, loadData }
+const git = { loadArticles, loadAuthors, loadData }
 
 export { git }

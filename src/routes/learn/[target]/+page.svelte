@@ -4,8 +4,7 @@
 	import type { PageData } from './$types'
 	import { page } from '$app/stores'
 
-	import { paginate, LightPaginationNav } from 'svelte-paginate' // https://github.com/kudadam/svelte-better-paginate
-
+	import { paginate, LightPaginationNav } from 'svelte-paginate'
 	import { Filters } from '@lib/configs'
 	import type { Article, Filter } from '@lib/interfaces'
 	import { date, utils, articles as articlesHelper } from '@lib/helpers'

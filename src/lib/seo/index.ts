@@ -38,7 +38,8 @@ export const articleSchema = (article: Article): JsonLdProps['schema'] => ({
 	inLanguage: article.metadata.language === 'Italian' ? 'it' : 'en',
 	author: {
 		'@type': 'Person',
-		name: `${article.metadata.author}`
+		name: `${article.metadata.author}`,
+		url: article.author === undefined ? undefined : `/meet/member/${article.author.slug}`
 	},
 	creator: {
 		'@type': 'Person',

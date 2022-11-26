@@ -14,7 +14,7 @@
 	title={pageTitle}
 	titleTemplate={`%s | ${info.siteName}`}
 	description={pageDescription}
-	canonical={`${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`}
+	canonical={`/learn/${article.metadata.target.toLowerCase()}/${article.slug}`}
 	openGraph={{
 		site_name: info.siteName,
 		type: 'article',
@@ -31,14 +31,14 @@
 	twitter={{
 		title: pageTitle,
 		description: pageDescription,
-		cardType: 'summary_large_image',
+		cardType: 'summary',
 		site: info.basePath,
 		image: article.metadata.cover
 	}}
 	languageAlternates={[
 		{
 			hrefLang: language,
-			href: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`
+			href: `/learn/${article.metadata.target.toLowerCase()}/${article.slug}`
 		}
 	]}
 />
