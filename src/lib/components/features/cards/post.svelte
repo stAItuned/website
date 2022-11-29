@@ -26,7 +26,9 @@
 			alt="background"
 			class="h-2/3 absolute top-0 w-full rounded-t-lg object-cover"
 		/>
-		<div class="flex flex-col justify-between h-1/2 bg-secondary-600 rounded-tr-[45px] rounded-b-lg p-4 z-10">
+		<div
+			class="flex flex-col justify-between h-1/2 bg-secondary-600 rounded-tr-[45px] rounded-b-lg p-4 z-10"
+		>
 			<h1 class="font-bold text-xl">{article.metadata.title}</h1>
 			<div class="space-y-1">
 				<div class="flex space-x-2">

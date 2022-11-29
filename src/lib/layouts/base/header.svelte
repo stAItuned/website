@@ -35,7 +35,7 @@
 	<Sidebars.Header bind:open={open_header} />
 
 	<header
-		class="fixed z-20 px-16 py-6 rounded-b-[30px] bg-primary-600 w-full h-[90px]"
+		class="fixed z-20 px-8 py-6 rounded-b-[30px] bg-primary-600 w-full h-[90px]"
 		transition:slide={{ duration: 300, easing: backInOut }}
 	>
 		<div class="flex justify-between items-end">
