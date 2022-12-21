@@ -6,11 +6,11 @@
 </script>
 
 <footer
-	class="px-16 py-8 rounded-t-[30px] bg-primary-600 lg:grid lg:grid-cols-3 flex flex-col justify-self-end items-center space-y-10 lg:space-y-0"
+	class="px-16 py-8 bg-primary-600 lg:grid lg:grid-cols-3 flex flex-col justify-self-end items-center space-y-10 lg:space-y-0"
 >
 	<div class="flex flex-col gap-4">
 		<!-- <h3 class="text-lg uppercase text-slate-200 opacity-25 font-bold">Follow us</h3> -->
-		<div class="flex space-x-8 justify-start">
+		<!-- <div class="flex space-x-8 justify-start">
 			{#each Socials.ICON_LINKS as social}
 				<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
 					<social.icon class="w-10 h-10" />
@@ -20,14 +20,14 @@
 					/>
 				</a>
 			{/each}
-		</div>
+		</div> -->
 	</div>
 
 	<div class="justify-self-center">
 		<a href="/keepintouch">
 			<img srcset={JoinUS} alt="JoinUS" />
 		</a>
-		<p class="mt-3 text-center text-sm text-gray-500">Copyright ©stAItuned</p>
+		<!-- <p class="mt-3 text-center text-sm text-gray-500">Copyright ©stAItuned</p> -->
 	</div>
 
 	<!--<a href="/keepintouch" class="text-end text-xl font-bold text-white uppercase m-0">

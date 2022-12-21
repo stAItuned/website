@@ -1,8 +1,6 @@
 <script lang="ts">
-	// @ts-ignore-line
-	import homeLogo from '@assets/general/home_logo_3.png?h=600?webp'
 	// @ts-ignore
-	import bgGraph from '@assets/general/bg-graph.png?h=600?webp'
+	import bgGradient from '@assets/general/bg-gradient.png?h=600?webp'
 
 	import type { PageData } from './$types'
 
@@ -64,18 +62,30 @@
 
 <!-- Hero -->
 <PageTransition>
-	<section class="mb-[30px] mt-[120px]">
-		<div class="relative bg-primary-500 h-[600px] shadow-2xl flex flex-col justify-center">
-			<img srcset={bgGraph} alt="bg-graph" class="absolute object-cover w-full h-full" />
-			<center class="z-10">
-				<img
-					class="p-5 h-auto sm:w-[100vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] 2xl:w-[40vw]"
-					srcset={homeLogo}
-					alt="logo"
-				/>
-			</center>
+	<div class="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
+		<img srcset={bgGradient} alt="bg-graph" class="object-cover w-full h-full" />
+		<h1 class="text-6xl absolute w-1/2 left-16 font-semibold text-slate-50">
+			Artificial intelligence within everyone's reach
+		</h1>
+		<div class="absolute text-center bottom-32 left-16 right-16 font-semibold text-slate-50 flex justify-between">
+			<div class="space-y-2">
+				<h3 class="text-6xl">12</h3>
+				<p class="text-3xl">articles</p>
+			</div>
+			<div class="space-y-2">
+				<h3 class="text-6xl">12</h3>
+				<p class="text-3xl">articles</p>
+			</div>
+			<div class="space-y-2">
+				<h3 class="text-6xl">12</h3>
+				<p class="text-3xl">articles</p>
+			</div>
+			<div class="space-y-2">
+				<h3 class="text-6xl">12</h3>
+				<p class="text-3xl">articles</p>
+			</div>
 		</div>
-	</section>
+	</div>
 
 	<!-- Stats -->
 	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
@@ -90,7 +100,7 @@
 	</section> -->
 
 	<!-- Home Articles Cards -->
-	<section class="bg-secondary-600 text-white py-5 mb-10">
+	<section class="bg-white text-white py-5">
 		<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
 			{#each Home.CATEGORIES as category}
 				<div
