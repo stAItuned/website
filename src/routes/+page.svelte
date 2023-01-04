@@ -6,9 +6,9 @@
 
 	import HomePageMetaTags from '@lib/seo/HomePageMetaTags.svelte'
 
-	import { Home } from '@lib/configs'
+	import { Home, Socials } from '@lib/configs'
 	import type { Category } from '@lib/types'
-	import type { Article } from '@lib/interfaces'
+	import type { Article, Author } from '@lib/interfaces'
 	import { date } from '@lib/helpers'
 	import { PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
@@ -32,6 +32,16 @@
 	const setShow = (newState: Category) => {
 		articlesToShow = newState
 	}
+
+	const authorsLen = data.authors.filter((author: Author) =>
+		author.team.some((t) => t === 'Writers')
+	).length
+	const expertArticles = data.articles.filter(
+		(article: Article) => article.metadata.target === 'Expert'
+	).length
+	const newbieArticles = data.articles.filter(
+		(article: Article) => article.metadata.target === 'Newbie'
+	).length
 
 	$: articles = articlesToShow === 'Recent' ? recentArticles : relevantArticles
 </script>
@@ -64,25 +74,40 @@
 <PageTransition>
 	<div class="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
 		<img srcset={bgGradient} alt="bg-graph" class="object-cover w-full h-full" />
-		<h1 class="text-6xl absolute w-1/2 left-16 font-semibold text-slate-50">
+		<div class="absolute right-16 md:flex flex-col space-y-8 hidden">
+			{#each Socials.ICON_LINKS as social}
+				<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
+					<social.icon class="w-10 h-10" />
+					<svelte:component
+						this={social.icon}
+						class="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
+					/>
+				</a>
+			{/each}
+		</div>
+		<h1
+			class="text-4xl px-8 md:px-0 md:text-6xl absolute w-full md:w-1/2 md:left-16 md:right-0 font-semibold text-slate-50"
+		>
 			Artificial intelligence within everyone's reach
 		</h1>
-		<div class="absolute text-center bottom-32 left-16 right-16 font-semibold text-slate-50 flex justify-between">
+		<div
+			class="absolute text-center bottom-32 left-8 right-8 md:left-16 md:right-16 font-semibold text-slate-50 flex justify-between space-x-4"
+		>
 			<div class="space-y-2">
-				<h3 class="text-6xl">12</h3>
-				<p class="text-3xl">articles</p>
+				<h3 class="text-4xl md:text-6xl">{data.articles.length}</h3>
+				<p class="text-lg md:text-2xl">articles</p>
 			</div>
 			<div class="space-y-2">
-				<h3 class="text-6xl">12</h3>
-				<p class="text-3xl">articles</p>
+				<h3 class="text-4xl md:text-6xl">{expertArticles}</h3>
+				<p class="text-lg md:text-2xl">articles for experts</p>
 			</div>
 			<div class="space-y-2">
-				<h3 class="text-6xl">12</h3>
-				<p class="text-3xl">articles</p>
+				<h3 class="text-4xl md:text-6xl">{newbieArticles}</h3>
+				<p class="text-lg md:text-2xl">articles for newbie</p>
 			</div>
 			<div class="space-y-2">
-				<h3 class="text-6xl">12</h3>
-				<p class="text-3xl">articles</p>
+				<h3 class="text-4xl md:text-6xl">{authorsLen}</h3>
+				<p class="text-lg md:text-2xl">writers</p>
 			</div>
 		</div>
 	</div>

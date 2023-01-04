@@ -8,7 +8,7 @@
 	$: active = $page.url.pathname
 </script>
 
-<ul class="flex flex-col lg:flex-row py-16 lg:py-0 space-y-4 lg:space-y-0 space-x-0 lg:space-x-16">
+<ul class="flex flex-col lg:flex-row py-16 lg:py-0 space-y-8 lg:space-y-0 space-x-0 lg:space-x-16">
 	{#each CONFIG.navigation.pages as page}
 		<li>
 			<a
