@@ -1,3 +1,4 @@
 [submodule "cms"]
 	path = cms
 	url = https://github.com/stAItuned/content-manager
+	branch=main
