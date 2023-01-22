@@ -24,17 +24,22 @@ export async function GET() {
           <priority>0.7</priority>
       </url>
       <url>
-      <loc>${info.basePath}/keepintouch/</loc>
-      <changefreq>weekly</changefreq>
+          <loc>${info.basePath}/keepintouch/</loc>
+          <changefreq>weekly</changefreq>
       </url>
       <url>
-      <loc>${info.basePath}/meet/</loc>
-      <changefreq>weekly</changefreq>
+          <loc>${info.basePath}/meet/</loc>
+          <changefreq>weekly</changefreq>
       </url>
       <url>
-      <loc>${info.basePath}/learn/</loc>
-      <changefreq>weekly</changefreq>
+          <loc>${info.basePath}/learn/</loc>
+          <changefreq>weekly</changefreq>
       </url>
+
+      <url>
+          <loc>${info.basePath}/sitemap.xml/</loc>
+      </url>
+
       ${data.articles
         .map(
           (article) => `
