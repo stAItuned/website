@@ -35,6 +35,9 @@ export async function GET() {
       <loc>${info.basePath}/learn/</loc>
       <changefreq>weekly</changefreq>
       </url>
+      <url>
+        <loc>${info.basePath}/sitemap.xml</loc>
+      </url>
       ${data.articles
         .map(
           (article) => `
