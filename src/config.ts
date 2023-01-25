@@ -11,7 +11,8 @@ export const CONFIG = {
 			{ name: 'Meet us', path: '/meet' },
 			{ name: 'Learn', path: '/learn' },
 			/*{ name: 'Integrate', path: '/integrate' },*/
-			{ name: 'Keep in touch', path: '/keepintouch' }
+			{ name: 'Keep in touch', path: '/keepintouch' },
+			{ name: 'Sitemap', path: '/sitemap.xml' }
 		]
 	}
 }
