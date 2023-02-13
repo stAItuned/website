@@ -18,7 +18,7 @@
 			<h3 class="font-bold text-slate-700">{article.metadata.title}</h3>
 			<p class="text-slate-700">{article.metadata.author}</p>
 		</div>
-		<p class="text-sm text-slate-400">{article.metadata.meta}</p>
+		<p class="text-sm text-slate-400 line-clamp-3">{article.metadata.meta}</p>
 		<div class="hidden lg:flex justify-between text-slate-400">
 			<span>{dayjs(article.metadata.date).format('DD MMMM YYYY')}</span>
 			<span>{article.metadata.readingTime} min</span>
