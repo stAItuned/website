@@ -1,6 +1,6 @@
 <script lang="ts">
 	// @ts-ignore
-	import bgGradient from '@assets/general/bg-gradient.png?h=600?webp'
+	import homeBg from '@assets/general/home_bg.webp?h=1200'
 
 	import type { PageData } from './$types'
 
@@ -14,7 +14,7 @@
 	import { Cards } from '@components/features'
 
 	export let data: PageData
-
+	
 	const recentArticles: Article[] = date.sort
 		.mostRecentArticleFirst(data.articles)
 		.slice(0, Home.AMOUNT_OF_ARTICLES)
@@ -73,7 +73,8 @@
 <!-- Hero -->
 <PageTransition>
 	<div class="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
-		<img srcset={bgGradient} alt="bg-graph" class="object-cover w-full h-full" />
+		<div class="absolute h-full w-screen bg-slate-900/20" />
+		<img srcset={homeBg} alt="bg-graph" class="object-cover w-full h-full" />
 		<div class="absolute right-16 md:flex flex-col space-y-8 hidden">
 			{#each Socials.ICON_LINKS as social}
 				<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
@@ -91,7 +92,7 @@
 			Artificial intelligence within everyone's reach
 		</h1>
 		<div
-			class="absolute text-center bottom-32 left-8 right-8 md:left-16 md:right-16 font-semibold text-slate-50 flex justify-between space-x-4"
+			class="absolute text-center bottom-16 left-8 right-8 md:left-16 md:right-16 font-semibold text-slate-50 flex justify-between space-x-4"
 		>
 			<div class="space-y-2">
 				<h3 class="text-4xl md:text-6xl">{data.articles.length}</h3>
