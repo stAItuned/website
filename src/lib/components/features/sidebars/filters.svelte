@@ -2,7 +2,7 @@
 	import { Filters } from '@lib/configs'
 	import type { Filter } from '@lib/interfaces'
 
-	import { Sidebar, Hamburger, Button } from '@components/ui-core'
+	import { Sidebar, Hamburger, Button, FilterButton } from '@components/ui-core'
 
 	export let open: boolean
 	export let activeFilters: Filter
@@ -60,19 +60,9 @@
 			<div class="flex flex-wrap gap-2">
 				{#each Filters.TAGS as tag}
 					{#if activeFilters.tags.includes(tag)}
-						<button
-							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
-							on:click={() => remove(tag, 'tags')}
-						>
-							<span>{tag}</span>
-						</button>
+						<FilterButton active handleClick={() => remove(tag, 'tags')} label={tag} />
 					{:else}
-						<button
-							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
-							on:click={() => add(tag, 'tags')}
-						>
-							<span>{tag}</span>
-						</button>
+						<FilterButton handleClick={() => add(tag, 'tags')} label={tag} />
 					{/if}
 				{/each}
 			</div>
@@ -85,18 +75,9 @@
 			<div class="flex lg:flex-col gap-2 w-fit">
 				{#each Filters.CREATION_DATES as date}
 					{#if activeFilters.creationDate.includes(date)}
-						<button
-							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
-						>
-							<span>{date}</span>
-						</button>
+						<FilterButton active handleClick={() => remove(date, 'creationDate')} label={date} />
 					{:else}
-						<button
-							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
-							on:click={() => add(date, 'creationDate')}
-						>
-							<span>{date}</span>
-						</button>
+						<FilterButton handleClick={() => add(date, 'creationDate')} label={date} />
 					{/if}
 				{/each}
 			</div>
@@ -107,19 +88,9 @@
 			<div class="flex gap-2 w-fit">
 				{#each Filters.READING_TIME as time}
 					{#if activeFilters.readingTime.includes(time)}
-						<button
-							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
-							on:click={() => remove(time, 'readingTime')}
-						>
-							<span>{time}</span>
-						</button>
+						<FilterButton active handleClick={() => remove(time, 'readingTime')} label={time} />
 					{:else}
-						<button
-							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
-							on:click={() => add(time, 'readingTime')}
-						>
-							<span>{time}</span>
-						</button>
+						<FilterButton handleClick={() => add(time, 'readingTime')} label={time} />
 					{/if}
 				{/each}
 			</div>
@@ -130,23 +101,15 @@
 			<div class="flex gap-2 w-fit">
 				{#each Filters.LANGUAGES as lang}
 					{#if activeFilters.languages.includes(lang)}
-						<button
-							class="rounded-lg p-2 text-xs lg:text-sm font-semibold bg-primary-500 hover:bg-primary-400 active:bg-primary-500 transition text-white"
-							on:click={() => remove(lang, 'languages')}
-						>
-							<span>{lang}</span>
-						</button>
+						<FilterButton active handleClick={() => remove(lang, 'languages')} label={lang} />
 					{:else}
-						<button
-							class="rounded-lg text-primary-500 p-2 text-xs lg:text-sm font-semibold bg-gray-200 hover:bg-primary-400 active:bg-primary-500 transition hover:text-white"
-							on:click={() => add(lang, 'languages')}
-						>
-							<span>{lang}</span>
-						</button>
+						<FilterButton handleClick={() => add(lang, 'languages')} label={lang} />
 					{/if}
 				{/each}
 			</div>
 		</div>
-		<Button className="mb-16 sm:mb-0" variant="secondary" rounded="lg" width="full" onClick={filter}>Apply</Button>
+		<Button className="mb-16 sm:mb-0" variant="secondary" rounded="lg" width="full" onClick={filter}
+			>Apply</Button
+		>
 	</div>
 </Sidebar>

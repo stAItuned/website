@@ -1,22 +1,20 @@
 <script lang="ts">
-	// @ts-ignore-line
-	import homeLogo from '@assets/general/home_logo_3.png?h=600?webp'
 	// @ts-ignore
-	import bgGraph from '@assets/general/bg-graph.png?h=600?webp'
+	import homeBg from '@assets/general/home_bg.webp?h=1200'
 
 	import type { PageData } from './$types'
 
 	import HomePageMetaTags from '@lib/seo/HomePageMetaTags.svelte'
 
-	import { Home } from '@lib/configs'
+	import { Home, Socials } from '@lib/configs'
 	import type { Category } from '@lib/types'
-	import type { Article } from '@lib/interfaces'
+	import type { Article, Author } from '@lib/interfaces'
 	import { date } from '@lib/helpers'
 	import { PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
 
 	export let data: PageData
-
+	
 	const recentArticles: Article[] = date.sort
 		.mostRecentArticleFirst(data.articles)
 		.slice(0, Home.AMOUNT_OF_ARTICLES)
@@ -34,6 +32,16 @@
 	const setShow = (newState: Category) => {
 		articlesToShow = newState
 	}
+
+	const authorsLen = data.authors.filter((author: Author) =>
+		author.team.some((t) => t === 'Writers')
+	).length
+	const expertArticles = data.articles.filter(
+		(article: Article) => article.metadata.target === 'Expert'
+	).length
+	const newbieArticles = data.articles.filter(
+		(article: Article) => article.metadata.target === 'Newbie'
+	).length
 
 	$: articles = articlesToShow === 'Recent' ? recentArticles : relevantArticles
 </script>
@@ -64,18 +72,46 @@
 
 <!-- Hero -->
 <PageTransition>
-	<section class="mb-[30px] mt-[120px]">
-		<div class="relative bg-primary-500 h-[600px] shadow-2xl flex flex-col justify-center">
-			<img srcset={bgGraph} alt="bg-graph" class="absolute object-cover w-full h-full" />
-			<center class="z-10">
-				<img
-					class="p-5 h-auto sm:w-[100vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] 2xl:w-[40vw]"
-					srcset={homeLogo}
-					alt="logo"
-				/>
-			</center>
+	<div class="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
+		<div class="absolute h-full w-screen bg-slate-900/20" />
+		<img srcset={homeBg} alt="bg-graph" class="object-cover w-full h-full" />
+		<div class="absolute right-16 md:flex flex-col space-y-8 hidden">
+			{#each Socials.ICON_LINKS as social}
+				<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
+					<social.icon class="w-10 h-10" />
+					<svelte:component
+						this={social.icon}
+						class="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
+					/>
+				</a>
+			{/each}
 		</div>
-	</section>
+		<h1
+			class="text-4xl px-8 md:px-0 md:text-6xl absolute w-full md:w-1/2 md:left-16 md:right-0 font-semibold text-slate-50"
+		>
+			Artificial intelligence within everyone's reach
+		</h1>
+		<div
+			class="absolute text-center bottom-16 left-8 right-8 md:left-16 md:right-16 font-semibold text-slate-50 flex justify-between space-x-4"
+		>
+			<div class="space-y-2">
+				<h3 class="text-4xl md:text-6xl">{data.articles.length}</h3>
+				<p class="text-lg md:text-2xl">articles</p>
+			</div>
+			<div class="space-y-2">
+				<h3 class="text-4xl md:text-6xl">{expertArticles}</h3>
+				<p class="text-lg md:text-2xl">articles for experts</p>
+			</div>
+			<div class="space-y-2">
+				<h3 class="text-4xl md:text-6xl">{newbieArticles}</h3>
+				<p class="text-lg md:text-2xl">articles for newbie</p>
+			</div>
+			<div class="space-y-2">
+				<h3 class="text-4xl md:text-6xl">{authorsLen}</h3>
+				<p class="text-lg md:text-2xl">writers</p>
+			</div>
+		</div>
+	</div>
 
 	<!-- Stats -->
 	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
@@ -90,7 +126,7 @@
 	</section> -->
 
 	<!-- Home Articles Cards -->
-	<section class="bg-secondary-600 text-white py-5 mb-10">
+	<section class="bg-white text-white py-5">
 		<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
 			{#each Home.CATEGORIES as category}
 				<div

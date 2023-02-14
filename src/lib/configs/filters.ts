@@ -1,5 +1,6 @@
 export const TARGETS = [
     "Newbie",
+    "Midway",
     "Expert"
 ] as const
 

@@ -2,18 +2,18 @@
 	import { fly } from 'svelte/transition'
 	import { backInOut } from 'svelte/easing'
 
-	import { scroll } from '@lib/helpers'
+	// import { scroll } from '@lib/helpers'
 
 	export let className = ''
 	export let open: boolean
 	export let onClose = () => {}
 
-	$: (() => {
-		if (!open) {
-			scroll.enableScroll()
-			onClose()
-		} else scroll.disabledScroll()
-	})()
+	// $: (() => {
+	// 	if (!open) {
+	// 		scroll.enableScroll()
+	// 		onClose()
+	// 	} else scroll.disabledScroll()
+	// })()
 </script>
 
 {#if open}
