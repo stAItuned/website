@@ -5,7 +5,7 @@
 	import { Teams } from '@lib/configs'
 	import type { Article, Author } from '@lib/interfaces'
 	import { utils, authors as authorsHelper } from '@lib/helpers'
-	import { Breadcrumb, PageTransition } from '@components/ui-core'
+	import { Breadcrumb } from '@components/ui-core'
 	import { Cards } from '@components/features'
 
 	export let data: PageData
@@ -28,18 +28,16 @@
 			: authorsHelper.sortByArticlesReadingTime(authorsHelper.filterByTeam(authors, team), articles)
 </script>
 
-<PageTransition>
-	<div class="max-w-7xl mx-auto mb-32 mt-[150px] space-y-16 px-8 xl:px-4">
-		<div class="flex flex-col md:flex-row gap-16 items-center justify-between xl:px-8">
-			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
-			<h1 class="font-bold text-4xl text-center text-primary-500 uppercase">
-				{team} team
-			</h1>
-		</div>
-		<div class="flex flex-wrap justify-center">
-			{#each filteredAuthors as author}
-					<Cards.TeamMember {author} />
-			{/each}
-		</div>
+<div class="max-w-7xl mx-auto my-32 space-y-16 px-8 xl:px-4">
+	<div class="flex flex-col md:flex-row gap-16 items-center justify-between xl:px-8">
+		<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
+		<h1 class="font-bold text-4xl text-center text-primary-500 uppercase">
+			{team} team
+		</h1>
 	</div>
-</PageTransition>
+	<div class="flex flex-wrap justify-center">
+		{#each filteredAuthors as author}
+			<Cards.TeamMember {author} />
+		{/each}
+	</div>
+</div>

@@ -8,7 +8,7 @@
 	import { Filters } from '@lib/configs'
 	import type { Article, Filter } from '@lib/interfaces'
 	import { date, utils, articles as articlesHelper } from '@lib/helpers'
-	import { Breadcrumb, Searchbar, PageTransition, Icons } from '@components/ui-core'
+	import { Breadcrumb, Searchbar, Icons } from '@components/ui-core'
 	import { Sidebars, Cards } from '@components/features'
 	import NewbieExpertMetaTags from '@lib/seo/NewbieExpertMetaTags.svelte'
 
@@ -38,7 +38,7 @@
 	const pageSize = 3 * 3 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
 
 	const setPage = (e: { detail: { page: number } }) => {
-		scrollTo(0, 0);
+		scrollTo(0, 0)
 		currentPage = e.detail.page
 	}
 
@@ -62,53 +62,51 @@
 	}
 
 	$: filteredArticles = date.sort.mostRecentArticleFirst(articles)
-	$: paginatedItems = paginate({items: filteredArticles, pageSize, currentPage}) as Article[]
+	$: paginatedItems = paginate({ items: filteredArticles, pageSize, currentPage }) as Article[]
 </script>
 
-<NewbieExpertMetaTags filteredArticles={articles} target={target} />
+<NewbieExpertMetaTags filteredArticles={articles} {target} />
 
-<PageTransition>
-	<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
+<Sidebars.Filters bind:open={open_filters} {activeFilters} {filter} />
 
-	<section class="max-w-7xl mx-auto mb-32 px-4 mt-[150px] space-y-16">
-		<div class="flex flex-col md:flex-row items-center gap-8 lg:gap-16">
-			<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
-			<div class="flex w-full items-center lg:space-x-16 space-x-4">
-				<Searchbar {handleInput} name="searchbar" placeholder="Search by title or author..." />
-				<div
-					on:click={() => (open_filters = !open_filters)}
-					class="transition hover:opacity-100 opacity-50 text-slate-800"
-				>
-					<Icons.Filter clickable class="w-8 h-8" />
-				</div>
+<section class="max-w-7xl mx-auto my-32 px-4 space-y-16">
+	<div class="flex flex-col md:flex-row items-center gap-8 lg:gap-16">
+		<Breadcrumb tabs={utils.getTabsFromPathname(pathname)} />
+		<div class="flex w-full items-center lg:space-x-16 space-x-4">
+			<Searchbar {handleInput} name="searchbar" placeholder="Search by title or author..." />
+			<div
+				on:click={() => (open_filters = !open_filters)}
+				class="transition hover:opacity-100 opacity-50 text-slate-800"
+			>
+				<Icons.Filter clickable class="w-8 h-8" />
 			</div>
 		</div>
+	</div>
 
-		{#if filteredArticles.length > 0}
-			<div class="flex flex-wrap">
-				{#each paginatedItems as article}
-					<Cards.Post {article} />
-				{/each}
-			</div>
-		{:else}
-			<div class="h-full">
-				<h1 class="text-center text-2xl font-bold text-primary-500">
-					No article found with your selected criteria
-				</h1>
-			</div>
-		{/if}
+	{#if filteredArticles.length > 0}
+		<div class="flex flex-wrap">
+			{#each paginatedItems as article}
+				<Cards.Post {article} />
+			{/each}
+		</div>
+	{:else}
+		<div class="h-full">
+			<h1 class="text-center text-2xl font-bold text-primary-500">
+				No article found with your selected criteria
+			</h1>
+		</div>
+	{/if}
 
-		{#if articles.length > pageSize}
-			<div class="w-min my-16 mx-auto">
-				<LightPaginationNav
-					totalItems={articles.length}
-					{pageSize}
-					{currentPage}
-					limit={1}
-					showStepOptions={true}
-					on:setPage={setPage}
-				/>
-			</div>
-		{/if}
-	</section>
-</PageTransition>
+	{#if articles.length > pageSize}
+		<div class="w-min my-16 mx-auto">
+			<LightPaginationNav
+				totalItems={articles.length}
+				{pageSize}
+				{currentPage}
+				limit={1}
+				showStepOptions={true}
+				on:setPage={setPage}
+			/>
+		</div>
+	{/if}
+</section>

@@ -10,7 +10,6 @@
 	import type { Category } from '@lib/types'
 	import type { Article, Author } from '@lib/interfaces'
 	import { date } from '@lib/helpers'
-	import { PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
 
 	export let data: PageData
@@ -67,60 +66,60 @@
 <HomePageMetaTags />
 
 <!-- Hero -->
-<PageTransition>
-	<div class="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
-		<div class="absolute h-full w-screen bg-slate-900/20" />
-		<img srcset={homeBg} alt="bg-graph" class="object-cover w-full h-full scale-x-[-1]" />
-		<div class="absolute right-16 md:flex flex-col space-y-8 hidden">
-			{#each Socials.ICON_LINKS as social}
-				<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
-					<social.icon class="w-10 h-10" />
-					<svelte:component
-						this={social.icon}
-						class="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
-					/>
-				</a>
-			{/each}
-		</div>
-		<h1
-			class="text-4xl px-8 md:px-0 md:text-6xl absolute w-full md:w-1/2 md:left-16 md:right-0 font-semibold text-slate-50"
-		>
-			Artificial intelligence within everyone's reach
-		</h1>
-		<div
-			class="absolute text-center bottom-16 left-8 right-8 md:left-32 md:right-32 font-semibold text-slate-50 flex justify-between space-x-4"
-		>
-			<a href="/learn">
-				<div class="space-y-2">
-					<h3 class="text-4xl md:text-5xl">{data.articles.length}</h3>
-					<p class="text-lg md:text-xl">articles</p>
-				</div>
-			</a>
-			<div class="space-y-2">
-				<h3 class="text-4xl md:text-5xl">{activeUsers}</h3>
-				<div>
-					<p class="text-lg md:text-xl">active users</p>
-					<p class="text-sm md:text-sm">last month</p>
-				</div>
-			</div>
-			<div class="space-y-2">
-				<h3 class="text-4xl md:text-5xl">{sessions}</h3>
-				<div>
-					<p class="text-lg md:text-xl">sessions</p>
-					<p class="text-sm md:text-sm">last month</p>
-				</div>
-			</div>
-			<a href="/meet/writers">
-				<div class="space-y-2">
-					<h3 class="text-4xl md:text-5xl">{authorsLen}</h3>
-					<p class="text-lg md:text-xl">writers</p>
-				</div>
-			</a>
-		</div>
-	</div>
 
-	<!-- Stats -->
-	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
+<div class="relative h-screen shadow-2xl flex flex-col justify-center">
+	<div class="absolute h-full w-screen bg-slate-900/20" />
+	<img srcset={homeBg} alt="bg-graph" class="object-cover w-full h-full scale-x-[-1]" />
+	<div class="absolute right-16 md:flex flex-col space-y-8 hidden">
+		{#each Socials.ICON_LINKS as social}
+			<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
+				<social.icon class="w-10 h-10" />
+				<svelte:component
+					this={social.icon}
+					class="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
+				/>
+			</a>
+		{/each}
+	</div>
+	<h1
+		class="text-4xl px-8 md:px-0 md:text-6xl absolute w-full md:w-1/2 md:left-16 md:right-0 font-semibold text-slate-50"
+	>
+		Artificial intelligence within everyone's reach
+	</h1>
+	<div
+		class="absolute text-center bottom-16 left-8 right-8 md:left-32 md:right-32 font-semibold text-slate-50 flex justify-between space-x-4"
+	>
+		<a href="/learn">
+			<div class="space-y-2">
+				<h3 class="text-4xl md:text-5xl">{data.articles.length}</h3>
+				<p class="text-lg md:text-xl">articles</p>
+			</div>
+		</a>
+		<div class="space-y-2">
+			<h3 class="text-4xl md:text-5xl">{activeUsers}</h3>
+			<div>
+				<p class="text-lg md:text-xl">active users</p>
+				<p class="text-sm md:text-sm">last month</p>
+			</div>
+		</div>
+		<div class="space-y-2">
+			<h3 class="text-4xl md:text-5xl">{sessions}</h3>
+			<div>
+				<p class="text-lg md:text-xl">sessions</p>
+				<p class="text-sm md:text-sm">last month</p>
+			</div>
+		</div>
+		<a href="/meet/writers">
+			<div class="space-y-2">
+				<h3 class="text-4xl md:text-5xl">{authorsLen}</h3>
+				<p class="text-lg md:text-xl">writers</p>
+			</div>
+		</a>
+	</div>
+</div>
+
+<!-- Stats -->
+<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-4 bg-black h-full md:text-2xl sm:text-xl font-bold">
 			<div class="bg-primary-600 text-center py-4 w-auto uppercase">120 <br />reading hours</div>
 			<div class="bg-primary-600 text-center py-4 w-auto uppercase">50<br />articles</div>
@@ -131,27 +130,26 @@
 		</div>
 	</section> -->
 
-	<!-- Home Articles Cards -->
-	<section class="bg-white text-white py-5">
-		<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
-			{#each Home.CATEGORIES as category}
-				<div
-					class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition"
-					class:text-secondary-600={articlesToShow === category}
-					class:text-gray-400={articlesToShow !== category}
-					on:click={() => setShow(category)}
-				>
-					{`${category} Articles`}
-				</div>
-			{/each}
-		</div>
-		<div class="flex flex-wrap bg-primary-600 uppercase transition">
-			{#each articles as article, idx}
-				<Cards.Home
-					{article}
-					color={Home.ARTICLE_CARD_COLORS[idx % Home.ARTICLE_CARD_COLORS.length]}
-				/>
-			{/each}
-		</div>
-	</section>
-</PageTransition>
+<!-- Home Articles Cards -->
+<section class="bg-white text-white py-5">
+	<div class="text-center flex sm:text-xl font-bold pb-5 uppercase">
+		{#each Home.CATEGORIES as category}
+			<div
+				class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition"
+				class:text-secondary-600={articlesToShow === category}
+				class:text-gray-400={articlesToShow !== category}
+				on:click={() => setShow(category)}
+			>
+				{`${category} Articles`}
+			</div>
+		{/each}
+	</div>
+	<div class="flex flex-wrap bg-primary-600 uppercase transition">
+		{#each articles as article, idx}
+			<Cards.Home
+				{article}
+				color={Home.ARTICLE_CARD_COLORS[idx % Home.ARTICLE_CARD_COLORS.length]}
+			/>
+		{/each}
+	</div>
+</section>
