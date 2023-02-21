@@ -23,7 +23,8 @@
 		searchParam = currentTarget.value
 		if (searchParam)
 			filteredArticles = articles.filter((article: Article) => {
-				return article.metadata.title.toLowerCase().includes(searchParam.toLowerCase())
+				return article.metadata.title.toLowerCase().includes(searchParam.toLowerCase()) || 
+				article.author?.name.toLowerCase().includes(searchParam.toLowerCase())
 			})
 		else filteredArticles = []
 	}
@@ -47,7 +48,7 @@
 					iconStart
 					variant="transparent"
 					name="searchbarModal"
-					placeholder="Search by title..."
+					placeholder="Search by title or author..."
 					{handleInput}
 				/>
 				<CloseButton bind:open={isOpen} />

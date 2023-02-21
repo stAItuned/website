@@ -14,7 +14,7 @@
 	import { Cards } from '@components/features'
 
 	export let data: PageData
-	
+
 	const recentArticles: Article[] = date.sort
 		.mostRecentArticleFirst(data.articles)
 		.slice(0, Home.AMOUNT_OF_ARTICLES)
@@ -36,12 +36,8 @@
 	const authorsLen = data.authors.filter((author: Author) =>
 		author.team.some((t) => t === 'Writers')
 	).length
-	const expertArticles = data.articles.filter(
-		(article: Article) => article.metadata.target === 'Expert'
-	).length
-	const newbieArticles = data.articles.filter(
-		(article: Article) => article.metadata.target === 'Newbie'
-	).length
+	const activeUsers = 157
+	const sessions = 305
 
 	$: articles = articlesToShow === 'Recent' ? recentArticles : relevantArticles
 </script>
@@ -74,7 +70,7 @@
 <PageTransition>
 	<div class="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
 		<div class="absolute h-full w-screen bg-slate-900/20" />
-		<img srcset={homeBg} alt="bg-graph" class="object-cover w-full h-full" />
+		<img srcset={homeBg} alt="bg-graph" class="object-cover w-full h-full scale-x-[-1]" />
 		<div class="absolute right-16 md:flex flex-col space-y-8 hidden">
 			{#each Socials.ICON_LINKS as social}
 				<a href={social.url} target="_blank" rel="noreferrer" aria-label="{social.name} icon">
@@ -92,24 +88,34 @@
 			Artificial intelligence within everyone's reach
 		</h1>
 		<div
-			class="absolute text-center bottom-16 left-8 right-8 md:left-16 md:right-16 font-semibold text-slate-50 flex justify-between space-x-4"
+			class="absolute text-center bottom-16 left-8 right-8 md:left-32 md:right-32 font-semibold text-slate-50 flex justify-between space-x-4"
 		>
+			<a href="/learn">
+				<div class="space-y-2">
+					<h3 class="text-4xl md:text-5xl">{data.articles.length}</h3>
+					<p class="text-lg md:text-xl">articles</p>
+				</div>
+			</a>
 			<div class="space-y-2">
-				<h3 class="text-4xl md:text-6xl">{data.articles.length}</h3>
-				<p class="text-lg md:text-2xl">articles</p>
+				<h3 class="text-4xl md:text-5xl">{activeUsers}</h3>
+				<div>
+					<p class="text-lg md:text-xl">active users</p>
+					<p class="text-sm md:text-sm">last month</p>
+				</div>
 			</div>
 			<div class="space-y-2">
-				<h3 class="text-4xl md:text-6xl">{expertArticles}</h3>
-				<p class="text-lg md:text-2xl">articles for experts</p>
+				<h3 class="text-4xl md:text-5xl">{sessions}</h3>
+				<div>
+					<p class="text-lg md:text-xl">sessions</p>
+					<p class="text-sm md:text-sm">last month</p>
+				</div>
 			</div>
-			<div class="space-y-2">
-				<h3 class="text-4xl md:text-6xl">{newbieArticles}</h3>
-				<p class="text-lg md:text-2xl">articles for newbie</p>
-			</div>
-			<div class="space-y-2">
-				<h3 class="text-4xl md:text-6xl">{authorsLen}</h3>
-				<p class="text-lg md:text-2xl">writers</p>
-			</div>
+			<a href="/meet/writers">
+				<div class="space-y-2">
+					<h3 class="text-4xl md:text-5xl">{authorsLen}</h3>
+					<p class="text-lg md:text-xl">writers</p>
+				</div>
+			</a>
 		</div>
 	</div>
 
