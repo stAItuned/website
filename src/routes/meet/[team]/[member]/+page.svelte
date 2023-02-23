@@ -10,7 +10,7 @@
 	export let data: PageData
 	const author: Author = data.author
 	const articlesWrittebByAuthor = data.articles.filter(
-		(article) => article.metadata.author === author.name
+		(article: Article) => article.metadata.author === author.name
 	)
 
 	// Pagination
@@ -178,22 +178,15 @@
 
 <style>
 	.container {
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: min-content auto 1fr;
-		gap: 1em 1em;
-		grid-auto-flow: row;
 		justify-items: center;
-		grid-template-areas:
-			'breadcrumbs'
-			'profile'
-			'main-content';
 	}
 
 	@media only screen and (min-width: 768px) {
 		.container {
+			display: grid;
 			grid-template-columns: 1fr 3fr;
 			grid-template-rows: min-content 1fr;
+			grid-auto-flow: row;
 			gap: 1em 1em;
 			grid-template-areas:
 				'profile breadcrumbs'
