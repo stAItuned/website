@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,js,ts,svelte}'],
+  content: ['./src/**/*.{html,js,ts,svelte}', "./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}"],
   mode: 'jit',
   theme: {
     fontFamily: {
@@ -24,5 +24,5 @@ module.exports = {
       }
     }
   },
-  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/line-clamp'), require('@tailwindcss/forms')]
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/line-clamp'), require('@tailwindcss/forms'), require('flowbite/plugin')]
 }

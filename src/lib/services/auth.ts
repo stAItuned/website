@@ -1,10 +1,16 @@
 import axios from 'axios'
+import { SERVER_URL } from "./config";
 
-export const SERVER_URL = "http://localhost:1337/api" as const
-
-interface Credentials {
+export interface Credentials {
     identifier: string,
     password: string
+}
+
+export interface UserData {
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string,
 }
 
 export const auth = {
@@ -25,6 +31,17 @@ export const auth = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             })
                 .then(res => resolve(res.data))
+                .catch(err => reject(err.response.data.error))
+        })
+    },
+
+    signup: (data: UserData) => {
+        return new Promise((resolve, reject) => {
+            axios.post(`${SERVER_URL}/auth/local/register`, data)
+                .then(res => {
+                    localStorage.setItem("token", res.data.jwt)
+                    resolve(res.data.user)
+                })
                 .catch(err => reject(err.response.data.error))
         })
     }

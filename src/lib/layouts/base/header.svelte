@@ -38,7 +38,7 @@
 
 <Sidebars.Header bind:open={open_header} />
 
-<header class={`${homepage ? 'absolute' : 'sticky'} z-20 px-8 py-6 w-full`}>
+<header class={`absolute z-20 px-8 py-6 w-full`}>
 	<div class="flex justify-between items-start">
 		<a href="/" on:click={() => (open_header = false)}>
 			<img

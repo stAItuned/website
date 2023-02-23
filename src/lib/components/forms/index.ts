@@ -1,1 +1,5 @@
 export { default as Input } from './input.svelte'
+export { default as Select } from './select.svelte'
+export { default as MultiSelect } from './multi-select.svelte'
+export { default as TimedInput } from './timed-input.svelte'
+export { default as Dropzone } from './dropzone.svelte'

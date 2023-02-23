@@ -1,7 +1,4 @@
 <script lang="ts">
-	import '../styles/tailwind.css'
-	import 'bytemd/dist/index.css'
-	import 'github-markdown-css/github-markdown-light.css'
 	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
 	import userStore, { type User } from '@lib/stores/user'
@@ -13,17 +10,22 @@
 		// Check if 'token' exists in localStorage
 		if (!localStorage.getItem('token')) {
 			loading = false
-			return { props: { user: null } }
+			return
 		}
 
 		api.auth
 			.me()
-			.then((user) => ($userStore = user as User))
+			.then((user) => {
+				$userStore = user as User
+				goto('/')
+			})
 			.catch((err) => console.error(err))
 			.finally(() => (loading = false))
 	})
 </script>
 
 {#if !loading}
-	<slot />
+	<div class="h-screen flex flex-col justify-center overflow-x-hidden">
+		<slot />
+	</div>
 {/if}

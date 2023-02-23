@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createForm } from 'svelte-forms-lib'
+	import { Form, type FormProps } from 'svelte-forms-lib'
 
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte'
 	import FaGoogle from 'svelte-icons/fa/FaGoogle.svelte'
@@ -12,23 +12,20 @@
 	import { Input } from '@lib/components/forms'
 	import { Button } from '@lib/components/ui-core'
 
-	const { form, errors, handleChange, handleSubmit } = createForm({
-		initialValues: {
-			email: '',
-			password: ''
-		},
+	const formProps: FormProps = {
+		initialValues: { email: '', password: '' },
 		validationSchema: LoginSchema,
 		onSubmit: ({ email, password }) => {
 			api.auth
-				.login({ identifier: email, password })
+				.login({ identifier: email as string, password: password as string })
 				.then((res) => ($user = res as User))
 				.catch((err) => console.log(err))
 		}
-	})
+	}
 </script>
 
-<section class="max-w-lg mx-auto px-4 space-y-16">
-	<div class="flex flex-col space-y-8">
+<section class="w-full px-4">
+	<div class="flex flex-col space-y-8 max-w-lg mx-auto">
 		<h1 class="text-primary-600 font-bold text-4xl">Login</h1>
 		<div class="flex space-x-8">
 			<div class="bg-slate-900 text-white flex justify-center items-center rounded-xl w-1/3">
@@ -48,34 +45,27 @@
 			</div>
 		</div>
 		<div class="border w-full border-slate-100" />
-		<form on:submit|preventDefault={handleSubmit} class="flex flex-col space-y-8" action="">
-			<Input
-				id="email"
-				name="email"
-				label="Email"
-				placeholder="Email"
-				bind:value={$form.email}
-				{handleChange}
-				bind:error={$errors.email}
-			/>
+		<Form {...formProps} class="flex flex-col space-y-8" let:errors>
+			<Input name="email" label="Email" placeholder="me@example.com" {errors} />
 			<div class="flex flex-col space-y-2">
 				<Input
-					id="password"
 					name="password"
 					label="Password"
+					placeholder="Enter your password"
 					type="password"
-					placeholder="Password"
-					bind:value={$form.password}
-					{handleChange}
-					bind:error={$errors.password}
+					{errors}
 				/>
 				<small class="text-primary-500 text-end font-semibold">Forgot password?</small>
 			</div>
 			<div class="flex flex-col space-y-4">
 				<Button type="submit" width="full">Login</Button>
-				<span>Do you not have an account? <b class="underline text-primary-500">Signup now</b></span
-				>
+				<span
+					>Do you not have an account?
+					<a href="/signup" class="">
+						<b class="underline text-primary-500 hover:text-primary-300">Signup now</b>
+					</a>
+				</span>
 			</div>
-		</form>
+		</Form>
 	</div>
 </section>
