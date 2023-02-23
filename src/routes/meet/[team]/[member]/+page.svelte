@@ -113,7 +113,6 @@
 						</li>
 						<li class="mr-2">
 							<button
-								href="#"
 								class="inline-flex p-4 rounded-t-lg border-b-2  group {openTab === 'articles'
 									? tabActiveClass.tab
 									: 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'}"
