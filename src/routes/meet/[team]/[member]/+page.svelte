@@ -61,7 +61,7 @@
 					{author.description}
 				{/if}
 			</div>
-			<div class="propic flex flex-row md:flex-col gap-2 mb-3 items-center text-center">
+			<div class="propic flex flex-col gap-2 mb-3 items-center text-center">
 				<img
 					src={author.propic}
 					alt="{author.name} propic"
@@ -177,6 +177,8 @@
 
 <style>
 	.container {
+		display: flex;
+		flex-direction: column;
 		justify-items: center;
 	}
 
