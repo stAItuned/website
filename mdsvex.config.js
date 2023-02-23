@@ -60,7 +60,7 @@ const config = defineConfig({
 		rehypeFigure,
 		[rehypeExternalLinks, { rel: ['nofollow', 'ugc'] }],
 		imageLazyLoading,
-		[rehypeTOC, tocConfig]
+		// [rehypeTOC, tocConfig]
 	]
 })
 /**

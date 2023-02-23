@@ -14,10 +14,10 @@
 	const article: Article = data.article
 
 	const componentToRender = data.componentToRender
-	const isArticleGuide: boolean =
-		data.component.metadata.layout !== undefined &&
-		typeof data.component.metadata.layout === 'string' &&
-		data.component.metadata.layout.toLowerCase() === 'guide'
+	// const isArticleGuide: boolean =
+	// 	data.component.metadata.layout !== undefined &&
+	// 	typeof data.component.metadata.layout === 'string' &&
+	// 	data.component.metadata.layout.toLowerCase() === 'guide'
 
 	const pathname = $page.url.pathname
 
@@ -54,7 +54,7 @@
 	}
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
 	{#if !isArticleGuide}
 		<style>
 			div.toc {
@@ -62,7 +62,7 @@
 			}
 		</style>
 	{/if}
-</svelte:head>
+</svelte:head> -->
 
 <ArticleMetaTags {article} />
 
@@ -90,9 +90,7 @@
 					/>
 
 					{#if article.author !== undefined}
-						<a
-							class="no-underline hover:underline"
-							href={`/meet/member/${article.author.slug}`}
+						<a class="no-underline hover:underline" href={`/meet/member/${article.author.slug}`}
 							>{article.author.name}</a
 						>
 					{:else}
