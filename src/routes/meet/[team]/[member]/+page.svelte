@@ -10,7 +10,7 @@
 	export let data: PageData
 	const author: Author = data.author
 	const articlesWrittebByAuthor = data.articles.filter(
-		(article) => article.metadata.author === author.name
+		(article: Article) => article.metadata.author === author.name
 	)
 
 	// Pagination
@@ -61,7 +61,7 @@
 					{author.description}
 				{/if}
 			</div>
-			<div class="propic flex flex-row md:flex-col gap-2 mb-3 items-center text-center">
+			<div class="propic flex flex-col gap-2 mb-3 items-center text-center">
 				<img
 					src={author.propic}
 					alt="{author.name} propic"
@@ -113,7 +113,6 @@
 						</li>
 						<li class="mr-2">
 							<button
-								href="#"
 								class="inline-flex p-4 rounded-t-lg border-b-2  group {openTab === 'articles'
 									? tabActiveClass.tab
 									: 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'}"
@@ -178,22 +177,17 @@
 
 <style>
 	.container {
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: min-content auto 1fr;
-		gap: 1em 1em;
-		grid-auto-flow: row;
+		display: flex;
+		flex-direction: column;
 		justify-items: center;
-		grid-template-areas:
-			'breadcrumbs'
-			'profile'
-			'main-content';
 	}
 
 	@media only screen and (min-width: 768px) {
 		.container {
+			display: grid;
 			grid-template-columns: 1fr 3fr;
 			grid-template-rows: min-content 1fr;
+			grid-auto-flow: row;
 			gap: 1em 1em;
 			grid-template-areas:
 				'profile breadcrumbs'
