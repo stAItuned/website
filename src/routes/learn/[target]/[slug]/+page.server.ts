@@ -8,26 +8,24 @@ export const load: PageServerLoad = async ({ params }) => {
 	const article = articles.find((article) => article.slug === params.slug)
 	if (!article) throw error(404, 'Article not found')
 
-	// filter related articles by target
+	// Filter related articles by target excluding same slug
 	const target = article.metadata.target
+	const slug = article.slug
 	const relatedArticlesByTarget = articles.filter(
-		(thisArticle) => thisArticle.metadata.target === target
+		(thisArticle) => thisArticle.metadata.target === target && thisArticle.slug !== slug
 	)
 
-	// filter related articles by target and topic
+	// Filter related articles by target and topic
 	const topics = article.metadata.topics
 	const relatedArticlesByTargetAndTopic = relatedArticlesByTarget.filter((thisArticle) =>
 		thisArticle.metadata.topics.filter((topic) => topics.includes(topic))
 	)
 
-	// maximum of 5 related articles
+	// Maximum of 5 related articles
 	const relatedArticles =
 		relatedArticlesByTargetAndTopic.length > 5
 			? relatedArticlesByTargetAndTopic.slice(0, 5)
 			: relatedArticlesByTargetAndTopic
-
-	console.log(relatedArticles)
-	console.log(target)
 
 	return {
 		article,
