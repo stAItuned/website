@@ -7,7 +7,7 @@
 	export let relatedArticle: Article
 </script>
 
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto p-3">
 	<div
 		on:click={() =>
 			goto(`/learn/${relatedArticle.metadata.target.toLowerCase()}/${relatedArticle.slug}`)}

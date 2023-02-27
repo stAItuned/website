@@ -14,7 +14,10 @@
 	<h2 class="pb-12 font-bold text-2xl leading-5">Related articles:</h2>
 	<!-- Related Articles  -->
 	{#if innerWidth >= 768}
-		<Carousel>
+		<Carousel
+			autoplay
+			autoplayDuration={5000} 
+			particlesToShow={2}>
 			{#each relatedArticles as relatedArticle}
 				<div>
 					<RelatedArticle {relatedArticle} />
