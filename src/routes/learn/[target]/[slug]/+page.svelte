@@ -91,7 +91,8 @@
 
 					{#if article.author !== undefined}
 						<a class="no-underline hover:underline" href={`/meet/member/${article.author.slug}`}
-							>{article.author.name}</a
+							>{article.author.name}
+							{article.author.title}</a
 						>
 					{:else}
 						{article.metadata.author}
