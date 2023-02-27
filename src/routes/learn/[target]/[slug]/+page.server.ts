@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	// Filter related articles by target and topic
 	const topics = article.metadata.topics
-	const relatedArticlesByTargetAndTopic = relatedArticlesByTarget.filter((thisArticle) =>
+	const relatedArticlesByTargetAndTopic = (relatedArticlesByTarget.length > 0 ? relatedArticlesByTarget : articles).filter((thisArticle) =>
 		thisArticle.metadata.topics.filter((topic) => topics.includes(topic))
 	)
 
