@@ -115,8 +115,8 @@
 				</div>
 			</a>
 		</div>
-		<p class="text-xs text-right px-2">* Users and sessions are referred to as last month's data</p>
 	</div>
+	<p class="text-xs text-right px-2 bg-transparent">* Users and sessions are referred to as last month's data</p>
 
 	<!-- Stats -->
 	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
