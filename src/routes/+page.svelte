@@ -99,15 +99,13 @@
 			<div class="space-y-2">
 				<h3 class="text-4xl md:text-5xl">{activeUsers}</h3>
 				<div>
-					<p class="text-lg md:text-xl">active users</p>
-					<p class="text-sm md:text-sm">last month</p>
+					<p class="text-lg md:text-xl">users</p>
 				</div>
 			</div>
 			<div class="space-y-2">
 				<h3 class="text-4xl md:text-5xl">{sessions}</h3>
 				<div>
 					<p class="text-lg md:text-xl">sessions</p>
-					<p class="text-sm md:text-sm">last month</p>
 				</div>
 			</div>
 			<a href="/meet/writers">
@@ -117,6 +115,7 @@
 				</div>
 			</a>
 		</div>
+		<p class="text-xs text-right px-2">* Users and sessions are referred to as last month's data</p>
 	</div>
 
 	<!-- Stats -->
