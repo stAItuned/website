@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const target = article.metadata.target
 	const slug = article.slug
 	const relatedArticlesByTarget = articles.filter(
-		(thisArticle) => thisArticle.metadata.target === target && thisArticle.slug !== slug
+		(thisArticle) => thisArticle.metadata.target.toLowerCase() === target && thisArticle.slug !== slug
 	)
 
 	// Filter related articles by target and topic

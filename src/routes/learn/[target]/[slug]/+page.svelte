@@ -9,11 +9,13 @@
 	import type { Article } from '@lib/interfaces'
 	import { utils } from '@lib/helpers'
 	import { PageTransition, Breadcrumb, Icons } from '@components/ui-core'
-	import RelatedArticles from '@lib/components/features/related-articles.svelte'
+	//import RelatedArticles from '@lib/components/features/related-articles.svelte'
 
 	export let data: PageData
 	const article: Article = data.article
 	const relatedArticles: Article[] = data.relatedArticles
+
+	console.log(relatedArticles)
 
 	const componentToRender = data.componentToRender
 	// const isArticleGuide: boolean =
@@ -155,7 +157,7 @@
 	</section>
 	<!-- Related Contents -->
 	<section>
-		<RelatedArticles {relatedArticles} />
+		<!--<RelatedArticles {relatedArticles} />-->
 	</section>
 </PageTransition>
 
