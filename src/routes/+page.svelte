@@ -6,12 +6,13 @@
 
 	import HomePageMetaTags from '@lib/seo/HomePageMetaTags.svelte'
 
-	import { Home, Socials } from '@lib/configs'
-	import type { Category } from '@lib/types'
-	import type { Article, Author } from '@lib/interfaces'
-	import { date } from '@lib/helpers'
-	import { PageTransition } from '@components/ui-core'
 	import { Cards } from '@components/features'
+	import { PageTransition } from '@components/ui-core'
+	import { Home, Socials } from '@lib/configs'
+	import { date } from '@lib/helpers'
+	import type { Article, Author } from '@lib/interfaces'
+	import type { Category } from '@lib/types'
+	import Typewriter from 'svelte-typewriter'
 
 	export let data: PageData
 
@@ -82,11 +83,20 @@
 				</a>
 			{/each}
 		</div>
-		<h1
-			class="text-4xl px-8 md:px-0 md:text-6xl absolute w-full md:w-1/2 md:left-16 md:right-0 font-semibold text-slate-50"
-		>
-			Artificial intelligence within everyone's reach
-		</h1>
+		<div class="absolute px-8 md:px-0  w-full md:w-1/2 md:left-16 md:right-0">
+			<h1 class="text-4xl md:text-6xl font-semibold text-slate-50">
+				stAi tuned is <span class="text-secondary-600">
+					<Typewriter mode="loop" delay={700} showCursorOnDelay interval={200}>
+						<div>Curiosity</div>
+						<div>Community</div>
+						<div>Sharing</div>
+					</Typewriter>
+				</span>
+			</h1>
+			<h2 class="text-3xl md:text-3xl font-semibold text-slate-50 pt-8">
+				Artificial Intelligence within everyone's reach
+			</h2>
+		</div>
 		<div
 			class="absolute text-center bottom-16 left-8 right-8 md:left-32 md:right-32 font-semibold text-slate-50 flex justify-between space-x-4"
 		>
@@ -116,7 +126,9 @@
 			</a>
 		</div>
 	</div>
-	<p class="text-xs text-right px-2 bg-transparent">* Users and sessions are referred to as last month's data</p>
+	<p class="text-xs text-right px-2 bg-transparent">
+		* Users and sessions are referred to as last month's data
+	</p>
 
 	<!-- Stats -->
 	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
