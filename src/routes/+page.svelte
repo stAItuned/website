@@ -91,13 +91,6 @@
 						<div>Community</div>
 						<div>Sharing</div>
 					</Typewriter>
-				</span> enclosed in <span class="text-secondary-600">
-					<Typewriter mode="loop" delay={1400} showCursorOnDelay interval={360}>
-						<div>AI Blog</div>
-						<div>Instagram</div>
-						<div>LinkedIn</div>
-						<div>TikTok</div>
-					</Typewriter>
 				</span>
 			</h1>
 			<h2 class="text-3xl md:text-3xl font-semibold text-slate-50 pt-8">
