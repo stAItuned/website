@@ -26,18 +26,12 @@ export interface InputProps extends BaseField {
     rows?: number
 }
 
-
 export interface SelectProps extends BaseSelect {
     defaultOption?: Option,
 }
 
-export interface MultiSelectProps extends Omit<BaseSelect, "id" | "errors"> {
+export interface MultiSelectProps extends BaseSelect {
     selected?: string[],
-}
-
-export interface TimedInputProps extends BaseField {
-    placeholder?: string,
-    callback: (value: string, loading?: Writable<boolean>, isInvalid?: Writable<boolean>) => void
 }
 
 export interface DropzoneProps extends BaseField {
@@ -45,11 +39,14 @@ export interface DropzoneProps extends BaseField {
     desc?: string
 }
 
+export interface ToggleProps extends BaseField { }
+
 export type FieldProps =
     InputProps
     | SelectProps
     | MultiSelectProps
     | DropzoneProps
+    | ToggleProps
 
 export interface Field {
     component: new (...args: any) => SvelteComponentTyped<FieldProps>,

@@ -1,41 +1,37 @@
-import type { Attributes, Entry, ResponseEntry } from "./base";
+import type { BaseAttributes, EntryResponse, EntriesResponse } from './base'
+import type { AuthorResponse } from './author'
+import type { FileResponse } from '@lib/models/file'
 
 /* Attributes */
 
-interface TargetAttributes extends Attributes {
-    label: string
+export interface TargetAttributes extends BaseAttributes {
+	label: string
 }
 
-interface TopicAttributes extends Attributes {
-    label: string
+export interface TopicAttributes extends BaseAttributes {
+	label: string
 }
 
-interface ArticleAttributes extends Attributes {
-    title: string,
-    slug: string,
-    description: string,
-    language: string
-    content: string,
-    target?: { data: ResponseTarget },
-    topics?: { data: ResponseTopic[] },
+export interface ArticleAttributes extends BaseAttributes {
+	title: string,
+	content: string,
+	language: string
+	slug: string,
+	description: string,
+	reviewable: boolean,
+	cover?: FileResponse
+	target?: TargetResponse,
+	topics?: TopicsResponse,
+	author?: AuthorResponse
 }
 
-/* ResponseEntries */
+/* Responses */
 
-export interface ResponseTarget extends ResponseEntry {
-    attributes: TargetAttributes
-}
+export type TargetResponse = EntryResponse<TargetAttributes>
+export type TargetsResponse = EntriesResponse<TargetAttributes>
 
-export interface ResponseTopic extends ResponseEntry {
-    attributes: TopicAttributes
-}
+export type TopicResponse = EntryResponse<TopicAttributes>
+export type TopicsResponse = EntriesResponse<TopicAttributes>
 
-export interface ResponseArticle extends ResponseEntry {
-    attributes: ArticleAttributes
-}
-
-/* Entries */
-
-export interface Target extends Entry, TargetAttributes { }
-export interface Topic extends Entry, TopicAttributes { }
-export interface Article extends Entry, ArticleAttributes { }
+export type ArticleResponse = EntryResponse<ArticleAttributes>
+export type ArticlesResponse = EntriesResponse<ArticleAttributes>

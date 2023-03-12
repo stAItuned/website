@@ -1,48 +1,86 @@
-import axios from 'axios'
-import { SERVER_URL } from "./config";
+import type { AuthResponse, ErrorResponse, UserAttributes } from '@lib/models'
+import type { AxiosError, AxiosResponse } from 'axios'
+
+import req from './config'
 
 export interface Credentials {
-    identifier: string,
-    password: string
+	identifier: string,
+	password: string
 }
 
-export interface UserData {
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string,
-}
+export type Provider = "google" | "github" | "linkedin" | "discord"
 
 export const auth = {
-    login: (credentials: Credentials) => {
-        return new Promise((resolve, reject) => {
-            axios.post(`${SERVER_URL}/auth/local`, credentials)
-                .then(res => {
-                    localStorage.setItem("token", res.data.jwt)
-                    resolve(res.data.user)
-                })
-                .catch(err => reject(err.response.data.error))
-        })
-    },
+	login: (credentials: Credentials): Promise<UserAttributes> => {
+		return new Promise((resolve, reject) => {
+			req.post(`/auth/local`, credentials)
+				.then((res: AxiosResponse<AuthResponse>) => {
+					localStorage.setItem('token', res.data.jwt)
+					resolve(res.data.user)
+				})
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
 
-    me: () => {
-        return new Promise((resolve, reject) => {
-            axios.get(`${SERVER_URL}/users/me`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            })
-                .then(res => resolve(res.data))
-                .catch(err => reject(err.response.data.error))
-        })
-    },
+	me: (): Promise<UserAttributes> => {
+		return new Promise((resolve, reject) => {
+			req.get(`/users/me`)
+				.then((res: AxiosResponse<UserAttributes>) => resolve(res.data))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
 
-    signup: (data: UserData) => {
-        return new Promise((resolve, reject) => {
-            axios.post(`${SERVER_URL}/auth/local/register`, data)
-                .then(res => {
-                    localStorage.setItem("token", res.data.jwt)
-                    resolve(res.data.user)
-                })
-                .catch(err => reject(err.response.data.error))
-        })
-    }
+	signup: (
+		{ email, password }:
+			{ email: string, password: string }
+	): Promise<UserAttributes> => {
+		return new Promise((resolve, reject) => {
+			req.post(`/auth/local/register`, { email, password, username: email })
+				.then((res: AxiosResponse<AuthResponse>) => {
+					localStorage.setItem('token', res.data.jwt)
+					resolve(res.data.user)
+				})
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	sendEmailConfirmation: (email: string) => {
+		return new Promise((resolve, reject) => {
+			req.post('/auth/send-email-confirmation', { email })
+				.then((res) => resolve(res.data))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	forgotPassword: (email: string): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			req.post('/auth/forgot-password', { email })
+				.then(() => resolve())
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	resetPassword: (
+		data: { password: string, passwordConfirmation: string, code: string }
+	): Promise<UserAttributes> => {
+		return new Promise((resolve, reject) => {
+			req.post('/auth/reset-password', data)
+				.then((res: AxiosResponse<AuthResponse>) => {
+					localStorage.setItem('token', res.data.jwt)
+					resolve(res.data.user)
+				})
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	connectProvider: (provider: Provider, accessToken: string): Promise<UserAttributes> => {
+		return new Promise((resolve, reject) => {
+			req.get(`/auth/${provider}/callback?access_token=${accessToken}`)
+				.then((res: AxiosResponse<AuthResponse>) => {
+					localStorage.setItem('token', res.data.jwt)
+					resolve(res.data.user)
+				})
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	}
 }

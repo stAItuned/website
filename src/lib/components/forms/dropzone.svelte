@@ -6,21 +6,17 @@
 
 	import type { DropzoneProps } from './types'
 
+	import { Label } from './utils'
+
 	interface $$Props extends DropzoneProps {}
 
-	const {
-		name,
-		id = name,
-		accept,
-		label = '',
-		desc = ''
-	}: DropzoneProps = $$props as DropzoneProps
+	const { name, id = name, accept, label = '', desc = '' }: DropzoneProps = $$props as DropzoneProps
 
 	const dispatch = createEventDispatcher()
 </script>
 
-<div class={`flex flex-col space-y-2 ${$$props.class}`}>
-	<label for={id}>{label}</label>
+<div class={`relative flex flex-col ${$$props.class}`}>
+	<Label {id} {label} />
 	<Dropzone {id} {accept} on:change={(e) => dispatch('upload', e)}>
 		<CloudArrowUp size="64" class="text-slate-300" />
 		<p class="my-2 text-sm text-slate-500">

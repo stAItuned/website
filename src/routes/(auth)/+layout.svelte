@@ -1,31 +1,26 @@
-<script lang="ts">
+<script lang='ts'>
 	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
-	import userStore, { type User } from '@lib/stores/user'
+	import user from '@lib/stores/user'
 
-	import api from '@lib/services'
+	// @ts-ignore
+	import logoDark from '@assets/general/logo-text-dark.png?w=196?webp'
 
-	let loading = true
 	onMount(() => {
-		// Check if 'token' exists in localStorage
-		if (!localStorage.getItem('token')) {
-			loading = false
-			return
-		}
-
-		api.auth
-			.me()
-			.then((user) => {
-				$userStore = user as User
-				goto('/')
-			})
-			.catch((err) => console.error(err))
-			.finally(() => (loading = false))
+		if ($user) goto('/dashboard')
 	})
 </script>
 
-{#if !loading}
-	<div class="h-screen flex flex-col justify-center overflow-x-hidden">
-		<slot />
+{#if !$user}
+	<div class='min-h-screen py-8 flex flex-col justify-center overflow-x-hidden'>
+		<section>
+			<img
+				src={logoDark}
+				alt='logo'
+				on:click={() => goto('/')}
+				class='mx-auto mb-12 hover:cursor-pointer'
+			/>
+			<slot />
+		</section>
 	</div>
 {/if}

@@ -1,115 +1,87 @@
-<script lang="ts">
-	import { Form, type FormProps } from 'svelte-forms-lib'
-
-	import FaGithub from 'svelte-icons/fa/FaGithub.svelte'
-	import FaGoogle from 'svelte-icons/fa/FaGoogle.svelte'
-	import FaFacebookF from 'svelte-icons/fa/FaFacebookF.svelte'
-
-	import { SignupSchema } from '@lib/validations'
-	import user, { type User } from '@lib/stores/user'
+<script lang='ts'>
 	import api from '@lib/services'
 
-	import { Input } from '@lib/components/forms'
-	import { Button } from '@lib/components/ui-core'
+	import { getNotificationsContext } from 'svelte-notifications'
+	import { notify } from '@lib/hooks'
+
+	import { Form, type FormProps } from 'svelte-forms-lib'
+	import { SignupSchema } from '@lib/validations'
+	import { signupFields as fields } from '../fields'
+
+	import { Hr, Button, Card } from 'flowbite-svelte'
+	import Providers from '../components/providers.svelte'
+
+	const { addNotification } = getNotificationsContext()
+
+	let showVerificationMessage = false
+	let accountEmail = ''
 
 	const formProps: FormProps = {
-		initialValues: { firstname: '', lastname: '', email: '', password: '', confirmPassword: '' },
+		initialValues: { email: '', password: '', confirmPassword: '', toggle: false },
 		validationSchema: SignupSchema,
-		onSubmit: ({ firstname, lastname, email, password }) => {
+		onSubmit: ({ email, password }) => {
 			api.auth
 				.signup({
-					firstname: firstname as string,
-					lastname: lastname as string,
 					email: email as string,
 					password: password as string
 				})
-				.then((res) => ($user = res as User))
-				.catch((err) => console.log(err))
+				.then((res) => {
+					accountEmail = res.email
+					showVerificationMessage = true
+				})
+				.catch((err) => addNotification(notify.error(err)))
 		}
 	}
 
-	interface Field {
-		name: string
-		label: string
-		placeholder: string
-		type?: 'password' | 'text'
+	const handleSendAgain = () => {
+		if (accountEmail)
+			api.auth.sendEmailConfirmation(accountEmail)
+				.then(() => addNotification(notify.success('Great! Your email has been sent successfully!')))
+				.catch(err => addNotification(notify.error(err)))
 	}
-
-	const fields: Field[] = [
-		{
-			name: 'firstname',
-			label: 'Firstname',
-			placeholder: 'Mario',
-		},
-		{
-			name: 'lastname',
-			label: 'Lastname',
-			placeholder: 'Rossi',
-		},
-		{
-			name: 'email',
-			label: 'Email',
-			placeholder: 'me@example.com',
-		},
-		{
-			name: 'password',
-			label: 'Password',
-			placeholder: 'Password',
-			type: 'password'
-		},
-		{
-			name: 'confirmPassword',
-			label: 'Confirm password',
-			placeholder: 'Confirm password',
-			type: 'password'
-		}
-	]
 </script>
 
-<section class="w-full px-4">
-	<div class="flex flex-col space-y-8 max-w-3xl mx-auto">
-		<h1 class="text-primary-600 font-bold text-4xl">Signup</h1>
-		<div class="max-w-lg flex space-x-8">
-			<div class="bg-slate-900 text-white flex justify-center items-center rounded-xl w-1/3">
-				<div class="w-8 h-8">
-					<FaGithub />
-				</div>
+
+<section>
+	{#if !showVerificationMessage}
+		<Card size='md' class='mx-auto'>
+			<h3 class='text-xl font-semibold text-gray-900 mb-6'>Signup</h3>
+			<div class='flex flex-col space-y-6'>
+				<Form {...formProps} let:errors let:updateField class='flex flex-col space-y-8'>
+					<div class='flex flex-col space-y-4'>
+						{#each fields as field}
+							<svelte:component
+								this={field.component}
+								{...field.attributes}
+								{errors}
+								on:toggle={(e) => updateField('toggle', e.detail.checked)}
+							/>
+						{/each}
+					</div>
+					<div class='flex flex-col space-y-4'>
+						<Button type='submit' size='lg' color='primary'>Signup</Button>
+						<span class='text-xs'
+						>Do you already have an account?
+						<a href='/login' class=''>
+							<b class='underline text-primary-500 hover:text-primary-300'>Login now</b>
+						</a>
+					</span>
+					</div>
+				</Form>
+				<Hr class='my-3'>or</Hr>
+				<Providers />
 			</div>
-			<div class="bg-red-400 text-white py-2 flex justify-center items-center rounded-xl w-1/3">
-				<div class="w-8 h-8">
-					<FaGoogle />
-				</div>
-			</div>
-			<div class="bg-sky-500 text-white py-2 flex justify-center items-center rounded-xl w-1/3">
-				<div class="w-8 h-8">
-					<FaFacebookF />
-				</div>
-			</div>
+		</Card>
+	{:else}
+		<div class='flex flex-col justify-center items-center text-center'>
+			<h3 class='text-4xl font-bold text-primary-600 mb-6'>Confirm your registration</h3>
+			<p class='text-slate-500 mb-2'>We have been sent to you an email to confirm your registration and verify your
+				account.</p>
+			<p>Please, first confirm your registration to perform login successfully</p>
+			<small class='mt-6 text-slate-500'>Have you not received any mail yet? Try to <span
+				class='underline text-primary-500 hover:text-primary-300 font-bold hover:cursor-pointer'
+				on:click={handleSendAgain}>Send again</span></small>
 		</div>
-		<div class="border w-full border-slate-100" />
-		<Form {...formProps} let:errors class="flex flex-col space-y-8">
-			<div class="grid grid-cols-2 gap-8">
-				{#each fields as field}
-					<Input
-						id={field.name}
-						name={field.name}
-						label={field.label}
-						placeholder={field.placeholder}
-						type={field.type || 'text'}
-						errors={errors}
-						class={field.name === 'email' ? 'col-span-2' : 'col-span-1'}
-					/>
-				{/each}
-			</div>
-			<div class="flex flex-col space-y-4">
-				<Button type="submit" width="full">Signup</Button>
-				<span
-					>Do you already have an account?
-					<a href="/login" class="">
-						<b class="underline text-primary-500 hover:text-primary-300">Login now</b>
-					</a>
-				</span>
-			</div>
-		</Form>
-	</div>
+	{/if}
 </section>
+

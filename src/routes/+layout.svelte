@@ -1,29 +1,40 @@
-<script lang="ts">
+<script lang='ts'>
 	import '../styles/tailwind.css'
 	import 'bytemd/dist/index.css'
 	import 'github-markdown-css/github-markdown-light.css'
+
+	import Notifications from 'svelte-notifications'
+	import { Toast } from '@lib/components/ui-core'
+
 	import { onMount } from 'svelte'
-	import { goto } from '$app/navigation'
-	import userStore, { type User } from '@lib/stores/user'
+	import user from '@lib/stores/user'
 
 	import api from '@lib/services'
+	import { SyncLoader } from 'svelte-loading-spinners'
+	import colors from 'tailwindcss/colors.js'
 
 	let loading = true
-	onMount(() => {
+
+	onMount(async () => {
 		// Check if 'token' exists in localStorage
 		if (!localStorage.getItem('token')) {
 			loading = false
-			return { props: { user: null } }
+			return
 		}
 
-		api.auth
-			.me()
-			.then((user) => ($userStore = user as User))
-			.catch((err) => console.error(err))
-			.finally(() => (loading = false))
+		api.auth.me()
+			.then((res) => user.set(res))
+			.catch(() => user.set(null))
+			.finally(() => loading = false)
 	})
 </script>
 
 {#if !loading}
-	<slot />
+	<Notifications item={Toast} zIndex={999}>
+		<slot />
+	</Notifications>
+{:else}
+	<div class='absolute top-[50%] left-[50%]'>
+		<SyncLoader color={colors.slate['300']} />
+	</div>
 {/if}

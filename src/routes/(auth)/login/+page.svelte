@@ -1,16 +1,19 @@
-<script lang="ts">
+<script lang='ts'>
 	import { Form, type FormProps } from 'svelte-forms-lib'
 
-	import FaGithub from 'svelte-icons/fa/FaGithub.svelte'
-	import FaGoogle from 'svelte-icons/fa/FaGoogle.svelte'
-	import FaFacebookF from 'svelte-icons/fa/FaFacebookF.svelte'
-
 	import { LoginSchema } from '@lib/validations'
-	import user, { type User } from '@lib/stores/user'
+	import user from '@lib/stores/user'
 	import api from '@lib/services'
 
-	import { Input } from '@lib/components/forms'
-	import { Button } from '@lib/components/ui-core'
+	import { loginFields as fields } from '../fields'
+
+	import { goto } from '$app/navigation'
+	import { Hr, Button, Card } from 'flowbite-svelte'
+	import Providers from '../components/providers.svelte'
+	import { getNotificationsContext } from 'svelte-notifications'
+	import { notify } from '@lib/hooks'
+
+	const { addNotification } = getNotificationsContext()
 
 	const formProps: FormProps = {
 		initialValues: { email: '', password: '' },
@@ -18,54 +21,43 @@
 		onSubmit: ({ email, password }) => {
 			api.auth
 				.login({ identifier: email as string, password: password as string })
-				.then((res) => ($user = res as User))
-				.catch((err) => console.log(err))
+				.then((res) => {
+					user.set(res)
+					goto('/dashboard')
+						.then(() => addNotification(notify.success(`Welcome, ${res.firstname}!`)))
+				})
+				.catch((err) => addNotification(notify.error(err)))
 		}
 	}
 </script>
 
-<section class="w-full px-4">
-	<div class="flex flex-col space-y-8 max-w-lg mx-auto">
-		<h1 class="text-primary-600 font-bold text-4xl">Login</h1>
-		<div class="flex space-x-8">
-			<div class="bg-slate-900 text-white flex justify-center items-center rounded-xl w-1/3">
-				<div class="w-8 h-8">
-					<FaGithub />
+<section>
+	<Card size='md' class='mx-auto'>
+		<h3 class='text-xl font-semibold text-gray-900 mb-6'>Login</h3>
+		<div class='flex flex-col space-y-6'>
+			<Form {...formProps} let:errors let:updateField class='flex flex-col space-y-8'>
+				<div class='flex flex-col space-y-4'>
+					{#each fields as field}
+						<svelte:component
+							this={field.component}
+							{...field.attributes}
+							{errors}
+						/>
+					{/each}
+					<a href='/forgot-password' class='text-primary-500 text-sm text-end font-semibold'>Forgot password?</a>
 				</div>
-			</div>
-			<div class="bg-red-400 text-white py-2 flex justify-center items-center rounded-xl w-1/3">
-				<div class="w-8 h-8">
-					<FaGoogle />
+				<div class='flex flex-col space-y-4'>
+					<Button type='submit' size='lg' color='primary'>Login</Button>
+					<span class='text-xs'
+					>Do you not have an account yet?
+						<a href='/signup' class=''>
+							<b class='underline text-primary-500 hover:text-primary-300'>Signup now</b>
+						</a>
+					</span>
 				</div>
-			</div>
-			<div class="bg-sky-500 text-white py-2 flex justify-center items-center rounded-xl w-1/3">
-				<div class="w-8 h-8">
-					<FaFacebookF />
-				</div>
-			</div>
+			</Form>
+			<Hr class='my-3'>or</Hr>
+			<Providers />
 		</div>
-		<div class="border w-full border-slate-100" />
-		<Form {...formProps} class="flex flex-col space-y-8" let:errors>
-			<Input name="email" label="Email" placeholder="me@example.com" {errors} />
-			<div class="flex flex-col space-y-2">
-				<Input
-					name="password"
-					label="Password"
-					placeholder="Enter your password"
-					type="password"
-					{errors}
-				/>
-				<small class="text-primary-500 text-end font-semibold">Forgot password?</small>
-			</div>
-			<div class="flex flex-col space-y-4">
-				<Button type="submit" width="full">Login</Button>
-				<span
-					>Do you not have an account?
-					<a href="/signup" class="">
-						<b class="underline text-primary-500 hover:text-primary-300">Signup now</b>
-					</a>
-				</span>
-			</div>
-		</Form>
-	</div>
+	</Card>
 </section>

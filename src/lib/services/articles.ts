@@ -1,76 +1,138 @@
-import axios from "axios";
+import req from './config'
 
-import { SERVER_URL } from "./config";
+import type {
+	ArticleResponse,
+	ArticlesResponse,
+	TargetsResponse,
+	TopicsResponse,
+	ErrorResponse,
+	ArticleAttributes
+} from '@lib/models'
+import type { AxiosResponse, AxiosError } from 'axios'
 
-import type { ResponseArticle, ResponseTarget, ResponseTopic, Target, Topic } from "@lib/models";
+import { upload } from '@lib/services/upload'
 
 interface RequestOptions {
-    populate: boolean
+	populate: boolean
 }
 
 export const articles = {
-    targets: {
-        fetch: (): Promise<Target[]> => {
-            return new Promise((resolve, reject) => {
-                axios.get(`${SERVER_URL}/targets?fields[0]=label`)
-                    .then(({ data }) => resolve((data.data as ResponseTarget[])
-                        .map((target: ResponseTarget): Target => ({ id: target.id, label: target.attributes.label }))))
-                    .catch(err => reject(err))
-            })
-        }
-    },
+	targets: {
+		fetch: (): Promise<TargetsResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get(`/targets?fields[0]=label`)
+					.then((res: AxiosResponse<TargetsResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		}
+	},
 
-    topics: {
-        fetch: (): Promise<Topic[]> => {
-            return new Promise((resolve, reject) => {
-                axios.get(`${SERVER_URL}/topics?fields[0]=label`)
-                    .then(({ data }) => resolve((data.data as ResponseTopic[])
-                        .map((topic: ResponseTopic): Topic => ({ id: topic.id, label: topic.attributes.label }))))
-                    .catch(err => reject(err))
-            })
-        }
-    },
+	topics: {
+		fetch: (): Promise<TopicsResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get(`/topics?fields[0]=label`)
+					.then((res: AxiosResponse<TopicsResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		}
+	},
 
-    create: ({ data, cover }) => {
-        return new Promise((resolve, reject) => {
-            if (cover) {
-                const slug = data.title.trim().toLowerCase().replaceAll(" ", "-")
-                const files = new FormData()
-                files.append('files', cover, slug)
-                axios.post(`${SERVER_URL}/upload`, files)
-                    .then((res) => {
-                        axios.post(`${SERVER_URL}/articles`, { data: { ...data, description: '', language: 'Italian', cover: res.data[0].id } }, {
-                            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                        })
-                            .then(({ data }) => resolve(data.data))
-                            .catch(err => reject(err))
-                    })
-                    .catch(err => reject(err))
-            } else
-                axios.post(`${SERVER_URL}/articles`, { data: { ...data, language: 'Italian' } }, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                })
-                    .then(({ data }) => resolve(data))
-                    .catch(err => reject(err))
-        })
-    },
+	draft: {
+		fetch: (): Promise<ArticlesResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get(`/articles/draft`)
+					.then((res: AxiosResponse<ArticlesResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		},
 
-    fetchBySlug: (slug: string): Promise<ResponseArticle> => {
-        return new Promise((resolve, reject) => {
-            axios.get(`${SERVER_URL}/slugify/slugs/article/${slug}`)
-                .then(({ data }) => {
-                    if (!data.data) reject(data.error)
-                    else resolve(data.data)
-                })
-                .catch(err => reject(err))
-        })
-    },
+		last: (): Promise<ArticleResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get('/articles/draft/last')
+					.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		},
 
-    fetchById: (id: number, options?: RequestOptions): Promise<ResponseArticle> => {
-        return new Promise((resolve, reject) => {
-            axios.get(`${SERVER_URL}/articles/${id}${options?.populate ? "?populate=*" : ""}`)
-                .then(({ data }) => resolve(data.data))
-                .catch(err => reject(err))
-        })
-    },
+		makeReviewable: (id: number): Promise<void> => {
+			return new Promise((resolve, reject) => {
+				req.put(`/articles/${id}/make-reviewable`)
+					.then(() => resolve())
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		}
+	},
+
+	checkSlugAvailability: (slug: string): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			req.get(`/articles/${slug}/is-available`)
+				.then(() => resolve())
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data))
+		})
+	},
+
+	create: (
+		article: Pick<ArticleAttributes, 'title' | 'description'>
+			& { target: string, topics: string[], cover?: File }
+	): Promise<ArticleResponse> => {
+		return new Promise((resolve, reject) => {
+			if (article.cover) {
+				const slug = article.title.trim().toLowerCase().replaceAll(' ', '-')
+				upload(article.cover, slug)
+					.then(({ id }) => {
+						req.post('/articles', { data: { ...article, language: 'Italian', cover: id } })
+							.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+							.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+					})
+					.catch(reject)
+			} else
+				req.post(`/articles`, { data: { ...article, language: 'Italian' } })
+					.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	update: (
+		id: number,
+		data: Pick<ArticleAttributes, 'title' | 'description'>
+			& { target: string, topics: string[], cover?: File }
+	): Promise<ArticleResponse> => {
+		return new Promise((resolve, reject) => {
+			req.put(`/articles/${id}`, { data })
+				.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	delete: (id: number): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			req.delete(`/articles/${id}`)
+				.then(() => resolve())
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	fetchBySlug: (slug: string, options?: RequestOptions): Promise<ArticleResponse> => {
+		return new Promise((resolve, reject) => {
+			req.get(`/slugify/slugs/article/${slug}${options?.populate ? '?populate=*' : ''}&publicationState=preview`)
+				.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	fetchById: (id: number, options?: RequestOptions): Promise<ArticleResponse> => {
+		return new Promise((resolve, reject) => {
+			req.get(`/articles/${id}${options?.populate ? '?populate=*' : ''}`)
+				.then(({ data }) => resolve(data))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	updateContent: (id: number, content: string): Promise<ArticleResponse> => {
+		return new Promise((resolve, reject) => {
+			req.put(`/articles/${id}`, { data: { content } })
+				.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	}
 }

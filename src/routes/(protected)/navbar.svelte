@@ -8,10 +8,10 @@
 	let:hidden
 	let:toggle
 	fluid={false}
-	navClass="px-2 sm:px-4 py-2.5 w-full bg-slate-50 border-b border-slate-300/50"
+	navClass="px-2 sm:px-4 py-2.5 w-full bg-slate-50 border-b !border-slate-300"
 	navDivClass="px-4 flex flex-wrap justify-between items-center"
 >
-	<NavBrand href="/">
+	<NavBrand href="/dashboard">
 		<img src={logoDark} class="mr-4 h-6 sm:h-12" alt="Staituned Logo" />
 		<div class="flex space-x-2 uppercase">
 			<span
@@ -26,11 +26,7 @@
 	<NavUl {hidden} ulClass="flex items-center space-x-8">
 		<NavLi href="/" active={false}>Blog</NavLi>
 		<NavLi>
-			<Button href="articles/new">Write a new article</Button>
+			<Button href="/articles/new">Write a new article</Button>
 		</NavLi>
-		<!-- <NavLi href="/about">About</NavLi>
-		<NavLi href="/services">Services</NavLi>
-		<NavLi href="/pricing">Pricing</NavLi>
-		<NavLi href="/contact">Contact</NavLi> -->
 	</NavUl>
 </Navbar>

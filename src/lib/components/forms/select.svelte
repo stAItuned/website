@@ -1,9 +1,13 @@
 <script lang="ts">
-	import { Select, ErrorMessage } from 'svelte-forms-lib'
+	import { Select } from 'svelte-forms-lib'
+
+	import { ErrorMessage, Label } from './utils'
 
 	import type { SelectProps } from './types'
 
-	interface $$Props extends SelectProps {}
+	interface $$Props extends SelectProps {
+		class?: string
+	}
 
 	const {
 		name,
@@ -19,17 +23,17 @@
 	errors?.subscribe((fields) => (fields[name] ? (isInvalid = true) : (isInvalid = false)))
 </script>
 
-<div class={`flex flex-col space-y-2 ${$$props.class}`}>
-	<label for={id}>{label}</label>
+<div class={`relative flex flex-col ${$$props.class}`}>
+	<Label {id} {label} />
 	<Select
 		{id}
 		{name}
-		class={`rounded-lg bg-slate-100 ${isInvalid ? 'border-red-500' : 'border-slate-200'}`}
+		class={`rounded-lg p-2 mb-3 text-sm bg-slate-100 ${isInvalid ? 'border-red-500' : 'border-slate-200'}`}
 	>
 		<option value={defaultOption.value} disabled>{defaultOption.label}</option>
 		{#each options as option}
 			<option value={option.value}>{option.label}</option>
 		{/each}
 	</Select>
-	<ErrorMessage {name} class="text-red-500 font-semibold" />
+	<ErrorMessage {name} bind:isInvalid />
 </div>

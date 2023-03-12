@@ -1,2 +1,5 @@
 export * from './base'
+export * from './file'
+export * from './user'
+export * from './author'
 export * from './article'

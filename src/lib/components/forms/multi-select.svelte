@@ -1,13 +1,20 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import { ErrorMessage } from 'svelte-forms-lib'
 	import { Dropdown, Checkbox, Chevron, Button, Search } from 'flowbite-svelte'
+
+	import { ErrorMessage, Label } from './utils'
 
 	import type { MultiSelectProps, Option } from './types'
 
 	interface $$Props extends MultiSelectProps {}
 
-	const { name, label = '', options }: MultiSelectProps = $$props as MultiSelectProps
+	const {
+		name,
+		id = name,
+		label = '',
+		options,
+		errors
+	}: MultiSelectProps = $$props as MultiSelectProps
 
 	let { selected = [] } = $$props as MultiSelectProps
 
@@ -35,13 +42,16 @@
 		searchValue = ''
 		filteredOptions = options
 	}
+
+	let isInvalid = false
+	errors?.subscribe((fields) => (fields[name] ? (isInvalid = true) : (isInvalid = false)))
 </script>
 
-<div class={`flex flex-col space-y-2 ${$$props.class}`}>
-	<p>{label}</p>
+<div class={`relative flex flex-col ${$$props.class}`}>
+	<Label {id} {label} />
 	<Button on:click={handleResetSearch}><Chevron>{label}</Chevron></Button>
 
-	<Dropdown class="overflow-y-auto px-3 pb-3 text-sm h-44">
+	<Dropdown {id} class="overflow-y-auto px-3 pb-3 text-sm h-44">
 		<div slot="header" class="p-3">
 			<Search size="md" bind:value={searchValue} on:input={handleSearch} />
 		</div>
@@ -56,5 +66,5 @@
 			</li>
 		{/each}
 	</Dropdown>
-	<ErrorMessage {name} class="text-red-500 font-semibold" />
+	<ErrorMessage {name} bind:isInvalid />
 </div>

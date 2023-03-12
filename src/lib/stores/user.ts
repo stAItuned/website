@@ -1,16 +1,7 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store'
+import type { UserAttributes } from '@lib/models'
 
-export interface User {
-    id: number,
-    firstname: string,
-    lastname: string,
-    email: string,
-    provider: string,
-    confirmed: boolean,
-    blocked: boolean,
-    createdAt: string,
-    updatedAt: string
-}
+type UserStore = UserAttributes | null
 
-const user = writable<User | null>(null);
+const user = writable<UserStore>(null)
 export default user
