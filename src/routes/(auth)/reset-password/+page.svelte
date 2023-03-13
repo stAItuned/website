@@ -12,7 +12,7 @@
 
 	import { Button, Card } from 'flowbite-svelte'
 	import { goto } from '$app/navigation'
-	import user from '@lib/stores/user'
+	import { user } from '@lib/stores'
 
 	export let data: PageData
 	const { code }: string = data

@@ -4,7 +4,7 @@
 	import 'github-markdown-css/github-markdown-light.css'
 
 	import Notifications from 'svelte-notifications'
-	import { Toast } from '@lib/components/ui-core'
+	import { Toast } from '@shared/components/ui-core'
 
 	import { onMount } from 'svelte'
 	import user from '@lib/stores/user'

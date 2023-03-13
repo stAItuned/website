@@ -5,7 +5,7 @@
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'
 
-	import { ArticleMetadataForm } from '../../../components/article-metadata'
+	import { ArticleMetadataForm } from '@protected/components/article-metadata'
 
 	import api from '@lib/services'
 	import type { ArticleResponse } from '@lib/models'

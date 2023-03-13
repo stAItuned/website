@@ -10,7 +10,7 @@
 	import type { Category } from '@lib/types'
 	import type { Article, Author } from '@lib/interfaces'
 	import { date } from '@lib/helpers'
-	import { Cards } from '@components/features'
+	import { Cards } from '@shared/components/features'
 
 	export let data: PageData
 

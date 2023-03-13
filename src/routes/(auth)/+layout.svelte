@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
-	import user from '@lib/stores/user'
+	import { user } from '@lib/stores'
 
 	// @ts-ignore
 	import logoDark from '@assets/general/logo-text-dark.png?w=196?webp'

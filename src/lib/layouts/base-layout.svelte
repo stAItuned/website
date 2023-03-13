@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Base from './base'
-	import { PageTransition } from '$lib/components/ui-core'
+	import { PageTransition } from '@shared/components/ui-core'
 	export let url: string
 	let open_header = false
 </script>

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 
 	import { goto } from '$app/navigation'
-	import user from '@lib/stores/user'
+	import { user } from '@lib/stores'
 
 	import { page } from '$app/stores'
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '@components/ui-core'
+	import { Button } from '@shared/components/ui-core'
 	import { page } from '$app/stores'
 	const statusCode = $page.status
 	const message = $page.error?.message

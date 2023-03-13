@@ -9,7 +9,7 @@
 	import { signupFields as fields } from '../fields'
 
 	import { Hr, Button, Card } from 'flowbite-svelte'
-	import Providers from '../components/providers.svelte'
+	import { Providers } from '@auth/components'
 
 	const { addNotification } = getNotificationsContext()
 

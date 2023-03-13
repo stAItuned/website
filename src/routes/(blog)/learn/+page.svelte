@@ -10,7 +10,7 @@
 
 	import { Filters } from '@lib/configs'
 	import { utils } from '@lib/helpers'
-	import { Button, Breadcrumb } from '@components/ui-core'
+	import { Button, Breadcrumb } from '@shared/components/ui-core'
 	import LearnPageMetaTags from '@lib/seo/LearnPageMetaTags.svelte'
 
 	const pathname = $page.url.pathname

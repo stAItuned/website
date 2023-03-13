@@ -8,8 +8,8 @@
 	import { Filters } from '@lib/configs'
 	import type { Article, Filter } from '@lib/interfaces'
 	import { date, utils, articles as articlesHelper } from '@lib/helpers'
-	import { Breadcrumb, Searchbar, Icons } from '@components/ui-core'
-	import { Sidebars, Cards } from '@components/features'
+	import { Breadcrumb, Searchbar, Icons } from '@shared/components/ui-core'
+	import { Sidebars, Cards } from '@shared/components/features'
 	import NewbieExpertMetaTags from '@lib/seo/NewbieExpertMetaTags.svelte'
 
 	export let data: PageData

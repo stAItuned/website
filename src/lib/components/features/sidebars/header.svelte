@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Socials } from '@lib/configs'
-	import { Sidebar, Nav } from '@components/ui-core'
+	import { Sidebar, Nav } from '@shared/components/ui-core'
 
 	export let open: boolean
 </script>

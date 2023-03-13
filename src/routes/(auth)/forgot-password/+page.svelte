@@ -6,7 +6,7 @@
 
 	import { Form, type FormProps } from 'svelte-forms-lib'
 	import { ForgotPasswordSchema } from '@lib/validations'
-	import { Input } from '@lib/components/forms'
+	import { Input } from '@shared/components/forms'
 	import { emailField } from '../fields'
 
 	import { Button, Card } from 'flowbite-svelte'

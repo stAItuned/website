@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 	import Base from '@lib/layouts/base'
 
-	import { PageTransition } from '$lib/components/ui-core'
+	import { PageTransition } from '@shared/components/ui-core'
 
 	let open_header = false
 </script>

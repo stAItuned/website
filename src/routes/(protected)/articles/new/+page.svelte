@@ -4,7 +4,7 @@
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'
 
-	import { ArticleMetadataForm } from '../components/article-metadata'
+	import { ArticleMetadataForm } from '@protected/components/article-metadata'
 
 	import api from '@lib/services'
 
@@ -24,7 +24,7 @@
 				cover
 			})
 			.then((res) => {
-				addNotification(notify.success("Your article has been created successfully"))
+				addNotification(notify.success('Your article has been created successfully'))
 				goto(`/articles/draft/${res.data.attributes.slug}/editor`)
 			})
 			.catch((err) => addNotification(notify.error(err)))

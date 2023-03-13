@@ -5,8 +5,8 @@
 	import { Teams } from '@lib/configs'
 	import type { Article, Author } from '@lib/interfaces'
 	import { utils, authors as authorsHelper } from '@lib/helpers'
-	import { Breadcrumb } from '@components/ui-core'
-	import { Cards } from '@components/features'
+	import { Breadcrumb } from '@shared/components/ui-core'
+	import { Cards } from '@shared/components/features'
 
 	export let data: PageData
 

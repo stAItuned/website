@@ -3,8 +3,8 @@
 
 	import type { Article, Author } from '@lib/interfaces'
 
-	import Breadcrumb from '@lib/components/ui-core/breadcrumb.svelte'
-	import SearchArticleCard from '@lib/components/features/cards/search-article-card.svelte'
+	import { Breadcrumb } from '@shared/components/ui-core'
+	import SearchArticleCard from '@shared/components/features/cards/search-article-card.svelte'
 	import { paginate, LightPaginationNav } from 'svelte-paginate'
 
 	export let data: PageData

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Heading, P, Avatar } from 'flowbite-svelte'
 
-	import user from '@lib/stores/user'
+	import { user } from '@lib/stores'
 </script>
 
 <header>

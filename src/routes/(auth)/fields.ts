@@ -1,6 +1,5 @@
-import type { Field } from '@components/forms/types'
-import { Input, Toggle } from '@components/forms'
-
+import type { Field } from '@shared/components/forms/types'
+import { Input, Toggle } from '@shared/components/forms'
 
 export const emailField: Field = {
 	attributes: {

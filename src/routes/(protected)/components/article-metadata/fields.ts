@@ -1,7 +1,7 @@
 import type { TargetsResponse, TopicsResponse } from '@lib/models'
 
-import type { Field, MultiSelectProps, SelectProps } from '@components/forms/types'
-import { Dropzone, Input, MultiSelect, Select } from '@components/forms'
+import type { Field, MultiSelectProps, SelectProps } from '@shared/components/forms/types'
+import { Dropzone, Input, MultiSelect, Select } from '@shared/components/forms'
 import CheckSlugInput from './check-slug-input.svelte'
 
 export const targetField = (targets: TargetsResponse): SelectProps => ({

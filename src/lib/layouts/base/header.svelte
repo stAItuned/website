@@ -8,8 +8,8 @@
 	import { slide } from 'svelte/transition'
 	import { backInOut } from 'svelte/easing'
 
-	import { SearchModal, Sidebars } from '@components/features'
-	import { Hamburger, Nav, Icons } from '@components/ui-core'
+	import { SearchModal, Sidebars } from '@shared/components/features'
+	import { Hamburger, Nav, Icons } from '@shared/components/ui-core'
 
 	let currentY: number
 	let prevY = 0

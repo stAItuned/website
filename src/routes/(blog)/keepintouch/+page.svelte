@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, PageTransition } from '@components/ui-core'
+	import { Button, PageTransition } from '@shared/components/ui-core'
 	import SecondaryPageMetaTags from '@lib/seo/SecondaryPageMetaTags.svelte'
 
 	let formData = {

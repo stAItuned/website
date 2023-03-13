@@ -4,7 +4,7 @@
 
 	import type { ArticleResponse } from '@lib/models'
 	import { utils } from '@lib/helpers'
-	import { Breadcrumb, Icons } from '@components/ui-core'
+	import { Breadcrumb, Icons } from '@shared/components/ui-core'
 	import dayjs from 'dayjs'
 
 	export let data: PageData

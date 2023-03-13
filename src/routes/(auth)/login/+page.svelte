@@ -9,7 +9,7 @@
 
 	import { goto } from '$app/navigation'
 	import { Hr, Button, Card } from 'flowbite-svelte'
-	import Providers from '../components/providers.svelte'
+	import { Providers } from '@auth/components'
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'
 

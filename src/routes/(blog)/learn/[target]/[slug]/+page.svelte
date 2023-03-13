@@ -8,7 +8,7 @@
 
 	import type { Article } from '@lib/interfaces'
 	import { utils } from '@lib/helpers'
-	import { Breadcrumb, Icons } from '@components/ui-core'
+	import { Breadcrumb, Icons } from '@shared/components/ui-core'
 
 	export let data: PageData
 	const article: Article = data.article

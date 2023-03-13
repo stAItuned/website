@@ -3,8 +3,8 @@
 
 	import { Teams } from '@lib/configs'
 	import { utils } from '@lib/helpers'
-	import { Breadcrumb } from '@components/ui-core'
-	import { Cards } from '@components/features'
+	import { Breadcrumb } from '@shared/components/ui-core'
+	import { Cards } from '@shared/components/features'
 	import SecondaryPageMetaTags from '@lib/seo/SecondaryPageMetaTags.svelte'
 
 	const pathname = $page.url.pathname

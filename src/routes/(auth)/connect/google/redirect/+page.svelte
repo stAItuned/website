@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
 
-	import user from '@lib/stores/user'
+	import { user } from '@lib/stores'
 
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'

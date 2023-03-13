@@ -2,8 +2,8 @@
 	import { createEventDispatcher } from 'svelte'
 	import { Spinner } from 'flowbite-svelte'
 
-	import { Label, ErrorMessage } from '@components/forms/utils'
-	import type { InputProps } from '@components/forms/types'
+	import { Label, ErrorMessage } from '@shared/components/forms/utils'
+	import type { InputProps } from '@shared/components/forms/types'
 	import type { ErrorResponse } from '@lib/models'
 
 	import api from '@lib/services'

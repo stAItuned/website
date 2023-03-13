@@ -12,7 +12,7 @@
 
 	let spanClass = 'flex-1 ml-3 whitespace-nowrap'
 
-	import user from '@lib/stores/user'
+	import { user } from '@lib/stores'
 
 	import { User, Folder, Squares2x2, Cog6Tooth, ArrowLeftOnRectangle } from 'svelte-heros-v2'
 	import { goto } from '$app/navigation'
