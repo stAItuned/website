@@ -1,5 +1,4 @@
 <script lang='ts'>
-	import type { PageData } from './$types'
 	import { goto } from '$app/navigation'
 
 	import { getNotificationsContext } from 'svelte-notifications'
@@ -12,17 +11,33 @@
 
 	// import Header from './header.svelte'
 
-	export let data: PageData
-	const { article }: { article: ArticleResponse } = data
-
-	const initialValues = {
-		title: article.data.attributes.title,
-		description: article.data.attributes.description,
-		target: article.data.attributes.target?.data.id.toString(),
-		topics: article.data.attributes.topics?.data.map(topic => topic.id.toString())
-	}
+	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
 
 	const { addNotification } = getNotificationsContext()
+
+	let loading = true
+	let article: ArticleResponse
+	let initialValues
+
+	const slug = $page.params.slug
+
+	onMount(() => {
+		api.articles.draft.fetchBySlug(slug)
+			.then(res => {
+				article = res
+				console.log(res)
+				initialValues = {
+					title: article.data.attributes.title,
+					description: article.data.attributes.description,
+					target: article.data.attributes.target?.data.id.toString(),
+					topics: article.data.attributes.topics?.data.map(topic => topic.id.toString())
+				}
+			})
+			.catch((err) => addNotification(notify.error(err)))
+			.finally(() => loading = false)
+	})
+
 
 	let cover: File | undefined = undefined
 
@@ -34,12 +49,14 @@
 			topics: topics as string[]
 		})
 			.then((res) => {
-				addNotification(notify.success("Your article has been updated successfully"))
+				addNotification(notify.success('Your article has been updated successfully'))
 				goto(`/articles/draft/${res.data.attributes.slug}/editor`)
 			})
 			.catch((err) => addNotification(notify.error(err)))
 	}
 </script>
 
-<!--<Header />-->
-<ArticleMetadataForm {handleSubmit} {initialValues} />
+{#if !loading}
+	<!--<Header />-->
+	<ArticleMetadataForm {handleSubmit} {initialValues} />
+{/if}

@@ -1,18 +1,17 @@
-import { browser } from '$app/environment'
 import axios from 'axios'
 
-export const SERVER_URL = 'http://localhost:1337/api' as const
+export const SERVER_URL = 'http://localhost:1337' as const
 
 const instance = axios.create({
-	baseURL: SERVER_URL
+	baseURL: `${SERVER_URL}/api`,
+	withCredentials: true
 })
 
-instance.interceptors.request.use((config) => {
-	if (browser) {
-		const token = localStorage.getItem('token')
-		if (token) config.headers.Authorization = `Bearer ${token}`
-	}
-	return config
-})
+// instance.interceptors.request.use((config) => {
+// 	// const token = localStorage.getItem('token')
+// 	// if (token) config.headers.Authorization = `Bearer ${token}`
+// 	config.withCredentials = true
+// 	return config
+// })
 
 export default instance

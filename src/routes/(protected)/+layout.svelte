@@ -8,7 +8,7 @@
 
 	import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte'
 	import Navbar from './navbar.svelte'
-	import Sidebar from './sidebar.svelte'
+	import { Sidebar } from '@protected/components'
 
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'
@@ -29,18 +29,21 @@
 
 	onMount(() => {
 		if (!$user)
-			goto('/login').then(() => addNotification(notify.error("You must be authenticated")))
+			goto('/login').then(() => addNotification(notify.error('You must be authenticated')))
 	})
+
+	let hiddenSidebar = true
+	const openSidebar = () => hiddenSidebar = false
 </script>
 
 
 {#if $user}
 	<div class='h-screen flex flex-col overflow-hidden'>
-		<Navbar />
+		<Navbar {openSidebar} />
 		<div class='flex h-full overflow-hidden'>
-			<Sidebar />
-			<div class='px-4 py-8 w-4/5  overflow-y-scroll'>
-				<div class='px-8 flex flex-col space-y-8'>
+			<Sidebar bind:hidden={hiddenSidebar} />
+			<div class='py-8 xl:w-4/5  overflow-y-scroll'>
+				<div class='px-4 xl:px-8 flex flex-col space-y-8'>
 					<Breadcrumb>
 						{#each breadcrumb as item, idx}
 							<BreadcrumbItem href={item.href} home={!idx}>{item.label}</BreadcrumbItem>

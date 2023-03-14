@@ -1,4 +1,6 @@
 <script lang='ts'>
+	import type { PageData } from './$types'
+
 	import { onMount } from 'svelte'
 	import {
 		Heading,
@@ -23,7 +25,7 @@
 	import { Pie } from 'svelte-chartjs'
 	import 'chart.js/auto'
 	import dayjs from 'dayjs'
-	import type { ArticleResponse } from '@lib/models'
+	import type { ArticleResponse, ErrorResponse } from '@lib/models'
 	import { goto } from '$app/navigation'
 	import api from '@lib/services'
 	import { getNotificationsContext } from 'svelte-notifications'

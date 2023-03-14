@@ -1,14 +1,14 @@
 import req from './config'
 
 import type {
+	ArticleAttributes,
 	ArticleResponse,
 	ArticlesResponse,
-	TargetsResponse,
-	TopicsResponse,
 	ErrorResponse,
-	ArticleAttributes
+	TargetsResponse,
+	TopicsResponse
 } from '@lib/models'
-import type { AxiosResponse, AxiosError } from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
 
 import { upload } from '@lib/services/upload'
 
@@ -46,9 +46,17 @@ export const articles = {
 			})
 		},
 
-		last: (): Promise<ArticleResponse> => {
+		fetchBySlug: (slug: string): Promise<ArticleResponse> => {
 			return new Promise((resolve, reject) => {
-				req.get('/articles/draft/last')
+				req.get(`/articles/draft/${slug}`)
+					.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		},
+
+		last: (token?: string): Promise<ArticleResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get('/articles/draft/last', { headers: { Authorization: token ? `Bearer ${token}` : null } })
 					.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
 					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
 			})
@@ -79,8 +87,8 @@ export const articles = {
 			if (article.cover) {
 				const slug = article.title.trim().toLowerCase().replaceAll(' ', '-')
 				upload(article.cover, slug)
-					.then(({ id }) => {
-						req.post('/articles', { data: { ...article, language: 'Italian', cover: id } })
+					.then((file) => {
+						req.post('/articles', { data: { ...article, language: 'Italian', cover: file.id } })
 							.then((res: AxiosResponse<ArticleResponse>) => resolve(res.data))
 							.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
 					})

@@ -17,15 +17,33 @@
 	import type { ArticleResponse } from '@lib/models'
 	import { notify } from '@lib/hooks'
 	import { getNotificationsContext } from 'svelte-notifications'
-
-	export let data: PageData
-	const { article }: ArticleResponse = data
+	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
 
 	const { addNotification } = getNotificationsContext()
 
-	let { content } = article.data.attributes
-	let { updatedAt } = article.data.attributes
-	let lastSavedContent = content
+	let loading = true
+	let article: ArticleResponse
+	let content
+	let updatedAt
+	let lastSavedContent
+
+	const slug = $page.params.slug
+
+	onMount(() => {
+		api.articles.draft.fetchBySlug(slug)
+			.then(res => {
+				article = res
+				lastSavedContent = content = article.data.attributes.content
+				updatedAt = article.data.attributes.updatedAt
+			})
+			.catch((err) => addNotification(notify.error(err)))
+			.finally(() => loading = false)
+	})
+
+	// let { content } = article.data.attributes
+	// let { updatedAt } = article.data.attributes
+	// let lastSavedContent = content
 
 	const handleSave = () => {
 		if (content !== lastSavedContent)
@@ -51,49 +69,51 @@
 			.catch((err) => addNotification(notify.error(err)))
 	}
 
-	setInterval(handleSave, 60000)
+	setInterval(handleSave, 30 * 1000)
 </script>
 
-<Toolbar slot='header' embedded>
-	<ToolbarGroup>
-		<Badge border class='mr-3'>
-			<Clock variation='solid' size='16' class='mr-2' />
-			last update {dayjs(updatedAt).format('DD MMMM YYYY, HH:mm')}
-		</Badge>
-		<ToolbarButton on:click={handleSave}
-									 class={`${lastSavedContent === content ? "opacity-25 hover:bg-inherit text-inherit" : "opacity-100"}`}
-									 disabled={lastSavedContent === content}>
-			<div class='flex space-x-2 items-center px-1.5'>
-				<CloudArrowUp />
-				<span>Save</span>
-			</div>
-		</ToolbarButton>
-		<ToolbarButton on:click={handlePublish}>
-			<div class='flex space-x-2 items-center px-1.5'>
-				<CheckBadge />
-				<span>Publish</span>
-			</div>
-		</ToolbarButton>
-	</ToolbarGroup>
-</Toolbar>
+{#if !loading}
+	<Toolbar slot='header' embedded>
+		<ToolbarGroup>
+			<Badge border class='mr-3'>
+				<Clock variation='solid' size='16' class='mr-2' />
+				last update {dayjs(updatedAt).format('DD MMMM YYYY, HH:mm')}
+			</Badge>
+			<ToolbarButton on:click={handleSave}
+										 class={`${lastSavedContent === content ? "opacity-25 hover:bg-inherit text-inherit" : "opacity-100"}`}
+										 disabled={lastSavedContent === content}>
+				<div class='flex space-x-2 items-center px-1.5'>
+					<CloudArrowUp />
+					<span>Save</span>
+				</div>
+			</ToolbarButton>
+			<ToolbarButton on:click={handlePublish}>
+				<div class='flex space-x-2 items-center px-1.5'>
+					<CheckBadge />
+					<span>Publish</span>
+				</div>
+			</ToolbarButton>
+		</ToolbarGroup>
+	</Toolbar>
 
-<header>
-	<Heading tag='h2' customSize='text-4xl font-extrabold'>
-		{article.data.attributes.title}
-	</Heading>
-	<p class='my-4 text-slate-500'>
-		{article.data.attributes.description}
-	</p>
+	<header>
+		<Heading tag='h2' customSize='text-4xl font-extrabold'>
+			{article.data.attributes.title}
+		</Heading>
+		<p class='my-4 text-slate-500'>
+			{article.data.attributes.description}
+		</p>
 
-	<div class='flex w-full justify-between items-center'>
-		<div class='flex items-center space-x-2'>
-			<Avatar>AD</Avatar>
-			<span
-			>{`${article.data.attributes.author?.data.attributes.firstname} ${article.data.attributes.author?.data.attributes.lastname}`}</span
-			>
+		<div class='flex w-full justify-between items-center'>
+			<div class='flex items-center space-x-2'>
+				<Avatar>AD</Avatar>
+				<span
+				>{`${article.data.attributes.author?.data.attributes.firstname} ${article.data.attributes.author?.data.attributes.lastname}`}</span
+				>
+			</div>
+			<span>{article.data.attributes.target?.data.attributes.label}</span>
 		</div>
-		<span>{article.data.attributes.target?.data.attributes.label}</span>
-	</div>
-</header>
+	</header>
 
-<Editor class='bytemd' value={content} on:change={(e) => (content = e.detail.value)} />
+	<Editor class='bytemd' value={content} on:change={(e) => (content = e.detail.value)} />
+{/if}

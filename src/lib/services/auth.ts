@@ -8,16 +8,13 @@ export interface Credentials {
 	password: string
 }
 
-export type Provider = "google" | "github" | "linkedin" | "discord"
+export type Provider = 'google' | 'github' | 'linkedin' | 'discord'
 
 export const auth = {
 	login: (credentials: Credentials): Promise<UserAttributes> => {
 		return new Promise((resolve, reject) => {
 			req.post(`/auth/local`, credentials)
-				.then((res: AxiosResponse<AuthResponse>) => {
-					localStorage.setItem('token', res.data.jwt)
-					resolve(res.data.user)
-				})
+				.then((res: AxiosResponse<AuthResponse>) => resolve(res.data.user))
 				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
 		})
 	},
@@ -26,7 +23,7 @@ export const auth = {
 		return new Promise((resolve, reject) => {
 			req.get(`/users/me`)
 				.then((res: AxiosResponse<UserAttributes>) => resolve(res.data))
-				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+				.catch((err: AxiosError<ErrorResponse>) => reject(err.request))
 		})
 	},
 
@@ -81,6 +78,14 @@ export const auth = {
 					resolve(res.data.user)
 				})
 				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	logout: (): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			req.delete('/auth/current')
+				.then(() => resolve())
+				.catch((err: AxiosError<ErrorResponse>) => reject(err.response?.data?.error.message))
 		})
 	}
 }

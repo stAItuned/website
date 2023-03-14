@@ -6,10 +6,10 @@
 	import { CreateArticleSchema } from '@lib/validations'
 	import { fields } from './fields'
 
-	import { Button } from '@lib/components/ui-core'
+	import { Button } from 'flowbite-svelte'
 	import api from '@lib/services'
 
-	export let handleSubmit: (values: Record<string, unknown>) => any
+	export let handleSubmit: (values: Record<string, unknown>, cover?: File) => any
 	export let initialValues: {
 		title: string,
 		description: string,
@@ -30,7 +30,7 @@
 		formProps = {
 			initialValues: initialValues,
 			validationSchema: CreateArticleSchema({ targets: targets, topics: topics }),
-			onSubmit: handleSubmit
+			onSubmit: (values) => handleSubmit(values, cover)
 		}
 
 		loading = false
@@ -72,7 +72,7 @@
 		</div>
 
 		<div class='flex flex-col space-y-4'>
-			<Button type='submit' width='full'>Continue</Button>
+			<Button type='submit' size='xl'>Continue</Button>
 		</div>
 	</Form>
 {/if}

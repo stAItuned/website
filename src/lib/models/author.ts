@@ -6,7 +6,7 @@ export interface AuthorAttributes extends Omit<BaseAttributes, "publishedAt"> {
     bio?: string,
     overview?: string,
     linkedin?: string,
-    user: UserResponse
+    user?: UserResponse
 }
 
 export type AuthorResponse = EntryResponse<AuthorAttributes>

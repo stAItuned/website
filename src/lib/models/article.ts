@@ -19,6 +19,7 @@ export interface ArticleAttributes extends BaseAttributes {
 	slug: string,
 	description: string,
 	reviewable: boolean,
+	readingTime?: string,
 	cover?: FileResponse
 	target?: TargetResponse,
 	topics?: TopicsResponse,

@@ -20,6 +20,8 @@
 			"@protected/components/*": ["src/routes/(protected)/components/*"],
 			"@config": ["src/config"],
 			"@assets/*": ["src/assets/*"],
+			"$lib":["src/lib"],
+			"$lib/*":["src/lib/*"]
 		}
 	}
 }

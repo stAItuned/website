@@ -45,6 +45,7 @@
 		"github-markdown-css": "^5.2.0",
 		"hastscript": "^7.1.0",
 		"js-yaml": "^4.1.0",
+		"marked": "^4.2.12",
 		"mdsvex": "^0.10.6",
 		"mdsvex-relative-images": "^1.0.2",
 		"octokit": "^2.0.7",
