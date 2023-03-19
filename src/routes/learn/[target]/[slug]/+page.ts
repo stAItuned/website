@@ -7,6 +7,7 @@ export const load: PageLoad = async ({ data }) => {
     return {
         article,
         componentToRender: component.default,
+        relatedArticles
         // component: component
     }
 }
