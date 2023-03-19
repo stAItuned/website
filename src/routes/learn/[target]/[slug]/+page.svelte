@@ -177,7 +177,7 @@
 	</section>
 	<!-- Related Contents -->
 	<section>
-		<!--<RelatedArticles {relatedArticles} />-->
+		<RelatedArticles {relatedArticles} />
 	</section>
 </PageTransition>
 
