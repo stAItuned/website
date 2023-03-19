@@ -14,14 +14,14 @@
 	title={pageTitle}
 	titleTemplate={`%s | ${info.siteName}`}
 	description={pageDescription}
-	canonical={`/learn/${article.metadata.target.toLowerCase()}/${article.slug}`}
+	canonical={`${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`}
 	openGraph={{
 		site_name: info.siteName,
 		type: 'article',
 		description: pageDescription,
 		title: pageTitle,
-		images: [{ url: article.metadata.cover }],
-		url: info.basePath,
+		images: [{ url: `${info.basePath}${article.metadata.cover}` }],
+		url: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`,
 		article: {
 			publishedTime: article.metadata.date,
 			authors: [article.metadata.author],
@@ -32,13 +32,13 @@
 		title: pageTitle,
 		description: pageDescription,
 		cardType: 'summary',
-		site: info.basePath,
-		image: article.metadata.cover
+		site: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`,
+		image: `${info.basePath}${article.metadata.cover}`
 	}}
 	languageAlternates={[
 		{
 			hrefLang: language,
-			href: `/learn/${article.metadata.target.toLowerCase()}/${article.slug}`
+			href: `${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}`
 		}
 	]}
 />
