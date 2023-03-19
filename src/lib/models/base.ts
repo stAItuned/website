@@ -21,11 +21,11 @@ export interface BaseMeta {
 }
 
 export interface EntryResponse<T extends BaseAttributes> {
-    data: BaseData<T>
+    data?: BaseData<T>
 }
 
 export interface EntriesResponse<T extends BaseAttributes> {
-    data: BaseData<T>[],
+    data?: BaseData<T>[],
     meta: BaseMeta
 }
 

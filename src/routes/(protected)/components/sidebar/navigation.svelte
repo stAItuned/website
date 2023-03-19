@@ -13,7 +13,7 @@
 		<a href='/articles/new' on:click={closeSidebar}>
 			<SidebarCta
 				label='Write a new article'
-				class='bg-gradient-to-br from-indigo-700 to-sky-500 shadow-lg shadow-blue-500/50 !mb-6'
+				class='bg-gradient-to-br from-indigo-700 to-sky-500 shadow-lg shadow-blue-500/50 !mb-6 hover:scale-105 transition'
 				spanClass='bg-indigo-200 text-indigo-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded'>
 				<p class='mb-3 text-sm text-slate-50'>
 					Let's start writing your own content!

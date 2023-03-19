@@ -9,8 +9,6 @@
 	import api from '@lib/services'
 	import type { ArticleResponse } from '@lib/models'
 
-	// import Header from './header.svelte'
-
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
 
@@ -28,10 +26,10 @@
 				article = res
 				console.log(res)
 				initialValues = {
-					title: article.data.attributes.title,
-					description: article.data.attributes.description,
-					target: article.data.attributes.target?.data.id.toString(),
-					topics: article.data.attributes.topics?.data.map(topic => topic.id.toString())
+					title: article.data?.attributes.title,
+					description: article.data?.attributes.description,
+					target: article.data?.attributes.target?.data?.id.toString(),
+					topics: article.data?.attributes.topics?.data?.map(topic => topic.id.toString())
 				}
 			})
 			.catch((err) => addNotification(notify.error(err)))
@@ -42,7 +40,7 @@
 	let cover: File | undefined = undefined
 
 	const handleSubmit = ({ title, description, target, topics }) => {
-		api.articles.update(article.data.id, {
+		api.articles.update(article.data!.id, {
 			title: title as string,
 			description: description as string,
 			target: target as string,
@@ -50,13 +48,12 @@
 		})
 			.then((res) => {
 				addNotification(notify.success('Your article has been updated successfully'))
-				goto(`/articles/draft/${res.data.attributes.slug}/editor`)
+				goto(`/articles/draft/${res.data?.attributes.slug}/editor`)
 			})
 			.catch((err) => addNotification(notify.error(err)))
 	}
 </script>
 
 {#if !loading}
-	<!--<Header />-->
 	<ArticleMetadataForm {handleSubmit} {initialValues} />
 {/if}

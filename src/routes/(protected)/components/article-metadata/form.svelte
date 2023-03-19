@@ -59,6 +59,7 @@
 					{...field.attributes}
 					{errors}
 					{form}
+					file={cover}
 					title={initialValues.title}
 					on:select={(e) => updateField('topics', e.detail.selected)}
 					on:change={(e) => handleChange(e.detail)}

@@ -9,6 +9,7 @@ export interface UserAttributes extends Omit<BaseAttributes, "publishedAt"> {
     username: string,
     firstname: string,
     lastname: string,
+    completed: boolean
 }
 
 export type UserResponse = EntryResponse<Omit<UserAttributes, "id">>

@@ -4,26 +4,12 @@
 	import { goto } from '$app/navigation'
 	import { user } from '@lib/stores'
 
-	import { page } from '$app/stores'
-
-	import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte'
-	import Navbar from './navbar.svelte'
-	import { Sidebar } from '@protected/components'
+	import { CursorArrowRays } from 'svelte-heros-v2'
+	import { Breadcrumb, Navbar, Sidebar } from '@protected/components'
 
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'
 
-	const split = $page.url.pathname.split('/').slice(1)
-	const items = split.map((item) => item[0].toUpperCase() + item.slice(1))
-	const breadcrumb = items.map((item, idx) => {
-		const label = item
-		let href = ''
-		split.forEach((el, idx2) => {
-			if (idx2 <= idx) href = href + '/' + el
-		})
-		console.log(href)
-		return { label, href }
-	})
 
 	const { addNotification } = getNotificationsContext()
 
@@ -43,13 +29,17 @@
 		<div class='flex h-full overflow-hidden'>
 			<Sidebar bind:hidden={hiddenSidebar} />
 			<div class='py-8 xl:w-4/5  overflow-y-scroll'>
-				<div class='px-4 xl:px-8 flex flex-col space-y-8'>
-					<Breadcrumb>
-						{#each breadcrumb as item, idx}
-							<BreadcrumbItem href={item.href} home={!idx}>{item.label}</BreadcrumbItem>
-						{/each}
-					</Breadcrumb>
+				<div class='px-6 xl:px-8 flex flex-col space-y-8'>
+					<Breadcrumb />
 					<slot />
+					{#if $user.completed}
+						<div class='fixed bottom-0 left-0 py-4 px-2 w-full hover:cursor-pointer scale-95 hover:scale-100 transition'>
+							<div class='flex items-center p-4 text-white bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg shadow-xl'>
+								<CursorArrowRays class='mr-3' />
+								<span class='text-sm'>Complete your profile to unlock all the functionalities</span>
+							</div>
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>

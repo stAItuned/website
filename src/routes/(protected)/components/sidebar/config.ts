@@ -1,5 +1,5 @@
 import type { SidebarItemProps } from '@protected/components/sidebar/types'
-import { Cog6Tooth, Folder, Squares2x2, User, Newspaper } from 'svelte-heros-v2'
+import { Cog6Tooth, Folder, Newspaper, Squares2x2, User, ChartPie } from 'svelte-heros-v2'
 
 interface SidebarNavigation {
 	main: SidebarItemProps[],
@@ -24,7 +24,7 @@ export const navigation: SidebarNavigation = {
 				{ label: 'Published articles', href: '/articles/published' },
 				{ label: 'Draft articles', href: '/articles/draft' }
 			]
-		}
+		},
 	],
 	footer: [
 		{
