@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { sineIn } from 'svelte/easing'
-	import { draw } from 'svelte/transition'
+
+	import { draw, fade } from 'svelte/transition'
+
 	import type { PageData } from './$types'
 
 	import ArticleMetaTags from '@lib/seo/ArticleMetaTags.svelte'
@@ -10,6 +12,8 @@
 	import RelatedArticles from '@lib/components/features/related-articles.svelte'
 	import { utils } from '@lib/helpers'
 	import type { Article } from '@lib/interfaces'
+
+	import { Email, Facebook, LinkedIn } from 'svelte-share-buttons-component'
 
 	export let data: PageData
 	const article: Article = data.article
@@ -23,8 +27,19 @@
 
 	const pathname = $page.url.pathname
 
-	// allows the little animation when sharing
-	let shared = false
+	// Share article buttons
+	let openShareOptions = false
+	const url = window.location.href
+	const title = article.metadata.title
+	const description = article.metadata.meta
+	const handleShareOptions = () => {
+		openShareOptions = !openShareOptions
+		if (openShareOptions === true) {
+			setTimeout(() => {
+				openShareOptions = false
+			}, 5000);
+		}
+	}
 
 	const localtime = new Date(article.metadata.date).toLocaleDateString(undefined, {
 		year: '2-digit',
@@ -44,14 +59,10 @@
 			// console.log('navigation.share failed, fallback')
 			try {
 				await navigator.clipboard.writeText(window.location.href)
-			} catch {
-				// console.log('not even able to copy into clipboard')
-				return
+				openShareOptions = false
+			} catch (error) {
+				console.error(error)
 			}
-			shared = true
-			setTimeout(() => {
-				shared = false
-			}, 3000)
 		}
 	}
 </script>
@@ -100,6 +111,7 @@
 						{article.metadata.author}
 					{/if}
 				</div>
+
 				<div class="flex items-right space-x-2">
 					<!-- Date -->
 					<div class="flex items-center space-x-2">
