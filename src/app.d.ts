@@ -15,3 +15,4 @@ declare namespace App {
 }
 
 declare module 'svelte-carousel';
+declare module 'svelte-share-buttons-component';
