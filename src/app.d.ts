@@ -13,3 +13,6 @@ declare namespace App {
 
 	// interface Stuff {}
 }
+
+declare module 'svelte-carousel';
+declare module 'svelte-share-buttons-component';
