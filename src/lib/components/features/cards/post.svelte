@@ -8,7 +8,7 @@
 
 	import dayjs from 'dayjs'
 
-	import { Icons, Button } from '@components/ui-core'
+	import { Icons, Button } from '@shared/components/ui-core'
 	import type { Article } from '@lib/interfaces'
 	import { goto } from '$app/navigation'
 

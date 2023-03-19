@@ -1,29 +1,16 @@
 <script lang="ts">
-	// @ts-ignore
-	// import bgGradient from '@assets/general/bg-gradient.png?w=1024?webp'
-
-	// import { fade } from 'svelte/transition'
-
-	import { page } from '$app/stores'
 	import Base from './base'
-
+	import { PageTransition } from '@shared/components/ui-core'
+	export let url: string
 	let open_header = false
-
-	$: homepage = $page.url.pathname === '/'
 </script>
 
 <Base.Header bind:open_header />
-<section class="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
-	<!-- {#if homepage}
-		<img
-			transition:fade={{ duration: 300 }}
-			srcset={bgGradient}
-			alt="bg-gradient"
-			class="absolute h-full w-full object-cover -z-50"
-		/>
-	{/if} -->
-	<main class="h-full flex flex-col justify-center">
-		<slot />
+<section class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+	<main class="h-full w-full flex flex-col justify-center">
+		<PageTransition {url}>
+			<slot />
+		</PageTransition>
 	</main>
 	<Base.Footer />
 </section>

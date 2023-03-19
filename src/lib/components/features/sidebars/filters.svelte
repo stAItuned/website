@@ -2,7 +2,7 @@
 	import { Filters } from '@lib/configs'
 	import type { Filter } from '@lib/interfaces'
 
-	import { Sidebar, Hamburger, Button, FilterButton } from '@components/ui-core'
+	import { Sidebar, Hamburger, Button, FilterButton } from '@shared/components/ui-core'
 
 	export let open: boolean
 	export let activeFilters: Filter

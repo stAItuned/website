@@ -11,11 +11,15 @@
 		"strict": true,
 		"paths": {
 			"@lib/*": ["src/lib/*"],
-			"@components/*": ["src/lib/components/*"],
-			"@stores/*": ["src/stores/*"],
+			"@shared/components/*": ["src/lib/components/*"],
+			"@blog/components": ["src/routes/(blog)/components"],
+			"@blog/components/*": ["src/routes/(blog)/components/*"],
+			"@auth/components": ["src/routes/(auth)/components"],
+			"@auth/components/*": ["src/routes/(auth)/components/*"],
+			"@protected/components": ["src/routes/(protected)/components"],
+			"@protected/components/*": ["src/routes/(protected)/components/*"],
 			"@config": ["src/config"],
 			"@assets/*": ["src/assets/*"],
-			"@posts/*": ["posts/*"],
 			"$lib":["src/lib"],
 			"$lib/*":["src/lib/*"]
 		}

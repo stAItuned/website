@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,js,ts,svelte}'],
+  content: ['./src/**/*.{html,js,ts,svelte}', "./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}"],
   mode: 'jit',
   theme: {
     fontFamily: {
@@ -11,10 +11,16 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          300: '#4d84d4',
-          400: '#566096',
+          50: '#9c9fba',
+          100: '#888cac',
+          200: '#74799e',
+          300: '#606590',
+          400: '#4c5282',
           500: '#383F74',
-          600: '#1A1E3B'
+          600: '#323968',
+          700: '#2d325d',
+          800: '#272c51',
+          900: '#222646',
         },
         secondary: {
           400: '#FFF7A8',
@@ -24,5 +30,5 @@ module.exports = {
       }
     }
   },
-  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/line-clamp'), require('@tailwindcss/forms')]
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/line-clamp'), require('@tailwindcss/forms'), require('flowbite/plugin')]
 }

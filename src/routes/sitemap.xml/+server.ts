@@ -1,4 +1,4 @@
-import info from '$lib/info'
+import info from '@lib/info'
 
 import { git } from '@lib/git'
 import type { CMSData } from '@lib/interfaces'

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Teams } from '@lib/configs'
-	import { Button } from '@components/ui-core'
+	import { Button } from '@shared/components/ui-core'
 
 	export let team: typeof Teams.TEAMS_DATA[number]
 </script>

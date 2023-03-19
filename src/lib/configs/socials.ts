@@ -1,4 +1,4 @@
-import { Icons } from '@components/ui-core'
+import { Icons } from '@shared/components/ui-core'
 
 export const ICON_LINKS = [
     {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Author } from '@lib/interfaces'
 
-	import { Icons } from '@components/ui-core'
+	import { Icons } from '@shared/components/ui-core'
 
 	export let author: Author
 </script>

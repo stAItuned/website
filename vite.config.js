@@ -10,12 +10,16 @@ export default defineConfig({
 	// allows vite access to ./posts
 	server: {
 		fs: {
-			allow: ['.']
-		}
+			allow: ["."]
+		},
 	},
 	resolve: {
 		alias: {
 			'@lib': path.resolve('./src/lib'),
+			'@shared/components': path.resolve('./src/lib/components'),
+			'@blog/components': path.resolve('./src/routes/(blog)/components'),
+			'@auth/components': path.resolve('./src/routes/(auth)/components'),
+			'@protected/components': path.resolve('./src/routes/(protected)/components'),
 			'@config': path.resolve('./src/config'),
 			'@components': path.resolve('./src/lib/components'),
 			'@stores': path.resolve('./src/stores'),
