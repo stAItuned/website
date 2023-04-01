@@ -3,9 +3,9 @@ export default {
     shortDescription: "stAI tuned for an Artificial Intelligence accessible to anyone! 🧠", 
     longDescription: "stAI tuned for an Artificial Intelligence accessible to anyone! 🧠", 
     logo: {
-        relPath: "/assets/general/blue-bg-logo.png",
-        width: 1920,
-        height: 1124
+        relPath: "/assets/general/home_bg.webp",
+        width: 3840,
+        height: 2160
     },
     logoPath: "/assets/general/logo.svg", // TODO: There should be an image with a fixed size
     basePath: "https://staituned.com"
