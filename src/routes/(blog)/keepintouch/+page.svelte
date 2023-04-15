@@ -1,20 +1,17 @@
 <script lang="ts">
-	import { Button, PageTransition } from '@shared/components/ui-core'
 	import SecondaryPageMetaTags from '@lib/seo/SecondaryPageMetaTags.svelte'
+	import api from '@lib/services'
+	import { Button } from '@shared/components/ui-core'
 
-	let formData = {
-		subject: '',
+	let formContactData = {
 		name: '',
+		subject: '',
 		email: '',
-		body: ''
+		text: ''
 	}
-
-	function submitForm() {
-		const subject = encodeURI(`${formData.subject} | ${formData.name} | ${formData.email}`)
-		const url = `mailto:staituned.owner@gmail.com?subject=${subject}&body=${encodeURI(
-			formData.body
-		)}`
-		if (formData.subject !== '' && formData.body !== '' && formData.email !== '') window.open(url)
+	const handleSubmit = async () => {
+		await api.contacts.create(formContactData)
+		formContactData = { name: '', subject: '', email: '', text: '' }
 	}
 </script>
 
@@ -47,14 +44,14 @@
 
 	<form
 		class="relative p-8 w-full sm:w-2/3 text-sm bg-secondary-600 rounded space-y-4"
-		on:submit|preventDefault={submitForm}
+		on:submit|preventDefault={handleSubmit}
 	>
 		<div
 			class="bg-primary-600 absolute -top-5 lg:-top-10 right-5 lg:right-10 w-full h-full -z-10 rounded"
 		/>
 		<input
 			class="w-full rounded-lg p-3 border-0 shadow"
-			bind:value={formData.name}
+			bind:value={formContactData.name}
 			type="text"
 			id="fname"
 			name="fname"
@@ -63,7 +60,7 @@
 		/><br />
 		<input
 			class="w-full rounded-lg p-3 border-0 shadow"
-			bind:value={formData.subject}
+			bind:value={formContactData.subject}
 			type="text"
 			id="fobject"
 			name="fobject"
@@ -72,7 +69,7 @@
 		/><br />
 		<input
 			class="w-full rounded-lg p-3 border-0 shadow"
-			bind:value={formData.email}
+			bind:value={formContactData.email}
 			type="email"
 			id="femail"
 			name="femail"
@@ -80,7 +77,7 @@
 			required
 		/><br />
 		<textarea
-			bind:value={formData.body}
+			bind:value={formContactData.text}
 			id="ftext"
 			name="ftext"
 			placeholder="Text*"
