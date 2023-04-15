@@ -9,9 +9,28 @@
 		email: '',
 		text: ''
 	}
+
+	let buttonMsg = 'Send'
+
 	const handleSubmit = async () => {
-		await api.contacts.create(formContactData)
-		formContactData = { name: '', subject: '', email: '', text: '' }
+		try {
+			buttonMsg = 'Sending...'
+			await api.contacts.create(formContactData)
+			setTimeout(() => {
+				formContactData = { name: '', subject: '', email: '', text: '' }
+				buttonMsg = 'Success!'
+			}, 1000)
+			setTimeout(() => {
+				buttonMsg = 'Send'
+			}, 2000)
+		} catch (err) {
+			console.error(err)
+			buttonMsg = 'Sending failed'
+			setTimeout(() => {
+				formContactData = { name: '', subject: '', email: '', text: '' }
+				buttonMsg = 'Send'
+			}, 1000)
+		}
 	}
 </script>
 
@@ -86,6 +105,6 @@
 			required
 		/>
 
-		<Button type="submit" variant="primary" width="full" rounded="lg">Send</Button>
+		<Button type="submit" variant="primary" width="full" rounded="lg">{buttonMsg}</Button>
 	</form>
 </div>
