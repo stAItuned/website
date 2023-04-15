@@ -4,7 +4,7 @@ import type { ErrorResponse } from '@lib/models'
 import type { ContactAttributes, ContactResponse } from '@lib/models/contact'
 import type { AxiosError, AxiosResponse } from 'axios'
 
-import { PUBLIC_CREATE_CONTACT_TOKEN as token } from '$env/static/public'
+const token = import.meta.env.VITE_CREATE_CONTACT_TOKEN
 
 export const contacts = {
 	create: (data: ContactAttributes): Promise<ContactResponse> => {
