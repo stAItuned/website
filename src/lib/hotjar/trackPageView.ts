@@ -1,4 +1,3 @@
-import { PUBLIC_HOTJAR_TRACKING_ID } from '$env/static/public'
 import { onMount } from 'svelte'
 
 declare global {
@@ -18,9 +17,9 @@ export function trackPageview(request: Request) {
 				function () {
 					;(window.hj.q = window.hj.q || []).push(arguments)
 				}
-			window.hj.q?.push(['_setAccount', 'PUBLIC_HOTJAR_TRACKING_ID'])
+			window.hj.q?.push(['_setAccount', 'VITE_HOTJAR_TRACKING_ID'])
 			window.hj._hjSettings = {
-				hjid: PUBLIC_HOTJAR_TRACKING_ID,
+				hjid: VITE_HOTJAR_TRACKING_ID,
 				hjsv: 6
 			}
 			const { pathname, search } = new URL(import.meta.env.VITE_APP_URL + import.meta.url)
