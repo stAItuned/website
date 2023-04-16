@@ -17,9 +17,9 @@ export function trackPageview(request: Request) {
 				function () {
 					;(window.hj.q = window.hj.q || []).push(arguments)
 				}
-			window.hj.q?.push(['_setAccount', 'VITE_HOTJAR_TRACKING_ID'])
+			window.hj.q?.push(['_setAccount', import.meta.env.VITE_HOTJAR_TRACKING_ID])
 			window.hj._hjSettings = {
-				hjid: VITE_HOTJAR_TRACKING_ID,
+				hjid: import.meta.env.VITE_HOTJAR_TRACKING_ID,
 				hjsv: 6
 			}
 			const { pathname, search } = new URL(import.meta.env.VITE_APP_URL + import.meta.url)
