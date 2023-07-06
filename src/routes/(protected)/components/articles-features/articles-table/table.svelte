@@ -2,9 +2,10 @@
 	import type { ArticlesResponse } from '@lib/models'
 
 	import { TableBody, TableHead, TableHeadCell, TableSearch } from 'flowbite-svelte'
-	import { ArticleRow } from '@protected/components/draft-articles-table'
-	import { tableHeadCells } from '@protected/components/draft-articles-table/config'
+	import { ArticleRow } from '@protected/components/articles-features/articles-table'
+	import { tableHeadCells } from '@protected/components/articles-features/articles-table/config'
 
+	export let hasActions: boolean = true
 	export let articles: ArticlesResponse
 
 	let searchTerm = ''
@@ -29,7 +30,7 @@
 	</TableHead>
 	<TableBody>
 		{#each filteredArticles as article}
-			<ArticleRow {article} />
+			<ArticleRow {article} {hasActions} />
 		{/each}
 	</TableBody>
 </TableSearch>

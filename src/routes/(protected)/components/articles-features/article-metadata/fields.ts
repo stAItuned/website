@@ -7,7 +7,7 @@ import CheckSlugInput from './check-slug-input.svelte'
 export const targetField = (targets: TargetsResponse): SelectProps => ({
 	name: 'target',
 	label: 'Target',
-	options: targets.data.map((target) => ({
+	options: targets.data!.map((target) => ({
 		label: target.attributes.label,
 		value: target.id.toString()
 	})),
@@ -17,7 +17,7 @@ export const targetField = (targets: TargetsResponse): SelectProps => ({
 export const topicsField = (topics: TopicsResponse, selected: string[]): MultiSelectProps => ({
 	name: 'topics',
 	label: 'Topics',
-	options: topics.data.map((topic) => ({
+	options: topics.data!.map((topic) => ({
 		label: topic.attributes.label,
 		value: topic.id.toString()
 	})),

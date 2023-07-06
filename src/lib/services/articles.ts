@@ -71,6 +71,26 @@ export const articles = {
 		}
 	},
 
+	inReview: {
+		fetch: (): Promise<ArticlesResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get(`/articles/in-review`)
+					.then((res: AxiosResponse<ArticlesResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		}
+	},
+
+	published: {
+		fetch: (): Promise<ArticlesResponse> => {
+			return new Promise((resolve, reject) => {
+				req.get(`/articles/published`)
+					.then((res: AxiosResponse<ArticlesResponse>) => resolve(res.data))
+					.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+			})
+		}
+	},
+
 	checkSlugAvailability: (slug: string): Promise<void> => {
 		return new Promise((resolve, reject) => {
 			req.get(`/articles/${slug}/is-available`)

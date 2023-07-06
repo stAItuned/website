@@ -22,6 +22,7 @@ export const navigation: SidebarNavigation = {
 			icon: Folder,
 			children: [
 				{ label: 'Published articles', href: '/articles/published' },
+				{ label: 'In-review articles', href: '/articles/in-review' },
 				{ label: 'Draft articles', href: '/articles/draft' }
 			]
 		},
@@ -30,11 +31,10 @@ export const navigation: SidebarNavigation = {
 		{
 			props: { label: 'Blog', href: '/' },
 			icon: Newspaper,
-			mobileOnly: true
 		},
 		{
 			props: { label: 'Settings', href: '/settings' },
 			icon: Cog6Tooth
-		}
+		},
 	]
 }

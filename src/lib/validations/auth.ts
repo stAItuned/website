@@ -30,3 +30,9 @@ export const ResetPasswordSchema = yup.object().shape({
 	passwordConfirmation: PasswordConfirmationSchema("password"),
 	code: yup.string().required()
 })
+
+export const ChangePasswordSchema = yup.object().shape({
+	currentPassword: yup.string().required('Current password is required'),
+	password: PasswordSchema,
+	passwordConfirmation: PasswordConfirmationSchema("password")
+})

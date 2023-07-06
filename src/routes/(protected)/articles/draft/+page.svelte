@@ -8,8 +8,8 @@
 	import type { ArticlesResponse } from '@lib/models'
 
 	import { Heading, ListPlaceholder, P } from 'flowbite-svelte'
-	import { ArticlesTable } from '@protected/components'
-	import { isLoadingNeeded } from '@protected/components/draft-articles-table/config'
+	import { ArticlesTable } from '@protected/components/articles-features'
+	import { isLoadingNeeded } from '@protected/components/articles-features/articles-table/config'
 
 	const { addNotification } = getNotificationsContext()
 
@@ -39,10 +39,11 @@
 		Are you ready to write a new article? Setup main info and then you will be able to write!
 	</p>
 	<P class='mb-4'>
-		Setup main info such as title, description, targte and topics. An article should have a unique
-		slug, so choose a good title beacuse the slug will be automatically generated from it.
+		Setup main info such as title, description, target and topics. An article should have a unique
+		slug, so choose a good title because the slug will be automatically generated from it.
 	</P>
 </header>
+
 {#if !$isLoadingNeeded}
 	{#if articles?.data.length}
 		<ArticlesTable {articles} />

@@ -22,8 +22,10 @@
 	})
 </script>
 
-<Breadcrumb>
-	{#each breadcrumb as item, idx}
-		<BreadcrumbItem href={item.href} home={idx === 0}>{item.label}</BreadcrumbItem>
-	{/each}
-</Breadcrumb>
+<div class=''>
+	<Breadcrumb>
+		{#each breadcrumb as item, idx}
+			<BreadcrumbItem href={item.href} home={idx === 0}>{item.label}</BreadcrumbItem>
+		{/each}
+	</Breadcrumb>
+</div>

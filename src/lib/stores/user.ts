@@ -8,7 +8,7 @@ export default user
 
 export const utils = {
 	name: {
-		getFullname: (user: UserStore): string => `${user?.firstname} ${user?.lastname}`,
-		getInitials: (user: UserStore): string => `${user?.firstname[0]}${user?.lastname[0]}`.toUpperCase()
+		getFullname: (user: UserStore): string => `${user?.author.firstname} ${user?.author.lastname}`,
+		getInitials: (user: UserStore): string => `${user?.author.firstname?.at(0)}${user?.author.lastname?.at(0)}`.toUpperCase()
 	}
 }

@@ -15,7 +15,7 @@
 
 	let loading = true
 
-	onMount(async () => {
+	onMount(() => {
 		api.auth.me()
 			.then((res) => user.set(res))
 			.catch(() => user.set(null))

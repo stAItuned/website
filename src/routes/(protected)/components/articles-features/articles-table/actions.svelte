@@ -13,6 +13,7 @@
 	import { notify } from '@lib/hooks'
 	import { getNotificationsContext } from 'svelte-notifications'
 
+	export let hasActions: boolean = true
 	export let hidden: boolean
 	export let article: BaseData<ArticleAttributes>
 
@@ -107,60 +108,64 @@
 			</div>
 		</div>
 
-		<!-- Actions -->
-		<div>
-			<Sidebar class='!w-full !pb-6'>
-				<SidebarWrapper divClass='overflow-y-auto'>
-					<SidebarGroup border>
-						{#each actions(article) as action}
-							<SidebarItem label={action.label} href={action?.href} on:click={action?.callback} class='text-slate-600'>
-								<svelte:fragment slot='icon'>
-									<svelte:component this={action.icon} />
-								</svelte:fragment>
-							</SidebarItem>
-						{/each}
-					</SidebarGroup>
-				</SidebarWrapper>
-			</Sidebar>
+		{#if hasActions}
+			<!-- Actions -->
+			<div>
+				<Sidebar class='!w-full !pb-6'>
+					<SidebarWrapper divClass='overflow-y-auto'>
+						<SidebarGroup border>
+							{#each actions(article) as action}
+								<SidebarItem label={action.label} href={action?.href} on:click={action?.callback}
+														 class='text-slate-600'>
+									<svelte:fragment slot='icon'>
+										<svelte:component this={action.icon} />
+									</svelte:fragment>
+								</SidebarItem>
+							{/each}
+						</SidebarGroup>
+					</SidebarWrapper>
+				</Sidebar>
 
 
-			<Modal bind:open={$hasDeleteModalCalled} variant='danger' callback={handleDelete}
-						 on:hide={() => $hasDeleteModalCalled = false}>
-				<h3 class='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
-					Are you sure you want to delete this article?
-				</h3>
-			</Modal>
+				<Modal bind:open={$hasDeleteModalCalled} variant='danger' callback={handleDelete}
+							 on:hide={() => $hasDeleteModalCalled = false}>
+					<h3 class='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
+						Are you sure you want to delete this article?
+					</h3>
+				</Modal>
 
 
-			<Modal size='md' bind:open={$hasBeenPublishModalCalled} variant='warning' callback={handlePublish}
-						 on:hide={() => $hasBeenPublishModalCalled = false}>
-				<h3 class='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
-					Are you sure you want to publish this article?
-				</h3>
-				<Alert color='yellow' class='mb-6 text-left'>
+				<Modal size='md' bind:open={$hasBeenPublishModalCalled} variant='warning' callback={handlePublish}
+							 on:hide={() => $hasBeenPublishModalCalled = false}>
+					<h3 class='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
+						Are you sure you want to publish this article?
+					</h3>
+					<Alert color='yellow' class='mb-6 text-left'>
     			<span slot='icon'>
 						<ExclamationTriangle variation='solid' />
     			</span>
-					<p>
-						Please keep in mind that by confirming you will send your article to review and it will no longer be
-						editable.
-					</p>
-				</Alert>
-				<Alert class='mb-6 text-left'>
+						<p>
+							Please keep in mind that by confirming you will send your article to review and it will no longer be
+							editable.
+						</p>
+					</Alert>
+					<Alert class='mb-6 text-left'>
 					<span slot='icon'>
 						<InformationCircle variation='solid' />
 					</span>
-					<p>
-						You will always be able to check the status of your article within
-						<a href='/articles/in-review' class='font-semibold underline hover:text-blue-800 dark:hover:text-blue-900'>
-							articles in review
-						</a> page.
-					</p>
-				</Alert>
-			</Modal>
+						<p>
+							You will always be able to check the status of your article within
+							<a href='/articles/in-review'
+								 class='font-semibold underline hover:text-blue-800 dark:hover:text-blue-900'>
+								articles in review
+							</a> page.
+						</p>
+					</Alert>
+				</Modal>
 
 
-		</div>
+			</div>
+		{/if}
 	</div>
 </Drawer>
 

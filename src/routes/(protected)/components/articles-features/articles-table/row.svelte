@@ -3,8 +3,9 @@
 	import type { ArticleAttributes, BaseData } from '@lib/models'
 
 	import { Badge, TableBodyCell, TableBodyRow } from 'flowbite-svelte'
-	import { Actions } from '@protected/components/draft-articles-table'
+	import { Actions } from '@protected/components/articles-features/articles-table'
 
+	export let hasActions: boolean = true
 	export let article: BaseData<ArticleAttributes>
 
 	let hiddenActions = true
@@ -24,5 +25,5 @@
 			{article.attributes.target?.data?.attributes?.label}
 		</Badge>
 	</TableBodyCell>
-	<Actions bind:hidden={hiddenActions} {article} />
+	<Actions bind:hidden={hiddenActions} {article} {hasActions} />
 </TableBodyRow>

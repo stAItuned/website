@@ -34,16 +34,12 @@
 		api.articles.draft.fetchBySlug(slug)
 			.then(res => {
 				article = res
-				lastSavedContent = content = article.data.attributes.content
-				updatedAt = article.data.attributes.updatedAt
+				lastSavedContent = content = article.data?.attributes.content
+				updatedAt = article.data?.attributes.updatedAt
 			})
 			.catch((err) => addNotification(notify.error(err)))
 			.finally(() => loading = false)
 	})
-
-	// let { content } = article.data.attributes
-	// let { updatedAt } = article.data.attributes
-	// let lastSavedContent = content
 
 	const handleSave = () => {
 		if (content !== lastSavedContent)

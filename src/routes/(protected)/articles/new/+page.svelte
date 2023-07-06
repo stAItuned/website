@@ -6,7 +6,7 @@
 	import { notify } from '@lib/hooks'
 
 	import { Heading, P } from 'flowbite-svelte'
-	import { ArticleMetadataForm } from '@protected/components'
+	import { ArticleMetadataForm } from '@protected/components/articles-features'
 
 	const { addNotification } = getNotificationsContext()
 
@@ -15,7 +15,7 @@
 			.create({ ...values, cover })
 			.then((res) => {
 				addNotification(notify.success('Your article has been created successfully'))
-				goto(`/articles/draft/${res.data.attributes.slug}/editor`)
+				goto(`/articles/draft/${res.data!.attributes.slug}/editor`)
 			})
 			.catch((err) => addNotification(notify.error(err)))
 	}

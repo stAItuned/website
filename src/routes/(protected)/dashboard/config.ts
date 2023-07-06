@@ -1,4 +1,4 @@
-import type { CardCTAProps } from '@protected/components/dashboard-blocks/types'
+import type { CardCTAProps } from '@protected/components/dashboard-features/types'
 
 export interface CallToAction {
 	props: CardCTAProps,

@@ -1,6 +1,5 @@
-export { ArticleMetadataForm } from './article-metadata'
 export { Sidebar } from './sidebar'
 export { default as Navbar } from './navbar.svelte'
 export { default as Breadcrumb } from './breadcrumb.svelte'
-export { ArticlesTable } from './draft-articles-table'
 export { default as Modal } from './modal.svelte'
+export { default as UnlockProfileCTA } from './unlock-profile-cta.svelte'

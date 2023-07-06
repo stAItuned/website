@@ -3,19 +3,10 @@
 	import 'chart.js/auto'
 	import { getNotificationsContext } from 'svelte-notifications'
 
-	import { BetaReleaseAlert, CardCTA } from '@protected/components/dashboard-blocks'
+	import { BetaReleaseAlert, CardCTA } from '@protected/components/dashboard-features'
 	import { callToActions } from './config'
 
 	const { addNotification } = getNotificationsContext()
-
-	const dataPie = {
-		labels: ['Published', 'Draft', 'Reviewing'],
-		datasets: [
-			{
-				data: [2, 5, 1]
-			}
-		]
-	}
 </script>
 
 <header>

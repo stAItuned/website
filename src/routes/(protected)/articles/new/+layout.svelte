@@ -1,23 +1,31 @@
 <script lang='ts'>
 	import { Button, Modal } from 'flowbite-svelte'
+	import { user } from '@lib/stores'
+	import { slide } from 'svelte/transition'
+	import { quintOut } from 'svelte/easing'
 </script>
 
-<div>
-	<Modal title='Complete your profile' size='lg' open={false} permanent>
-		<p class='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-			With less than a month to go before the European Union enacts new consumer privacy laws for its citizens,
-			companies around the world are updating their terms of service agreements to comply.
-		</p>
-		<p class='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-			The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to
-			ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as
-			possible of high-risk data breaches that could personally affect them.
-		</p>
-		<svelte:fragment slot='footer'>
-			<Button>I accept</Button>
-			<Button color='alternative'>Decline</Button>
-		</svelte:fragment>
-	</Modal>
-</div>
+{#if !$user.author.unlocked}
+	<div>
+		<Modal
+			title='Complete your profile'
+			size='lg'
+			open={true} permanent transition={slide}
+			params={{duration: 300, easing: quintOut}}
+		>
+			<p class='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
+				Please complete your profile to continue and write your first article.
+			</p>
+			<p class='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
+				It only takes a few seconds for the essential information and you will only need to provide a little information
+				about yourself.
+			</p>
+			<svelte:fragment slot='footer'>
+				<Button href='/profile/complete'>Complete now</Button>
+				<Button href='/dashboard' color='alternative'>Later</Button>
+			</svelte:fragment>
+		</Modal>
+	</div>
+{/if}
 
 <slot />

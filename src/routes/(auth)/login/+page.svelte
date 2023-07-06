@@ -2,13 +2,12 @@
 	import { Form, type FormProps } from 'svelte-forms-lib'
 
 	import { LoginSchema } from '@lib/validations'
-	import user from '@lib/stores/user'
 	import api from '@lib/services'
 
 	import { loginFields as fields } from '../fields'
 
 	import { goto } from '$app/navigation'
-	import { Hr, Button, Card } from 'flowbite-svelte'
+	import { Button, Card, Hr } from 'flowbite-svelte'
 	import { Providers } from '@auth/components'
 	import { getNotificationsContext } from 'svelte-notifications'
 	import { notify } from '@lib/hooks'
@@ -21,11 +20,7 @@
 		onSubmit: ({ email, password }) => {
 			api.auth
 				.login({ identifier: email as string, password: password as string })
-				.then((res) => {
-					user.set(res)
-					goto('/dashboard')
-						.then(() => addNotification(notify.success(`Welcome, ${res.firstname}!`)))
-				})
+				.then(() => goto('/dashboard'))
 				.catch((err) => addNotification(notify.error(err)))
 		}
 	}

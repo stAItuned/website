@@ -14,7 +14,7 @@ export const CreateArticleSchema = (
 		target: yup
 			.string()
 			.oneOf(
-				targets.data.map((target) => target.id.toString()),
+				targets.data!.map((target) => target.id.toString()),
 				'Invalid Target'
 			)
 			.required('Target is required'),
@@ -23,7 +23,7 @@ export const CreateArticleSchema = (
 			.min(1, 'Pick at least 1 topic')
 			.of(yup.string()
 				.oneOf(
-					topics.data.map(topic => topic.id.toString()),
+					topics.data!.map(topic => topic.id.toString()),
 					'Invalid topic')
 			)
 	})

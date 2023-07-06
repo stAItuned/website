@@ -14,8 +14,8 @@
 	const handleLogout = () => {
 		api.auth.logout()
 			.then(() => {
-				user.set(null)
 				goto('/').then(() => addNotification(notify.success('See you!')))
+				user.set(null)
 			})
 			.catch((err) => addNotification(notify.error(err)))
 	}
@@ -25,7 +25,7 @@
 	<SidebarItem
 		label='Logout'
 		on:click={handleLogout}
-		class='hover:!bg-slate-200'
+		class='hover:!bg-slate-200 mt-2'
 	>
 		<svelte:fragment slot='icon'>
 			<svelte:component this={ArrowLeftOnRectangle} />

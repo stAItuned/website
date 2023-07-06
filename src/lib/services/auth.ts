@@ -21,7 +21,7 @@ export const auth = {
 
 	me: (): Promise<UserAttributes> => {
 		return new Promise((resolve, reject) => {
-			req.get(`/users/me`)
+			req.get(`/users/me?populate[author][populate][0]=avatar`)
 				.then((res: AxiosResponse<UserAttributes>) => resolve(res.data))
 				.catch((err: AxiosError<ErrorResponse>) => reject(err.request))
 		})
@@ -77,6 +77,18 @@ export const auth = {
 					localStorage.setItem('token', res.data.jwt)
 					resolve(res.data.user)
 				})
+				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
+		})
+	},
+
+	changePassword: (data: {
+		currentPassword: string,
+		password: string,
+		passwordConfirmation: string
+	}): Promise<UserAttributes> => {
+		return new Promise((resolve, reject) => {
+			req.post('/auth/change-password', data)
+				.then((res: AxiosResponse<UserAttributes>) => resolve(res.data))
 				.catch((err: AxiosError<ErrorResponse>) => reject(err?.response?.data.error.message))
 		})
 	},
