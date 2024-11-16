@@ -36,8 +36,8 @@
 	const authorsLen = data.authors.filter((author: Author) =>
 		author.team.some((t) => t === 'Writers')
 	).length
-	const activeUsers = 274
-	const sessions = 608
+	const activeUsers = 334
+	const sessions = 420
 
 	$: articles = articlesToShow === 'Recent' ? recentArticles : relevantArticles
 </script>
@@ -116,7 +116,7 @@
 			</a>
 		</div>
 	</div>
-	<p class="text-xs text-right px-2 bg-transparent">* Users and sessions are referred to as last month's data</p>
+	<p class="text-xs text-right px-2 bg-transparent">* Users and sessions are referred to the last three month data</p>
 
 	<!-- Stats -->
 	<!-- <section class="bg-secondary-600 h-full  text-white py-4 w-full">
