@@ -23,15 +23,15 @@ export async function GET() {
       </url>
       <url>
         <loc>${info.basePath}/keepintouch/</loc>
-        <changefreq>weekly</changefreq>
+        <changefreq>never</changefreq>
       </url>
       <url>
         <loc>${info.basePath}/meet/</loc>
-        <changefreq>weekly</changefreq>
+        <changefreq>monthly</changefreq>
       </url>
       <url>
         <loc>${info.basePath}/learn/</loc>
-        <changefreq>weekly</changefreq>
+        <changefreq>never</changefreq>
       </url>
       ${data.articles
         .map(
@@ -39,7 +39,7 @@ export async function GET() {
         <url>
           <loc>${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}</loc>
           <lastmod>${new Date(article.metadata.date).toISOString().split('T')[0]}</lastmod>
-          <changefreq>weekly</changefreq>
+          <changefreq>monthly</changefreq>
           <xhtml:link
             rel="alternate"
             hreflang="${article.metadata.language === 'Italian' ? 'it' : 'en'}"
