@@ -18,8 +18,8 @@ export async function GET() {
     >
       <url>
         <loc>${info.basePath}/</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
       </url>
       <url>
         <loc>${info.basePath}/keepintouch/</loc>
@@ -31,7 +31,8 @@ export async function GET() {
       </url>
       <url>
         <loc>${info.basePath}/learn/</loc>
-        <changefreq>never</changefreq>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
       </url>
       ${data.articles
         .map(
@@ -39,12 +40,17 @@ export async function GET() {
         <url>
           <loc>${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}</loc>
           <lastmod>${new Date(article.metadata.date).toISOString().split('T')[0]}</lastmod>
-          <changefreq>monthly</changefreq>
+          <changefreq>weekly</changefreq>
+          <priority>0.7</priority>
           <xhtml:link
             rel="alternate"
             hreflang="${article.metadata.language === 'Italian' ? 'it' : 'en'}"
             href="${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}"
           />
+          <image:image>
+            <image:loc>${article.metadata.cover}</image:loc>
+            <image:title>${article.metadata.title}</image:title>
+          </image:image>
         </url>
         `.trim()
         )
