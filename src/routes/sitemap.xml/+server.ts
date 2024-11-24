@@ -48,9 +48,9 @@ export async function GET() {
             href="${info.basePath}/learn/${article.metadata.target.toLowerCase()}/${article.slug}"
           />
           <image:image>
-            <image:loc>${article.metadata.cover}</image:loc>
-            <image:title>${article.metadata.title}</image:title>
-          </image:image>
+              <image:loc>${info.basePath}${article.metadata.cover.replace('./', '')}</image:loc>
+              <image:title>${article.metadata.title}</image:title>
+            </image:image>
         </url>
         `.trim()
         )
