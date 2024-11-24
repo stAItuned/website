@@ -1,8 +1,8 @@
 export const CATEGORIES = ['Recent', 'Relevant'] as const
 
-export const ARTICLE_CARD_COLORS = ['#ffb347', '#a7c7e7', '#47efff', '#77dd77'] as const
+export const ARTICLE_CARD_COLORS = ['#ffb347', '#a7c7e7', '#47efff', '#77dd77', '#77ddb3', '#b9dd77', '#ddc477', '#dd8677'] as const
 
-export const AMOUNT_OF_ARTICLES = 6 as const
+export const AMOUNT_OF_ARTICLES = 8 as const
 
 export const RELEVANT_ARTICLES_SLUG = [
     'how-to-handle-imbalanced-data-machine-learning',
