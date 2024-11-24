@@ -36,7 +36,7 @@
 	let articlesToShow: Category = 'Recent'
 
 	const setShow = (newState: Category) => {
-		articlesToShow = newState.toLowerCase()
+		articlesToShow = newState
 	}
 
 	const authorsLen = data.authors.filter((author: Author) =>
@@ -142,9 +142,9 @@
 			{#each Home.CATEGORIES as category}
 				<div
 					class="w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition"
-					class:text-secondary-600={articlesToShow.toLowerCase() === category.toLowerCase()}
-					class:text-gray-400={articlesToShow.toLowerCase() !== category.toLowerCase()}
-					on:click={() => setShow(category.toLowerCase())}
+					class:text-secondary-600={articlesToShow === category}
+					class:text-gray-400={articlesToShow !== category}
+					on:click={() => setShow(category)}
 				>
 					{`${category} Articles`}
 				</div>
