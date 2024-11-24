@@ -15,9 +15,15 @@
 
 	export let data: PageData
 
-	const recentArticles: Article[] = date.sort
-		.mostRecentArticleFirst(data.articles)
-		.slice(0, Home.AMOUNT_OF_ARTICLES)
+    const recentArticles: Article[] = date.sort
+        .mostRecentArticleFirst(data.articles.map((article) => ({
+          ...article,
+          metadata: {
+            ...article.metadata,
+            target: article.metadata.target.toLowerCase(),
+          },
+        })))
+        .slice(0, Home.AMOUNT_OF_ARTICLES);
 
 	const relevantArticles = date.sort.mostRecentArticleFirst(
 		Home.RELEVANT_ARTICLES_SLUG.map((slug) =>
@@ -30,7 +36,7 @@
 	let articlesToShow: Category = 'Recent'
 
 	const setShow = (newState: Category) => {
-		articlesToShow = newState
+		articlesToShow = newState.toLowerCase()
 	}
 
 	const authorsLen = data.authors.filter((author: Author) =>
