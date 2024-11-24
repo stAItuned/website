@@ -155,6 +155,7 @@
 				<Cards.Home
 					{article}
 					color={Home.ARTICLE_CARD_COLORS[idx % Home.ARTICLE_CARD_COLORS.length]}
+                    href={`/learn/${article.metadata.target}/${article.slug}`}
 				/>
 			{/each}
 		</div>
