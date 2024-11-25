@@ -35,7 +35,7 @@
 	let open_filters = false
 
 	let currentPage = 1
-	const pageSize = 3 * 3 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
+	const pageSize = 3 * 5 // ideally a multiple of 5 (10?), but temporarily left at 2 for developing purposes
 
 	const setPage = (e: { detail: { page: number } }) => {
 		scrollTo(0, 0);
