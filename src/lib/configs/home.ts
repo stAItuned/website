@@ -5,7 +5,7 @@ export const ARTICLE_CARD_COLORS = ['#ffb347', '#a7c7e7', '#47efff', '#77dd77', 
 export const AMOUNT_OF_ARTICLES = 8 as const
 
 export const RELEVANT_ARTICLES_SLUG = [
-    'imarena-ai-content-creation-guide',
+    'imarena-ai-benchmarking-platform',
     'google-ai-studio-guide',
     'openai-o3-model-ai-advancements',
     'ai-translator-lara-global-communication',
