@@ -42,8 +42,8 @@
 	const authorsLen = data.authors.filter((author: Author) =>
 		author.team.some((t) => t === 'Writers')
 	).length
-	const activeUsers = 497
-	const sessions = 547
+	const activeUsers = 550
+	const sessions = 663
 
 	$: articles = articlesToShow === 'Recent' ? recentArticles : relevantArticles
 </script>
