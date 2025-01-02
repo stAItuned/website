@@ -6,7 +6,7 @@ export const ARTICLE_CARD_COLORS = [
     '#ff7f50', // Coral
     '#ffa07a', // Light Coral
     '#ffb347', // Vibrant Orange
-    '#ffeb99', // Pastel Yellow
+//     '#ffeb99', // Pastel Yellow
     '#ffd700', // Gold
     '#b9dd77', // Lime Green
     '#77dd77', // Light Green
@@ -54,7 +54,7 @@ export const ARTICLE_CARD_COLORS = [
 //     '#6fa8dc', // Medium Blue - Balanced technical articles
 // ] as const;
 
-export const AMOUNT_OF_ARTICLES = 24 as const
+export const AMOUNT_OF_ARTICLES = 22 as const
 
 export const RELEVANT_ARTICLES_SLUG = [
     'imarena-ai-benchmarking-platform',
