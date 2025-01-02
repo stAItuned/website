@@ -1,10 +1,10 @@
 export const CATEGORIES = ['Recent', 'Relevant'] as const
 
 export const ARTICLE_CARD_COLORS = [
-    '#ffa07a', // Light Coral
-    '#ff7f50', // Coral
     '#ff6347', // Tomato Red
     '#ff4500', // Orange-Red
+    '#ff7f50', // Coral
+    '#ffa07a', // Light Coral
     '#ffb347', // Vibrant Orange
     '#ffeb99', // Pastel Yellow
     '#ffd700', // Gold
