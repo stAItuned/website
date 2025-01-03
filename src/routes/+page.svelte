@@ -25,15 +25,13 @@
         })))
         .slice(0, Home.AMOUNT_OF_ARTICLES);
 
-	const relevantArticles = date.sort.mostRecentArticleFirst(
-		Home.RELEVANT_ARTICLES_SLUG.map((slug) =>
-			data.articles.find((article: Article) => article.slug === slug)
-		)
-			.filter((article) => article !== undefined)
-			.slice(0, Home.AMOUNT_OF_ARTICLES) as Article[]
-	)
+	const relevantArticles = Home.RELEVANT_ARTICLES_SLUG.map((slug) =>
+	data.articles.find((article: Article) => article.slug === slug)
+    )
+	.filter((article) => article !== undefined)
+	.slice(0, Home.AMOUNT_OF_ARTICLES) as Article[];
 
-	let articlesToShow: Category = 'Recent'
+	let articlesToShow: Category = 'Relevant'
 
 	const setShow = (newState: Category) => {
 		articlesToShow = newState
