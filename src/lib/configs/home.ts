@@ -58,13 +58,14 @@ export const AMOUNT_OF_ARTICLES = 22 as const
 
 export const RELEVANT_ARTICLES_SLUG = [
     'imarena-ai-benchmarking-platform',
+    'deepseek-v3-open-source-ai',
     'large-concept-model-meta',
-    'gartner-hype-cycle-generative-ai-2024',
-    'sora-openai-text-to-video-tool',
-    'deep-learning-pytorch-template',
     'google-ai-studio-guide',
+    'modernbert-transformer-innovations',
+    'gartner-hype-cycle-generative-ai-2024',
+    'deep-learning-pytorch-template',
+    'time-series-forecasting-with-fraction-differentiation',
     'search-gpt-vs-google-search-comparison',
     'notebooklm-ai-collaboration-and-comprehension',
-    'time-series-forecasting-with-fraction-differentiation',
-    'ai-translator-lara-global-communication',
+
 ] as const
