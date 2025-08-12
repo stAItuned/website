@@ -5,6 +5,7 @@ import { allPosts } from '@/lib/contentlayer'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { AuthorAvatar } from '@/components/AuthorAvatar'
 import { MarkdownContent } from '@/components/MarkdownContent'
+import { RelatedArticles } from '@/components/RelatedArticles'
 
 interface ArticlePageProps {
   params: {
@@ -17,13 +18,40 @@ export default function ArticlePage({ params }: ArticlePageProps) {
   const { target, slug } = params
 
   // Find the article
-  const article = allPosts.find((post: any) => 
+  const article = allPosts.find((post) => 
     post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
   )
 
   if (!article) {
     notFound()
   }
+
+  // Find related articles
+  const getRelatedArticles = () => {
+    // Filter articles by same target, excluding current article
+    let relatedArticlesByTarget = allPosts.filter((post) => 
+      post.target?.toLowerCase() === target.toLowerCase() && 
+      post.slug !== slug &&
+      post.published !== false
+    )
+
+    // If we have topics, try to find articles with similar topics
+    if (article.topics && article.topics.length > 0) {
+      const relatedByTopics = relatedArticlesByTarget.filter((post) =>
+        post.topics?.some((topic: string) => article.topics?.includes(topic))
+      )
+      
+      // Use topic-based if we have enough, otherwise fall back to target-based
+      if (relatedByTopics.length > 0) {
+        relatedArticlesByTarget = relatedByTopics
+      }
+    }
+
+    // Return maximum of 5 related articles
+    return relatedArticlesByTarget.slice(0, 5)
+  }
+
+  const relatedArticles = getRelatedArticles()
 
   const targetDisplay = target.charAt(0).toUpperCase() + target.slice(1)
 
@@ -120,6 +148,19 @@ export default function ArticlePage({ params }: ArticlePageProps) {
           />
         </article>
       </section>
+
+      {/* Related Articles */}
+      <RelatedArticles relatedArticles={relatedArticles.map(post => ({
+        title: post.title,
+        slug: post.slug,
+        cover: post.cover,
+        author: post.author,
+        date: post.date,
+        meta: post.meta,
+        readingTime: post.readingTime,
+        target: post.target,
+        topics: post.topics
+      }))} />
     </PageTransition>
   )
 }

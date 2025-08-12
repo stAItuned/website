@@ -10,6 +10,12 @@ const targets = [
     image: '/assets/learn/newbie-card.jpg'
   },
   {
+    name: 'Midway',
+    slug: 'midway', 
+    description: 'Building on the basics? Explore intermediate AI concepts and applications.',
+    image: '/assets/learn/midway-card.png'
+  },
+  {
     name: 'Expert', 
     slug: 'expert',
     description: 'Ready for advanced AI concepts and cutting-edge research.',

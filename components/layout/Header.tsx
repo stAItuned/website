@@ -30,7 +30,7 @@ export function Header() {
       <div className="flex justify-between items-start">
         <Link href="/" onClick={() => setIsMenuOpen(false)}>
           <Image
-            className="h-[30px] lg:h-[50px] hover:cursor-pointer"
+            className="h-[30px] lg:h-[50px] w-auto hover:cursor-pointer"
             src={isHomepage ? "/assets/general/logo-text.png" : "/assets/general/logo-text-dark.png"}
             alt="stAItuned logo"
             width={200}

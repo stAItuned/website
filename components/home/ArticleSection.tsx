@@ -4,14 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-// Function to calculate reading time based on content
-function calculateReadingTime(content?: string): number {
-  if (!content) return 1
-  const wordsPerMinute = 200
-  const wordCount = content.split(/\s+/).length
-  return Math.ceil(wordCount / wordsPerMinute)
-}
-
 type Category = 'Relevant' | 'Recent'
 
 const articleCardColors = [
@@ -75,132 +67,37 @@ function ArticleCard({ article, color }: { article: Article; color: string }) {
     }
     
     // If it's a relative path, convert to absolute path
-    // Images are directly in the article directory, not in a subdirectory
     return `/cms/articles/${article.slug}/${cover}`
   }
 
-  const getAuthorImageSrc = (author?: string) => {
-    if (!author) return '/assets/general/avatar.png'
-    
-    // Convert author name to file format (replace spaces with hyphens, lowercase)
-    const authorSlug = author.toLowerCase().replace(/\s+/g, '-')
-    // Try to get author image, fallback to default avatar
-    return `/assets/team/${authorSlug}.jpg`
-  }
-
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    })
-  }
-
   const imageSrc = getValidImageSrc(article.cover)
-  const authorImageSrc = getAuthorImageSrc(article.author)
-  
-  // Calculate reading time if not provided
-  const readingTime = article.readingTime || calculateReadingTime(article.meta)
   
   return (
-    <div className="relative w-full md:w-1/2 lg:w-1/3 p-4">
-      <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        {/* Image and Date Overlay */}
-        <div className="relative h-48 overflow-hidden">
-          {imageSrc ? (
-            <Image
-              src={imageSrc}
-              alt="Article cover"
-              width={400}
-              height={200}
-              className="w-full h-full object-cover"
-              unoptimized={imageSrc.startsWith('http')}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none'
-              }}
-            />
-          ) : (
-            <div 
-              className="w-full h-full flex items-center justify-center text-white"
-              style={{ background: color }}
-            >
-              <span className="text-lg font-bold">{article.title}</span>
-            </div>
-          )}
-          
-          {/* Date Overlay */}
-          {article.date && (
-            <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm">
-              {formatDate(article.date)}
-            </div>
-          )}
-        </div>
-
-        {/* Card Content */}
-        <div className="p-4">
-          {/* Author Section */}
-          {article.author && (
-            <div className="flex items-center mb-3">
-              <Image
-                src={authorImageSrc}
-                alt={article.author}
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-full object-cover mr-3"
-                onError={(e) => {
-                  e.currentTarget.src = '/assets/general/avatar.png'
-                }}
-              />
-              <span className="text-sm text-gray-600 font-medium">{article.author}</span>
-              
-              {/* Reading Time */}
-              {readingTime && (
-                <div className="ml-auto flex items-center text-sm text-gray-500">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {readingTime}m read
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Title */}
-          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
-            {article.title}
-          </h3>
-
-          {/* Meta Description */}
-          {article.meta && (
-            <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-              {article.meta}
-            </p>
-          )}
-
-          {/* Topics */}
-          {article.topics && article.topics.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {article.topics.slice(0, 2).map((topic) => (
-                <span
-                  key={topic}
-                  className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-                >
-                  {topic}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Read More Button */}
-          <Link href={`/learn/${target}/${article.slug}`}>
-            <button className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200">
-              Read More
-            </button>
-          </Link>
-        </div>
-      </div>
+    <div 
+      className="relative w-full md:w-1/2 sm:text-xl font-bold opacity-80 hover:opacity-100 transition"
+      style={{ background: color }}
+    >
+      <Link href={`/learn/${target}/${article.slug}`}>
+        {imageSrc ? (
+          <Image
+            src={imageSrc}
+            alt="bg"
+            width={400}
+            height={200}
+            className="w-full max-h-[200px] object-cover opacity-30"
+            unoptimized={imageSrc.startsWith('http')}
+            onError={(e) => {
+              // Hide broken images
+              e.currentTarget.style.display = 'none'
+            }}
+          />
+        ) : (
+          <div className="w-full h-[200px] opacity-30" />
+        )}
+        <span className="absolute top-[30%] left-[10%] text-white">
+          {article.title}
+        </span>
+      </Link>
     </div>
   )
 }
@@ -230,19 +127,15 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
         ))}
       </div>
 
-      {/* Article cards */}
-      <div className="bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article, idx) => (
-              <ArticleCard
-                key={article.slug}
-                article={article}
-                color={articleCardColors[idx % articleCardColors.length]}
-              />
-            ))}
-          </div>
-        </div>
+      {/* Article cards - matching Svelte layout exactly */}
+      <div className="flex flex-wrap bg-primary-600 uppercase transition">
+        {articles.map((article, idx) => (
+          <ArticleCard
+            key={article.slug}
+            article={article}
+            color={articleCardColors[idx % articleCardColors.length]}
+          />
+        ))}
       </div>
     </section>
   )
