@@ -1,16 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
+import { useSafePathname } from '@/components/SafeNavigation'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { openSearch } = useSearch()
-  const pathname = usePathname()
+  const pathname = useSafePathname()
   const isHomepage = pathname === '/'
 
   useEffect(() => {

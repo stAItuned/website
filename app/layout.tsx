@@ -7,7 +7,8 @@ import { Footer } from '@/components/layout/Footer'
 import { SearchModal } from '@/components/SearchModal'
 import { SearchProvider } from '@/components/SearchContext'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
-import { PageViewTracker } from '@/components/PageViewTracker'
+import { SafePageViewTracker } from '@/components/PageViewTracker'
+import { ClientOnly } from '@/components/SafeNavigation'
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -37,7 +38,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <Providers>
           <SearchProvider>
-            <PageViewTracker />
+            <SafePageViewTracker />
             <Header />
             <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
               <main className="h-full flex flex-col justify-center">

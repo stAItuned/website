@@ -2,7 +2,7 @@
   "hosting": [
     {
       "target": "production",
-      "source": ".",
+      "source": "out",
       "headers": [
         {
           "source": "**",
@@ -33,7 +33,7 @@
     },
     {
       "target": "development",
-      "source": ".",
+      "source": "out",
       "headers": [
         {
           "source": "**",
