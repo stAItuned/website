@@ -4,7 +4,7 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { PageTransition } from '@/components/ui/PageTransition'
-import { AuthorAvatar } from '@/components/AuthorAvatar'
+import AuthorAvatar from '@/components/AuthorAvatar'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { RelatedArticles } from '@/components/RelatedArticles'
 

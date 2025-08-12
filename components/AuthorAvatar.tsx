@@ -1,32 +1,33 @@
-'use client'
-
 import Image from 'next/image'
-import Link from 'next/link'
+import { getAuthorData } from '@/lib/authors'
 
 interface AuthorAvatarProps {
   author: string
 }
 
-export function AuthorAvatar({ author }: AuthorAvatarProps) {
+export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
+  const authorData = await getAuthorData(author)
+  const authorSlug = author.replaceAll(' ', '-')
+
   return (
-    <>
+    <div className="flex items-center gap-3">
       <Image
-        src={`/cms/team/${author.replaceAll(' ', '-')}/propic.jpg`}
-        alt="Author avatar"
-        width={32}
-        height={32}
-        className="rounded-full"
-        unoptimized
-        onError={(e) => {
-          e.currentTarget.style.display = 'none'
-        }}
+        src={`/cms/team/${authorSlug}/propic.jpg`}
+        alt={author}
+        width={48}
+        height={48}
+        className="rounded-full object-cover"
       />
-      <Link 
-        href={`/meet/member/${author.toLowerCase().replaceAll(' ', '-')}`}
-        className="no-underline hover:underline text-primary-600"
-      >
-        {author}
-      </Link>
-    </>
+      <div>
+        <div className="font-medium text-gray-900">
+          {authorData?.name || author}
+        </div>
+        {authorData?.title && (
+          <div className="text-sm text-gray-600">
+            {authorData.title}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
