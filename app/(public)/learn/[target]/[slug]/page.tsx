@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { AuthorAvatar } from '@/components/AuthorAvatar'
@@ -11,6 +12,44 @@ interface ArticlePageProps {
   params: {
     target: string
     slug: string
+  }
+}
+
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const { target, slug } = params
+  
+  // Find the article
+  const article = allPosts.find((post) => 
+    post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
+  )
+
+  if (!article) {
+    return {
+      title: 'Article Not Found - stAItuned',
+      description: 'The requested article could not be found.'
+    }
+  }
+
+  return {
+    title: `${article.title} - stAItuned`,
+    description: article.meta || article.title,
+    openGraph: {
+      title: article.title,
+      description: article.meta || article.title,
+      type: 'article',
+      publishedTime: article.date,
+      authors: article.author ? [article.author] : undefined,
+      images: article.cover ? [{
+        url: article.cover.startsWith('http') ? article.cover : `/cms/articles/${article.slug}/${article.cover}`,
+        alt: article.title
+      }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.meta || article.title,
+      images: article.cover ? [article.cover.startsWith('http') ? article.cover : `/cms/articles/${article.slug}/${article.cover}`] : undefined,
+    }
   }
 }
 
@@ -145,6 +184,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
           <MarkdownContent 
             content={article.body.raw}
             className="prose prose-lg max-w-none"
+            articleSlug={article.slug}
           />
         </article>
       </section>
