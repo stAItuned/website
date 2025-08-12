@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useSearch } from '@/components/SearchContext'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { openSearch } = useSearch()
   const pathname = usePathname()
   const isHomepage = pathname === '/'
 
@@ -16,8 +18,20 @@ export function Header() {
       setIsScrolled(window.scrollY > 100)
     }
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        openSearch()
+      }
+    }
+
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('keydown', handleKeyDown)
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [])
 
   const navigation = [
@@ -57,7 +71,7 @@ export function Header() {
             </ul>
           </div>
           
-          <div className="rounded-full bg-primary-300 absolute right-0 p-4">
+          <div className="rounded-full bg-primary-300 absolute right-0 p-4 cursor-pointer hover:bg-primary-400 transition-colors" onClick={openSearch}>
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>

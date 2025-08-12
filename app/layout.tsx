@@ -4,6 +4,8 @@ import { Montserrat } from 'next/font/google'
 import { Providers } from './providers'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { SearchModal } from '@/components/SearchModal'
+import { SearchProvider } from '@/components/SearchContext'
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -31,13 +33,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <Providers>
-          <Header />
-          <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
-            <main className="h-full flex flex-col justify-center">
-              {children}
-            </main>
-            <Footer />
-          </section>
+          <SearchProvider>
+            <Header />
+            <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
+              <main className="h-full flex flex-col justify-center">
+                {children}
+              </main>
+              <Footer />
+            </section>
+            <SearchModal />
+          </SearchProvider>
         </Providers>
       </body>
     </html>
