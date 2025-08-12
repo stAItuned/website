@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { getAuthorData } from '@/lib/authors'
 
 interface AuthorAvatarProps {
@@ -10,7 +11,10 @@ export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
   const authorSlug = author.replaceAll(' ', '-')
 
   return (
-    <div className="flex items-center gap-3">
+    <Link 
+      href={`/author/${authorSlug}`}
+      className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+    >
       <Image
         src={`/cms/team/${authorSlug}/propic.jpg`}
         alt={author}
@@ -28,6 +32,6 @@ export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   )
 }
