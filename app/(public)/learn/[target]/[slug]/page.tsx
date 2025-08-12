@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -13,6 +12,23 @@ interface ArticlePageProps {
     target: string
     slug: string
   }
+}
+
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const params: { target: string; slug: string }[] = []
+  
+  allPosts.forEach((post) => {
+    if (post.target && post.published !== false) {
+      params.push({
+        target: post.target.toLowerCase(),
+        slug: post.slug,
+      })
+    }
+  })
+  
+  return params
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
@@ -112,14 +128,11 @@ export default function ArticlePage({ params }: ArticlePageProps) {
       <section className="relative">
         {/* Cover Image */}
         {coverImage && (
-          <div className="w-full h-[25rem] lg:h-[30rem] relative">
-            <Image
+          <div className="w-full h-[25rem] lg:h-[30rem] relative overflow-hidden">
+            <img
               src={coverImage}
               alt="Article cover"
-              fill
-              className="object-cover"
-              unoptimized={coverImage.startsWith('http')}
-              priority
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
         )}

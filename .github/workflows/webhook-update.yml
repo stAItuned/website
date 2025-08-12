@@ -25,8 +25,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
-          # Use custom token if available, fallback to GITHUB_TOKEN
-          token: ${{ secrets.WEBSITE_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+          # Use custom token if available, fallback to WEBSITE_DISPATCH_TOKEN
+          token: ${{ secrets.WEBSITE_DISPATCH_TOKEN || secrets.WEBSITE_DISPATCH_TOKEN }}
           fetch-depth: 0  # Ensure full history for submodule operations
       
       - name: Update CMS submodule

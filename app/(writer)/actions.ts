@@ -1,4 +1,11 @@
-"use server"
+// Only enable server actions for non-static builds
+const isStaticBuild = process.env.FIREBASE_DEPLOYMENT === 'true'
+
+if (!isStaticBuild) {
+  // This directive is only included in non-static builds
+  eval('"use server"')
+}
+
 import { db } from "@/lib/firebase/admin"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
@@ -10,6 +17,10 @@ export async function saveDraft(data: {
   content: string
   tags?: string[]
 }) {
+  if (isStaticBuild) {
+    throw new Error("Server actions are not available in static builds")
+  }
+  
   const session = await getServerSession(authOptions)
   if (!session?.user?.email) {
     throw new Error("Unauthorized")
@@ -35,6 +46,10 @@ export async function saveDraft(data: {
 }
 
 export async function getDrafts() {
+  if (isStaticBuild) {
+    throw new Error("Server actions are not available in static builds")
+  }
+  
   const session = await getServerSession(authOptions)
   if (!session?.user?.email) {
     throw new Error("Unauthorized")

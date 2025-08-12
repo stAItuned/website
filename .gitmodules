@@ -1,4 +1,4 @@
-[submodule "cms"]
-	path = cms
-	url = https://daniele21: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@github.com/stAItuned/content-manager
+[submodule "content"]
+	path = content
+	url = https://github.com/stAItuned/content-manager.git
 	branch = main

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { getAuthorData } from '@/lib/authors'
 
@@ -15,7 +14,7 @@ export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
       href={`/author/${authorSlug}`}
       className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
     >
-      <Image
+      <img
         src={`/cms/team/${authorSlug}/propic.jpg`}
         alt={author}
         width={48}

@@ -1,47 +1,52 @@
-name: Deploy Production (staituned.com)
+name: Deploy React-Migrate Branch (dev.staituned.com)
 
 # ===================================
-# PRODUCTION DEPLOYMENT CONFIGURATION
+# REACT-MIGRATE DEPLOYMENT CONFIGURATION
 # ===================================
-# Branches: main, master
-# Domain: https://staituned.com
-# Environment: Production
+# Branches: react-migrate
+# Domain: https://dev.staituned.com
+# Environment: Development (for testing)
 # ===================================
 
 on:
-  # Triggered when content is updated for production
-  repository_dispatch:
-    types: [content-updated, production-content-updated]
+  # Triggered on pushes to react-migrate branch
+  push:
+    branches: [ react-migrate ]
   
   # Manual deployment trigger
   workflow_dispatch:
   
-  # Production branches - deploy to staituned.com
-  push:
-    branches: [ main, master ]
+  # Repository dispatch for CMS updates
+  repository_dispatch:
+    types: [react-migrate-content-updated]
 
 env:
-  DEPLOYMENT_DOMAIN: "staituned.com"
-  DEPLOYMENT_URL: "https://staituned.com"
-  ENVIRONMENT: "production"
+  DEPLOYMENT_DOMAIN: "dev.staituned.com"
+  DEPLOYMENT_URL: "https://dev.staituned.com"
+  ENVIRONMENT: "development"
+
+# Ensure the workflow has necessary permissions
+permissions:
+  contents: write
+  actions: read
 
 jobs:
-  deploy-production:
+  deploy-react-migrate:
     runs-on: ubuntu-latest
     
     steps:
       - name: 📋 Deployment Info
         run: |
-          echo "🚀 PRODUCTION DEPLOYMENT"
-          echo "========================"
+          echo "🚀 REACT-MIGRATE DEPLOYMENT"
+          echo "==========================="
           echo "🌐 Domain: ${{ env.DEPLOYMENT_DOMAIN }}"
           echo "🔗 URL: ${{ env.DEPLOYMENT_URL }}"
-          echo "🌟 Environment: ${{ env.ENVIRONMENT }}"
+          echo "🧪 Environment: ${{ env.ENVIRONMENT }}"
           echo "🌿 Branch: ${{ github.ref_name }}"
           echo "📝 Commit: ${{ github.sha }}"
-          echo "========================"
-    
-    steps:
+          echo "⚠️  Note: Using dev domain for testing"
+          echo "==========================="
+      
       - name: Checkout repository with submodules
         uses: actions/checkout@v4
         with:
@@ -62,12 +67,12 @@ jobs:
           if ! git diff --quiet HEAD -- cms; then
             echo "📝 CMS submodule has updates"
             git add cms
-            git commit -m "🔄 Auto-update content from CMS
+            git commit -m "🔄 Auto-update content from CMS (react-migrate)
             
             Triggered by: ${{ github.event.client_payload.pusher }}
             CMS commit: ${{ github.event.client_payload.sha }}
             "
-            git push origin ${{ github.ref_name }}
+            git push origin react-migrate
             echo "✅ CMS submodule updated and committed"
           else
             echo "ℹ️ No changes in CMS submodule"
@@ -82,32 +87,32 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Build website (Production)
+      - name: Build website (React-Migrate Testing)
         run: |
-          echo "🏗️ Building website for PRODUCTION environment..."
-          export NODE_ENV=production
+          echo "🏗️ Building website for REACT-MIGRATE testing environment..."
+          export NODE_ENV=development
           export NEXT_PUBLIC_BASE_URL=${{ env.DEPLOYMENT_URL }}
           npm run build
-          echo "✅ Production build successful"
+          echo "✅ React-Migrate build successful"
       
-      - name: Deploy to Vercel Production
+      - name: Deploy to Vercel Development (react-migrate)
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
-          vercel-args: '--prod --alias ${{ env.DEPLOYMENT_DOMAIN }}'
+          vercel-args: '--alias ${{ env.DEPLOYMENT_DOMAIN }}'
           alias-domains: |
             ${{ env.DEPLOYMENT_DOMAIN }}
-            www.${{ env.DEPLOYMENT_DOMAIN }}
       
-      - name: Production Deployment Summary
+      - name: React-Migrate Deployment Summary
         run: |
-          echo "🚀 PRODUCTION DEPLOYMENT COMPLETE"
-          echo "=================================="
+          echo "🚀 REACT-MIGRATE DEPLOYMENT COMPLETE"
+          echo "====================================="
           echo "🌐 Live URL: ${{ env.DEPLOYMENT_URL }}"
-          echo "🌟 Environment: ${{ env.ENVIRONMENT }}"
+          echo "🧪 Environment: ${{ env.ENVIRONMENT }}"
+          echo "⚠️  Note: react-migrate branch deployed to dev domain for testing"
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             echo "🔄 Trigger: CMS content update"
             echo "👤 CMS Pusher: ${{ github.event.client_payload.pusher }}"
@@ -116,4 +121,4 @@ jobs:
             echo "🔄 Trigger: Direct push to ${{ github.ref_name }} branch"
           fi
           echo "📝 Website Commit: ${{ github.sha }}"
-          echo "✅ Production website successfully deployed!"
+          echo "✅ React-Migrate website successfully deployed to dev!"

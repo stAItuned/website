@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 
 interface Article {
   title: string
@@ -62,14 +61,13 @@ function RelatedArticleCard({ article }: { article: Article }) {
           <div className="relative h-[420px] flex flex-col justify-end hover:scale-105 transition duration-300 my-16">
             {/* Cover Image */}
             {imageSrc && (
-              <Image
+              <img
                 src={imageSrc}
                 alt="background"
                 width={400}
                 height={280}
                 className="h-2/3 absolute -top-16 w-full rounded-lg object-cover"
-                unoptimized={imageSrc.startsWith('http')}
-                onError={(e) => {
+                onError={(e: any) => {
                   e.currentTarget.style.display = 'none'
                 }}
               />
@@ -92,13 +90,13 @@ function RelatedArticleCard({ article }: { article: Article }) {
                   {/* Author */}
                   <div className="flex space-x-2 items-center">
                     {authorImageSrc && (
-                      <Image
+                      <img
                         src={authorImageSrc}
                         alt="avatar"
                         width={32}
                         height={32}
                         className="max-h-8 rounded-full object-cover"
-                        onError={(e) => {
+                        onError={(e: any) => {
                           e.currentTarget.style.display = 'none'
                         }}
                       />

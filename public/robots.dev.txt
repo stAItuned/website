@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+# Development environment - prevent indexing
+# Dev site should not be indexed by search engines
+Sitemap: https://dev.staituned.com/sitemap.xml

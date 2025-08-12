@@ -1,7 +1,7 @@
 import { Octokit } from "octokit"
 
 const gh = new Octokit({ 
-  auth: process.env.GITHUB_TOKEN! 
+  auth: process.env.WEBSITE_DISPATCH_TOKEN! 
 })
 
 const owner = "stAItuned"

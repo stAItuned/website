@@ -1,0 +1,77 @@
+{
+  "hosting": [
+    {
+      "target": "production",
+      "source": ".",
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            }
+          ]
+        }
+      ],
+      "frameworksBackend": {
+        "region": "europe-west1"
+      },
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "content/**/*.md",
+        "content/.git/**",
+        "content/.github/**",
+        "content/.vscode/**",
+        "content/.gitignore",
+        "content/.pre-commit-config.yaml",
+        "content/README.md",
+        "content/backup/**"
+      ]
+    },
+    {
+      "target": "development",
+      "source": ".",
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            }
+          ]
+        }
+      ],
+      "frameworksBackend": {
+        "region": "europe-west1"
+      },
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "content/**/*.md",
+        "content/.git/**",
+        "content/.github/**",
+        "content/.vscode/**",
+        "content/.gitignore",
+        "content/.pre-commit-config.yaml",
+        "content/README.md",
+        "content/backup/**"
+      ]
+    }
+  ],
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs18",
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

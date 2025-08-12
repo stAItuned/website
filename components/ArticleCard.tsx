@@ -1,7 +1,5 @@
 'use client'
 
-import Image from 'next/image'
-
 interface ArticleCardProps {
   article: {
     title: string
@@ -13,6 +11,7 @@ interface ArticleCardProps {
     readingTime?: number
     target?: string
     language?: string
+    topics?: string[]
   }
 }
 
@@ -59,21 +58,22 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const imageSrc = getValidImageSrc(article.cover)
   const authorImageSrc = getAuthorImageSrc(article.author)
 
+  const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'
+
   return (
     <div
-      onClick={() => window.location.href = `/learn/${article.target?.toLowerCase() || 'general'}/${article.slug}`}
+      onClick={() => window.location.href = `/learn/${target}/${article.slug}`}
       className="w-full sm:w-1/2 lg:w-1/3 p-2 sm:p-4 text-primary-600 hover:cursor-pointer rounded-lg"
     >
       <div className="relative h-[380px] sm:h-[420px] flex flex-col justify-end hover:scale-105 transition duration-300 my-8 sm:my-16">
         {imageSrc && (
-          <Image
+          <img
             src={imageSrc}
             alt="background"
             width={400}
             height={280}
             className="h-2/3 absolute -top-8 sm:-top-16 w-full rounded-lg object-cover"
-            unoptimized={imageSrc.startsWith('http')}
-            onError={(e) => {
+            onError={(e: any) => {
               e.currentTarget.style.display = 'none'
             }}
           />
@@ -103,13 +103,13 @@ export function ArticleCard({ article }: ArticleCardProps) {
               {/* Author */}
               <div className="flex space-x-2 items-center">
                 {authorImageSrc && (
-                  <Image
+                  <img
                     src={authorImageSrc}
                     alt="avatar"
                     width={32}
                     height={32}
                     className="max-h-6 sm:max-h-8 rounded-full"
-                    onError={(e) => {
+                    onError={(e: any) => {
                       e.currentTarget.style.display = 'none'
                     }}
                   />
