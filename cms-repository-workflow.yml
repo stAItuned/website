@@ -1,0 +1,84 @@
+# CMS Repository Workflow
+# Save this file as: .github/workflows/notify-website.yml
+# In the stAItuned/content-manager repository
+
+name: Notify Website of Content Changes
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'articles/**'
+      - 'team/**'
+
+jobs:
+  notify-website:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Get changed files
+        id: changes
+        run: |
+          # Get list of changed files
+          if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          else
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          fi
+          
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          
+          # Count changes
+          ARTICLE_CHANGES=$(echo "$CHANGED_FILES" | grep -E '^articles/' | wc -l)
+          TEAM_CHANGES=$(echo "$CHANGED_FILES" | grep -E '^team/' | wc -l)
+          
+          echo "article_changes=$ARTICLE_CHANGES" >> $GITHUB_OUTPUT
+          echo "team_changes=$TEAM_CHANGES" >> $GITHUB_OUTPUT
+          echo "total_changes=$((ARTICLE_CHANGES + TEAM_CHANGES))" >> $GITHUB_OUTPUT
+      
+      - name: Notify website repository
+        if: steps.changes.outputs.total_changes > 0
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
+          repository: stAItuned/website
+          event-type: content-updated
+          client-payload: |
+            {
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "repository": "${{ github.repository }}",
+              "pusher": "${{ github.actor }}",
+              "timestamp": "${{ github.event.head_commit.timestamp }}",
+              "message": "${{ github.event.head_commit.message }}",
+              "changes": {
+                "articles": ${{ steps.changes.outputs.article_changes }},
+                "team": ${{ steps.changes.outputs.team_changes }},
+                "total": ${{ steps.changes.outputs.total_changes }}
+              }
+            }
+      
+      - name: Log notification
+        if: steps.changes.outputs.total_changes > 0
+        run: |
+          echo "✅ Notified website repository of content changes"
+          echo "📊 Change summary:"
+          echo "   • Articles modified: ${{ steps.changes.outputs.article_changes }}"
+          echo "   • Team profiles modified: ${{ steps.changes.outputs.team_changes }}"
+          echo "   • Total changes: ${{ steps.changes.outputs.total_changes }}"
+          echo "   • Commit: ${{ github.sha }}"
+          echo "   • Author: ${{ github.actor }}"
+          echo "   • Message: ${{ github.event.head_commit.message }}"
+          echo ""
+          echo "🚀 Website will automatically update with new content"
+          echo "📍 Monitor progress: https://github.com/stAItuned/website/actions"
+      
+      - name: No changes detected
+        if: steps.changes.outputs.total_changes == 0
+        run: |
+          echo "ℹ️ No content changes detected in articles/ or team/ directories"
+          echo "Website notification skipped"

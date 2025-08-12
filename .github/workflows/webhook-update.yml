@@ -1,11 +1,15 @@
 name: Webhook Content Update
 
 on:
-  # Webhook trigger from external services
-  webhook:
+  # Repository dispatch trigger (for webhooks from other repos)
+  repository_dispatch:
+    types: [webhook-update, content-sync]
   
   # Manual trigger
   workflow_dispatch:
+  
+  # HTTP webhook via repository dispatch API
+  # Can be triggered via: POST /repos/stAItuned/website/dispatches
 
 jobs:
   update-content:
