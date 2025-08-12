@@ -3,7 +3,7 @@ name: Deploy to Firebase Development
 # ===================================
 # FIREBASE DEVELOPMENT DEPLOYMENT
 # ===================================
-# Branches: dev, react-migrate
+# Branches: dev, development, react-migrate
 # Domain: https://dev.staituned.com
 # Environment: Development
 # Platform: Firebase Hosting
@@ -12,7 +12,7 @@ name: Deploy to Firebase Development
 on:
   # Development branches - deploy to Firebase development
   push:
-    branches: [ dev, react-migrate ]
+    branches: [ dev, development, react-migrate ]
   
   # Manual deployment trigger
   workflow_dispatch:
