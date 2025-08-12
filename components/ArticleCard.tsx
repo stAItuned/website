@@ -46,6 +46,16 @@ export function ArticleCard({ article }: ArticleCardProps) {
     return `/cms/team/${authorSlug}/propic.jpg`
   }
 
+  const getTargetStyle = (target?: string) => {
+    const targetStyles = {
+      'Newbie': 'bg-green-500 text-white',
+      'Midway': 'bg-yellow-500 text-white', 
+      'Expert': 'bg-red-500 text-white',
+      'General': 'bg-gray-500 text-white'
+    }
+    return targetStyles[target as keyof typeof targetStyles] || targetStyles.General
+  }
+
   const imageSrc = getValidImageSrc(article.cover)
   const authorImageSrc = getAuthorImageSrc(article.author)
 
@@ -67,6 +77,13 @@ export function ArticleCard({ article }: ArticleCardProps) {
               e.currentTarget.style.display = 'none'
             }}
           />
+        )}
+        
+        {/* Target Level Overlay */}
+        {article.target && (
+          <div className={`absolute -top-16 right-0 px-2 py-1 rounded-bl-lg rounded-tr-lg text-xs font-semibold z-20 ${getTargetStyle(article.target)}`}>
+            {article.target}
+          </div>
         )}
         
         {/* Post Info */}
