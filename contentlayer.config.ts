@@ -48,7 +48,7 @@ export const Post = defineDocumentType(() => ({
 }))
 
 export default makeSource({
-  contentDirPath: 'cms',
+  contentDirPath: 'content',
   documentTypes: [Post],
   disableImportAliasWarning: true,
   onUnknownDocuments: 'skip-warn',
