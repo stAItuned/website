@@ -3,15 +3,15 @@ name: Deploy Development (dev.staituned.com)
 # ===================================
 # DEVELOPMENT DEPLOYMENT CONFIGURATION
 # ===================================
-# Branches: dev
+# Branches: dev, development
 # Domain: https://dev.staituned.com
 # Environment: Development
 # ===================================
 
 on:
-  # Triggered on pushes to dev branch
+  # Triggered on pushes to dev or development branch
   push:
-    branches: [ dev ]
+    branches: [ dev, development ]
   
   # Manual deployment trigger
   workflow_dispatch:
@@ -70,7 +70,7 @@ jobs:
             Triggered by: ${{ github.event.client_payload.pusher }}
             CMS commit: ${{ github.event.client_payload.sha }}
             "
-            git push origin dev
+            git push origin ${{ github.ref_name }}
             echo "✅ CMS submodule updated and committed"
           else
             echo "ℹ️ No changes in CMS submodule"
