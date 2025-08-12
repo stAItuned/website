@@ -1,0 +1,71 @@
+name: Update Content from CMS
+
+on:
+  # Triggered by repository_dispatch from the content-manager repo
+  repository_dispatch:
+    types: [content-updated]
+  
+  # Manual trigger for testing
+  workflow_dispatch:
+  
+  # Optional: periodic check every 6 hours as fallback
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Update CMS submodule to latest
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Update submodule to latest commit from main branch
+          git submodule update --remote cms
+          
+          # Check if there are changes
+          if git diff --quiet HEAD -- cms; then
+            echo "No changes in CMS submodule"
+            echo "cms_updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "CMS submodule has updates"
+            echo "cms_updated=true" >> $GITHUB_OUTPUT
+            
+            # Commit the submodule update
+            git add cms
+            git commit -m "🔄 Update content from CMS ($(git rev-parse --short cms/HEAD))"
+            git push origin ${{ github.ref_name }}
+          fi
+        id: update_cms
+      
+      - name: Setup Node.js
+        if: steps.update_cms.outputs.cms_updated == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        if: steps.update_cms.outputs.cms_updated == 'true'
+        run: npm ci
+      
+      - name: Build and validate content
+        if: steps.update_cms.outputs.cms_updated == 'true'
+        run: |
+          npm run build
+          echo "✅ Content build successful"
+      
+      - name: Trigger deployment
+        if: steps.update_cms.outputs.cms_updated == 'true'
+        run: |
+          echo "🚀 Content updated and validated. Deployment will be triggered automatically."
+          echo "Updated CMS to commit: $(git rev-parse --short cms/HEAD)"

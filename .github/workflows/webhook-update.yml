@@ -1,0 +1,42 @@
+name: Webhook Content Update
+
+on:
+  # Webhook trigger from external services
+  webhook:
+  
+  # Manual trigger
+  workflow_dispatch:
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update CMS submodule
+        run: |
+          git config --global user.name 'Content Updater'
+          git config --global user.email 'noreply@staituned.com'
+          
+          # Pull latest from CMS
+          git submodule update --remote cms
+          
+          # Check for changes
+          if ! git diff --quiet HEAD -- cms; then
+            git add cms
+            git commit -m "📝 Update content from CMS webhook"
+            git push
+            echo "✅ Content updated successfully"
+          else
+            echo "ℹ️ No content changes detected"
+          fi
+      
+      - name: Trigger build
+        run: |
+          # This will trigger your deployment platform (Vercel, Netlify, etc.)
+          echo "🔄 Build triggered by content update"

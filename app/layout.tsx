@@ -10,7 +10,7 @@ import { SearchProvider } from '@/components/SearchContext'
 const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'stAItuned - AI & Data Science Community',
+  title: 'stAItuned - Your Sharing Spot',
   description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
   icons: {
     icon: [
