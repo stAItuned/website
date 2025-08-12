@@ -1,0 +1,20 @@
+{
+  "projects": {
+    "production": "staituned-production-163f4",
+    "development": "staituned-production-163f4",
+    "default": "staituned-production-163f4"
+  },
+  "targets": {
+    "staituned-production-163f4": {
+      "hosting": {
+        "production": [
+          "staituned-production"
+        ],
+        "development": [
+          "staituned-dev"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
