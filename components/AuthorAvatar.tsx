@@ -15,7 +15,7 @@ export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
       className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
     >
       <img
-        src={`/cms/team/${authorSlug}/propic.jpg`}
+        src={`/content/team/${authorSlug}/propic.jpg`}
         alt={author}
         width={48}
         height={48}

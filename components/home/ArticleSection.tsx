@@ -67,7 +67,7 @@ function ArticleCard({ article, color }: { article: Article; color: string }) {
     }
     
     // If it's a relative path, convert to absolute path
-    return `/cms/articles/${article.slug}/${cover}`
+    return `/content/articles/${article.slug}/${cover}`
   }
 
   const imageSrc = getValidImageSrc(article.cover)

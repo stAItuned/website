@@ -148,7 +148,7 @@ export async function generateStaticParams() {
   const path = await import('path')
   
   // Get all author directories
-  const teamDir = path.join(process.cwd(), 'cms/team')
+  const teamDir = path.join(process.cwd(), 'content/team')
   if (!fs.existsSync(teamDir)) return []
   
   const authorDirs = fs.readdirSync(teamDir, { withFileTypes: true })

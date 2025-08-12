@@ -10,14 +10,14 @@ import { cms as cmsHelper } from '@lib/helpers'
 const loadAuthors = (): Promise<(Author)[]> => {
 	return new Promise((resolve) => {
 		resolve(
-			Object.entries(import.meta.glob('/cms/team/**/*.md', { eager: true }))
+			Object.entries(import.meta.glob('/content/team/**/*.md', { eager: true }))
 				.map(([filepath, member]: [string, any]) => {
 					if (!cmsHelper.author.isValidAuthor(member.metadata)) {
 						return undefined
 					}
 
 					const folder = cmsHelper.author.getFolderFromPath(filepath)
-					const propic: string = `/cms/team/${folder}/propic.jpg`
+					const propic: string = `/content/team/${folder}/propic.jpg`
 
 					const author: Author = {
 						...member.metadata,

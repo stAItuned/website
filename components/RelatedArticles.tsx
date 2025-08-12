@@ -32,7 +32,7 @@ function RelatedArticleCard({ article }: { article: Article }) {
     }
     // Handle cases where cover has nested paths like "./cover.jpeg"
     const cleanCover = cover.replace(/^\.\//, '')
-    return `/cms/articles/${article.slug}/${cleanCover}`
+    return `/content/articles/${article.slug}/${cleanCover}`
   }
 
   const formatDate = (dateString?: string) => {
@@ -48,7 +48,7 @@ function RelatedArticleCard({ article }: { article: Article }) {
   const getAuthorImageSrc = (author?: string) => {
     if (!author) return null
     const authorSlug = author.replaceAll(' ', '-')
-    return `/cms/team/${authorSlug}/propic.jpg`
+    return `/content/team/${authorSlug}/propic.jpg`
   }
 
   const imageSrc = getValidImageSrc(article.cover)

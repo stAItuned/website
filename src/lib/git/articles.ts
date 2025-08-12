@@ -9,7 +9,7 @@ import { cms } from '@lib/helpers'
 
 const loadArticles = (): Promise<(Article)[]> => {
 	return new Promise((resolve) => {
-		resolve(Object.entries(import.meta.glob('/cms/articles/**/*.md', { eager: true }))
+		resolve(Object.entries(import.meta.glob('/content/articles/**/*.md', { eager: true }))
 			.map(([filepath, post]: [string, any]) => {
 				if (!cms.article.isValidMetadata(post.metadata)) {
 					return undefined
@@ -23,7 +23,7 @@ const loadArticles = (): Promise<(Article)[]> => {
 					filename,
 					metadata: {
 						...metadata,
-						cover: `/cms/articles/${slug}/${metadata.cover}`,
+						cover: `/content/articles/${slug}/${metadata.cover}`,
 						readingTime: cms.article.computeReadingTime(post.default.render().html)
 					}
 				}

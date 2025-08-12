@@ -48,7 +48,7 @@ const loadCovers = (articles: Article[]): Promise<Cover[]> => {
     return new Promise((resolve) => {
         const covers: Cover[] = []
         articles.forEach((article: Article, idx) => {
-            import(/* @vite-ignore */`./cms/articles/${article.slug}/${article.metadata.cover}?w=1280?webp`)
+            import(/* @vite-ignore */`./content/articles/${article.slug}/${article.metadata.cover}?w=1280?webp`)
                 .then(image => {
                     covers.push({
                         image: image.default,

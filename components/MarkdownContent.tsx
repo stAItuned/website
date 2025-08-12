@@ -35,7 +35,7 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
           const cleanSrc = src.replace(/^\.\//, '')
           
           // Convert to absolute path
-          const absoluteSrc = `/cms/articles/${articleSlug}/${cleanSrc}`
+          const absoluteSrc = `/content/articles/${articleSlug}/${cleanSrc}`
           
           return `<img${before} src="${absoluteSrc}"${after}>`
         }

@@ -26,7 +26,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
     }
     // Handle cases where cover has nested paths like "./cover.jpeg"
     const cleanCover = cover.replace(/^\.\//, '')
-    return `/cms/articles/${article.slug}/${cleanCover}`
+    return `/content/articles/${article.slug}/${cleanCover}`
   }
 
   const formatDate = (dateString?: string) => {
@@ -42,7 +42,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const getAuthorImageSrc = (author?: string) => {
     if (!author) return null
     const authorSlug = author.replaceAll(' ', '-')
-    return `/cms/team/${authorSlug}/propic.jpg`
+    return `/content/team/${authorSlug}/propic.jpg`
   }
 
   const getTargetStyle = (target?: string) => {

@@ -69,6 +69,12 @@ const nextConfig = {
     async rewrites() {
       const rewrites = []
       
+      // Serve images from content directory
+      rewrites.push({
+        source: '/content/:path*',
+        destination: '/api/content/:path*',
+      })
+      
       // Use dev robots.txt for development environment
       if (isDev) {
         rewrites.push({

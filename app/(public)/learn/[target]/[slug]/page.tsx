@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       publishedTime: article.date,
       authors: article.author ? [article.author] : undefined,
       images: article.cover ? [{
-        url: article.cover.startsWith('http') ? article.cover : `/cms/articles/${article.slug}/${article.cover}`,
+        url: article.cover.startsWith('http') ? article.cover : `/content/articles/${article.slug}/${article.cover}`,
         alt: article.title
       }] : undefined,
     },
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       card: 'summary_large_image',
       title: article.title,
       description: article.meta || article.title,
-      images: article.cover ? [article.cover.startsWith('http') ? article.cover : `/cms/articles/${article.slug}/${article.cover}`] : undefined,
+      images: article.cover ? [article.cover.startsWith('http') ? article.cover : `/content/articles/${article.slug}/${article.cover}`] : undefined,
     }
   }
 }
@@ -118,7 +118,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
     if (cover.startsWith('/')) {
       return cover
     }
-    return `/cms/articles/${article.slug}/${cover}`
+    return `/content/articles/${article.slug}/${cover}`
   }
 
   const coverImage = getValidImageSrc(article.cover)

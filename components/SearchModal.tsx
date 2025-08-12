@@ -74,7 +74,7 @@ export function SearchModal() {
       return article.cover
     }
     const cleanCover = article.cover.replace(/^\.\//, '')
-    return `/cms/articles/${article.slug}/${cleanCover}`
+    return `/content/articles/${article.slug}/${cleanCover}`
   }
 
   return (

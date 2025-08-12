@@ -66,7 +66,7 @@ export async function GET() {
       const coverUrl = post.cover 
         ? (post.cover.startsWith('http') 
           ? post.cover 
-          : `${baseUrl}/cms/articles/${post.slug}/${post.cover.replace('./', '')}`)
+          : `${baseUrl}/content/articles/${post.slug}/${post.cover.replace('./', '')}`)
         : null
       
       return `<url>
