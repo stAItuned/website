@@ -13,13 +13,19 @@
 // Mock implementation for development
 export const db = {
   collection: (name: string) => ({
-    doc: (id: string) => ({
+    doc: (id?: string) => ({
+      id: id || `auto-generated-${Date.now()}`,
       get: () => Promise.resolve({ exists: false }),
       set: (data: any, options?: any) => Promise.resolve(),
     }),
-    where: () => ({
-      orderBy: () => ({
-        get: () => Promise.resolve({ docs: [] })
+    where: (field: string, operator: string, value: any) => ({
+      orderBy: (field: string, direction: string) => ({
+        get: () => Promise.resolve({ 
+          docs: [] as Array<{ 
+            id: string; 
+            data: () => any;
+          }>
+        })
       })
     })
   })

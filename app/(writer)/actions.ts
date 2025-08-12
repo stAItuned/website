@@ -18,7 +18,7 @@ export async function saveDraft(data: {
   const collection = db.collection('drafts')
   const ref = data.id
     ? collection.doc(data.id)
-    : collection.doc()
+    : collection.doc() // Auto-generate document ID
 
   await ref.set({
     title: data.title,

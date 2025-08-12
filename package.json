@@ -2,13 +2,20 @@
 	"name": "staituned-website",
 	"version": "1.0.0",
 	"private": true,
+	"engines": {
+		"node": ">=20.0.0",
+		"npm": ">=8.0.0"
+	},
 	"scripts": {
 		"dev": "next dev --port 3000",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
 		"update:cms": "git submodule update --remote",
-		"update:content": "git submodule update --init --recursive --remote"
+		"update:content": "git submodule update --init --recursive --remote",
+		"sync:content": "npm run update:cms && npm run build",
+		"setup:automation": "./setup-automation.sh",
+		"check:content": "echo 'Articles:' && find cms/articles -name '*.md' | wc -l && echo 'Team members:' && find cms/team -name 'meta.md' | wc -l"
 	},
 	"dependencies": {
 		"@emotion/is-prop-valid": "^1.3.1",
