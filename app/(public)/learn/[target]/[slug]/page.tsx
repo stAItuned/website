@@ -6,6 +6,7 @@ import { PageTransition } from '@/components/ui/PageTransition'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { RelatedArticles } from '@/components/RelatedArticles'
+import ArticleAnalytics from '@/components/analytics/ArticleAnalytics'
 
 interface ArticlePageProps {
   params: {
@@ -186,6 +187,14 @@ export default function ArticlePage({ params }: ArticlePageProps) {
               </svg>
               <p>{article.readingTime}m</p>
             </div>
+          </div>
+
+          {/* Article Analytics */}
+          <div className="not-prose mb-8">
+            <ArticleAnalytics 
+              slug={article.slug} 
+              target={target}
+            />
           </div>
 
           {/* Article Title */}

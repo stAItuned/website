@@ -76,8 +76,8 @@ export function Header() {
               </ul>
             </div>
 
-            {/* Authentication Section */}
-            {!loading && (
+            {/* Authentication Section - Only in production */}
+            {process.env.NODE_ENV === 'production' && !loading && (
               <div className="hidden lg:flex items-center">
                 {user ? (
                   <UserMenu user={user} />
@@ -133,8 +133,8 @@ export function Header() {
                 </Link>
               ))}
               
-              {/* Mobile Authentication */}
-              {!loading && (
+              {/* Mobile Authentication - Only in production */}
+              {process.env.NODE_ENV === 'production' && !loading && (
                 <div className="py-4 border-b border-primary-500">
                   {user ? (
                     <div className="space-y-4">

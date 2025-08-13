@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import ArticleAnalyticsCard from '@/components/analytics/ArticleAnalyticsCard'
 
 type Category = 'Relevant' | 'Recent'
 
@@ -94,9 +95,19 @@ function ArticleCard({ article, color }: { article: Article; color: string }) {
         ) : (
           <div className="w-full h-[200px] opacity-30" />
         )}
-        <span className="absolute top-[30%] left-[10%] text-white">
-          {article.title}
-        </span>
+        <div className="absolute top-[20%] left-[10%] text-white space-y-2">
+          <div className="text-base sm:text-xl font-bold">
+            {article.title}
+          </div>
+          <div className="text-xs opacity-80">
+            <ArticleAnalyticsCard 
+              slug={article.slug} 
+              target={target}
+              className="text-white"
+              showLabel={true}
+            />
+          </div>
+        </div>
       </Link>
     </div>
   )

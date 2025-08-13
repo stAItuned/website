@@ -57,7 +57,7 @@ export default function EditorPage() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-4xl">
+    <main className="container mx-auto px-4 py-8 pt-24 max-w-4xl">
       <div className="bg-white rounded-lg shadow-md p-8">
         <div className="space-y-6 mb-8">
           <div>
