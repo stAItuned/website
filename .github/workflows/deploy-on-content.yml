@@ -18,17 +18,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout website (shallow + submodules)
+      - name: Checkout code with submodules
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-          submodules: recursive
+          submodules: true
           token: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
-
-      - name: Configure git for private submodules
-        if: ${{ secrets.WEBSITE_DISPATCH_TOKEN != '' }}
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.WEBSITE_DISPATCH_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Update submodule to latest (shallow)
         run: |
