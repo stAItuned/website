@@ -63,8 +63,22 @@ jobs:
           rm -f public/content
           cp -r content public/content
 
+      - name: Remove content submodule to avoid symlinks
+        run: |
+          # Backup contentlayer config
+          cp contentlayer.config.ts contentlayer.config.ts.bak
+          # Update contentlayer to use public/content instead of content
+          sed 's/contentDirPath: .content./contentDirPath: "public\/content"/' contentlayer.config.ts > contentlayer.config.ts.tmp
+          mv contentlayer.config.ts.tmp contentlayer.config.ts
+          # Remove the content submodule directory to avoid symlinks
+          rm -rf content
+
       - name: Build (Contentlayer + Next)
         run: npm run build
+
+      - name: Restore contentlayer config
+        run: |
+          mv contentlayer.config.ts.bak contentlayer.config.ts
 
       - name: Deploy to Firebase (Hosting + SSR auto)
         run: firebase deploy --project "$FIREBASE_PROJECT_ID" --non-interactive
