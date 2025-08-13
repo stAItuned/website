@@ -58,6 +58,11 @@ jobs:
       - name: Enable Firebase Web Frameworks experiment
         run: firebase experiments:enable webframeworks
 
+      - name: Copy content to public (replace symlink)
+        run: |
+          rm -f public/content
+          cp -r content public/content
+
       - name: Build (Contentlayer + Next)
         run: npm run build
 
