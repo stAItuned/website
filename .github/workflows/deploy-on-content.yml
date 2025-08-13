@@ -63,31 +63,28 @@ jobs:
           rm -f public/content
           cp -r content public/content
 
-      - name: Remove content submodule to avoid symlinks
+      - name: Debug content structure
         run: |
-          # Backup contentlayer config
-          cp contentlayer.config.ts contentlayer.config.ts.bak
-          # Update contentlayer to use public/content instead of content
-          sed 's/contentDirPath: .content./contentDirPath: "public\/content"/' contentlayer.config.ts > contentlayer.config.ts.tmp
-          mv contentlayer.config.ts.tmp contentlayer.config.ts
-          # Remove the content submodule directory to avoid symlinks
-          rm -rf content
+          echo "=== Content directory structure ==="
+          ls -la content/ || echo "No content directory"
+          echo "=== Content articles ==="
+          find content/articles -name "*.md" | head -10 || echo "No articles found"
+          echo "=== Public content ==="
+          ls -la public/content/ || echo "No public/content"
+          echo "=== Articles with title field ==="
+          grep -r "title:" content/articles/ | head -5 || echo "No titles found"
 
       - name: Build (Contentlayer + Next)
         run: npm run build
 
-      - name: Restore contentlayer config
+      - name: Clean up before deployment
         run: |
-          mv contentlayer.config.ts.bak contentlayer.config.ts
-
-      - name: Clean up symlinks before deployment
-        run: |
-          # Remove any remaining symlinks that might cause issues
-          find . -type l -not -path "./node_modules/*" -delete 2>/dev/null || true
-          # Ensure clean Firebase cache
+          # Clean Firebase cache
           rm -rf .firebase
-          # Clean up any build artifacts that might contain symlinks
+          # Clean up build artifacts that might contain symlinks
           rm -rf .next/cache 2>/dev/null || true
+          # Remove any symlinks that might exist (but keep content directory)
+          find . -type l -not -path "./node_modules/*" -not -path "./content/*" -delete 2>/dev/null || true
 
       - name: Debug frameworks output
         run: |
