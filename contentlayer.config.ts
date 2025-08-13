@@ -20,8 +20,10 @@ export const Post = defineDocumentType(() => ({
       type: 'string', 
       resolve: (doc) => {
         const pathParts = doc._raw.flattenedPath.split('/')
-        const slug = pathParts.slice(1).join('/')
-        return `/posts/${slug}`
+        const slug = pathParts[1] // Get the article directory name
+        // Get target from frontmatter, default to 'general' if not specified
+        const target = doc.target ? doc.target.toLowerCase() : 'general'
+        return `/learn/${target}/${slug}`
       }
     },
     slug: {
@@ -52,4 +54,6 @@ export default makeSource({
   documentTypes: [Post],
   disableImportAliasWarning: true,
   onUnknownDocuments: 'skip-warn',
+  // Add file filtering to exclude problematic files
+  onExtraFieldData: 'ignore'
 })
