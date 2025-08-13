@@ -7,20 +7,10 @@
 		"npm": ">=8.0.0"
 	},
 	"scripts": {
-		"dev": "next dev --port 3000",
-		"dev:prod": "NEXT_PUBLIC_BASE_URL=https://dev.staituned.com next dev --port 3000",
-		"build": "next build",
-		"build:dev": "NEXT_PUBLIC_BASE_URL=https://dev.staituned.com NODE_ENV=development next build",
-		"build:firebase": "FIREBASE_DEPLOYMENT=true node scripts/prepare-firebase-build.js && FIREBASE_DEPLOYMENT=true next build; FIREBASE_DEPLOYMENT=true node scripts/restore-firebase-build.js",
-		"export": "FIREBASE_DEPLOYMENT=true next build",
+		"dev": "next dev",
+		"build": "contentlayer build && next build",
 		"start": "next start",
-		"lint": "next lint",
-		"update:content": "git submodule update --init --recursive --remote --depth 1",
-		"sync:content": "npm run update:content && npm run build",
-		"setup:automation": "./setup-automation.sh",
-		"check:content": "echo 'Articles:' && find content/articles -name '*.md' | wc -l && echo 'Team members:' && find content/team -name 'meta.md' | wc -l",
-		"deploy:prod": "firebase deploy --project staituned-prod --only hosting:production",
-		"deploy:dev": "firebase deploy --project staituned-prod --only hosting:development"
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"@emotion/is-prop-valid": "^1.3.1",
