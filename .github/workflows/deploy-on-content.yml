@@ -96,6 +96,12 @@ jobs:
           ls -la .firebase/$FIREBASE_PROJECT_ID || true
           ls -la .firebase/$FIREBASE_PROJECT_ID/functions || true
 
+      - name: Set cleanup policy (once)
+        run: firebase functions:artifacts:setpolicy --location europe-west1 --days 7 --project "$FIREBASE_PROJECT_ID"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+
       - name: Deploy to Firebase (Hosting + SSR auto)
         run: firebase deploy --project "$FIREBASE_PROJECT_ID" --non-interactive
         env:
