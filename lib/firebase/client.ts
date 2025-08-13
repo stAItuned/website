@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getAnalytics, type Analytics } from "firebase/analytics";
+import { getAuth, type Auth, GoogleAuthProvider } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,10 +20,24 @@ const firebaseConfig = {
 // Initialize Firebase
 const app: FirebaseApp = initializeApp(firebaseConfig);
 
+// Initialize Auth
+const auth: Auth = getAuth(app);
+
 // Initialize Analytics (only in browser environment)
 let analytics: Analytics | null = null;
 if (typeof window !== 'undefined') {
   analytics = getAnalytics(app);
 }
 
-export { app, analytics };
+// Create Google Auth Provider
+const googleProvider = new GoogleAuthProvider();
+
+// Optional: Add additional scopes if needed
+// googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+
+// Optional: Set custom parameters
+// googleProvider.setCustomParameters({
+//   'login_hint': 'user@example.com'
+// });
+
+export { app, auth, analytics, googleProvider };

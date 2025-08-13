@@ -1,20 +1,45 @@
 "use client"
 
-import { signIn, getSession } from "next-auth/react"
-import { useState } from "react"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/components/auth/FirebaseAuthProvider"
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton"
+import { User } from "firebase/auth"
 
 export default function SignInPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const { user, loading } = useAuth()
+  const router = useRouter()
 
-  const handleSignIn = async () => {
-    setIsLoading(true)
-    try {
-      await signIn("google", { callbackUrl: "/" })
-    } catch (error) {
-      console.error("Sign in error:", error)
-    } finally {
-      setIsLoading(false)
+  // Redirect if already signed in
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/')
     }
+  }, [user, loading, router])
+
+  const handleSignInSuccess = (user: User) => {
+    console.log('Sign in successful:', user.email)
+    router.push('/')
+  }
+
+  const handleSignInError = (error: { code: string; message: string }) => {
+    console.error('Sign in failed:', error)
+  }
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  if (user) {
+    return null // Will redirect via useEffect
   }
 
   return (
@@ -30,13 +55,26 @@ export default function SignInPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <button
-            onClick={handleSignIn}
-            disabled={isLoading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Signing in..." : "Sign in with Google"}
-          </button>
+          <div className="space-y-6">
+            <GoogleSignInButton
+              onSignInSuccess={handleSignInSuccess}
+              onSignInError={handleSignInError}
+              className="w-full justify-center"
+            />
+            
+            <div className="text-center">
+              <p className="text-xs text-gray-500">
+                By signing in, you agree to our{' '}
+                <a href="#" className="text-primary-600 hover:text-primary-500">
+                  Terms of Service
+                </a>{' '}
+                and{' '}
+                <a href="#" className="text-primary-600 hover:text-primary-500">
+                  Privacy Policy
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </main>

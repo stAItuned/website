@@ -1,36 +1,23 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { redirect } from "next/navigation"
+'use client'
 
-export default async function WriterLayout({
+import { AuthGuard } from "@/components/auth/AuthGuard"
+import { useAuth } from "@/components/auth/FirebaseAuthProvider"
+import Image from "next/image"
+
+export default function WriterLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // For development, skip auth check
-  if (process.env.NODE_ENV === 'development') {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <nav className="bg-white shadow-sm border-b">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex justify-between items-center">
-              <h1 className="text-xl font-semibold text-gray-900">Writer Dashboard</h1>
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">Development Mode</span>
-              </div>
-            </div>
-          </div>
-        </nav>
-        {children}
-      </div>
-    )
-  }
+  return (
+    <AuthGuard>
+      <WriterLayoutContent>{children}</WriterLayoutContent>
+    </AuthGuard>
+  )
+}
 
-  const session = await getServerSession(authOptions)
-  
-  if (!session) {
-    redirect("/signin")
-  }
+function WriterLayoutContent({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,14 +25,20 @@ export default async function WriterLayout({
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <h1 className="text-xl font-semibold text-gray-900">Writer Dashboard</h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {session.user?.name}</span>
-              <img
-                src={session.user?.image || ''}
-                alt={session.user?.name || ''}
-                className="w-8 h-8 rounded-full"
-              />
-            </div>
+            {user && (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">Welcome, {user.displayName || user.email}</span>
+                {user.photoURL && (
+                  <Image
+                    src={user.photoURL}
+                    alt={user.displayName || 'User'}
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </nav>
