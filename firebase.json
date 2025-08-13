@@ -5,6 +5,22 @@
     "frameworksBackend": { 
       "region": "europe-west1" 
     },
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "content/**",
+      "scripts/**",
+      "*.sh",
+      "*.md",
+      ".env*",
+      "*.config.js",
+      "*.config.ts",
+      "*.config.cjs",
+      "tsconfig*.json",
+      ".contentlayer/**",
+      ".next/cache/**"
+    ],
     "headers": [
       { 
         "source": "**", 

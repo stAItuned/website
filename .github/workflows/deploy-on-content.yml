@@ -76,6 +76,29 @@ jobs:
 
       - name: Build (Contentlayer + Next)
         run: npm run build
+        env:
+          # Authentication (disabled for development - will be production only)
+          NEXT_PUBLIC_DISABLE_AUTH: ${{ secrets.NEXT_PUBLIC_DISABLE_AUTH }}
+          
+          # Google Analytics
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+          
+          # Firebase Client Configuration  
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          
+          # Google Analytics Server-side
+          GOOGLE_ANALYTICS_PROPERTY_ID: ${{ secrets.GOOGLE_ANALYTICS_PROPERTY_ID }}
+          GOOGLE_ANALYTICS_CLIENT_EMAIL: ${{ secrets.GOOGLE_ANALYTICS_CLIENT_EMAIL }}
+          GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
+          GOOGLE_ANALYTICS_PROJECT_ID: ${{ secrets.GOOGLE_ANALYTICS_PROJECT_ID }}
+          
+          # GitHub Token for workflow
+          WEBSITE_DISPATCH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
 
       - name: Clean up before deployment
         run: |
