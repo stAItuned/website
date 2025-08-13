@@ -1,27 +1,9 @@
 # Firebase ignore file
-# Ignore the content submodule to avoid symlink issues
+# Exclude content submodule to avoid symlink issues
 content/
 
-# Ignore development/build artifacts
+# Standard ignores
 node_modules/
-.next/
-.contentlayer/
-
-# Ignore git and other VCS
 .git/
-.gitignore
-
-# Ignore editor files
-.vscode/
-.idea/
-
-# Ignore logs
 *.log
-npm-debug.log*
-
-# Ignore cache
-.cache/
-
-# Ignore OS files
 .DS_Store
-Thumbs.db

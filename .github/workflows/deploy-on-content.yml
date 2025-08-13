@@ -80,6 +80,22 @@ jobs:
         run: |
           mv contentlayer.config.ts.bak contentlayer.config.ts
 
+      - name: Clean up symlinks before deployment
+        run: |
+          # Remove any remaining symlinks that might cause issues
+          find . -type l -not -path "./node_modules/*" -delete 2>/dev/null || true
+          # Ensure clean Firebase cache
+          rm -rf .firebase
+          # Clean up any build artifacts that might contain symlinks
+          rm -rf .next/cache 2>/dev/null || true
+
+      - name: Debug frameworks output
+        run: |
+          echo "PROJECT=$FIREBASE_PROJECT_ID"
+          ls -la .firebase || true
+          ls -la .firebase/$FIREBASE_PROJECT_ID || true
+          ls -la .firebase/$FIREBASE_PROJECT_ID/functions || true
+
       - name: Deploy to Firebase (Hosting + SSR auto)
         run: firebase deploy --project "$FIREBASE_PROJECT_ID" --non-interactive
         env:
