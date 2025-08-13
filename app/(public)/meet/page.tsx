@@ -92,7 +92,7 @@ export default async function MeetPage() {
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="relative">
                     <Image
-                      src={`/cms/team/${author.slug}/propic.jpg`}
+                      src={`/content/team/${author.slug}/propic.jpg`}
                       alt={author.name}
                       width={100}
                       height={100}

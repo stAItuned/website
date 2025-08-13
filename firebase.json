@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "staituned-website",
     "source": ".",
     "frameworksBackend": { 
       "region": "europe-west1" 

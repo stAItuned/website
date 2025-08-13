@@ -80,7 +80,7 @@ export default async function AuthorsPage() {
             >
               <div className="flex items-center gap-4 mb-4">
                 <Image
-                  src={`/cms/team/${author.slug}/propic.jpg`}
+                  src={`/content/team/${author.slug}/propic.jpg`}
                   alt={author.name}
                   width={64}
                   height={64}
