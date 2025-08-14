@@ -35,7 +35,7 @@ export async function saveDraft(data: {
   return { id: ref.id }
 }
 
-export async function getDrafts() {
+export async function getDrafts(): Promise<Array<{ id: string; title?: string; content?: string; [key: string]: unknown }>> {
   if (isStaticBuild) {
     throw new Error("Server actions are not available in static builds")
   }
@@ -46,10 +46,6 @@ export async function getDrafts() {
 
 
   // Not available without NextAuth.js
-  const snapshot = { docs: [] }
-
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }))
+  // Return empty array with proper typing
+  return []
 }
