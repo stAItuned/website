@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthContext'
 
-const DISABLE_AUTH =
-  (process.env.NEXT_PUBLIC_DISABLE_AUTH ?? '').toLowerCase() === 'true';
+const DISABLE_AUTH = true
+  // (process.env.NEXT_PUBLIC_DISABLE_AUTH ?? '').toLowerCase() === 'true';
 
 interface AuthGuardProps {
   children: React.ReactNode

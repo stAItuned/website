@@ -106,7 +106,7 @@ export function HomeHero({ totalArticles, totalWriters, activeUsers, sessions }:
           </div>
         </div>
         
-        <Link href="/meet/writers">
+        <Link href="/meet">
           <div className="space-y-2">
             <h3 className="text-4xl md:text-5xl">{totalWriters}</h3>
             <p className="text-lg md:text-xl">writers</p>

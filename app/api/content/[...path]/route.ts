@@ -10,21 +10,41 @@ export async function GET(
     const filePath = params.path.join('/')
     const fullPath = path.join(process.cwd(), 'content', filePath)
     
+    console.log(`[Content API] Requested: ${filePath}`)
+    console.log(`[Content API] Full path: ${fullPath}`)
+    console.log(`[Content API] CWD: ${process.cwd()}`)
+    
     // Security check: ensure the path is within the content directory
-    if (!fullPath.startsWith(path.join(process.cwd(), 'content'))) {
+    const contentDir = path.join(process.cwd(), 'content')
+    if (!fullPath.startsWith(contentDir)) {
+      console.log(`[Content API] Security violation: ${fullPath} not in ${contentDir}`)
       return new NextResponse('Forbidden', { status: 403 })
     }
     
     // Check if file exists
     if (!fs.existsSync(fullPath)) {
+      console.log(`[Content API] File not found: ${fullPath}`)
+      
+      // List directory contents for debugging
+      const dirPath = path.dirname(fullPath)
+      if (fs.existsSync(dirPath)) {
+        const files = fs.readdirSync(dirPath)
+        console.log(`[Content API] Directory ${dirPath} contains:`, files)
+      } else {
+        console.log(`[Content API] Directory ${dirPath} does not exist`)
+      }
+      
       return new NextResponse('Not Found', { status: 404 })
     }
     
     // Get file stats
     const stats = fs.statSync(fullPath)
     if (!stats.isFile()) {
+      console.log(`[Content API] Not a file: ${fullPath}`)
       return new NextResponse('Not Found', { status: 404 })
     }
+    
+    console.log(`[Content API] Serving file: ${fullPath} (${stats.size} bytes)`)
     
     // Read the file
     const fileBuffer = fs.readFileSync(fullPath)
@@ -49,10 +69,13 @@ export async function GET(
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=31536000', // Cache for 1 year
+        'Access-Control-Allow-Origin': '*',
       },
     })
   } catch (error) {
-    console.error('Error serving content file:', error)
-    return new NextResponse('Internal Server Error', { status: 500 })
+    console.error('[Content API] Error serving content file:', error)
+    console.error('[Content API] Request path:', params.path)
+    console.error('[Content API] Process CWD:', process.cwd())
+    return new NextResponse(`Internal Server Error: ${error}`, { status: 500 })
   }
 }

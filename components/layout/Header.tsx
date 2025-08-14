@@ -7,10 +7,10 @@ import { useSearch } from '@/components/SearchContext'
 import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
 
-const DISABLE_AUTH =
-  typeof process !== 'undefined'
-    ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
-    : false
+const DISABLE_AUTH = true
+  // typeof process !== 'undefined'
+  //   ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
+  //   : false
 import { UserMenu } from '@/components/auth/UserMenu'
 
 export function Header() {
