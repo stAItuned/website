@@ -89,15 +89,13 @@ function RelatedArticleCard({ article }: { article: Article }) {
                   {/* Author */}
                   <div className="flex space-x-2 items-center">
                     {authorImageSrc && (
-                      <img
+                      <Image
                         src={authorImageSrc}
                         alt="avatar"
                         width={32}
                         height={32}
-                        className="max-h-8 rounded-full object-cover"
-                        onError={(e: any) => {
-                          e.currentTarget.style.display = 'none'
-                        }}
+                        className="w-8 h-8 rounded-full object-cover"
+                        onError={(e) => { (e.currentTarget as any).style.display = 'none'; }}
                       />
                     )}
                     <p className="text-lg mb-0 font-semibold">{article.author}</p>

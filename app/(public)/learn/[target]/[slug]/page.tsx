@@ -134,12 +134,13 @@ export default function ArticlePage({ params }: ArticlePageProps) {
       <section className="relative">
         {/* Cover Image */}
         {coverImage && (
-          <div className="w-full h-[25rem] lg:h-[30rem] relative overflow-hidden">
+          <div className="relative w-full aspect-[16/9] lg:h-[30rem] overflow-hidden">
             <Image
               src={coverImage}
               alt="Article cover"
               fill
               className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 1024px"
               unoptimized={coverImage.startsWith('http')}
             />
           </div>

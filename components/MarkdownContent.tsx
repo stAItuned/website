@@ -64,6 +64,8 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
         prose-td:py-2
         prose-img:rounded-lg
         prose-img:shadow-md
+        prose-img:w-full
+        prose-img:h-auto
         ${className}`}
       dangerouslySetInnerHTML={{ __html: processedContent }}
     />

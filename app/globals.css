@@ -78,6 +78,13 @@ body {
   height: auto;
 }
 
+/* Specific styling for article card images to prevent aspect ratio warnings */
+.article-card-image {
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
+
 /* Code blocks */
 .prose pre {
   background-color: #1f2937;

@@ -6,9 +6,8 @@ if (!isStaticBuild) {
   eval('"use server"')
 }
 
+
 import { db } from "@/lib/firebase/admin"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
 
 export async function saveDraft(data: { 
   id?: string
@@ -21,26 +20,17 @@ export async function saveDraft(data: {
     throw new Error("Server actions are not available in static builds")
   }
   
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized")
-  }
+
+  // TODO: Replace with Firebase Auth check if needed
+  throw new Error("Server actions are not available without NextAuth.js. Use client-side Firebase Auth instead.")
 
   const collection = db.collection('drafts')
   const ref = data.id
     ? collection.doc(data.id)
     : collection.doc() // Auto-generate document ID
 
-  await ref.set({
-    title: data.title,
-    slug: data.slug,
-    content: data.content,
-    tags: data.tags || [],
-    author_uid: session.user.email,
-    status: 'draft',
-    updated_at: new Date(),
-    created_at: data.id ? undefined : new Date()
-  }, { merge: true })
+
+  // Not available without NextAuth.js
 
   return { id: ref.id }
 }
@@ -50,16 +40,13 @@ export async function getDrafts() {
     throw new Error("Server actions are not available in static builds")
   }
   
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized")
-  }
 
-  const snapshot = await db
-    .collection('drafts')
-    .where('author_uid', '==', session.user.email)
-    .orderBy('updated_at', 'desc')
-    .get()
+  // TODO: Replace with Firebase Auth check if needed
+  throw new Error("Server actions are not available without NextAuth.js. Use client-side Firebase Auth instead.")
+
+
+  // Not available without NextAuth.js
+  const snapshot = { docs: [] }
 
   return snapshot.docs.map(doc => ({
     id: doc.id,

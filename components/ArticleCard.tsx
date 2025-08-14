@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 interface ArticleCardProps {
   article: {
     title: string
@@ -65,19 +67,19 @@ export function ArticleCard({ article }: ArticleCardProps) {
       onClick={() => window.location.href = `/learn/${target}/${article.slug}`}
       className="w-full sm:w-1/2 lg:w-1/3 p-2 sm:p-4 text-primary-600 hover:cursor-pointer rounded-lg"
     >
-      <div className="relative h-[380px] sm:h-[420px] flex flex-col justify-end hover:scale-105 transition duration-300 my-8 sm:my-16">
-        {imageSrc && (
-          <img
-            src={imageSrc}
-            alt="background"
-            width={400}
-            height={280}
-            className="h-2/3 absolute -top-8 sm:-top-16 w-full rounded-lg object-cover"
-            onError={(e: any) => {
-              e.currentTarget.style.display = 'none'
-            }}
-          />
-        )}
+      <div className="relative">
+        <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
+          {imageSrc && (
+            <Image
+              src={imageSrc}
+              alt={article.title}
+              fill
+              className="article-card-image"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={false}
+            />
+          )}
+        </div>
         
         {/* Target Level Overlay */}
         {article.target && (
@@ -103,15 +105,13 @@ export function ArticleCard({ article }: ArticleCardProps) {
               {/* Author */}
               <div className="flex space-x-2 items-center">
                 {authorImageSrc && (
-                  <img
+                  <Image
                     src={authorImageSrc}
                     alt="avatar"
                     width={32}
                     height={32}
-                    className="max-h-6 sm:max-h-8 rounded-full"
-                    onError={(e: any) => {
-                      e.currentTarget.style.display = 'none'
-                    }}
+                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                   />
                 )}
                 <p className="text-sm sm:text-lg mb-0 font-semibold truncate">{article.author}</p>
