@@ -119,7 +119,7 @@ function ArticleCard({ article, color, pageViews }: {
             )}
             {article.date && (
               <span className="inline-block px-2 py-0.5 rounded-full bg-gray-900/80 text-white text-xs font-normal shadow-sm">
-                {new Date(article.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                {new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
               </span>
             )}
           </div>
@@ -153,7 +153,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
   
   // Fetch analytics data for all articles
   const { data: analyticsData, loading: analyticsLoading } = useMultipleAnalytics({
-    startDate: '30daysAgo',
+    startDate: '90daysAgo',
     endDate: 'today'
   })
 

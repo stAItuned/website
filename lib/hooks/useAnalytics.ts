@@ -34,8 +34,8 @@ interface UseAnalyticsOptions {
 export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsResult {
   const {
     slug,
-    target = 'midway',
-    startDate = '30daysAgo',
+    // Remove target from default options
+    startDate = '90daysAgo',
     endDate = 'today',
     enabled = true
   } = options
@@ -54,7 +54,6 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
       const params = new URLSearchParams({
         startDate,
         endDate,
-        target,
         ...(slug && { slug })
       })
 
@@ -76,7 +75,7 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
     } finally {
       setLoading(false)
     }
-  }, [slug, target, startDate, endDate, enabled])
+  }, [slug, startDate, endDate, enabled])
 
   useEffect(() => {
     fetchAnalytics()
@@ -96,7 +95,7 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
 
 // Hook for multiple articles analytics
 interface UseMultipleAnalyticsResult {
-  data: Array<{
+data: Array<{
     articleUrl: string
     pageTitle?: string
     pageViews: number
@@ -105,6 +104,13 @@ interface UseMultipleAnalyticsResult {
     bounceRate: number
     users: number
     sessions: number
+    // Additional possible Google Analytics fields
+    entrances?: number
+    exits?: number
+    exitRate?: number
+    newUsers?: number
+    pageValue?: number
+    sessionDuration?: number
     // CMS fields
     title?: string
     author?: string
@@ -112,7 +118,7 @@ interface UseMultipleAnalyticsResult {
     topics?: string[]
     readingTime?: number
     published?: boolean
-  }> | null
+}> | null
   loading: boolean
   error: string | null
   refetch: () => void
@@ -120,8 +126,8 @@ interface UseMultipleAnalyticsResult {
 
 export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> = {}): UseMultipleAnalyticsResult {
   const {
-    target = 'midway',
-    startDate = '30daysAgo',
+    // Remove target from default options
+    startDate = '90daysAgo',
     endDate = 'today',
     enabled = true
   } = options
@@ -139,8 +145,7 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
     try {
       const params = new URLSearchParams({
         startDate,
-        endDate,
-        target
+        endDate
       })
 
       const response = await fetch(`/api/analytics?${params}`)
@@ -157,7 +162,7 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
     } finally {
       setLoading(false)
     }
-  }, [target, startDate, endDate, enabled])
+  }, [startDate, endDate, enabled])
 
   useEffect(() => {
     fetchAnalytics()
@@ -239,4 +244,33 @@ export function formatDuration(seconds: number): string {
 // Format bounce rate as percentage
 export function formatBounceRate(rate: number): string {
   return `${Math.round(rate * 100)}%`
+}
+
+// Extract site-wide active users and sessions from analytics data
+export function extractSiteMetrics(data: AnalyticsData | UseMultipleAnalyticsResult['data']): {
+  activeUsers: number
+  activeSessions: number
+} {
+  if (!data) {
+    return { activeUsers: 0, activeSessions: 0 }
+  }
+
+  // If it's a single analytics data object
+  if (!Array.isArray(data)) {
+    return {
+      activeUsers: data.users || 0,
+      activeSessions: data.sessions || 0
+    }
+  }
+
+  // If it's an array of analytics data, sum up all users and sessions
+  const totals = data.reduce(
+    (acc, item) => ({
+      activeUsers: acc.activeUsers + (item.users || 0),
+      activeSessions: acc.activeSessions + (item.sessions || 0)
+    }),
+    { activeUsers: 0, activeSessions: 0 }
+  )
+
+  return totals
 }

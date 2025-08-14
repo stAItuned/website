@@ -1,12 +1,15 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { PageTransition } from '@/components/ui/PageTransition'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { RelatedArticles } from '@/components/RelatedArticles'
-import ArticleAnalytics from '@/components/analytics/ArticleAnalytics'
+import ArticleAnalyticsStats from '@/components/ArticleAnalyticsStats'
+
+console.log('ArticleAnalyticsStats:', ArticleAnalyticsStats)
 
 interface ArticlePageProps {
   params: {
@@ -124,16 +127,20 @@ export default function ArticlePage({ params }: ArticlePageProps) {
 
   const coverImage = getValidImageSrc(article.cover)
 
+
+
   return (
     <PageTransition>
       <section className="relative">
         {/* Cover Image */}
         {coverImage && (
           <div className="w-full h-[25rem] lg:h-[30rem] relative overflow-hidden">
-            <img
+            <Image
               src={coverImage}
               alt="Article cover"
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
+              unoptimized={coverImage.startsWith('http')}
             />
           </div>
         )}
@@ -189,13 +196,8 @@ export default function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </div>
 
-          {/* Article Analytics */}
-          <div className="not-prose mb-8">
-            <ArticleAnalytics 
-              slug={article.slug} 
-              target={target}
-            />
-          </div>
+          {/* Article Analytics (moved here) */}
+          <ArticleAnalyticsStats slug={article.slug} />
 
           {/* Article Title */}
           <h1 className="text-4xl font-bold mb-8 text-primary-600">

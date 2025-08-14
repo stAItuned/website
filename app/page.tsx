@@ -1,9 +1,12 @@
+'use client'
+
 import { allPosts } from '@/lib/contentlayer'
 import Link from 'next/link'
 import Image from 'next/image'
 import { HomeHero } from '@/components/home/HomeHero'
 import { ArticleSection } from '@/components/home/ArticleSection'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { useAnalytics, extractSiteMetrics } from '@/lib/hooks/useAnalytics'
 
 export default function HomePage() {
   // Sort posts by date and get recent ones
@@ -36,8 +39,12 @@ export default function HomePage() {
 
   const totalArticles = allPosts.length;
   const totalWriters = 15; // You can calculate this from team data
-  const activeUsers = 1381;
-  const sessions = 1707;
+  
+  // Google Analytics data
+  const { data: analyticsData, loading: analyticsLoading } = useAnalytics({ startDate: '90daysAgo', endDate: 'today' });
+  // console.log('analyticsData:', analyticsData);
+  const { activeUsers, activeSessions } = extractSiteMetrics(analyticsData);
+  const sessions = activeSessions;
 
   return (
     <PageTransition>
@@ -52,7 +59,7 @@ export default function HomePage() {
         
         {/* Stats Note */}
         <p className="text-xs text-right px-2 bg-transparent">
-          * Users and sessions are referred to the last three month data
+          * Users and sessions are from Google Analytics (last three months)
         </p>
 
         {/* Articles Section */}

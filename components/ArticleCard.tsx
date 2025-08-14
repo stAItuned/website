@@ -1,7 +1,5 @@
 'use client'
 
-import ArticleAnalyticsCard from '@/components/analytics/ArticleAnalyticsCard'
-
 interface ArticleCardProps {
   article: {
     title: string
@@ -136,22 +134,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
             </div>
 
             {/* Footer */}
-            <div className="space-y-2">
-              {/* Analytics Info */}
-              <div className="flex justify-center">
-                <ArticleAnalyticsCard 
-                  slug={article.slug} 
-                  target={target}
-                  className="text-gray-500"
-                  showLabel={true}
-                />
-              </div>
-              
-              <div className="px-8 sm:px-16">
-                <button className="py-2 w-full bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors text-sm sm:text-base">
-                  Read more
-                </button>
-              </div>
+            <div className="px-8 sm:px-16">
+              <button className="py-2 w-full bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors text-sm sm:text-base">
+                Read more
+              </button>
             </div>
           </div>
         </div>
