@@ -569,7 +569,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
         <div className="text-gray-600 text-sm md:text-base">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1">
             <span>
-              Showing <span className="font-semibold">{filteredArticles.length}</span> article{filteredArticles.length !== 1 ? 's' : ''} for <span className="font-semibold">{targetDisplay}</span>
+              Showing <span className="font-semibold">{startIndex + 1}-{Math.min(startIndex + pageSize, filteredArticles.length)}</span> of <span className="font-semibold">{filteredArticles.length}</span> article{filteredArticles.length !== 1 ? 's' : ''} for <span className="font-semibold">{targetDisplay}</span>
             </span>
             {searchTerm && (
               <span className="text-primary-600"> matching &ldquo;{searchTerm}&rdquo;</span>

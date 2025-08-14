@@ -1,6 +1,8 @@
 'use client'
 
+
 import Image from 'next/image'
+import { useAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useAnalytics'
 
 interface ArticleCardProps {
   article: {
@@ -18,6 +20,8 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
+  // Fetch analytics for this article (from cache if present)
+  const { data: analyticsData, loading: analyticsLoading } = useAnalytics({ slug: article.slug })
   const getValidImageSrc = (cover?: string) => {
     if (!cover) return null
     if (cover.startsWith('http://') || cover.startsWith('https://')) {
@@ -79,15 +83,23 @@ export function ArticleCard({ article }: ArticleCardProps) {
               priority={false}
             />
           )}
+
+          {/* Views Badge */}
+          <div className="absolute top-2 left-2 z-20 flex items-center bg-white/90 text-gray-800 rounded-full px-2 py-1 shadow text-xs font-semibold gap-1">
+            <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M1.5 12s4.5-7.5 10.5-7.5S22.5 12 22.5 12s-4.5 7.5-10.5 7.5S1.5 12 1.5 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData?.pageViews || 0)}
+            <span className="ml-1">views</span>
+          </div>
         </div>
-        
         {/* Target Level Overlay */}
         {article.target && (
-          <div className={`absolute -top-8 sm:-top-16 right-0 px-2 py-1 rounded-bl-lg rounded-tr-lg text-xs font-semibold z-20 ${getTargetStyle(article.target)}`}>
+          <div className={`absolute -top-8 sm:-top-1 right-0 px-2 py-1 rounded-bl-lg rounded-tr-lg text-xs font-semibold z-20 ${getTargetStyle(article.target)}`}>
             {article.target}
           </div>
         )}
-        
         {/* Post Info */}
         <div className="relative mx-2 sm:mx-4 h-2/3 justify-between bg-slate-100 rounded-lg p-3 sm:p-4 z-10">
           {/* Date */}
@@ -97,7 +109,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
             </svg>
             <p className="text-sm sm:text-md m-0">{formatDate(article.date)}</p>
           </div>
-          
           {/* Main Info */}
           <div className="space-y-4 sm:space-y-6 flex flex-col justify-between h-full">
             {/* Header */}
@@ -116,7 +127,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
                 )}
                 <p className="text-sm sm:text-lg mb-0 font-semibold truncate">{article.author}</p>
               </div>
-              
               {/* Reading Time */}
               {article.readingTime && (
                 <div className="flex space-x-2">
@@ -124,7 +134,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
                 </div>
               )}
             </div>
-            
             {/* Title */}
             <div className="space-y-2">
               <h1 className="font-bold text-base sm:text-lg leading-tight">{article.title}</h1>
@@ -132,7 +141,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
                 {article.meta || 'No description available'}
               </p>
             </div>
-
             {/* Footer */}
             <div className="px-8 sm:px-16">
               <button className="py-2 w-full bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors text-sm sm:text-base">

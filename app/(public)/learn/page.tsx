@@ -32,6 +32,26 @@ const targets = [
 export default function LearnPage() {
   const searchParams = useSearchParams()
   const target = searchParams.get('target')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isMobile, setIsMobile] = useState(false)
+  const pageSize = 15
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Reset page when target changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [target])
 
   // Filter articles by target if specified
   const filteredArticles = useMemo(() => {
@@ -40,6 +60,11 @@ export default function LearnPage() {
       post.target?.toLowerCase() === target.toLowerCase() && post.published !== false
     ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [target])
+
+  // Pagination
+  const totalPages = Math.ceil(filteredArticles.length / pageSize)
+  const startIndex = (currentPage - 1) * pageSize
+  const paginatedArticles = filteredArticles.slice(startIndex, startIndex + pageSize)
 
   // If target is specified, show filtered articles
   if (target) {
@@ -67,7 +92,7 @@ export default function LearnPage() {
               {targetDisplay} Articles
             </h1>
             <p className="text-gray-600 mb-8">
-              Showing {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} for {targetDisplay} level
+              Showing {paginatedArticles.length} of {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} for {targetDisplay} level
             </p>
             <Link 
               href="/learn" 
@@ -78,9 +103,9 @@ export default function LearnPage() {
           </div>
 
           {/* Articles Grid */}
-          {filteredArticles.length > 0 ? (
+          {paginatedArticles.length > 0 ? (
             <div className="flex flex-wrap">
-              {filteredArticles.map((article) => (
+              {paginatedArticles.map((article) => (
                 <ArticleCard 
                   key={article.slug} 
                   article={{
@@ -105,6 +130,102 @@ export default function LearnPage() {
               <p className="text-gray-600">
                 Check back soon for new content!
               </p>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-8">
+              <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  {isMobile ? 'Prev' : 'Previous'}
+                </button>
+                
+                {/* Page numbers with smart display logic */}
+                {(() => {
+                  const maxVisiblePages = isMobile ? 3 : 5
+                  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
+                  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+                  
+                  // Adjust start if we're near the end
+                  if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1)
+                  }
+                  
+                  const pages = []
+                  
+                  // First page and ellipsis
+                  if (startPage > 1) {
+                    pages.push(
+                      <button
+                        key={1}
+                        onClick={() => setCurrentPage(1)}
+                        className="px-2 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        1
+                      </button>
+                    )
+                    if (startPage > 2) {
+                      pages.push(
+                        <span key="start-ellipsis" className="px-1 sm:px-2 py-2 text-sm sm:text-base text-gray-400">
+                          ...
+                        </span>
+                      )
+                    }
+                  }
+                  
+                  // Visible page range
+                  for (let i = startPage; i <= endPage; i++) {
+                    pages.push(
+                      <button
+                        key={i}
+                        onClick={() => setCurrentPage(i)}
+                        className={`px-2 sm:px-4 py-2 text-sm sm:text-base border rounded-lg ${
+                          currentPage === i 
+                            ? 'bg-primary-600 text-white border-primary-600' 
+                            : 'border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {i}
+                      </button>
+                    )
+                  }
+                  
+                  // Last page and ellipsis
+                  if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                      pages.push(
+                        <span key="end-ellipsis" className="px-1 sm:px-2 py-2 text-sm sm:text-base text-gray-400">
+                          ...
+                        </span>
+                      )
+                    }
+                    pages.push(
+                      <button
+                        key={totalPages}
+                        onClick={() => setCurrentPage(totalPages)}
+                        className="px-2 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        {totalPages}
+                      </button>
+                    )
+                  }
+                  
+                  return pages
+                })()}
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           )}
         </section>

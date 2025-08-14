@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import { RelatedArticleCard } from '@/components/RelatedArticleCard'
 
 interface Article {
   title: string
@@ -20,117 +19,6 @@ interface RelatedArticlesProps {
   relatedArticles: Article[]
 }
 
-function RelatedArticleCard({ article }: { article: Article }) {
-  const target = article.target?.toLowerCase() || 'general'
-  
-  const getValidImageSrc = (cover?: string) => {
-    if (!cover) return null
-    if (cover.startsWith('http://') || cover.startsWith('https://')) {
-      return cover
-    }
-    if (cover.startsWith('/')) {
-      return cover
-    }
-    // Handle cases where cover has nested paths like "./cover.jpeg"
-    const cleanCover = cover.replace(/^\.\//, '')
-    return `/content/articles/${article.slug}/${cleanCover}`
-  }
-
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      day: '2-digit', 
-      month: 'long', 
-      year: 'numeric' 
-    })
-  }
-
-  const getAuthorImageSrc = (author?: string) => {
-    if (!author) return null
-    const authorSlug = author.replaceAll(' ', '-')
-    return `/content/team/${authorSlug}/propic.jpg`
-  }
-
-  const imageSrc = getValidImageSrc(article.cover)
-  const authorImageSrc = getAuthorImageSrc(article.author)
-
-  return (
-    <div className="max-w-4xl mx-auto p-3">
-      <Link href={`/learn/${target}/${article.slug}`}>
-        <div className="w-full py-2 text-primary-600 hover:cursor-pointer rounded-lg">
-          <div className="relative my-16 h-[420px] overflow-hidden rounded-lg">
-            {/* Cover Image */}
-            {imageSrc && (
-              <Image
-                src={imageSrc}
-                alt="background"
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 800px"
-                onError={(e) => { (e.currentTarget as any).style.display = 'none'; }}
-                priority={false}
-              />
-            )}
-            {/* Post Info */}
-            <div className="relative mx-4 h-2/3 justify-between bg-slate-100 rounded-lg p-4 z-10">
-              {/* Date */}
-              <div className="absolute -top-10 left-0 w-full px-4 py-1 flex space-x-2 font-semibold text-white bg-slate-700 bg-opacity-40 rounded-lg">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
-                </svg>
-                <p className="text-md m-0">{formatDate(article.date)}</p>
-              </div>
-              
-              {/* Main Info */}
-              <div className="space-y-6 flex flex-col justify-between h-full">
-                {/* Header */}
-                <div className="flex justify-between items-center">
-                  {/* Author */}
-                  <div className="flex space-x-2 items-center">
-                    {authorImageSrc && (
-                      <Image
-                        src={authorImageSrc}
-                        alt="avatar"
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded-full object-cover"
-                        onError={(e) => { (e.currentTarget as any).style.display = 'none'; }}
-                      />
-                    )}
-                    <p className="text-lg mb-0 font-semibold">{article.author}</p>
-                  </div>
-                  
-                  {/* Reading Time */}
-                  {article.readingTime && (
-                    <div className="flex space-x-2">
-                      <p className="text-md mb-0 font-semibold">{article.readingTime} min</p>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Title */}
-                <div className="space-y-2">
-                  <h1 className="font-bold text-lg leading-5">{article.title}</h1>
-                  <p className="text-sm leading-4 line-clamp-3">
-                    {article.meta}
-                  </p>
-                </div>
-
-                {/* Footer */}
-                <div className="px-16">
-                  <button className="py-2 w-full bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors">
-                    Read more
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </div>
-  )
-}
 
 export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -223,10 +111,10 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
                 onMouseLeave={() => setIsAutoPlaying(true)}
               >
                 {relatedArticles.map((article) => (
-                  <div 
-                    key={article.slug} 
-                    className="flex-shrink-0" 
-                    style={{ width: '50%' }} // Each card takes exactly 50% so 2 are visible
+                  <div
+                    key={article.slug}
+                    className="flex-shrink-0 flex justify-center items-center px-2"
+                    style={{ width: '50%' }}
                   >
                     <RelatedArticleCard article={article} />
                   </div>
@@ -257,7 +145,7 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
           /* Mobile: Simple list like Svelte */
           <ul className="space-y-0">
             {relatedArticles.map((article) => (
-              <li key={article.slug}>
+              <li key={article.slug} className="flex justify-center py-2">
                 <RelatedArticleCard article={article} />
               </li>
             ))}

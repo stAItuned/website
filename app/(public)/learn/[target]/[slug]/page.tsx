@@ -7,6 +7,7 @@ import { PageTransition } from '@/components/ui/PageTransition'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { RelatedArticles } from '@/components/RelatedArticles'
+import { LikeButton } from '@/components/LikeButton'
 import ArticleAnalyticsStats from '@/components/ArticleAnalyticsStats'
 
 console.log('ArticleAnalyticsStats:', ArticleAnalyticsStats)
@@ -197,8 +198,12 @@ export default function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </div>
 
-          {/* Article Analytics (moved here) */}
-          <ArticleAnalyticsStats slug={article.slug} />
+
+          {/* Article Analytics and Like Button */}
+          <div className="flex items-center gap-4 mb-4">
+            <ArticleAnalyticsStats slug={article.slug} />
+            <LikeButton articleSlug={article.slug} />
+          </div>
 
           {/* Article Title */}
           <h1 className="text-4xl font-bold mb-8 text-primary-600">
