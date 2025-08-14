@@ -1,14 +1,30 @@
-'use client'
-
 import { allPosts } from '@/lib/contentlayer'
-import Link from 'next/link'
-import Image from 'next/image'
 import { HomeHero } from '@/components/home/HomeHero'
 import { ArticleSection } from '@/components/home/ArticleSection'
 import { PageTransition } from '@/components/ui/PageTransition'
-import { useAnalytics, extractSiteMetrics } from '@/lib/hooks/useAnalytics'
 
-export default function HomePage() {
+// Force static generation
+export const dynamic = 'force-static'
+export const revalidate = 86400 // ISR ogni 10 minuti
+
+async function getAnalyticsData() {
+  try {
+    const response = await fetch(new URL('/api/analytics/stats', process.env.VERCEL_URL || 'http://localhost:3000'), {
+      next: { revalidate: revalidate, tags: ['analytics-stats'] }
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch analytics')
+    }
+    
+    return await response.json()
+  } catch (error) {
+    console.error('Analytics fetch error:', error)
+    return { activeUsers: 0, sessions: 0 }
+  }
+}
+
+export default async function HomePage() {
   // Sort posts by date and get recent ones
   const recentArticles = allPosts
     .filter(post => post.published !== false)
@@ -40,11 +56,9 @@ export default function HomePage() {
   const totalArticles = allPosts.length;
   const totalWriters = 15; // You can calculate this from team data
   
-  // Google Analytics data
-  const { data: analyticsData, loading: analyticsLoading } = useAnalytics({ startDate: '90daysAgo', endDate: 'today' });
-  // console.log('analyticsData:', analyticsData);
-  const { activeUsers, activeSessions } = extractSiteMetrics(analyticsData);
-  const sessions = activeSessions;
+  // Fetch analytics data server-side con caching
+  const analyticsData = await getAnalyticsData()
+  const { activeUsers, sessions } = analyticsData
 
   return (
     <PageTransition>

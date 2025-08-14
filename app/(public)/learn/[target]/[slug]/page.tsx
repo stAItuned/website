@@ -10,7 +10,9 @@ import { RelatedArticles } from '@/components/RelatedArticles'
 import { LikeButton } from '@/components/LikeButton'
 import ArticleAnalyticsStats from '@/components/ArticleAnalyticsStats'
 
-console.log('ArticleAnalyticsStats:', ArticleAnalyticsStats)
+// Force static generation per articoli
+export const dynamic = 'force-static'
+export const revalidate = 60*60*6 // ISR ogni 6 ore
 
 interface ArticlePageProps {
   params: {

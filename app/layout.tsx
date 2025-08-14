@@ -1,17 +1,19 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
-import { Providers } from './providers'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { SearchProvider } from '@/components/SearchContext'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { SafePageViewTracker } from '@/components/PageViewTracker'
-import { CacheProvider } from '@/components/CacheProvider'
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
 import dynamic from 'next/dynamic'
 
-// Lazy load SearchModal to reduce initial bundle size
+// Lazy load solo i componenti necessari che richiedono client-side
+const SearchProvider = dynamic(
+  () => import('@/components/SearchContext').then(mod => ({ default: mod.SearchProvider })),
+  { ssr: false }
+)
+
 const SearchModal = dynamic(
   () => import('@/components/SearchModal').then(mod => ({ default: mod.SearchModal })),
   { ssr: false }
@@ -69,21 +71,18 @@ export default function RootLayout({
       <body className={montserrat.className}>
         <GoogleAnalytics />
         <ServiceWorkerRegister />
-        <Providers>
-          <CacheProvider>
-            <SearchProvider>
-              <SafePageViewTracker />
-              <Header />
-              <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
-                <main className="h-full flex flex-col justify-center">
-                  {children}
-                </main>
-                <Footer />
-              </section>
-              <SearchModal />
-            </SearchProvider>
-          </CacheProvider>
-        </Providers>
+        {/* Solo i componenti essenziali sono server-side */}
+        <SearchProvider>
+          <SafePageViewTracker />
+          <Header />
+          <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
+            <main className="h-full flex flex-col justify-center">
+              {children}
+            </main>
+            <Footer />
+          </section>
+          <SearchModal />
+        </SearchProvider>
       </body>
     </html>
   )

@@ -2,6 +2,8 @@
 
 import { AuthGuard } from "@/components/auth/AuthGuard"
 import { useAuth } from "@/components/auth/AuthContext"
+import { FirebaseAuthProvider } from "@/components/auth/FirebaseAuthProvider"
+import { CacheProvider } from "@/components/CacheProvider"
 import Image from "next/image"
 
 export default function WriterLayout({
@@ -10,9 +12,13 @@ export default function WriterLayout({
   children: React.ReactNode
 }) {
   return (
-    <AuthGuard>
-      <WriterLayoutContent>{children}</WriterLayoutContent>
-    </AuthGuard>
+    <FirebaseAuthProvider>
+      <CacheProvider>
+        <AuthGuard>
+          <WriterLayoutContent>{children}</WriterLayoutContent>
+        </AuthGuard>
+      </CacheProvider>
+    </FirebaseAuthProvider>
   )
 }
 

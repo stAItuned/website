@@ -44,6 +44,8 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
       '@heroicons/react',
       'react-syntax-highlighter',
       'firebase/auth',
@@ -111,7 +113,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, s-maxage=300, stale-while-revalidate=600', // 5 minutes cache, 10 minutes stale
+            value: 'public, s-maxage=300, stale-while-revalidate=86400', // 5 minutes cache, 1 day stale
           },
         ],
       },

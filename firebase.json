@@ -3,7 +3,12 @@
     "site": "staituned-production",
     "source": ".",
     "frameworksBackend": { 
-      "region": "europe-west1" 
+      "region": "europe-west1",
+      "concurrency": 100,
+      "memory": "256MiB",
+      "timeoutSeconds": 60,
+      "minInstances": 0,
+      "maxInstances": 10
     },
     "ignore": [
       "firebase.json",
@@ -48,6 +53,15 @@
         ]
       },
       {
+        "source": "/api/analytics/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, s-maxage=600, stale-while-revalidate=1200"
+          }
+        ]
+      },
+      {
         "source": "/sw.js",
         "headers": [
           {
@@ -73,6 +87,13 @@
           }
         ] 
       }
+    ]
+  },
+  "functions": {
+    "runtime": "nodejs20",
+    "source": ".next/functions",
+    "predeploy": [
+      "npm run build"
     ]
   }
 }
