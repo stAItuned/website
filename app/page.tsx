@@ -1,30 +1,13 @@
 import { allPosts } from '@/lib/contentlayer'
-import { HomeHero } from '@/components/home/HomeHero'
+import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
 import { ArticleSection } from '@/components/home/ArticleSection'
 import { PageTransition } from '@/components/ui/PageTransition'
 
 // Force static generation
 export const dynamic = 'force-static'
-export const revalidate = 86400 // ISR ogni 10 minuti
+export const revalidate = 86400 // ISR ogni giorno
 
-async function getAnalyticsData() {
-  try {
-    const response = await fetch(new URL('/api/analytics/stats', process.env.VERCEL_URL || 'http://localhost:3000'), {
-      next: { revalidate: revalidate, tags: ['analytics-stats'] }
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch analytics')
-    }
-    
-    return await response.json()
-  } catch (error) {
-    console.error('Analytics fetch error:', error)
-    return { activeUsers: 0, sessions: 0 }
-  }
-}
-
-export default async function HomePage() {
+export default function HomePage() {
   // Sort posts by date and get recent ones
   const recentArticles = allPosts
     .filter(post => post.published !== false)
@@ -56,19 +39,19 @@ export default async function HomePage() {
   const totalArticles = allPosts.length;
   const totalWriters = 15; // You can calculate this from team data
   
-  // Fetch analytics data server-side con caching
-  const analyticsData = await getAnalyticsData()
-  const { activeUsers, sessions } = analyticsData
+  // Analytics data will be loaded client-side to avoid build-time fetch issues
+  const activeUsers = 0; // Placeholder, will be updated via client-side
+  const sessions = 0; // Placeholder, will be updated via client-side
 
   return (
     <PageTransition>
       <main className="min-h-screen">
         {/* Hero Section */}
-        <HomeHero 
+        <HomeHeroWithAnalytics 
           totalArticles={totalArticles}
           totalWriters={totalWriters}
-          activeUsers={activeUsers}
-          sessions={sessions}
+          initialActiveUsers={activeUsers}
+          initialSessions={sessions}
         />
         
         {/* Stats Note */}

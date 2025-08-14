@@ -64,40 +64,73 @@ const nextConfig = {
   webpack: (config, { dev, isServer }) => {
     config.resolve.symlinks = false
     
-    // Optimize bundle splitting
+    // Optimize bundle splitting - AGGRESSIVE OPTIMIZATION
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 200000,
         cacheGroups: {
+          // Framework chunks (React, Next.js)
+          framework: {
+            test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
+            name: 'framework',
+            priority: 40,
+            chunks: 'all',
+            enforce: true,
+          },
+          // Libraries usate globalmente ma caricate async
+          firebase: {
+            test: /[\\/]node_modules[\\/](firebase|@firebase)[\\/]/,
+            name: 'firebase',
+            priority: 30,
+            chunks: 'async',
+            enforce: true,
+          },
+          // Editor libraries (solo writer)
+          editor: {
+            test: /[\\/]node_modules[\\/](@tiptap|@mdxeditor|prosemirror)[\\/]/,
+            name: 'editor',
+            priority: 30,
+            chunks: 'async',
+            enforce: true,
+          },
+          // Syntax highlighting (solo articoli)
+          highlighter: {
+            test: /[\\/]node_modules[\\/](react-syntax-highlighter|prismjs|highlight\.js|shiki)[\\/]/,
+            name: 'highlighter',
+            priority: 30,
+            chunks: 'async',
+            enforce: true,
+          },
+          // UI Libraries
+          ui: {
+            test: /[\\/]node_modules[\\/](@heroicons|lucide-react|framer-motion)[\\/]/,
+            name: 'ui',
+            priority: 25,
+            chunks: 'all',
+          },
+          // Utilities
+          utils: {
+            test: /[\\/]node_modules[\\/](date-fns|marked|gray-matter|reading-time)[\\/]/,
+            name: 'utils',
+            priority: 20,
+            chunks: 'all',
+          },
+          // Vendor rimanenti (ridotto)
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            chunks: 'all',
+            maxSize: 150000, // Max 150KB per chunk vendor
+          },
+          // Default
           default: {
             minChunks: 2,
             priority: -20,
             reuseExistingChunk: true,
           },
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            priority: -10,
-            chunks: 'all',
-          },
-          firebase: {
-            test: /[\\/]node_modules[\\/](firebase|@firebase)[\\/]/,
-            name: 'firebase',
-            priority: 10,
-            chunks: 'async', // Load Firebase only when needed
-          },
-          tiptap: {
-            test: /[\\/]node_modules[\\/]@tiptap[\\/]/,
-            name: 'tiptap',
-            priority: 10,
-            chunks: 'async', // Load TipTap only on editor pages
-          },
-          highlighter: {
-            test: /[\\/]node_modules[\\/](react-syntax-highlighter|prismjs|highlight\.js)[\\/]/,
-            name: 'highlighter',
-            priority: 10,
-            chunks: 'async',
-          }
         }
       }
     }
