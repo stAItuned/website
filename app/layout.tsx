@@ -3,12 +3,18 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { GoogleAnalytics } from '@/components/GoogleAnalytics'
-import { SafePageViewTracker } from '@/components/PageViewTracker'
-import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
 import dynamic from 'next/dynamic'
 
-// Lazy load solo i componenti necessari che richiedono client-side
+// Critical components loaded immediately
+import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
+
+// Non-critical components lazy loaded
+const SafePageViewTracker = dynamic(
+  () => import('@/components/PageViewTracker').then(mod => ({ default: mod.SafePageViewTracker })),
+  { ssr: false }
+)
+
 const SearchProvider = dynamic(
   () => import('@/components/SearchContext').then(mod => ({ default: mod.SearchProvider })),
   { ssr: false }
