@@ -9,17 +9,18 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "content/**",
       "scripts/**",
       "*.sh",
       "*.md",
       ".env*",
-      "*.config.js",
-      "*.config.ts",
-      "*.config.cjs",
-      "tsconfig*.json",
       ".contentlayer/**",
-      ".next/cache/**"
+      ".next/cache/**",
+      "public/content/.git/**",
+      "public/content/.github/**",
+      "public/content/.vscode/**",
+      "public/content/.gitignore",
+      "public/content/.pre-commit-config.yaml",
+      "public/content/README.md"
     ],
     "headers": [
       { 

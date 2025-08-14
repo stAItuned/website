@@ -45,12 +45,20 @@ export const Post = defineDocumentType(() => ({
         const readingTime = Math.ceil(wordCount / wordsPerMinute)
         return readingTime
       }
+    },
+    imagePath: {
+      type: 'string',
+      resolve: (doc) => {
+        const pathParts = doc._raw.flattenedPath.split('/')
+        const slug = pathParts[1] // Get the article directory name
+        return `/content/articles/${slug}`
+      }
     }
   },
 }))
 
 export default makeSource({
-  contentDirPath: 'content',
+  contentDirPath: 'public/content',
   documentTypes: [Post],
   disableImportAliasWarning: true,
   onUnknownDocuments: 'skip-warn',
