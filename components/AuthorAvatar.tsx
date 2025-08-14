@@ -21,12 +21,12 @@ export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
         height={48}
         className="rounded-full object-cover"
       />
-      <div>
+      <div className="flex flex-col">
         <div className="font-medium text-gray-900">
           {authorData?.name || author}
         </div>
         {authorData?.title && (
-          <div className="text-sm text-gray-600">
+          <div className="text-xs text-gray-500 mt-0.5">
             {authorData.title}
           </div>
         )}

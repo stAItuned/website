@@ -86,7 +86,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
         <div className="flex items-start gap-6">
           <Image
-            src={`/cms/team/${slug}/propic.jpg`}
+            src={`/content/team/${slug}/propic.jpg`}
             alt={authorData.name}
             width={120}
             height={120}

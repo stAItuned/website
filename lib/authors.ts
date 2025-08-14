@@ -15,34 +15,43 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
   try {
     // Convert author name to slug format (replace spaces with hyphens)
     const authorSlug = authorName.replaceAll(' ', '-')
-    
-    // Read the author's metadata file from the file system
-    const metadataPath = path.join(process.cwd(), 'cms', 'team', authorSlug, 'meta.md')
-    
-    if (!fs.existsSync(metadataPath)) {
+
+    // Try both possible locations for the metadata file
+    const possiblePaths = [
+      path.join(process.cwd(), 'cms', 'team', authorSlug, 'meta.md'),
+      path.join(process.cwd(), 'content', 'team', authorSlug, 'meta.md'),
+      path.join(process.cwd(), 'public', 'content', 'team', authorSlug, 'meta.md'),
+    ]
+
+    let metadataText = null
+    for (const metadataPath of possiblePaths) {
+      if (fs.existsSync(metadataPath)) {
+        metadataText = fs.readFileSync(metadataPath, 'utf-8')
+        break
+      }
+    }
+    if (!metadataText) {
       return null
     }
-    
-    const metadataText = fs.readFileSync(metadataPath, 'utf-8')
-    
+
     // Parse the frontmatter from the markdown file - handle both Unix and Windows line endings
     const frontmatterRegex = /^\s*---[\r\n]+([\s\S]*?)[\r\n]+---/
     const match = metadataText.match(frontmatterRegex)
-    
+
     if (!match) {
       return null
     }
-    
+
     // Simple YAML parsing for the author metadata
     const frontmatter = match[1]
     const lines = frontmatter.split(/[\r\n]+/)
     const metadata: Record<string, string | string[]> = {}
-    
+
     for (const line of lines) {
       if (line.includes(':')) {
         const [key, ...valueParts] = line.split(':')
         const value = valueParts.join(':').trim()
-        
+
         // Handle arrays (team field)
         if (value.startsWith('[') && value.endsWith(']')) {
           metadata[key.trim()] = value
@@ -54,7 +63,7 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
         }
       }
     }
-    
+
     return {
       name: Array.isArray(metadata.name) ? metadata.name[0] : metadata.name || authorName,
       team: Array.isArray(metadata.team) ? metadata.team : [],
