@@ -6,6 +6,11 @@ import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
 import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/FirebaseAuthProvider'
+
+const DISABLE_AUTH =
+  typeof process !== 'undefined'
+    ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
+    : false
 import { UserMenu } from '@/components/auth/UserMenu'
 import { signOutUser } from '@/lib/firebase/auth'
 
@@ -76,8 +81,8 @@ export function Header() {
               </ul>
             </div>
 
-            {/* Authentication Section - Only in production */}
-            {process.env.NODE_ENV === 'production' && !loading && (
+            {/* Authentication Section */}
+            {!DISABLE_AUTH && !loading && (
               <div className="hidden lg:flex items-center">
                 {user ? (
                   <UserMenu user={user} />
@@ -133,8 +138,8 @@ export function Header() {
                 </Link>
               ))}
               
-              {/* Mobile Authentication - Only in production */}
-              {process.env.NODE_ENV === 'production' && !loading && (
+              {/* Mobile Authentication */}
+              {!DISABLE_AUTH && !loading && (
                 <div className="py-4 border-b border-primary-500">
                   {user ? (
                     <div className="space-y-4">

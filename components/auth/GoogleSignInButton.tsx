@@ -33,7 +33,16 @@ export default function GoogleSignInButton({
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
 
+  const DISABLE_AUTH =
+    typeof process !== 'undefined'
+      ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
+      : false
+
   useEffect(() => {
+    if (DISABLE_AUTH) {
+      setInitialLoading(false)
+      return
+    }
     // Handle redirect result on component mount (for redirect flow)
     const handleRedirect = async () => {
       if (useRedirect) {
@@ -45,7 +54,6 @@ export default function GoogleSignInButton({
         }
       }
     }
-
     handleRedirect()
 
     // Listen for auth state changes
@@ -55,7 +63,7 @@ export default function GoogleSignInButton({
     })
 
     return () => unsubscribe()
-  }, [useRedirect, onSignInSuccess, onSignInError])
+  }, [useRedirect, onSignInSuccess, onSignInError, DISABLE_AUTH])
 
   const handleSignIn = async () => {
     setLoading(true)
