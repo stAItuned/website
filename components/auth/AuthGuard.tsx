@@ -5,9 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/FirebaseAuthProvider'
 
 const DISABLE_AUTH =
-  typeof process !== 'undefined'
-    ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
-    : false
+  (process.env.NEXT_PUBLIC_DISABLE_AUTH ?? '').toLowerCase() === 'true';
 
 interface AuthGuardProps {
   children: React.ReactNode
