@@ -35,6 +35,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload critical resources */}
+        <link
+          rel="preload"
+          href="/assets/general/home_bg.webp"
+          as="image"
+          type="image/webp"
+        />
+        <link
+          rel="preload"
+          href="/assets/general/logo-text.png"
+          as="image"
+          type="image/png"
+        />
+        {/* Preload critical fonts */}
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={montserrat.className}>
         <GoogleAnalytics />
         <ServiceWorkerRegister />

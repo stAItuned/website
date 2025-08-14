@@ -52,10 +52,11 @@ interface ArticleSectionProps {
   relevantArticles: Article[]
 }
 
-function ArticleCard({ article, color, pageViews }: { 
+function ArticleCard({ article, color, pageViews, index }: { 
   article: Article; 
   color: string; 
-  pageViews?: number 
+  pageViews?: number;
+  index: number;
 }) {
   const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'
   
@@ -87,22 +88,25 @@ function ArticleCard({ article, color, pageViews }: {
         {imageSrc ? (
           <Image
             src={imageSrc}
-            alt="bg"
+            alt={`Cover image for ${article.title}`}
             width={400}
             height={200}
             className="w-full max-h-[200px] object-cover opacity-30"
             unoptimized={imageSrc.startsWith('http')}
+            loading={index < 4 ? "eager" : "lazy"}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={75}
             onError={(e) => {
               // Hide broken images
               e.currentTarget.style.display = 'none'
             }}
           />
         ) : (
-          <div className="w-full h-[200px] opacity-30" />
+          <div className="w-full h-[200px] opacity-30 bg-gradient-to-br from-gray-400 to-gray-600" />
         )}
         <span className="absolute top-[30%] left-[10%] text-white">
-          <span>{article.title}</span>
-          <div className="flex flex-wrap items-center gap-2 mt-1">
+          <span className="text-lg md:text-xl lg:text-2xl font-bold leading-tight drop-shadow-lg">{article.title}</span>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
             {article.author && (
               <span className="inline-block px-2 py-0.5 rounded-full bg-white/90 text-gray-900 text-xs font-semibold shadow-sm">
                 {article.author
@@ -225,6 +229,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
             article={article}
             color={articleCardColors[idx % articleCardColors.length]}
             pageViews={article.pageViews}
+            index={idx}
           />
         ))}
       </div>

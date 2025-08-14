@@ -62,6 +62,9 @@ jobs:
         run: |
           rm -f public/content
           cp -r content public/content
+          # Ensure all static assets are properly accessible
+          ls -la public/assets/ || echo "No assets directory found"
+          ls -la public/sw.js || echo "No service worker found"
 
       - name: Debug content structure
         run: |

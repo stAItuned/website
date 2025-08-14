@@ -446,3 +446,476 @@ out
 .firebase/staituned-production/hosting/learn/newbie/understanding-how-recommendation-suggestions-work.html
 .firebase/staituned-production/hosting/learn/newbie/what-is-an-llm-large-language-model-explained.html
 .firebase/staituned-production/hosting/learn/newbie/what-is-behind-chatgpt-generative-ai-explained.html
+public/sw.js
+public/content/.gitignore
+public/content/.pre-commit-config.yaml
+public/content/README.md
+public/content/.github/workflows/dispatch-site.yml
+public/content/articles/30-days-of-machine-learning-engineering/30DaysOfMachineLearningEngineering.md
+public/content/articles/30-days-of-machine-learning-engineering/30DaysOfMachineLearningEngineering.png
+public/content/articles/30-days-of-machine-learning-engineering/cover.jpeg
+public/content/articles/advanced-data-normalization-techniques-for-financial-data-analysis/Advanced Data Normalization Techniques for Financial Analysis.md
+public/content/articles/advanced-data-normalization-techniques-for-financial-data-analysis/cover_image.webp
+public/content/articles/agentic-ai-vs-traditional-ai-key-differences/agenticai.webp
+public/content/articles/agentic-ai-vs-traditional-ai-key-differences/article.md
+public/content/articles/agentic-ai-vs-traditional-ai-key-differences/cover.webp
+public/content/articles/agentic-ai-vs-traditional-ai-key-differences/risks.webp
+public/content/articles/agentic-ai-vs-traditional-ai-key-differences/workflow.webp
+public/content/articles/ai-for-breast-cancer-diagnosis/AI for breast cancer diagnosis.md
+public/content/articles/ai-for-breast-cancer-diagnosis/benign-and-malignant.jpeg
+public/content/articles/ai-for-breast-cancer-diagnosis/cover.webp
+public/content/articles/ai-for-breast-cancer-diagnosis/mammography.gif
+public/content/articles/ai-for-breast-cancer-diagnosis/TumorClassification.png
+public/content/articles/ai-for-breast-cancer-diagnosis/TumorSegmentation.png
+public/content/articles/ai-in-agriculture-making-farming-more-efficient-and-sustainable/AI in Agriculture.md
+public/content/articles/ai-in-agriculture-making-farming-more-efficient-and-sustainable/cover.webp
+public/content/articles/ai-in-agriculture-making-farming-more-efficient-and-sustainable/image1.webp
+public/content/articles/ai-in-agriculture-making-farming-more-efficient-and-sustainable/image2.webp
+public/content/articles/ai-research-assistants-openai-deep-research/article.md
+public/content/articles/ai-research-assistants-openai-deep-research/cover.webp
+public/content/articles/ai-translator-lara-global-communication/cover_lara.webp
+public/content/articles/ai-translator-lara-global-communication/lara.md
+public/content/articles/artificial-intelligence-in-videogames/Artificial Intelligence in videogames.md
+public/content/articles/artificial-intelligence-in-videogames/connor.jpg
+public/content/articles/artificial-intelligence-in-videogames/cover.jpg
+public/content/articles/artificial-intelligence-in-videogames/montecarlo.jpg
+public/content/articles/artificial-intelligence-in-videogames/untildawn.jpg
+public/content/articles/assortativity-coefficients-in-social-network-data/03_Network_Img.png
+public/content/articles/assortativity-coefficients-in-social-network-data/06_Attribute_Assignment.png
+public/content/articles/assortativity-coefficients-in-social-network-data/08_Mixing_Matrix.png
+public/content/articles/assortativity-coefficients-in-social-network-data/11_Assortativity_Coefficients.png
+public/content/articles/assortativity-coefficients-in-social-network-data/assortativity coefficients in social networks data.md
+public/content/articles/assortativity-coefficients-in-social-network-data/Formula_Attribute_Assortativity_Coefficient.png
+public/content/articles/assortativity-coefficients-in-social-network-data/Formula_Betweenness_Centrality.png
+public/content/articles/assortativity-coefficients-in-social-network-data/Formula_Mixing_Matrix_01.png
+public/content/articles/assortativity-coefficients-in-social-network-data/Formula_Mixing_Matrix_02.png
+public/content/articles/automate-ml-training-notifications-knockknock/cover.webp
+public/content/articles/automate-ml-training-notifications-knockknock/knockknock.md
+public/content/articles/bias-variance-tradeoff/article_1.png
+public/content/articles/bias-variance-tradeoff/article_2.png
+public/content/articles/bias-variance-tradeoff/article_3.png
+public/content/articles/bias-variance-tradeoff/article_4.png
+public/content/articles/bias-variance-tradeoff/bias-variance-tradeoff.md
+public/content/articles/bias-variance-tradeoff/cover.jpg
+public/content/articles/conditional-data-permutations-xai-guide/article.md
+public/content/articles/conditional-data-permutations-xai-guide/cover.webp
+public/content/articles/cos-è-l-intelligenza-artificiale/cos-e-intelligenza-artificiale.md
+public/content/articles/cos-è-l-intelligenza-artificiale/Intelligenza_Artificiale_Alexa_di_Amazon.png
+public/content/articles/cos-è-l-intelligenza-artificiale/Intelligenza_Artificiale_Google_Traduttore.png
+public/content/articles/cos-è-l-intelligenza-artificiale/Intelligenza_Artificiale_identificazione_di_ostacoli.png
+public/content/articles/cos-è-l-intelligenza-artificiale/Intelligenza_Artificiale_Machine_Learning.png
+public/content/articles/cos-è-l-intelligenza-artificiale/Intelligenza_Artificiale_Previsione_di_una_serie_temporale.png
+public/content/articles/cos-è-l-intelligenza-artificiale/Intelligenza_Artificiale.jpg
+public/content/articles/cos-è-l-intelligenza-artificiale/Untitled.png
+public/content/articles/cos-è-la-data-science-e-perchè-è-così-importante/cos-e-la-data-science.md
+public/content/articles/cos-è-la-data-science-e-perchè-è-così-importante/cover.jpeg
+public/content/articles/cos-è-un-algoritmo-e-per-cosa-si-utilizza/Cos’è un algoritmo e per cosa si utilizza.md
+public/content/articles/cos-è-un-algoritmo-e-per-cosa-si-utilizza/cover.png
+public/content/articles/cos-è-un-computer/Computer.jpg
+public/content/articles/cos-è-un-computer/Cos_un_computer.jpg
+public/content/articles/cos-è-un-computer/cos-e-un-computer.md
+public/content/articles/cos-è-un-computer/Il_Computer_e_linguaggio_macchina.jpg
+public/content/articles/cos-è-un-computer/Untitled.png
+public/content/articles/cosa-sono-i-big-data-e-perchè-sono-importanti/20220824_165554.jpg
+public/content/articles/cosa-sono-i-big-data-e-perchè-sono-importanti/big-data.jpg
+public/content/articles/cosa-sono-i-big-data-e-perchè-sono-importanti/Cosa sono i Big Data e perché sono importanti.md
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/Cosa sono le reti neurali artificiali.md
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/solution-now-reti-neurali.jpg
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/Storia_dellIntelligenza_Artificiale_reti_neurali.webp
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/Untitled.png
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/Untitled1.png
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/Untitled2.png
+public/content/articles/cosa-sono-le-reti-neurali-artificiali/Untitled3.png
+public/content/articles/cosa-sono-le-reti-neurali-convoluzionali/1207_2e8734c46.jpg_MASK.png
+public/content/articles/cosa-sono-le-reti-neurali-convoluzionali/1207_2e8734c46.jpg.png
+public/content/articles/cosa-sono-le-reti-neurali-convoluzionali/1207_CONV_full_masked_map.png
+public/content/articles/cosa-sono-le-reti-neurali-convoluzionali/Cosa sono le Reti Neurali Convoluzionali.md
+public/content/articles/cosa-sono-le-reti-neurali-convoluzionali/cover.jpeg
+public/content/articles/cosa-sono-le-reti-neurali-convoluzionali/Untitled.png
+public/content/articles/cosa-sono-le-reti-neurali-ricorrenti/Cosa sono le reti neurali ricorrenti.md
+public/content/articles/cosa-sono-le-reti-neurali-ricorrenti/cover.png
+public/content/articles/cosa-sono-le-reti-neurali-ricorrenti/Untitled.png
+public/content/articles/cross-validation-techniques-for-financial-time-series-forecasting/cover.webp
+public/content/articles/cross-validation-techniques-for-financial-time-series-forecasting/Cross-Validation Techniques for Financial Time series.md
+public/content/articles/cross-validation-techniques-for-financial-time-series-forecasting/k-fold.png
+public/content/articles/cross-validation-techniques-for-financial-time-series-forecasting/timeseries-split.png
+public/content/articles/cross-validation-techniques-for-financial-time-series-forecasting/window_expansion.png
+public/content/articles/curse-of-dimensionality/cover.jpeg
+public/content/articles/curse-of-dimensionality/img1.jpeg
+public/content/articles/curse-of-dimensionality/img2.jpeg
+public/content/articles/curse-of-dimensionality/img3.gif
+public/content/articles/curse-of-dimensionality/img4.gif
+public/content/articles/curse-of-dimensionality/img5.jpeg
+public/content/articles/curse-of-dimensionality/img6.gif
+public/content/articles/curse-of-dimensionality/img7.gif
+public/content/articles/curse-of-dimensionality/Model uncertainty through Monte Carlo dropout - PT2.md
+public/content/articles/data-science-learning-path-guide/article.md
+public/content/articles/data-science-learning-path-guide/cover.webp
+public/content/articles/deep-learning-pytorch-template/DeepLearningPyTorchTemplate.md
+public/content/articles/deep-learning-pytorch-template/productivity.jpg
+public/content/articles/deep-learning-pytorch-template/productivity.webp
+public/content/articles/deepseek-v3-open-source-ai/article.md
+public/content/articles/deepseek-v3-open-source-ai/cover.webp
+public/content/articles/deepseek-v3-open-source-ai/price.png
+public/content/articles/docling-document-processing-ai/article.md
+public/content/articles/docling-document-processing-ai/cover.webp
+public/content/articles/elevate-your-time-series-analytics-with-temporal-fusion-transformer/1.jpeg
+public/content/articles/elevate-your-time-series-analytics-with-temporal-fusion-transformer/2.png
+public/content/articles/elevate-your-time-series-analytics-with-temporal-fusion-transformer/3.png
+public/content/articles/elevate-your-time-series-analytics-with-temporal-fusion-transformer/4.png
+public/content/articles/elevate-your-time-series-analytics-with-temporal-fusion-transformer/cover.webp
+public/content/articles/elevate-your-time-series-analytics-with-temporal-fusion-transformer/Elevate Your Time Series Analytics with TFT.md
+public/content/articles/embeddings-with-elmo/elmo.jpg
+public/content/articles/embeddings-with-elmo/elmo2.jpeg
+public/content/articles/embeddings-with-elmo/embeddings-with-elmo.md
+public/content/articles/embeddings-with-elmo/image01.jpg
+public/content/articles/explainable-ai-in-ml-dl-models/cover.webp
+public/content/articles/explainable-ai-in-ml-dl-models/Explainability in AI models.md
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled 1.png
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled 2.png
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled 3.png
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled 4.png
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled 5.png
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled 6.png
+public/content/articles/explainable-ai-in-ml-dl-models/Untitled.png
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/cover.jpg
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/curiosity.jpg
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/evaluate.jpg
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/Five reasons why my machine learning models failed.md
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/people-listening.jpg
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/point.jpg
+public/content/articles/five-reasons-why-my-machine-learning-models-failed/transparent.jpg
+public/content/articles/from-zero-to-hero/ai.jpg
+public/content/articles/from-zero-to-hero/cover.jpg
+public/content/articles/from-zero-to-hero/From zero to hero.md
+public/content/articles/gartner-hype-cycle-generative-ai-2024/article.md
+public/content/articles/gartner-hype-cycle-generative-ai-2024/cover.webp
+public/content/articles/gartner-hype-cycle-generative-ai-2024/hype-cycle-for-generative-ai-2024.jpg
+public/content/articles/generative-adversarial-networks/cover.jpg
+public/content/articles/generative-adversarial-networks/gan_diagram.svg
+public/content/articles/generative-adversarial-networks/Generative Adversarial Networks.md
+public/content/articles/genesis-physics-simulation-platform/article.md
+public/content/articles/genesis-physics-simulation-platform/cover.webp
+public/content/articles/google-ai-studio-guide/article.md
+public/content/articles/google-ai-studio-guide/compare.png
+public/content/articles/google-ai-studio-guide/cover.webp
+public/content/articles/google-ai-studio-guide/home.png
+public/content/articles/google-ai-studio-guide/prompt.png
+public/content/articles/google-vids-ai-video-creation-tool/article.md
+public/content/articles/google-vids-ai-video-creation-tool/cover.webp
+public/content/articles/grok-model-ai-advancements/article.md
+public/content/articles/grok-model-ai-advancements/cover.webp
+public/content/articles/how-to-handle-imbalanced-data-machine-learning/article.md
+public/content/articles/how-to-handle-imbalanced-data-machine-learning/cover.webp
+public/content/articles/how-to-handle-imbalanced-data-machine-learning/imbalanced data.png
+public/content/articles/how-to-handle-imbalanced-data-machine-learning/imbalanced data.webp
+public/content/articles/imarena-ai-benchmarking-platform/article.md
+public/content/articles/imarena-ai-benchmarking-platform/chatbot_arena.jpeg
+public/content/articles/imarena-ai-benchmarking-platform/cover.webp
+public/content/articles/imarena-ai-benchmarking-platform/imarena.png
+public/content/articles/imarena-ai-benchmarking-platform/vote.png
+public/content/articles/introduction-to-information-retrieval-systems/Introduction to Information Retrieval Systems.md
+public/content/articles/introduzione-alla-classificazione-nel-machine-learning/1.jpg
+public/content/articles/introduzione-alla-classificazione-nel-machine-learning/classification.md
+public/content/articles/introduzione-alla-classificazione-nel-machine-learning/cover.jpg
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/1.jpg
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/2.jpg
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/3.jpg
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/4.jpg
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/5.jpg
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/linearRegression.md
+public/content/articles/introduzione-alla-linear-regression-nel-machine-learning/lr.jpeg
+public/content/articles/introduzione-e-primi-passi-sul-deep-learning/Caratteristiche-e-funzionamento-del-Deep-Learning-in-informatica.png
+public/content/articles/introduzione-e-primi-passi-sul-deep-learning/deep-learning.jpg
+public/content/articles/introduzione-e-primi-passi-sul-deep-learning/Introduzione e primi passi nel Deep Learning.md
+public/content/articles/introduzione-e-primi-passi-sul-deep-learning/Untitled.png
+public/content/articles/introduzione-gentile-al-reinforcement-learning/cover.png
+public/content/articles/introduzione-gentile-al-reinforcement-learning/Intoduzione Gentile al Reinforcement Learning.md
+public/content/articles/introduzione-gentile-al-reinforcement-learning/RL_framework.png
+public/content/articles/introduzione-gentile-al-reinforcement-learning/RL_usecase.gif
+public/content/articles/iterative-pruning-methods-with-julia/cover.jpeg
+public/content/articles/iterative-pruning-methods-with-julia/img1.jpeg
+public/content/articles/iterative-pruning-methods-with-julia/iterative pruning methods with Julia.md
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/1.jpg
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/2.jpg
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/3.jpg
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/4.jpg
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/5.jpg
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/cluster analysis.md
+public/content/articles/la-cluster-analysis-nel-machine-learning-una-introduzione/cover.jpg
+public/content/articles/large-concept-model-meta/article.md
+public/content/articles/large-concept-model-meta/cover.webp
+public/content/articles/large-concept-model-meta/lcm-arch.png
+public/content/articles/large-concept-model-meta/lcm.png
+public/content/articles/machine-learning-introduzione-e-primi-passi/cover.jpg
+public/content/articles/machine-learning-introduzione-e-primi-passi/dogs.jpg
+public/content/articles/machine-learning-introduzione-e-primi-passi/MachineLearning.md
+public/content/articles/machine-learning-theory-course/image01.jpeg
+public/content/articles/machine-learning-theory-course/image02.png
+public/content/articles/machine-learning-theory-course/image03.png
+public/content/articles/machine-learning-theory-course/image04.png
+public/content/articles/machine-learning-theory-course/image05.png
+public/content/articles/machine-learning-theory-course/image06.png
+public/content/articles/machine-learning-theory-course/image07.png
+public/content/articles/machine-learning-theory-course/image08.jpeg
+public/content/articles/machine-learning-theory-course/image09.png
+public/content/articles/machine-learning-theory-course/image10.jpeg
+public/content/articles/machine-learning-theory-course/image11.png
+public/content/articles/machine-learning-theory-course/image12.png
+public/content/articles/machine-learning-theory-course/image13.png
+public/content/articles/machine-learning-theory-course/image14.png
+public/content/articles/machine-learning-theory-course/image15.png
+public/content/articles/machine-learning-theory-course/image16.png
+public/content/articles/machine-learning-theory-course/image17.png
+public/content/articles/machine-learning-theory-course/image18.png
+public/content/articles/machine-learning-theory-course/image19.png
+public/content/articles/machine-learning-theory-course/image20.png
+public/content/articles/machine-learning-theory-course/Machine Learning Theory.md
+public/content/articles/machine-learning-theory-course/ML-bg.png
+public/content/articles/measure-distance-between-documents-with-cosine-similarity/cosine_similarity.md
+public/content/articles/measure-distance-between-documents-with-cosine-similarity/cover.jpg
+public/content/articles/measure-distance-between-documents-with-cosine-similarity/embedding_viz.png
+public/content/articles/measure-distance-between-documents-with-cosine-similarity/euclidean_distance_2d.png
+public/content/articles/measure-distance-between-documents-with-cosine-similarity/topic_vectors.png
+public/content/articles/meta-learning-model-optimization-automated-efficiency/article.md
+public/content/articles/meta-learning-model-optimization-automated-efficiency/cover.webp
+public/content/articles/meta-learning-model-optimization-automated-efficiency/meta-learning.jpeg
+public/content/articles/microsoft-open-sources-bitnet-1-bit-llm-framework/article.md
+public/content/articles/microsoft-open-sources-bitnet-1-bit-llm-framework/cover.webp
+public/content/articles/mixture-of-experts-moe-ai-scaling-efficiency/article.md
+public/content/articles/mixture-of-experts-moe-ai-scaling-efficiency/cover.webp
+public/content/articles/ml-vs-dl/Classification Tasks Comparing Machine Learning an 2dfcf9549e1f46a6a0213099aff097a1.md
+public/content/articles/ml-vs-dl/cover.webp
+public/content/articles/ml-vs-dl/Untitled 1.png
+public/content/articles/ml-vs-dl/Untitled 2.png
+public/content/articles/ml-vs-dl/Untitled 3.png
+public/content/articles/ml-vs-dl/Untitled 4.png
+public/content/articles/ml-vs-dl/Untitled 5.png
+public/content/articles/ml-vs-dl/Untitled 6.png
+public/content/articles/ml-vs-dl/Untitled 7.png
+public/content/articles/ml-vs-dl/Untitled.png
+public/content/articles/model-deployment/background.jpg
+public/content/articles/model-deployment/FastAPI.png
+public/content/articles/model-deployment/model_deployment.md
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt1/cover.jpg
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt1/cover.webp
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt1/epistemic-vs-aleatoric.jpg
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt1/mc_classification_pipeline.png
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt1/MCDropoutPipeline.png
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt1/Model uncertainty through Monte Carlo dropout - PT1.md
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt2/certain.png
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt2/cover.jpg
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt2/hist.png
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt2/Model uncertainty through Monte Carlo dropout - PT2.md
+public/content/articles/model-uncertainty-through-monte-carlo-dropout-pt2/uncertain.png
+public/content/articles/modernbert-transformer-innovations/article.md
+public/content/articles/modernbert-transformer-innovations/cover.webp
+public/content/articles/musica-generata-dall-intelligenza-artificiale-staituned/Musica_di_Davide_Cope.jpg
+public/content/articles/musica-generata-dall-intelligenza-artificiale-staituned/musica_generata_con_ai.md
+public/content/articles/musica-generata-dall-intelligenza-artificiale-staituned/Musica_generata_dallIntelligenza_Artificiale.webp
+public/content/articles/nanobots-in-healthcare-future-of-medicine/article.md
+public/content/articles/nanobots-in-healthcare-future-of-medicine/cover_.webp
+public/content/articles/natural-language-processing-course/bg.png
+public/content/articles/natural-language-processing-course/image01.jpg
+public/content/articles/natural-language-processing-course/image02.png
+public/content/articles/natural-language-processing-course/image03.png
+public/content/articles/natural-language-processing-course/image04.png
+public/content/articles/natural-language-processing-course/image05.png
+public/content/articles/natural-language-processing-course/image06.png
+public/content/articles/natural-language-processing-course/image07.png
+public/content/articles/natural-language-processing-course/image08.png
+public/content/articles/natural-language-processing-course/image09.png
+public/content/articles/natural-language-processing-course/image10.png
+public/content/articles/natural-language-processing-course/image11.png
+public/content/articles/natural-language-processing-course/image12.png
+public/content/articles/natural-language-processing-course/image13.png
+public/content/articles/natural-language-processing-course/image14.png
+public/content/articles/natural-language-processing-course/image15.png
+public/content/articles/natural-language-processing-course/image16.png
+public/content/articles/natural-language-processing-course/image17.png
+public/content/articles/natural-language-processing-course/image18.png
+public/content/articles/natural-language-processing-course/image19.png
+public/content/articles/natural-language-processing-course/image20.png
+public/content/articles/natural-language-processing-course/image21.png
+public/content/articles/natural-language-processing-course/image22.png
+public/content/articles/natural-language-processing-course/image23.png
+public/content/articles/natural-language-processing-course/image24.png
+public/content/articles/natural-language-processing-course/image25.png
+public/content/articles/natural-language-processing-course/Natural Language Processing course.md
+public/content/articles/notebooklm-ai-collaboration-and-comprehension/article.md
+public/content/articles/notebooklm-ai-collaboration-and-comprehension/cover_.webp
+public/content/articles/openai-o3-mini-vs-deepseek-r1-ai-model-comparison/article.md
+public/content/articles/openai-o3-mini-vs-deepseek-r1-ai-model-comparison/cover.webp
+public/content/articles/openai-o3-mini-vs-deepseek-r1-ai-model-comparison/performance.png
+public/content/articles/openai-o3-model-ai-advancements/article.md
+public/content/articles/openai-o3-model-ai-advancements/cover.webp
+public/content/articles/openai-o3-model-ai-advancements/o3-performance.png
+public/content/articles/perplexity-ai-vs-chatgpt-differences-use-cases/article.md
+public/content/articles/perplexity-ai-vs-chatgpt-differences-use-cases/cover.webp
+public/content/articles/quando-è-nata-l-intelligenza-artificiale/Quando è nata l’Intelligenza Artificiale.md
+public/content/articles/quando-è-nata-l-intelligenza-artificiale/Storia_dellIntelligenza_Artificiale_Alan_Turing.jpg
+public/content/articles/quando-è-nata-l-intelligenza-artificiale/Storia_dellIntelligenza_Artificiale_percettrone.png
+public/content/articles/quando-è-nata-l-intelligenza-artificiale/Storia_dellIntelligenza_Artificiale_reti_neurali.webp
+public/content/articles/quando-è-nata-l-intelligenza-artificiale/Storia_dellIntelligenza_Artificiale.jpg
+public/content/articles/ragcache-efficient-knowledge-caching/article.md
+public/content/articles/ragcache-efficient-knowledge-caching/cover.webp
+public/content/articles/ragcache-efficient-knowledge-caching/ragcache.png
+public/content/articles/reti-generative-avversarie-gan/Reti Generative Avversarie (GAN).md
+public/content/articles/reti-generative-avversarie-gan/Reti_neurali.jpg
+public/content/articles/reti-generative-avversarie-gan/Untitled.png
+public/content/articles/search-gpt-vs-google-search-comparison/article.md
+public/content/articles/search-gpt-vs-google-search-comparison/cover.webp
+public/content/articles/simplifying-machine-learning-for-business-the-role-of-blogs/broken_ball.png
+public/content/articles/simplifying-machine-learning-for-business-the-role-of-blogs/community_image.png
+public/content/articles/simplifying-machine-learning-for-business-the-role-of-blogs/community-image-alt.png
+public/content/articles/simplifying-machine-learning-for-business-the-role-of-blogs/cover.webp
+public/content/articles/simplifying-machine-learning-for-business-the-role-of-blogs/ml_for_business.md
+public/content/articles/simulation-in-bayesian-inference/cover.png
+public/content/articles/simulation-in-bayesian-inference/density_plot.png
+public/content/articles/simulation-in-bayesian-inference/Simulation in Bayesian Inference.md
+public/content/articles/simulation-in-bayesian-inference/trace_plot.png
+public/content/articles/software-enginnering-ds/cover.jpg
+public/content/articles/software-enginnering-ds/data-science-engineer-software.jpg
+public/content/articles/software-enginnering-ds/Software_Engineering_DS.md
+public/content/articles/sora-openai-text-to-video-tool/article.md
+public/content/articles/sora-openai-text-to-video-tool/cover.webp
+public/content/articles/sora-openai-text-to-video-tool/sora_1.mp4
+public/content/articles/sora-openai-text-to-video-tool/sora_2.mp4
+public/content/articles/stable-diffusion-creare-immagini-a-partire-dal-testo/cover.webp
+public/content/articles/stable-diffusion-creare-immagini-a-partire-dal-testo/image.png
+public/content/articles/stable-diffusion-creare-immagini-a-partire-dal-testo/Stable Diffusion.md
+public/content/articles/study-case-death-stranding/bubble.png
+public/content/articles/study-case-death-stranding/case-study-ds.md
+public/content/articles/study-case-death-stranding/cover.jpg
+public/content/articles/study-case-death-stranding/ds.jpg
+public/content/articles/study-case-death-stranding/ds2.jpg
+public/content/articles/study-case-death-stranding/ds3.png
+public/content/articles/study-case-death-stranding/ds4.jpg
+public/content/articles/study-case-death-stranding/ds5.jpg
+public/content/articles/study-case-death-stranding/ds6.png
+public/content/articles/study-case-death-stranding/mesh.png
+public/content/articles/study-case-death-stranding/mesh2.png
+public/content/articles/study-case-death-stranding/star.png
+public/content/articles/study-case-the-last-of-us/case-study-the-last-of-us.md
+public/content/articles/study-case-the-last-of-us/cone1.jpg
+public/content/articles/study-case-the-last-of-us/cone2.jpg
+public/content/articles/study-case-the-last-of-us/cover.jpg
+public/content/articles/study-case-the-last-of-us/ellie.png
+public/content/articles/study-case-the-last-of-us/elliecovering.jpg
+public/content/articles/study-case-the-last-of-us/fsms.png
+public/content/articles/study-case-the-last-of-us/hunterskills.png
+public/content/articles/study-case-the-last-of-us/infects.jpg
+public/content/articles/study-case-the-last-of-us/inftectedtype.jpg
+public/content/articles/study-case-the-last-of-us/lastofus2.png
+public/content/articles/study-case-the-last-of-us/path.jpg
+public/content/articles/study-case-the-last-of-us/pathselliecover.jpg
+public/content/articles/study-case-the-last-of-us/searchpath.jpg
+public/content/articles/study-case-the-last-of-us/tlou.jpg
+public/content/articles/super-resolution-what-is-it-and-why-is-it-useful/cover.png
+public/content/articles/super-resolution-what-is-it-and-why-is-it-useful/LR_SR_HR.png
+public/content/articles/super-resolution-what-is-it-and-why-is-it-useful/remote_sensed_img.jpg
+public/content/articles/super-resolution-what-is-it-and-why-is-it-useful/SR_example.png
+public/content/articles/super-resolution-what-is-it-and-why-is-it-useful/Super resolution what is it and why is it useful.md
+public/content/articles/tensorflow-cnn-for-multilabel-image-classification-task/cover.jpg
+public/content/articles/tensorflow-cnn-for-multilabel-image-classification-task/tensorflow-cnn-for-multilabel-image-classification-task.md
+public/content/articles/the-power-of-prompt-engineering/1.png
+public/content/articles/the-power-of-prompt-engineering/2.png
+public/content/articles/the-power-of-prompt-engineering/3.png
+public/content/articles/the-power-of-prompt-engineering/4.png
+public/content/articles/the-power-of-prompt-engineering/5.png
+public/content/articles/the-power-of-prompt-engineering/6.png
+public/content/articles/the-power-of-prompt-engineering/7.png
+public/content/articles/the-power-of-prompt-engineering/8.png
+public/content/articles/the-power-of-prompt-engineering/cover.webp
+public/content/articles/the-power-of-prompt-engineering/prompt_engineering.md
+public/content/articles/the-power-of-synthetic-data/0.png
+public/content/articles/the-power-of-synthetic-data/1.png
+public/content/articles/the-power-of-synthetic-data/2.png
+public/content/articles/the-power-of-synthetic-data/3.png
+public/content/articles/the-power-of-synthetic-data/4.png
+public/content/articles/the-power-of-synthetic-data/5.1.png
+public/content/articles/the-power-of-synthetic-data/5.png
+public/content/articles/the-power-of-synthetic-data/cover.webp
+public/content/articles/the-power-of-synthetic-data/The Power of Synthetic Data Enhancing AI Model Gen a897c99373c140cebc850384da8613af.md
+public/content/articles/time-series-forecasting-with-fraction-differentiation/1-Time series forecasting with fraction differentiat.md
+public/content/articles/time-series-forecasting-with-fraction-differentiation/cover.jpg
+public/content/articles/time-series-forecasting-with-fraction-differentiation/Untitled.png
+public/content/articles/time-series-forecasting-with-fraction-differentiation/Untitled1.png
+public/content/articles/understanding-generative-adversarial-networks-gans/article.md
+public/content/articles/understanding-generative-adversarial-networks-gans/cover.webp
+public/content/articles/understanding-how-recommendation-suggestions-work/cover.webp
+public/content/articles/understanding-how-recommendation-suggestions-work/image1.png
+public/content/articles/understanding-how-recommendation-suggestions-work/image2.png
+public/content/articles/understanding-how-recommendation-suggestions-work/image3.png
+public/content/articles/understanding-how-recommendation-suggestions-work/recommender system.md
+public/content/articles/using-autoencoders-for-anomaly-detection-in-strong-unbalanced-datasets/autoencoder.png
+public/content/articles/using-autoencoders-for-anomaly-detection-in-strong-unbalanced-datasets/autoencoder.webp
+public/content/articles/using-autoencoders-for-anomaly-detection-in-strong-unbalanced-datasets/cover.webp
+public/content/articles/using-autoencoders-for-anomaly-detection-in-strong-unbalanced-datasets/Using Autoencoders for Anomaly Detection .md
+public/content/articles/what-is-an-llm-large-language-model-explained/article.md
+public/content/articles/what-is-an-llm-large-language-model-explained/cover.webp
+public/content/articles/what-is-behind-chatgpt-generative-ai-explained/article.md
+public/content/articles/what-is-behind-chatgpt-generative-ai-explained/cover.webp
+public/content/articles/x-ray-image-segmentation-using-u-nets/Intro_DL.jpeg
+public/content/articles/x-ray-image-segmentation-using-u-nets/Output_1.png
+public/content/articles/x-ray-image-segmentation-using-u-nets/Output_2.png
+public/content/articles/x-ray-image-segmentation-using-u-nets/Segmentation.jpeg
+public/content/articles/x-ray-image-segmentation-using-u-nets/U-net_architecture.png
+public/content/articles/x-ray-image-segmentation-using-u-nets/X-Ray Image Segmentation using U-Nets.md
+public/content/backup/removed-AI-in-Agricultura-Rendere-l'agricoltura-piu-efficiente-e-sostenibile/AI in Agricoltura.md
+public/content/backup/removed-AI-in-Agricultura-Rendere-l'agricoltura-piu-efficiente-e-sostenibile/cover.webp
+public/content/backup/removed-AI-in-Agricultura-Rendere-l'agricoltura-piu-efficiente-e-sostenibile/image1.png
+public/content/backup/removed-AI-in-Agricultura-Rendere-l'agricoltura-piu-efficiente-e-sostenibile/image1.webp
+public/content/backup/removed-AI-in-Agricultura-Rendere-l'agricoltura-piu-efficiente-e-sostenibile/image2.png
+public/content/backup/removed-AI-in-Agricultura-Rendere-l'agricoltura-piu-efficiente-e-sostenibile/image2.webp
+public/content/team/Alex-Buffa/meta.md
+public/content/team/Alex-Buffa/propic.jpg
+public/content/team/Alice-Ghidini/meta.md
+public/content/team/Alice-Ghidini/propic.jpg
+public/content/team/Andrea-Deluca/meta.md
+public/content/team/Andrea-Deluca/propic.jpg
+public/content/team/Daniele-Moltisanti/meta.md
+public/content/team/Daniele-Moltisanti/propic.jpg
+public/content/team/Davide-Nardini/meta.md
+public/content/team/Davide-Nardini/propic.jpg
+public/content/team/Filippo-Mazza/meta.md
+public/content/team/Filippo-Mazza/propic.jpg
+public/content/team/Francesca-Cancelliere/meta.md
+public/content/team/Francesca-Cancelliere/propic.jpg
+public/content/team/Francesco-Di-Gangi/meta.md
+public/content/team/Francesco-Di-Gangi/propic.jpg
+public/content/team/Francesco-Di-Salvo/meta.md
+public/content/team/Francesco-Di-Salvo/propic.jpg
+public/content/team/Gabriele-Albini/meta.md
+public/content/team/Gabriele-Albini/propic.jpg
+public/content/team/Gabriele-Cola/meta.md
+public/content/team/Gabriele-Cola/propic.jpg
+public/content/team/Gabriele-Inzerillo/meta.md
+public/content/team/Gabriele-Inzerillo/propic.jpg
+public/content/team/Gianluca-La-Malfa/meta.md
+public/content/team/Gianluca-La-Malfa/propic.jpg
+public/content/team/Irene-Fiorito-Accardi/meta.md
+public/content/team/Irene-Fiorito-Accardi/propic.jpg
+public/content/team/Javier-Gongora/meta.md
+public/content/team/Javier-Gongora/propic.jpg
+public/content/team/Marcello-Politi/meta.md
+public/content/team/Marcello-Politi/propic.jpg
+public/content/team/Matteo-Villosio/meta.md
+public/content/team/Matteo-Villosio/propic.jpg
+public/content/team/Mattia-Lisciandrello/meta.md
+public/content/team/Mattia-Lisciandrello/propic.jpg
+public/content/team/Monteiro-Del-Prete/meta.md
+public/content/team/Monteiro-Del-Prete/propic.jpg
+public/content/team/Prith-Sharma/meta.md
+public/content/team/Prith-Sharma/propic.jpg
+public/content/team/Roberta-Ghidini/meta.md
+public/content/team/Roberta-Ghidini/propic.jpg
+public/content/team/Sofia-Pedrini/meta.md
+public/content/team/Sofia-Pedrini/propic.jpg
+public/content/team/Valeria-Tardio/meta.md
+public/content/team/Valeria-Tardio/propic.jpg
+.env.example
+.gitignore
+submodules update
+test-table.html
+run manual deploy

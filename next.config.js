@@ -8,6 +8,10 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
     domains: [
       'images.unsplash.com', 
       'via.placeholder.com', 
@@ -33,9 +37,28 @@ const nextConfig = {
       },
     ],
   },
+  // Performance optimizations
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['@heroicons/react'],
+  },
   // Handle the content submodule
-  webpack: (config) => {
+  webpack: (config, { dev, isServer }) => {
     config.resolve.symlinks = false
+    
+    // Optimize bundle splitting
+    if (!dev && !isServer) {
+      config.optimization.splitChunks.chunks = 'all'
+      config.optimization.splitChunks.cacheGroups = {
+        ...config.optimization.splitChunks.cacheGroups,
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      }
+    }
+    
     return config
   },
   transpilePackages: ['contentlayer'],
@@ -66,6 +89,23 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable', // 1 year for assets
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'cross-origin',
+          },
+        ],
+      },
+      {
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
           },
         ],
       },
