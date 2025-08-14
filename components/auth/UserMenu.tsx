@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { User } from 'firebase/auth'
-import { signOutUser } from '@/lib/firebase/auth'
 
 interface UserMenuProps {
   user: User
@@ -26,6 +25,7 @@ export function UserMenu({ user }: UserMenuProps) {
   }, [])
 
   const handleSignOut = async () => {
+    const { signOutUser } = await import('@/lib/firebase/auth')
     await signOutUser()
     setIsOpen(false)
   }

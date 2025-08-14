@@ -1,38 +1,51 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { User } from 'firebase/auth'
-import { onAuthStateChange } from '@/lib/firebase/auth'
-
-interface AuthContextType {
-  user: User | null
-  loading: boolean
-}
-
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true
-})
-
-export function useAuth() {
-  return useContext(AuthContext)
-}
+import { AuthContext } from './AuthContext'
 
 export function FirebaseAuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Don't load Firebase by default
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChange((user) => {
-      setUser(user)
+  const initializeAuth = async () => {
+    if (loading) return // Already initialized or initializing
+    
+    setLoading(true)
+    try {
+      // Dynamic import Firebase only when needed
+      const { onAuthStateChange } = await import('@/lib/firebase/auth')
+      
+      const unsubscribe = onAuthStateChange((user) => {
+        setUser(user)
+        setLoading(false)
+      })
+
+      return unsubscribe
+    } catch (error) {
+      console.error('Failed to initialize Firebase Auth:', error)
       setLoading(false)
-    })
+    }
+  }
 
-    return () => unsubscribe()
-  }, [])
+  const signIn = async () => {
+    await initializeAuth()
+    const { signInWithGooglePopup } = await import('@/lib/firebase/auth')
+    return signInWithGooglePopup()
+  }
+
+  const signOut = async () => {
+    const { signOutUser } = await import('@/lib/firebase/auth')
+    return signOutUser()
+  }
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      signIn: async () => { await signIn() },
+      signOut: async () => { await signOut() }
+    }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { google } from 'googleapis'
 import { allPosts } from '@/lib/contentlayer'
+import { analyticsCache } from '@/lib/analytics-cache'
 
 // Google Analytics Data API v1 types
 interface AnalyticsData {
@@ -73,6 +74,37 @@ export async function GET(request: NextRequest) {
   const target = searchParams.get('target') || 'midway' // newbie, midway, expert
 
   try {
+    // Check cache first - ALWAYS return cached data if available
+    const cachedData = analyticsCache.get(articleSlug || undefined, startDate, endDate)
+    if (cachedData) {
+      console.log('📊 Analytics: Serving from cache', { articleSlug, date: new Date().toISOString() })
+      return NextResponse.json({
+        success: true,
+        data: cachedData,
+        source: 'cache',
+        cacheStats: analyticsCache.getStats()
+      })
+    }
+
+    // Check if we can make an API call today
+    if (!analyticsCache.canMakeAPICall()) {
+      console.log('🚫 Analytics: Daily API limit reached, serving mock data', { 
+        articleSlug, 
+        stats: analyticsCache.getStats(),
+        date: new Date().toISOString()
+      })
+      
+      // Return mock data when limit is reached
+      const mockData = generateMockData(articleSlug, target, startDate, endDate)
+      return NextResponse.json({
+        success: true,
+        data: mockData,
+        source: 'mock_daily_limit',
+        cacheStats: analyticsCache.getStats(),
+        message: 'Daily Google Analytics API limit reached. Serving mock data.'
+      })
+    }
+
     // Check if all required environment variables are set
     const requiredEnvVars = [
       'GOOGLE_ANALYTICS_PROPERTY_ID',
@@ -85,88 +117,27 @@ export async function GET(request: NextRequest) {
     
     if (missingEnvVars.length > 0) {
       console.warn('Missing Google Analytics environment variables:', missingEnvVars)
+      const mockData = generateMockData(articleSlug, target, startDate, endDate)
       
-      if (articleSlug) {
-        // Single article - find in CMS
-        const publishedPosts = allPosts.filter(post => post.published !== false)
-        const post = publishedPosts.find(p => p.slug === articleSlug)
-        
-        if (post) {
-          const mockData: AnalyticsData = {
-            articleUrl: `/learn/${(post.target || 'midway').toLowerCase()}/${post.slug}`,
-            pageViews: Math.floor(Math.random() * 1000) + 100,
-            uniquePageViews: Math.floor(Math.random() * 800) + 80,
-            avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
-            bounceRate: Math.random() * 0.5 + 0.2,
-            users: Math.floor(Math.random() * 500) + 50,
-            sessions: Math.floor(Math.random() * 600) + 60,
-            dateRange: { startDate, endDate },
-            title: post.title,
-            author: post.author,
-            target: (post.target || 'midway').toLowerCase(),
-            topics: post.topics || [],
-            readingTime: post.readingTime || 5,
-            published: post.published !== false
-          }
-          
-          return NextResponse.json({
-            success: true,
-            data: mockData,
-            isDevelopment: true,
-            source: 'mock_with_cms'
-          })
-        }
-      } else {
-        // Multiple articles - use all published posts with mock analytics
-        const publishedPosts = allPosts.filter(post => post.published !== false)
-        const articles = publishedPosts.map(post => {
-          const targetLower = (post.target || 'midway').toLowerCase()
-          return {
-            articleUrl: `/learn/${targetLower}/${post.slug}`,
-            title: post.title,
-            author: post.author,
-            target: targetLower,
-            topics: post.topics || [],
-            readingTime: post.readingTime || 5,
-            published: post.published !== false,
-            pageViews: Math.floor(Math.random() * 1000) + 100,
-            uniquePageViews: Math.floor(Math.random() * 800) + 80,
-            avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
-            bounceRate: Math.random() * 0.5 + 0.2,
-            users: Math.floor(Math.random() * 500) + 50,
-            sessions: Math.floor(Math.random() * 600) + 60,
-          }
-        }).slice(0, 20) // Limit for performance
-        
-        return NextResponse.json({
-          success: true,
-          data: articles,
-          total: articles.length,
-          dateRange: { startDate, endDate },
-          isDevelopment: true,
-          source: 'mock_with_cms'
-        })
-      }
-      
-      // Fallback to basic mock data if no CMS data found
-      const mockData: AnalyticsData = {
-        articleUrl: articleSlug ? `/learn/${target}/${articleSlug}` : 'all-articles',
-        pageViews: Math.floor(Math.random() * 1000) + 100,
-        uniquePageViews: Math.floor(Math.random() * 800) + 80,
-        avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
-        bounceRate: Math.random() * 0.5 + 0.2,
-        users: Math.floor(Math.random() * 500) + 50,
-        sessions: Math.floor(Math.random() * 600) + 60,
-        dateRange: { startDate, endDate }
-      }
+      // Cache mock data to prevent further attempts
+      analyticsCache.set(mockData, articleSlug || undefined, startDate, endDate)
       
       return NextResponse.json({
         success: true,
         data: mockData,
         isDevelopment: true,
-        source: 'fallback_mock'
+        source: 'mock_missing_env',
+        cacheStats: analyticsCache.getStats()
       })
     }
+
+    // Record the API call
+    analyticsCache.recordAPICall()
+    console.log('📈 Analytics: Making Google Analytics API call', { 
+      articleSlug, 
+      stats: analyticsCache.getStats(),
+      date: new Date().toISOString()
+    })
 
     const analyticsData = await getAnalyticsReporting()
     const propertyId = process.env.GOOGLE_ANALYTICS_PROPERTY_ID
@@ -222,9 +193,10 @@ export async function GET(request: NextRequest) {
     })
     const data = response.data as AnalyticsResponse
 
+    let result
     if (!data.rows || data.rows.length === 0) {
       // Return zero data if no analytics found
-      const emptyData: AnalyticsData = {
+      result = {
         articleUrl: pagePathFilter,
         pageViews: 0,
         uniquePageViews: 0,
@@ -237,20 +209,12 @@ export async function GET(request: NextRequest) {
           endDate
         }
       }
-      
-      return NextResponse.json({
-        success: true,
-        data: emptyData,
-        message: 'No analytics data found for the specified criteria'
-      })
-    }
-
-    if (articleSlug) {
+    } else if (articleSlug) {
       // Single article analytics
       const row = data.rows[0]
       const metrics = row.metricValues
 
-      const analyticsResult: AnalyticsData = {
+      result = {
         articleUrl: row.dimensionValues[0].value,
         pageViews: parseInt(metrics[0].value) || 0,
         uniquePageViews: parseInt(metrics[1].value) || 0, // Using totalUsers as proxy
@@ -263,11 +227,6 @@ export async function GET(request: NextRequest) {
           endDate
         }
       }
-
-      return NextResponse.json({
-        success: true,
-        data: analyticsResult
-      })
     } else {
       // Multiple articles analytics - merge with CMS data
       const analyticsMap = new Map<string, AnalyticsRowData>()
@@ -322,41 +281,95 @@ export async function GET(request: NextRequest) {
         return a.title.localeCompare(b.title)
       })
 
-      return NextResponse.json({
-        success: true,
-        data: articles,
-        total: articles.length,
-        dateRange: {
-          startDate,
-          endDate
-        },
-        source: 'merged_cms_analytics'
-      })
+      result = articles
     }
+
+    // Cache the result for 24 hours
+    analyticsCache.set(result, articleSlug || undefined, startDate, endDate)
+
+    return NextResponse.json({
+      success: true,
+      data: result,
+      source: 'google_analytics_api',
+      cacheStats: analyticsCache.getStats()
+    })
   } catch (error) {
     console.error('Google Analytics API Error:', error)
     
     // Return mock data on error for graceful degradation
-    const mockData: AnalyticsData = {
-      articleUrl: articleSlug ? `/learn/${target}/${articleSlug}` : 'all-articles',
-      pageViews: Math.floor(Math.random() * 1000) + 100,
-      uniquePageViews: Math.floor(Math.random() * 800) + 80,
-      avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
-      bounceRate: Math.random() * 0.5 + 0.2,
-      users: Math.floor(Math.random() * 500) + 50,
-      sessions: Math.floor(Math.random() * 600) + 60,
-      dateRange: {
-        startDate,
-        endDate
-      }
-    }
+    const mockData = generateMockData(articleSlug, target, startDate, endDate)
+    
+    // Cache mock data to prevent further failed attempts
+    analyticsCache.set(mockData, articleSlug || undefined, startDate, endDate)
     
     return NextResponse.json({
       success: false,
       error: 'Failed to fetch analytics data',
       data: mockData, // Provide mock data for graceful degradation
-      isDevelopment: true
+      source: 'mock_error_fallback',
+      cacheStats: analyticsCache.getStats()
     }, { status: 500 })
+  }
+}
+
+// Helper function to generate mock data consistently
+function generateMockData(articleSlug: string | null, target: string, startDate: string, endDate: string) {
+  if (articleSlug) {
+    // Single article - find in CMS
+    const publishedPosts = allPosts.filter(post => post.published !== false)
+    const post = publishedPosts.find(p => p.slug === articleSlug)
+    
+    if (post) {
+      return {
+        articleUrl: `/learn/${(post.target || 'midway').toLowerCase()}/${post.slug}`,
+        pageViews: Math.floor(Math.random() * 1000) + 100,
+        uniquePageViews: Math.floor(Math.random() * 800) + 80,
+        avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
+        bounceRate: Math.random() * 0.5 + 0.2,
+        users: Math.floor(Math.random() * 500) + 50,
+        sessions: Math.floor(Math.random() * 600) + 60,
+        dateRange: { startDate, endDate },
+        title: post.title,
+        author: post.author,
+        target: (post.target || 'midway').toLowerCase(),
+        topics: post.topics || [],
+        readingTime: post.readingTime || 5,
+        published: post.published !== false
+      }
+    }
+  } else {
+    // Multiple articles - use all published posts with mock analytics
+    const publishedPosts = allPosts.filter(post => post.published !== false)
+    return publishedPosts.map(post => {
+      const targetLower = (post.target || 'midway').toLowerCase()
+      return {
+        articleUrl: `/learn/${targetLower}/${post.slug}`,
+        title: post.title,
+        author: post.author,
+        target: targetLower,
+        topics: post.topics || [],
+        readingTime: post.readingTime || 5,
+        published: post.published !== false,
+        pageViews: Math.floor(Math.random() * 1000) + 100,
+        uniquePageViews: Math.floor(Math.random() * 800) + 80,
+        avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
+        bounceRate: Math.random() * 0.5 + 0.2,
+        users: Math.floor(Math.random() * 500) + 50,
+        sessions: Math.floor(Math.random() * 600) + 60,
+      }
+    }).slice(0, 20) // Limit for performance
+  }
+  
+  // Fallback to basic mock data if no CMS data found
+  return {
+    articleUrl: articleSlug ? `/learn/${target}/${articleSlug}` : 'all-articles',
+    pageViews: Math.floor(Math.random() * 1000) + 100,
+    uniquePageViews: Math.floor(Math.random() * 800) + 80,
+    avgTimeOnPage: Math.floor(Math.random() * 300) + 60,
+    bounceRate: Math.random() * 0.5 + 0.2,
+    users: Math.floor(Math.random() * 500) + 50,
+    sessions: Math.floor(Math.random() * 600) + 60,
+    dateRange: { startDate, endDate }
   }
 }
 

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
-import { useAuth } from "@/components/auth/FirebaseAuthProvider"
+import { useAuth } from "@/components/auth/AuthContext"
 import { useArticles, formatReadingTime, formatPublicationDate, getTargetColor, getTargetDisplayName } from "@/lib/hooks/useArticles"
 
 export default function PublishedPage() {

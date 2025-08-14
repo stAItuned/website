@@ -1,11 +1,15 @@
 "use client"
 
-import { FirebaseAuthProvider } from "@/components/auth/FirebaseAuthProvider"
+import { AuthContext } from "@/components/auth/AuthContext"
+import { useState } from 'react'
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const [user] = useState(null)
+  const [loading] = useState(false)
+
   return (
-    <FirebaseAuthProvider>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
-    </FirebaseAuthProvider>
+    </AuthContext.Provider>
   )
 }

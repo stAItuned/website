@@ -1,28 +1,47 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { allPosts } from '@/lib/contentlayer'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
 
+interface SearchResult {
+  slug: string
+  title: string
+  author: string
+  date: string
+  cover?: string
+  target?: string
+  meta?: string
+  published?: boolean
+}
+
 export function SearchModal() {
   const { isSearchOpen, closeSearch } = useSearch()
   const [searchTerm, setSearchTerm] = useState('')
-  const [filteredArticles, setFilteredArticles] = useState<typeof allPosts>([])
+  const [filteredArticles, setFilteredArticles] = useState<SearchResult[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   // Filter articles based on search term
   useEffect(() => {
     if (searchTerm.trim()) {
-      const filtered = allPosts.filter((article) =>
-        article.published !== false &&
-        (article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         article.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         article.meta?.toLowerCase().includes(searchTerm.toLowerCase()))
-      )
-      setFilteredArticles(filtered)
+      setIsLoading(true)
+      // Dynamic import to load content only when searching
+      import('@/lib/contentlayer').then(({ allPosts }) => {
+        const filtered = allPosts.filter((article: SearchResult) =>
+          article.published !== false &&
+          (article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           article.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           article.meta?.toLowerCase().includes(searchTerm.toLowerCase()))
+        )
+        setFilteredArticles(filtered)
+        setIsLoading(false)
+      }).catch(() => {
+        setIsLoading(false)
+      })
     } else {
       setFilteredArticles([])
+      setIsLoading(false)
     }
   }, [searchTerm])
 
@@ -65,7 +84,7 @@ export function SearchModal() {
     })
   }
 
-  const getValidImageSrc = (article: (typeof allPosts)[0]) => {
+  const getValidImageSrc = (article: SearchResult) => {
     if (!article.cover) return null
     if (article.cover.startsWith('http://') || article.cover.startsWith('https://')) {
       return article.cover
@@ -124,13 +143,20 @@ export function SearchModal() {
 
             {/* Results */}
             <div className="max-h-96 overflow-y-auto">
-              {searchTerm && filteredArticles.length === 0 && (
+              {isLoading && (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="text-gray-500 mt-2">Searching...</p>
+                </div>
+              )}
+              
+              {!isLoading && searchTerm && filteredArticles.length === 0 && (
                 <div className="text-center py-8">
                   <p className="text-gray-500">No articles found for &ldquo;{searchTerm}&rdquo;</p>
                 </div>
               )}
               
-              {filteredArticles.length > 0 && (
+              {!isLoading && filteredArticles.length > 0 && (
                 <div className="space-y-3">
                   <p className="text-sm text-gray-500 mb-4">
                     Found {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''}

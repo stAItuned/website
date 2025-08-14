@@ -5,14 +5,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
 import { useSafePathname } from '@/components/SafeNavigation'
-import { useAuth } from '@/components/auth/FirebaseAuthProvider'
+import { useAuth } from '@/components/auth/AuthContext'
 
 const DISABLE_AUTH =
   typeof process !== 'undefined'
     ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
     : false
 import { UserMenu } from '@/components/auth/UserMenu'
-import { signOutUser } from '@/lib/firebase/auth'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -196,6 +195,7 @@ export function Header() {
                         </Link>
                         <button
                           onClick={async () => {
+                            const { signOutUser } = await import('@/lib/firebase/auth')
                             await signOutUser()
                             setIsMenuOpen(false)
                           }}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useAnalytics, useMultipleAnalytics, formatAnalyticsNumber, formatDuration, formatBounceRate } from '@/lib/hooks/useAnalytics'
+import AnalyticsCacheStatus from './AnalyticsCacheStatus'
 
 interface AnalyticsDashboardProps {
   articleSlug?: string
@@ -54,6 +55,9 @@ export default function AnalyticsDashboard({
 
   return (
     <div className={`space-y-6 ${className}`}>
+      {/* Cache Status */}
+      <AnalyticsCacheStatus />
+
       {/* Header with Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>

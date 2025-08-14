@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/components/auth/FirebaseAuthProvider"
+import { useAuth } from "@/components/auth/AuthContext"
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton"
 import { User } from "firebase/auth"
 

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/components/auth/FirebaseAuthProvider'
+import { useAuth } from '@/components/auth/AuthContext'
 
 const DISABLE_AUTH =
   (process.env.NEXT_PUBLIC_DISABLE_AUTH ?? '').toLowerCase() === 'true';

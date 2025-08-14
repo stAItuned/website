@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/components/auth/FirebaseAuthProvider'
+import { useAuth } from '@/components/auth/AuthContext'
 
 interface UserSettings {
   displayName: string

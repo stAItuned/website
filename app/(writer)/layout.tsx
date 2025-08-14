@@ -1,7 +1,7 @@
 'use client'
 
 import { AuthGuard } from "@/components/auth/AuthGuard"
-import { useAuth } from "@/components/auth/FirebaseAuthProvider"
+import { useAuth } from "@/components/auth/AuthContext"
 import Image from "next/image"
 
 export default function WriterLayout({

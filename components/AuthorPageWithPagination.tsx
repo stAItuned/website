@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArticleCard } from '@/components/ArticleCard'
@@ -29,7 +30,7 @@ interface Article {
 interface AuthorPageWithPaginationProps {
   authorData: AuthorData
   authorArticles: Article[]
-  pageSize: number
+  pageSize?: number
   slug: string
 }
 
@@ -40,9 +41,10 @@ export function AuthorPageWithPagination({
   slug 
 }: AuthorPageWithPaginationProps) {
   const [currentPage, setCurrentPage] = useState(1)
-  const totalPages = Math.ceil(authorArticles.length / pageSize)
-  const startIndex = (currentPage - 1) * pageSize
-  const paginatedArticles = authorArticles.slice(startIndex, startIndex + pageSize)
+  const effectivePageSize = pageSize ?? PAGINATION_SIZE
+  const totalPages = Math.ceil(authorArticles.length / effectivePageSize)
+  const startIndex = (currentPage - 1) * effectivePageSize
+  const paginatedArticles = authorArticles.slice(startIndex, startIndex + effectivePageSize)
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">

@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { getAuthorData } from '@/lib/authors'
 import { AuthorPageWithPagination } from '@/components/AuthorPageWithPagination'
+import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 
 interface AuthorPageProps {
   params: {
@@ -62,13 +63,11 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   // Pagination logic
-  const pageSize = 15
-  
   return (
     <AuthorPageWithPagination 
       authorData={authorData} 
       authorArticles={authorArticles} 
-      pageSize={pageSize} 
+      pageSize={PAGINATION_SIZE} 
       slug={slug} 
     />
   )

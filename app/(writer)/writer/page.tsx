@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { useAuth } from "@/components/auth/FirebaseAuthProvider"
+import { useAuth } from "@/components/auth/AuthContext"
 import { useMultipleAnalytics, formatAnalyticsNumber } from "@/lib/hooks/useAnalytics"
 import { useArticles, useArticleStats } from "@/lib/hooks/useArticles"
 

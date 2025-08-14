@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { allPosts } from '@/lib/contentlayer'
+import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { ArticleCard } from '@/components/ArticleCard'
 
@@ -46,7 +47,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
     dateRange: 'all',
     languages: []
   })
-  const pageSize = 15
+  const pageSize = PAGINATION_SIZE
 
   // Check if we're on mobile
   useEffect(() => {

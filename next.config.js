@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 const { withContentlayer } = require('next-contentlayer')
 
 const nextConfig = {
@@ -40,7 +43,20 @@ const nextConfig = {
   // Performance optimizations
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['@heroicons/react'],
+    optimizePackageImports: [
+      '@heroicons/react',
+      'react-syntax-highlighter',
+      'firebase/auth',
+      'firebase/analytics',
+      '@tiptap/react',
+      '@tiptap/starter-kit',
+      'framer-motion',
+      'marked'
+    ],
+    serverComponentsExternalPackages: [
+      'googleapis',
+      'firebase-admin'
+    ]
   },
   // Handle the content submodule
   webpack: (config, { dev, isServer }) => {
@@ -48,14 +64,39 @@ const nextConfig = {
     
     // Optimize bundle splitting
     if (!dev && !isServer) {
-      config.optimization.splitChunks.chunks = 'all'
-      config.optimization.splitChunks.cacheGroups = {
-        ...config.optimization.splitChunks.cacheGroups,
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: -10,
+            chunks: 'all',
+          },
+          firebase: {
+            test: /[\\/]node_modules[\\/](firebase|@firebase)[\\/]/,
+            name: 'firebase',
+            priority: 10,
+            chunks: 'async', // Load Firebase only when needed
+          },
+          tiptap: {
+            test: /[\\/]node_modules[\\/]@tiptap[\\/]/,
+            name: 'tiptap',
+            priority: 10,
+            chunks: 'async', // Load TipTap only on editor pages
+          },
+          highlighter: {
+            test: /[\\/]node_modules[\\/](react-syntax-highlighter|prismjs|highlight\.js)[\\/]/,
+            name: 'highlighter',
+            priority: 10,
+            chunks: 'async',
+          }
+        }
       }
     }
     
@@ -124,4 +165,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withContentlayer(nextConfig)
+module.exports = withBundleAnalyzer(withContentlayer(nextConfig))

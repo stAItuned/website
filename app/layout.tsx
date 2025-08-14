@@ -4,12 +4,18 @@ import { Montserrat } from 'next/font/google'
 import { Providers } from './providers'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { SearchModal } from '@/components/SearchModal'
 import { SearchProvider } from '@/components/SearchContext'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { SafePageViewTracker } from '@/components/PageViewTracker'
 import { CacheProvider } from '@/components/CacheProvider'
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
+import dynamic from 'next/dynamic'
+
+// Lazy load SearchModal to reduce initial bundle size
+const SearchModal = dynamic(
+  () => import('@/components/SearchModal').then(mod => ({ default: mod.SearchModal })),
+  { ssr: false }
+)
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 

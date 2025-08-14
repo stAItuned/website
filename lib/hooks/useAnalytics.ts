@@ -45,24 +45,25 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
   const [error, setError] = useState<string | null>(null)
 
   // Create cache key based on query parameters
-  const cacheKey = `analytics_${slug || 'global'}_${startDate}_${endDate}`
+  const cacheKey = `analytics_client_${slug || 'global'}_${startDate}_${endDate}`
   
   const fetchAnalytics = useCallback(async () => {
     if (!enabled) return
 
-    // Check cache first
+    // Check local cache first with longer expiry (24 hours)
     if (typeof window !== 'undefined') {
       const cached = localStorage.getItem(cacheKey)
       if (cached) {
         try {
           const { data: cachedData, timestamp } = JSON.parse(cached)
-          // Cache for 15 minutes
-          if (Date.now() - timestamp < 15 * 60 * 1000) {
+          // Cache for 24 hours on client side since server has daily limits
+          if (Date.now() - timestamp < 24 * 60 * 60 * 1000) {
             setData(cachedData)
             return
           }
         } catch (e) {
           // Invalid cache, continue to fetch
+          localStorage.removeItem(cacheKey)
         }
       }
     }
@@ -80,20 +81,29 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
       const response = await fetch(`/api/analytics?${params}`)
       const result = await response.json()
 
-      if (result.success) {
+      if (result.success || result.data) {
+        // Always use the data provided, whether from cache, API, or mock
         setData(result.data)
-        // Cache the result
+        
+        // Cache the result for 24 hours
         if (typeof window !== 'undefined') {
           localStorage.setItem(cacheKey, JSON.stringify({
             data: result.data,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            source: result.source || 'unknown'
           }))
         }
-      } else {
-        // Even on API error, use the mock data provided
-        if (result.data) {
-          setData(result.data)
+
+        // Log cache stats if available
+        if (result.cacheStats) {
+          console.log('📊 Analytics Cache Stats:', result.cacheStats)
         }
+
+        // Show info about data source
+        if (result.source) {
+          console.log(`📊 Analytics data source: ${result.source}`)
+        }
+      } else {
         setError(result.error || 'Failed to fetch analytics data')
       }
     } catch (err) {
@@ -109,7 +119,7 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
   }, [fetchAnalytics])
 
   const refetch = () => {
-    // Clear cache when manually refetching
+    // Clear client-side cache when manually refetching
     if (typeof window !== 'undefined') {
       localStorage.removeItem(cacheKey)
     }
@@ -168,24 +178,25 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
   const [error, setError] = useState<string | null>(null)
 
   // Create cache key for multiple analytics
-  const cacheKey = `analytics_multiple_${startDate}_${endDate}`
+  const cacheKey = `analytics_client_multiple_${startDate}_${endDate}`
 
   const fetchAnalytics = useCallback(async () => {
     if (!enabled) return
 
-    // Check cache first
+    // Check local cache first with longer expiry (24 hours)
     if (typeof window !== 'undefined') {
       const cached = localStorage.getItem(cacheKey)
       if (cached) {
         try {
           const { data: cachedData, timestamp } = JSON.parse(cached)
-          // Cache for 15 minutes
-          if (Date.now() - timestamp < 15 * 60 * 1000) {
+          // Cache for 24 hours on client side since server has daily limits
+          if (Date.now() - timestamp < 24 * 60 * 60 * 1000) {
             setData(cachedData)
             return
           }
         } catch (e) {
           // Invalid cache, continue to fetch
+          localStorage.removeItem(cacheKey)
         }
       }
     }
@@ -202,14 +213,27 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
       const response = await fetch(`/api/analytics?${params}`)
       const result = await response.json()
 
-      if (result.success) {
+      if (result.success || result.data) {
+        // Always use the data provided, whether from cache, API, or mock
         setData(result.data)
-        // Cache the result
+        
+        // Cache the result for 24 hours
         if (typeof window !== 'undefined') {
           localStorage.setItem(cacheKey, JSON.stringify({
             data: result.data,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            source: result.source || 'unknown'
           }))
+        }
+
+        // Log cache stats if available
+        if (result.cacheStats) {
+          console.log('📊 Analytics Cache Stats:', result.cacheStats)
+        }
+
+        // Show info about data source
+        if (result.source) {
+          console.log(`📊 Analytics data source: ${result.source}`)
         }
       } else {
         setError(result.error || 'Failed to fetch analytics data')
@@ -227,7 +251,7 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
   }, [fetchAnalytics])
 
   const refetch = () => {
-    // Clear cache when manually refetching
+    // Clear client-side cache when manually refetching
     if (typeof window !== 'undefined') {
       localStorage.removeItem(cacheKey)
     }
@@ -340,28 +364,79 @@ export function extractSiteMetrics(data: AnalyticsData | UseMultipleAnalyticsRes
 // Cache management utilities
 export function clearAnalyticsCache() {
   if (typeof window !== 'undefined') {
-    const keys = Object.keys(localStorage).filter(key => key.startsWith('analytics_'))
+    const keys = Object.keys(localStorage).filter(key => 
+      key.startsWith('analytics_') || key.startsWith('analytics_client_')
+    )
     keys.forEach(key => localStorage.removeItem(key))
+    console.log(`🗑️ Cleared ${keys.length} analytics cache entries`)
   }
 }
 
 export function clearExpiredCache() {
   if (typeof window !== 'undefined') {
-    const keys = Object.keys(localStorage).filter(key => key.startsWith('analytics_'))
+    const keys = Object.keys(localStorage).filter(key => 
+      key.startsWith('analytics_') || key.startsWith('analytics_client_')
+    )
+    let clearedCount = 0
+    
     keys.forEach(key => {
       try {
         const cached = localStorage.getItem(key)
         if (cached) {
           const { timestamp } = JSON.parse(cached)
-          // Remove if older than 15 minutes
-          if (Date.now() - timestamp >= 15 * 60 * 1000) {
+          // Remove if older than 24 hours
+          if (Date.now() - timestamp >= 24 * 60 * 60 * 1000) {
             localStorage.removeItem(key)
+            clearedCount++
           }
         }
       } catch (e) {
         // Invalid cache entry, remove it
         localStorage.removeItem(key)
+        clearedCount++
       }
     })
+    
+    if (clearedCount > 0) {
+      console.log(`🗑️ Cleared ${clearedCount} expired analytics cache entries`)
+    }
   }
+}
+
+// Analytics cache info
+export function getAnalyticsCacheInfo() {
+  if (typeof window !== 'undefined') {
+    const keys = Object.keys(localStorage).filter(key => 
+      key.startsWith('analytics_') || key.startsWith('analytics_client_')
+    )
+    
+    const cacheInfo = keys.map(key => {
+      try {
+        const cached = localStorage.getItem(key)
+        if (cached) {
+          const { timestamp, source } = JSON.parse(cached)
+          const age = Date.now() - timestamp
+          const ageHours = Math.floor(age / (60 * 60 * 1000))
+          const ageMinutes = Math.floor((age % (60 * 60 * 1000)) / (60 * 1000))
+          
+          return {
+            key,
+            source: source || 'unknown',
+            age: `${ageHours}h ${ageMinutes}m`,
+            timestamp: new Date(timestamp).toLocaleString()
+          }
+        }
+      } catch (e) {
+        return { key, error: 'Invalid cache entry' }
+      }
+      return null
+    }).filter(Boolean)
+    
+    return {
+      totalEntries: keys.length,
+      entries: cacheInfo
+    }
+  }
+  
+  return { totalEntries: 0, entries: [] }
 }

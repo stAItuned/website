@@ -3,12 +3,6 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { User } from 'firebase/auth'
-import { 
-  signInWithGooglePopup, 
-  signOutUser, 
-  onAuthStateChange,
-  handleRedirectResult 
-} from '@/lib/firebase/auth'
 
 interface AuthError {
   code: string
@@ -43,32 +37,41 @@ export default function GoogleSignInButton({
       setInitialLoading(false)
       return
     }
-    // Handle redirect result on component mount (for redirect flow)
-    const handleRedirect = async () => {
-      if (useRedirect) {
-        const result = await handleRedirectResult()
-        if (result.success && result.user) {
-          onSignInSuccess?.(result.user)
-        } else if (!result.success && result.error) {
-          onSignInError?.(result.error)
+    
+    // Dynamically import Firebase auth functions
+    const initAuth = async () => {
+      const { onAuthStateChange, handleRedirectResult } = await import('@/lib/firebase/auth')
+      
+      // Handle redirect result on component mount (for redirect flow)
+      const handleRedirect = async () => {
+        if (useRedirect) {
+          const result = await handleRedirectResult()
+          if (result.success && result.user) {
+            onSignInSuccess?.(result.user)
+          } else if (!result.success && result.error) {
+            onSignInError?.(result.error)
+          }
         }
       }
+      await handleRedirect()
+
+      // Listen for auth state changes
+      const unsubscribe = onAuthStateChange((user) => {
+        setUser(user)
+        setInitialLoading(false)
+      })
+
+      return unsubscribe
     }
-    handleRedirect()
-
-    // Listen for auth state changes
-    const unsubscribe = onAuthStateChange((user) => {
-      setUser(user)
-      setInitialLoading(false)
-    })
-
-    return () => unsubscribe()
+    
+    initAuth()
   }, [useRedirect, onSignInSuccess, onSignInError, DISABLE_AUTH])
 
   const handleSignIn = async () => {
     setLoading(true)
     
     try {
+      const { signInWithGooglePopup } = await import('@/lib/firebase/auth')
       const result = await signInWithGooglePopup()
       
       if (result.success && result.user) {
@@ -90,6 +93,7 @@ export default function GoogleSignInButton({
     setLoading(true)
     
     try {
+      const { signOutUser } = await import('@/lib/firebase/auth')
       await signOutUser()
     } catch (error) {
       console.error('Sign out error:', error)
