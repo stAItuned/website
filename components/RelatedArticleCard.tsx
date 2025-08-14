@@ -31,9 +31,11 @@ export function RelatedArticleCard({ article }: { article: Article }) {
             <Image
               src={imageSrc}
               alt={article.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-200"
+              width={128}
+              height={128}
+              className="object-cover group-hover:scale-105 transition-transform duration-200 w-full h-full"
               sizes="128px"
+              loading="lazy"
               priority={false}
             />
           </div>

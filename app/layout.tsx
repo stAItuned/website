@@ -4,6 +4,8 @@ import { Montserrat } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import dynamic from 'next/dynamic'
+// Temporarily disabled to prevent image optimizer overload
+// import { getArticleCoversForPreload } from '@/lib/preload-covers'
 
 // Critical components loaded immediately
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
@@ -47,6 +49,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Temporarily disabled to prevent image optimizer overload
+  // const articleCovers = getArticleCoversForPreload()
+
   return (
     <html lang="en">
       <head>
@@ -63,6 +68,45 @@ export default function RootLayout({
           as="image"
           type="image/png"
         />
+        {/* Preload learn page target images */}
+        <link
+          rel="preload"
+          href="/assets/learn/newbie-card.jpg"
+          as="image"
+          type="image/jpeg"
+        />
+        <link
+          rel="preload"
+          href="/assets/learn/midway-card.png"
+          as="image"
+          type="image/png"
+        />
+        <link
+          rel="preload"
+          href="/assets/learn/expert-card.png"
+          as="image"
+          type="image/png"
+        />
+        {/* Temporarily disabled article cover preloading to prevent image optimizer overload
+        {articleCovers.map((cover, index) => {
+          const isPng = cover.includes('.png')
+          const isWebp = cover.includes('.webp')
+          
+          let type = 'image/jpeg' // default for jpg/jpeg
+          if (isPng) type = 'image/png'
+          if (isWebp) type = 'image/webp'
+          
+          return (
+            <link
+              key={`cover-${index}`}
+              rel="preload"
+              href={cover}
+              as="image"
+              type={type}
+            />
+          )
+        })}
+        */}
         {/* Preload critical fonts */}
         <link
           rel="preconnect"

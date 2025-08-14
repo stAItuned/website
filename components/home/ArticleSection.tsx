@@ -93,9 +93,12 @@ function ArticleCard({ article, color, pageViews, index }: {
             height={200}
             className="w-full max-h-[200px] object-cover opacity-30"
             unoptimized={imageSrc.startsWith('http')}
-            loading={index < 4 ? "eager" : "lazy"}
+            loading={index === 0 ? "eager" : "lazy"}
             sizes="(max-width: 768px) 100vw, 50vw"
-            quality={75}
+            quality={60}
+            priority={index === 0}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
             onError={(e) => {
               // Hide broken images
               e.currentTarget.style.display = 'none'

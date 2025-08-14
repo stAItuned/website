@@ -63,7 +63,8 @@ export function Header() {
                      (max-width: 1024px) 11rem,
                      (max-width: 1280px) 13rem,
                      15rem"
-              priority
+              priority={isHomepage}
+              loading={isHomepage ? "eager" : "lazy"}
             />
           </Link>
 
