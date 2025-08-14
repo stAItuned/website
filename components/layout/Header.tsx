@@ -54,11 +54,16 @@ export function Header() {
         <div className="flex justify-between items-start">
           <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <Image
-              className="h-[30px] lg:h-[50px] w-auto hover:cursor-pointer"
               src={isHomepage ? "/assets/general/logo-text.png" : "/assets/general/logo-text-dark.png"}
               alt="stAItuned logo"
-              width={200}
-              height={50}
+              width={600} // intrinsic width for ratio
+              height={133} // intrinsic height for ratio
+              className="h-auto w-28 sm:w-36 md:w-44 lg:w-52 xl:w-60 hover:cursor-pointer"
+              sizes="(max-width: 640px) 7rem,
+                     (max-width: 768px) 9rem,
+                     (max-width: 1024px) 11rem,
+                     (max-width: 1280px) 13rem,
+                     15rem"
               priority
             />
           </Link>

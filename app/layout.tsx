@@ -8,7 +8,8 @@ import { SearchModal } from '@/components/SearchModal'
 import { SearchProvider } from '@/components/SearchContext'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { SafePageViewTracker } from '@/components/PageViewTracker'
-import { ClientOnly } from '@/components/SafeNavigation'
+import { CacheProvider } from '@/components/CacheProvider'
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -36,18 +37,21 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <GoogleAnalytics />
+        <ServiceWorkerRegister />
         <Providers>
-          <SearchProvider>
-            <SafePageViewTracker />
-            <Header />
-            <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
-              <main className="h-full flex flex-col justify-center">
-                {children}
-              </main>
-              <Footer />
-            </section>
-            <SearchModal />
-          </SearchProvider>
+          <CacheProvider>
+            <SearchProvider>
+              <SafePageViewTracker />
+              <Header />
+              <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
+                <main className="h-full flex flex-col justify-center">
+                  {children}
+                </main>
+                <Footer />
+              </section>
+              <SearchModal />
+            </SearchProvider>
+          </CacheProvider>
         </Providers>
       </body>
     </html>

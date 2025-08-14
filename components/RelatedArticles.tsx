@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Article {
   title: string
@@ -58,21 +59,19 @@ function RelatedArticleCard({ article }: { article: Article }) {
     <div className="max-w-4xl mx-auto p-3">
       <Link href={`/learn/${target}/${article.slug}`}>
         <div className="w-full py-2 text-primary-600 hover:cursor-pointer rounded-lg">
-          <div className="relative h-[420px] flex flex-col justify-end hover:scale-105 transition duration-300 my-16">
+          <div className="relative my-16 h-[420px] overflow-hidden rounded-lg">
             {/* Cover Image */}
             {imageSrc && (
-              <img
+              <Image
                 src={imageSrc}
                 alt="background"
-                width={400}
-                height={280}
-                className="h-2/3 absolute -top-16 w-full rounded-lg object-cover"
-                onError={(e: any) => {
-                  e.currentTarget.style.display = 'none'
-                }}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 800px"
+                onError={(e) => { (e.currentTarget as any).style.display = 'none'; }}
+                priority={false}
               />
             )}
-            
             {/* Post Info */}
             <div className="relative mx-4 h-2/3 justify-between bg-slate-100 rounded-lg p-4 z-10">
               {/* Date */}

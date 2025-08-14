@@ -39,6 +39,38 @@ const nextConfig = {
     return config
   },
   transpilePackages: ['contentlayer'],
+  // Add cache headers for API routes and static assets
+  async headers() {
+    return [
+      {
+        source: '/api/analytics',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=300, stale-while-revalidate=600', // 5 minutes cache, 10 minutes stale
+          },
+        ],
+      },
+      {
+        source: '/content/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable', // 1 year for static content
+          },
+        ],
+      },
+      {
+        source: '/assets/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable', // 1 year for assets
+          },
+        ],
+      },
+    ]
+  },
   async rewrites() {
     const rewrites = []
     

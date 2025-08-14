@@ -44,8 +44,28 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Create cache key based on query parameters
+  const cacheKey = `analytics_${slug || 'global'}_${startDate}_${endDate}`
+  
   const fetchAnalytics = useCallback(async () => {
     if (!enabled) return
+
+    // Check cache first
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem(cacheKey)
+      if (cached) {
+        try {
+          const { data: cachedData, timestamp } = JSON.parse(cached)
+          // Cache for 15 minutes
+          if (Date.now() - timestamp < 15 * 60 * 1000) {
+            setData(cachedData)
+            return
+          }
+        } catch (e) {
+          // Invalid cache, continue to fetch
+        }
+      }
+    }
 
     setLoading(true)
     setError(null)
@@ -62,6 +82,13 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
 
       if (result.success) {
         setData(result.data)
+        // Cache the result
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(cacheKey, JSON.stringify({
+            data: result.data,
+            timestamp: Date.now()
+          }))
+        }
       } else {
         // Even on API error, use the mock data provided
         if (result.data) {
@@ -75,13 +102,17 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
     } finally {
       setLoading(false)
     }
-  }, [slug, startDate, endDate, enabled])
+  }, [slug, startDate, endDate, enabled, cacheKey])
 
   useEffect(() => {
     fetchAnalytics()
   }, [fetchAnalytics])
 
   const refetch = () => {
+    // Clear cache when manually refetching
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(cacheKey)
+    }
     fetchAnalytics()
   }
 
@@ -136,8 +167,28 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Create cache key for multiple analytics
+  const cacheKey = `analytics_multiple_${startDate}_${endDate}`
+
   const fetchAnalytics = useCallback(async () => {
     if (!enabled) return
+
+    // Check cache first
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem(cacheKey)
+      if (cached) {
+        try {
+          const { data: cachedData, timestamp } = JSON.parse(cached)
+          // Cache for 15 minutes
+          if (Date.now() - timestamp < 15 * 60 * 1000) {
+            setData(cachedData)
+            return
+          }
+        } catch (e) {
+          // Invalid cache, continue to fetch
+        }
+      }
+    }
 
     setLoading(true)
     setError(null)
@@ -153,6 +204,13 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
 
       if (result.success) {
         setData(result.data)
+        // Cache the result
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(cacheKey, JSON.stringify({
+            data: result.data,
+            timestamp: Date.now()
+          }))
+        }
       } else {
         setError(result.error || 'Failed to fetch analytics data')
       }
@@ -162,13 +220,17 @@ export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> 
     } finally {
       setLoading(false)
     }
-  }, [startDate, endDate, enabled])
+  }, [startDate, endDate, enabled, cacheKey])
 
   useEffect(() => {
     fetchAnalytics()
   }, [fetchAnalytics])
 
   const refetch = () => {
+    // Clear cache when manually refetching
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(cacheKey)
+    }
     fetchAnalytics()
   }
 
@@ -273,4 +335,33 @@ export function extractSiteMetrics(data: AnalyticsData | UseMultipleAnalyticsRes
   )
 
   return totals
+}
+
+// Cache management utilities
+export function clearAnalyticsCache() {
+  if (typeof window !== 'undefined') {
+    const keys = Object.keys(localStorage).filter(key => key.startsWith('analytics_'))
+    keys.forEach(key => localStorage.removeItem(key))
+  }
+}
+
+export function clearExpiredCache() {
+  if (typeof window !== 'undefined') {
+    const keys = Object.keys(localStorage).filter(key => key.startsWith('analytics_'))
+    keys.forEach(key => {
+      try {
+        const cached = localStorage.getItem(key)
+        if (cached) {
+          const { timestamp } = JSON.parse(cached)
+          // Remove if older than 15 minutes
+          if (Date.now() - timestamp >= 15 * 60 * 1000) {
+            localStorage.removeItem(key)
+          }
+        }
+      } catch (e) {
+        // Invalid cache entry, remove it
+        localStorage.removeItem(key)
+      }
+    })
+  }
 }
