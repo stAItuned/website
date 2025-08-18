@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebase/admin";
+import { sanitizeSlug } from '@/lib/sanitizeSlug';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -8,11 +9,7 @@ export async function GET(request: Request) {
   try {
     if (slug) {
       // Sanitize slug to match what's stored in Firestore
-      const sanitizedSlug = slug
-        .replace(/[/\\]/g, '-')
-        .replace(/[^a-zA-Z0-9\-_]/g, '')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '');
+  const sanitizedSlug = sanitizeSlug(slug);
       
       // Return data for specific article
   const snap = await db().collection('articles').doc(sanitizedSlug).get();
@@ -20,12 +17,17 @@ export async function GET(request: Request) {
         const data = snap.data();
         if (!data) {
           return NextResponse.json({
-            success: false,
-            error: 'No analytics data for this article',
-            data: null,
+            success: true,
+            data: {
+              pageViews: 0,
+              users: 0,
+              sessions: 0,
+              avgTimeOnPage: 0,
+              bounceRate: 0,
+              updatedAt: null,
+            },
             source: 'not_found',
           }, {
-            status: 404,
             headers: { 
               "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
             },
@@ -34,12 +36,12 @@ export async function GET(request: Request) {
         return NextResponse.json({
           success: true,
           data: {
-            pageViews: data.pageViews,
-            users: data.users,
-            sessions: data.sessions,
-            avgTimeOnPage: data.avgTimeOnPage,
-            bounceRate: data.bounceRate,
-            updatedAt: data.updatedAt,
+            pageViews: data.pageViews ?? 0,
+            users: data.users ?? 0,
+            sessions: data.sessions ?? 0,
+            avgTimeOnPage: data.avgTimeOnPage ?? 0,
+            bounceRate: data.bounceRate ?? 0,
+            updatedAt: data.updatedAt ?? null,
           },
           source: 'firestore',
         }, {
@@ -48,14 +50,19 @@ export async function GET(request: Request) {
           },
         });
       } else {
-        // Article not found in analytics
+        // Article not found in analytics, return 0s for all metrics
         return NextResponse.json({
-          success: false,
-          error: 'No analytics data for this article',
-          data: null,
+          success: true,
+          data: {
+            pageViews: 0,
+            users: 0,
+            sessions: 0,
+            avgTimeOnPage: 0,
+            bounceRate: 0,
+            updatedAt: null,
+          },
           source: 'not_found',
         }, {
-          status: 404,
           headers: { 
             "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
           },
@@ -66,12 +73,22 @@ export async function GET(request: Request) {
       const snap = await db().doc("analytics/daily").get();
       if (!snap.exists) {
         return NextResponse.json({
-          success: false,
-          error: 'No analytics summary found',
-          data: null,
+          success: true,
+          data: {
+            totalStats: {
+              pageViews: 0,
+              users: 0,
+              sessions: 0,
+              avgTimeOnPage: 0,
+              bounceRate: 0,
+            },
+            topPages: [],
+            updatedAt: null,
+            dateRange: null,
+            date: null
+          },
           source: 'not_found',
         }, {
-          status: 404,
           headers: { 
             "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
           },
@@ -80,12 +97,22 @@ export async function GET(request: Request) {
       const data = snap.data();
       if (!data) {
         return NextResponse.json({
-          success: false,
-          error: 'No analytics summary found',
-          data: null,
+          success: true,
+          data: {
+            totalStats: {
+              pageViews: 0,
+              users: 0,
+              sessions: 0,
+              avgTimeOnPage: 0,
+              bounceRate: 0,
+            },
+            topPages: [],
+            updatedAt: null,
+            dateRange: null,
+            date: null
+          },
           source: 'not_found',
         }, {
-          status: 404,
           headers: { 
             "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
           },
@@ -94,11 +121,17 @@ export async function GET(request: Request) {
       return NextResponse.json({
         success: true,
         data: {
-          totalStats: data.totalStats,
-          topPages: data.topPages,
-          updatedAt: data.updatedAt,
-          dateRange: data.dateRange,
-          date: data.date
+          totalStats: {
+            pageViews: data.totalStats?.pageViews ?? 0,
+            users: data.totalStats?.users ?? 0,
+            sessions: data.totalStats?.sessions ?? 0,
+            avgTimeOnPage: data.totalStats?.avgTimeOnPage ?? 0,
+            bounceRate: data.totalStats?.bounceRate ?? 0,
+          },
+          topPages: data.topPages ?? [],
+          updatedAt: data.updatedAt ?? null,
+          dateRange: data.dateRange ?? null,
+          date: data.date ?? null
         },
         source: 'firestore',
       }, {

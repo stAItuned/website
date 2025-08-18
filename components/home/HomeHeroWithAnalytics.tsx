@@ -31,7 +31,7 @@ export function HomeHeroWithAnalytics({
           setSessions(totalStats.sessions || 0)
         }
       } catch (error) {
-        console.error('Failed to load analytics:', error)
+  console.error('No data available:', error)
         // Keep initial values on error
       }
     }

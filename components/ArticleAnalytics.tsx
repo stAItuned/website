@@ -29,7 +29,7 @@ export function ArticleAnalytics({ slug, target, className = '' }: ArticleAnalyt
             setAnalytics(null)
           }
         } else {
-          setError('Failed to load analytics')
+          setError('No data available')
         }
       } catch (err) {
         setError('Analytics unavailable')
