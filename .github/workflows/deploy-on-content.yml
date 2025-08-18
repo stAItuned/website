@@ -5,7 +5,7 @@ on:
     types: [content-updated]
   workflow_dispatch:
   push:
-    branches: [main, development]  # Aggiungiamo development
+    branches: [main]
 
 concurrency:
   group: deploy-production

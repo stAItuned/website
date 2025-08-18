@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
         .replace(/[^a-zA-Z0-9\-_]/g, '')
         .replace(/-+/g, '-')
         .replace(/^-+|-+$/g, '');
-      const docRef = db.collection('articles').doc(sanitizedSlug)
+      const docRef = db().collection('articles').doc(sanitizedSlug)
       const snap = await docRef.get()
       if (!snap.exists) {
         return NextResponse.json({
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       })
     } else {
       // All articles: read from analytics/daily (or analytics/summaries)
-      const docRef = db.doc('analytics/daily')
+      const docRef = db().doc('analytics/daily')
       const snap = await docRef.get()
       if (!snap.exists) {
         return NextResponse.json({

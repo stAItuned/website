@@ -1,14 +1,5 @@
 import { NextResponse } from "next/server";
-import { getApps, initializeApp, applicationDefault } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-
-function db() {
-  if (!getApps().length) {
-    // In Firebase Functions usa ADC (Application Default Credentials)
-    initializeApp({ credential: applicationDefault() });
-  }
-  return getFirestore();
-}
+import { db } from "@/lib/firebase/admin";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
