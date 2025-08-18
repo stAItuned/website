@@ -2,7 +2,7 @@
 
 
 import Image from 'next/image'
-import { useAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useAnalytics'
+import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
 
 interface ArticleCardProps {
   article: {
@@ -20,8 +20,8 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
-  // Fetch analytics for this article (from cache if present)
-  const { data: analyticsData, loading: analyticsLoading } = useAnalytics({ slug: article.slug })
+  // Fetch analytics for this article (fast endpoint)
+  const { data: analyticsData, loading: analyticsLoading } = useFastAnalytics({ slug: article.slug })
   const getValidImageSrc = (cover?: string) => {
     if (!cover) return null
     if (cover.startsWith('http://') || cover.startsWith('https://')) {

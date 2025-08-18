@@ -22,11 +22,13 @@ export function HomeHeroWithAnalytics({
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('/api/analytics/stats')
+        const response = await fetch('/api/analytics/fast')
         if (response.ok) {
-          const data = await response.json()
-          setActiveUsers(data.activeUsers || 0)
-          setSessions(data.sessions || 0)
+          const json = await response.json()
+          // Extract users and sessions from Firestore-backed response
+          const totalStats = json?.data?.totalStats || {}
+          setActiveUsers(totalStats.users || 0)
+          setSessions(totalStats.sessions || 0)
         }
       } catch (error) {
         console.error('Failed to load analytics:', error)

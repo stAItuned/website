@@ -21,5 +21,16 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+    
+    // Analytics data - Allow Cloud Functions to write, public read access
+    match /analytics/summaries {
+      allow read: if true;
+      allow write: if true; // Cloud Functions will write with admin SDK
+    }
+    
+    match /analytics/articles/{articleSlug} {
+      allow read: if true;
+      allow write: if true; // Cloud Functions will write with admin SDK
+    }
   }
 }

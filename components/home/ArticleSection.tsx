@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useMultipleAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useAnalytics'
+import { formatAnalyticsNumber } from '@/lib/hooks/useAnalytics'
 
 type Category = 'Relevant' | 'Recent'
 
@@ -157,43 +157,60 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
     recent: recentArticles,
     relevant: relevantArticles
   })
+  const [analyticsLoading, setAnalyticsLoading] = useState(true)
   
-  // Fetch analytics data for all articles
-  const { data: analyticsData, loading: analyticsLoading } = useMultipleAnalytics({
-    startDate: '90daysAgo',
-    endDate: 'today'
-  })
-
-  // Merge analytics data with articles when available
+  // Fetch analytics data for all articles from Firestore
   useEffect(() => {
-    if (analyticsData && analyticsData.length > 0) {
-      const analyticsMap = new Map()
-      analyticsData.forEach(item => {
-        // Create a map of article URLs to view counts
-        if (item.articleUrl) {
-          analyticsMap.set(item.articleUrl, item.pageViews || 0)
-        }
-      })
+    const fetchAnalytics = async () => {
+      try {
+        setAnalyticsLoading(true)
+        const response = await fetch('/api/analytics')
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success && result.data && Array.isArray(result.data)) {
+            const analyticsMap = new Map()
+            result.data.forEach((item: { articleUrl?: string; pageViews?: number }) => {
+              if (item.articleUrl) {
+                analyticsMap.set(item.articleUrl, item.pageViews || 0)
+              }
+            })
 
-      const enhanceArticlesWithAnalytics = (articles: Article[]) => {
-        return articles.map(article => {
-          const target = article.target?.toLowerCase() || 'midway'
-          const articleUrl = `/learn/${target}/${article.slug}`
-          const pageViews = analyticsMap.get(articleUrl) || 0
-          
-          return {
-            ...article,
-            pageViews
+            const enhanceArticlesWithAnalytics = (articles: Article[]) => {
+              return articles.map(article => {
+                const target = article.target?.toLowerCase() || 'midway'
+                const articleUrl = `/learn/${target}/${article.slug}`
+                const pageViews = analyticsMap.get(articleUrl) || 0
+                
+                return {
+                  ...article,
+                  pageViews
+                }
+              })
+            }
+
+            setArticlesWithAnalytics({
+              recent: enhanceArticlesWithAnalytics(recentArticles),
+              relevant: enhanceArticlesWithAnalytics(relevantArticles)
+            })
           }
-        })
+        }
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error)
+      } finally {
+        setAnalyticsLoading(false)
       }
-
-      setArticlesWithAnalytics({
-        recent: enhanceArticlesWithAnalytics(recentArticles),
-        relevant: enhanceArticlesWithAnalytics(relevantArticles)
-      })
     }
-  }, [analyticsData, recentArticles, relevantArticles])
+
+    fetchAnalytics()
+  }, [recentArticles, relevantArticles])
+  
+  // Remove the old analytics hook
+  // const { data: analyticsData, loading: analyticsLoading } = useMultipleAnalytics({
+  //   startDate: '90daysAgo',
+  //   endDate: 'today'
+  // })
+
+  // Remove the old useEffect that merged analytics data
   
   const categories: Category[] = ['Relevant', 'Recent']
   const articles = articlesToShow === 'Recent' 
@@ -242,9 +259,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
         <p className="text-xs text-right text-gray-300">
           {analyticsLoading 
             ? 'Loading view counts...' 
-            : analyticsData && analyticsData.length > 0
-              ? '* View counts from Google Analytics (last 30 days)'
-              : '* View counts unavailable'
+            : '* View counts from Google Analytics (last 90 days)'
           }
         </p>
       </div>

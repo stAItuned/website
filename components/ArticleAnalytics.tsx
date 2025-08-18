@@ -1,6 +1,7 @@
 'use client'
 
-import { useAnalytics, formatAnalyticsNumber, formatDuration, formatBounceRate } from '@/lib/hooks/useAnalytics'
+import { useState, useEffect } from 'react'
+import { formatAnalyticsNumber, formatDuration, formatBounceRate } from '@/lib/hooks/useAnalytics'
 
 interface ArticleAnalyticsProps {
   slug: string
@@ -9,12 +10,37 @@ interface ArticleAnalyticsProps {
 }
 
 export function ArticleAnalytics({ slug, target, className = '' }: ArticleAnalyticsProps) {
-  const { data: analytics, loading, error } = useAnalytics({
-    slug,
-    target,
-    startDate: '30daysAgo',
-    endDate: 'today'
-  })
+  const [analytics, setAnalytics] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await fetch(`/api/analytics/fast?slug=${encodeURIComponent(slug)}`)
+        
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success && result.data) {
+            setAnalytics(result.data)
+          } else {
+            setAnalytics(null)
+          }
+        } else {
+          setError('Failed to load analytics')
+        }
+      } catch (err) {
+        setError('Analytics unavailable')
+        console.error('Analytics fetch error:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAnalytics()
+  }, [slug])
 
   if (loading) {
     return (
@@ -55,7 +81,7 @@ export function ArticleAnalytics({ slug, target, className = '' }: ArticleAnalyt
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-900">Article Analytics</h3>
         <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-          Last 30 days
+          Last 90 days
         </span>
       </div>
       
@@ -118,7 +144,7 @@ export function ArticleAnalytics({ slug, target, className = '' }: ArticleAnalyt
       {/* Data source note */}
       <div className="mt-4 pt-3 border-t border-gray-100">
         <p className="text-xs text-gray-500 text-center">
-          Data from Google Analytics • Updated in real-time
+          Data from Google Analytics via Firestore • Updated daily at 6 AM
         </p>
       </div>
     </div>
