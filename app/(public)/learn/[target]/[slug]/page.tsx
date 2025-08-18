@@ -207,7 +207,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
 
           {/* Article Analytics */}
           <div className="mb-4">
-            <ArticleAnalyticsStats slug={article.slug} hideBounceRate />
+            <ArticleAnalyticsStats slug={article.slug} />
           </div>
 
           {/* Article Title */}

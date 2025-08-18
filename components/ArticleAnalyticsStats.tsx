@@ -104,8 +104,15 @@ export default function ArticleAnalyticsStats({ slug }: ArticleAnalyticsStatsPro
     </span>
   </div>
       </div>
-      {error && (
-        <div className="text-xs text-gray-400 mt-2 text-center">{error}</div>
+      {(error || true) && (
+        <div className="flex items-center justify-between mt-2 w-full">
+          {error ? (
+            <div className="text-xs text-gray-400 text-left">{error}</div>
+          ) : <span />}
+          <div className="text-[11px] text-gray-500 dark:text-gray-400 text-right select-none ml-2">
+            * data referred to the last 90 days
+          </div>
+        </div>
       )}
     </div>
   )
