@@ -12,6 +12,7 @@ interface AuthorData {
   description?: string
   linkedin?: string
   email?: string
+  speaker?: boolean
 }
 
 interface Article {
@@ -79,6 +80,22 @@ export function AuthorPageWithPagination({
               <p className="text-xl text-primary-600 mb-4">
                 {authorData.title}
               </p>
+            )}
+            {authorData.speaker && (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold border border-green-200 mb-2">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zm5 9a5 5 0 0 1-10 0m5 5v3m-4 0h8" />
+                </svg>
+                <span>Available for speech</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 ml-2">AI & Innovation</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 ml-1">GenAI applied to the business</span>
+                <a
+                  href={`mailto:${authorData.email}?subject=Request%20for%20Speech%20Engagement&body=Hi%20${encodeURIComponent(authorData.name)},%0D%0A%0D%0AI'd%20like%20to%20invite%20you%20for%20a%20speech%20at%20our%20event.%20Please%20let%20me%20know%20your%20availability.`}
+                  className="ml-2 px-3 py-1 rounded-full bg-primary-600 text-white text-xs font-semibold transition-all duration-200 hover:bg-primary-700 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
+                >
+                  Request a speech
+                </a>
+              </div>
             )}
             {authorData.description && (
               <p className="text-gray-600 mb-4">

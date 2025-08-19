@@ -115,13 +115,23 @@ export default async function MeetPage() {
                       </p>
                     )}
                   </div>
-                  
+
+                  {/* Speaker badge */}
+                  {author.data?.speaker && (
+                    <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold border border-green-200 mb-1">
+                      <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zm5 9a5 5 0 0 1-10 0m5 5v3m-4 0h8" />
+                      </svg>
+                      Available for speech
+                    </div>
+                  )}
+
                   {author.data?.description && (
                     <p className="text-xs text-gray-600 line-clamp-3">
                       {author.data.description}
                     </p>
                   )}
-                  
+
                   <div className="bg-primary-100 text-primary-800 text-sm px-3 py-1 rounded-full">
                     {author.articleCount} article{author.articleCount !== 1 ? 's' : ''}
                   </div>

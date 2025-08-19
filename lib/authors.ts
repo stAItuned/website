@@ -9,6 +9,7 @@ export interface AuthorData {
   linkedin: string
   email: string
   description: string
+  speaker?: boolean
 }
 
 export async function getAuthorData(authorName: string): Promise<AuthorData | null> {
@@ -45,12 +46,12 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
     // Simple YAML parsing for the author metadata
     const frontmatter = match[1]
     const lines = frontmatter.split(/[\r\n]+/)
-    const metadata: Record<string, string | string[]> = {}
+  const metadata: Record<string, any> = {}
 
     for (const line of lines) {
       if (line.includes(':')) {
         const [key, ...valueParts] = line.split(':')
-        const value = valueParts.join(':').trim()
+  const value = valueParts.join(':').trim()
 
         // Handle arrays (team field)
         if (value.startsWith('[') && value.endsWith(']')) {
@@ -58,6 +59,10 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
             .slice(1, -1) // Remove brackets
             .split(',')
             .map(item => item.trim().replace(/['"]/g, ''))
+        } else if (value.toLowerCase() === 'true') {
+          metadata[key.trim()] = true
+        } else if (value.toLowerCase() === 'false') {
+          metadata[key.trim()] = false
         } else {
           metadata[key.trim()] = value.replace(/['"]/g, '')
         }
@@ -70,7 +75,8 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
       title: Array.isArray(metadata.title) ? metadata.title[0] : metadata.title || '',
       linkedin: Array.isArray(metadata.linkedin) ? metadata.linkedin[0] : metadata.linkedin || '',
       email: Array.isArray(metadata.email) ? metadata.email[0] : metadata.email || '',
-      description: Array.isArray(metadata.description) ? metadata.description[0] : metadata.description || ''
+      description: Array.isArray(metadata.description) ? metadata.description[0] : metadata.description || '',
+      speaker: typeof metadata.speaker === 'boolean' ? metadata.speaker : (typeof metadata.speaker === 'string' ? metadata.speaker.trim().toLowerCase() === 'true' : false)
     }
   } catch (error) {
     console.error('Error reading author data:', error)

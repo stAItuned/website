@@ -15,7 +15,7 @@ export default function HomePage() {
       if (!a.date || !b.date) return 0;
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     })
-    .slice(0, 22);
+    .slice(0, 10);
 
   // Relevant articles based on specific slugs (you can customize this)
   const relevantArticleSlugs = [
