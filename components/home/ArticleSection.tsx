@@ -149,13 +149,15 @@ function ArticleCard({ article, color, pageViews, index }: {
 }
 
 export function ArticleSection({ recentArticles, relevantArticles }: ArticleSectionProps) {
-  const [articlesToShow, setArticlesToShow] = useState<Category>('Relevant')
+  const [articlesToShow, setArticlesToShow] = useState<Category | 'Top'>('Relevant')
   const [articlesWithAnalytics, setArticlesWithAnalytics] = useState<{
     recent: Article[]
     relevant: Article[]
+    top: Article[]
   }>({
     recent: recentArticles,
-    relevant: relevantArticles
+    relevant: relevantArticles,
+    top: []
   })
   const [analyticsLoading, setAnalyticsLoading] = useState(true)
   
@@ -188,10 +190,24 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
               })
             }
 
+            const recentWithAnalytics = enhanceArticlesWithAnalytics(recentArticles);
+            const relevantWithAnalytics = enhanceArticlesWithAnalytics(relevantArticles);
+            // Top 10 by views from all unique articles in both lists
+            const allArticles = [...recentWithAnalytics, ...relevantWithAnalytics];
+            const uniqueArticlesMap = new Map();
+            allArticles.forEach(article => {
+              uniqueArticlesMap.set(article.slug, article);
+            });
+            const uniqueArticles = Array.from(uniqueArticlesMap.values());
+            const topArticles = uniqueArticles
+              .filter(a => typeof a.pageViews === 'number')
+              .sort((a, b) => (b.pageViews ?? 0) - (a.pageViews ?? 0))
+              .slice(0, 10);
             setArticlesWithAnalytics({
-              recent: enhanceArticlesWithAnalytics(recentArticles),
-              relevant: enhanceArticlesWithAnalytics(relevantArticles)
-            })
+              recent: recentWithAnalytics,
+              relevant: relevantWithAnalytics,
+              top: topArticles
+            });
           }
         }
       } catch (error) {
@@ -212,10 +228,15 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
 
   // Remove the old useEffect that merged analytics data
   
-  const categories: Category[] = ['Relevant', 'Recent']
-  const articles = articlesToShow === 'Recent' 
-    ? articlesWithAnalytics.recent 
-    : articlesWithAnalytics.relevant
+  const categories: (Category | 'Top')[] = ['Relevant', 'Recent', 'Top']
+  let articles: Article[] = [];
+  if (articlesToShow === 'Recent') {
+    articles = articlesWithAnalytics.recent;
+  } else if (articlesToShow === 'Relevant') {
+    articles = articlesWithAnalytics.relevant;
+  } else if (articlesToShow === 'Top') {
+    articles = articlesWithAnalytics.top;
+  }
 
   return (
     <section className="bg-white text-white py-5">
@@ -232,7 +253,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
             onClick={() => setArticlesToShow(category)}
           >
             <div className="flex items-center justify-center space-x-2">
-              <span>{`${category} Articles`}</span>
+              <span>{category === 'Top' ? 'Top 10' : `${category} Articles`}</span>
               {analyticsLoading && (
                 <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white opacity-50"></div>
               )}

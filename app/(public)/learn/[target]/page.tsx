@@ -583,7 +583,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
 
         {/* Articles Grid */}
         {paginatedArticles.length > 0 ? (
-          <div className="flex flex-wrap">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
             {paginatedArticles.map((article: Article) => (
               <ArticleCard 
                 key={article.slug} 

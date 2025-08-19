@@ -34,8 +34,8 @@ const socialLinks: SocialLink[] = [
 interface HomeHeroProps {
   totalArticles: number
   totalWriters: number
-  activeUsers: number
-  sessions: number
+  activeUsers: number | string
+  sessions: number | string
 }
 
 export function HomeHero({ totalArticles, totalWriters, activeUsers, sessions }: HomeHeroProps) {

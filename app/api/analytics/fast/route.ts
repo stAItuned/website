@@ -25,6 +25,7 @@ export async function GET(request: Request) {
               avgTimeOnPage: 0,
               bounceRate: 0,
               updatedAt: null,
+              likes: 0
             },
             source: 'not_found',
           }, {
@@ -42,6 +43,7 @@ export async function GET(request: Request) {
             avgTimeOnPage: data.avgTimeOnPage ?? 0,
             bounceRate: data.bounceRate ?? 0,
             updatedAt: data.updatedAt ?? null,
+            likes: data.likes ?? 0,
           },
           source: 'firestore',
         }, {
@@ -60,6 +62,7 @@ export async function GET(request: Request) {
             avgTimeOnPage: 0,
             bounceRate: 0,
             updatedAt: null,
+            likes: 0,
           },
           source: 'not_found',
         }, {

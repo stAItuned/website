@@ -68,11 +68,13 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
   return (
     <div
-      onClick={() => window.location.href = `/learn/${target}/${article.slug}`}
-      className="w-full sm:w-1/2 lg:w-1/3 p-2 sm:p-4 text-primary-600 hover:cursor-pointer rounded-lg"
+      onClick={() => (window.location.href = `/learn/${target}/${article.slug}`)}
+      className="w-full sm:w-1/2 lg:w-1/3 p-2 sm:p-4 text-primary-600 hover:cursor-pointer h-full"
     >
-      <div className="relative">
-        <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
+      <div
+  className="relative flex flex-col h-full min-h-[480px] max-h-[480px] rounded-2xl border border-gray-200 shadow-md transition-transform transition-shadow duration-200 ease-in-out bg-white hover:shadow-xl hover:-translate-y-1 hover:scale-[1.025]"
+      >
+        <div className="relative w-full h-48 overflow-hidden rounded-t-lg shrink-0">
           {imageSrc && (
             <Image
               src={imageSrc}
@@ -105,8 +107,8 @@ export function ArticleCard({ article }: ArticleCardProps) {
             {article.target}
           </div>
         )}
-        {/* Post Info */}
-        <div className="relative mx-2 sm:mx-4 h-2/3 justify-between bg-slate-100 rounded-lg p-3 sm:p-4 z-10">
+  {/* Post Info fills remaining height */}
+  <div className="relative mx-2 sm:mx-4 bg-slate-100 rounded-lg p-3 sm:p-4 z-10 flex flex-col flex-1">
           {/* Date */}
           <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex space-x-2 font-semibold text-white bg-slate-700 bg-opacity-40 rounded-lg">
             <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +117,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             <p className="text-sm sm:text-md m-0">{formatDate(article.date)}</p>
           </div>
           {/* Main Info */}
-          <div className="space-y-4 sm:space-y-6 flex flex-col justify-between h-full">
+          <div className="flex flex-col gap-4 sm:gap-6 flex-1">
             {/* Header */}
             <div className="flex justify-between items-center">
               {/* Author */}
@@ -141,15 +143,23 @@ export function ArticleCard({ article }: ArticleCardProps) {
                 </div>
               )}
             </div>
-            {/* Title */}
+            {/* Title & Meta with fixed heights and overflow handling */}
             <div className="space-y-2">
-              <h1 className="font-bold text-base sm:text-lg leading-tight">{article.title}</h1>
-              <p className="text-xs sm:text-sm leading-4 line-clamp-3">
+              <h1
+                className="font-bold text-base sm:text-lg leading-tight line-clamp-2 overflow-hidden"
+                title={article.title}
+              >
+                {article.title}
+              </h1>
+              <p
+                className="text-xs sm:text-sm leading-4 line-clamp-3 overflow-hidden"
+                title={article.meta || 'No description available'}
+              >
                 {article.meta || 'No description available'}
               </p>
             </div>
-            {/* Footer */}
-            <div className="px-8 sm:px-16">
+            {/* Footer pinned to bottom of the info box */}
+            <div className="px-8 sm:px-16 mt-auto">
               <button className="py-2 w-full bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors text-sm sm:text-base">
                 Read more
               </button>

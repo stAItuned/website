@@ -171,9 +171,8 @@ export default function ArticlePage({ params }: ArticlePageProps) {
         {/* Article Content */}
         <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto my-8 px-4">
           {/* Article Header */}
-          <div className="flex justify-between items-center mb-8 not-prose gap-4 flex-wrap">
-            <div className="flex items-center flex-wrap"
-                 style={{ gap: '7.5rem' }}>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 not-prose gap-4 sm:gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center flex-wrap w-full sm:w-auto gap-4 sm:gap-[7.5rem]">
               {/* Author */}
               <div className="flex items-center gap-2">
                 {article.author && (
@@ -199,7 +198,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
                 <p>{article.readingTime}m</p>
               </div>
             </div>
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mt-4 sm:mt-0">
               <LikeButton articleSlug={article.slug} />
             </div>
           </div>
