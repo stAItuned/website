@@ -15,9 +15,9 @@ function getFirebaseApp(): App {
     return cachedApp;
   }
   
-  const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  const key = process.env.FB_SERVICE_ACCOUNT_KEY;
   if (!key) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY env variable is required for Firebase Admin SDK.');
+    throw new Error('FB_SERVICE_ACCOUNT_KEY env variable is required for Firebase Admin SDK.');
   }
   
   cachedApp = initializeApp({

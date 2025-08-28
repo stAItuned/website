@@ -5,7 +5,7 @@ export default function DebugPage() {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL ? 'SET' : 'NOT SET',
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
     GOOGLE_ANALYTICS_PROPERTY_ID: process.env.GOOGLE_ANALYTICS_PROPERTY_ID ? 'SET' : 'NOT SET',
-    FIREBASE_SERVICE_ACCOUNT_KEY: process.env.FIREBASE_SERVICE_ACCOUNT_KEY ? 'SET' : 'NOT SET',
+    FB_SERVICE_ACCOUNT_KEY: process.env.FB_SERVICE_ACCOUNT_KEY ? 'SET' : 'NOT SET',
     // Client-side environment variables
     NEXT_PUBLIC_DISABLE_AUTH: process.env.NEXT_PUBLIC_DISABLE_AUTH || 'NOT SET',
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? 'SET' : 'NOT SET',

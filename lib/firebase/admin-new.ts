@@ -6,7 +6,7 @@ let db: any;
 
 try {
   // Try to initialize Firebase Admin
-  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  const serviceAccountKey = process.env.FB_SERVICE_ACCOUNT_KEY;
   
   if (serviceAccountKey && !serviceAccountKey.includes('placeholder')) {
     const app = getApps()[0] ?? initializeApp({
