@@ -173,13 +173,13 @@ export default function FeedbackLauncher() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed right-[env(safe-area-inset-right,20px)] bottom-[calc(env(safe-area-inset-bottom,20px)+20px)] z-[60]
-                   group flex items-center gap-2 rounded-full px-4 py-3
-                   text-sm font-medium text-white shadow-xl
-                   bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600
-                   hover:from-fuchsia-500 hover:to-indigo-500
-                   focus:outline-none focus:ring-2 focus:ring-white/40
-                   [@media(prefers-reduced-motion:no-preference)]:animate-pulse"
+  className="fixed right-[calc(env(safe-area-inset-right,20px)+8px)] bottom-[calc(env(safe-area-inset-bottom,20px)+20px)] z-[60]
+       group flex items-center gap-2 rounded-full px-6 py-3
+       text-sm font-medium text-white shadow-xl
+       bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600
+       hover:from-fuchsia-500 hover:to-indigo-500
+       focus:outline-none focus:ring-2 focus:ring-white/40
+       [@media(prefers-reduced-motion:no-preference)]:animate-pulse"
         aria-label="Open feedback"
       >
         <span className="text-lg">💬</span>

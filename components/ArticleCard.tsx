@@ -108,7 +108,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         )}
   {/* Post Info fills remaining height */}
-  <div className="relative mx-2 sm:mx-4 bg-slate-100 rounded-lg p-3 sm:p-4 z-10 flex flex-col flex-1">
+  <div className="relative bg-slate-100 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full">
           {/* Date */}
           <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex space-x-2 font-semibold text-white bg-slate-700 bg-opacity-40 rounded-lg">
             <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

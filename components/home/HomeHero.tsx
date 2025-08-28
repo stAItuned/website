@@ -15,21 +15,21 @@ const socialLinks: SocialLink[] = [
     url: 'https://www.linkedin.com/company/stai-tuned/',
     icon: LinkedInIcon
   },
-  {
-    name: 'instagram', 
-    url: 'https://www.instagram.com/stai.tuned/',
-    icon: InstagramIcon
-  },
-  {
-    name: 'facebook',
-    url: 'https://www.facebook.com/stAItuned',
-    icon: FacebookIcon
-  },
-  {
-    name: 'tiktok',
-    url: 'https://www.tiktok.com/@staituned?lang=en',
-    icon: TikTokIcon
-  }
+  // {
+  //   name: 'instagram', 
+  //   url: 'https://www.instagram.com/stai.tuned/',
+  //   icon: InstagramIcon
+  // },
+  // {
+  //   name: 'facebook',
+  //   url: 'https://www.facebook.com/stAItuned',
+  //   icon: FacebookIcon
+  // },
+  // {
+  //   name: 'tiktok',
+  //   url: 'https://www.tiktok.com/@staituned?lang=en',
+  //   icon: TikTokIcon
+  // }
 ]
 
 interface HomeHeroProps {
