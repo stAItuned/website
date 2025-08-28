@@ -4,6 +4,8 @@ import { Montserrat } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import dynamic from 'next/dynamic'
+import FeedbackLauncher from "@/components/feedback/FeedbackLauncher";
+
 // Temporarily disabled to prevent image optimizer overload
 // import { getArticleCoversForPreload } from '@/lib/preload-covers'
 
@@ -133,6 +135,7 @@ export default function RootLayout({
           </section>
           <SearchModal />
         </SearchProvider>
+        <FeedbackLauncher />
       </body>
     </html>
   )
