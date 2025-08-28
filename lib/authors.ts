@@ -8,6 +8,7 @@ export interface AuthorData {
   title: string
   linkedin: string
   email: string
+  website?: string
   description: string
   speaker?: boolean
 }
@@ -75,6 +76,7 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
       title: Array.isArray(metadata.title) ? metadata.title[0] : metadata.title || '',
       linkedin: Array.isArray(metadata.linkedin) ? metadata.linkedin[0] : metadata.linkedin || '',
       email: Array.isArray(metadata.email) ? metadata.email[0] : metadata.email || '',
+      website: Array.isArray(metadata.website) ? metadata.website[0] : metadata.website || '',
       description: Array.isArray(metadata.description) ? metadata.description[0] : metadata.description || '',
       speaker: typeof metadata.speaker === 'boolean' ? metadata.speaker : (typeof metadata.speaker === 'string' ? metadata.speaker.trim().toLowerCase() === 'true' : false)
     }

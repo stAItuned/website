@@ -12,6 +12,7 @@ interface AuthorData {
   description?: string
   linkedin?: string
   email?: string
+  website?: string
   speaker?: boolean
 }
 
@@ -125,6 +126,21 @@ export function AuthorPageWithPagination({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   Email
+                </a>
+              )}
+              {authorData.website && (
+                <a
+                  href={authorData.website.startsWith('http') ? authorData.website : `https://${authorData.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors"
+                >
+                  {/* Globe icon for website */}
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" strokeWidth="2" />
+                    <path strokeWidth="2" d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20" />
+                  </svg>
+                  Website
                 </a>
               )}
             </div>
