@@ -127,8 +127,8 @@ export default function RootLayout({
         <SearchProvider>
           <SafePageViewTracker />
           <Header />
-          <section className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
-            <main className="h-full flex flex-col justify-center">
+          <section className="relative min-h-screen flex flex-col justify-between">
+            <main className="flex flex-col">
               {children}
             </main>
             <Footer />

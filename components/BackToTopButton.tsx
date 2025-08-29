@@ -4,14 +4,25 @@ import { useEffect, useState } from 'react'
 export function BackToTopButton() {
   const [showTop, setShowTop] = useState(false)
   useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 300)
+    const onScroll = () => {
+      setShowTop(window.scrollY > 300)
+      if (window.scrollY < 10) {
+        console.log('[BackToTop] Window at top (scrollY < 10)')
+      }
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+        console.log('[BackToTop] Window at bottom (scrollY + innerHeight >= body.offsetHeight)')
+      }
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
   if (!showTop) return null
   return (
     <button
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      onClick={() => {
+        console.log('[BackToTop] Clicked Back to Top button')
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }}
       className="fixed bottom-8 right-8 z-50 bg-primary-600 text-white rounded-full shadow-lg p-3 hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
       aria-label="Back to top"
     >

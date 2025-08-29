@@ -1,14 +1,16 @@
+"use client"
 import Link from 'next/link'
-import { getAuthorData } from '@/lib/authors'
 
 interface AuthorAvatarProps {
   author: string
+  authorData?: {
+    name?: string
+    title?: string
+  }
 }
 
-export default async function AuthorAvatar({ author }: AuthorAvatarProps) {
-  const authorData = await getAuthorData(author)
+export default function AuthorAvatar({ author, authorData }: AuthorAvatarProps) {
   const authorSlug = author.replaceAll(' ', '-')
-
   return (
     <Link 
       href={`/author/${authorSlug}`}
