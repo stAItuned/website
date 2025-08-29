@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { marked } from 'marked'
+import { addHeadingIdsToMarkdown } from '@/lib/markdown-headings'
 
 interface MarkdownContentProps {
   content: string
@@ -17,9 +18,12 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
       breaks: true,
     })
 
-    // Convert markdown to HTML
-    let htmlContent = marked(content) as string
-    
+    // Inject heading IDs into h2/h3
+    const contentWithIds = addHeadingIdsToMarkdown(content)
+
+    // Convert markdown (with heading IDs) to HTML
+    let htmlContent = marked(contentWithIds) as string
+
     // Process image paths if articleSlug is provided
     if (articleSlug) {
       // Replace relative image paths with absolute paths
@@ -30,18 +34,18 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
           if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')) {
             return match
           }
-          
+
           // Clean relative path indicators
           const cleanSrc = src.replace(/^\.\//, '')
-          
+
           // Convert to absolute path
           const absoluteSrc = `/content/articles/${articleSlug}/${cleanSrc}`
-          
+
           return `<img${before} src="${absoluteSrc}"${after}>`
         }
       )
     }
-    
+
     return htmlContent
   }, [content, articleSlug])
 
