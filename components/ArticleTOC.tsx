@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 type TocItem = { level: number; text: string; slug: string }
 
-export function ArticleTOC({ toc }: { toc: TocItem[] }) {
+export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlightSlug }: { toc: TocItem[]; enableScrollSpy?: boolean; onLinkClick?: (slug: string) => void; highlightSlug?: string }) {
   // Get all heading ids
   const ids = useMemo(() => toc.map(t => t.slug), [toc])
   const containerRef = useRef<HTMLDivElement>(null)
@@ -27,44 +27,38 @@ export function ArticleTOC({ toc }: { toc: TocItem[] }) {
 
   // Scrollspy effect
   useEffect(() => {
-    if (!ids.length) return
+    if (!enableScrollSpy) return;
+    if (!ids.length) return;
     const headings = Array.from(
       document.querySelectorAll<HTMLElement>(
         '#article-root h2[id], #article-root h3[id]'
       )
-    )
+    );
     if (!headings.length) {
-      console.warn('[TOC DEBUG] No headings found in #article-root')
-      return
+      console.warn('[TOC DEBUG] No headings found in #article-root');
+      return;
     }
-    console.log('[TOC DEBUG] Found headings:', headings.map(h => ({ id: h.id, offsetTop: h.offsetTop })))
-    const TOP_OFFSET = 120
-    const BOTTOM_THRESHOLD = 120 // px from bottom to consider "at bottom"
+    console.log('[TOC DEBUG] Found headings:', headings.map(h => ({ id: h.id, offsetTop: h.offsetTop })));
+    const TOP_OFFSET = 120;
+    const BOTTOM_THRESHOLD = 120; // px from bottom to consider "at bottom"
     const onScroll = () => {
-      const fromTop = window.scrollY + TOP_OFFSET
-      let current = headings[0].id
+      const fromTop = window.scrollY + TOP_OFFSET;
+      let current = headings[0].id;
       for (const h of headings) {
-        if (h.offsetTop <= fromTop) current = h.id
-        else break
+        if (h.offsetTop <= fromTop) current = h.id;
+        else break;
       }
       // If near the bottom, force last heading as active
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - BOTTOM_THRESHOLD) {
-        current = headings[headings.length - 1].id
+        current = headings[headings.length - 1].id;
       }
-      setActive(current)
-      console.log('[TOC DEBUG] Scroll event: fromTop', fromTop, 'active', current)
-      // Debug log
-      if (window.scrollY < 10) {
-        console.log('[TOC] Window at top (scrollY < 10)')
-      }
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
-        console.log('[TOC] Window at bottom (scrollY + innerHeight >= body.offsetHeight)')
-      }
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [ids])
+      setActive(current);
+      console.log('[TOC DEBUG] Scroll event: fromTop', fromTop, 'active', current);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [ids, enableScrollSpy]);
 
   // Auto-scroll active TOC item into view
   useEffect(() => {
@@ -86,6 +80,8 @@ export function ArticleTOC({ toc }: { toc: TocItem[] }) {
 
   if (!toc.length) return null
   const minLevel = Math.min(...toc.map(t => t.level))
+  // Only use highlightSlug if scrollspy is disabled (mobile modal)
+  const effectiveActive = !enableScrollSpy && highlightSlug ? highlightSlug : active;
 
   return (
     <nav
@@ -101,7 +97,7 @@ export function ArticleTOC({ toc }: { toc: TocItem[] }) {
       <ul className="space-y-1.5">
         {toc.map(item => {
           const indent = (item.level - minLevel) * 16
-          const isActive = active === item.slug
+          const isActive = effectiveActive === item.slug
           return (
             <li key={item.slug} style={{ paddingLeft: indent }}>
               <a
@@ -112,7 +108,11 @@ export function ArticleTOC({ toc }: { toc: TocItem[] }) {
                     ? 'bg-primary-50 border-primary-500 text-primary-700 shadow-sm'
                     : 'border-transparent text-gray-700 hover:bg-gray-50 hover:border-primary-200 hover:text-primary-700'}
                 `}
-                onClick={() => {
+                onClick={e => {
+                  if (onLinkClick) {
+                    e.preventDefault();
+                    onLinkClick(item.slug);
+                  }
                   console.log(`[TOC] Clicked TOC link: #${item.slug}`)
                 }}
               >

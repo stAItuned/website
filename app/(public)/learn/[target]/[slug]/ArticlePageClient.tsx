@@ -1,5 +1,6 @@
 "use client"
 import { useScreenSize } from '@/lib/hooks/useScreenSize'
+import { useState } from 'react'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { LikeButton } from '@/components/LikeButton'
@@ -22,9 +23,67 @@ export default function ArticlePageClient({
   authorData
 }: any) {
   const isLarge = useScreenSize()
+  const [showTocModal, setShowTocModal] = useState(false)
+  const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
   return (
     <PageTransition>
       <section className="relative">
+        {/* Mobile TOC Hamburger Button */}
+        {!isLarge && toc.length > 0 && (
+          <button
+            className="fixed top-4 right-4 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 text-primary-600 focus:outline-none transition-transform duration-200 active:scale-95 hover:bg-primary-50"
+            aria-label="Open Table of Contents"
+            onClick={() => {
+              setModalActiveSlug(null);
+              setShowTocModal(true);
+            }}
+          >
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+        )}
+        {/* Mobile TOC Modal with animation and blur */}
+        {!isLarge && (
+          <div
+            className={`fixed inset-0 z-50 flex items-start justify-end transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+            style={{ transitionProperty: 'background,backdrop-filter' }}
+            onClick={() => setShowTocModal(false)}
+          >
+            <div
+              className={`w-80 max-w-full h-full bg-white shadow-2xl p-4 overflow-y-auto relative transform transition-transform duration-300 ${showTocModal ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+              style={{ transitionProperty: 'transform,opacity' }}
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                className="absolute top-2 right-2 p-2 rounded-full hover:bg-primary-50 text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-300 transition-colors duration-200 shadow"
+                aria-label="Close TOC"
+                onClick={() => setShowTocModal(false)}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+              <div className="mb-4 text-lg font-bold text-primary-700 flex items-center gap-2">
+                <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                Table of Contents
+              </div>
+              <ArticleTOC 
+                toc={toc} 
+                enableScrollSpy={false}
+                highlightSlug={modalActiveSlug || undefined}
+                onLinkClick={slug => {
+                  setModalActiveSlug(slug);
+                  setShowTocModal(false);
+                  setTimeout(() => {
+                    requestAnimationFrame(() => {
+                      const el = document.getElementById(slug) || document.getElementsByName(slug)[0];
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    });
+                  }, 250);
+                }}
+              />
+            </div>
+          </div>
+        )}
         {/* Cover Image */}
         {coverImage && (
           <div className="relative w-full aspect-[16/9] lg:h-[30rem] overflow-hidden">
@@ -59,7 +118,7 @@ export default function ArticlePageClient({
         {/* Responsive: Only render one article version at a time */}
         {isLarge ? (
           <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
-            {/* Left: TOC Sidebar */}
+            {/* Left: TOC Sidebar (Desktop only) */}
             <aside className="h-full min-h-screen">
               <ArticleTOC toc={toc} />
             </aside>
