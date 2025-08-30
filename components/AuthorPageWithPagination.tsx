@@ -49,41 +49,41 @@ export function AuthorPageWithPagination({
   const paginatedArticles = authorArticles.slice(startIndex, startIndex + effectivePageSize)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+  <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center space-x-4 text-primary-500 mb-8">
-        <Link href="/" className="text-sm lg:text-base opacity-50 hover:underline hover:opacity-100 transition">
+      <nav className="flex items-center space-x-2 sm:space-x-4 text-primary-500 mb-4 sm:mb-8 text-xs sm:text-base overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent">
+        <Link href="/" className="opacity-50 hover:underline hover:opacity-100 transition">
           Home
         </Link>
         <span>/</span>
-        <Link href="/learn" className="text-sm lg:text-base opacity-50 hover:underline hover:opacity-100 transition">
+        <Link href="/learn" className="opacity-50 hover:underline hover:opacity-100 transition">
           Learn
         </Link>
         <span>/</span>
-        <span className="text-base lg:text-xl">Author: {authorData.name}</span>
+        <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom">Author: {authorData.name}</span>
       </nav>
 
       {/* Author Header */}
-      <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-        <div className="flex items-start gap-6">
+      <div className="bg-white rounded-lg shadow-sm p-4 sm:p-8 mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
           <Image
             src={`/content/team/${slug}/propic.jpg`}
             alt={authorData.name}
-            width={120}
-            height={120}
-            className="rounded-full object-cover"
+            width={90}
+            height={90}
+            className="rounded-full object-cover w-20 h-20 sm:w-[120px] sm:h-[120px]"
           />
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="flex-1 text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
               {authorData.name}
             </h1>
             {authorData.title && (
-              <p className="text-xl text-primary-600 mb-4">
+              <p className="text-base sm:text-xl text-primary-600 mb-2 sm:mb-4">
                 {authorData.title}
               </p>
             )}
             {authorData.speaker && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold border border-green-200 mb-2">
+              <div className="inline-flex flex-wrap items-center gap-2 px-2 sm:px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold border border-green-200 mb-2">
                 <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zm5 9a5 5 0 0 1-10 0m5 5v3m-4 0h8" />
                 </svg>
@@ -99,11 +99,11 @@ export function AuthorPageWithPagination({
               </div>
             )}
             {authorData.description && (
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-2 sm:mb-4 text-sm sm:text-base">
                 {authorData.description}
               </p>
             )}
-            <div className="flex gap-4">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-4 mt-2">
               {authorData.linkedin && (
                 <a
                   href={authorData.linkedin}
@@ -159,34 +159,35 @@ export function AuthorPageWithPagination({
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap -mx-4">
+            <div className="flex flex-wrap -mx-2 sm:-mx-4">
               {paginatedArticles.map((article) => (
-                <ArticleCard
-                  key={article.slug}
-                  article={{
-                    title: article.title,
-                    slug: article.slug,
-                    cover: article.cover,
-                    author: article.author,
-                    date: article.date,
-                    meta: article.meta,
-                    readingTime: typeof article.readingTime === 'string' 
-                      ? parseInt(article.readingTime) || undefined 
-                      : article.readingTime,
-                    target: article.target,
-                    language: article.language
-                  }}
-                />
+                <div key={article.slug} className="w-full sm:w-1/2 md:w-1/3 px-2 sm:px-4 mb-4">
+                  <ArticleCard
+                    article={{
+                      title: article.title,
+                      slug: article.slug,
+                      cover: article.cover,
+                      author: article.author,
+                      date: article.date,
+                      meta: article.meta,
+                      readingTime: typeof article.readingTime === 'string' 
+                        ? parseInt(article.readingTime) || undefined 
+                        : article.readingTime,
+                      target: article.target,
+                      language: article.language
+                    }}
+                  />
+                </div>
               ))}
             </div>
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-8">
-                <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
+              <div className="flex justify-center mt-6 sm:mt-8">
+                <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base">
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-2 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     Previous
                   </button>
@@ -201,23 +202,23 @@ export function AuthorPageWithPagination({
                     const pages = []
                     if (startPage > 1) {
                       pages.push(
-                        <button key={1} onClick={() => setCurrentPage(1)} className={`px-3 py-2 rounded-lg border ${currentPage === 1 ? 'bg-primary-600 text-white' : 'bg-white text-primary-600'}`}>1</button>
+                        <button key={1} onClick={() => setCurrentPage(1)} className={`px-2 py-1 rounded-lg border ${currentPage === 1 ? 'bg-primary-600 text-white' : 'bg-white text-primary-600'}`}>1</button>
                       )
                       if (startPage > 2) {
-                        pages.push(<span key="start-ellipsis" className="px-2">...</span>)
+                        pages.push(<span key="start-ellipsis" className="px-1">...</span>)
                       }
                     }
                     for (let i = startPage; i <= endPage; i++) {
                       pages.push(
-                        <button key={i} onClick={() => setCurrentPage(i)} className={`px-3 py-2 rounded-lg border ${currentPage === i ? 'bg-primary-600 text-white' : 'bg-white text-primary-600'}`}>{i}</button>
+                        <button key={i} onClick={() => setCurrentPage(i)} className={`px-2 py-1 rounded-lg border ${currentPage === i ? 'bg-primary-600 text-white' : 'bg-white text-primary-600'}`}>{i}</button>
                       )
                     }
                     if (endPage < totalPages) {
                       if (endPage < totalPages - 1) {
-                        pages.push(<span key="end-ellipsis" className="px-2">...</span>)
+                        pages.push(<span key="end-ellipsis" className="px-1">...</span>)
                       }
                       pages.push(
-                        <button key={totalPages} onClick={() => setCurrentPage(totalPages)} className={`px-3 py-2 rounded-lg border ${currentPage === totalPages ? 'bg-primary-600 text-white' : 'bg-white text-primary-600'}`}>{totalPages}</button>
+                        <button key={totalPages} onClick={() => setCurrentPage(totalPages)} className={`px-2 py-1 rounded-lg border ${currentPage === totalPages ? 'bg-primary-600 text-white' : 'bg-white text-primary-600'}`}>{totalPages}</button>
                       )
                     }
                     return pages
@@ -225,7 +226,7 @@ export function AuthorPageWithPagination({
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-2 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     Next
                   </button>

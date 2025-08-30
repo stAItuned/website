@@ -49,26 +49,26 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed z-20 px-8 py-6 w-full transition-transform duration-300 ${!isScrolled ? 'translate-y-0' : '-translate-y-full'}`}>
+  <header className={`fixed z-50 px-4 py-3 sm:px-8 sm:py-6 w-full transition-transform duration-300 ${!isScrolled ? 'sm:fixed sm:translate-y-0' : 'sm:fixed sm:-translate-y-full'}`}>
         <div className="flex justify-between items-start">
           <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <Image
               src={isHomepage ? "/assets/general/logo-text.png" : "/assets/general/logo-text-dark.png"}
               alt="stAItuned logo"
-              width={600} // intrinsic width for ratio
-              height={133} // intrinsic height for ratio
-              className="h-auto w-28 sm:w-36 md:w-44 lg:w-52 xl:w-60 hover:cursor-pointer"
-              sizes="(max-width: 640px) 7rem,
-                     (max-width: 768px) 9rem,
-                     (max-width: 1024px) 11rem,
-                     (max-width: 1280px) 13rem,
-                     15rem"
+              width={600}
+              height={133}
+              className="h-auto w-20 sm:w-28 md:w-36 lg:w-44 xl:w-52 hover:cursor-pointer"
+              sizes="(max-width: 640px) 5rem,
+                     (max-width: 768px) 7rem,
+                     (max-width: 1024px) 9rem,
+                     (max-width: 1280px) 11rem,
+                     13rem"
               priority={isHomepage}
               loading={isHomepage ? "eager" : "lazy"}
             />
           </Link>
 
-          <nav className="fixed right-8 py-3 px-8 text-white rounded-full bg-primary-600 font-semibold text-xl flex space-x-4 lg:space-x-8 items-center">
+          <nav className="fixed right-4 top-4 z-50 py-2 px-4 text-white rounded-2xl bg-primary-600 font-semibold text-lg flex space-x-3 lg:space-x-6 items-center shadow-md border border-primary-400/30 backdrop-blur-sm">
             <div className="hidden lg:block">
               <ul className="flex items-center space-x-8">
                 {navigation.map((item) => (
@@ -108,11 +108,12 @@ export function Header() {
               </svg>
             </div>
             
-            <button 
-              className="lg:hidden text-white"
+            <button
+              className="lg:hidden text-white rounded-full p-3 w-12 h-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-secondary-400 active:bg-primary-700 transition"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Open menu"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -126,17 +127,47 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)} />
-          <div className="fixed top-0 right-0 w-64 h-full bg-primary-600 shadow-lg">
-            <div className="flex flex-col p-8 pt-24">
+        <div className={`fixed inset-0 z-50 lg:hidden flex items-start justify-end transition-all duration-300 ${isMenuOpen ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+          style={{ transitionProperty: 'background,backdrop-filter' }}
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <div
+            className={`w-full max-w-xs h-full bg-primary-600 dark:bg-primary-900 shadow-2xl rounded-t-2xl flex flex-col pt-0 pb-8 px-0 relative transform transition-all duration-300 ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+            style={{ transitionProperty: 'transform,opacity', willChange: 'transform' }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Mobile Menu Header with Logo and Close Button */}
+            <div className="relative flex items-center justify-between px-6 pt-6 pb-4 border-b border-primary-100 dark:border-primary-700 bg-primary-600 dark:bg-primary-900">
+              <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
+                <Image
+                  src={isHomepage ? "/assets/general/logo-text.png" : "/assets/general/logo-text-dark.png"}
+                  alt="stAItuned logo"
+                  width={120}
+                  height={30}
+                  className="h-8 w-auto"
+                  priority={isHomepage}
+                  loading={isHomepage ? "eager" : "lazy"}
+                />
+              </Link>
+              <button
+                className="text-primary-700 dark:text-white rounded-full p-2 hover:bg-primary-100 dark:hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-secondary-400 border border-primary-200 dark:border-primary-700 shadow"
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex flex-col pt-6 gap-3 px-6 text-primary-900 dark:text-white">
               {navigation.map((item) => (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`py-4 text-white text-lg font-semibold hover:text-secondary-500 transition border-b border-primary-500 ${
-                    pathname === item.path ? 'text-secondary-500' : ''
-                  }`}
+                  className={`py-5 text-xl font-semibold transition border-b border-primary-100 dark:border-primary-700 rounded-lg px-2 mb-1 
+                    ${pathname === item.path ? 'text-secondary-500' : 'text-primary-900 dark:text-white'}
+                    hover:text-secondary-500 focus:text-secondary-500`
+                  }
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}

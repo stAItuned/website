@@ -13,7 +13,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 export default function ArticlePageClient({
-  isLargeDefault,
   coverImage,
   article,
   toc,
@@ -28,15 +27,16 @@ export default function ArticlePageClient({
   return (
     <PageTransition>
       <section className="relative">
-        {/* Mobile TOC Hamburger Button */}
+        {/* Mobile TOC Hamburger Button (below header logo) */}
         {!isLarge && toc.length > 0 && (
           <button
-            className="fixed top-4 right-4 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 text-primary-600 focus:outline-none transition-transform duration-200 active:scale-95 hover:bg-primary-50"
+            className="fixed left-4 top-20 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 text-primary-600 focus:outline-none transition-transform duration-200 active:scale-95 hover:bg-primary-50"
             aria-label="Open Table of Contents"
             onClick={() => {
               setModalActiveSlug(null);
               setShowTocModal(true);
             }}
+            style={{ position: 'fixed' }}
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
@@ -44,12 +44,12 @@ export default function ArticlePageClient({
         {/* Mobile TOC Modal with animation and blur */}
         {!isLarge && (
           <div
-            className={`fixed inset-0 z-50 flex items-start justify-end transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+            className={`fixed inset-0 z-50 flex items-start justify-start transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
             style={{ transitionProperty: 'background,backdrop-filter' }}
             onClick={() => setShowTocModal(false)}
           >
             <div
-              className={`w-80 max-w-full h-full bg-white shadow-2xl p-4 overflow-y-auto relative transform transition-transform duration-300 ${showTocModal ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+              className={`w-full max-w-xs h-full bg-white shadow-2xl rounded-t-2xl p-4 overflow-y-auto relative transform transition-all duration-300 ${showTocModal ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
               style={{ transitionProperty: 'transform,opacity' }}
               onClick={e => e.stopPropagation()}
             >
@@ -99,20 +99,20 @@ export default function ArticlePageClient({
         )}
         {/* Breadcrumb */}
         <div className="lg:absolute lg:top-96 top-32 p-4 z-10">
-          <nav className="flex items-center space-x-4 text-primary-500 w-full md:w-fit bg-slate-100 px-8 py-4 rounded-lg font-semibold">
-            <Link href="/" className="text-sm lg:text-base opacity-50 hover:underline hover:opacity-100 transition">
+          <nav className="flex items-center space-x-2 sm:space-x-4 text-primary-500 w-full md:w-fit bg-slate-100 px-2 sm:px-8 py-2 sm:py-4 rounded-lg font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base">
+            <Link href="/" className="opacity-50 hover:underline hover:opacity-100 transition">
               Home
             </Link>
             <span>/</span>
-            <Link href="/learn" className="text-sm lg:text-base opacity-50 hover:underline hover:opacity-100 transition">
+            <Link href="/learn" className="opacity-50 hover:underline hover:opacity-100 transition">
               Learn
             </Link>
             <span>/</span>
-            <Link href={`/learn/${target}`} className="text-sm lg:text-base opacity-50 hover:underline hover:opacity-100 transition">
+            <Link href={`/learn/${target}`} className="opacity-50 hover:underline hover:opacity-100 transition">
               {targetDisplay}
             </Link>
             <span>/</span>
-            <span className="text-base lg:text-xl truncate">{article.title}</span>
+            <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom" title={article.title}>{article.title}</span>
           </nav>
         </div>
         {/* Responsive: Only render one article version at a time */}
@@ -178,39 +178,45 @@ export default function ArticlePageClient({
             <div />
           </div>
         ) : (
-          <div className="flex flex-col gap-8 max-w-2xl mx-auto my-8 px-4">
-            <article className="prose prose-xl max-w-2xl w-full mx-auto text-base lg:text-lg rounded-2xl bg-white shadow-lg p-6">
+          <div className="flex flex-col gap-10 max-w-2xl mx-auto my-8 px-4 sm:px-6 md:px-8">
+            <article className="prose prose-base sm:prose-lg max-w-2xl w-full mx-auto text-[0.98rem] leading-6 sm:text-base lg:text-lg rounded-2xl bg-white shadow-lg p-5 sm:p-8">
               {/* Article Header */}
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 not-prose border-b border-gray-200 pb-4">
-                <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto gap-2 sm:gap-8">
-                  {/* Author */}
-                  <div className="flex items-center gap-2">
-                    {article.author && (
+              <div className="flex flex-col gap-4 items-center mb-8 not-prose border-b border-gray-200 pb-4 text-center">
+                {/* Author */}
+                <div className="flex flex-col items-center gap-1 justify-center">
+                  {article.author && (
+                    <>
                       <AuthorAvatar author={article.author} />
-                    )}
+                      {article.author.jobTitle && (
+                        <span className="text-xs text-gray-500 mt-1">{article.author.jobTitle}</span>
+                      )}
+                    </>
+                  )}
+                </div>
+                {/* Article Title */}
+                <h1 className="text-2xl sm:text-4xl font-bold text-primary-600 mb-2 mt-2 leading-tight">
+                  {article.title}
+                </h1>
+                {/* Meta Info Group */}
+                <div className="flex flex-row flex-wrap items-center justify-center gap-3 text-gray-600 text-sm divide-x divide-gray-300">
+                  {/* Date */}
+                  <div className="flex items-center gap-1 px-2 first:pl-0">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+                    </svg>
+                    <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                   </div>
-                  {/* Meta Info Group */}
-                  <div className="flex flex-row flex-wrap items-center gap-2 sm:gap-4 text-gray-600 text-sm divide-x divide-gray-300">
-                    {/* Date */}
-                    <div className="flex items-center gap-1 px-2 first:pl-0">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
-                      </svg>
-                      <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                    </div>
-                    {/* Reading time */}
-                    <div className="flex items-center gap-1 px-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span>{article.readingTime}m</span>
-                    </div>
+                  {/* Reading time */}
+                  <div className="flex items-center gap-1 px-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{article.readingTime}m</span>
                   </div>
                 </div>
-                <div className="flex-shrink-0 w-full sm:w-auto flex justify-end sm:justify-center mt-2 sm:mt-0">
-                  <div className="w-full sm:w-auto">
-                    <LikeButton articleSlug={article.slug} />
-                  </div>
+                {/* Like Button */}
+                <div className="flex justify-center mt-2">
+                  <LikeButton articleSlug={article.slug} />
                 </div>
               </div>
               {/* Article Analytics */}
