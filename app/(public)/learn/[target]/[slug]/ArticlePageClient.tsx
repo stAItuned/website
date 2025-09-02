@@ -9,6 +9,7 @@ import AuthorAvatar from '@/components/AuthorAvatar'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RelatedArticles } from '@/components/RelatedArticles'
+import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -161,10 +162,20 @@ export default function ArticlePageClient({
               <div className="mb-4">
                 <ArticleAnalyticsStats slug={article.slug} />
               </div>
-              {/* Article Title */}
-              <h1 className="text-4xl font-bold mb-8 text-primary-600">
-                {article.title}
-              </h1>
+              {/* Article Title (desktop) */}
+              <div className="mb-6">
+                <h1 className="text-4xl font-bold text-primary-600 mb-4">
+                  {article.title}
+                </h1>
+                {/* Share button below title */}
+                <div className="flex justify-start">
+                  <ShareOnLinkedIn
+                    title={article.title}
+                    description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                    imageUrl={coverImage}
+                  />
+                </div>
+              </div>
               {/* Article Body */}
               <div id="article-root">
                 <MarkdownContent 
@@ -223,10 +234,20 @@ export default function ArticlePageClient({
               <div className="mb-4">
                 <ArticleAnalyticsStats slug={article.slug} />
               </div>
-              {/* Article Title */}
-              <h1 className="text-4xl font-bold mb-8 text-primary-600">
-                {article.title}
-              </h1>
+              {/* Article Title (mobile) */}
+              <div className="mb-6">
+                <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 mb-4 text-center">
+                  {article.title}
+                </h1>
+                {/* Share button below title */}
+                <div className="flex justify-center">
+                  <ShareOnLinkedIn
+                    title={article.title}
+                    description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                    imageUrl={coverImage}
+                  />
+                </div>
+              </div>
               {/* Article Body */}
               <div id="article-root">
                 <MarkdownContent 

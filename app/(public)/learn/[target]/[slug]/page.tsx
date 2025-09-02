@@ -25,38 +25,51 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { target: string; slug: string } }): Promise<Metadata> {
-  const { target, slug } = params
+  const { target, slug } = params;
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com';
   // Find the article
   const article = allPosts.find((post) => 
     post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
-  )
+  );
   if (!article) {
     return {
       title: 'Article Not Found - stAItuned',
       description: 'The requested article could not be found.'
-    }
+    };
   }
+  const url = `${base}/learn/${article.target}/${article.slug}`;
+  
+  // Use actual cover image if available, otherwise generated OG image
+  // Note: article.imagePath contains the correct path to the article directory
+  const ogImage = article.cover 
+    ? `${base}${article.imagePath}/${article.cover}`
+    : `${base}/api/og/article/${article.slug}.png`;
   return {
-    title: `${article.title} - stAItuned`,
-    description: article.meta || article.title,
+    title: article.seoTitle ?? article.title,
+    description: article.seoDescription ?? article.meta ?? article.title,
+    alternates: { canonical: url },
     openGraph: {
-      title: article.title,
-      description: article.meta || article.title,
+      url,
       type: 'article',
+      title: article.seoTitle ?? article.title,
+      description: article.seoDescription ?? article.meta ?? article.title,
       publishedTime: article.date,
       authors: article.author ? [article.author] : undefined,
-      images: article.cover ? [{
-        url: article.cover.startsWith('http') ? article.cover : `/content/articles/${article.slug}/${article.cover}`,
-        alt: article.title
-      }] : undefined,
+      images: [{ 
+        url: ogImage, 
+        alt: article.title,
+        width: 1200,
+        height: 630,
+        type: 'image/png'
+      }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: article.title,
-      description: article.meta || article.title,
-      images: article.cover ? [article.cover.startsWith('http') ? article.cover : `/content/articles/${article.slug}/${article.cover}`] : undefined,
-    }
-  }
+      title: article.seoTitle ?? article.title,
+      description: article.seoDescription ?? article.meta ?? article.title,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: { params: { target: string; slug: string } }) {

@@ -13,15 +13,15 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
   useEffect(() => {
     const headings = Array.from(document.querySelectorAll('#article-root h2[id], #article-root h3[id]'));
     const headingIds = headings.map(h => h.id);
-    console.log('[TOC DEBUG] TOC slugs:', ids);
-    console.log('[TOC DEBUG] Heading IDs in DOM:', headingIds);
+    // console.log('[TOC DEBUG] TOC slugs:', ids);
+    // console.log('[TOC DEBUG] Heading IDs in DOM:', headingIds);
     const missing = ids.filter(id => !headingIds.includes(id));
     if (missing.length > 0) {
-      console.warn('[TOC DEBUG] These TOC slugs are missing in the DOM:', missing);
+    //   console.warn('[TOC DEBUG] These TOC slugs are missing in the DOM:', missing);
     }
     const extra = headingIds.filter(id => !ids.includes(id));
     if (extra.length > 0) {
-      console.warn('[TOC DEBUG] These heading IDs are in the DOM but not in the TOC:', extra);
+    //   console.warn('[TOC DEBUG] These heading IDs are in the DOM but not in the TOC:', extra);
     }
   }, [ids]);
 
@@ -35,10 +35,10 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
       )
     );
     if (!headings.length) {
-      console.warn('[TOC DEBUG] No headings found in #article-root');
+    //   console.warn('[TOC DEBUG] No headings found in #article-root');
       return;
     }
-    console.log('[TOC DEBUG] Found headings:', headings.map(h => ({ id: h.id, offsetTop: h.offsetTop })));
+    // console.log('[TOC DEBUG] Found headings:', headings.map(h => ({ id: h.id, offsetTop: h.offsetTop })));
     const TOP_OFFSET = 120;
     const BOTTOM_THRESHOLD = 120; // px from bottom to consider "at bottom"
     const onScroll = () => {
@@ -53,7 +53,7 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
         current = headings[headings.length - 1].id;
       }
       setActive(current);
-      console.log('[TOC DEBUG] Scroll event: fromTop', fromTop, 'active', current);
+    //   console.log('[TOC DEBUG] Scroll event: fromTop', fromTop, 'active', current);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });

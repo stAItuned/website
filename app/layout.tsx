@@ -1,3 +1,4 @@
+// ...existing code...
 import './globals.css'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
@@ -29,6 +30,7 @@ const SearchModal = dynamic(
   { ssr: false }
 )
 
+
 const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
     apple: '/favicon.ico',
   },
   manifest: '/manifest.json',
-  metadataBase: new URL('https://staituned.it'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
 }
 
 export default function RootLayout({
