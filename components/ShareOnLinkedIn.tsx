@@ -5,9 +5,11 @@ type Props = {
   title?: string;
   description?: string;
   imageUrl?: string;
+  onShareClick?: () => void;
+  onCopyClick?: () => void;
 };
 
-export function ShareOnLinkedIn({ title, description, imageUrl }: Props = {}) {
+export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, onCopyClick }: Props = {}) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
 
@@ -44,10 +46,11 @@ export function ShareOnLinkedIn({ title, description, imageUrl }: Props = {}) {
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
       setShowDropdown(false);
+      if (onCopyClick) onCopyClick();
     } catch (err) {
       console.error('Failed to copy:', err);
     }
-  }, [pageUrl]);
+  }, [pageUrl, onCopyClick]);
 
   const handleLinkedInShare = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -63,7 +66,8 @@ export function ShareOnLinkedIn({ title, description, imageUrl }: Props = {}) {
       window.open(liUrl, '_blank');
     }
     setShowDropdown(false);
-  }, [liUrl]);
+    if (onShareClick) onShareClick();
+  }, [liUrl, onShareClick]);
 
   return (
     <div className="relative">

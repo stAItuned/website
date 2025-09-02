@@ -69,10 +69,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
   return (
     <div
       onClick={() => (window.location.href = `/learn/${target}/${article.slug}`)}
-      className="w-full sm:w-1/2 lg:w-1/3 p-2 sm:p-4 text-primary-600 hover:cursor-pointer h-full"
+      className="text-primary-600 hover:cursor-pointer h-full"
     >
       <div
-  className="relative flex flex-col h-full min-h-[480px] max-h-[480px] rounded-2xl border border-gray-200 shadow-md transition-transform transition-shadow duration-200 ease-in-out bg-white hover:shadow-xl hover:-translate-y-1 hover:scale-[1.025]"
+        className="relative flex flex-col h-full min-h-[480px] max-h-[480px] rounded-2xl border border-gray-200 shadow-md transition-transform transition-shadow duration-200 ease-in-out bg-white hover:shadow-xl hover:-translate-y-1 hover:scale-[1.025]"
       >
         <div className="relative w-full h-48 overflow-hidden rounded-t-lg shrink-0">
           {imageSrc && (
@@ -107,8 +107,8 @@ export function ArticleCard({ article }: ArticleCardProps) {
             {article.target}
           </div>
         )}
-  {/* Post Info fills remaining height */}
-  <div className="relative bg-slate-100 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full">
+        {/* Post Info fills remaining height */}
+        <div className="relative bg-slate-100 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full">
           {/* Date */}
           <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex space-x-2 font-semibold text-white bg-slate-700 bg-opacity-40 rounded-lg">
             <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
