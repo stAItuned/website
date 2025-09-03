@@ -16,7 +16,10 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
   // Build the *current* page URL on the client
   const pageUrl = useMemo(() => {
     if (typeof window === "undefined") return "https://staituned.com";
-    return window.location.href; // includes path + query
+    // Ensure we get the full URL including pathname
+    const fullUrl = window.location.href;
+    console.log('ShareOnLinkedIn - Current page URL:', fullUrl);
+    return fullUrl;
   }, []);
 
   // Optional: add UTM for LinkedIn
@@ -25,20 +28,19 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
     u.searchParams.set("utm_source", "linkedin");
     u.searchParams.set("utm_medium", "social");
     u.searchParams.set("utm_campaign", "share_article");
-    return u.toString();
+    const finalUrl = u.toString();
+    console.log('ShareOnLinkedIn - URL with UTM:', finalUrl);
+    return finalUrl;
   }, [pageUrl]);
 
   // LinkedIn endpoint with article data
   const liUrl = useMemo(() => {
-    const articleTitle = title || document?.title || "stAItuned";
-    const articleDescription = description || "";
-    const source = "staituned.com";
-    return `https://www.linkedin.com/shareArticle?mini=true` +
-           `&url=${encodeURIComponent(urlWithUtm)}` +
-           `&title=${encodeURIComponent(articleTitle)}` +
-           `&summary=${encodeURIComponent(articleDescription)}` +
-           `&source=${encodeURIComponent(source)}`;
-  }, [urlWithUtm, title, description]);
+    // Use the classic shareArticle endpoint which works better across platforms
+    // This is what Medium and other major sites use
+    const linkedinUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(urlWithUtm)}`;
+    console.log('ShareOnLinkedIn - Final LinkedIn URL:', linkedinUrl);
+    return linkedinUrl;
+  }, [urlWithUtm]);
 
   const handleCopyLink = useCallback(async () => {
     try {
@@ -54,17 +56,27 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
 
   const handleLinkedInShare = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    // Open as popup; if blocked, fallback to new tab
-    const w = 640, h = 680;
-    const y = window.top!.outerHeight / 2 + window.top!.screenY - h / 2;
-    const x = window.top!.outerWidth / 2 + window.top!.screenX - w / 2;
-    const win = window.open(liUrl, "linkedin-share", `width=${w},height=${h},left=${x},top=${y}`);
-    if (win) {
-      win.focus();
+    
+    // Check if we're on mobile
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobileDevice) {
+      // On mobile, just navigate to the LinkedIn share URL
+      // This will open in the LinkedIn app if installed, or browser otherwise
+      window.location.href = liUrl;
     } else {
-      // Fallback to new tab
-      window.open(liUrl, '_blank');
+      // Desktop behavior - open as popup with fallback
+      const w = 640, h = 680;
+      const y = window.top!.outerHeight / 2 + window.top!.screenY - h / 2;
+      const x = window.top!.outerWidth / 2 + window.top!.screenX - w / 2;
+      const win = window.open(liUrl, "linkedin-share", `width=${w},height=${h},left=${x},top=${y}`);
+      if (win) {
+        win.focus();
+      } else {
+        window.open(liUrl, '_blank');
+      }
     }
+    
     setShowDropdown(false);
     if (onShareClick) onShareClick();
   }, [liUrl, onShareClick]);

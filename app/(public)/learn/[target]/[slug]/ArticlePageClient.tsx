@@ -10,7 +10,7 @@ import { BackToTopButton } from '@/components/BackToTopButton'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RelatedArticles } from '@/components/RelatedArticles'
 import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
-import { gtag } from '@/lib/gtag'
+import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -174,14 +174,16 @@ export default function ArticlePageClient({
                     title={article.title}
                     description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
                     imageUrl={coverImage}
-                    onShareClick={() => gtag('event', 'share_linkedin', {
-                      event_category: 'engagement',
-                      event_label: article.slug,
+                    onShareClick={() => event({
+                      action: 'share_linkedin',
+                      category: 'engagement',
+                      label: article.slug,
                       value: 1,
                     })}
-                    onCopyClick={() => gtag('event', 'share_copy_link', {
-                      event_category: 'engagement',
-                      event_label: article.slug,
+                    onCopyClick={() => event({
+                      action: 'share_copy_link',
+                      category: 'engagement',
+                      label: article.slug,
                       value: 1,
                     })}
                   />
@@ -256,14 +258,16 @@ export default function ArticlePageClient({
                     title={article.title}
                     description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
                     imageUrl={coverImage}
-                    onShareClick={() => gtag('event', 'share_linkedin', {
-                      event_category: 'engagement',
-                      event_label: article.slug,
+                    onShareClick={() => event({
+                      action: 'share_linkedin',
+                      category: 'engagement',
+                      label: article.slug,
                       value: 1,
                     })}
-                    onCopyClick={() => gtag('event', 'share_copy_link', {
-                      event_category: 'engagement',
-                      event_label: article.slug,
+                    onCopyClick={() => event({
+                      action: 'share_copy_link',
+                      category: 'engagement',
+                      label: article.slug,
                       value: 1,
                     })}
                   />
