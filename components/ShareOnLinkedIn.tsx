@@ -65,16 +65,9 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
       // This will open in the LinkedIn app if installed, or browser otherwise
       window.location.href = liUrl;
     } else {
-      // Desktop behavior - open as popup with fallback
-      const w = 640, h = 680;
-      const y = window.top!.outerHeight / 2 + window.top!.screenY - h / 2;
-      const x = window.top!.outerWidth / 2 + window.top!.screenX - w / 2;
-      const win = window.open(liUrl, "linkedin-share", `width=${w},height=${h},left=${x},top=${y}`);
-      if (win) {
-        win.focus();
-      } else {
-        window.open(liUrl, '_blank');
-      }
+      // Desktop behavior - use window.open with _blank instead of popup
+      // This ensures better URL handling
+      window.open(liUrl, '_blank');
     }
     
     setShowDropdown(false);
