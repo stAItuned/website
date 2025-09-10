@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
-import GithubSlugger from 'github-slugger'
+import { extractTOC } from '@/lib/markdown-headings'
 import nextDynamic from 'next/dynamic'
 import { getAuthorData } from '@/lib/authors'
 
@@ -115,22 +115,7 @@ export default async function ArticlePage({ params }: { params: { target: string
     return `/content/articles/${article.slug}/${cover}`
   }
   const coverImage = getValidImageSrc(article.cover)
-  // Extract TOC from markdown
-  function extractTOC(markdown: string) {
-    const lines = markdown.split('\n')
-    const toc = []
-    const slugger = new GithubSlugger()
-    for (const line of lines) {
-      const match = /^(##+)\s+(.*)/.exec(line)
-      if (match) {
-        const level = match[1].length
-        const text = match[2].trim()
-        const slug = slugger.slug(text)
-        toc.push({ level, text, slug })
-      }
-    }
-    return toc
-  }
+  // Extract TOC from markdown using shared function
   const toc = extractTOC(article.body.raw)
   const authorData = article.author ? await getAuthorData(article.author) : null
   const ArticlePageClient = nextDynamic(() => import('./ArticlePageClient'), { ssr: false })

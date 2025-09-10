@@ -27,6 +27,12 @@ export default function ArticlePageClient({
   const [showTocModal, setShowTocModal] = useState(false)
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
   
+  // Debug screen size and TOC
+  useEffect(() => {
+    console.log('[ARTICLE DEBUG] isLarge:', isLarge, 'window.innerWidth:', typeof window !== 'undefined' ? window.innerWidth : 'server')
+    console.log('[ARTICLE DEBUG] TOC length:', toc.length)
+  }, [isLarge, toc])
+  
   // Tracking refs and state
   const scrollTrackingRef = useRef({
     maxScrolled: 0,
@@ -476,9 +482,27 @@ export default function ArticlePageClient({
         {isLarge ? (
           <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
             {/* Left: TOC Sidebar (Desktop only) */}
-            <aside className="h-full min-h-screen">
+            <aside className="h-full min-h-screen relative">
               <div className="table-of-contents">
-                <ArticleTOC toc={toc} />
+                <ArticleTOC 
+                  toc={toc} 
+                  enableScrollSpy={true}
+                  onLinkClick={(slug) => {
+                    // Track TOC click
+                    event({
+                      action: 'toc_click',
+                      category: 'navigation',
+                      label: slug,
+                      value: 1
+                    })
+                    
+                    // Smooth scroll to heading
+                    const element = document.getElementById(slug)
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }}
+                />
               </div>
             </aside>
             {/* Center: Main Article Content */}

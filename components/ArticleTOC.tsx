@@ -13,54 +13,71 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
   useEffect(() => {
     const headings = Array.from(document.querySelectorAll('#article-root h2[id], #article-root h3[id]'));
     const headingIds = headings.map(h => h.id);
-    // console.log('[TOC DEBUG] TOC slugs:', ids);
-    // console.log('[TOC DEBUG] Heading IDs in DOM:', headingIds);
+    console.log('[TOC DEBUG] TOC slugs:', ids);
+    console.log('[TOC DEBUG] Heading IDs in DOM:', headingIds);
+    console.log('[TOC DEBUG] enableScrollSpy:', enableScrollSpy);
     const missing = ids.filter(id => !headingIds.includes(id));
     if (missing.length > 0) {
-    //   console.warn('[TOC DEBUG] These TOC slugs are missing in the DOM:', missing);
+      console.warn('[TOC DEBUG] These TOC slugs are missing in the DOM:', missing);
     }
     const extra = headingIds.filter(id => !ids.includes(id));
     if (extra.length > 0) {
-    //   console.warn('[TOC DEBUG] These heading IDs are in the DOM but not in the TOC:', extra);
+      console.warn('[TOC DEBUG] These heading IDs are in the DOM but not in the TOC:', extra);
     }
-  }, [ids]);
+  }, [ids, enableScrollSpy]);
 
   // Scrollspy effect
   useEffect(() => {
     if (!enableScrollSpy) return;
     if (!ids.length) return;
+    
     const headings = Array.from(
       document.querySelectorAll<HTMLElement>(
         '#article-root h2[id], #article-root h3[id]'
       )
     );
+    
     if (!headings.length) {
-    //   console.warn('[TOC DEBUG] No headings found in #article-root');
+      console.warn('[TOC DEBUG] No headings found in #article-root');
       return;
     }
-    // console.log('[TOC DEBUG] Found headings:', headings.map(h => ({ id: h.id, offsetTop: h.offsetTop })));
+    console.log('[TOC DEBUG] Found headings:', headings.map(h => ({ id: h.id, offsetTop: h.offsetTop })));
+    
     const TOP_OFFSET = 120;
     const BOTTOM_THRESHOLD = 120; // px from bottom to consider "at bottom"
+    
+    let ticking = false;
+    
     const onScroll = () => {
-      const fromTop = window.scrollY + TOP_OFFSET;
-      let current = headings[0].id;
-      for (const h of headings) {
-        if (h.offsetTop <= fromTop) current = h.id;
-        else break;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const fromTop = window.scrollY + TOP_OFFSET;
+          let current = headings[0].id;
+          
+          for (const h of headings) {
+            if (h.offsetTop <= fromTop) current = h.id;
+            else break;
+          }
+          
+          // If near the bottom, force last heading as active
+          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - BOTTOM_THRESHOLD) {
+            current = headings[headings.length - 1].id;
+          }
+          
+          setActive(current);
+          console.log('[TOC DEBUG] Scroll event: fromTop', fromTop, 'active', current, 'enableScrollSpy', enableScrollSpy);
+          ticking = false;
+        });
+        ticking = true;
       }
-      // If near the bottom, force last heading as active
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - BOTTOM_THRESHOLD) {
-        current = headings[headings.length - 1].id;
-      }
-      setActive(current);
-    //   console.log('[TOC DEBUG] Scroll event: fromTop', fromTop, 'active', current);
     };
+    
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, [ids, enableScrollSpy]);
 
-  // Auto-scroll active TOC item into view
+  // Auto-scroll active TOC item into view (within TOC container only)
   useEffect(() => {
     const container = containerRef.current
     if (!container || !active) return
@@ -68,13 +85,23 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
       `a[href="#${CSS.escape(active)}"]`
     ) as HTMLElement | null
     if (!el) return
+    
+    // Only scroll within the TOC container, not the entire page
     const cRect = container.getBoundingClientRect()
     const eRect = el.getBoundingClientRect()
     const padding = 24
     const outOfViewTop = eRect.top < cRect.top + padding
     const outOfViewBottom = eRect.bottom > cRect.bottom - padding
+    
     if (outOfViewTop || outOfViewBottom) {
-      el.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      // Scroll only the TOC container, not the page
+      const elementOffsetTop = el.offsetTop
+      const targetScrollTop = elementOffsetTop - container.offsetHeight / 2 + el.offsetHeight / 2
+      
+      container.scrollTo({
+        top: targetScrollTop,
+        behavior: 'smooth'
+      })
     }
   }, [active])
 
@@ -87,7 +114,7 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
     <nav
       ref={containerRef}
       aria-label="Table of contents"
-      className="sticky top-8 max-h-[80vh] overflow-y-auto bg-white rounded-xl shadow-lg p-4 border border-gray-100"
+      className="sticky top-8 max-h-[80vh] overflow-y-auto bg-white rounded-xl shadow-lg p-4 border border-gray-100 z-10"
     >
       <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-600">
         <svg className="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
