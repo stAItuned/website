@@ -1,6 +1,6 @@
 "use client"
 import { useScreenSize } from '@/lib/hooks/useScreenSize'
-import { useState } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { LikeButton } from '@/components/LikeButton'
@@ -26,6 +26,342 @@ export default function ArticlePageClient({
   const isLarge = useScreenSize()
   const [showTocModal, setShowTocModal] = useState(false)
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
+  
+  // Tracking refs and state
+  const scrollTrackingRef = useRef({
+    maxScrolled: 0,
+    scrollMilestones: new Set<number>(),
+    startTime: Date.now(),
+    hasTrackedEngagement: false,
+    lastScrollTime: Date.now(),
+    totalScrollTime: 0,
+    scrollDirection: 'down' as 'up' | 'down',
+    lastScrollPosition: 0,
+    fastScrollCount: 0,
+    slowScrollSections: new Set<string>(),
+    readingSpeeds: [] as number[]
+  })
+  
+  // Track scroll depth
+  const trackScrollDepth = useCallback(() => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+    const scrollPercent = Math.round((scrollTop / docHeight) * 100)
+    const now = Date.now()
+    
+    const tracking = scrollTrackingRef.current
+    
+    // Calculate scroll speed and direction
+    const scrollDelta = scrollTop - tracking.lastScrollPosition
+    const timeDelta = now - tracking.lastScrollTime
+    const scrollSpeed = Math.abs(scrollDelta) / timeDelta // pixels per ms
+    
+    // Detect scroll direction
+    const newDirection = scrollDelta > 0 ? 'down' : 'up'
+    if (newDirection !== tracking.scrollDirection) {
+      tracking.scrollDirection = newDirection
+    }
+    
+    // Track fast scrolling (potential bounce indicator)
+    if (scrollSpeed > 3) { // Fast scroll threshold
+      tracking.fastScrollCount++
+    }
+    
+    // Track reading time in sections
+    if (scrollSpeed < 0.5 && timeDelta > 1000) { // Slow scroll = reading
+      const section = Math.floor(scrollPercent / 10) * 10 // 10% sections
+      tracking.slowScrollSections.add(`section_${section}`)
+      tracking.readingSpeeds.push(scrollSpeed)
+    }
+    
+    tracking.lastScrollPosition = scrollTop
+    tracking.lastScrollTime = now
+    tracking.totalScrollTime += timeDelta
+    
+    // Update max scrolled
+    if (scrollPercent > tracking.maxScrolled) {
+      tracking.maxScrolled = scrollPercent
+    }
+    
+    // Track milestones (25%, 50%, 75%, 90%, 100%)
+    const milestones = [25, 50, 75, 90, 100]
+    milestones.forEach(milestone => {
+      if (scrollPercent >= milestone && !tracking.scrollMilestones.has(milestone)) {
+        tracking.scrollMilestones.add(milestone)
+        
+        // Calculate time to reach milestone
+        const timeToMilestone = now - tracking.startTime
+        
+        event({
+          action: 'scroll_depth',
+          category: 'engagement',
+          label: `${milestone}%`,
+          value: milestone
+        })
+        
+        // Track reading pace
+        event({
+          action: 'reading_pace',
+          category: 'engagement',
+          label: `time_to_${milestone}%`,
+          value: Math.round(timeToMilestone / 1000)
+        })
+      }
+    })
+    
+    // Track engagement after 30 seconds of reading
+    const timeSpent = now - tracking.startTime
+    if (timeSpent > 30000 && !tracking.hasTrackedEngagement && scrollPercent > 10) {
+      tracking.hasTrackedEngagement = true
+      
+      // Calculate engagement quality
+      const avgReadingSpeed = tracking.readingSpeeds.reduce((a, b) => a + b, 0) / tracking.readingSpeeds.length
+      const readingSections = tracking.slowScrollSections.size
+      const fastScrollRatio = tracking.fastScrollCount / (timeSpent / 1000)
+      
+      event({
+        action: 'engaged_reading',
+        category: 'engagement',
+        label: article.slug,
+        value: Math.round(timeSpent / 1000)
+      })
+      
+      // Detailed engagement metrics
+      event({
+        action: 'reading_quality',
+        category: 'engagement',
+        label: `sections_read_${readingSections}`,
+        value: readingSections
+      })
+      
+      if (fastScrollRatio > 2) {
+        event({
+          action: 'fast_scroll_behavior',
+          category: 'bounce_indicator',
+          label: article.slug,
+          value: Math.round(fastScrollRatio)
+        })
+      }
+    }
+  }, [article.slug])
+  
+  // Track link clicks
+  const trackLinkClick = useCallback((clickEvent: Event) => {
+    const target = clickEvent.target as HTMLElement
+    const link = target.closest('a')
+    
+    if (link) {
+      const href = link.getAttribute('href') || ''
+      const isExternal = href.startsWith('http') && !href.includes('staituned.com')
+      const isInternal = href.startsWith('/') || href.includes('staituned.com')
+      const isTOC = link.closest('.table-of-contents') !== null
+      const isRelated = link.closest('[data-related-articles]') !== null
+      
+      let linkType = 'other'
+      if (isTOC) linkType = 'toc'
+      else if (isRelated) linkType = 'related_article'
+      else if (isExternal) linkType = 'external'
+      else if (isInternal) linkType = 'internal'
+      
+      event({
+        action: 'link_click',
+        category: 'engagement',
+        label: `${linkType}: ${href}`,
+        value: 1
+      })
+      
+      // Additional tracking for external links
+      if (isExternal) {
+        event({
+          action: 'external_link_click',
+          category: 'outbound',
+          label: href,
+          value: 1
+        })
+      }
+    }
+  }, [])
+  
+  // Track time on page when user leaves
+  const trackTimeOnPage = useCallback(() => {
+    const timeSpent = Date.now() - scrollTrackingRef.current.startTime
+    const maxScrolled = scrollTrackingRef.current.maxScrolled
+    const tracking = scrollTrackingRef.current
+    
+    // Basic metrics
+    event({
+      action: 'time_on_page',
+      category: 'engagement',
+      label: article.slug,
+      value: Math.round(timeSpent / 1000)
+    })
+    
+    event({
+      action: 'max_scroll_depth',
+      category: 'engagement',
+      label: article.slug,
+      value: maxScrolled
+    })
+    
+    // Bounce detection metrics
+    const isLikelyBounce = timeSpent < 10000 && maxScrolled < 25
+    const isShallowRead = timeSpent < 30000 && maxScrolled < 50
+    const isFastScroller = tracking.fastScrollCount > 5 && timeSpent < 60000
+    
+    if (isLikelyBounce) {
+      event({
+        action: 'bounce_likely',
+        category: 'bounce_analysis',
+        label: `quick_exit_${Math.round(timeSpent / 1000)}s`,
+        value: Math.round(timeSpent / 1000)
+      })
+    }
+    
+    if (isShallowRead) {
+      event({
+        action: 'shallow_read',
+        category: 'bounce_analysis',
+        label: `shallow_${maxScrolled}%`,
+        value: maxScrolled
+      })
+    }
+    
+    if (isFastScroller) {
+      event({
+        action: 'fast_scanner',
+        category: 'bounce_analysis',
+        label: `fast_scroll_${tracking.fastScrollCount}`,
+        value: tracking.fastScrollCount
+      })
+    }
+    
+    // Content engagement analysis
+    const engagementScore = Math.min(100, 
+      (maxScrolled * 0.4) + 
+      (Math.min(timeSpent / 1000, 300) * 0.3) + 
+      (tracking.slowScrollSections.size * 10)
+    )
+    
+    event({
+      action: 'engagement_score',
+      category: 'content_analysis',
+      label: article.slug,
+      value: Math.round(engagementScore)
+    })
+    
+    // Track most engaging sections
+    if (tracking.slowScrollSections.size > 0) {
+      event({
+        action: 'engaging_sections',
+        category: 'content_analysis',
+        label: Array.from(tracking.slowScrollSections).join(','),
+        value: tracking.slowScrollSections.size
+      })
+    }
+  }, [article.slug])
+  
+  // Set up tracking
+  useEffect(() => {
+    // Track page view start
+    event({
+      action: 'article_view_start',
+      category: 'engagement',
+      label: article.slug,
+      value: 1
+    })
+    
+    // Track viewport and device info for bounce analysis
+    const viewport = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      isMobile: window.innerWidth < 768
+    }
+    
+    event({
+      action: 'viewport_info',
+      category: 'technical',
+      label: `${viewport.width}x${viewport.height}_${viewport.isMobile ? 'mobile' : 'desktop'}`,
+      value: viewport.width
+    })
+    
+    // Track page load performance
+    const loadTime = performance.now()
+    event({
+      action: 'page_load_time',
+      category: 'technical',
+      label: article.slug,
+      value: Math.round(loadTime)
+    })
+    
+    // Track if user came from search, social, direct, etc.
+    const referrer = document.referrer
+    let trafficSource = 'direct'
+    if (referrer.includes('google')) trafficSource = 'google'
+    else if (referrer.includes('linkedin')) trafficSource = 'linkedin'
+    else if (referrer.includes('twitter')) trafficSource = 'twitter'
+    else if (referrer.includes('facebook')) trafficSource = 'facebook'
+    else if (referrer && !referrer.includes('staituned.com')) trafficSource = 'external'
+    else if (referrer.includes('staituned.com')) trafficSource = 'internal'
+    
+    event({
+      action: 'traffic_source',
+      category: 'acquisition',
+      label: trafficSource,
+      value: 1
+    })
+    
+    // Track early exit intent (mouse leaving viewport quickly)
+    let mouseLeaveCount = 0
+    const handleMouseLeave = () => {
+      mouseLeaveCount++
+      const timeOnPage = Date.now() - scrollTrackingRef.current.startTime
+      
+      if (timeOnPage < 10000 && mouseLeaveCount === 1) {
+        event({
+          action: 'early_exit_intent',
+          category: 'bounce_indicator',
+          label: `mouse_leave_${Math.round(timeOnPage / 1000)}s`,
+          value: Math.round(timeOnPage / 1000)
+        })
+      }
+    }
+    
+    document.addEventListener('mouseleave', handleMouseLeave)
+    
+    // Add scroll listener
+    const handleScroll = () => {
+      requestAnimationFrame(trackScrollDepth)
+    }
+    
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    
+    // Add click listener for link tracking
+    document.addEventListener('click', trackLinkClick)
+    
+    // Track when user leaves page
+    const handleBeforeUnload = () => {
+      trackTimeOnPage()
+    }
+    
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        trackTimeOnPage()
+      }
+    }
+    
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('click', trackLinkClick)
+      document.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      trackTimeOnPage() // Final tracking on unmount
+    }
+  }, [trackScrollDepth, trackLinkClick, trackTimeOnPage, article.slug])
+  
   return (
     <PageTransition>
       <section className="relative">
@@ -37,6 +373,14 @@ export default function ArticlePageClient({
             onClick={() => {
               setModalActiveSlug(null);
               setShowTocModal(true);
+              
+              // Track mobile TOC open
+              event({
+                action: 'mobile_toc_open',
+                category: 'navigation',
+                label: article.slug,
+                value: 1
+              })
             }}
             style={{ position: 'fixed' }}
           >
@@ -66,23 +410,34 @@ export default function ArticlePageClient({
                 <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
                 Table of Contents
               </div>
-              <ArticleTOC 
-                toc={toc} 
-                enableScrollSpy={false}
-                highlightSlug={modalActiveSlug || undefined}
-                onLinkClick={slug => {
-                  setModalActiveSlug(slug);
-                  setShowTocModal(false);
-                  setTimeout(() => {
-                    requestAnimationFrame(() => {
-                      const el = document.getElementById(slug) || document.getElementsByName(slug)[0];
-                      if (el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }
-                    });
-                  }, 250);
-                }}
-              />
+              <div className="table-of-contents">
+                <ArticleTOC 
+                  toc={toc} 
+                  enableScrollSpy={false}
+                  highlightSlug={modalActiveSlug || undefined}
+                  onLinkClick={slug => {
+                    setModalActiveSlug(slug);
+                    setShowTocModal(false);
+                    
+                    // Track TOC click
+                    event({
+                      action: 'toc_click',
+                      category: 'navigation',
+                      label: slug,
+                      value: 1
+                    })
+                    
+                    setTimeout(() => {
+                      requestAnimationFrame(() => {
+                        const el = document.getElementById(slug) || document.getElementsByName(slug)[0];
+                        if (el) {
+                          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      });
+                    }, 250);
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -122,7 +477,9 @@ export default function ArticlePageClient({
           <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
             {/* Left: TOC Sidebar (Desktop only) */}
             <aside className="h-full min-h-screen">
-              <ArticleTOC toc={toc} />
+              <div className="table-of-contents">
+                <ArticleTOC toc={toc} />
+              </div>
             </aside>
             {/* Center: Main Article Content */}
             <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
@@ -290,17 +647,19 @@ export default function ArticlePageClient({
         <BackToTopButton />
       </div>
       {/* Related Articles */}
-      <RelatedArticles relatedArticles={relatedArticles.map((post: any) => ({
-        title: post.title,
-        slug: post.slug,
-        cover: post.cover,
-        author: post.author,
-        date: post.date,
-        meta: post.meta,
-        readingTime: post.readingTime,
-        target: post.target,
-        topics: post.topics
-      }))} />
+      <div data-related-articles>
+        <RelatedArticles relatedArticles={relatedArticles.map((post: any) => ({
+          title: post.title,
+          slug: post.slug,
+          cover: post.cover,
+          author: post.author,
+          date: post.date,
+          meta: post.meta,
+          readingTime: post.readingTime,
+          target: post.target,
+          topics: post.topics
+        }))} />
+      </div>
     </PageTransition>
   )
 }
