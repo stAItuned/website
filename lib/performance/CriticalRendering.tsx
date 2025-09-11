@@ -1,33 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+'use client'
 
-// Critical CSS extraction for above-the-fold content
-export const CRITICAL_CSS = `
-  /* Critical styles for immediate render */
-  .hero-section, .nav-header, .article-header {
-    display: block;
-    visibility: visible;
-  }
-  
-  /* Prevent layout shift */
-  .article-content img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16/9;
-    background: #f3f4f6;
-  }
-  
-  /* Loading states */
-  .skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-  }
-  
-  @keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-`
+import { useState, useEffect, useRef, useCallback } from 'react'
+import Image from 'next/image'
 
 // Intersection Observer hook for lazy loading
 export function useIntersectionObserver(
@@ -100,11 +74,14 @@ export function ProgressiveImage({
     <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
       {/* Low quality placeholder */}
       {lowQualitySrc && !isLoaded && (
-        <img
+        <Image
           src={lowQualitySrc}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover filter blur-sm scale-110 transition-opacity duration-300"
+          fill
+          className="absolute inset-0 object-cover filter blur-sm scale-110 transition-opacity duration-300"
           aria-hidden="true"
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       )}
       
@@ -115,16 +92,17 @@ export function ProgressiveImage({
       
       {/* Main image */}
       {shouldLoad && !isError && (
-        <img
+        <Image
           src={src}
           alt={alt}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
+          fill
+          className={`object-cover transition-opacity duration-300 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           onLoad={handleLoad}
           onError={handleError}
-          loading={priority ? 'eager' : 'lazy'}
-          decoding="async"
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       )}
       
@@ -173,7 +151,7 @@ export function LazyComponent<T extends Record<string, unknown>>({
     return fallback || <div className="skeleton h-32 w-full" />
   }
 
-  return <Component {...props} />
+  return <Component {...(props as unknown as T)} />
 }
 
 // Prefetch hook for critical resources

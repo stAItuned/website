@@ -18,8 +18,6 @@ export const signInWithGooglePopup = async () => {
     const token = await result.user.getIdToken();
     
     console.log("Google sign-in successful!");
-    console.log("User:", result.user);
-    console.log("ID Token:", token);
     
     return {
       success: true,

@@ -211,3 +211,4 @@ const nextConfig = {
 }
 
 module.exports = withBundleAnalyzer(withContentlayer(nextConfig))
+

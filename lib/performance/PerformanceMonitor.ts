@@ -3,21 +3,21 @@
 import { useEffect, useRef } from 'react'
 
 interface PerformanceMetrics {
-  FCP: number | null
-  LCP: number | null
-  FID: number | null
-  CLS: number | null
-  TTFB: number | null
+  FCP: number | null // First Contentful Paint
+  LCP: number | null // Largest Contentful Paint
+  FID: number | null // First Input Delay
+  CLS: number | null // Cumulative Layout Shift
+  TTFB: number | null // Time to First Byte
   bundleSize: number | null
   renderTime: number | null
 }
 
 interface PerformanceConfig {
-  enableRUM: boolean
+  enableRUM: boolean // Real User Monitoring
   enableCoreWebVitals: boolean
   enableBundleTracking: boolean
-  sampleRate: number
-  endpoint?: string
+  sampleRate: number // 0.1 = 10% of users
+  endpoint?: string // Your analytics endpoint
 }
 
 export class PerformanceMonitor {
@@ -30,242 +30,179 @@ export class PerformanceMonitor {
     bundleSize: null,
     renderTime: null
   }
-  
+
   private config: PerformanceConfig
-  private observer: PerformanceObserver | null = null
-  private startTime: number
+  private isClient: boolean
 
-  constructor(config: Partial<PerformanceConfig> = {}) {
-    this.config = {
-      enableRUM: true,
-      enableCoreWebVitals: true,
-      enableBundleTracking: true,
-      sampleRate: 1.0,
-      endpoint: '/api/analytics/performance',
-      ...config
-    }
-    this.startTime = performance.now()
-    this.initialize()
-  }
-
-  private initialize() {
-    if (typeof window === 'undefined') return
+  constructor(config: PerformanceConfig) {
+    this.config = config
+    this.isClient = typeof window !== 'undefined'
     
-    // Should we track this session?
-    if (Math.random() > this.config.sampleRate) return
-
-    this.trackCoreWebVitals()
-    this.trackResourceMetrics()
-    this.trackCustomMetrics()
-    this.setupReporting()
+    if (this.isClient && this.config.enableCoreWebVitals) {
+      this.initCoreWebVitals()
+    }
   }
 
-  private trackCoreWebVitals() {
-    if (!this.config.enableCoreWebVitals) return
+  private initCoreWebVitals() {
+    if (!this.isClient || !('PerformanceObserver' in window)) return
 
     try {
-      // Track FCP (First Contentful Paint)
-      this.observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          if (entry.name === 'first-contentful-paint') {
-            this.metrics.FCP = entry.startTime
-          }
-        }
-      })
-      this.observer.observe({ type: 'paint', buffered: true })
+      // Track FCP (First Contentful Paint) - When first content appears
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries()
+        const lastEntry = entries[entries.length - 1]
+        this.metrics.FCP = lastEntry.startTime
+        this.reportMetric('FCP', lastEntry.startTime)
+      }).observe({ type: 'paint', buffered: true })
 
-      // Track LCP (Largest Contentful Paint)
+      // Track LCP (Largest Contentful Paint) - When main content loads
       new PerformanceObserver((list) => {
         const entries = list.getEntries()
         const lastEntry = entries[entries.length - 1]
         this.metrics.LCP = lastEntry.startTime
+        this.reportMetric('LCP', lastEntry.startTime)
       }).observe({ type: 'largest-contentful-paint', buffered: true })
 
-      // Track FID (First Input Delay)
+      // Track FID (First Input Delay) - Responsiveness to user input
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          this.metrics.FID = entry.processingStart - entry.startTime
+          const fidEntry = entry as PerformanceEntry & { processingStart?: number }
+          if (fidEntry.processingStart) {
+            const fidValue = fidEntry.processingStart - entry.startTime
+            this.metrics.FID = fidValue
+            this.reportMetric('FID', fidValue)
+          }
         }
       }).observe({ type: 'first-input', buffered: true })
 
-      // Track CLS (Cumulative Layout Shift)
+      // Track CLS (Cumulative Layout Shift) - Visual stability
       let clsValue = 0
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value
+          const clsEntry = entry as PerformanceEntry & { value?: number; hadRecentInput?: boolean }
+          if (clsEntry.value !== undefined && !clsEntry.hadRecentInput) {
+            clsValue += clsEntry.value
           }
         }
         this.metrics.CLS = clsValue
+        this.reportMetric('CLS', clsValue)
       }).observe({ type: 'layout-shift', buffered: true })
 
-      // Track TTFB (Time to First Byte)
+      // Track TTFB (Time to First Byte) - Server response time
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.name === location.href) {
-            this.metrics.TTFB = entry.responseStart - entry.requestStart
+          const navigationEntry = entry as PerformanceEntry & { 
+            responseStart?: number; 
+            requestStart?: number 
+          }
+          if (navigationEntry.responseStart && navigationEntry.requestStart) {
+            const ttfbValue = navigationEntry.responseStart - navigationEntry.requestStart
+            this.metrics.TTFB = ttfbValue
+            this.reportMetric('TTFB', ttfbValue)
           }
         }
       }).observe({ type: 'navigation', buffered: true })
 
     } catch (error) {
-      console.warn('Core Web Vitals tracking failed:', error)
+      console.warn('Performance monitoring setup failed:', error)
     }
   }
 
-  private trackResourceMetrics() {
-    if (!this.config.enableBundleTracking) return
+  // Track bundle size and loading performance
+  public trackBundleSize() {
+    if (!this.isClient || !this.config.enableBundleTracking) return
 
     try {
-      // Track bundle sizes
-      new PerformanceObserver((list) => {
-        let totalSize = 0
-        for (const entry of list.getEntries()) {
-          if (entry.name.includes('/_next/static/')) {
-            totalSize += entry.transferSize || 0
-          }
+      const resourceEntries = performance.getEntriesByType('resource') as (PerformanceEntry & {
+        transferSize?: number;
+        name: string;
+      })[]
+      let totalSize = 0
+      let jsSize = 0
+      let cssSize = 0
+      
+      resourceEntries.forEach(entry => {
+        if (entry.name.includes('/_next/static/')) {
+          const size = entry.transferSize || 0
+          totalSize += size
+          
+          if (entry.name.endsWith('.js')) jsSize += size
+          if (entry.name.endsWith('.css')) cssSize += size
         }
-        this.metrics.bundleSize = totalSize
-      }).observe({ type: 'resource', buffered: true })
+      })
+      
+      this.metrics.bundleSize = totalSize
+      this.reportMetric('bundleSize', totalSize)
+      this.reportMetric('jsSize', jsSize)
+      this.reportMetric('cssSize', cssSize)
     } catch (error) {
-      console.warn('Resource tracking failed:', error)
+      console.warn('Bundle size tracking failed:', error)
     }
   }
 
-  private trackCustomMetrics() {
-    // Track React render time
-    this.metrics.renderTime = performance.now() - this.startTime
-
-    // Track memory usage if available
-    if ('memory' in performance) {
-      const memory = (performance as any).memory
-      this.trackMetric('memory-used', memory.usedJSHeapSize)
-      this.trackMetric('memory-total', memory.totalJSHeapSize)
-      this.trackMetric('memory-limit', memory.jsHeapSizeLimit)
+  // Report metrics to your analytics endpoint
+  private reportMetric(name: string, value: number) {
+    if (Math.random() > this.config.sampleRate) return // Sample rate check
+    
+    // Log for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`📊 Performance Metric: ${name} = ${value}ms`)
     }
-
-    // Track connection quality
-    if ('connection' in navigator) {
-      const connection = (navigator as any).connection
-      this.trackMetric('connection-downlink', connection.downlink)
-      this.trackMetric('connection-rtt', connection.rtt)
-      this.trackMetric('connection-type', connection.effectiveType)
-    }
-  }
-
-  private trackMetric(name: string, value: any) {
-    if (this.config.enableRUM) {
-      // Store custom metrics for reporting
-      performance.mark(`custom-${name}-${value}`)
-    }
-  }
-
-  private setupReporting() {
-    // Report on page unload
-    window.addEventListener('beforeunload', () => {
-      this.report()
-    })
-
-    // Report after 10 seconds for session tracking
-    setTimeout(() => {
-      this.report()
-    }, 10000)
-
-    // Report on visibility change
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        this.report()
-      }
-    })
-  }
-
-  public report() {
-    if (!this.config.endpoint) return
-
-    const report = {
-      url: window.location.href,
-      userAgent: navigator.userAgent,
-      timestamp: new Date().toISOString(),
-      metrics: this.metrics,
-      customMetrics: this.getCustomMetrics(),
-      sessionId: this.getSessionId(),
-      userId: this.getUserId()
-    }
-
-    // Use sendBeacon for reliability on page unload
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(
-        this.config.endpoint,
-        JSON.stringify(report)
-      )
-    } else {
-      // Fallback to fetch with keepalive
+    
+    // Send to analytics endpoint
+    if (this.config.endpoint) {
       fetch(this.config.endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(report),
-        keepalive: true
-      }).catch(console.error)
+        body: JSON.stringify({
+          metric: name,
+          value,
+          url: window.location.pathname,
+          timestamp: Date.now(),
+          userAgent: navigator.userAgent.slice(0, 200)
+        })
+      }).catch(err => console.warn('Failed to send metric:', err))
     }
   }
 
-  private getCustomMetrics() {
-    const entries = performance.getEntriesByType('mark')
-    return entries
-      .filter(entry => entry.name.startsWith('custom-'))
-      .reduce((acc, entry) => {
-        const [, name, value] = entry.name.split('-')
-        acc[name] = value
-        return acc
-      }, {} as Record<string, any>)
-  }
-
-  private getSessionId(): string {
-    let sessionId = sessionStorage.getItem('staituned-session-id')
-    if (!sessionId) {
-      sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-      sessionStorage.setItem('staituned-session-id', sessionId)
-    }
-    return sessionId
-  }
-
-  private getUserId(): string | null {
-    return localStorage.getItem('staituned-user-id')
-  }
-
+  // Get current metrics snapshot
   public getMetrics(): PerformanceMetrics {
     return { ...this.metrics }
   }
 
-  public dispose() {
-    if (this.observer) {
-      this.observer.disconnect()
+  // Get performance grade based on Google's thresholds
+  public getPerformanceGrade() {
+    const { FCP, LCP, FID, CLS } = this.metrics
+    
+    const grades = {
+      FCP: FCP ? (FCP < 1800 ? 'good' : FCP < 3000 ? 'needs-improvement' : 'poor') : 'unknown',
+      LCP: LCP ? (LCP < 2500 ? 'good' : LCP < 4000 ? 'needs-improvement' : 'poor') : 'unknown',
+      FID: FID ? (FID < 100 ? 'good' : FID < 300 ? 'needs-improvement' : 'poor') : 'unknown',
+      CLS: CLS ? (CLS < 0.1 ? 'good' : CLS < 0.25 ? 'needs-improvement' : 'poor') : 'unknown'
     }
+    
+    return grades
   }
 }
 
-// React Hook for performance monitoring
-export function usePerformanceMonitor(config?: Partial<PerformanceConfig>) {
+// React hook for easy integration
+export function usePerformanceMonitor(config: PerformanceConfig) {
   const monitorRef = useRef<PerformanceMonitor | null>(null)
 
   useEffect(() => {
-    monitorRef.current = new PerformanceMonitor(config)
-    
-    return () => {
-      monitorRef.current?.dispose()
+    if (!monitorRef.current) {
+      monitorRef.current = new PerformanceMonitor(config)
     }
-  }, [])
+
+    // Track bundle size after component mount
+    const timer = setTimeout(() => {
+      monitorRef.current?.trackBundleSize()
+    }, 2000) // Wait for resources to load
+
+    return () => clearTimeout(timer)
+  }, [config])
 
   return monitorRef.current
 }
 
-// HOC for automatic performance tracking
-export function withPerformanceTracking<P extends object>(
-  Component: React.ComponentType<P>,
-  trackingConfig?: Partial<PerformanceConfig>
-) {
-  return function PerformanceTrackedComponent(props: P) {
-    usePerformanceMonitor(trackingConfig)
-    return <Component {...props} />
-  }
-}
+export default PerformanceMonitor

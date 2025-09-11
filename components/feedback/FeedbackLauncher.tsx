@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useStandardAuth } from "../auth/StandardAuthProvider";
+import StandardGoogleSignIn from "../auth/StandardGoogleSignIn";
 
 type Payload = {
   category: string;
@@ -11,6 +13,8 @@ type Payload = {
   userAgent?: string;
   consent: boolean;
   website?: string; // honeypot
+  userId?: string; // Google user ID
+  userName?: string; // User display name
 };
 
 const CATEGORIES = ["Idea", "Bug", "Content", "Other"] as const;
@@ -22,7 +26,16 @@ export default function FeedbackLauncher() {
   const [error, setError] = useState<string | null>(null);
   const [showNudge, setShowNudge] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const confettiRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Get auth state from standard Google auth
+  const { user, isAuthenticated, signIn } = useStandardAuth();
+  
+  // Debug auth state changes
+  useEffect(() => {
+    console.log("FeedbackLauncher auth state:", { user: !!user, id: user?.id, isAuthenticated, showAuthModal });
+  }, [user, isAuthenticated, showAuthModal]);
 
   const pathname = usePathname();
   const search = useSearchParams();
@@ -36,20 +49,41 @@ export default function FeedbackLauncher() {
     message: "",
     email: "",
     page,
-    userAgent: "",
     consent: false,
-    website: "",
+    userId: user?.id || "",
+    userName: user?.name || "",
   });
 
-  // Prefill email once (and persist user’s change)
-  // useEffect(() => {
-  //   if (typeof window === "undefined") return;
-  //   const saved = localStorage.getItem("feedback_email");
-  //   setPayload((p) => ({ ...p, email: saved || "daniele.moltisanti@skytv.it" }));
-  // }, []);
-  // useEffect(() => {
-  //   if (payload.email) localStorage.setItem("feedback_email", payload.email);
-  // }, [payload.email]);
+  // Update payload when user info changes
+  useEffect(() => {
+    if (user) {
+      setPayload((p) => ({
+        ...p,
+        email: user.email || "",
+        userId: user.id || "",
+        userName: user.name || "",
+      }));
+    }
+  }, [user]);
+
+    // Handle opening feedback with auth check
+  const handleOpenFeedback = useCallback(() => {
+    if (!user && !isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+    setOpen(true);
+  }, [user, isAuthenticated]);
+
+  // Watch for successful authentication and auto-open feedback
+  useEffect(() => {
+    if (user && showAuthModal) {
+      console.log("User authenticated, opening feedback modal");
+      setShowAuthModal(false);
+      // Small delay to ensure auth state is fully updated
+      setTimeout(() => setOpen(true), 100);
+    }
+  }, [user, showAuthModal]);
 
   // Nudge dot (shows until first open)
   useEffect(() => {
@@ -80,12 +114,17 @@ export default function FeedbackLauncher() {
   // Keyboard shortcut: F to open
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "f" && !open) setOpen(true);
-      if (e.key === "Escape" && open) setOpen(false);
+      if (e.key.toLowerCase() === "f" && !open && !showAuthModal) {
+        handleOpenFeedback();
+      }
+      if (e.key === "Escape") {
+        if (open) setOpen(false);
+        if (showAuthModal) setShowAuthModal(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, showAuthModal, handleOpenFeedback]);
 
   // Tiny confetti burst
   function confetti() {
@@ -129,6 +168,12 @@ export default function FeedbackLauncher() {
     setError(null);
     setOk(null);
 
+    if (!user && !isAuthenticated) {
+      setError("Please sign in first to send feedback.");
+      setBusy(false);
+      return;
+    }
+
     if (!payload.message || payload.message.trim().length < 6) {
       setError("Please add a few more words 🙂");
       setBusy(false);
@@ -146,7 +191,7 @@ export default function FeedbackLauncher() {
     });
 
     try {
-    const res = await fetch("/api/feedbacks", {
+      const res = await fetch("/api/feedbacks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -159,8 +204,8 @@ export default function FeedbackLauncher() {
       setPayload((p) => ({ ...p, message: "" }));
       confetti();
       setTimeout(() => setOpen(false), 900);
-    } catch (err: any) {
-      setError(err?.message || "Network error");
+    } catch (err: unknown) {
+      setError((err as Error)?.message || "Network error");
       setOk(false);
     } finally {
       setBusy(false);
@@ -172,8 +217,8 @@ export default function FeedbackLauncher() {
       {/* Floating launcher */}
       <button
         type="button"
-        onClick={() => setOpen(true)}
-  className="fixed right-[calc(env(safe-area-inset-right,20px)+8px)] bottom-[calc(env(safe-area-inset-bottom,20px)+20px)] z-[60]
+        onClick={handleOpenFeedback}
+        className="fixed right-[calc(env(safe-area-inset-right,20px)+8px)] bottom-[calc(env(safe-area-inset-bottom,20px)+20px)] z-[60]
        group flex items-center gap-2 rounded-full px-6 py-3
        text-sm font-medium text-white shadow-xl
        bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600
@@ -192,7 +237,78 @@ export default function FeedbackLauncher() {
         )}
       </button>
 
-      {/* Modal */}
+      {/* Authentication Modal */}
+      {showAuthModal && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Sign in required"
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={() => setShowAuthModal(false)} />
+
+          {/* Auth Panel */}
+          <div className="relative w-full max-w-md rounded-2xl shadow-2xl bg-neutral-900 text-neutral-50 p-0 m-4 overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600 px-5 py-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold tracking-wide">🔐 Sign in Required</h3>
+                <button
+                  onClick={() => setShowAuthModal(false)}
+                  className="rounded-lg px-2 py-1 hover:bg-white/10 focus:outline-none focus:ring focus:ring-white/30"
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+              </div>
+              <p className="text-xs mt-1 opacity-90">
+                We need you to sign in to send feedback and follow up if needed.
+              </p>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <div className="text-center space-y-3">
+                <p className="text-sm opacity-80">
+                  Please sign in with Google to send feedback. This helps us:
+                </p>
+                <ul className="text-xs opacity-70 space-y-1 text-left">
+                  <li>• Follow up on your suggestions</li>
+                  <li>• Prevent spam and abuse</li>
+                  <li>• Keep track of feature requests</li>
+                </ul>
+              </div>
+
+              <div className="pt-2">
+                <StandardGoogleSignIn
+                  onSignInSuccess={(user) => {
+                    // Call the auth provider's signIn method to save user data
+                    signIn(user);
+                    setShowAuthModal(false);
+                    setOpen(true);
+                  }}
+                  onSignInError={(error: { message: string }) => {
+                    setError(error.message);
+                  }}
+                  className="w-full"
+                />
+              </div>
+
+              <div className="flex justify-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAuthModal(false)}
+                  className="text-xs opacity-60 hover:opacity-80 underline"
+                >
+                  Maybe later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Feedback Modal - Show when open is true (user will be checked during render) */}
       {open && (
         <div
           className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center"
@@ -220,9 +336,29 @@ export default function FeedbackLauncher() {
                   ✕
                 </button>
               </div>
-              <p className="text-xs mt-1 opacity-90">
-                Press <kbd className="px-1 rounded bg-black/20">F</kbd> anytime to open this panel.
-              </p>
+              {user ? (
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                    {user?.name?.[0] || user?.email?.[0] || "U"}
+                  </div>
+                  <p className="text-xs opacity-90">
+                    Signed in as {user?.name || user?.email}
+                  </p>
+                </div>
+              ) : isAuthenticated ? (
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                    ✓
+                  </div>
+                  <p className="text-xs opacity-90">
+                    Successfully authenticated
+                  </p>
+                </div>
+              ) : (
+                <p className="text-xs mt-1 opacity-90">
+                  Loading user information...
+                </p>
+              )}
             </div>
 
             <form onSubmit={submit} className="p-5 space-y-4">
@@ -285,14 +421,14 @@ export default function FeedbackLauncher() {
               {/* Email + Consent */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <label className="text-sm">
-                  Email (optional)
+                  Email (from your account)
                   <input
                     type="email"
                     inputMode="email"
-                    placeholder="we’ll reach out if needed"
                     value={payload.email}
-                    onChange={(e) => setPayload((p) => ({ ...p, email: e.target.value }))}
-                    className="mt-1 w-full rounded-xl bg-neutral-800 border border-white/10 px-3 py-2 text-sm
+                    readOnly
+                    className="mt-1 w-full rounded-xl bg-neutral-700 border border-white/5 px-3 py-2 text-sm
+                               text-neutral-300 cursor-not-allowed
                                focus:outline-none focus:ring-2 focus:ring-white/20"
                   />
                 </label>
