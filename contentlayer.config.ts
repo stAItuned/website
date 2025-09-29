@@ -57,11 +57,34 @@ export const Post = defineDocumentType(() => ({
   },
 }))
 
+export const Team = defineDocumentType(() => ({
+  name: 'Team',
+  filePathPattern: `team/**/meta.md`,
+  contentType: 'markdown',
+  fields: {
+    name: { type: 'string', required: false },
+    role: { type: 'string', required: false },
+    team: { type: 'list', of: { type: 'string' }, required: false },
+    bio: { type: 'string', required: false },
+    linkedin: { type: 'string', required: false },
+    github: { type: 'string', required: false },
+    website: { type: 'string', required: false },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => {
+        const pathParts = doc._raw.flattenedPath.split('/')
+        return pathParts[1] // Get the team member directory name
+      }
+    }
+  },
+}))
+
 export default makeSource({
   contentDirPath: 'public/content',
-  documentTypes: [Post],
+  documentTypes: [Post, Team],
   disableImportAliasWarning: true,
-  onUnknownDocuments: 'skip-warn',
-  // Add file filtering to exclude problematic files
-  onExtraFieldData: 'ignore'
+  onUnknownDocuments: 'skip-ignore',
+  onExtraFieldData: 'ignore',
 })

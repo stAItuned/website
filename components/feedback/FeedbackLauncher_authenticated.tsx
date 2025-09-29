@@ -65,33 +65,12 @@ export default function FeedbackLauncher() {
 
   // Handle opening feedback - check auth first
   const handleOpenFeedback = useCallback(() => {
-    console.log('handleOpenFeedback called:', { user: !!user, loading, showAuthModal });
     if (!user && !loading) {
-      console.log('Opening auth modal');
       setShowAuthModal(true);
     } else if (user) {
-      console.log('Opening feedback modal directly');
       setOpen(true);
     }
   }, [user, loading]);
-
-    // Auto-open feedback modal when user becomes authenticated after auth modal was shown
-  useEffect(() => {
-    console.log('Auth effect:', { user: !!user, showAuthModal, open, loading });
-    if (user && showAuthModal && !loading) {
-      console.log('Auto-opening feedback modal after successful auth');
-      setShowAuthModal(false);
-      // Small delay to ensure state updates properly
-      setTimeout(() => {
-        setOpen(true);
-      }, 100);
-    }
-  }, [user, showAuthModal, loading, open]);
-
-  // Debug effect to track state changes
-  useEffect(() => {
-    console.log('Feedback state:', { open, user: !!user, loading, showAuthModal });
-  }, [open, user, loading, showAuthModal]);
 
   // Nudge dot (shows until first open)
   useEffect(() => {
@@ -281,10 +260,11 @@ export default function FeedbackLauncher() {
                 </ul>
               </div>
 
-                            <div className="pt-2">
+              <div className="pt-2">
                 <GoogleSignInButton
                   onSignInSuccess={() => {
-                    // Don't do anything here, let the useEffect handle the transition
+                    setShowAuthModal(false);
+                    setTimeout(() => setOpen(true), 300);
                   }}
                   onSignInError={(error) => {
                     console.error('Sign in error:', error);
@@ -308,12 +288,8 @@ export default function FeedbackLauncher() {
         </div>
       )}
 
-      {/* Feedback Modal - Only shown when authenticated and not loading */}
-      {(() => {
-        const shouldShow = open && user && !loading && !showAuthModal;
-        console.log('Feedback modal render check:', { open, user: !!user, loading, showAuthModal, shouldShow });
-        return shouldShow;
-      })() && (
+      {/* Feedback Modal - Only shown when authenticated */}
+      {open && user && (
         <div
           className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center"
           role="dialog"

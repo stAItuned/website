@@ -93,7 +93,7 @@ class AnalyticsCache {
 
   private cleanup() {
     const now = Date.now()
-    for (const [key, cached] of this.cache.entries()) {
+    for (const [key, cached] of Array.from(this.cache.entries())) {
       // Remove entries that are expired beyond stale-while-revalidate window
       const maxAge = (cached.ttl + 3600) * 1000 // Extra hour buffer
       if ((now - cached.timestamp) > maxAge) {

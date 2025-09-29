@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import dynamic from 'next/dynamic'
 import FeedbackLauncher from "@/components/feedback/FeedbackLauncher";
+import { CRITICAL_CSS } from '@/lib/performance/criticalStyles'
 
 // Temporarily disabled to prevent image optimizer overload
 // import { getArticleCoversForPreload } from '@/lib/preload-covers'
@@ -27,6 +28,16 @@ const SearchProvider = dynamic(
 
 const SearchModal = dynamic(
   () => import('@/components/SearchModal').then(mod => ({ default: mod.SearchModal })),
+  { ssr: false }
+)
+
+const PerformanceProvider = dynamic(
+  () => import('@/components/PerformanceProvider'),
+  { ssr: false }
+)
+
+const FirebaseAuthProvider = dynamic(
+  () => import('@/components/auth/FirebaseAuthProvider').then(mod => ({ default: mod.FirebaseAuthProvider })),
   { ssr: false }
 )
 
@@ -59,6 +70,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Critical CSS for immediate render */}
+        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+        
         {/* Preload critical resources */}
         <link
           rel="preload"
@@ -123,21 +137,28 @@ export default function RootLayout({
         />
       </head>
       <body className={montserrat.className}>
-        <GoogleAnalytics />
-        <ServiceWorkerRegister />
-        {/* Solo i componenti essenziali sono server-side */}
-        <SearchProvider>
-          <SafePageViewTracker />
-          <Header />
-          <section className="relative min-h-screen flex flex-col justify-between">
-            <main className="flex flex-col">
-              {children}
-            </main>
-            <Footer />
-          </section>
-          <SearchModal />
-        </SearchProvider>
-        <FeedbackLauncher />
+        <FirebaseAuthProvider>
+          <PerformanceProvider 
+            enableMonitoring={process.env.NODE_ENV === 'production'}
+            sampleRate={0.1}
+          >
+            <GoogleAnalytics />
+            <ServiceWorkerRegister />
+            {/* Solo i componenti essenziali sono server-side */}
+            <SearchProvider>
+              <SafePageViewTracker />
+              <Header />
+              <section className="relative min-h-screen flex flex-col justify-between">
+                <main className="flex flex-col">
+                  {children}
+                </main>
+                <Footer />
+              </section>
+              <SearchModal />
+            </SearchProvider>
+            <FeedbackLauncher />
+          </PerformanceProvider>
+        </FirebaseAuthProvider>
       </body>
     </html>
   )
