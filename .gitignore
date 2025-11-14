@@ -1,22 +1,47 @@
+# macOS
 .DS_Store
-node_modules
-/build
-/.svelte-kit
-/package
-*public/*
+
+# Node modules & logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.log
+
+# Build output (Next.js / tooling)
+.next/
+out/
+build/
+dist/
+.turbo/
+.vercel/
+.contentlayer/
+.output/
+.vite/
+
+# Environment files
 .env
 .env.*
 !.env.example
-.vercel
-.output
-.vite
-*.idea
-.next
-.contentlayer
-out
-.firebase/*
-public/*
-.env.example
-submodules update
-test-table.html
-run manual deploy
+functions/.env
+functions/.env.*
+
+# Firebase / Functions build artifacts
+.firebase/
+functions/lib/
+functions/node_modules/
+
+# Coverage / test artifacts
+coverage/
+.nyc_output/
+
+# Editors / IDE
+.idea/
+.vscode/
+*.iml
+
+# Misc
+package-lock.json.*
+env.local
+env.local.new
+env.staituned-production-163f4

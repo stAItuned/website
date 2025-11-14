@@ -340,14 +340,20 @@ export default function FeedbackLauncher() {
                   ✕
                 </button>
               </div>
-              <div className="flex items-center gap-2 mt-2">
-                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
-                  {user.displayName?.[0] || user.email?.[0] || "U"}
-                </div>
-                <p className="text-xs opacity-90">
-                  Signed in as {user.displayName || user.email}
-                </p>
-              </div>
+              {(() => {
+                const initials = user?.displayName?.[0] ?? user?.email?.[0] ?? "U";
+                const userLabel = user?.displayName || user?.email || "Signed-in user";
+                return (
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                      {initials}
+                    </div>
+                    <p className="text-xs opacity-90">
+                      Signed in as {userLabel}
+                    </p>
+                  </div>
+                )
+              })()}
             </div>
 
             <form onSubmit={submit} className="p-5 space-y-4">

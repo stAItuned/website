@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { extractTOC } from '@/lib/markdown-headings'
-import nextDynamic from 'next/dynamic'
 import { getAuthorData } from '@/lib/authors'
+import ArticlePageClient from './ArticlePageClient'
 
 // Force static generation per articoli
 export const dynamic = 'force-static'
@@ -118,7 +118,6 @@ export default async function ArticlePage({ params }: { params: { target: string
   // Extract TOC from markdown using shared function
   const toc = extractTOC(article.body.raw)
   const authorData = article.author ? await getAuthorData(article.author) : null
-  const ArticlePageClient = nextDynamic(() => import('./ArticlePageClient'), { ssr: false })
   return (
     <ArticlePageClient
       coverImage={coverImage}

@@ -1,5 +1,5 @@
-import { ImageResponse } from "next/server";
-import { NextResponse } from "next/server";
+import { ImageResponse } from "next/og";
+import { NextRequest, NextResponse } from "next/server";
 // If allPosts is edge-safe in your build, you can import it to show real titles.
 // import { allPosts } from "@/lib/contentlayer";
 
@@ -16,10 +16,11 @@ function cleanSlug(s: string) {
 // }
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { slug: string } }
+  _req: NextRequest,
+  context: { params: Promise<{ slug: string }> }
 ) {
-  const slug = cleanSlug(params.slug);
+  const { slug: rawSlug } = await context.params
+  const slug = cleanSlug(rawSlug);
   const title = decodeURIComponent(slug).replace(/[-_]/g, " ");
   // const title = getPostTitle(slug);
 

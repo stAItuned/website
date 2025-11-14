@@ -4,7 +4,6 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import dynamic from 'next/dynamic'
 import FeedbackLauncher from "@/components/feedback/FeedbackLauncher";
 import { CRITICAL_CSS } from '@/lib/performance/criticalStyles'
 
@@ -14,32 +13,11 @@ import { CRITICAL_CSS } from '@/lib/performance/criticalStyles'
 // Critical components loaded immediately
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
-
-// Non-critical components lazy loaded
-const SafePageViewTracker = dynamic(
-  () => import('@/components/PageViewTracker').then(mod => ({ default: mod.SafePageViewTracker })),
-  { ssr: false }
-)
-
-const SearchProvider = dynamic(
-  () => import('@/components/SearchContext').then(mod => ({ default: mod.SearchProvider })),
-  { ssr: false }
-)
-
-const SearchModal = dynamic(
-  () => import('@/components/SearchModal').then(mod => ({ default: mod.SearchModal })),
-  { ssr: false }
-)
-
-const PerformanceProvider = dynamic(
-  () => import('@/components/PerformanceProvider'),
-  { ssr: false }
-)
-
-const FirebaseAuthProvider = dynamic(
-  () => import('@/components/auth/FirebaseAuthProvider').then(mod => ({ default: mod.FirebaseAuthProvider })),
-  { ssr: false }
-)
+import { SafePageViewTracker } from '@/components/PageViewTracker'
+import { SearchProvider } from '@/components/SearchContext'
+import { SearchModal } from '@/components/SearchModal'
+import PerformanceProvider from '@/components/PerformanceProvider'
+import { FirebaseAuthProvider } from '@/components/auth/FirebaseAuthProvider'
 
 
 const montserrat = Montserrat({ subsets: ['latin'] })

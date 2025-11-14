@@ -5,29 +5,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const { withContentlayer } = require('next-contentlayer')
 
 const nextConfig = {
-  eslint: {
-    // Allow production builds to complete even with ESLint errors
-    // TODO: Fix ESLint errors and remove this
-    ignoreDuringBuilds: true,
-  },
+  serverExternalPackages: ['googleapis', 'firebase-admin'],
   images: {
     formats: ['image/webp'], // Temporarily removed AVIF to reduce CPU load
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
-    domains: [
-      'images.unsplash.com', 
-      'via.placeholder.com', 
-      'localhost',
-      'dev.staituned.com',
-      'miro.medium.com',
-      'cdn-images-1.medium.com',
-      'github.com',
-      'raw.githubusercontent.com',
-      'user-images.githubusercontent.com',
-      'assets.website-files.com',
-      'upload.wikimedia.org'
-    ],
     // Allow all external images as fallback
     remotePatterns: [
       {
@@ -54,12 +37,9 @@ const nextConfig = {
       '@tiptap/starter-kit',
       'framer-motion',
       'marked'
-    ],
-    serverComponentsExternalPackages: [
-      'googleapis',
-      'firebase-admin'
     ]
   },
+  turbopack: {},
   // Handle the content submodule
   webpack: (config, { dev, isServer }) => {
     config.resolve.symlinks = false
@@ -211,4 +191,3 @@ const nextConfig = {
 }
 
 module.exports = withBundleAnalyzer(withContentlayer(nextConfig))
-
