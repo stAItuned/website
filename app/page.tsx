@@ -1,5 +1,6 @@
 import { allPosts } from '@/lib/contentlayer'
 import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
+import { HomeDualTracks } from '@/components/home/HomeDualTracks'
 import { ArticleSection } from '@/components/home/ArticleSection'
 import { PageTransition } from '@/components/ui/PageTransition'
 
@@ -53,6 +54,9 @@ export default function HomePage() {
           initialActiveUsers={activeUsers}
           initialSessions={sessions}
         />
+        
+        {/* Dual tracks overview */}
+        <HomeDualTracks />
         
         {/* Stats Note */}
         <p className="text-xs text-right px-2 bg-transparent">

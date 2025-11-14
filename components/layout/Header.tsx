@@ -43,8 +43,10 @@ export function Header() {
   }, [openSearch])
 
   const navigation = [
-    { name: 'Learn', path: '/learn' },
-    { name: 'Meet', path: '/meet' },
+    { name: 'Home', path: '/' },
+    { name: 'Per le aziende', path: '/aziende' },
+    { name: 'Blog', path: '/learn' },
+    { name: 'Chi siamo', path: '/meet' },
   ]
 
   return (

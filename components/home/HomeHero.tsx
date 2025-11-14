@@ -1,36 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
-import { LinkedInIcon, InstagramIcon, FacebookIcon, TikTokIcon } from '@/components/icons/SocialIcons'
-
-interface SocialLink {
-  name: string
-  url: string
-  icon: React.ComponentType<{ className?: string }>
-}
-
-const socialLinks: SocialLink[] = [
-  {
-    name: 'linkedin',
-    url: 'https://www.linkedin.com/company/stai-tuned/',
-    icon: LinkedInIcon
-  },
-  // {
-  //   name: 'instagram', 
-  //   url: 'https://www.instagram.com/stai.tuned/',
-  //   icon: InstagramIcon
-  // },
-  // {
-  //   name: 'facebook',
-  //   url: 'https://www.facebook.com/stAItuned',
-  //   icon: FacebookIcon
-  // },
-  // {
-  //   name: 'tiktok',
-  //   url: 'https://www.tiktok.com/@staituned?lang=en',
-  //   icon: TikTokIcon
-  // }
-]
 
 interface HomeHeroProps {
   totalArticles: number
@@ -39,88 +8,86 @@ interface HomeHeroProps {
   sessions: number | string
 }
 
-export function HomeHero({ totalArticles, totalWriters, activeUsers, sessions }: HomeHeroProps) {
-
+export function HomeHero({
+  totalArticles,
+  totalWriters,
+  activeUsers,
+  sessions
+}: HomeHeroProps) {
+  const stats = [
+    { label: 'articles', value: totalArticles, href: '/learn' },
+    { label: 'users', value: activeUsers },
+    { label: 'sessions', value: sessions },
+    { label: 'contributors', value: totalWriters, href: '/meet' },
+  ]
 
   return (
-    <div className="relative top-0 h-screen shadow-2xl flex flex-col justify-center">
-
-
-      {/* Dark overlay */}
-      <div className="absolute h-full w-screen bg-slate-900/20 z-10" />
-      
-      {/* Background image */}
-      <div className="absolute inset-0 w-full h-full">
-        <Image
-          src="/assets/general/home_bg.webp"
-          alt="AI Background"
-          fill
-          className="object-cover scale-x-[-1]"
-          priority
-          sizes="100vw"
-          quality={85}
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-        />
-      </div>
-
-      {/* Social icons */}
-      <div className="absolute right-16 md:flex flex-col space-y-8 hidden z-20">
-        {socialLinks.map((social) => {
-          const IconComponent = social.icon
-          return (
-            <a
-              key={social.name}
-              href={social.url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${social.name} icon`}
-              className="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
-            >
-              <IconComponent className="w-10 h-10" />
-            </a>
-          )
-        })}
-      </div>
-
-
-      {/* Main heading */}
-      <h1 className="text-4xl px-8 md:px-0 md:text-6xl absolute w-full md:w-1/2 md:left-16 md:right-0 font-semibold text-slate-50 z-20">
-        Artificial intelligence within everyone&apos;s reach
-      </h1>
-
-
-
-      {/* Bottom stats */}
-      <div className="absolute text-center bottom-16 left-8 right-8 md:left-32 md:right-32 font-semibold text-slate-50 flex justify-between space-x-4 z-20">
-        <Link href="/learn">
-          <div className="space-y-2">
-            <h3 className="text-4xl md:text-5xl">{totalArticles}</h3>
-            <p className="text-lg md:text-xl">articles</p>
-          </div>
-        </Link>
-        
-        <div className="space-y-2">
-          <h3 className="text-4xl md:text-5xl">{activeUsers}</h3>
-          <div>
-            <p className="text-lg md:text-xl">users</p>
-          </div>
+    <section className="relative min-h-[85vh] overflow-hidden shadow-2xl">
+      <Image
+        src="/assets/general/home_bg.webp"
+        alt="AI background"
+        fill
+        className="object-cover scale-x-[-1]"
+        priority
+        sizes="100vw"
+        quality={85}
+        placeholder="blur"
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 via-slate-900/80 to-slate-900/70" />
+      <div className="relative z-20 max-w-6xl mx-auto px-6 py-16 space-y-8 text-slate-100">
+        <span className="inline-flex items-center gap-2 text-xs tracking-[0.3em] uppercase text-amber-300">
+          AI pratica · per PMI · per creator
+        </span>
+        <h1 className="text-4xl md:text-6xl font-semibold leading-tight">
+          AI pratica per PMI e professionisti: dalla strategia alle webapp funzionanti
+        </h1>
+        <p className="text-lg md:text-xl text-slate-200 max-w-3xl">
+          Aiuto aziende e creator a usare l’AI per ridurre lavoro manuale, migliorare i processi e lanciare nuovi servizi digitali.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/aziende"
+            className="px-6 py-3 rounded-full bg-amber-400 text-slate-900 font-semibold hover:bg-amber-300 transition"
+          >
+            Per la tua azienda
+          </Link>
+          <Link
+            href="/learn"
+            className="px-6 py-3 rounded-full border border-white/60 text-white font-semibold hover:border-white hover:text-amber-300 transition"
+          >
+            Per imparare e sperimentare
+          </Link>
         </div>
-        
-        <div className="space-y-2">
-          <h3 className="text-4xl md:text-5xl">{sessions}</h3>
-          <div>
-            <p className="text-lg md:text-xl">sessions</p>
-          </div>
+        <p className="text-sm text-slate-200/80 max-w-2xl">
+          Chi arriva da Google/LinkedIn e fa impresa → clicca “Per la tua azienda”. Chi è lettore/nerd → clicca “Per imparare e sperimentare”. Il messaggio è chiaro: 🧠 “Questo posto è di qualcuno che usa l’AI sul serio e aiuta anche le aziende”.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white/10 border border-white/10 rounded-3xl p-4 text-center text-slate-100">
+          {stats.map((stat) => {
+            const value = typeof stat.value === 'number' ? stat.value.toLocaleString('it-IT') : stat.value
+            const content = (
+              <>
+                <p className="text-3xl font-bold leading-relaxed">{value}</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-slate-200">{stat.label}</p>
+              </>
+            )
+
+            return stat.href ? (
+              <Link
+                key={stat.label}
+                href={stat.href}
+                className="transition hover:text-amber-300"
+              >
+                {content}
+              </Link>
+            ) : (
+              <div key={stat.label}>
+                {content}
+              </div>
+            )
+          })}
         </div>
-        
-        <Link href="/meet">
-          <div className="space-y-2">
-            <h3 className="text-4xl md:text-5xl">{totalWriters}</h3>
-            <p className="text-lg md:text-xl">writers</p>
-          </div>
-        </Link>
       </div>
-    </div>
+    </section>
   )
 }
