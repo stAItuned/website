@@ -2,10 +2,10 @@
 let allPosts: any[] = []
 
 try {
-  const contentlayer = require('../.contentlayer/generated')
-  allPosts = contentlayer.allPosts || []
-} catch {
-  // Fallback for development when contentlayer hasn't run yet
+  const { allPosts: generatedAllPosts } = await import('../.contentlayer/generated/index.mjs')
+  allPosts = generatedAllPosts || []
+} catch (error) {
+  console.warn('[contentlayer] failed to import generated data:', error)
   allPosts = []
 }
 

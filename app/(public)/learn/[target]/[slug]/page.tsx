@@ -24,8 +24,8 @@ export async function generateStaticParams() {
   return params
 }
 
-export async function generateMetadata({ params }: { params: { target: string; slug: string } }): Promise<Metadata> {
-  const { target, slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ target: string; slug: string }> }): Promise<Metadata> {
+  const { target, slug } = await params;
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com';
   // Find the article
   const article = allPosts.find((post) => 
@@ -72,10 +72,10 @@ export async function generateMetadata({ params }: { params: { target: string; s
   };
 }
 
-export default async function ArticlePage({ params }: { params: { target: string; slug: string } }) {
+export default async function ArticlePage({ params }: { params: Promise<{ target: string; slug: string }> }) {
+  const { target, slug } = await params
   // Debug: log on mount
-  console.log('[ArticlePage] MOUNTED', params)
-  const { target, slug } = params
+  console.log('[ArticlePage] MOUNTED', { target, slug })
   // Find the article
   const article = allPosts.find((post) => 
     post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
