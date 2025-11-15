@@ -7,7 +7,7 @@ import ArticlePageClient from './ArticlePageClient'
 
 // Force static generation per articoli
 export const dynamic = 'force-static'
-export const revalidate = 60*60*6 // ISR ogni 6 ore
+export const revalidate = 21600 // ISR ogni 6 ore (60*60*6)
 
 export const dynamicParams = false
 

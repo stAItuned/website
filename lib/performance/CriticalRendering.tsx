@@ -230,41 +230,22 @@ export function ResourceHints() {
 // Critical font loading
 export function FontOptimization() {
   useEffect(() => {
-    // Preload critical fonts
-    const criticalFonts = [
-      '/fonts/montserrat-regular.woff2',
-      '/fonts/montserrat-semibold.woff2'
-    ]
+    // The app uses Google Fonts via `@import` in `app/globals.css` and
+    // `next/font/google` in `app/layout.tsx`. Avoid preloading local
+    // font files that may not exist in `public/fonts/` to prevent 404s.
+    // Instead, ensure we preconnect to Google Fonts which helps
+    // performance when loading remote fonts.
 
-    criticalFonts.forEach(fontUrl => {
+    const preconnect = (href: string, crossOrigin = false) => {
       const link = document.createElement('link')
-      link.rel = 'preload'
-      link.href = fontUrl
-      link.as = 'font'
-      link.type = 'font/woff2'
-      link.crossOrigin = 'anonymous'
+      link.rel = 'preconnect'
+      link.href = href
+      if (crossOrigin) link.crossOrigin = 'anonymous'
       document.head.appendChild(link)
-    })
+    }
 
-    // Font display optimization
-    const style = document.createElement('style')
-    style.textContent = `
-      @font-face {
-        font-family: 'Montserrat';
-        font-style: normal;
-        font-weight: 400;
-        font-display: swap;
-        src: url('/fonts/montserrat-regular.woff2') format('woff2');
-      }
-      @font-face {
-        font-family: 'Montserrat';
-        font-style: normal;
-        font-weight: 600;
-        font-display: swap;
-        src: url('/fonts/montserrat-semibold.woff2') format('woff2');
-      }
-    `
-    document.head.appendChild(style)
+    preconnect('https://fonts.googleapis.com')
+    preconnect('https://fonts.gstatic.com', true)
   }, [])
 
   return null

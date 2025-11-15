@@ -6,13 +6,13 @@ import { AuthorPageWithPagination } from '@/components/AuthorPageWithPagination'
 import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 
 interface AuthorPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: AuthorPageProps): Promise<Metadata> {
-  const { slug } = params
+  const { slug } = await params
   
   // Convert slug back to author name
   const authorName = slug.replaceAll('-', ' ')
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
 }
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
-  const { slug } = params
+  const { slug } = await params
   // Convert slug back to author name
   const authorName = slug.replaceAll('-', ' ')
   // Get author data

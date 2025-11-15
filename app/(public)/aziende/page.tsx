@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
 
 export const dynamic = 'force-static'
-export const revalidate = 60 * 60 * 6 // every 6 hours
+export const revalidate = 21600 // every 6 hours (60 * 60 * 6)
 
 export const metadata: Metadata = {
   title: 'Per le aziende - stAItuned',

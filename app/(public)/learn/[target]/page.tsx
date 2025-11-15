@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { use, useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { allPosts } from '@/lib/contentlayer'
 import { PAGINATION_SIZE } from '@/lib/paginationConfig'
@@ -8,9 +8,9 @@ import { PageTransition } from '@/components/ui/PageTransition'
 import { ArticleCard } from '@/components/ArticleCard'
 
 interface LearnTargetPageProps {
-  params: {
+  params: Promise<{
     target: string
-  }
+  }>
 }
 
 interface FilterState {
@@ -35,7 +35,7 @@ interface Article {
 }
 
 export default function LearnTargetPage({ params }: LearnTargetPageProps) {
-  const { target } = params
+  const { target } = use(params)
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)

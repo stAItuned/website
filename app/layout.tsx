@@ -2,6 +2,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
+import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import FeedbackLauncher from "@/components/feedback/FeedbackLauncher";
@@ -113,6 +114,16 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        {/* Preload Google Fonts CSS to improve font fetch priority */}
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+        />
       </head>
       <body className={`${montserrat.className} antialiased stai-body`}>
         <ThemeProvider>
@@ -135,7 +146,9 @@ export default function RootLayout({
                 </section>
                 <SearchModal />
               </SearchProvider>
-              <FeedbackLauncher />
+              <Suspense fallback={null}>
+                <FeedbackLauncher />
+              </Suspense>
             </PerformanceProvider>
           </FirebaseAuthProvider>
         </ThemeProvider>

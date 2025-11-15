@@ -6,7 +6,7 @@ import LearnPageClient from './LearnPageClient'
 
 // Force static generation
 export const dynamic = 'force-static'
-export const revalidate = 60*60*24 // ISR ogni giorno
+export const revalidate = 86400 // ISR ogni giorno (60*60*24)
 
 const targets = [
   {
