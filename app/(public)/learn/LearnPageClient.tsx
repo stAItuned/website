@@ -95,22 +95,23 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
 
         {/* Articles Grid */}
         {paginatedArticles.length > 0 ? (
-          <div className="flex flex-wrap">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 items-stretch">
             {paginatedArticles.map((article) => (
-              <ArticleCard 
-                key={article.slug} 
-                article={{
-                  title: article.title,
-                  slug: article.slug,
-                  cover: article.cover,
-                  author: article.author,
-                  date: article.date,
-                  meta: article.meta,
-                  readingTime: article.readingTime,
-                  target: article.target,
-                  language: article.language
-                }} 
-              />
+              <div className="h-full" key={article.slug}>
+                <ArticleCard 
+                  article={{
+                    title: article.title,
+                    slug: article.slug,
+                    cover: article.cover,
+                    author: article.author,
+                    date: article.date,
+                    meta: article.meta,
+                    readingTime: article.readingTime,
+                    target: article.target,
+                    language: article.language
+                  }} 
+                />
+              </div>
             ))}
           </div>
         ) : (

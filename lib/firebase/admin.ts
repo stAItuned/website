@@ -15,13 +15,15 @@ function getFirebaseApp(): App {
     return cachedApp;
   }
   
-  const key = process.env.FB_SERVICE_ACCOUNT_KEY;
-  if (!key) {
+  const rawKey = process.env.FB_SERVICE_ACCOUNT_KEY
+    || (process.env.FB_SERVICE_ACCOUNT_KEY_B64 ? Buffer.from(process.env.FB_SERVICE_ACCOUNT_KEY_B64, 'base64').toString('utf8') : undefined);
+
+  if (!rawKey) {
     throw new Error('FB_SERVICE_ACCOUNT_KEY env variable is required for Firebase Admin SDK.');
   }
-  
+
   cachedApp = initializeApp({
-    credential: cert(JSON.parse(key)),
+    credential: cert(JSON.parse(rawKey)),
   });
   
   return cachedApp;

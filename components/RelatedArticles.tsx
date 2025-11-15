@@ -23,7 +23,9 @@ interface RelatedArticlesProps {
 export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const [innerWidth, setInnerWidth] = useState(0)
+  const [innerWidth, setInnerWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  )
 
   useEffect(() => {
     const handleResize = () => setInnerWidth(window.innerWidth)
