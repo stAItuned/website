@@ -482,8 +482,8 @@ export default function ArticlePageClient({
         {isLarge ? (
           <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
             {/* Left: TOC Sidebar (Desktop only) */}
-            <aside className="relative self-stretch">
-              <div className="sticky top-24">
+            <aside className="self-stretch">
+              <div className="sticky top-14">
                 <div className="table-of-contents">
                   <ArticleTOC 
                     toc={toc} 

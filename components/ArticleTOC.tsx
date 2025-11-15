@@ -143,7 +143,8 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
 
   const navClasses = clsx(
     'bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-4 border border-gray-100 dark:border-slate-700 text-gray-900 dark:text-white transition-colors duration-200',
-    sticky ? 'sticky top-8 max-h-[calc(100vh-3rem)] overflow-y-auto z-10' : 'w-full',
+    'max-h-[calc(100vh-3rem)] overflow-y-auto',
+    sticky ? 'sticky top-8 z-10' : 'w-full',
     'scrollbar-thin scrollbar-thumb-primary-300 dark:scrollbar-thumb-secondary-500 scrollbar-track-gray-100 dark:scrollbar-track-slate-700'
   )
 
