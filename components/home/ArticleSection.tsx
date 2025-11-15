@@ -239,7 +239,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
   }
 
   return (
-    <section className="bg-white text-white py-5">
+    <section className="bg-white text-slate-900 dark:bg-slate-900 dark:text-white py-5">
       {/* Category tabs */}
       <div className="text-center flex sm:text-xl font-bold pb-5 uppercase">
         {categories.map((category) => (
@@ -247,8 +247,8 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
             key={category}
             className={`w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition ${
               articlesToShow === category 
-                ? 'text-secondary-600' 
-                : 'text-gray-400'
+                ? 'text-secondary-600 dark:text-secondary-400' 
+                : 'text-gray-400 dark:text-gray-300'
             }`}
             onClick={() => setArticlesToShow(category)}
           >
@@ -277,7 +277,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
 
       {/* Analytics note */}
       <div className="bg-primary-600 px-4 py-2">
-        <p className="text-xs text-right text-gray-300">
+        <p className="text-xs text-right text-gray-300 dark:text-gray-200">
           {analyticsLoading 
             ? 'Loading view counts...' 
             : '* View counts from Google Analytics (last 90 days)'

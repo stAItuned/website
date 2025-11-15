@@ -37,9 +37,9 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
   return (
     <section className="max-w-7xl mx-auto mt-14 px-4 sm:mt-16">
       <div className="space-y-3 text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Shortlist</p>
-        <h2 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Cosa puoi leggere su stAItuned</h2>
-        <p className="text-slate-600">
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Shortlist</p>
+        <h2 className="text-3xl font-semibold text-slate-900 dark:text-slate-50 sm:text-4xl">Cosa puoi leggere su stAItuned</h2>
+        <p className="text-slate-600 dark:text-slate-300">
           Sia che tu sia un’azienda che vuole capire l’AI, sia che tu sia un tecnico che vuole approfondire.
         </p>
       </div>
@@ -48,11 +48,11 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
         {columns.map((column) => (
           <div
             key={column.heading}
-            className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-md"
+            className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-900/50"
           >
             <div className="space-y-2">
-              <h3 className="text-2xl font-semibold text-slate-900">{column.heading}</h3>
-              <p className="text-slate-600">{column.description}</p>
+              <h3 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">{column.heading}</h3>
+              <p className="text-slate-600 dark:text-slate-300">{column.description}</p>
             </div>
             <div className="mt-6 space-y-4">
               {column.items.map((item) => {
@@ -66,14 +66,14 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                 return (
                   <article
                     key={item.slug}
-                    className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50 p-5"
+                    className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/40"
                   >
-                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
                       {badgeText}
                     </span>
-                    <h4 className="text-lg font-semibold text-slate-900">{item.title}</h4>
-                    <p className="text-sm text-slate-600">{item.description}</p>
-                    <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-50">{item.title}</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">{item.description}</p>
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
                       {readingTime && <span>{readingTime}</span>}
                       {readingTime && formattedDate && <span aria-hidden="true">•</span>}
                       {formattedDate && <span>{formattedDate}</span>}
@@ -84,7 +84,7 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
             </div>
             <Link
               href={column.linkHref}
-              className="mt-6 inline-flex items-center justify-center rounded-full border border-slate-900/20 bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="mt-6 inline-flex items-center justify-center rounded-full border border-slate-900/20 bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:border-white/40 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
               {column.linkLabel}
             </Link>

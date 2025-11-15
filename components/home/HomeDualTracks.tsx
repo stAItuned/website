@@ -31,11 +31,11 @@ export function HomeDualTracks() {
   return (
     <section className="max-w-7xl mx-auto mt-12 px-4 py-16 space-y-10">
       <div className="space-y-3 text-center">
-        <p className="text-sm tracking-[0.3em] text-slate-500 uppercase">Due binari chiari</p>
-        <h2 className="text-3xl md:text-4xl font-semibold text-slate-900">
+        <p className="text-sm tracking-[0.3em] text-slate-500 dark:text-slate-400 uppercase">Due binari chiari</p>
+        <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 dark:text-slate-50">
           Chi viene per l’azienda, chi viene per la curiosità: zero confusione.
         </h2>
-        <p className="text-slate-600 max-w-3xl mx-auto">
+        <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
           Le due sezioni parallele mantengono il messaggio coerente e accompagnano ogni visitatore verso il contenuto su misura per lui.
         </p>
       </div>
@@ -43,14 +43,14 @@ export function HomeDualTracks() {
         {tracks.map((track) => (
           <article
             key={track.title}
-            className="relative flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-2xl"
+            className="relative flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900/60"
           >
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.35em] text-amber-500">Sezione dedicata</p>
-              <h3 className="text-2xl font-semibold text-slate-900">{track.title}</h3>
-              <p className="text-slate-600 leading-relaxed">{track.description}</p>
+              <h3 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">{track.title}</h3>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{track.description}</p>
             </div>
-            <ul className="space-y-2 text-slate-600">
+            <ul className="space-y-2 text-slate-600 dark:text-slate-300">
               {track.bullets.map((bullet) => (
                 <li key={bullet} className="flex gap-3 text-sm md:text-base">
                   <span aria-hidden className="text-amber-500">•</span>
@@ -60,7 +60,7 @@ export function HomeDualTracks() {
             </ul>
             <Link
               href={track.href}
-              className="mt-auto inline-flex items-center justify-center rounded-full border border-slate-900/20 bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:border-slate-900 hover:bg-slate-800"
+              className="mt-auto inline-flex items-center justify-center rounded-full border border-slate-900/20 bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:border-slate-900 hover:bg-slate-800 dark:border-white/40 dark:bg-white dark:text-slate-900 dark:hover:border-white dark:hover:bg-slate-100"
             >
               {track.cta}
             </Link>
