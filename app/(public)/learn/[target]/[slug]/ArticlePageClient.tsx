@@ -572,8 +572,8 @@ export default function ArticlePageClient({
             <div />
           </div>
         ) : (
-          <div className="flex flex-col gap-10 max-w-2xl mx-auto my-8 px-4 sm:px-6 md:px-8">
-            <article className="prose prose-base sm:prose-lg max-w-2xl w-full mx-auto text-[0.98rem] leading-6 sm:text-base lg:text-lg rounded-2xl bg-white shadow-lg p-5 sm:p-8">
+          <div className="flex flex-col gap-10 max-w-2xl mx-auto my-10 px-4 sm:px-6 md:px-8">
+            <article className="article-mobile-card prose prose-sm sm:prose-base max-w-2xl w-full mx-auto text-[0.72rem] leading-5 sm:text-[0.8rem] sm:leading-6 md:text-[0.9rem] lg:text-base rounded-[28px] bg-white/90 dark:bg-slate-900/80 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-700/40 p-6 sm:p-10 backdrop-blur-xl">
               {/* Article Header */}
               <div className="flex flex-col gap-4 items-center mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4 text-center">
                 {/* Author */}
@@ -614,7 +614,7 @@ export default function ArticlePageClient({
                 </div>
               </div>
               {/* Article Analytics */}
-              <div className="mb-4">
+              <div className="mb-4 flex flex-col gap-1">
                 <ArticleAnalyticsStats slug={article.slug} />
               </div>
               {/* Article Title (mobile) */}
@@ -647,7 +647,7 @@ export default function ArticlePageClient({
               <div id="article-root">
                 <MarkdownContent 
                   content={article.body.raw}
-                  className="prose prose-lg max-w-none"
+                  className="prose prose-sm sm:prose-base md:prose-lg max-w-none article-mobile-markdown"
                   articleSlug={article.slug}
                 />
               </div>
