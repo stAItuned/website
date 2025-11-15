@@ -50,24 +50,19 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
   }, [content, articleSlug])
 
   return (
-    <div 
-      className={`prose prose-lg max-w-none 
-        prose-headings:text-gray-900 
-        prose-p:text-gray-700 
-        prose-strong:text-gray-900 
-        prose-table:text-gray-700
+    <div
+      className={`prose prose-lg max-w-none stai-markdown
         prose-table:border-collapse
         prose-th:border
-        prose-th:border-gray-300
-        prose-th:bg-gray-100
+        prose-th:border-[color:var(--stai-border)]
         prose-th:px-4
         prose-th:py-2
         prose-td:border
-        prose-td:border-gray-300
+        prose-td:border-[color:var(--stai-border)]
         prose-td:px-4
         prose-td:py-2
         prose-img:rounded-lg
-        prose-img:shadow-md
+        prose-img:shadow-lg
         prose-img:w-full
         prose-img:h-auto
         ${className}`}

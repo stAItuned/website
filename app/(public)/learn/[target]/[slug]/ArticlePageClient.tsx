@@ -367,6 +367,20 @@ export default function ArticlePageClient({
       trackTimeOnPage() // Final tracking on unmount
     }
   }, [trackScrollDepth, trackLinkClick, trackTimeOnPage, article.slug])
+
+  const handleTOCClick = useCallback((slug: string) => {
+    event({
+      action: 'toc_click',
+      category: 'navigation',
+      label: slug,
+      value: 1
+    })
+
+    const element = document.getElementById(slug) || document.getElementsByName(slug)[0]
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [article.slug])
   
   return (
     <PageTransition>
@@ -424,22 +438,8 @@ export default function ArticlePageClient({
                   onLinkClick={slug => {
                     setModalActiveSlug(slug);
                     setShowTocModal(false);
-                    
-                    // Track TOC click
-                    event({
-                      action: 'toc_click',
-                      category: 'navigation',
-                      label: slug,
-                      value: 1
-                    })
-                    
                     setTimeout(() => {
-                      requestAnimationFrame(() => {
-                        const el = document.getElementById(slug) || document.getElementsByName(slug)[0];
-                        if (el) {
-                          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                      });
+                      handleTOCClick(slug);
                     }, 250);
                   }}
                 />
@@ -462,53 +462,42 @@ export default function ArticlePageClient({
         )}
         {/* Breadcrumb */}
         <div className="lg:absolute lg:top-96 top-32 p-4 z-10">
-          <nav className="flex items-center space-x-2 sm:space-x-4 text-primary-500 w-full md:w-fit bg-slate-100 px-2 sm:px-8 py-2 sm:py-4 rounded-lg font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base">
-            <Link href="/" className="opacity-50 hover:underline hover:opacity-100 transition">
+          <nav className="flex items-center space-x-2 sm:space-x-4 text-gray-900 dark:text-white w-full md:w-fit bg-white/90 dark:bg-slate-950/75 backdrop-blur-3xl shadow-xl dark:shadow-black/60 px-4 sm:px-8 py-3 rounded-2xl font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 dark:scrollbar-thumb-secondary-400 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base border border-white/60 dark:border-slate-800/70">
+            <Link href="/" className="opacity-80 hover:text-primary-600 transition text-current">
               Home
             </Link>
-            <span>/</span>
-            <Link href="/learn" className="opacity-50 hover:underline hover:opacity-100 transition">
+            <span className="text-gray-500 dark:text-gray-400">/</span>
+            <Link href="/learn" className="opacity-80 hover:text-primary-600 transition text-current">
               Learn
             </Link>
-            <span>/</span>
-            <Link href={`/learn/${target}`} className="opacity-50 hover:underline hover:opacity-100 transition">
+            <span className="text-gray-500 dark:text-gray-400">/</span>
+            <Link href={`/learn/${target}`} className="opacity-80 hover:text-primary-600 transition text-current">
               {targetDisplay}
             </Link>
-            <span>/</span>
-            <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom" title={article.title}>{article.title}</span>
+            <span className="text-gray-500 dark:text-gray-400">/</span>
+            <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom text-current" title={article.title}>{article.title}</span>
           </nav>
         </div>
         {/* Responsive: Only render one article version at a time */}
         {isLarge ? (
           <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
             {/* Left: TOC Sidebar (Desktop only) */}
-            <aside className="h-full min-h-screen relative">
-              <div className="table-of-contents">
-                <ArticleTOC 
-                  toc={toc} 
-                  enableScrollSpy={true}
-                  onLinkClick={(slug) => {
-                    // Track TOC click
-                    event({
-                      action: 'toc_click',
-                      category: 'navigation',
-                      label: slug,
-                      value: 1
-                    })
-                    
-                    // Smooth scroll to heading
-                    const element = document.getElementById(slug)
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    }
-                  }}
-                />
+            <aside className="relative self-stretch">
+              <div className="sticky top-24">
+                <div className="table-of-contents">
+                  <ArticleTOC 
+                    toc={toc} 
+                    enableScrollSpy={true}
+                    onLinkClick={handleTOCClick}
+                    sticky={false}
+                  />
+                </div>
               </div>
             </aside>
             {/* Center: Main Article Content */}
             <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
               {/* Article Header */}
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 not-prose border-b border-gray-200 pb-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4">
                 <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto gap-2 sm:gap-8">
                   {/* Author */}
                   <div className="flex items-center gap-2">
@@ -517,7 +506,7 @@ export default function ArticlePageClient({
                     )}
                   </div>
                   {/* Meta Info Group */}
-                  <div className="flex flex-row flex-wrap items-center gap-2 sm:gap-4 text-gray-600 text-sm divide-x divide-gray-300">
+                  <div className="flex flex-row flex-wrap items-center gap-2 sm:gap-4 text-gray-600 dark:text-gray-300 text-sm divide-x divide-gray-300 dark:divide-slate-700">
                     {/* Date */}
                     <div className="flex items-center gap-1 px-2 first:pl-0">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -546,7 +535,7 @@ export default function ArticlePageClient({
               </div>
               {/* Article Title (desktop) */}
               <div className="mb-6">
-                <h1 className="text-4xl font-bold text-primary-600 mb-4">
+                <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-300 mb-4">
                   {article.title}
                 </h1>
                 {/* Share button below title */}
@@ -586,24 +575,24 @@ export default function ArticlePageClient({
           <div className="flex flex-col gap-10 max-w-2xl mx-auto my-8 px-4 sm:px-6 md:px-8">
             <article className="prose prose-base sm:prose-lg max-w-2xl w-full mx-auto text-[0.98rem] leading-6 sm:text-base lg:text-lg rounded-2xl bg-white shadow-lg p-5 sm:p-8">
               {/* Article Header */}
-              <div className="flex flex-col gap-4 items-center mb-8 not-prose border-b border-gray-200 pb-4 text-center">
+              <div className="flex flex-col gap-4 items-center mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4 text-center">
                 {/* Author */}
                 <div className="flex flex-col items-center gap-1 justify-center">
                   {article.author && (
                     <>
                       <AuthorAvatar author={article.author} />
                       {article.author.jobTitle && (
-                        <span className="text-xs text-gray-500 mt-1">{article.author.jobTitle}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{article.author.jobTitle}</span>
                       )}
                     </>
                   )}
                 </div>
                 {/* Article Title */}
-                <h1 className="text-2xl sm:text-4xl font-bold text-primary-600 mb-2 mt-2 leading-tight">
+                <h1 className="text-2xl sm:text-4xl font-bold text-primary-600 dark:text-primary-300 mb-2 mt-2 leading-tight">
                   {article.title}
                 </h1>
                 {/* Meta Info Group */}
-                <div className="flex flex-row flex-wrap items-center justify-center gap-3 text-gray-600 text-sm divide-x divide-gray-300">
+                <div className="flex flex-row flex-wrap items-center justify-center gap-3 text-gray-600 dark:text-gray-300 text-sm divide-x divide-gray-300 dark:divide-slate-700">
                   {/* Date */}
                   <div className="flex items-center gap-1 px-2 first:pl-0">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -630,7 +619,7 @@ export default function ArticlePageClient({
               </div>
               {/* Article Title (mobile) */}
               <div className="mb-6">
-                <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 mb-4 text-center">
+                <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-300 mb-4 text-center">
                   {article.title}
                 </h1>
                 {/* Share button below title */}

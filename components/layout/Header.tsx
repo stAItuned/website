@@ -6,6 +6,8 @@ import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
 import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { useTheme } from '@/components/ThemeProvider'
 
 const DISABLE_AUTH = true
   // typeof process !== 'undefined'
@@ -18,8 +20,13 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { openSearch } = useSearch()
   const { user, loading } = useAuth()
+  const { resolvedTheme } = useTheme()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
+  const logoSrc =
+    isHomepage || resolvedTheme === 'dark'
+      ? "/assets/general/logo-text.png"
+      : "/assets/general/logo-text-dark.png"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +62,7 @@ export function Header() {
         <div className="flex justify-between items-start">
           <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <Image
-              src={isHomepage ? "/assets/general/logo-text.png" : "/assets/general/logo-text-dark.png"}
+              src={logoSrc}
               alt="stAItuned logo"
               width={600}
               height={133}
@@ -70,16 +77,14 @@ export function Header() {
             />
           </Link>
 
-          <nav className="fixed right-4 top-4 z-50 py-2 px-4 text-white rounded-2xl bg-primary-600 font-semibold text-lg flex space-x-3 lg:space-x-6 items-center shadow-md border border-primary-400/30 backdrop-blur-sm">
+          <nav className="stai-glass-panel stai-nav fixed right-4 top-4 z-50 flex items-center gap-3 lg:gap-6 rounded-2xl px-4 py-2.5 font-semibold text-base">
             <div className="hidden lg:block">
               <ul className="flex items-center space-x-8">
                 {navigation.map((item) => (
                   <li key={item.path}>
                     <Link
                       href={item.path}
-                      className={`hover:text-secondary-500 transition ${
-                        pathname === item.path ? 'text-secondary-500' : ''
-                      }`}
+                      className={`stai-link ${pathname === item.path ? 'stai-link--active' : ''}`}
                     >
                       {item.name}
                     </Link>
@@ -104,18 +109,26 @@ export function Header() {
               </div>
             )}
             
-            <div className="rounded-full bg-primary-300 p-3 cursor-pointer hover:bg-primary-400 transition-colors" onClick={openSearch}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
+            <ThemeToggle />
             
             <button
-              className="lg:hidden text-white rounded-full p-3 w-12 h-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-secondary-400 active:bg-primary-700 transition"
+              type="button"
+              className="stai-icon-button"
+              onClick={openSearch}
+              aria-label="Open search"
+            >
+              <svg className="w-6 h-6 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+            
+            <button
+              type="button"
+              className="lg:hidden stai-icon-button w-12 h-12 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Open menu"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -129,20 +142,20 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className={`fixed inset-0 z-50 lg:hidden flex items-start justify-end transition-all duration-300 ${isMenuOpen ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+        <div className={`fixed inset-0 z-50 lg:hidden flex items-start justify-end transition-all duration-300 ${isMenuOpen ? 'pointer-events-auto bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
           style={{ transitionProperty: 'background,backdrop-filter' }}
           onClick={() => setIsMenuOpen(false)}
         >
           <div
-            className={`w-full max-w-xs h-full bg-primary-600 dark:bg-primary-900 shadow-2xl rounded-t-2xl flex flex-col pt-0 pb-8 px-0 relative transform transition-all duration-300 ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+            className={`stai-drawer w-full max-w-xs h-full rounded-t-2xl flex flex-col pt-0 pb-8 px-0 relative transform transition-all duration-300 ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
             style={{ transitionProperty: 'transform,opacity', willChange: 'transform' }}
             onClick={e => e.stopPropagation()}
           >
             {/* Mobile Menu Header with Logo and Close Button */}
-            <div className="relative flex items-center justify-between px-6 pt-6 pb-4 border-b border-primary-100 dark:border-primary-700 bg-primary-600 dark:bg-primary-900">
+            <div className="relative flex items-center justify-between px-6 pt-6 pb-4 border-b stai-border">
               <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
                 <Image
-                  src={isHomepage ? "/assets/general/logo-text.png" : "/assets/general/logo-text-dark.png"}
+                  src={logoSrc}
                   alt="stAItuned logo"
                   width={120}
                   height={30}
@@ -152,24 +165,24 @@ export function Header() {
                 />
               </Link>
               <button
-                className="text-primary-700 dark:text-white rounded-full p-2 hover:bg-primary-100 dark:hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-secondary-400 border border-primary-200 dark:border-primary-700 shadow"
+                type="button"
+                className="stai-icon-button w-10 h-10 !p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
                 onClick={() => setIsMenuOpen(false)}
                 aria-label="Close menu"
               >
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-7 h-7 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <div className="flex flex-col pt-6 gap-3 px-6 text-primary-900 dark:text-white">
+            <div className="flex flex-col pt-6 gap-3 px-6 stai-text">
               {navigation.map((item) => (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`py-5 text-xl font-semibold transition border-b border-primary-100 dark:border-primary-700 rounded-lg px-2 mb-1 
-                    ${pathname === item.path ? 'text-secondary-500' : 'text-primary-900 dark:text-white'}
-                    hover:text-secondary-500 focus:text-secondary-500`
-                  }
+                  className={`stai-drawer-link py-5 text-xl font-semibold border-b stai-border rounded-lg px-2 mb-1 ${
+                    pathname === item.path ? 'stai-drawer-link--active' : ''
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
@@ -258,13 +271,14 @@ export function Header() {
               )}
               
               <button
+                type="button"
                 onClick={() => {
                   openSearch()
                   setIsMenuOpen(false)
                 }}
-                className="flex items-center space-x-3 py-4 text-white text-lg font-semibold hover:text-secondary-500 transition border-b border-primary-500"
+                className="flex items-center space-x-3 py-4 stai-drawer-link text-lg font-semibold border-b stai-border"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span>Search</span>

@@ -1,11 +1,16 @@
 import GithubSlugger from 'github-slugger';
 
+function removeManualTOC(markdown: string) {
+  return markdown.replace(/##\s+Table of contents[\s\S]*?(?=\n##\s+|$)/i, '\n').replace(/\n{3,}/g, '\n\n');
+}
+
 export function processMarkdownWithTOC(markdown: string) {
   const toc: Array<{ level: number; text: string; slug: string }> = [];
   const slugger = new GithubSlugger();
+  const sanitizedMarkdown = removeManualTOC(markdown);
   
   // Process markdown and generate TOC in one pass to ensure consistent slugs
-  const processedMarkdown = markdown.replace(/^(#{1,6})\s+(.+)$/gm, (match, hashes, title) => {
+  const processedMarkdown = sanitizedMarkdown.replace(/^(#{1,6})\s+(.+)$/gm, (match, hashes, title) => {
     const level = hashes.length;
     const text = title.trim();
     const slug = slugger.slug(text);

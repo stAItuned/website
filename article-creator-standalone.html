@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article Creator - StAItuned</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+    }
+
+    h1 {
+      color: #1a202c;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      color: #718096;
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      resize: vertical;
+      min-height: 400px;
+    }
+
+    .help-text {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-top: 4px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #2d3748;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+    }
+
+    .btn-download {
+      background: #48bb78;
+      color: white;
+    }
+
+    .btn-download:hover {
+      background: #38a169;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(72, 187, 120, 0.3);
+    }
+
+    .alert {
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #c6f6d5;
+      color: #22543d;
+      border: 2px solid #9ae6b4;
+    }
+
+    .alert-error {
+      background: #fed7d7;
+      color: #742a2a;
+      border: 2px solid #fc8181;
+    }
+
+    .preview-container {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f7fafc;
+      border-radius: 6px;
+      border: 2px dashed #cbd5e0;
+    }
+
+    .preview-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 10px;
+    }
+
+    pre {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .images-section {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f7fafc;
+      border-radius: 6px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .image-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: white;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .image-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .image-item input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-danger {
+      background: #fc8181;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #f56565;
+    }
+
+    .btn-insert {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-insert:hover {
+      background: #5a67d8;
+    }
+
+    .image-upload-btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #48bb78;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .image-upload-btn:hover {
+      background: #38a169;
+    }
+
+    .rendered-preview {
+      background: white;
+      padding: 30px;
+      border-radius: 6px;
+      line-height: 1.6;
+      color: #2d3748;
+    }
+
+    .rendered-preview h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+
+    .rendered-preview h2 {
+      font-size: 2rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #1a202c;
+    }
+
+    .rendered-preview h3 {
+      font-size: 1.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: #2d3748;
+    }
+
+    .rendered-preview p {
+      margin-bottom: 1rem;
+    }
+
+    .rendered-preview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .rendered-preview code {
+      background: #f7fafc;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9em;
+      color: #e53e3e;
+    }
+
+    .rendered-preview pre {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    .rendered-preview pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    .rendered-preview ul, .rendered-preview ol {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .rendered-preview li {
+      margin-bottom: 0.5rem;
+    }
+
+    .rendered-preview blockquote {
+      border-left: 4px solid #667eea;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      color: #4a5568;
+      font-style: italic;
+    }
+
+    .rendered-preview a {
+      color: #667eea;
+      text-decoration: none;
+      border-bottom: 1px solid #667eea;
+    }
+
+    .rendered-preview a:hover {
+      color: #5a67d8;
+    }
+
+    .rendered-preview table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    .rendered-preview th, .rendered-preview td {
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    .rendered-preview th {
+      background: #f7fafc;
+      font-weight: 600;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: #e2e8f0;
+      border: none;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      color: #2d3748;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #f7fafc;
+      color: #667eea;
+    }
+
+    .tab-btn:hover {
+      background: #cbd5e0;
+    }
+
+    .tab-btn.active:hover {
+      background: #f7fafc;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .rendered-preview h1 {
+        font-size: 2rem;
+      }
+
+      .rendered-preview h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Article Creator</h1>
+    <p class="subtitle">Create beautiful articles for your website</p>
+
+    <div id="alert"></div>
+
+    <form id="articleForm">
+      <!-- Title -->
+      <div class="form-group">
+        <label for="title">Title *</label>
+        <input type="text" id="title" required placeholder="Enter article title">
+      </div>
+
+      <!-- Slug -->
+      <div class="form-group">
+        <label for="slug">Slug (URL path) *</label>
+        <input type="text" id="slug" required placeholder="article-slug">
+        <p class="help-text">URL will be: /learn/<span id="targetPreview">general</span>/<span id="slugPreview">article-slug</span></p>
+      </div>
+
+      <!-- Grid for Author and Date -->
+      <div class="grid">
+        <div class="form-group">
+          <label for="author">Author</label>
+          <input type="text" id="author" placeholder="Author name">
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+      </div>
+
+      <!-- Topics -->
+      <div class="form-group">
+        <label for="topics">Topics (comma-separated)</label>
+        <input type="text" id="topics" placeholder="AI, Machine Learning, Deep Learning">
+      </div>
+
+      <!-- Grid for Target and Language -->
+      <div class="grid">
+        <div class="form-group">
+          <label for="target">Target Category *</label>
+          <select id="target" required>
+            <option value="beginner">Newbie</option>
+            <option value="intermediate">Midway</option>
+            <option value="advanced">Expert</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="language">Language</label>
+          <select id="language">
+            <option value="en">English</option>
+            <option value="it">Italian</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Meta Description -->
+      <div class="form-group">
+        <label for="meta">Meta Description</label>
+        <textarea id="meta" rows="2" placeholder="Brief description for SEO (max 160 characters)" maxlength="160"></textarea>
+        <p class="help-text"><span id="metaCount">0</span>/160 characters</p>
+      </div>
+
+      <!-- Cover Image -->
+      <div class="form-group">
+        <label>Cover Image (WebP)</label>
+        <div class="images-section">
+          <div style="margin-bottom: 15px;">
+            <label for="coverUpload" class="image-upload-btn" style="background: #9f7aea;">
+              🖼️ Upload Cover Image
+            </label>
+            <input type="file" id="coverUpload" accept="image/*" style="display: none;">
+            <p class="help-text" style="margin-top: 8px;">Upload any image - will be automatically converted to WebP (cover.webp)</p>
+          </div>
+          <div id="coverPreview"></div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="form-group">
+        <label for="content">Article Content (Markdown) *</label>
+        <textarea id="content" required placeholder="Write your article content in Markdown format..."></textarea>
+      </div>
+
+      <!-- Images Section -->
+      <div class="form-group">
+        <label>Article Images</label>
+        <div class="images-section">
+          <div style="margin-bottom: 15px;">
+            <label for="imageUpload" class="image-upload-btn">
+              📷 Add Image
+            </label>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" multiple>
+            <p class="help-text" style="margin-top: 8px;">Upload images and insert them at cursor position in the content above</p>
+          </div>
+          <div id="imagesList"></div>
+        </div>
+      </div>
+
+      <!-- Published Checkbox -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="published">
+        <label for="published" style="margin-bottom: 0;">Publish immediately</label>
+      </div>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
+        <button type="button" class="btn-primary" onclick="previewArticle()">Preview</button>
+        <button type="button" class="btn-download" onclick="downloadArticle()">Download All Files</button>
+      </div>
+
+      <!-- Upload info -->
+      <div id="uploadInfo" style="display: none;" class="alert alert-success">
+        📷 <span id="imageCount">0</span> image(s) will be downloaded along with the article
+      </div>
+    </form>
+
+    <!-- Preview Section -->
+    <div id="previewSection" style="display: none;">
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="switchTab('markdown')">📝 Markdown</button>
+        <button class="tab-btn" onclick="switchTab('rendered')">👁️ Rendered</button>
+      </div>
+      <div class="preview-container">
+        <div id="markdownPreview">
+          <div class="preview-title">📄 Preview - article.md</div>
+          <pre id="previewContent"></pre>
+        </div>
+        <div id="renderedPreview" style="display: none;">
+          <div class="preview-title">👁️ Rendered Preview</div>
+          <div class="rendered-preview" id="renderedContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // Store uploaded images
+    let uploadedImages = [];
+    let coverImage = null;
+    let imageCounter = 0;
+
+    // Set today's date as default
+    document.getElementById('date').valueAsDate = new Date();
+
+    // Auto-generate slug from title
+    document.getElementById('title').addEventListener('input', (e) => {
+      const title = e.target.value;
+      const slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      document.getElementById('slug').value = slug;
+      document.getElementById('slugPreview').textContent = slug || 'article-slug';
+    });
+
+    // Update slug preview
+    document.getElementById('slug').addEventListener('input', (e) => {
+      document.getElementById('slugPreview').textContent = e.target.value || 'article-slug';
+    });
+
+    // Update target preview
+    document.getElementById('target').addEventListener('change', (e) => {
+      document.getElementById('targetPreview').textContent = e.target.value;
+    });
+
+    // Meta character counter
+    document.getElementById('meta').addEventListener('input', (e) => {
+      document.getElementById('metaCount').textContent = e.target.value.length;
+    });
+
+    // Handle image upload
+    document.getElementById('imageUpload').addEventListener('change', (e) => {
+      const files = e.target.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+          imageCounter++;
+          const imageName = file.name.replace(/\s+/g, '-').toLowerCase();
+          const imageData = {
+            id: imageCounter,
+            name: imageName,
+            originalName: file.name,
+            data: event.target.result,
+            file: file
+          };
+          uploadedImages.push(imageData);
+          renderImagesList();
+        };
+        
+        reader.readAsDataURL(file);
+      }
+      e.target.value = ''; // Reset input
+    });
+
+    // Handle cover image upload
+    document.getElementById('coverUpload').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const webpData = await convertToWebP(file);
+        coverImage = {
+          name: 'cover.webp',
+          data: webpData
+        };
+        renderCoverPreview();
+        showAlert('Cover image uploaded and converted to WebP!', 'success');
+      } catch (error) {
+        showAlert('Failed to convert cover image to WebP', 'error');
+      }
+
+      e.target.value = ''; // Reset input
+    });
+
+    function convertToWebP(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+              reject(new Error('Failed to get canvas context'));
+              return;
+            }
+            ctx.drawImage(img, 0, 0);
+            // Convert to WebP with quality 0.9
+            const webpData = canvas.toDataURL('image/webp', 0.9);
+            resolve(webpData);
+          };
+          img.onerror = () => reject(new Error('Failed to load image'));
+          img.src = e.target.result;
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderCoverPreview() {
+      const coverPreview = document.getElementById('coverPreview');
+      if (!coverImage) {
+        coverPreview.innerHTML = '<p class="help-text">No cover image uploaded</p>';
+        return;
+      }
+
+      coverPreview.innerHTML = `
+        <div class="image-item">
+          <img src="${coverImage.data}" alt="Cover">
+          <input type="text" value="${coverImage.name}" readonly style="flex: 1;">
+          <button class="btn-small btn-danger" onclick="removeCover()">Remove</button>
+        </div>
+      `;
+    }
+
+    function removeCover() {
+      coverImage = null;
+      renderCoverPreview();
+      showAlert('Cover image removed', 'success');
+    }
+
+    function renderImagesList() {
+      const imagesList = document.getElementById('imagesList');
+      const uploadInfo = document.getElementById('uploadInfo');
+      const imageCount = document.getElementById('imageCount');
+      
+      const totalFiles = uploadedImages.length + (coverImage ? 1 : 0);
+      
+      if (uploadedImages.length === 0) {
+        imagesList.innerHTML = '<p class="help-text">No images uploaded yet</p>';
+      } else {
+        imagesList.innerHTML = uploadedImages.map(img => `
+          <div class="image-item">
+            <img src="${img.data}" alt="${img.name}">
+            <input type="text" value="${img.name}" onchange="updateImageName(${img.id}, this.value)" placeholder="image-name.jpg">
+            <button class="btn-small btn-insert" onclick="insertImageAtCursor('${img.name}')">Insert</button>
+            <button class="btn-small btn-danger" onclick="removeImage(${img.id})">Remove</button>
+          </div>
+        `).join('');
+      }
+
+      if (totalFiles === 0) {
+        uploadInfo.style.display = 'none';
+      } else {
+        uploadInfo.style.display = 'block';
+        imageCount.textContent = totalFiles;
+      }
+    }
+
+    function updateImageName(id, newName) {
+      const image = uploadedImages.find(img => img.id === id);
+      if (image) {
+        image.name = newName.replace(/\s+/g, '-').toLowerCase();
+        renderImagesList();
+      }
+    }
+
+    function removeImage(id) {
+      uploadedImages = uploadedImages.filter(img => img.id !== id);
+      renderImagesList();
+    }
+
+    function insertImageAtCursor(imageName) {
+      const textarea = document.getElementById('content');
+      const cursorPos = textarea.selectionStart;
+      const textBefore = textarea.value.substring(0, cursorPos);
+      const textAfter = textarea.value.substring(cursorPos);
+      
+      const imageMarkdown = `\n![Alt text](${imageName})\n`;
+      textarea.value = textBefore + imageMarkdown + textAfter;
+      
+      // Move cursor after inserted text
+      const newCursorPos = cursorPos + imageMarkdown.length;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
+      
+      showAlert(`Image "${imageName}" inserted at cursor position!`, 'success');
+    }
+
+    function switchTab(tab) {
+      const markdownTab = document.querySelector('.tab-btn:nth-child(1)');
+      const renderedTab = document.querySelector('.tab-btn:nth-child(2)');
+      const markdownPreview = document.getElementById('markdownPreview');
+      const renderedPreview = document.getElementById('renderedPreview');
+
+      if (tab === 'markdown') {
+        markdownTab.classList.add('active');
+        renderedTab.classList.remove('active');
+        markdownPreview.style.display = 'block';
+        renderedPreview.style.display = 'none';
+      } else {
+        markdownTab.classList.remove('active');
+        renderedTab.classList.add('active');
+        markdownPreview.style.display = 'none';
+        renderedPreview.style.display = 'block';
+        renderMarkdownPreview();
+      }
+    }
+
+    function renderMarkdownPreview() {
+      const content = document.getElementById('content').value;
+      let htmlContent = marked.parse(content);
+      
+      // Replace image references with actual base64 data
+      uploadedImages.forEach(img => {
+        const regex = new RegExp(`src=["']${img.name}["']`, 'g');
+        htmlContent = htmlContent.replace(regex, `src="${img.data}"`);
+      });
+
+      document.getElementById('renderedContent').innerHTML = htmlContent;
+    }
+
+    function showAlert(message, type = 'success') {
+      const alertDiv = document.getElementById('alert');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      alertDiv.style.display = 'block';
+      setTimeout(() => {
+        alertDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    function generateArticleContent() {
+      const title = document.getElementById('title').value;
+      const author = document.getElementById('author').value;
+      const date = document.getElementById('date').value;
+      const topics = document.getElementById('topics').value;
+      const meta = document.getElementById('meta').value;
+      const target = document.getElementById('target').value;
+      const language = document.getElementById('language').value;
+      const published = document.getElementById('published').checked;
+      const content = document.getElementById('content').value;
+
+      if (!title || !content) {
+        showAlert('Title and content are required!', 'error');
+        return null;
+      }
+
+      // Parse topics
+      const topicsArray = topics
+        ? topics.split(',').map(t => t.trim()).filter(Boolean)
+        : [];
+
+      // Build frontmatter
+      let frontmatter = '---\n';
+      frontmatter += `title: "${title}"\n`;
+      if (author) frontmatter += `author: "${author}"\n`;
+      if (date) frontmatter += `date: ${date}\n`;
+      if (topicsArray.length > 0) {
+        frontmatter += `topics: [${topicsArray.map(t => `"${t}"`).join(', ')}]\n`;
+      }
+      if (meta) frontmatter += `meta: "${meta}"\n`;
+      if (target) frontmatter += `target: "${target}"\n`;
+      if (language) frontmatter += `language: "${language}"\n`;
+      if (coverImage) frontmatter += `cover: "cover.webp"\n`;
+      frontmatter += `published: ${published}\n`;
+      frontmatter += '---\n\n';
+
+      return frontmatter + content;
+    }
+
+    function previewArticle() {
+      const articleContent = generateArticleContent();
+      if (!articleContent) return;
+
+      document.getElementById('previewContent').textContent = articleContent;
+      document.getElementById('previewSection').style.display = 'block';
+      
+      // Reset to markdown tab
+      switchTab('markdown');
+      
+      document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+      showAlert('Preview generated successfully! Switch to Rendered tab to see the formatted output.', 'success');
+    }
+
+    function downloadArticle() {
+      const articleContent = generateArticleContent();
+      if (!articleContent) return;
+
+      const slug = document.getElementById('slug').value || 'article';
+      
+      // Create instructions for user
+      let instructions = `Article files downloaded!\n\nNext steps:\n`;
+      instructions += `1. Create a folder named "${slug}" in public/content/articles/\n`;
+      instructions += `2. Place article.md in that folder\n`;
+      
+      let downloadCount = 0;
+      let fileList = [];
+
+      // Download article
+      downloadFile(articleContent, 'article.md', 'text/markdown');
+      
+      // Download cover if exists
+      if (coverImage) {
+        fileList.push('cover.webp');
+        downloadCount++;
+        setTimeout(() => {
+          downloadFile(coverImage.data, 'cover.webp', 'image/webp', true);
+        }, 500);
+      }
+      
+      // Download other images
+      if (uploadedImages.length > 0) {
+        uploadedImages.forEach(img => fileList.push(img.name));
+        downloadCount += uploadedImages.length;
+        
+        setTimeout(() => {
+          uploadedImages.forEach((img, index) => {
+            setTimeout(() => {
+              downloadFile(img.data, img.name, 'image/*', true);
+            }, (index + 1) * 500); // Stagger downloads (start after cover)
+          });
+        }, coverImage ? 1000 : 500);
+      }
+
+      if (downloadCount > 0) {
+        instructions += `3. Place these ${downloadCount} file(s) in the same folder:\n`;
+        fileList.forEach(name => {
+          instructions += `   - ${name}\n`;
+        });
+        
+        showAlert(`Downloading article.md and ${downloadCount} file(s)...`, 'success');
+        setTimeout(() => {
+          alert(instructions);
+        }, 1000);
+      } else {
+        downloadFile(articleContent, 'article.md', 'text/markdown');
+        showAlert(instructions, 'success');
+      }
+    }
+
+    function downloadFile(content, filename, type, isBase64 = false) {
+      let blob;
+      if (isBase64) {
+        // Convert base64 to blob
+        const base64Data = content.split(',')[1];
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        blob = new Blob([byteArray], { type: type });
+      } else {
+        blob = new Blob([content], { type: type });
+      }
+      
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function resetForm() {
+      if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+        document.getElementById('articleForm').reset();
+        document.getElementById('date').valueAsDate = new Date();
+        document.getElementById('slugPreview').textContent = 'article-slug';
+        document.getElementById('targetPreview').textContent = 'beginner';
+        document.getElementById('metaCount').textContent = '0';
+        document.getElementById('previewSection').style.display = 'none';
+        uploadedImages = [];
+        coverImage = null;
+        imageCounter = 0;
+        renderImagesList();
+        renderCoverPreview();
+        showAlert('Form reset successfully!', 'success');
+      }
+    }
+
+    // Prevent form submission
+    document.getElementById('articleForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  </script>
+</body>
+</html>

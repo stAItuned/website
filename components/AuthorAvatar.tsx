@@ -24,11 +24,11 @@ export default function AuthorAvatar({ author, authorData }: AuthorAvatarProps) 
         className="rounded-full object-cover"
       />
       <div className="flex flex-col">
-        <div className="font-medium text-gray-900">
+        <div className="font-medium text-gray-900 dark:text-white">
           {authorData?.name || author}
         </div>
         {authorData?.title && (
-          <div className="text-xs text-gray-500 mt-0.5">
+          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             {authorData.title}
           </div>
         )}
