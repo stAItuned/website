@@ -44,7 +44,11 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
           const { data: cachedData, timestamp } = JSON.parse(cached)
           // Cache for 5 minutes (data updates hourly anyway)
           if (Date.now() - timestamp < 5 * 60 * 1000) {
-            setData(cachedData)
+            // Normalize cached data structure as well
+            const normalizedCached = cachedData?.totalStats 
+              ? cachedData.totalStats 
+              : cachedData
+            setData(normalizedCached)
             return
           }
         } catch (e) {
@@ -106,12 +110,17 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
       }
 
       if (response.ok && result && result.success && result.data) {
-        setData(result.data)
+        // Normalize data structure: if we get totalStats, extract it
+        const normalizedData = result.data.totalStats 
+          ? result.data.totalStats 
+          : result.data
+        
+        setData(normalizedData)
 
         // Cache for 5 minutes
         if (typeof window !== 'undefined') {
           localStorage.setItem(cacheKey, JSON.stringify({
-            data: result.data,
+            data: normalizedData,
             timestamp: Date.now(),
             source: result.source
           }))

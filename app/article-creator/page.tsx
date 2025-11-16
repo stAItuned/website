@@ -231,18 +231,20 @@ export default function ArticleCreator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 py-8 px-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-2xl p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">📝 Create New Article</h1>
-        <p className="text-gray-600 mb-6">Create beautiful articles for your website</p>
+    <div className="stai-body py-8 px-4">
+      <div className="max-w-4xl mx-auto stai-glass-panel rounded-lg p-8">
+        <h1 className="text-3xl font-bold stai-text mb-2">📝 Create New Article</h1>
+        <p className="stai-text-muted mb-6">Create beautiful articles for your website</p>
 
         {message.text && (
           <div
-            className={`p-4 rounded-md mb-6 ${
-              message.type === 'success' ? 'bg-green-50 text-green-800 border-2 border-green-200' : 'bg-red-50 text-red-800'
+            className={`p-4 rounded-md mb-6 stai-border ${
+              message.type === 'success'
+                ? 'bg-green-50 dark:bg-green-800 text-green-800 dark:text-green-200 border-2 border-green-200 dark:border-green-700'
+                : 'bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-200'
             }`}
           >
-            <div className="font-semibold mb-2">{message.text}</div>
+            <div className="font-semibold mb-2 stai-text">{message.text}</div>
             {message.type === 'success' && slug && (
               <div className="mt-3 flex gap-3">
                 <button
@@ -280,10 +282,10 @@ export default function ArticleCreator() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+  <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium stai-text mb-2">
               Title *
             </label>
             <input
@@ -292,14 +294,14 @@ export default function ArticleCreator() {
               required
               value={formData.title}
               onChange={handleTitleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
               placeholder="Enter article title"
             />
           </div>
 
           {/* Slug (auto-generated, editable) */}
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="slug" className="block text-sm font-medium stai-text mb-2">
               Slug (URL path) *
             </label>
             <input
@@ -308,17 +310,17 @@ export default function ArticleCreator() {
               required
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
               placeholder="article-slug"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs stai-text-muted mt-1">
               URL will be: /learn/{formData.target}/{slug}
             </p>
           </div>
 
           {/* Author */}
           <div>
-            <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="author" className="block text-sm font-medium stai-text mb-2">
               Author
             </label>
             <input
@@ -326,14 +328,14 @@ export default function ArticleCreator() {
               id="author"
               value={formData.author}
               onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
               placeholder="Author name"
             />
           </div>
 
           {/* Date */}
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="date" className="block text-sm font-medium stai-text mb-2">
               Date
             </label>
             <input
@@ -341,13 +343,13 @@ export default function ArticleCreator() {
               id="date"
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
             />
           </div>
 
           {/* Topics */}
           <div>
-            <label htmlFor="topics" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="topics" className="block text-sm font-medium stai-text mb-2">
               Topics (comma-separated)
             </label>
             <input
@@ -355,21 +357,21 @@ export default function ArticleCreator() {
               id="topics"
               value={formData.topics}
               onChange={(e) => setFormData({ ...formData, topics: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
               placeholder="AI, Machine Learning, Deep Learning"
             />
           </div>
 
           {/* Target */}
           <div>
-            <label htmlFor="target" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="target" className="block text-sm font-medium stai-text mb-2">
               Target Category *
             </label>
             <select
               id="target"
               value={formData.target}
               onChange={(e) => setFormData({ ...formData, target: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
             >
               <option value="Newbie">Newbie</option>
               <option value="Midway">Midway</option>
@@ -379,14 +381,14 @@ export default function ArticleCreator() {
 
           {/* Language */}
           <div>
-            <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="language" className="block text-sm font-medium stai-text mb-2">
               Language
             </label>
             <select
               id="language"
               value={formData.language}
               onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
             >
               <option value="en">English</option>
               <option value="it">Italian</option>
@@ -395,7 +397,7 @@ export default function ArticleCreator() {
 
           {/* Meta Description */}
           <div>
-            <label htmlFor="meta" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="meta" className="block text-sm font-medium stai-text mb-2">
               Meta Description
             </label>
             <textarea
@@ -403,7 +405,7 @@ export default function ArticleCreator() {
               value={formData.meta}
               onChange={(e) => setFormData({ ...formData, meta: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
               placeholder="Brief description for SEO (max 160 characters)"
               maxLength={160}
             />
@@ -411,10 +413,10 @@ export default function ArticleCreator() {
 
           {/* Cover Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium stai-text mb-2">
               Cover Image (WebP)
             </label>
-            <div className="p-5 bg-gray-50 border-2 border-gray-200 rounded-md">
+            <div className="p-5 stai-glass-panel rounded-md">
               <div className="mb-3">
                 <label
                   htmlFor="coverUpload"
@@ -429,21 +431,21 @@ export default function ArticleCreator() {
                   onChange={handleCoverUpload}
                   className="hidden"
                 />
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs stai-text-muted mt-2">
                   Upload any image format - will be automatically converted to WebP
                 </p>
               </div>
 
               {coverImage ? (
-                <div className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-md">
+                <div className="flex items-center gap-3 p-3 stai-glass-panel stai-border rounded-md">
                   <img
                     src={coverImage.data}
                     alt="Cover"
                     className="w-32 h-32 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">cover.webp</p>
-                    <p className="text-sm text-green-600">✓ Ready to upload</p>
+                    <p className="font-medium stai-text">cover.webp</p>
+                    <p className="text-sm text-green-600 dark:text-green-300">✓ Ready to upload</p>
                   </div>
                   <button
                     type="button"
@@ -454,14 +456,14 @@ export default function ArticleCreator() {
                   </button>
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">No cover image uploaded</p>
+                <p className="text-sm stai-text-muted">No cover image uploaded</p>
               )}
             </div>
           </div>
 
           {/* Content */}
           <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="content" className="block text-sm font-medium stai-text mb-2">
               Article Content (Markdown) *
             </label>
             <textarea
@@ -471,15 +473,15 @@ export default function ArticleCreator() {
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               rows={20}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+              className="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
               placeholder="Write your article content in Markdown format..."
             />
           </div>
 
           {/* Images Section */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Article Images</label>
-            <div className="p-5 bg-gray-50 border-2 border-gray-200 rounded-md">
+            <label className="block text-sm font-medium stai-text mb-2">Article Images</label>
+            <div className="p-5 stai-glass-panel rounded-md">
               <div className="mb-4">
                 <label
                   htmlFor="imageUpload"
@@ -502,13 +504,10 @@ export default function ArticleCreator() {
 
               <div className="space-y-2">
                 {uploadedImages.length === 0 ? (
-                  <p className="text-sm text-gray-500">No images uploaded yet</p>
+                  <p className="text-sm stai-text-muted">No images uploaded yet</p>
                 ) : (
                   uploadedImages.map((img) => (
-                    <div
-                      key={img.id}
-                      className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-md"
-                    >
+                    <div key={img.id} className="flex items-center gap-3 p-3 stai-glass-panel stai-border rounded-md">
                       <img
                         src={img.data}
                         alt={img.name}
@@ -518,7 +517,7 @@ export default function ArticleCreator() {
                         type="text"
                         value={img.name}
                         onChange={(e) => updateImageName(img.id, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="flex-1 px-3 py-2 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent stai-border bg-white dark:bg-[rgba(11,14,32,0.85)] text-gray-900 dark:text-white"
                         placeholder="image-name.jpg"
                       />
                       <button
@@ -549,9 +548,9 @@ export default function ArticleCreator() {
               id="published"
               checked={formData.published}
               onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 stai-border bg-white dark:bg-[rgba(11,14,32,0.85)]"
             />
-            <label htmlFor="published" className="ml-2 text-sm font-medium text-gray-700">
+            <label htmlFor="published" className="ml-2 text-sm font-medium stai-text">
               Publish immediately
             </label>
           </div>
@@ -568,7 +567,7 @@ export default function ArticleCreator() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-6 py-3 border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="px-6 py-3 rounded-md font-medium stai-border stai-text hover:bg-[rgba(255,255,255,0.02)] dark:hover:bg-[rgba(255,255,255,0.02)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Cancel
             </button>
@@ -576,7 +575,7 @@ export default function ArticleCreator() {
 
           {/* Upload info */}
           {(uploadedImages.length > 0 || coverImage) && (
-            <div className="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-md p-3">
+            <div className="text-sm stai-text-muted bg-[rgba(59,130,246,0.06)] dark:bg-[rgba(59,130,246,0.08)] border border-blue-200 dark:border-blue-900 rounded-md p-3">
               {coverImage && (
                 <div className="mb-1">
                   <strong>�️ Cover:</strong> cover.webp
@@ -593,14 +592,14 @@ export default function ArticleCreator() {
 
         {/* Preview Section */}
         {formData.content && (
-          <div className="mt-8">
+            <div className="mt-8">
             <div className="flex gap-2 mb-2">
               <button
                 onClick={() => setActiveTab('markdown')}
                 className={`px-4 py-2 rounded-t-md font-medium transition ${
                   activeTab === 'markdown'
-                    ? 'bg-gray-100 text-blue-600 border-b-2 border-blue-600'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    ? 'bg-[rgba(255,255,255,0.06)] dark:bg-[rgba(255,255,255,0.04)] text-blue-600 border-b-2 border-blue-600'
+                    : 'bg-[rgba(255,255,255,0.02)] dark:bg-transparent stai-text-muted hover:bg-[rgba(255,255,255,0.03)]'
                 }`}
               >
                 📝 Markdown
@@ -609,27 +608,27 @@ export default function ArticleCreator() {
                 onClick={() => setActiveTab('rendered')}
                 className={`px-4 py-2 rounded-t-md font-medium transition ${
                   activeTab === 'rendered'
-                    ? 'bg-gray-100 text-blue-600 border-b-2 border-blue-600'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    ? 'bg-[rgba(255,255,255,0.06)] dark:bg-[rgba(255,255,255,0.04)] text-blue-600 border-b-2 border-blue-600'
+                    : 'bg-[rgba(255,255,255,0.02)] dark:bg-transparent stai-text-muted hover:bg-[rgba(255,255,255,0.03)]'
                 }`}
               >
                 👁️ Rendered
               </button>
             </div>
 
-            <div className="border-2 border-gray-200 rounded-md p-6 bg-gray-50">
+            <div className="border-2 stai-border rounded-md p-6 stai-glass-panel">
               {activeTab === 'markdown' ? (
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">📄 Markdown Preview</h3>
-                  <pre className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-sm">
+                  <h3 className="font-semibold stai-text mb-3">📄 Markdown Preview</h3>
+                  <pre className="stai-markdown p-4 rounded-md overflow-x-auto text-sm">
                     {formData.content}
                   </pre>
                 </div>
               ) : (
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">👁️ Rendered Preview</h3>
+                  <h3 className="font-semibold stai-text mb-3">👁️ Rendered Preview</h3>
                   <div
-                    className="prose prose-lg max-w-none bg-white p-6 rounded-md"
+                    className="prose prose-lg max-w-none stai-markdown p-6 rounded-md stai-glass-panel stai-border"
                     dangerouslySetInnerHTML={{ __html: renderedHtml }}
                   />
                 </div>
