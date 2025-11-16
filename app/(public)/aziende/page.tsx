@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
-import { ExamplesSection } from './ExamplesSection'
 import { ContactCtaWithModal } from './ContactCtaWithModal'
 
 export const dynamic = 'force-static'
@@ -133,23 +132,36 @@ const steps = [
 export default function AziendePage() {
   return (
     <PageTransition>
-      <div className="max-w-6xl mx-auto mt-[150px] mb-32 px-4 space-y-16">
-        <nav className="flex items-center gap-3 text-sm font-semibold text-primary-500 bg-slate-100 px-6 py-4 rounded-xl">
-          <Link href="/" className="opacity-60 hover:opacity-100">
+      <div className="max-w-7xl mx-auto mt-[120px] mb-32 px-4 space-y-20">
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-3 text-sm font-medium text-slate-600 bg-white border border-slate-200 px-6 py-3 rounded-xl shadow-sm">
+          <Link href="/" className="opacity-60 hover:opacity-100 transition-opacity">
             Home
           </Link>
-          <span>/</span>
-          <span className="text-slate-900">Per le aziende</span>
+          <span className="text-slate-400">/</span>
+          <span className="text-slate-900 font-semibold">Per le aziende</span>
         </nav>
 
-        <section className="grid gap-10 lg:grid-cols-[1.3fr,0.7fr] items-start">
-          <div className="space-y-6">
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Sales page</p>
-            <p className="text-xs uppercase tracking-[0.5em] text-amber-400">AI per PMI · MVP in 2 settimane</p>
-            <h1 className="text-4xl md:text-5xl font-semibold text-slate-900">
-              AI strategica per PMI: dal problema al primo MVP in 2 settimane
-            </h1>
-            <div className="space-y-3 text-lg text-slate-700 leading-relaxed">
+        {/* Hero Section */}
+        <section className="grid gap-12 lg:grid-cols-[1.4fr,0.6fr] items-center">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
+                  🚀 AI per PMI
+                </div>
+                <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                  ⚡ MVP in 2 settimane
+                </div>
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+                AI strategica per PMI:
+                <span className="text-amber-500 block mt-2">
+                  dal problema al primo MVP in 2 settimane
+                </span>
+              </h1>
+            </div>
+            <div className="space-y-6 text-xl text-slate-700 leading-relaxed">
               <p>
                 <strong>StAItuned</strong> affianca <strong>PMI e aziende in crescita</strong> come <strong>AI Strategy & Product Lead</strong>. Insieme capiamo quali processi hanno più margine di miglioramento, quali dati stai già producendo e quali soluzioni di <strong>AI e GenAI</strong> hanno senso per il tuo contesto.
               </p>
@@ -161,99 +173,163 @@ export default function AziendePage() {
               </p>
             </div>
           </div>
-            <div className="rounded-3xl border border-white/60 bg-slate-900 p-8 text-slate-50 shadow-2xl">
-              <p className="text-sm uppercase tracking-[0.4em] text-amber-400">Call gratuita</p>
-              <p className="mt-4 text-lg font-semibold text-white">
-                Prenota una sessione di diagnosi (30’) per valutare opportunità immediate.
+                      {/* CTA Card */}
+          <div className="relative">
+            <div className="absolute -inset-4 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-3xl opacity-20 blur-xl"></div>
+            <div className="relative rounded-3xl border-2 border-amber-200 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 text-slate-50 shadow-2xl">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                <p className="text-sm uppercase tracking-[0.4em] text-amber-400 font-semibold">Call gratuita</p>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4 leading-tight">
+                Prenota una sessione di diagnosi (30') per valutare opportunità immediate
+              </h3>
+              <div className="space-y-3 text-sm text-slate-300 mb-6">
+                <div className="flex items-start gap-3">
+                  <span className="text-amber-400 mt-1">✓</span>
+                  <span>Agenda chiara e priorità definite insieme</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-amber-400 mt-1">✓</span>
+                  <span>Proposta MVP per le prossime 2 settimane</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-amber-400 mt-1">✓</span>
+                  <span>1–2 esperimenti concreti da iniziare subito</span>
+                </div>
+              </div>
+              <Link
+                href="#prenota-call"
+                className="group relative overflow-hidden inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-6 py-4 text-center font-bold text-slate-900 transition-all duration-300 hover:from-amber-300 hover:to-amber-400 hover:scale-105 hover:shadow-lg"
+              >
+                <span className="relative z-10">🚀 Prenota la call gratuita</span>
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </Link>
+              <p className="text-xs text-slate-400 text-center mt-3">
+                Nessun impegno • Valore immediato garantito
               </p>
-              <p className="mt-3 text-sm text-slate-300 space-y-2">
-                <span>
-                  Ti mando un’agenda chiara, capiamo insieme le priorità e ti propongo quale MVP possiamo portare in mano al tuo team nelle prossime 2 settimane.
-                </span>
-                <span>
-                  In uscita dalla call hai 1–2 esperimenti concreti da poter iniziare subito, con una stima dei tempi per arrivare alla prima demo funzionante.
-                </span>
-              </p>
-            <Link
-              href="#prenota-call"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:bg-amber-300"
-            >
-              Prenota la call gratuita
-            </Link>
+            </div>
           </div>
         </section>
 
-        <section className="space-y-8">
-          <h2 className="text-3xl font-semibold text-slate-900">Problemi che affrontiamo ogni giorno</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {problems.map((problem) => (
-              <div key={problem} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <p className="font-semibold text-slate-900">{problem}</p>
+        <section className="space-y-10">
+          <div className="text-center space-y-4">
+            <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
+              ⚠️ Problemi comuni
+            </div>
+            <h2 className="text-4xl font-bold text-slate-900">Problemi che affrontiamo ogni giorno</h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              Situazioni che riconosciamo in molte PMI e che limitano la crescita e l'efficienza operativa
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {problems.map((problem, index) => (
+              <div key={problem} className="group relative rounded-2xl border-2 border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-red-200 hover:shadow-md hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-bold">
+                    {index + 1}
+                  </div>
+                  <p className="font-semibold text-slate-900 leading-relaxed">{problem}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="space-y-8">
-          <div className="flex flex-col gap-3 md:flex-row md:items-baseline md:justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Servizi</p>
-              <h3 className="text-3xl font-semibold text-slate-900">Cosa facciamo insieme</h3>
+        <section className="space-y-10">
+          <div className="text-center space-y-4">
+            <div className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
+              🛠️ I nostri servizi
             </div>
-            <p className="text-sm text-slate-500 max-w-xl">
+            <h3 className="text-4xl font-bold text-slate-900">Cosa facciamo insieme</h3>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
               Portfolio snello e focalizzato: pochi servizi ben definiti che vanno dalla diagnosi al rilascio di un primo MVP in 2 settimane.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {services.map((service) => (
-              <article key={service.title} className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                <h4 className="text-xl font-semibold text-slate-900">{service.title}</h4>
-                <p className="text-sm text-slate-600">{service.description}</p>
+          <div className="grid gap-8 md:grid-cols-3">
+            {services.map((service, index) => (
+              <article key={service.title} className="group relative space-y-4 rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 p-8 shadow-sm transition-all duration-300 hover:border-blue-200 hover:shadow-lg hover:-translate-y-1">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                    {index + 1}
+                  </div>
+                  <h4 className="text-xl font-bold text-slate-900">{service.title}</h4>
+                </div>
+                <p className="text-slate-600 leading-relaxed">{service.description}</p>
+                <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
+                  <div className="w-6 h-6 bg-blue-500 rounded rotate-12"></div>
+                </div>
               </article>
             ))}
           </div>
         </section>
 
-        <ExamplesSection />
+        {/* <ExamplesSection /> */}
 
-        <section className="space-y-8">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Esempi di soluzioni AI</p>
-            <h3 className="text-3xl font-semibold text-slate-900">Esempi concreti che possiamo costruire insieme</h3>
+        <section className="space-y-10">
+          <div className="text-center space-y-4">
+            <div className="bg-amber-100 text-amber-600 px-4 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
+              💡 Esempi concreti
+            </div>
+            <h3 className="text-4xl font-bold text-slate-900">Soluzioni che possiamo costruire insieme</h3>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              Progetti reali che hanno già generato valore tangibile per PMI simili alla tua
+            </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {solutionExamples.map((example) => (
-              <article key={example.title} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h4 className="text-xl font-semibold text-slate-900">{example.title}</h4>
-                <p className="text-sm text-slate-600">{example.description}</p>
-                <ul className="space-y-2 text-sm text-slate-600">
+          <div className="grid gap-8 md:grid-cols-3">
+            {solutionExamples.map((example, index) => (
+              <article key={example.title} className="group relative space-y-6 rounded-2xl border-2 border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:border-amber-200 hover:shadow-lg hover:-translate-y-1">
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between">
+                    <h4 className="text-xl font-bold text-slate-900 leading-tight">{example.title}</h4>
+                    <div className="w-8 h-8 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                      {index + 1}
+                    </div>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed">{example.description}</p>
+                </div>
+                <ul className="space-y-3 text-sm">
                   {example.bullets.map((bullet) => (
-                    <li key={bullet} className="flex gap-3">
-                      <span aria-hidden className="text-amber-500">•</span>
-                      <span>{bullet}</span>
+                    <li key={bullet} className="flex gap-3 items-start">
+                      <span className="text-amber-500 text-lg mt-0.5">✓</span>
+                      <span className="text-slate-700">{bullet}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{example.footer}</p>
+                <div className="pt-4 border-t border-slate-100">
+                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500 bg-slate-50 px-3 py-2 rounded-full">
+                    {example.footer}
+                  </p>
+                </div>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="space-y-8">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Catalogo di soluzioni</p>
-            <h3 className="text-3xl font-semibold text-slate-900">Portfolio strutturato per ogni area del business</h3>
+        <section className="space-y-10">
+          <div className="text-center space-y-4">
+            <div className="bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
+              📋 Portfolio completo
+            </div>
+            <h3 className="text-4xl font-bold text-slate-900">Soluzioni per ogni area del business</h3>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              Catalogo strutturato di interventi AI che coprono tutte le principali funzioni aziendali
+            </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {catalogItems.map((item) => (
-              <article key={item.title} className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                <h4 className="text-xl font-semibold text-slate-900">{item.title}</h4>
-                <ul className="space-y-2 text-sm text-slate-600">
+          <div className="grid gap-8 md:grid-cols-2">
+            {catalogItems.map((item, index) => (
+              <article key={item.title} className="group relative space-y-6 rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 shadow-sm transition-all duration-300 hover:border-purple-200 hover:shadow-lg hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center font-bold">
+                    {index + 1}
+                  </div>
+                  <h4 className="text-xl font-bold text-slate-900">{item.title}</h4>
+                </div>
+                <ul className="space-y-3">
                   {item.bullets.map((bullet) => (
-                    <li key={bullet} className="flex gap-3">
-                      <span aria-hidden className="text-amber-500">•</span>
-                      <span>{bullet}</span>
+                    <li key={bullet} className="flex gap-3 items-start">
+                      <span className="text-purple-500 text-lg mt-0.5">▸</span>
+                      <span className="text-slate-700 leading-relaxed">{bullet}</span>
                     </li>
                   ))}
                 </ul>
@@ -263,9 +339,14 @@ export default function AziendePage() {
         </section>
 
         <section className="space-y-8">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Processo</p>
-            <h3 className="text-3xl font-semibold text-slate-900">Come lavoriamo</h3>
+          <div className="text-center space-y-4">
+            <div className="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
+              🚀 Metodologia provata
+            </div>
+            <h3 className="text-4xl font-bold text-slate-900">Come lavoriamo insieme</h3>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              Un processo strutturato e trasparente che porta dalla diagnosi alla demo funzionante in 2 settimane
+            </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {steps.map((step) => (
