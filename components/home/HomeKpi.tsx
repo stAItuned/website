@@ -9,30 +9,30 @@ interface HomeKpiProps {
 
 export function HomeKpi({ articleCount, writerCount }: HomeKpiProps) {
   const { data, loading } = useFastAnalytics()
-  const pageViews = data?.pageViews ?? 0
-  const pageViewsLabel = loading && data === null
+  const users = data?.users ?? 0
+  const usersLabel = loading && data === null
     ? '...'
-    : formatAnalyticsNumber(pageViews)
+    : formatAnalyticsNumber(users)
 
   const stats = [
     {
-      value: pageViewsLabel,
-      label: 'letture degli articoli',
+      value: usersLabel,
+      label: 'Utenti Attivi',
       description: 'Contenuti su AI e GenAI letti da studenti, professionisti e aziende.'
     },
     {
       value: `${articleCount}`,
-      label: 'articoli pubblicati',
+      label: 'Articoli Pubblicati',
       description: 'Dalle basi del Machine Learning alle applicazioni concrete per il business.'
     },
     {
       value: `${writerCount}`,
-      label: 'collaboratori',
+      label: 'Collaboratori',
       description: 'Persone che vogliono portare l’AI nel lavoro di tutti i giorni.'
     },
     {
       value: '10+',
-      label: 'prototipi AI sviluppati',
+      label: 'Prototipi AI sviluppati',
       description: 'Strumenti reali per testare sul campo cosa può fare l’AI.'
     },
   ]

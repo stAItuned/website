@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { ExamplesSection } from './ExamplesSection'
+import { ContactCtaWithModal } from './ContactCtaWithModal'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600 // every 6 hours (60 * 60 * 6)
@@ -159,24 +161,24 @@ export default function AziendePage() {
               </p>
             </div>
           </div>
-          <div className="rounded-3xl border border-white/60 bg-slate-900 p-8 text-slate-50 shadow-2xl">
-            <p className="text-sm uppercase tracking-[0.4em] text-amber-400">Call gratuita</p>
-            <p className="mt-4 text-lg font-semibold text-white">
-              Prenota una sessione di diagnosi (30’) per valutare opportunità immediate.
-            </p>
-            <p className="mt-3 text-sm text-slate-300 space-y-2">
-              <span>
-                Ti mando un’agenda chiara, capiamo insieme le priorità e ti propongo quale MVP possiamo portare in mano al tuo team nelle prossime 2 settimane.
-              </span>
-              <span>
-                In uscita dalla call hai 1–2 esperimenti concreti da poter iniziare subito, con una stima dei tempi per arrivare alla prima demo funzionante.
-              </span>
-            </p>
+            <div className="rounded-3xl border border-white/60 bg-slate-900 p-8 text-slate-50 shadow-2xl">
+              <p className="text-sm uppercase tracking-[0.4em] text-amber-400">Call gratuita</p>
+              <p className="mt-4 text-lg font-semibold text-white">
+                Prenota una sessione di diagnosi (30’) per valutare opportunità immediate.
+              </p>
+              <p className="mt-3 text-sm text-slate-300 space-y-2">
+                <span>
+                  Ti mando un’agenda chiara, capiamo insieme le priorità e ti propongo quale MVP possiamo portare in mano al tuo team nelle prossime 2 settimane.
+                </span>
+                <span>
+                  In uscita dalla call hai 1–2 esperimenti concreti da poter iniziare subito, con una stima dei tempi per arrivare alla prima demo funzionante.
+                </span>
+              </p>
             <Link
-              href="mailto:hello@staituned.com"
+              href="#prenota-call"
               className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:bg-amber-300"
             >
-              Scrivimi per prenotare
+              Prenota la call gratuita
             </Link>
           </div>
         </section>
@@ -211,6 +213,8 @@ export default function AziendePage() {
             ))}
           </div>
         </section>
+
+        <ExamplesSection />
 
         <section className="space-y-8">
           <div>
@@ -276,26 +280,7 @@ export default function AziendePage() {
           </p>
         </section>
 
-        <section className="rounded-3xl border border-amber-200 bg-amber-50 p-10 text-center">
-          <h3 className="text-3xl font-semibold text-slate-900">Pronto a trasformare l’AI in valore?</h3>
-          <p className="mt-3 text-slate-700">
-            Ti propongo un piano personalizzato, anche se sei solo alla fase “abbiamo qualche idea ma niente di concreto”. La call iniziale è gratuita e serve a trasformare quelle idee in <strong>1–2 esperimenti reali</strong>, con una demo in <strong>2 settimane</strong>.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <Link
-              href="mailto:hello@staituned.com"
-              className="inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-            >
-              Prenota la call gratuita
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-slate-900 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
-            >
-              Torna alla homepage
-            </Link>
-          </div>
-        </section>
+        <ContactCtaWithModal />
       </div>
     </PageTransition>
   )

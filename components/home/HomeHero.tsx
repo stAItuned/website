@@ -67,7 +67,7 @@ export function HomeHero({
         <p className="text-sm text-slate-200/80 max-w-2xl">
           Se hai una PMI o un’azienda in crescita, inizia da “Per la tua azienda”. Se vuoi imparare, sperimentare e restare aggiornato su AI e GenAI, inizia da “Per imparare e sperimentare”.
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white/10 border border-white/10 rounded-3xl p-4 text-center text-slate-100">
+        {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white/10 border border-white/10 rounded-3xl p-4 text-center text-slate-100">
           {stats.map((stat) => {
             const value = typeof stat.value === 'number' ? stat.value.toLocaleString('it-IT') : stat.value
             const content = (
@@ -91,7 +91,7 @@ export function HomeHero({
               </div>
             )
           })}
-        </div>
+        </div> */}
       </div>
     </section>
   )
