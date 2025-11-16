@@ -59,9 +59,9 @@ export function HomeHero({
             Per imparare e sperimentare
           </Link>
         </div>
-        <p className="text-sm text-slate-200/80 max-w-2xl">
+        {/* <p className="text-sm text-slate-200/80 max-w-2xl">
           Chi arriva da Google/LinkedIn e fa impresa → clicca “Per la tua azienda”. Chi è lettore/nerd → clicca “Per imparare e sperimentare”. Il messaggio è chiaro: 🧠 “Questo posto è di qualcuno che usa l’AI sul serio e aiuta anche le aziende”.
-        </p>
+        </p> */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white/10 border border-white/10 rounded-3xl p-4 text-center text-slate-100">
           {stats.map((stat) => {
             const value = typeof stat.value === 'number' ? stat.value.toLocaleString('it-IT') : stat.value

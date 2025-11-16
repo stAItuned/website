@@ -1,24 +1,39 @@
-export function HomeKpi() {
+'use client'
+
+import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
+
+interface HomeKpiProps {
+  articleCount: number
+  writerCount: number
+}
+
+export function HomeKpi({ articleCount, writerCount }: HomeKpiProps) {
+  const { data, loading } = useFastAnalytics()
+  const pageViews = data?.pageViews ?? 0
+  const pageViewsLabel = loading && data === null
+    ? '...'
+    : formatAnalyticsNumber(pageViews)
+
   const stats = [
     {
-      value: '10k+',
+      value: pageViewsLabel,
       label: 'letture degli articoli',
-      description: 'Contenuti su AI e Machine Learning letti da studenti, professionisti e aziende.'
+      description: 'Contenuti su AI e GenAI letti da studenti, professionisti e aziende.'
     },
     {
-      value: '40+',
+      value: `${articleCount}`,
       label: 'articoli pubblicati',
-      description: 'Dalle basi all’expert: guide, casi d’uso e approfondimenti tecnici.'
+      description: 'Dalle basi del Machine Learning alle applicazioni concrete per il business.'
     },
     {
-      value: '3k+',
-      label: 'iscritti alla newsletter / community',
+      value: `${writerCount}`,
+      label: 'collaboratori',
       description: 'Persone che vogliono portare l’AI nel lavoro di tutti i giorni.'
     },
     {
-      value: '5+',
-      label: 'anni di contenuti su AI',
-      description: 'Esperienza accumulata su progetti reali, non solo teoria.'
+      value: '10+',
+      label: 'prototipi AI sviluppati',
+      description: 'Strumenti reali per testare sul campo cosa può fare l’AI.'
     },
   ]
 
@@ -27,7 +42,7 @@ export function HomeKpi() {
       <div className="text-center space-y-3">
         <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">stAItuned in numeri</p>
         <h2 className="text-3xl font-semibold text-slate-900 dark:text-slate-50 sm:text-4xl">
-          Una community che vive di contenuti e sperimentazione su AI.
+          Una community e un laboratorio di sperimentazione su AI.
         </h2>
       </div>
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
