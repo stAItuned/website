@@ -5,8 +5,9 @@ import { Montserrat } from 'next/font/google'
 import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import FeedbackLauncher from "@/components/feedback/FeedbackLauncher";
 import { CRITICAL_CSS } from '@/lib/performance/criticalStyles'
+
+import FeedbackLoader from '@/components/feedback/FeedbackLoader.client'
 
 // Temporarily disabled to prevent image optimizer overload
 // import { getArticleCoversForPreload } from '@/lib/preload-covers'
@@ -147,7 +148,7 @@ export default function RootLayout({
                 <SearchModal />
               </SearchProvider>
               <Suspense fallback={null}>
-                <FeedbackLauncher />
+                <FeedbackLoader />
               </Suspense>
             </PerformanceProvider>
           </FirebaseAuthProvider>
