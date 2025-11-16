@@ -34,26 +34,33 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
 
     setIsSending(true)
 
+    let ok = false
     try {
       // POST to our API to notify Telegram (and other integrations)
-      await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, company, message, website, consent, page: window.location.pathname, userAgent: navigator.userAgent }),
       })
+
+      ok = res.ok
+      if (!ok) {
+        const text = await res.text().catch(() => '')
+        console.error('Contact submit failed:', res.status, text)
+      }
     } catch (err) {
       console.error('Contact submit failed:', err)
-      // continue anyway to open mail client
     } finally {
       setIsSending(false)
     }
 
-    const subject = encodeURIComponent('Richiesta call gratuita – stAItuned')
-    const body = encodeURIComponent(
-      `Nome: ${name}\nEmail: ${email}\nAzienda: ${company}\n\nMessaggio:\n${message}`
-    )
+    // Notify user of result (simple inline alerts kept to avoid adding deps/UI)
+    if (ok) {
+      alert('Richiesta inviata — ti risponderemo via email a breve.')
+    } else {
+      alert('Si è verificato un problema nell\'invio della richiesta. Riprova più tardi.')
+    }
 
-    window.location.href = `mailto:info@staituned.com?subject=${subject}&body=${body}`
     setIsOpen(false)
   }
 
