@@ -2,8 +2,15 @@
 
 import Script from 'next/script'
 import { GA_MEASUREMENT_ID } from '@/lib/gtag'
+import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
 export function GoogleAnalytics() {
+  const { hasConsentedToAnalytics } = useCookieConsent()
+
+  if (!hasConsentedToAnalytics) {
+    return null
+  }
+
   return (
     <>
       <Script

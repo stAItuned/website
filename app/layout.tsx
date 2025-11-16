@@ -20,6 +20,7 @@ import { SearchProvider } from '@/components/SearchContext'
 import { SearchModal } from '@/components/SearchModal'
 import PerformanceProvider from '@/components/PerformanceProvider'
 import { FirebaseAuthProvider } from '@/components/auth/FirebaseAuthProvider'
+import { CookieConsentProvider } from '@/components/cookies/CookieConsentProvider'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
 
@@ -129,10 +130,11 @@ export default function RootLayout({
       <body className={`${montserrat.className} antialiased stai-body`}>
         <ThemeProvider>
           <FirebaseAuthProvider>
-            <PerformanceProvider 
-              enableMonitoring={process.env.NODE_ENV === 'production'}
-              sampleRate={0.1}
-            >
+            <CookieConsentProvider>
+              <PerformanceProvider 
+                enableMonitoring={process.env.NODE_ENV === 'production'}
+                sampleRate={0.1}
+              >
               <GoogleAnalytics />
               <ServiceWorkerRegister />
               {/* Solo i componenti essenziali sono server-side */}
@@ -150,7 +152,8 @@ export default function RootLayout({
               <Suspense fallback={null}>
                 <FeedbackLoader />
               </Suspense>
-            </PerformanceProvider>
+              </PerformanceProvider>
+            </CookieConsentProvider>
           </FirebaseAuthProvider>
         </ThemeProvider>
       </body>

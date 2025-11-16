@@ -1,5 +1,6 @@
 "use client"
 
+import Link from 'next/link'
 import { FormEvent, useState, Dispatch, SetStateAction } from 'react'
 
 type ContactCtaWithModalProps = {
@@ -24,6 +25,7 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
     const message = (formData.get('message') as string) || ''
     const website = (formData.get('website') as string) || '' // honeypot
     const consent = (formData.get('consent') as string) === 'on'
+    const marketingConsent = (formData.get('marketingConsent') as string) === 'on'
 
     // Basic client-side validation
     if (!consent) {
@@ -40,7 +42,17 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, company, message, website, consent, page: window.location.pathname, userAgent: navigator.userAgent }),
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          message,
+          website,
+          consent,
+          marketingConsent,
+          page: window.location.pathname,
+          userAgent: navigator.userAgent,
+        }),
       })
 
       ok = res.ok
@@ -182,14 +194,24 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
                 />
               </div>
 
-              <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <input id="consent" name="consent" type="checkbox" className="h-4 w-4 rounded" />
+              <div className="mt-2 space-y-3">
+                <div className="flex items-start gap-3">
+                  <input id="consent" name="consent" type="checkbox" className="mt-1 h-4 w-4 rounded" />
                   <label htmlFor="consent" className="text-xs text-slate-400">
-                    Acconsento al trattamento dei dati e alla privacy policy.
+                    Acconsento al trattamento dei dati secondo la{' '}
+                    <Link className="text-amber-500 underline" href="/privacy">
+                      privacy policy
+                    </Link>
+                    .
                   </label>
                 </div>
-                <div className="flex justify-end gap-2">
+                <div className="flex items-start gap-3">
+                  <input id="marketingConsent" name="marketingConsent" type="checkbox" className="mt-1 h-4 w-4 rounded" />
+                  <label htmlFor="marketingConsent" className="text-xs text-slate-400">
+                    Desidero ricevere aggiornamenti, articoli e inviti agli eventi (marketing) da stAItuned.
+                  </label>
+                </div>
+                <div className="flex flex-wrap justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
@@ -207,6 +229,9 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
                 </div>
               </div>
             </form>
+            <p className="mt-4 text-xs text-slate-500">
+              Consulta la <Link className="text-amber-500 underline" href="/privacy">privacy policy</Link> per capire come utilizziamo le informazioni della call e di questo form.
+            </p>
           </div>
         </div>
       )}

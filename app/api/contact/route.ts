@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
-    const { name, email, company, message, page, userAgent, consent } = body || {}
+    const { name, email, company, message, page, userAgent, consent, marketingConsent } = body || {}
 
     if (!message || typeof message !== 'string' || message.trim().length < 3) {
       return NextResponse.json({ error: 'Invalid message' }, { status: 400 })
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     await sendTelegramFeedback({
       category: 'contact',
-      message: `Nome: ${name || 'n/a'}\nAzienda: ${company || 'n/a'}\n\n${message}`,
+      message: `Nome: ${name || 'n/a'}\nAzienda: ${company || 'n/a'}\nNewsletter/marketing: ${marketingConsent ? 'Sì' : 'No'}\n\n${message}`,
       email,
       page: page || '/?source=contact-modal',
       userAgent,

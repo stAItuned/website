@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
-import { LinkedInIcon, InstagramIcon, FacebookIcon, TikTokIcon } from '@/components/icons/SocialIcons'
+import { LinkedInIcon } from '@/components/icons/SocialIcons'
+import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
 const socialLinks = [
   {
@@ -26,10 +29,12 @@ const socialLinks = [
 ]
 
 export function Footer() {
+  const { openPreferences } = useCookieConsent()
+
   return (
-    <footer className="px-16 py-8 bg-primary-600 lg:grid lg:grid-cols-3 flex flex-col justify-self-end items-center space-y-10 lg:space-y-0">
-      <div className="flex flex-col gap-4">
-        <div className="flex space-x-8 justify-start">
+    <footer className="px-8 py-5 bg-primary-600 text-slate-200">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
           {socialLinks.map((social) => {
             const IconComponent = social.icon
             return (
@@ -39,29 +44,38 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${social.name} icon`}
-                className="w-10 h-10 text-slate-200 opacity-50 hover:opacity-100 transition"
+                className="w-8 h-8 text-slate-200 opacity-60 hover:opacity-100 transition"
               >
-                <IconComponent className="w-10 h-10" />
+                <IconComponent className="w-full h-full" />
               </a>
             )
           })}
         </div>
-      </div>
-
-      <div className="flex flex-col items-center space-y-4">
-        <Image
-          src="/assets/general/logo-text.png"
-          alt="stAItuned"
-          width={200}
-          height={50}
-          className="h-12 w-auto"
-        />
-      </div>
-
-      <div className="flex flex-col items-end space-y-4">
-        <p className="text-slate-200 text-sm">
-          © 2024 stAItuned. All rights reserved.
-        </p>
+        <div className="flex items-center gap-6 text-xs uppercase tracking-wide text-slate-200/90">
+          <Link href="/privacy" className="transition hover:text-white">
+            Privacy Policy
+          </Link>
+          <Link href="/cookie-policy" className="transition hover:text-white">
+            Cookie Policy
+          </Link>
+          <button
+            type="button"
+            onClick={openPreferences}
+            className="font-semibold tracking-[0.2em] text-amber-200 underline-offset-2 transition hover:text-white"
+          >
+            Gestisci i cookie
+          </button>
+        </div>
+        <div className="flex items-center gap-3 text-xs">
+          <Image
+            src="/assets/general/logo-text.png"
+            alt="stAItuned"
+            width={140}
+            height={30}
+            className="h-8 w-auto opacity-90"
+          />
+          <p className="text-slate-200/80">© 2024 stAItuned. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   )

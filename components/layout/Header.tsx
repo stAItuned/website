@@ -59,7 +59,7 @@ export function Header() {
   return (
     <>
   <header className={`fixed z-50 px-4 py-3 sm:px-8 sm:py-6 w-full transition-transform duration-300 ${!isScrolled ? 'sm:fixed sm:translate-y-0' : 'sm:fixed sm:-translate-y-full'}`}>
-        <div className="flex justify-between items-start">
+        <div className="relative flex justify-center items-center">
           <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <Image
               src={logoSrc}
