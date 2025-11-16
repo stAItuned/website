@@ -30,13 +30,41 @@ export default function CookiePolicyPage() {
             <article>
               <h3 className="text-base font-semibold text-slate-900">Cookie strettamente necessari</h3>
               <p className="mt-1">
-                Consentono la navigazione e la performance base del sito. Non raccolgono dati personali oltre a quelli tecnici e rimangono attivi anche senza consenso. Esempi: Next.js, session manager e protezioni da bot.</p>
+                Consentono la navigazione e la performance base del sito. Non raccolgono dati personali oltre a quelli tecnici e rimangono attivi anche senza consenso. Esempi: Next.js, session manager e protezioni da bot.
+              </p>
+              <dl className="mt-2 grid gap-2 text-xs text-slate-500">
+                <div>
+                  <dt className="font-semibold text-slate-700">Esempi</dt>
+                  <dd>Session cookie di Next.js / 15 minuti, cookie CSRF o di autenticazione per funzionalità dell'app.</dd>
+                </div>
+              </dl>
             </article>
             <article>
               <h3 className="text-base font-semibold text-slate-900">Cookie di analisi (Google Analytics)</h3>
               <p className="mt-1">
                 Misurano visite e interazioni, aiutandoci a capire quali contenuti funzionano meglio. Utilizziamo Google Analytics (_ga, _gid, _gat) e attiviamo questi cookie solo dopo il consenso registrato dal banner. I dati sono anonimizzati e non vengono combinati con altri identificatori interni.
               </p>
+              <dl className="mt-2 grid gap-2 text-xs text-slate-500">
+                <div>
+                  <dt className="font-semibold text-slate-700">Cookie principali</dt>
+                  <dd>_ga (24 mesi), _gid (24 ore), _gat (1 minuto); gestiti da Google LLC.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-700">Informazioni aggiuntive</dt>
+                  <dd>
+                    Maggiori dettagli sulla privacy di Google Analytics sono disponibili su{' '}
+                    <a
+                      href="https://policies.google.com/privacy"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-amber-600 underline"
+                    >
+                      policies.google.com
+                    </a>
+                    .
+                  </dd>
+                </div>
+              </dl>
             </article>
           </div>
         </section>
@@ -46,12 +74,15 @@ export default function CookiePolicyPage() {
           <p>
             Il consenso viene salvato localmente (localStorage) con la chiave <code className="rounded bg-slate-100 px-1 py-0.5 text-xs">staituned_cookie_consent</code>. Se desideri cambiare idea, elimina questo valore dal tuo browser e ricarica la pagina per far riapparire il banner. Oppure puoi aprire la <Link href="/privacy" className="text-amber-600 underline">Privacy Policy</Link> e scriverci a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link> per una richiesta diretta.
           </p>
+          <p>
+            Puoi anche cliccare sul pulsante “Gestisci i cookie” nel footer per riaprire immediatamente il banner e modificare la tua scelta (Accetta/Rifiuta) senza dover cancellare manualmente il localStorage.
+          </p>
         </section>
 
         <section className="space-y-4 text-sm text-slate-600">
           <h2 className="text-2xl font-semibold text-slate-900">Terze parti</h2>
           <p>
-            Oltre a Google, possiamo avvalerci di servizi esterni per la consegna delle newsletter o per ospitare i contenuti media. Questi partner trattano i dati sulla base delle loro policy (es. Google LLC e i suoi data center). Non vendiamo le informazioni e limitiamo gli scambi solo a quanto necessario per offrire il servizio.
+            Oltre a Google Analytics, possiamo avvalerci di servizi esterni per la consegna delle newsletter, l&apos;invio di notifiche e l&apos;hosting dei contenuti media (es. Google LLC, Telegram). Questi partner trattano i dati sulla base delle loro policy e, dove previsto, applicano strumenti come le Clausole Contrattuali Standard per i trasferimenti UE/extra UE. Non vendiamo le informazioni e limitiamo gli scambi solo a quanto necessario per offrire il servizio.
           </p>
         </section>
 

@@ -15,6 +15,9 @@ export default function PrivacyPage() {
           <p className="text-base text-slate-600">
             Tutte le interazioni con il sito stAItuned sono gestite con rispetto per la tua riservatezza. Questa pagina spiega come trattiamo i dati raccolti dai visitatori del blog, dalle aziende interessate ai nostri servizi AI, dalle persone che prenotano una call e da chi decide di unirsi alla nostra community o newsletter.
           </p>
+          <p className="text-sm text-slate-500">
+            Il titolare del trattamento è Daniele Moltisanti. Email di contatto: <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
+          </p>
         </header>
 
         <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/50 p-6 shadow-sm">
@@ -56,12 +59,22 @@ export default function PrivacyPage() {
         </section>
 
         <section className="space-y-4 text-sm text-slate-600">
-          <h2 className="text-2xl font-semibold text-slate-900">Base giuridica e trasferimento dei dati</h2>
+          <h2 className="text-2xl font-semibold text-slate-900">Base giuridica, trasferimenti e destinatari</h2>
           <p>
-            Il trattamento avviene su base di consenso (art. 6 GDPR) per marketing e analisi, mentre per la risposta alle richieste commerciali e per l&apos;erogazione dei servizi ci basiamo sul legittimo interesse di fornire informazioni personalizzate. I dati possono essere ospitati su fornitori terzi come Vercel (UE/USA) e Telegram (servizio notifiche), che adottano misure adeguate per la protezione dei dati.
+            Il trattamento avviene su base di consenso (art. 6 GDPR) per marketing e analisi, mentre per la risposta alle richieste commerciali e per l&apos;erogazione dei servizi ci basiamo sul legittimo interesse di fornire informazioni personalizzate. Alcuni fornitori (es. Google, Telegram) possono trattare dati da Paesi extra UE: in questi casi il trasferimento avviene sulla base delle Clausole Contrattuali Standard (SCC) o di altri strumenti riconosciuti dal GDPR. Per maggiori dettagli puoi consultare le rispettive privacy policy o scriverci.
           </p>
           <p>
-            Non vendiamo dati a terzi e condividiamo informazioni solo con strumenti necessari al funzionamento del sito o alla comunicazione, come i servizi email e di automazione che ci aiutano a gestire le prenotazioni.</p>
+            Non vendiamo dati a terzi e condividiamo informazioni solo con categorie di soggetti necessari al funzionamento del sito o alla comunicazione, come i servizi email e di automazione che ci aiutano a gestire le prenotazioni.
+          </p>
+          <div className="space-y-2 rounded-2xl border border-slate-200 bg-white/50 p-6 text-sm text-slate-600 shadow-sm">
+            <p className="font-semibold text-slate-900">Possibili destinatari/categorie:</p>
+            <ul className="list-disc pl-4">
+              <li>fornitori di hosting e infrastruttura (es. Firebase, Firestore);</li>
+              <li>servizi di email e newsletter per gestire iscrizioni e conferme di call;</li>
+              <li>strumenti di analytics (es. Google Analytics), attivati solo previo consenso esplicito;</li>
+              <li>strumenti di messaggistica, automazione o task management necessari per coordinare progetti o rispondere alle richieste.</li>
+            </ul>
+          </div>
         </section>
 
         <section className="space-y-4 text-sm text-slate-600">

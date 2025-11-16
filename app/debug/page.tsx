@@ -1,7 +1,6 @@
 export default function DebugPage() {
   const envVars = {
     NODE_ENV: process.env.NODE_ENV,
-    VERCEL: process.env.VERCEL,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL ? 'SET' : 'NOT SET',
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
     GOOGLE_ANALYTICS_PROPERTY_ID: process.env.GOOGLE_ANALYTICS_PROPERTY_ID ? 'SET' : 'NOT SET',
