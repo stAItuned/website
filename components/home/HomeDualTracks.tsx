@@ -3,23 +3,25 @@ import Link from 'next/link'
 const tracks = [
   {
     title: 'Per le aziende',
-    description: 'Un sales page chiaro per PMI: risolviamo problemi concreti, disegniamo servizi su misura e portiamo l’AI dalla strategia al lancio.',
+    description:
+      'Un sales page chiaro per PMI e aziende in crescita: partiamo dalla strategia, selezioniamo i casi d’uso giusti e in 2 settimane mettiamo nelle mani del tuo team una demo/MVP AI funzionante.',
     bullets: [
-      'Problemi tipici PMI: dati inutilizzati, processi lenti, necessità di decisioni rapide.',
-      'Servizi: consulenza strategica, prototipi di automazione, webapp a impatto reale.',
-      'Come lavoriamo: sprint 2 settimane, prototipi testati in produzione con metriche chiare.',
-      'Call gratuita per valutare priorità e definire next step.'
+      'Problemi tipici PMI: dati inutilizzati, processi lenti, clienti poco ingaggiati.',
+      'Soluzioni: assistenti AI per il team, automazioni e sistemi di raccomandazione 1-to-1, micro-webapp integrabili nei sistemi esistenti.',
+      'Come lavoriamo: sprint brevi da 2 settimane, metriche definite prima di iniziare, iterazioni rapide.',
+      'Call gratuita per capire da dove partire e stimare il primo MVP.'
     ],
     href: '/aziende',
     cta: 'Approfondisci il percorso'
   },
   {
     title: 'Learn / Blog',
-    description: 'La tua academy per sperimentare l’AI: guide pratiche, demo di webapp, newsletter e community per nerd curiosi.',
+    description:
+      'La tua academy per sperimentare AI e GenAI: guide pratiche, demo di webapp, newsletter e community per nerd curiosi e professionisti.',
     bullets: [
-      'Articoli e guide aggiornati ad ogni uscita.',
-      'Webapp demo per provare i concetti sul campo.',
-      'Newsletter con insight e spunti operativi.',
+      'Articoli e guide su AI e GenAI aggiornati ad ogni uscita.',
+      'Webapp demo e mini-tool per provare i concetti sul campo.',
+      'Newsletter con insight e spunti operativi da portare nel lavoro.',
       'Spazio aperto per domande, commenti e suggerimenti.'
     ],
     href: '/learn',
@@ -36,7 +38,7 @@ export function HomeDualTracks() {
           Chi viene per l’azienda, chi viene per la curiosità: zero confusione.
         </h2>
         <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-          Le due sezioni parallele mantengono il messaggio coerente e accompagnano ogni visitatore verso il contenuto su misura per lui.
+          stAItuned è sia partner strategico per PMI che vogliono portare l’AI nei processi, sia community e blog per chi vuole imparare e sperimentare.
         </p>
       </div>
       <div className="grid gap-6 md:grid-cols-2">

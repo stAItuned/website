@@ -37,14 +37,19 @@ export function HomeHero({
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 via-slate-900/80 to-slate-900/70" />
       <div className="relative z-20 max-w-6xl mx-auto px-6 py-16 space-y-8 text-slate-100">
         <span className="inline-flex items-center gap-2 text-xs tracking-[0.3em] uppercase text-amber-300">
-          AI pratica · per PMI · per creator
+          AI strategica · per PMI · dal problema al prototipo
         </span>
         <h1 className="text-4xl md:text-6xl font-semibold leading-tight">
-          AI pratica per PMI e professionisti: dalla strategia alle webapp funzionanti
+          AI pratica per PMI: dal foglio di idee al primo MVP in 2 settimane
         </h1>
-        <p className="text-lg md:text-xl text-slate-200 max-w-3xl">
-          Aiuto aziende e creator a usare l’AI per ridurre lavoro manuale, migliorare i processi e lanciare nuovi servizi digitali.
-        </p>
+        <div className="space-y-2 text-lg md:text-xl text-slate-200 max-w-3xl">
+          <p>
+            Ti affianco come AI Strategy & Product Lead: scegliamo 1–2 casi d’uso ad alto impatto, costruiamo una demo/MVP AI funzionante in 2 settimane (assistenti AI, automazioni, sistemi di raccomandazione 1-to-1) e la rendiamo integrabile nei sistemi che usi già (CRM, gestionale, tool interni).
+          </p>
+          <p>
+            Combiniamo GenAI e AI “classica” per far emergere insight dai tuoi dati e trasformarli in strumenti operativi, non solo in una webapp isolata.
+          </p>
+        </div>
         <div className="flex flex-wrap gap-3">
           <Link
             href="/aziende"
@@ -59,9 +64,9 @@ export function HomeHero({
             Per imparare e sperimentare
           </Link>
         </div>
-        {/* <p className="text-sm text-slate-200/80 max-w-2xl">
-          Chi arriva da Google/LinkedIn e fa impresa → clicca “Per la tua azienda”. Chi è lettore/nerd → clicca “Per imparare e sperimentare”. Il messaggio è chiaro: 🧠 “Questo posto è di qualcuno che usa l’AI sul serio e aiuta anche le aziende”.
-        </p> */}
+        <p className="text-sm text-slate-200/80 max-w-2xl">
+          Se hai una PMI o un’azienda in crescita, inizia da “Per la tua azienda”. Se vuoi imparare, sperimentare e restare aggiornato su AI e GenAI, inizia da “Per imparare e sperimentare”.
+        </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white/10 border border-white/10 rounded-3xl p-4 text-center text-slate-100">
           {stats.map((stat) => {
             const value = typeof stat.value === 'number' ? stat.value.toLocaleString('it-IT') : stat.value

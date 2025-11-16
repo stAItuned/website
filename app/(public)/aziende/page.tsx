@@ -11,44 +11,121 @@ export const metadata: Metadata = {
 }
 
 const problems = [
-  'Dati sparsi e poco utilizzati per decisioni strategiche.',
-  'Processi manuali che richiedono tempo e generano errori.',
-  'Mancanza di figure con competenze AI dehors dalle grandi consulenze.',
-  'Difficoltà nel tradurre prototipi in servizi stabili e monitorati.',
+  'Dati sparsi (CRM, gestionale, e-commerce) che non si trasformano in decisioni o azioni concrete.',
+  'Processi manuali che consumano tempo, generano errori e non sono misurati.',
+  'Nessuna figura con competenze di AI e GenAI che parli sia la lingua del business che quella tecnica, senza dover passare per grandi consulenze.',
+  'Prototipi isolati che non arrivano mai in produzione o non si integrano con i sistemi esistenti.',
+  'Difficoltà a costruire esperienze 1-to-1 per i clienti: raccomandazioni, contenuti, offerte davvero personalizzate.'
 ]
 
 const services = [
   {
     title: 'Assessment strategico',
-    description: 'Analizziamo i processi dati, individuiamo opportunità immediate e definiamo metriche condivise.'
+    description:
+      'Analizziamo processi e dati, individuiamo opportunità immediate e definiamo 1–3 casi d’uso prioritari, con metriche condivise.'
   },
   {
-    title: 'Prototipi e webapp',
-    description: 'Costruiamo MVP funzionanti (chatbot, automazioni, pipeline) pronti per essere testati con utenti reali.'
+    title: 'Prototipi e soluzioni AI pronte all’uso',
+    description:
+      'Costruiamo MVP AI funzionanti (assistenti AI, automazioni, sistemi di raccomandazione 1-to-1, cruscotti intelligenti) già pensati per integrarsi con i sistemi che usi oggi.'
   },
   {
     title: 'Delivery & mentoring',
-    description: 'Affianchiamo il team nei primi sprint di rilascio, monitoriamo i KPI e trasferiamo le competenze necessarie.'
+    description:
+      'Affianco il team nei primi sprint di rilascio: monitoriamo KPI, raccogliamo feedback e trasferisco le competenze necessarie per far evolvere la soluzione in autonomia.'
+  }
+]
+
+const solutionExamples = [
+  {
+    title: 'Assistente AI per il team commerciale',
+    description:
+      'Un assistente che legge email, note e storico delle trattative nel CRM e ti aiuta a gestire ogni opportunità rapidamente.',
+    bullets: [
+      'Prepara risposte personalizzate in pochi secondi.',
+      'Suggerisce il prossimo passo per ogni deal.',
+      'Aggiorna automaticamente il CRM dopo ogni interazione.'
+    ],
+    footer:
+      'Pensato per PMI con pochi commerciali che coprono tutto il ciclo: dalla prima risposta fino alla firma.'
   },
+  {
+    title: 'Raccomandazioni 1-to-1 per e-commerce di nicchia',
+    description:
+      'Un motore che unisce dati di navigazione, acquisti e preferenze per proporre prodotti, contenuti e offerte personalizzate.',
+    bullets: [
+      'Suggerisce prodotti affini e bundle pensati per ciascun cliente.',
+      'Propone contenuti utili per far tornare l’utente.',
+      'Aumenta il valore medio del carrello e la retention.'
+    ],
+    footer: 'Ideale per verticali come moda, sport, hobby e prodotti tecnici.'
+  },
+  {
+    title: 'Cruscotto intelligente per studi e team di servizi',
+    description:
+      'Una vista unica su email, documenti e ticket per riassumere conversazioni e trovare informazioni chiave senza caos.',
+    bullets: [
+      'Riassume rapidamente casi e conversazioni con i clienti.',
+      'Trova informazioni chiave senza cercare in mille posti.',
+      'Genera draft di report, verbali e risposte in pochi click.'
+    ],
+    footer:
+      'Perfetto per studi professionali, agenzie e piccole aziende dove il know-how è distribuito tra più persone.'
+  }
+]
+
+const catalogItems = [
+  {
+    title: 'Operation & produttività interna',
+    bullets: [
+      'Assistenti AI per team operation, customer care e amministrazione.',
+      'Automazioni per ridurre attività manuali e copia/incolla tra tool.',
+      'Cruscotti intelligenti che aggregano stato, priorità e anomalie.'
+    ]
+  },
+  {
+    title: 'Marketing & contenuti',
+    bullets: [
+      'Generazione assistita di contenuti (email, post, schede prodotto) guidata dai tuoi dati.',
+      'Segmentazione dinamica del pubblico e messaggi su misura.',
+      'Analisi automatica delle campagne con suggerimenti di ottimizzazione.'
+    ]
+  },
+  {
+    title: 'Vendite & customer experience',
+    bullets: [
+      'Sistemi di raccomandazione 1-to-1 per prodotti, contenuti o servizi.',
+      'Assistenti AI che supportano il commerciale prima, durante e dopo le call.',
+      'Strumenti per seguire il cliente lungo tutto il ciclo di vita.'
+    ]
+  },
+  {
+    title: 'Finanza & controllo di gestione',
+    bullets: [
+      'Reportistica semi-automatica da gestionale, fogli di calcolo e tool di fatturazione.',
+      'Analisi di scenari “what-if” supportata da AI.',
+      'Alert intelligenti su KPI critici (costi, margini, ritardi, anomalie).'
+    ]
+  }
 ]
 
 const steps = [
   {
     title: '1. Diagnosi rapida',
-    description: 'Call gratuita per capire obiettivi, ritmi e criticità, con mappa delle priorità.'
+    description: 'Call gratuita per capire obiettivi, ritmi e criticità, con una mappa delle priorità e 1–2 esperimenti concreti da cui partire.'
   },
   {
     title: '2. Proposta concreta',
-    description: 'Piano operativo con milestone, deliverable e risultati attesi.'
+    description: 'Piano operativo con milestone, deliverable e risultati attesi. Indichiamo da subito quale MVP ha senso consegnare in 2 settimane.'
   },
   {
     title: '3. Sviluppo + validazione',
-    description: 'Sprint agili, test sul campo, feedback e adattamenti in tempo reale.'
+    description: 'Sprint agili per arrivare a una demo/MVP funzionante in 2 settimane: test sul campo con persone reali, feedback e adattamenti in tempo reale.'
   },
   {
     title: '4. Supporto continuo',
-    description: 'Monitoraggio, documentazione e sessioni di mentoring per scalare la soluzione.'
-  },
+    description: 'Monitoraggio, documentazione e sessioni di mentoring per scalare la soluzione e integrarla nei sistemi che usi.'
+  }
 ]
 
 export default function AziendePage() {
@@ -66,23 +143,34 @@ export default function AziendePage() {
         <section className="grid gap-10 lg:grid-cols-[1.3fr,0.7fr] items-start">
           <div className="space-y-6">
             <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Sales page</p>
+            <p className="text-xs uppercase tracking-[0.5em] text-amber-400">AI per PMI · MVP in 2 settimane</p>
             <h1 className="text-4xl md:text-5xl font-semibold text-slate-900">
-              Risolvo problemi reali con l’AI per PMI e professionisti che vogliono entrare nel digitale moderno.
+              AI strategica per PMI: dal problema al primo MVP in 2 settimane
             </h1>
-            <p className="text-lg text-slate-700 leading-relaxed">
-              Aiuto team con budget reali a capire quali automazioni conviene lanciare, come orchestrare dati e processi, e quali webapp costruire per scalare i servizi.
-            </p>
-            <p className="text-sm text-slate-500 max-w-3xl">
-              Lavoro fianco a fianco con leader di PMI e product team per trasformare insight in strumenti funzionanti, con metriche di impatto chiare e iterazioni rapide.
-            </p>
+            <div className="space-y-3 text-lg text-slate-700 leading-relaxed">
+              <p>
+                <strong>StAItuned</strong> affianca <strong>PMI e aziende in crescita</strong> come <strong>AI Strategy & Product Lead</strong>. Insieme capiamo quali processi hanno più margine di miglioramento, quali dati stai già producendo e quali soluzioni di <strong>AI e GenAI</strong> hanno senso per il tuo contesto.
+              </p>
+              <p>
+                Dai <strong>sistemi di raccomandazione 1-to-1</strong> agli <strong>assistenti AI per il team</strong>, dalle <strong>automazioni operative</strong> ai <strong>cruscotti intelligenti</strong>, l’obiettivo è trasformare idee e slide in <strong>soluzioni pronte all’uso</strong>, con metriche chiare e integrazione nei sistemi che usi già.
+              </p>
+              <p>
+                Il primo passo è sempre lo stesso: una <strong>demo/MVP funzionante in circa 2 settimane</strong>, da far provare subito a persone reali.
+              </p>
+            </div>
           </div>
           <div className="rounded-3xl border border-white/60 bg-slate-900 p-8 text-slate-50 shadow-2xl">
             <p className="text-sm uppercase tracking-[0.4em] text-amber-400">Call gratuita</p>
             <p className="mt-4 text-lg font-semibold text-white">
               Prenota una sessione di diagnosi (30’) per valutare opportunità immediate.
             </p>
-            <p className="mt-3 text-sm text-slate-300">
-              Ti mando un’agenda chiara, capiamo insieme le priorità e ti propongo un piano di lavoro con tempi e risultati misurabili.
+            <p className="mt-3 text-sm text-slate-300 space-y-2">
+              <span>
+                Ti mando un’agenda chiara, capiamo insieme le priorità e ti propongo quale MVP possiamo portare in mano al tuo team nelle prossime 2 settimane.
+              </span>
+              <span>
+                In uscita dalla call hai 1–2 esperimenti concreti da poter iniziare subito, con una stima dei tempi per arrivare alla prima demo funzionante.
+              </span>
             </p>
             <Link
               href="mailto:hello@staituned.com"
@@ -111,7 +199,7 @@ export default function AziendePage() {
               <h3 className="text-3xl font-semibold text-slate-900">Cosa facciamo insieme</h3>
             </div>
             <p className="text-sm text-slate-500 max-w-xl">
-              Portfolio snello e focalizzato: pochi servizi ben definiti che vanno dal concept al rilascio.
+              Portfolio snello e focalizzato: pochi servizi ben definiti che vanno dalla diagnosi al rilascio di un primo MVP in 2 settimane.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -119,6 +207,52 @@ export default function AziendePage() {
               <article key={service.title} className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-6">
                 <h4 className="text-xl font-semibold text-slate-900">{service.title}</h4>
                 <p className="text-sm text-slate-600">{service.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Esempi di soluzioni AI</p>
+            <h3 className="text-3xl font-semibold text-slate-900">Esempi concreti che possiamo costruire insieme</h3>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {solutionExamples.map((example) => (
+              <article key={example.title} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h4 className="text-xl font-semibold text-slate-900">{example.title}</h4>
+                <p className="text-sm text-slate-600">{example.description}</p>
+                <ul className="space-y-2 text-sm text-slate-600">
+                  {example.bullets.map((bullet) => (
+                    <li key={bullet} className="flex gap-3">
+                      <span aria-hidden className="text-amber-500">•</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{example.footer}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-amber-500">Catalogo di soluzioni</p>
+            <h3 className="text-3xl font-semibold text-slate-900">Portfolio strutturato per ogni area del business</h3>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {catalogItems.map((item) => (
+              <article key={item.title} className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <h4 className="text-xl font-semibold text-slate-900">{item.title}</h4>
+                <ul className="space-y-2 text-sm text-slate-600">
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet} className="flex gap-3">
+                      <span aria-hidden className="text-amber-500">•</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
@@ -137,12 +271,15 @@ export default function AziendePage() {
               </article>
             ))}
           </div>
+          <p className="text-sm text-slate-600 max-w-3xl">
+            La velocità non viene da “scorciatoie magiche”, ma da esperienza su progetti AI reali, uso intensivo di AI e GenAI anche nei nostri workflow e un focus radicale su pochi casi d’uso alla volta.
+          </p>
         </section>
 
         <section className="rounded-3xl border border-amber-200 bg-amber-50 p-10 text-center">
           <h3 className="text-3xl font-semibold text-slate-900">Pronto a trasformare l’AI in valore?</h3>
           <p className="mt-3 text-slate-700">
-            Ti propongo un piano personalizzato, anche se vuoi solo capire da dove partire. La call iniziale è gratuita e serve a mettere sul tavolo idee concrete.
+            Ti propongo un piano personalizzato, anche se sei solo alla fase “abbiamo qualche idea ma niente di concreto”. La call iniziale è gratuita e serve a trasformare quelle idee in <strong>1–2 esperimenti reali</strong>, con una demo in <strong>2 settimane</strong>.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             <Link
