@@ -23,11 +23,11 @@ interface RelatedArticlesProps {
 export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const [innerWidth, setInnerWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1200
-  )
+  const [innerWidth, setInnerWidth] = useState<number | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
     const handleResize = () => setInnerWidth(window.innerWidth)
     handleResize() // Set initial value
     window.addEventListener('resize', handleResize)
@@ -36,7 +36,7 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlaying || relatedArticles.length <= 2 || innerWidth < 768) return
+    if (!isAutoPlaying || relatedArticles.length <= 2 || !innerWidth || innerWidth < 768) return
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => {
@@ -68,34 +68,56 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
     return null
   }
 
-  const canSlideDesktop = relatedArticles.length > 2 && innerWidth >= 768
+  // Render mobile view by default for SSR, then switch to appropriate view on client
+  if (!isMounted) {
+    return (
+      <section className="w-full">
+        <div className="my-12 sm:my-16 md:my-24 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
+          <h2 className="pb-6 sm:pb-8 md:pb-12 font-bold text-xl sm:text-2xl md:text-3xl leading-tight text-gray-900 dark:text-gray-100">
+            Related articles
+          </h2>
+          <div className="space-y-4">
+            {relatedArticles.map((article) => (
+              <div key={article.slug} className="w-full">
+                <RelatedArticleCard article={article} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  const canSlideDesktop = relatedArticles.length > 2 && innerWidth && innerWidth >= 768
 
   return (
-    <section>
-      <div className="my-24 px-4 max-w-4xl mx-auto">
-        <h2 className="pb-12 font-bold text-2xl leading-5">Related articles:</h2>
+    <section className="w-full">
+      <div className="my-12 sm:my-16 md:my-24 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
+        <h2 className="pb-6 sm:pb-8 md:pb-12 font-bold text-xl sm:text-2xl md:text-3xl leading-tight text-gray-900 dark:text-gray-100">
+          Related articles
+        </h2>
         
         {/* Desktop: Carousel with 2 articles */}
-        {innerWidth >= 768 ? (
+        {innerWidth && innerWidth >= 768 ? (
           <div className="relative">
             {/* Navigation buttons */}
             {canSlideDesktop && (
               <>
                 <button
                   onClick={handlePrevious}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all duration-200"
+                  className="absolute -left-4 lg:-left-12 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 hover:bg-opacity-100 dark:hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all duration-200"
                   aria-label="Previous articles"
                 >
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
                 <button
                   onClick={handleNext}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all duration-200"
+                  className="absolute -right-4 lg:-right-12 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 hover:bg-opacity-100 dark:hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all duration-200"
                   aria-label="Next articles"
                 >
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
@@ -134,8 +156,8 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
                       setCurrentIndex(index)
                       setIsAutoPlaying(false)
                     }}
-                    className={`w-3 h-3 rounded-full transition-colors duration-200 ${
-                      index === currentIndex ? 'bg-primary-600' : 'bg-gray-300'
+                    className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-colors duration-200 ${
+                      index === currentIndex ? 'bg-primary-600 dark:bg-primary-500' : 'bg-gray-300 dark:bg-gray-600'
                     }`}
                     aria-label={`Go to slide ${index + 1}`}
                   />
@@ -144,14 +166,14 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
             )}
           </div>
         ) : (
-          /* Mobile: Simple list like Svelte */
-          <ul className="space-y-0">
+          /* Mobile: Simple list with better spacing */
+          <div className="space-y-4">
             {relatedArticles.map((article) => (
-              <li key={article.slug} className="flex justify-center py-2">
+              <div key={article.slug} className="w-full">
                 <RelatedArticleCard article={article} />
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </section>
