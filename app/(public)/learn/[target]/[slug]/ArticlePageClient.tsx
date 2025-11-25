@@ -579,12 +579,7 @@ export default function ArticlePageClient({
                 {/* Author */}
                 <div className="flex flex-col items-center gap-1 justify-center">
                   {article.author && (
-                    <>
-                      <AuthorAvatar author={article.author} />
-                      {article.author.jobTitle && (
-                        <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">{article.author.jobTitle}</span>
-                      )}
-                    </>
+                    <AuthorAvatar author={article.author} authorData={authorData} />
                   )}
                 </div>
                 {/* Article Title */}
