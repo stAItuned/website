@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react'
 
 export function useScreenSize() {
-  const isServer = typeof window === 'undefined';
-  const [isLarge, setIsLarge] = useState(isServer ? true : window.innerWidth >= 1024);
+  const [isLarge, setIsLarge] = useState(true); // Default to true for SSR
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    if (isServer) return;
+    // Mark as client-side
+    setIsClient(true);
+    // Set initial value
+    setIsLarge(window.innerWidth >= 1024);
+    
     const onResize = () => setIsLarge(window.innerWidth >= 1024);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [isServer]);
+  }, []);
 
-  return isLarge;
+  // During SSR and first render, return true to match server
+  // After hydration, return actual screen size
+  return isClient ? isLarge : true;
 }

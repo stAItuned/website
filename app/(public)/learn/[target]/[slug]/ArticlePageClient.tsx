@@ -26,6 +26,12 @@ export default function ArticlePageClient({
   const isLarge = useScreenSize()
   const [showTocModal, setShowTocModal] = useState(false)
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+  
+  // Fix hydration mismatch by only rendering responsive UI after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   // Debug screen size and TOC
   useEffect(() => {
@@ -386,7 +392,7 @@ export default function ArticlePageClient({
     <PageTransition>
       <section className="relative">
         {/* Mobile TOC Hamburger Button (below header logo) */}
-        {!isLarge && toc.length > 0 && (
+        {mounted && !isLarge && toc.length > 0 && (
           <button
             className="fixed left-4 top-20 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 text-primary-600 focus:outline-none transition-transform duration-200 active:scale-95 hover:bg-primary-50"
             aria-label="Open Table of Contents"
@@ -408,7 +414,7 @@ export default function ArticlePageClient({
           </button>
         )}
         {/* Mobile TOC Modal with animation and blur */}
-        {!isLarge && (
+        {mounted && !isLarge && (
           <div
             className={`fixed inset-0 z-50 flex items-start justify-start transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
             style={{ transitionProperty: 'background,backdrop-filter' }}
@@ -479,7 +485,8 @@ export default function ArticlePageClient({
           </nav>
         </div>
         {/* Responsive: Only render one article version at a time */}
-        {isLarge ? (
+        {/* Render desktop by default for SSR, then switch after mount */}
+        {!mounted || isLarge ? (
           <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
             {/* Left: TOC Sidebar (Desktop only) */}
             <aside className="self-stretch">
