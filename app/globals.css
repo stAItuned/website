@@ -304,13 +304,86 @@ body {
   background-color: rgba(var(--stai-surface-strong-rgb), 0.9);
 }
 
+/* Responsive table wrapper */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* Scrollbar styling for table wrapper */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark .table-wrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile: Add scroll hint shadow */
+@media (max-width: 768px) {
+  .table-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 8px;
+    width: 30px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .dark .table-wrapper::after {
+    background: linear-gradient(to left, rgba(15, 23, 42, 0.8), transparent);
+  }
+
+  .table-wrapper.scrolled-end::after {
+    opacity: 0;
+  }
+}
+
 .stai-markdown table {
   width: 100%;
+  min-width: 600px; /* Ensure table doesn't get too cramped */
   border-collapse: collapse;
-  margin: 1.5rem 0;
+  margin: 0; /* Margin handled by wrapper */
   font-size: 0.9rem;
   background-color: rgba(var(--stai-surface-rgb), 0.8);
   border: 1px solid var(--stai-border);
+}
+
+/* Mobile table adjustments */
+@media (max-width: 768px) {
+  .stai-markdown table {
+    font-size: 0.75rem;
+    min-width: 500px;
+  }
 }
 
 .stai-markdown th,
@@ -318,6 +391,17 @@ body {
   border: 1px solid var(--stai-border);
   padding: 0.75rem;
   text-align: left;
+  white-space: nowrap;
+}
+
+/* Mobile: Allow text wrapping in cells if needed */
+@media (max-width: 768px) {
+  .stai-markdown th,
+  .stai-markdown td {
+    padding: 0.5rem;
+    white-space: normal;
+    min-width: 100px;
+  }
 }
 
 .stai-markdown th {
@@ -464,4 +548,120 @@ body {
 
 .markdown-content hr {
   @apply border-t border-gray-300 dark:border-gray-700 my-8;
+}
+
+/* Mobile-specific article content adjustments */
+@media (max-width: 768px) {
+  .article-mobile-markdown {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .article-mobile-markdown h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-mobile-markdown h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .article-mobile-markdown h3 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-mobile-markdown h4 {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-mobile-markdown p {
+    margin-bottom: 1rem;
+  }
+
+  .article-mobile-markdown ul,
+  .article-mobile-markdown ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-mobile-markdown li {
+    margin-bottom: 0.5rem;
+  }
+
+  .article-mobile-markdown pre {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+  }
+
+  .article-mobile-markdown code {
+    font-size: 0.8rem;
+  }
+
+  .article-mobile-markdown blockquote {
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+  }
+
+  .article-mobile-markdown img {
+    margin: 1rem 0;
+  }
+
+  /* Ensure images don't overflow on mobile */
+  .article-mobile-markdown img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Mobile article card container adjustments */
+  .article-mobile-card {
+    padding: 1rem !important;
+    border-radius: 1rem !important;
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 640px) and (max-width: 768px) {
+  .article-mobile-card {
+    padding: 1.5rem !important;
+  }
+
+  .article-mobile-markdown {
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive prose adjustments for all screen sizes */
+.prose {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.prose pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.prose code {
+  word-break: break-word;
+}
+
+/* Ensure iframe and video elements are responsive */
+.prose iframe,
+.prose video {
+  max-width: 100%;
+  height: auto;
 }

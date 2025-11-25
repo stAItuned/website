@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { marked } from 'marked'
 import { addHeadingIdsToMarkdown } from '@/lib/markdown-headings'
 
@@ -11,6 +11,8 @@ interface MarkdownContentProps {
 }
 
 export function MarkdownContent({ content, className = '', articleSlug }: MarkdownContentProps) {
+  const contentRef = useRef<HTMLDivElement>(null)
+
   const processedContent = useMemo(() => {
     // Configure marked with table support and better options
     marked.setOptions({
@@ -46,11 +48,58 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
       )
     }
 
+    // Wrap tables in a responsive container
+    htmlContent = htmlContent.replace(
+      /<table>/g,
+      '<div class="table-wrapper"><table>'
+    )
+    htmlContent = htmlContent.replace(
+      /<\/table>/g,
+      '</table></div>'
+    )
+
     return htmlContent
   }, [content, articleSlug])
 
+  // Add scroll detection for table wrappers to hide the scroll indicator
+  useEffect(() => {
+    if (!contentRef.current) return
+
+    const tableWrappers = contentRef.current.querySelectorAll('.table-wrapper')
+    
+    const handleScroll = (wrapper: Element) => {
+      const scrollLeft = wrapper.scrollLeft
+      const scrollWidth = wrapper.scrollWidth
+      const clientWidth = wrapper.clientWidth
+      
+      // Check if scrolled to the end
+      if (scrollLeft + clientWidth >= scrollWidth - 5) {
+        wrapper.classList.add('scrolled-end')
+      } else {
+        wrapper.classList.remove('scrolled-end')
+      }
+    }
+
+    const listeners: Array<[Element, () => void]> = []
+
+    tableWrappers.forEach(wrapper => {
+      const listener = () => handleScroll(wrapper)
+      wrapper.addEventListener('scroll', listener)
+      listeners.push([wrapper, listener])
+      // Initial check
+      handleScroll(wrapper)
+    })
+
+    return () => {
+      listeners.forEach(([wrapper, listener]) => {
+        wrapper.removeEventListener('scroll', listener)
+      })
+    }
+  }, [processedContent])
+
   return (
     <div
+      ref={contentRef}
       className={`prose prose-lg max-w-none stai-markdown
         prose-table:border-collapse
         prose-th:border
