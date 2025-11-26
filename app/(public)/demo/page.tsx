@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -28,19 +29,22 @@ const demos: Array<{
     title: 'AI Editorial Planner',
     description: 'Pianificatore editoriale AI per blog e social media. Prototipo basato su progetti reali.',
     tags: ['GenAI', 'Marketing', 'Automazione'],
-    status: 'coming-soon'
+    status: 'coming-soon',
+    image: '/assets/products/editorial_planner.jpeg'
   },
   {
     title: 'Comparatore Fondi Pensione',
     description: 'GenAI per confrontare fondi pensione in base a esigenze personali. Demo da progetto PMI.',
     tags: ['GenAI', 'E-commerce', 'Personalizzazione'],
-    status: 'beta'
+    status: 'beta',
+    image: '/assets/products/fund_comparison.jpeg'
   },
   {
     title: 'Your Document AI Assistant',
     description: 'Il tuo AI assistant dedicato sui tuoi documenti',
     tags: ['GenAI', 'Produttività', 'Enterprise'],
-    status: 'coming-soon'
+    status: 'coming-soon',
+    image: '/assets/products/ai_doc_assistant.jpeg'
   }
 ]
 
@@ -141,41 +145,56 @@ export default function DemoPage() {
                 return (
                   <article
                     key={index}
-                    className="group relative rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm transition-all duration-300 hover:border-amber-300 hover:shadow-lg hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/50"
+                    className="group relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm transition-all duration-300 hover:border-amber-300 hover:shadow-lg hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/50"
                   >
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between">
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${statusColors[demo.status]}`}>
+                    <div className="space-y-5">
+                      <div className="relative h-48 w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800/70">
+                        {demo.image && (
+                          <Image
+                            src={demo.image}
+                            alt={demo.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            priority={index < 2}
+                          />
+                        )}
+                        <span className={`absolute left-4 top-4 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${statusColors[demo.status]}`}>
                           {statusLabels[demo.status]}
                         </span>
+                      </div>
+                      <div className="px-6 pb-6 space-y-3">
+                        <div className="space-y-2">
+                          <h4 className="text-xl font-bold text-slate-900 dark:text-slate-50">
+                            {demo.title}
+                          </h4>
+                          <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
+                            {demo.description}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {demo.tags.map((tag, tagIndex) => (
+                            <span
+                              key={tagIndex}
+                              className="px-2 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-medium dark:bg-slate-800 dark:text-slate-300"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                         {demo.status === 'live' && demo.link && (
-                          <Link
-                            href={demo.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-amber-600 hover:text-amber-700 transition-colors"
-                          >
-                            <span className="text-2xl">→</span>
-                          </Link>
+                          <div className="pt-2">
+                            <Link
+                              href={demo.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 font-semibold transition-colors"
+                            >
+                              <span>Prova la demo</span>
+                              <span className="text-lg">→</span>
+                            </Link>
+                          </div>
                         )}
-                      </div>
-                      <div className="space-y-2">
-                        <h4 className="text-xl font-bold text-slate-900 dark:text-slate-50">
-                          {demo.title}
-                        </h4>
-                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
-                          {demo.description}
-                        </p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {demo.tags.map((tag, tagIndex) => (
-                          <span
-                            key={tagIndex}
-                            className="px-2 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-medium dark:bg-slate-800 dark:text-slate-300"
-                          >
-                            {tag}
-                          </span>
-                        ))}
                       </div>
                     </div>
                   </article>
