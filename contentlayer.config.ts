@@ -11,6 +11,7 @@ export const Post = defineDocumentType(() => ({
     topics: { type: 'list', of: { type: 'string' }, required: false },
     meta: { type: 'string', required: false },
     target: { type: 'string', required: false },
+  business: { type: 'boolean', required: false },
     language: { type: 'string', required: false },
     cover: { type: 'string', required: false },
     published: { type: 'boolean', required: false },

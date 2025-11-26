@@ -14,6 +14,14 @@ module.exports = {
       sans: 'Montserrat, sans-serif'
       //mono: 'JetBrains Mono, monospace'
     },
+    screens: {
+      'xs': '475px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         primary: {
@@ -28,13 +36,67 @@ module.exports = {
           600: '#FFE700'
         }
       },
-      typography: {
+      typography: (theme) => ({
         DEFAULT: {
           css: {
             maxWidth: 'none',
+            color: theme('colors.gray.700'),
+            h1: {
+              color: theme('colors.gray.900'),
+            },
+            h2: {
+              color: theme('colors.gray.900'),
+            },
+            h3: {
+              color: theme('colors.gray.900'),
+            },
+            h4: {
+              color: theme('colors.gray.900'),
+            },
+            a: {
+              color: theme('colors.primary.600'),
+              '&:hover': {
+                color: theme('colors.primary.500'),
+              },
+            },
+            strong: {
+              color: theme('colors.gray.900'),
+            },
+            code: {
+              color: theme('colors.gray.900'),
+            },
           },
         },
-      },
+        invert: {
+          css: {
+            color: theme('colors.gray.300'),
+            h1: {
+              color: theme('colors.gray.100'),
+            },
+            h2: {
+              color: theme('colors.gray.100'),
+            },
+            h3: {
+              color: theme('colors.gray.100'),
+            },
+            h4: {
+              color: theme('colors.gray.100'),
+            },
+            a: {
+              color: theme('colors.primary.400'),
+              '&:hover': {
+                color: theme('colors.primary.300'),
+              },
+            },
+            strong: {
+              color: theme('colors.gray.100'),
+            },
+            code: {
+              color: theme('colors.gray.100'),
+            },
+          },
+        },
+      }),
     }
   },
   plugins: [

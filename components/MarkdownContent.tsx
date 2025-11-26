@@ -100,7 +100,7 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
   return (
     <div
       ref={contentRef}
-      className={`prose prose-lg max-w-none stai-markdown
+      className={`prose prose-lg max-w-none stai-markdown dark:prose-invert
         prose-table:border-collapse
         prose-th:border
         prose-th:border-[color:var(--stai-border)]

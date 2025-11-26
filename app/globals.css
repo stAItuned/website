@@ -250,6 +250,16 @@ body {
   color: var(--stai-text);
 }
 
+.stai-markdown h1,
+.stai-markdown h2,
+.stai-markdown h3,
+.stai-markdown h4,
+.stai-markdown h5,
+.stai-markdown h6 {
+  color: var(--stai-text);
+  font-weight: 600;
+}
+
 .stai-markdown a {
   color: var(--stai-accent);
   text-decoration: underline;
