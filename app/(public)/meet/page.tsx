@@ -290,6 +290,12 @@ export default async function MeetPage() {
             <p className="text-lg text-slate-700 max-w-4xl leading-relaxed dark:text-slate-200">
               Questo ci permette di mantenere il blog aggiornato su AI e GenAI, mescolare punto di vista business e tecnico e proporre esempi e casi d'uso concreti che arrivano da settori diversi.
             </p>
+            <div className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-100 border border-slate-200 text-sm font-semibold text-slate-800 dark:bg-slate-900/60 dark:border-slate-800 dark:text-slate-100 shadow-sm">
+              <span className="text-base">✨</span>
+              <span>
+                Vuoi entrare nell'ecosistema come contributor o junior? <Link href="/lab" className="text-primary-700 hover:text-primary-800 underline underline-offset-4 dark:text-primary-300 dark:hover:text-primary-200">Scopri stAItuned Lab</Link>.
+              </span>
+            </div>
             <p className="text-base text-slate-500 dark:text-slate-400 font-medium">✨ Qui sotto trovi chi ha contribuito finora.</p>
           </div>
 

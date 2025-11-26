@@ -23,12 +23,13 @@ export default function PrivacyPage() {
         <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/50 p-6 shadow-sm">
           <h2 className="text-xl font-semibold text-slate-900">A chi è rivolta questa informativa</h2>
           <p className="text-sm text-slate-600">
-            Per chiarezza, la rendiamo disponibile a tre gruppi principali:
+            Per chiarezza, la rendiamo disponibile a quattro gruppi principali:
           </p>
           <ul className="list-disc space-y-1 pl-4 text-sm text-slate-600">
             <li>i lettori del blog e i membri della community che consumano contenuti pubblici;</li>
             <li>le PMI e i team che richiedono una call o una consulenza personalizzata;</li>
-            <li>chi si iscrive alla newsletter o alle comunicazioni di aggiornamento (marketing) con consenso esplicito.</li>
+            <li>chi si iscrive alla newsletter o alle comunicazioni di aggiornamento (marketing) con consenso esplicito;</li>
+            <li>chi si candida a collaborare con stAItuned o a entrare nello <strong>stAItuned Lab</strong>.</li>
           </ul>
         </section>
 
@@ -53,6 +54,35 @@ export default function PrivacyPage() {
               <h3 className="font-semibold text-slate-900">Newsletter, community e aggiornamenti</h3>
               <p className="mt-1">
                 Se scegli di ricevere aggiornamenti o contenuti di marketing, li inviamo via email solo previa autorizzazione separata. Puoi revocare il consenso in qualsiasi momento cliccando sul link di disiscrizione presente nelle comunicazioni o scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900">Candidature per collaborazioni e stAItuned Lab</h3>
+              <p className="mt-1">
+                Quando compili il modulo di candidatura al Lab o ci contatti per possibili collaborazioni, raccogliamo i dati necessari a valutare il tuo profilo, ad esempio:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>nome e cognome;</li>
+                <li>email di contatto;</li>
+                <li>eventuale ruolo attuale o area di competenza (es. data science, sviluppo web, UX);</li>
+                <li>link a portfolio, GitHub, LinkedIn o CV;</li>
+                <li>livello di esperienza dichiarato e interessi;</li>
+                <li>disponibilità di tempo e note che decidi di condividere.</li>
+              </ul>
+              <p className="mt-3">
+                Utilizziamo questi dati esclusivamente per:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>valutare la tua candidatura e proporti eventuali attività o progetti;</li>
+                <li>organizzare colloqui, task di prova o percorsi formativi interni;</li>
+                <li>tenerti aggiornato su opportunità di collaborazione in linea con il tuo profilo (solo se lo richiedi esplicitamente).</li>
+              </ul>
+              <p className="mt-3">
+                La base giuridica del trattamento è l&apos;esecuzione di misure precontrattuali su tua richiesta (art. 6.1.b GDPR) quando analizziamo la tua candidatura, e il consenso quando ti chiediamo di ricevere comunicazioni aggiuntive non strettamente legate alla candidatura.
+              </p>
+              <p className="mt-2">
+                I dati possono essere trattati con l&apos;aiuto di strumenti che usiamo per gestire candidature e collaborazione (es. Google Workspace, Notion, Trello), sempre nel rispetto di adeguate misure di sicurezza.
               </p>
             </div>
           </div>
@@ -81,6 +111,9 @@ export default function PrivacyPage() {
           <h2 className="text-2xl font-semibold text-slate-900">Conservazione e cancellazione</h2>
           <p>
             Le richieste di contatto vengono archiviate per 12–24 mesi per garantire il follow-up, mentre i dati per newsletter o community sono conservati finché il consenso resta attivo o finché non richiedi la cancellazione. La cronologia dei messaggi viene mantenuta per garantire continuità nei progetti in corso.
+          </p>
+          <p>
+            Le candidature al <strong>stAItuned Lab</strong> e alle collaborazioni vengono conservate per un periodo massimo di 12–24 mesi dalla loro ricezione, salvo tua richiesta di cancellazione anticipata, per poter valutare il profilo anche in vista di opportunità future. Puoi chiederci in qualsiasi momento di eliminare definitivamente la tua candidatura scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
           </p>
         </section>
 

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { CandidateCtaWithModal } from './CandidateCtaWithModal'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600 // every 6 hours
@@ -269,15 +270,7 @@ export default function LabPage() {
               Candidati al Lab e inizia a lavorare su progetti reali. Leggi il blog per arrivare preparato e capire come lavoriamo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link
-                href="https://forms.gle/YOUR_FORM_ID"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-purple-700 font-bold text-lg hover:bg-blue-50 transition-all shadow-lg hover:scale-105"
-              >
-                <span>Candidati al Lab</span>
-                <span>→</span>
-              </Link>
+              <CandidateCtaWithModal />
               <Link
                 href="/learn"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-white/60 text-white font-semibold text-lg hover:border-white hover:bg-white/10 transition-all backdrop-blur-sm"
