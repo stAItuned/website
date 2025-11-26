@@ -91,40 +91,15 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
               </svg>
               Back to all targets
             </Link>
-            
-            <div className="inline-flex items-center justify-center">
-              <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl font-bold text-white shadow-lg ${
-                targetSlug === 'newbie' ? 'bg-gradient-to-r from-emerald-500 to-green-600' :
-                targetSlug === 'midway' ? 'bg-gradient-to-r from-amber-500 to-orange-600' :
-                'bg-gradient-to-r from-rose-500 to-red-600'
-              }`}>
-                {targetSlug === 'newbie' && (
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-4.41 0-8-3.59-8-8V8.5l8-4.5 8 4.5V12c0 4.41-3.59 8-8 8z"/>
-                  </svg>
-                )}
-                {targetSlug === 'midway' && (
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                )}
-                {targetSlug === 'expert' && (
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2v-2zm0-6h2v4h-2v-4z"/>
-                  </svg>
-                )}
-                <span className="text-xl">{targetDisplay}</span>
-              </div>
+
+            <div className="max-w-2xl mx-auto space-y-2">
+              <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 dark:from-slate-100 dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
+                {targetDisplay} Level Articles
+              </h1>
+              <p className="text-lg text-slate-600 dark:text-slate-400">
+                {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} to help you learn
+              </p>
             </div>
-          </div>
-          
-          <div className="max-w-2xl mx-auto space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 dark:from-slate-100 dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-              {targetDisplay} Level Articles
-            </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400">
-              {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} to help you learn
-            </p>
           </div>
         </div>
 
@@ -274,14 +249,14 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
 
   // Default view - show target selection
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       {/* Hero Section */}
-      <div className="text-center space-y-6 max-w-4xl mx-auto">
+  <div className="text-center space-y-6 max-w-3xl mx-auto">
         <div className="space-y-4">
-          <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 dark:from-slate-100 dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 dark:from-slate-100 dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent leading-tight">
             Choose Your Learning Path
           </h1>
-          <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
             Discover AI articles tailored to your level — and if you want to apply what you learn on real projects, join the{' '}
             <Link href="/lab" className="font-semibold text-primary-600 underline-offset-4 underline dark:text-primary-300">
               stAItuned Lab
@@ -291,7 +266,7 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
       </div>
 
       {/* Target Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {targets.map((target, index) => {
           const articleCount = articlesByTarget[target.slug as keyof typeof articlesByTarget]?.length || 0
           const gradients = {
@@ -328,7 +303,7 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
               href={`/learn?target=${target.slug}`} 
               className="group relative"
             >
-              <div className="relative h-full flex flex-col bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden hover:scale-[1.02] hover:border-slate-300 dark:hover:border-slate-700">
+              <div className="relative h-full flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow transition-all duration-300 overflow-hidden hover:shadow-lg hover:scale-[1.01] hover:border-slate-300 dark:hover:border-slate-700">
                 {/* Decorative background elements */}
                 <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br opacity-5 rounded-full blur-3xl transition-opacity duration-300 group-hover:opacity-10"
                   style={{backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))`}}></div>
@@ -336,7 +311,7 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
                   style={{backgroundImage: `linear-gradient(to top right, var(--tw-gradient-stops))`}}></div>
 
                 {/* Image Section */}
-                <div className="relative w-full aspect-square overflow-hidden">
+                <div className="relative w-full aspect-[4/3] overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 z-10"></div>
                   <Image
                     src={target.image}
@@ -351,26 +326,26 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
                   />
                   
                   {/* Article Count Badge */}
-                  <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm text-slate-900 dark:text-slate-100 rounded-full px-4 py-2 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
-                    <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <div className="absolute top-3 right-3 z-20 flex items-center gap-1 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm text-slate-900 dark:text-slate-100 rounded-full px-3 py-1.5 shadow border border-slate-200/50 dark:border-slate-700/50">
+                    <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
                     </svg>
-                    <span className="text-sm font-bold">{articleCount}</span>
+                    <span className="text-xs font-bold">{articleCount}</span>
                   </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="relative flex-1 p-6 lg:p-8 space-y-4">
+                <div className="relative flex-1 p-4 lg:p-6 space-y-3">
                   {/* Icon and Title */}
                   <div className="space-y-3">
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r ${gradients[target.slug as keyof typeof gradients]} group-hover:from-${hoverGradients[target.slug as keyof typeof hoverGradients].split(' ')[0]} text-white shadow-lg transition-all duration-300`}>
+                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r ${gradients[target.slug as keyof typeof gradients]} group-hover:from-${hoverGradients[target.slug as keyof typeof hoverGradients].split(' ')[0]} text-white shadow transition-all duration-300`}>
                       {icons[target.slug as keyof typeof icons]}
-                      <span className="text-2xl font-bold">{target.name}</span>
+                      <span className="text-xl font-bold">{target.name}</span>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {target.description}
                   </p>
 
