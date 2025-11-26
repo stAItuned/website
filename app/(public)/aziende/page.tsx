@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -130,6 +131,12 @@ const steps = [
   }
 ]
 
+const resolveCoverSrc = (post: any) => {
+  if (!post.cover) return null
+  if (post.cover.startsWith('http://') || post.cover.startsWith('https://')) return post.cover
+  if (post.cover.startsWith('/')) return post.cover
+  return `${post.imagePath}/${post.cover}`
+}
 
 export default function AziendePage() {
   // Get the last 3 business articles dynamically
@@ -141,7 +148,8 @@ export default function AziendePage() {
       title: post.title,
       slug: post.slug,
       target: post.target?.toLowerCase() || 'business',
-      description: post.meta || post.description || ''
+      description: post.meta || post.description || '',
+      cover: resolveCoverSrc(post)
     }))
   return (
     <PageTransition>
@@ -367,20 +375,34 @@ export default function AziendePage() {
             {businessArticles.map((article, index) => (
               <article
                 key={article.slug}
-                className="group relative flex flex-col rounded-2xl border-2 border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/50"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/50"
               >
-                <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">
-                  {index + 1}
+                <div className="relative h-44 w-full overflow-hidden bg-slate-100 dark:bg-slate-800/70">
+                  {article.cover && (
+                    <Image
+                      src={article.cover}
+                      alt={article.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      unoptimized={article.cover.startsWith('http')}
+                    />
+                  )}
+                  <div className="absolute left-4 top-4 w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold shadow-sm">
+                    {index + 1}
+                  </div>
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 leading-tight">{article.title}</h4>
-                <p className="mt-3 text-sm text-slate-700 leading-relaxed flex-1">{article.description}</p>
-                <Link
-                  href={`/learn/${article.target}/${article.slug}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600"
-                >
-                  Leggi l’articolo
-                  <span aria-hidden className="text-base">→</span>
-                </Link>
+                <div className="px-5 pb-5 pt-5 space-y-3">
+                  <h4 className="text-lg font-bold text-slate-900 leading-tight">{article.title}</h4>
+                  <p className="text-sm text-slate-700 leading-relaxed flex-1">{article.description}</p>
+                  <Link
+                    href={`/learn/${article.target}/${article.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600"
+                  >
+                    Leggi l’articolo
+                    <span aria-hidden className="text-base">→</span>
+                  </Link>
+                </div>
               </article>
             ))}
           </div>
