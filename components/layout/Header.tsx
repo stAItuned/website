@@ -23,6 +23,8 @@ export function Header() {
   const { resolvedTheme } = useTheme()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
+  // Use the dark-text logo when in light mode, and the regular logo otherwise.
+  // Requested: use /public/assets/general/logo-text-dark.png for light mode.
   const logoSrc =
     isHomepage || resolvedTheme === 'dark'
       ? "/assets/general/logo-text.png"
@@ -49,16 +51,29 @@ export function Header() {
     }
   }, [openSearch])
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    if (isMenuOpen) {
+      document.body.classList.add('overflow-hidden')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+    }
+  }, [isMenuOpen])
+
   const navigation = [
     { name: 'Per le aziende', path: '/aziende' },
     { name: 'Impara', path: '/learn' },
     { name: 'Prodotti', path: '/prodotti' },
     { name: 'Chi siamo', path: '/meet' }
   ]
+  const primaryCta = { name: 'Prenota call', path: '/aziende#prenota-call' }
 
   return (
     <>
-  <header className={`fixed z-50 px-4 py-3 sm:px-8 sm:py-6 w-full transition-transform duration-300 ${!isScrolled ? 'sm:fixed sm:translate-y-0' : 'sm:fixed sm:-translate-y-full'}`}>
+  <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-300 ${isScrolled ? 'py-1 sm:py-1.5 bg-white/92 dark:bg-slate-900/92 backdrop-blur-md shadow-md' : 'py-1.5 sm:py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm'}`}>
         <div className="relative flex justify-center items-center">
           <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <Image
@@ -66,7 +81,7 @@ export function Header() {
               alt="stAItuned logo"
               width={600}
               height={133}
-              className="h-auto w-20 sm:w-28 md:w-36 lg:w-44 xl:w-52 hover:cursor-pointer"
+              className={`h-auto hover:cursor-pointer transition-all duration-300 ${isScrolled ? 'w-18 sm:w-22 md:w-26 lg:w-30 xl:w-32' : 'w-20 sm:w-26 md:w-32 lg:w-40 xl:w-44'}`}
               sizes="(max-width: 640px) 5rem,
                      (max-width: 768px) 7rem,
                      (max-width: 1024px) 9rem,
@@ -77,19 +92,23 @@ export function Header() {
             />
           </Link>
 
-          <nav className="stai-glass-panel stai-nav fixed right-4 top-4 z-50 flex items-center gap-3 lg:gap-6 rounded-2xl px-4 py-2.5 font-semibold text-base">
-            <div className="hidden lg:block">
-              <ul className="flex items-center space-x-8">
-                {navigation.map((item) => (
-                  <li key={item.path}>
-                    <Link
-                      href={item.path}
-                      className={`stai-link ${pathname === item.path ? 'stai-link--active' : ''}`}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
+          <nav className="stai-glass-panel stai-nav fixed right-2.5 top-2.5 z-50 flex items-center gap-2 lg:gap-3 rounded-2xl px-3 py-1.5 font-semibold text-sm border border-slate-200/60 dark:border-slate-800/60">
+            <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
+              <ul className="flex items-center space-x-5">
+                {navigation.map((item) => {
+                  const active = pathname === item.path
+                  return (
+                    <li key={item.path}>
+                      <Link
+                        href={item.path}
+                        aria-current={active ? 'page' : undefined}
+                        className={`relative inline-flex items-center gap-1.5 px-2 py-1.5 rounded-full transition-all duration-150 ${active ? 'text-primary-700 dark:text-primary-200 bg-primary-50 dark:bg-primary-900/30' : 'text-slate-800 dark:text-slate-100'} hover:text-primary-600 dark:hover:text-primary-300 hover:scale-[1.01] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1.5 after:h-[2px] after:w-8 after:scale-x-0 after:bg-primary-500 after:transition-transform after:duration-150 hover:after:scale-x-100 ${active ? 'after:scale-x-100' : ''}`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
 
@@ -113,18 +132,21 @@ export function Header() {
             
             <button
               type="button"
-              className="stai-icon-button"
+              className="stai-icon-button relative group w-10 h-10"
               onClick={openSearch}
               aria-label="Open search"
             >
-              <svg className="w-6 h-6 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
+              <span className="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 rounded-full bg-slate-900 text-white px-2 py-1 text-[10px] font-semibold opacity-0 transition-opacity duration-150 group-hover:opacity-100 shadow-sm dark:bg-white dark:text-slate-900">
+                ⌘K / Ctrl+K
+              </span>
             </button>
             
             <button
               type="button"
-              className="lg:hidden stai-icon-button w-12 h-12 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
+              className="lg:hidden stai-icon-button w-10 h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Open menu"
             >
@@ -136,6 +158,13 @@ export function Header() {
                 )}
               </svg>
             </button>
+
+            <Link
+              href={primaryCta.path}
+              className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            >
+              {primaryCta.name}
+            </Link>
           </nav>
         </div>
       </header>
@@ -152,8 +181,10 @@ export function Header() {
             onClick={e => e.stopPropagation()}
           >
             {/* Mobile Menu Header with Logo and Close Button */}
-            <div className="relative flex items-center justify-between px-6 pt-6 pb-4 border-b stai-border">
-              <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
+            <div className="relative flex items-center justify-between px-5 pt-5 pb-3 border-b stai-border">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Menu</span>
+                <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
                 <Image
                   src={logoSrc}
                   alt="stAItuned logo"
@@ -163,7 +194,8 @@ export function Header() {
                   priority={isHomepage}
                   loading={isHomepage ? "eager" : "lazy"}
                 />
-              </Link>
+                </Link>
+              </div>
               <button
                 type="button"
                 className="stai-icon-button w-10 h-10 !p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
@@ -175,19 +207,29 @@ export function Header() {
                 </svg>
               </button>
             </div>
-            <div className="flex flex-col pt-6 gap-3 px-6 stai-text">
-              {navigation.map((item) => (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`stai-drawer-link py-5 text-xl font-semibold border-b stai-border rounded-lg px-2 mb-1 ${
-                    pathname === item.path ? 'stai-drawer-link--active' : ''
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            <div className="flex flex-col pt-5 gap-2.5 px-5 stai-text">
+              {navigation.map((item) => {
+                const active = pathname === item.path
+                return (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    aria-current={active ? 'page' : undefined}
+                    className={`stai-drawer-link py-4 text-lg font-semibold border-b stai-border rounded-lg px-3 mb-1 transition-all ${active ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              })}
+
+              <Link
+                href={primaryCta.path}
+                className="mt-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {primaryCta.name}
+              </Link>
               
               {/* Mobile Authentication */}
               {!DISABLE_AUTH && !loading && (
