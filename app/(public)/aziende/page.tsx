@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { ContactCtaWithModal } from './ContactCtaWithModal'
+import { allPosts } from '@/lib/contentlayer'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600 // every 6 hours (60 * 60 * 6)
@@ -26,14 +27,14 @@ const services = [
       'Analizziamo processi e dati, individuiamo opportunità immediate e definiamo 1–3 casi d’uso prioritari, con metriche condivise.'
   },
   {
-    title: 'Prototipi e soluzioni AI pronte all’uso',
+    title: 'Progetto pilota / MVP',
     description:
-      'Costruiamo MVP AI funzionanti (assistenti AI, automazioni, sistemi di raccomandazione 1-to-1, cruscotti intelligenti) già pensati per integrarsi con i sistemi che usi oggi.'
+      'Costruiamo un progetto pilota (MVP) focalizzato: assistenti AI, automazioni o micro-webapp pensate per essere usate da persone reali, non solo demo da slide.'
   },
   {
-    title: 'Delivery & mentoring',
+    title: 'Da pilota a soluzione stabile',
     description:
-      'Affianco il team nei primi sprint di rilascio: monitoriamo KPI, raccogliamo feedback e trasferisco le competenze necessarie per far evolvere la soluzione in autonomia.'
+      'Se il pilota funziona, ti aiuto a decidere se rafforzarlo e integrarlo meglio nei tuoi sistemi oppure trasformare l\'idea in un prodotto più generico (interno o pubblico).'
   }
 ]
 
@@ -129,7 +130,19 @@ const steps = [
   }
 ]
 
+
 export default function AziendePage() {
+  // Get the last 3 business articles dynamically
+  const businessArticles = allPosts
+    .filter((post) => ((post as any).business === true || post.target?.toLowerCase() === 'business') && post.published !== false)
+    .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
+    .slice(0, 3)
+    .map((post) => ({
+      title: post.title,
+      slug: post.slug,
+      target: post.target?.toLowerCase() || 'business',
+      description: post.meta || post.description || ''
+    }))
   return (
     <PageTransition>
       <div className="max-w-7xl mx-auto mt-[120px] mb-32 px-4 space-y-20">
@@ -157,7 +170,7 @@ export default function AziendePage() {
               <h1 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
                 AI strategica per PMI:
                 <span className="text-amber-500 block mt-2">
-                  dal problema al primo MVP in 2 settimane
+                  progetti pilota rapidi che possono diventare soluzioni stabili
                 </span>
               </h1>
             </div>
@@ -338,6 +351,72 @@ export default function AziendePage() {
           </div>
         </section>
 
+
+        {/* Articoli per decisori */}
+        <section className="space-y-8">
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-amber-300 shadow-sm">
+              Articoli per decisori PMI
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900">Articoli per la tua azienda</h3>
+            <p className="text-base md:text-lg text-slate-600 max-w-3xl mx-auto">
+              Una selezione di articoli pensati per imprenditori, CEO e responsabili di funzione. Tutti nascono da casi reali che abbiamo affrontato con le PMI.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {businessArticles.map((article, index) => (
+              <article
+                key={article.slug}
+                className="group relative flex flex-col rounded-2xl border-2 border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/50"
+              >
+                <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">
+                  {index + 1}
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 leading-tight">{article.title}</h4>
+                <p className="mt-3 text-sm text-slate-700 leading-relaxed flex-1">{article.description}</p>
+                <Link
+                  href={`/learn/${article.target}/${article.slug}`}
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600"
+                >
+                  Leggi l’articolo
+                  <span aria-hidden className="text-base">→</span>
+                </Link>
+              </article>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link
+              href="/learn?target=business"
+              className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-900 shadow-md transition hover:bg-amber-400"
+            >
+              Vedi tutti gli articoli business
+              <span aria-hidden className="text-base">→</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* stAItuned Lab Box */}
+        <section className="space-y-8 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-3xl p-10 shadow-lg">
+          <div className="text-center space-y-4">
+            <div className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold inline-flex items-center gap-2">
+              💡 stAItuned Lab
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900">
+              Talenti junior, qualità senior
+            </h3>
+          </div>
+          <div className="max-w-3xl mx-auto space-y-6 text-lg text-slate-700 leading-relaxed">
+            <p>
+              Alcuni dei nostri progetti sono supportati da un piccolo gruppo di <strong>junior selezionati</strong>, formati direttamente sui nostri standard e <strong>supervisionati in ogni fase</strong>.
+            </p>
+            <p>
+              Questo ci permette di <strong>muoverci velocemente</strong>, mantenere <strong>alta la qualità</strong> e far crescere nuove persone nel mondo AI, senza compromessi sull'output per la tua azienda.
+            </p>
+            <p className="text-base text-slate-600 italic border-l-4 border-blue-400 pl-4">
+              La responsabilità finale e il controllo qualità restano sempre in capo al team senior. Per te cambia solo il ritmo di delivery e il costo del progetto.
+            </p>
+          </div>
+        </section>
         <section className="space-y-8">
           <div className="text-center space-y-4">
             <div className="bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">

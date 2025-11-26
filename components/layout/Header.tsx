@@ -50,10 +50,10 @@ export function Header() {
   }, [openSearch])
 
   const navigation = [
-    { name: 'Home', path: '/' },
     { name: 'Per le aziende', path: '/aziende' },
-    { name: 'Blog', path: '/learn' },
-    { name: 'Chi siamo', path: '/meet' },
+    { name: 'Impara', path: '/learn' },
+    { name: 'Prodotti', path: '/prodotti' },
+    { name: 'Chi siamo', path: '/meet' }
   ]
 
   return (

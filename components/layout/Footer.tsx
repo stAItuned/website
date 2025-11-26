@@ -52,6 +52,12 @@ export function Footer() {
           })}
         </div>
         <div className="flex items-center gap-6 text-xs uppercase tracking-wide text-slate-200/90">
+          <Link href="/meet" className="transition hover:text-white">
+            Chi siamo
+          </Link>
+          <Link href="/lab" className="transition hover:text-white">
+            Lab
+          </Link>
           <Link href="/privacy" className="transition hover:text-white">
             Privacy Policy
           </Link>

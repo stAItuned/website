@@ -47,16 +47,15 @@ export function HomeHero({
 
           {/* Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-white">
-            Dal foglio di idee al primo{' '}
-            <span className="text-amber-400">MVP AI</span>
+            <span className="text-amber-400">Progetti pilota di AI</span> in poche settimane,
             <br />
-            in 2 settimane
+            non programmi infiniti
           </h1>
 
           {/* Value proposition */}
           <div className="space-y-4 text-base md:text-lg text-slate-200 leading-relaxed max-w-3xl">
-            <p className="text-xl md:text-2xl font-medium text-white">
-              Ti affianchiamo come AI Strategy & Product Lead
+            <p className="text-xl md:text-2xl font-medium text-white leading-relaxed">
+              Dal foglio di idee a una prima soluzione AI funzionante, pronta da testare con il tuo team e integrare nei sistemi che usi già.
             </p>
             <ul className="space-y-3 text-slate-100">
               <li className="flex items-start gap-3">
@@ -65,7 +64,7 @@ export function HomeHero({
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-amber-400 font-bold mt-1">✓</span>
-                <span>Costruiamo <strong className="text-white">demo/MVP funzionanti</strong> (assistenti AI, automazioni, sistemi di raccomandazione 1-to-1)</span>
+                <span>Costruiamo <strong className="text-white">progetti pilota funzionanti</strong> (assistenti AI, automazioni, sistemi di raccomandazione 1-to-1)</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-amber-400 font-bold mt-1">✓</span>
@@ -87,7 +86,7 @@ export function HomeHero({
               href="/learn"
               className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-white/60 text-white font-semibold text-lg hover:border-white hover:bg-white/10 transition-all backdrop-blur-sm"
             >
-              <span>Impara e sperimenta</span>
+              <span>Impara e sperimenta con stAI tuned Lab</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </Link>
           </div>
@@ -96,7 +95,9 @@ export function HomeHero({
           <p className="text-sm text-slate-300/90 max-w-2xl pt-2">
             <strong className="text-white">PMI o azienda in crescita?</strong> Inizia da "Per la tua azienda". 
             <br className="hidden sm:block" />
-            <strong className="text-white">Vuoi imparare AI?</strong> Inizia da "Impara e sperimenta".
+            <strong className="text-white">Vuoi imparare AI?</strong> Inizia da "Impara e sperimenta  con stAI tuned Lab".
+            <br className="hidden sm:block" />
+            <strong className="text-white">E se vuoi imparare facendo,</strong> scopri anche <Link href="/lab" className="text-amber-400 hover:text-amber-300 underline underline-offset-2 transition-colors">stAItuned Lab</Link>.
           </p>
         </div>
       </div>

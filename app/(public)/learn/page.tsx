@@ -32,29 +32,33 @@ const targets = [
 export default function LearnPage() {
   // Pre-process articles per target per renderizzazione statica
   const articlesByTarget = {
-    newbie: allPosts.filter(post => 
-      post.target?.toLowerCase() === 'newbie' && post.published !== false
-    ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-    
-    midway: allPosts.filter(post => 
-      post.target?.toLowerCase() === 'midway' && post.published !== false
-    ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-    
-    expert: allPosts.filter(post => 
-      post.target?.toLowerCase() === 'expert' && post.published !== false
-    ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    newbie: allPosts
+      .filter(post => post.target?.toLowerCase() === 'newbie' && post.published !== false)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+
+    midway: allPosts
+      .filter(post => post.target?.toLowerCase() === 'midway' && post.published !== false)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+
+    expert: allPosts
+      .filter(post => post.target?.toLowerCase() === 'expert' && post.published !== false)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+
+    business: allPosts
+      .filter(post => (post as any).business === true && post.published !== false)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }
 
   return (
     <PageTransition>
-      <section className="max-w-7xl mx-auto mt-[150px] mb-32 px-4 space-y-16">
+      <section className="max-w-7xl mx-auto mt-[120px] mb-32 px-4 lg:px-6 space-y-20">
         {/* Breadcrumb */}
-        <nav className="flex items-center space-x-4 text-primary-500 w-full md:w-fit bg-slate-100 px-8 py-4 rounded-lg font-semibold">
-          <Link href="/" className="text-sm lg:text-base opacity-50 hover:underline hover:opacity-100 transition">
+        <nav className="flex items-center space-x-3 text-primary-500 w-full md:w-fit bg-white/60 backdrop-blur-sm px-6 py-3 rounded-2xl font-medium shadow-sm border border-slate-200/50 dark:bg-slate-900/60 dark:border-slate-800/50 dark:text-primary-400 transition-all hover:shadow-md">
+          <Link href="/" className="text-sm lg:text-base opacity-60 hover:opacity-100 transition-opacity hover:underline underline-offset-4">
             Home
           </Link>
-          <span>/</span>
-          <span className="text-base lg:text-xl truncate">Learn</span>
+          <span className="opacity-40">/</span>
+          <span className="text-sm lg:text-base font-semibold truncate">Learn</span>
         </nav>
 
         {/* Suspense per componenti client */}

@@ -26,13 +26,13 @@ export default function HomePage() {
     {
       slug: 'simplifying-machine-learning-for-business-the-role-of-blogs',
       title: 'Come un blog di ML può aiutare il business a capire l’AI',
-      description: 'Per spiegare bene l’AI ai decisori PMI e partire da un esperimento rapido, mostrando impatto su costi, tempi e qualità.',
+      description: 'Capire dove l’AI impatta davvero su costi, tempi e qualità con esempi di piloti rapidi.',
       badge: 'Business / PMI'
     },
     {
       slug: 'google-ai-studio-guide',
       title: 'Google AI Studio: prototipi rapidi per team digitali',
-      description: 'Una guida su come costruire una webapp di prova, raccogliere metriche e decidere se investire in produzione.',
+      description: 'Come costruire una webapp di prova, raccogliere metriche e decidere se scalare.',
       badge: 'Business / Strumenti'
     },
     {
@@ -47,7 +47,7 @@ export default function HomePage() {
     {
       slug: 'understanding-how-recommendation-suggestions-work',
       title: 'Understanding how recommendation systems work',
-      description: 'Come funzionano i sistemi che consigliano prodotti e contenuti, con spazio per arrivare subito a un proof of concept.',
+      description: 'Come funzionano i sistemi che consigliano prodotti e contenuti, con spazio per un proof of concept rapido.',
     },
     {
       slug: 'stable-diffusion-creare-immagini-a-partire-dal-testo',
@@ -62,20 +62,55 @@ export default function HomePage() {
     }
   ]
 
+  const productShortlist = [
+    {
+      slug: 'docling-document-processing-ai',
+      title: 'Docling: estrazione documentale pronta per diventare prodotto',
+      description: 'Un esperimento nato da richieste PMI per automatizzare lettura e normalizzazione di PDF e contratti.'
+    },
+    {
+      slug: 'ai-translator-lara-global-communication',
+      title: 'LARA: traduzione AI con focus su contesto e tono',
+      description: 'Da prototipo di laboratorio a webapp usata per localizzare materiali marketing e supporto clienti.'
+    },
+    {
+      slug: 'google-vids-ai-video-creation-tool',
+      title: 'Video brevi generati da prompt: cosa funziona davvero',
+      description: 'Test di produzione con Google Vids per capire dove inserire automazioni video nei processi di comunicazione.'
+    }
+  ]
+
   const shortlistColumns = [
     {
-      heading: 'Per la tua azienda',
-      description: 'Articoli per capire in modo semplice dove l’AI può aiutarti nei processi di tutti i giorni.',
-      linkLabel: 'Vedi tutte le risorse per le aziende',
-      linkHref: '/aziende',
+      heading: 'Per la tua azienda (Business)',
+      description:
+        'Articoli pensati per CEO e manager: come scegliere il primo pilota, valutare strumenti e misurare l’impatto.',
+  linkLabel: 'Vedi tutti gli articoli business',
+  linkHref: '/learn?target=business',
+      secondaryLinkLabel: 'Scopri i progetti pilota',
+      secondaryLinkHref: '/azienda',
       items: businessShortlist
     },
     {
       heading: 'Per imparare (tecnico)',
-      description: 'Approfondimenti per data scientist, ingegneri e curiosi di AI.',
-      linkLabel: 'Vai a tutti gli articoli',
+      description:
+        'Guide, tutorial e webapp di esempio organizzate per livello: Newbie, Midway, Expert.',
+      linkLabel: 'Vai alla sezione Learn',
       linkHref: '/learn',
+      secondaryLinkLabel: 'Entra nel stAItuned Lab',
+      secondaryLinkHref: '/lab',
       items: technicalShortlist
+    },
+    {
+      heading: 'Dai progetti pilota ai prodotti',
+      description:
+        'Esperimenti che diventano prodotti: strumenti leggeri nati da esigenze reali delle PMI, pronti da usare e adattare.',
+      linkLabel: 'Esplora prodotti & webapp',
+      linkHref: '/prodotti',
+      secondaryLinkLabel: 'Vedi tutti i prodotti',
+      secondaryLinkHref: '/prodotti',
+      microCopy: 'Prodotti nati da casi reali, pronti da usare e adattare.',
+      items: productShortlist
     }
   ]
 
