@@ -250,10 +250,11 @@ export function Header() {
                     key={item.path}
                     href={item.path}
                     aria-current={active ? 'page' : undefined}
-                    className={`stai-drawer-link py-4 text-lg font-semibold border-b stai-border rounded-lg px-3 mb-1 transition-all ${active ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200' : ''}`}
+                    className={`stai-drawer-link flex items-center gap-3 py-4 text-lg font-semibold border-b stai-border rounded-lg px-3 mb-1 transition-all ${active ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {item.name}
+                    <span className="text-xl">{item.icon}</span>
+                    <span> {item.name}</span>
                   </Link>
                 )
               })}
