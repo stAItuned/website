@@ -26,7 +26,12 @@ export function Header() {
   // Use the dark-text logo when in light mode, and the regular logo otherwise.
   // Requested: use /public/assets/general/logo-text-dark.png for light mode.
   const logoSrc =
-    isHomepage || resolvedTheme === 'dark'
+    resolvedTheme === 'dark'
+      ? "/assets/general/logo-text.png"
+      : "/assets/general/logo-text-dark.png"
+  // Mobile drawer should always swap based on theme only (light uses dark text logo).
+  const mobileLogoSrc =
+    resolvedTheme === 'dark'
       ? "/assets/general/logo-text.png"
       : "/assets/general/logo-text-dark.png"
 
@@ -207,11 +212,20 @@ export function Header() {
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Menu</span>
                 <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
                 <Image
-                  src={logoSrc}
+                  src="/assets/general/logo-text-dark.png"
                   alt="stAItuned logo"
                   width={120}
                   height={30}
-                  className="h-8 w-auto"
+                  className="h-8 w-auto block dark:hidden"
+                  priority={isHomepage}
+                  loading={isHomepage ? "eager" : "lazy"}
+                />
+                <Image
+                  src="/assets/general/logo-text.png"
+                  alt="stAItuned logo"
+                  width={120}
+                  height={30}
+                  className="h-8 w-auto hidden dark:block"
                   priority={isHomepage}
                   loading={isHomepage ? "eager" : "lazy"}
                 />

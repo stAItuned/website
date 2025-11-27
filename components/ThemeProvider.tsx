@@ -12,19 +12,15 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light')
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light')
-
-  useEffect(() => {
+  // Initialize from browser storage/preference to avoid logo/theme flicker after mount.
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'light'
     const stored = localStorage.getItem('theme')
-    if (stored === 'light' || stored === 'dark') {
-      setThemeState(stored)
-      return
-    }
-
+    if (stored === 'light' || stored === 'dark') return stored
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    setThemeState(prefersDark ? 'dark' : 'light')
-  }, [])
+    return prefersDark ? 'dark' : 'light'
+  })
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(theme)
 
   useEffect(() => {
     const root = document.documentElement
