@@ -155,7 +155,7 @@ export default function AziendePage() {
     <PageTransition>
       <div className="max-w-7xl mx-auto mt-[120px] mb-32 px-4 space-y-20">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-3 text-sm font-medium text-slate-600 bg-white border border-slate-200 px-6 py-3 rounded-xl shadow-sm">
+        <nav className="inline-flex w-fit items-center gap-3 text-sm font-medium text-slate-600 bg-white border border-slate-200 px-6 py-3 rounded-xl shadow-sm">
           <Link href="/" className="opacity-60 hover:opacity-100 transition-opacity">
             Home
           </Link>

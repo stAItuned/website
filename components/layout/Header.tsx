@@ -73,15 +73,15 @@ export function Header() {
 
   return (
     <>
-  <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-300 ${isScrolled ? 'py-1 sm:py-1.5 bg-white/92 dark:bg-slate-900/92 backdrop-blur-md shadow-md' : 'py-1.5 sm:py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm'}`}>
-        <div className="relative flex justify-center items-center">
+      <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-300 ${isScrolled ? 'py-1 sm:py-1.5 bg-white/92 dark:bg-slate-900/92 backdrop-blur-md shadow-md' : 'py-1.5 sm:py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm'}`}>
+        <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <Image
               src={logoSrc}
               alt="stAItuned logo"
-              width={600}
-              height={133}
-              className={`h-auto hover:cursor-pointer transition-all duration-300 ${isScrolled ? 'w-18 sm:w-22 md:w-26 lg:w-30 xl:w-32' : 'w-20 sm:w-26 md:w-32 lg:w-40 xl:w-44'}`}
+              width={360}
+              height={80}
+              className={`h-auto hover:cursor-pointer transition-all duration-300 ${isScrolled ? 'w-24 sm:w-28 md:w-32 lg:w-36' : 'w-28 sm:w-32 md:w-36 lg:w-44'}`}
               sizes="(max-width: 640px) 5rem,
                      (max-width: 768px) 7rem,
                      (max-width: 1024px) 9rem,
@@ -92,7 +92,7 @@ export function Header() {
             />
           </Link>
 
-          <nav className="stai-glass-panel stai-nav fixed right-2.5 top-2.5 z-50 flex items-center gap-2 lg:gap-3 rounded-2xl px-3 py-1.5 font-semibold text-sm border border-slate-200/60 dark:border-slate-800/60">
+          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-2 lg:gap-3 rounded-full px-3 py-2 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur">
             <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
               <ul className="flex items-center space-x-5">
                 {navigation.map((item) => {
