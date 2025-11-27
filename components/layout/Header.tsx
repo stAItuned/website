@@ -67,46 +67,22 @@ export function Header() {
     {
       name: 'Per le aziende',
       path: '/aziende',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20V7a1 1 0 011-1h5v14" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 20V4h5a1 1 0 011 1v15" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20h16" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 10h1M7 13h1M7 16h1M17 10h1M17 13h1M17 16h1M14 7h1" />
-        </svg>
-      )
+      icon: <span aria-hidden className="text-lg">🏢</span>
     },
     {
       name: 'Impara',
       path: '/learn',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5.5A2.5 2.5 0 017.5 3H19v16h-9.5A2.5 2.5 0 017 16.5V6" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 6h12" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.5 9.5H17M9.5 12H15" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8.5h2" />
-        </svg>
-      )
+      icon: <span aria-hidden className="text-lg">📚</span>
     },
     {
       name: 'Prodotti',
       path: '/prodotti',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7l9-4 9 4-9 4-9-4z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10l9 4 9-4V7" />
-        </svg>
-      )
+      icon: <span aria-hidden className="text-lg">🛠️</span>
     },
     {
       name: 'Chi siamo',
       path: '/meet',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 20a6 6 0 0112 0" />
-        </svg>
-      )
+      icon: <span aria-hidden className="text-lg">🧑‍🤝‍🧑</span>
     }
   ]
   const primaryCta = { name: 'Prenota call', path: '/aziende#prenota-call' }
