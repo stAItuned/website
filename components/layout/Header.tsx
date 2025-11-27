@@ -64,10 +64,50 @@ export function Header() {
   }, [isMenuOpen])
 
   const navigation = [
-    { name: 'Per le aziende', path: '/aziende' },
-    { name: 'Impara', path: '/learn' },
-    { name: 'Prodotti', path: '/prodotti' },
-    { name: 'Chi siamo', path: '/meet' }
+    {
+      name: 'Per le aziende',
+      path: '/aziende',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20V7a1 1 0 011-1h5v14" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 20V4h5a1 1 0 011 1v15" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 20h16" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 10h1M7 13h1M7 16h1M17 10h1M17 13h1M17 16h1M14 7h1" />
+        </svg>
+      )
+    },
+    {
+      name: 'Impara',
+      path: '/learn',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5.5A2.5 2.5 0 017.5 3H19v16h-9.5A2.5 2.5 0 017 16.5V6" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 6h12" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.5 9.5H17M9.5 12H15" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8.5h2" />
+        </svg>
+      )
+    },
+    {
+      name: 'Prodotti',
+      path: '/prodotti',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7l9-4 9 4-9 4-9-4z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10l9 4 9-4V7" />
+        </svg>
+      )
+    },
+    {
+      name: 'Chi siamo',
+      path: '/meet',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 20a6 6 0 0112 0" />
+        </svg>
+      )
+    }
   ]
   const primaryCta = { name: 'Prenota call', path: '/aziende#prenota-call' }
 
@@ -92,19 +132,24 @@ export function Header() {
             />
           </Link>
 
-          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-2 lg:gap-3 rounded-full px-3 py-2 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur">
+          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-2 lg:gap-3 rounded-full px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur">
             <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
-              <ul className="flex items-center space-x-5">
+              <ul className="flex items-center space-x-2">
                 {navigation.map((item) => {
                   const active = pathname === item.path
                   return (
                     <li key={item.path}>
                       <Link
                         href={item.path}
+                        aria-label={item.name}
                         aria-current={active ? 'page' : undefined}
-                        className={`relative inline-flex items-center gap-1.5 px-2 py-1.5 rounded-full transition-all duration-150 ${active ? 'text-primary-700 dark:text-primary-200 bg-primary-50 dark:bg-primary-900/30' : 'text-slate-800 dark:text-slate-100'} hover:text-primary-600 dark:hover:text-primary-300 hover:scale-[1.01] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1.5 after:h-[2px] after:w-8 after:scale-x-0 after:bg-primary-500 after:transition-transform after:duration-150 hover:after:scale-x-100 ${active ? 'after:scale-x-100' : ''}`}
+                        className={`group relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-200 ${active ? 'text-primary-700 dark:text-primary-200 bg-primary-50 dark:bg-primary-900/30 shadow-sm' : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 hover:text-primary-600 dark:hover:text-primary-300'}`}
                       >
-                        {item.name}
+                        {item.icon}
+                        <span className="sr-only">{item.name}</span>
+                        <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
+                          {item.name}
+                        </span>
                       </Link>
                     </li>
                   )
