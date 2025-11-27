@@ -75,20 +75,20 @@ export function HomeDualTracks() {
       <div className="grid gap-8 md:grid-cols-2">
         {tracks.map((track, index) => {
           const accentColor = track.accent === 'amber'
-            ? 'from-amber-50 to-white border-amber-200 hover:border-amber-300'
-            : 'from-blue-50 to-white border-blue-200 hover:border-blue-300'
+            ? 'from-amber-50 to-white border-amber-200 hover:border-amber-300 dark:from-amber-950/30 dark:via-slate-900 dark:to-slate-950 dark:border-amber-900/40 dark:hover:border-amber-700/60'
+            : 'from-blue-50 to-white border-blue-200 hover:border-blue-300 dark:from-blue-950/25 dark:via-slate-900 dark:to-slate-950 dark:border-blue-900/40 dark:hover:border-blue-700/60'
           const badgeColor = track.accent === 'amber'
-            ? 'bg-amber-100 text-amber-700'
-            : 'bg-blue-100 text-blue-700'
+            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200 dark:border dark:border-amber-800/60'
+            : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-100 dark:border dark:border-blue-800/60'
           return (
             <article
               key={track.title}
-              className={`group relative flex flex-col rounded-3xl border-2 bg-gradient-to-br ${accentColor} p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 dark:bg-slate-900/50 dark:border-slate-700`}
+              className={`group relative flex flex-col rounded-3xl border-2 bg-gradient-to-br ${accentColor} p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 dark:shadow-lg`}
             >
               {/* Decorative accent */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-slate-900/5 to-slate-900/0 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="flex items-start justify-between">
-                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide ${badgeColor} shadow-sm`}>{track.eyebrow}</div>
+                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide ${badgeColor} shadow-sm backdrop-blur-sm`}>{track.eyebrow}</div>
                 <div className="flex items-center justify-center w-9 h-9 rounded-full bg-slate-900/5 text-slate-700 text-sm font-bold dark:bg-slate-700/40 dark:text-slate-200">
                   {index + 1}
                 </div>
@@ -117,8 +117,8 @@ export function HomeDualTracks() {
                 <Link
                   href={track.href}
                   className={track.accent === 'amber'
-                    ? 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-900 font-semibold text-[13px] px-4 py-2 transition shadow-md hover:-translate-y-[1px] hover:shadow-lg'
-                    : 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 text-white font-semibold text-[13px] px-4 py-2 transition shadow-md hover:-translate-y-[1px] hover:shadow-lg'}
+                    ? 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-900 font-semibold text-[13px] px-4 py-2 transition shadow-md hover:-translate-y-[1px] hover:shadow-lg dark:from-amber-400 dark:via-amber-300 dark:to-amber-400'
+                    : 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 text-white font-semibold text-[13px] px-4 py-2 transition shadow-md hover:-translate-y-[1px] hover:shadow-lg dark:from-blue-500 dark:via-blue-400 dark:to-blue-500 dark:border dark:border-blue-300/60'}
                 >
                   <span>{track.primaryCta}</span>
                   <span aria-hidden className="text-base">→</span>
@@ -127,8 +127,8 @@ export function HomeDualTracks() {
                   <Link
                     href={track.secondaryCta.href}
                     className={track.accent === 'amber'
-                      ? 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full border-2 border-amber-200 bg-white/90 backdrop-blur-sm text-amber-700 font-semibold text-[13px] px-4 py-2 transition hover:-translate-y-[1px] hover:border-amber-300 hover:shadow-md'
-                      : 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full border-2 border-blue-300 bg-gradient-to-r from-blue-50 via-white to-blue-50 text-blue-800 font-semibold text-[13px] px-4 py-2 transition hover:-translate-y-[1px] hover:border-blue-400 hover:shadow-md'}
+                      ? 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full border-2 border-amber-200 bg-white/90 backdrop-blur-sm text-amber-700 font-semibold text-[13px] px-4 py-2 transition hover:-translate-y-[1px] hover:border-amber-300 hover:shadow-md dark:border-amber-500/50 dark:bg-amber-950/30 dark:text-amber-100'
+                      : 'inline-flex w-full sm:flex-1 justify-center items-center gap-2 rounded-full border-2 border-blue-300 bg-gradient-to-r from-blue-50 via-white to-blue-50 text-blue-800 font-semibold text-[13px] px-4 py-2 transition hover:-translate-y-[1px] hover:border-blue-400 hover:shadow-md dark:border-blue-400/60 dark:bg-gradient-to-r dark:from-blue-900/50 dark:via-blue-900/30 dark:to-blue-900/60 dark:text-blue-50'}
                   >
                     <span>{track.secondaryCta.label}</span>
                     <span aria-hidden className="text-base">↗</span>
