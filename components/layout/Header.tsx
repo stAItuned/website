@@ -8,6 +8,7 @@ import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
+import { CallModalTrigger } from '@/app/(public)/aziende/CallModalTrigger'
 
 const DISABLE_AUTH = true
   // typeof process !== 'undefined'
@@ -185,12 +186,9 @@ export function Header() {
               </svg>
             </button>
 
-            <Link
-              href={primaryCta.path}
-              className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-            >
+            <CallModalTrigger className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
               {primaryCta.name}
-            </Link>
+            </CallModalTrigger>
           </nav>
         </div>
       </header>
@@ -259,13 +257,12 @@ export function Header() {
                 )
               })}
 
-              <Link
-                href={primaryCta.path}
+              <CallModalTrigger
                 className="mt-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                onClick={() => setIsMenuOpen(false)}
+                onOpen={() => setIsMenuOpen(false)}
               >
                 {primaryCta.name}
-              </Link>
+              </CallModalTrigger>
               
               {/* Mobile Authentication */}
               {!DISABLE_AUTH && !loading && (

@@ -1,7 +1,8 @@
 "use client"
 
 import Link from 'next/link'
-import { FormEvent, useState, Dispatch, SetStateAction } from 'react'
+import { FormEvent, useState, Dispatch, SetStateAction, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 type ContactCtaWithModalProps = {
   isOpen?: boolean
@@ -13,6 +14,11 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen
   const setIsOpen = controlledSetIsOpen ?? internalSetIsOpen
   const [isSending, setIsSending] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -103,29 +109,30 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
         </section>
       )}
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" aria-modal="true" role="dialog">
-          <div
-            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="relative z-10 w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/10">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900">Prenota la call gratuita</h3>
-                <p className="mt-2 text-sm text-slate-500">
-                  Lascia qualche dettaglio su di te e sulla tua PMI. Ti risponderò via email per fissare uno slot da 30 minuti.
-                </p>
+      {mounted && isOpen &&
+        createPortal(
+          <div className="fixed inset-0 z-[80] flex items-center justify-center px-4 py-10 sm:px-6 sm:py-0" aria-modal="true" role="dialog">
+            <div
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+              onClick={() => setIsOpen(false)}
+            />
+            <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-900/15">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Prenota la call gratuita</h3>
+                  <p className="mt-2 text-sm text-slate-500">
+                    Lascia qualche dettaglio su di te e sulla tua PMI. Ti risponderò via email per fissare uno slot da 30 minuti.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-900"
+                  aria-label="Chiudi la finestra di contatto"
+                >
+                  <span className="block h-5 w-5">✕</span>
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-900"
-                aria-label="Chiudi la finestra di contatto"
-              >
-                <span className="block h-5 w-5">✕</span>
-              </button>
-            </div>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               {/* Honeypot field (bots will fill this) */}
@@ -229,12 +236,14 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
                 </div>
               </div>
             </form>
-            <p className="mt-4 text-xs text-slate-500">
-              Consulta la <Link className="text-amber-500 underline" href="/privacy">privacy policy</Link> per capire come utilizziamo le informazioni della call e di questo form.
-            </p>
-          </div>
-        </div>
-      )}
+                <p className="mt-4 text-xs text-slate-500">
+                  Consulta la <Link className="text-amber-500 underline" href="/privacy">privacy policy</Link> per capire come utilizziamo le informazioni della call e di questo form.
+                </p>
+            </div>
+          </div>,
+          document.body
+        )
+      }
   </>
   )
 }

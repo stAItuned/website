@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { CallModalTrigger } from './CallModalTrigger'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600
@@ -94,13 +95,22 @@ export default function AziendePage() {
             <p className="text-base md:text-lg text-slate-700 leading-relaxed dark:text-slate-300">
               Se sei una PMI o un’azienda in crescita, probabilmente ti hanno già parlato di “trasformazione AI” in modo vago. Noi lavoriamo all’opposto: pochi casi d’uso, problemi concreti, prototipi leggeri e metriche chiare. Ti affianchi un AI engineer con esperienza reale e usi i risultati per decidere se investire di più, senza legarti a progetti infiniti.
             </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {[
+                { label: 'Durata', value: '2–6 settimane' },
+                { label: 'Output', value: '1 prototipo + checklist' },
+                { label: 'Impegno per te', value: '1–2 ore a settimana' }
+              ].map((item) => (
+                <div key={item.label} className="rounded-2xl border border-amber-200/50 bg-amber-50/60 px-4 py-3 text-sm shadow-sm dark:border-amber-700/40 dark:bg-amber-900/20 dark:text-amber-50">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-amber-700 dark:text-amber-200">{item.label}</p>
+                  <p className="text-base font-semibold text-slate-900 dark:text-white">{item.value}</p>
+                </div>
+              ))}
+            </div>
             <div className="flex flex-wrap gap-3" id="mini-call">
-              <Link
-                href="mailto:info@staituned.com?subject=Mini-call%2030m%20-%20AI%20PMI"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 px-4 py-2 text-[13px] font-semibold text-slate-900 shadow-md transition hover:-translate-y-[1px] hover:shadow-lg dark:from-amber-400 dark:via-amber-300 dark:to-amber-400"
-              >
+              <CallModalTrigger className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 px-4 py-2 text-[13px] font-semibold text-slate-900 shadow-md transition hover:-translate-y-[1px] hover:shadow-lg dark:from-amber-400 dark:via-amber-300 dark:to-amber-400">
                 Parliamone in una mini-call di 30 minuti ↗
-              </Link>
+              </CallModalTrigger>
             </div>
           </div>
           <div className="rounded-3xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6 shadow-md dark:border-slate-800 dark:from-slate-900 dark:via-slate-900/70 dark:to-slate-950">
@@ -152,7 +162,10 @@ export default function AziendePage() {
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {timeline.map((step) => (
-              <div key={step.title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+              <div key={step.title} className="relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+                <div className="absolute -top-3 -right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold shadow-sm dark:bg-amber-900/40 dark:text-amber-200">
+                  {step.title.match(/\d+/)?.[0]}
+                </div>
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{step.title}</h3>
                 <ul className="mt-3 space-y-2 text-sm text-slate-700 leading-relaxed dark:text-slate-300">
                   {step.items.map((item) => (
@@ -175,7 +188,10 @@ export default function AziendePage() {
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {typicalProblems.map((item) => (
-              <div key={item} className="flex gap-2 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-200">
+              <div key={item} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-200">
+                <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold dark:bg-amber-900/40 dark:text-amber-200">
+                  AI
+                </div>
                 <span className="text-amber-500 mt-0.5">•</span>
                 <span className="leading-relaxed">{item}</span>
               </div>
@@ -213,27 +229,24 @@ export default function AziendePage() {
         </section>
 
         {/* Come iniziare */}
-        <section className="space-y-4 rounded-3xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-50 p-8 shadow-md dark:border-slate-800 dark:from-slate-900 dark:via-slate-900/70 dark:to-slate-950">
+        <section className="space-y-4 rounded-3xl border-2 border-slate-900/60 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-xl text-white dark:border-slate-700">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-200">
+              Prossimo passo
+            </span>
+            <span className="text-sm text-slate-200">Call breve, nessun impegno</span>
+          </div>
           <h2 className="text-3xl font-bold">Vuoi capire se ha senso partire?</h2>
-          <p className="text-base md:text-lg text-slate-700 leading-relaxed dark:text-slate-300">
+          <p className="text-base md:text-lg text-slate-200 leading-relaxed">
             Il modo più semplice per iniziare è una mini-call di 30 minuti. Ci racconti azienda, processo e problema principale; io ti faccio qualche domanda, ti propongo 1–2 possibili esperimenti e ti dico onestamente se secondo me ha senso procedere con un prototipo.
           </p>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
+          <p className="text-sm text-slate-200/80">
             Se alla fine della call non vediamo un caso d’uso forte, va benissimo così: avrai una seconda opinione e qualche idea in più, senza nessun impegno.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="mailto:info@staituned.com?subject=Mini-call%2030m%20-%20AI%20PMI"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 px-4 py-2 text-[13px] font-semibold text-slate-900 shadow-md transition hover:-translate-y-[1px] hover:shadow-lg dark:from-amber-400 dark:via-amber-300 dark:to-amber-400"
-            >
+            <CallModalTrigger className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-[13px] font-semibold text-slate-900 shadow-md transition hover:-translate-y-[1px] hover:shadow-lg">
               Prenota una mini-call ↗
-            </Link>
-            <Link
-              href="mailto:info@staituned.com?subject=Contesto%20azienda%20-%20stAItuned"
-              className="text-sm font-semibold text-amber-700 hover:text-amber-600 dark:text-amber-200 dark:hover:text-amber-100"
-            >
-              Scrivimi per raccontarmi il tuo contesto →
-            </Link>
+            </CallModalTrigger>
           </div>
         </section>
       </div>
