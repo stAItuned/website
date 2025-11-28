@@ -6,12 +6,12 @@ const tracks = [
     title: 'Per le aziende',
     eyebrow: 'PMI · Strategia & MVP',
     description:
-      'Progetti pilota snelli (2–6 settimane) per capire in fretta se un\'idea di AI ha impatto reale su costi, tempi e qualità. Costruiamo soluzioni che possono partire piccole e scalare in base ai risultati.',
+      'Percorsi brevi (2–6 settimane) per esplorare l’uso dell’AI su problemi concreti della tua PMI. Lavoriamo su pochi casi d’uso mirati, costruendo prototipi e demo che ti aiutano a decidere se ha senso fare un passo in più',
     bullets: [
-      'Problemi tipici: dati sparsi, processi lenti, clienti poco ingaggiati.',
-      'Soluzioni: assistenti AI, automazioni operative, raccomandazioni 1-to-1.',
-      'Approccio: sprint brevi, metriche definite prima di iniziare.',
-      'Outcome: demo/pilota funzionante + roadmap per scalare o integrare stabilmente.'
+      "Problemi tipici: dati sparsi, processi lenti, clienti poco ingaggiati",
+      "Cosa facciamo: analizziamo il contesto, proponiamo idee e costruiamo un primo prototipo di AI",
+      "Approccio: sprint brevi, metriche definite prima di iniziare",
+      "Outcome: demo funzionante + checklist per decidere se e come procedere verso un progetto più grande",
     ],
     href: '/aziende',
     primaryCta: 'Scopri il percorso aziende',
@@ -22,12 +22,13 @@ const tracks = [
     title: 'Learn / Blog',
     eyebrow: 'Academy · Sperimenta AI',
     description:
-      'Articoli pratici, mini-demo di webapp, strumenti leggeri per portare l\'AI nelle tue decisioni quotidiane. Molti contenuti nascono da casi reali che abbiamo affrontato con le PMI.',
+      'Articoli pratici, mini-demo di webapp e strumenti leggeri per portare l’AI nelle decisioni di tutti i giorni. I contenuti nascono da esperienze reali sul campo, da prototipi che testiamo e dalle domande che arrivano da PMI, studenti e professionisti.',
     bullets: [
-      'Guide e articoli aggiornati su AI e GenAI, spesso ispirati da progetti veri.',
-      'Mini-tool e webapp demo per mettere le mani in pasta.',
-      'Newsletter con insight operativi e casi d\'uso reali.',
-      'Community aperta per domande e suggerimenti.',
+      "Guide e articoli aggiornati su AI e GenAI, con esempi presi da scenari reali",
+      "Mini-tool e webapp demo per mettere le mani in pasta in modo guidato",
+      "Newsletter con insight operativi e casi d’uso spiegati in modo chiaro",
+      "Community aperta per domande, feedback e idee di nuovi esperimenti",
+      "E se vuoi fare un passo in più, c’è anche stAItuned Lab: progetti reali, mentorship e possibilità di collaborazioni pagate",
       <>
         E se vuoi fare un passo in più, c&apos;è anche{' '}
         <Link href="/lab" className="font-semibold text-blue-600 underline underline-offset-4 dark:text-blue-400">
@@ -67,8 +68,8 @@ export function HomeDualTracks() {
         <h2 className="text-3xl md:text-5xl font-bold leading-tight text-slate-900 dark:text-slate-50">
           Due percorsi complementari, zero confusione.
         </h2>
-        <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          Partner strategico per portare l'AI nei processi della tua PMI. Spazio di apprendimento e sperimentazione per curiosi e tecnici. Scegli il binario giusto e inizia subito.
+        <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-4xl mx-auto leading-relaxed">
+          Un percorso per le PMI che vogliono capire dove l’AI può avere impatto concreto, e uno per chi vuole imparare, sperimentare e mettere le mani in pasta. Scegli il binario giusto per te e inizia da lì.
         </p>
       </div>
 

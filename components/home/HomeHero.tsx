@@ -37,25 +37,24 @@ export function HomeHero({
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900/75 via-slate-900/85 to-slate-900/75" />
       
       <div className="relative z-20 max-w-6xl mx-auto px-6 py-20 md:py-24 flex flex-col justify-center min-h-[90vh]">
-        <div className="space-y-10 max-w-4xl">
+        <div className="space-y-10 max-w-4xl max-w-[67rem]">
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/20 border border-amber-400/30 backdrop-blur-sm">
             <span className="text-xs font-semibold tracking-[0.2em] uppercase text-amber-300">
-              AI strategica per PMI
+              AI pratica per PMI e team digitali
             </span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-white">
-            <span className="text-amber-400">Progetti pilota di AI</span> in poche settimane,
-            <br />
-            non programmi infiniti
+            <span className="text-amber-400">Prototipi di AI</span> da testare sul campo,  
+            prima di <span className="text-amber-400">investire</span> in progetti lunghi e costosi.
           </h1>
 
           {/* Value proposition */}
           <div className="space-y-4 text-base md:text-lg text-slate-200 leading-relaxed max-w-3xl">
             <p className="text-xl md:text-2xl font-medium text-white leading-relaxed">
-              Dal foglio di idee a una prima soluzione AI funzionante, pronta da testare con il tuo team e integrare nei sistemi che usi già.
+              Ti aiutiamo a trasformare ipotesi su AI in esperimenti concreti: prototipi, demo e strumenti di prova che il tuo team può usare subito per capire se vale la pena fare il passo successivo.
             </p>
             <ul className="space-y-3 text-slate-100">
               <li className="flex items-start gap-3">
@@ -64,11 +63,11 @@ export function HomeHero({
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-amber-400 font-bold mt-1">✓</span>
-                <span>Costruiamo <strong className="text-white">progetti pilota funzionanti</strong> (assistenti AI, automazioni, sistemi di raccomandazione 1-to-1)</span>
+                <span>Costruiamo <strong className="text-white">progetti pilota funzionanti</strong> </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-amber-400 font-bold mt-1">✓</span>
-                <span>Integrazione con i <strong className="text-white">sistemi che usi già</strong> (CRM, gestionale, tool interni)</span>
+                <span>Ti aiutiamo a capire <strong className="text-white"> se e come integrarli</strong> nei sistemi già in uso</span>
               </li>
             </ul>
           </div>

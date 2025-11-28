@@ -157,7 +157,7 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-3 md:grid-cols-3">
+              <div className="mt-6 grid gap-2.5 md:grid-cols-3">
                 {activeColumn.items.slice(0, 4).map((item, index) => {
                   const post = postMap.get(item.slug)
                   const formattedDate = post ? formatDate(post.date) : null
@@ -167,10 +167,10 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                   const coverSrc = post ? getCoverSrc(post) : null
                   return (
                     <Link key={`${item.slug}-${index}`} href={href} className="group/item block">
-                      <article className="relative overflow-hidden rounded-2xl border border-slate-100 bg-white/90 backdrop-blur-sm shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-800/60">
+                      <article className="relative overflow-hidden rounded-xl border border-slate-100 bg-white/90 backdrop-blur-sm shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-800/60">
                         <div className="absolute inset-0 bg-gradient-to-br from-amber-50/0 via-amber-50/40 to-amber-100/40 opacity-0 transition group-hover/item:opacity-100 dark:from-amber-400/5 dark:via-amber-400/10 dark:to-amber-300/10" />
                         {coverSrc && (
-                          <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-900/40">
+                          <div className="relative aspect-[5/4] w-full overflow-hidden border-b border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-900/40">
                             <Image
                               src={coverSrc}
                               alt={post?.title ?? item.title}
@@ -181,8 +181,8 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/25 via-slate-900/10 to-transparent" />
                           </div>
                         )}
-                        <div className="p-4">
-                          <div className="flex items-center justify-between gap-3">
+                        <div className="p-3.5">
+                          <div className="flex items-center justify-between gap-2.5">
                             <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
                               {badgeText}
                             </span>
@@ -192,13 +192,13 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                               </span>
                             )}
                           </div>
-                          <h4 className="mt-2 text-base font-bold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2">
+                          <h4 className="mt-1.5 text-sm font-bold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2">
                             {item.title}
                           </h4>
-                          <p className="mt-1 text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">
+                          <p className="mt-1 text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">
                             {item.description}
                           </p>
-                          <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                          <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] font-medium text-slate-500 dark:text-slate-400">
                             {formattedDate && <span>{formattedDate}</span>}
                             {formattedDate && readingTime && <span aria-hidden>•</span>}
                             {readingTime && <span>{readingTime}</span>}
@@ -223,7 +223,7 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
             <span aria-hidden className="text-base">→</span>
           </Link>
         </div>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-2.5 md:grid-cols-3">
           {posts
             .filter((post) => post.published !== false)
             .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
@@ -238,9 +238,9 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                 <Link
                   key={post.slug}
                   href={href}
-                  className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60"
+                  className="group block overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60"
                 >
-                  <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-800/60">
+                  <div className="relative aspect-[5/4] w-full overflow-hidden border-b border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-800/60">
                     {coverSrc ? (
                       <Image
                         src={coverSrc}
@@ -255,8 +255,8 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                     )}
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent" />
                   </div>
-                  <div className="p-5">
-                    <div className="flex items-center justify-between gap-3">
+                  <div className="p-3.5">
+                    <div className="flex items-center justify-between gap-2.5">
                       <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
                         {badgeText}
                       </span>
@@ -266,9 +266,11 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                         </span>
                       )}
                     </div>
-                    <h4 className="mt-2 text-lg font-bold text-slate-900 dark:text-slate-50 leading-snug">{post.title}</h4>
-                    <p className="mt-1 text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">{post.meta}</p>
-                    <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                    <h4 className="mt-1.5 text-sm font-bold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2">
+                      {post.title}
+                    </h4>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">{post.meta}</p>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] font-medium text-slate-500 dark:text-slate-400">
                       {formattedDate && <span>{formattedDate}</span>}
                       {formattedDate && readingTime && <span aria-hidden>•</span>}
                       {readingTime && <span>{readingTime}</span>}

@@ -30,8 +30,29 @@ export function HomeNextStep() {
             Porta queste idee <span className="text-amber-400">nella tua azienda</span>
           </h3>
           <p className="mt-4 text-base md:text-lg text-slate-200 leading-relaxed max-w-3xl mx-auto">
-            Se durante la lettura hai pensato “qui potremmo usarla anche noi”, facciamo una mini-call di 30 minuti: mappiamo i processi, scegliamo 1–2 esperimenti e stimiamo il primo MVP.
+            Una mini-call per capire se un prototipo di AI ha senso nel tuo contesto, senza impegno e senza slide infinite.
           </p>
+          <p className="mt-4 text-base sm:text-sm text-slate-200 leading-relaxed max-w-4xl mx-auto">
+            Se leggendo il sito ti è venuta in mente una situazione concreta – un processo lento, dati che non usi mai, clienti poco ingaggiati – possiamo guardarli insieme. In 30 minuti esploriamo il contesto, ragioniamo su 1–2 possibili casi d’uso di AI e ti aiuto a capire se un prototipo può avere davvero impatto oppure no.
+          </p>
+          <br />
+          <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                'ci racconti brevemente azienda, team e processo che ti crea più attrito',
+                'facciamo 2–3 ipotesi di casi d’uso AI realistici (niente “AI ovunque”, solo dove ha senso)',
+                'ti propongo uno schema di esperimento (prototipo, dati richiesti, metriche base)',
+                'se alla fine non ha senso fare nulla, lo diciamo chiaramente e ti rimangono comunque le idee'
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex gap-2 rounded-2xl border border-white/20 bg-white/5 p-3 text-sm text-slate-100 shadow-sm backdrop-blur-sm"
+                >
+                  <span className="text-amber-300 mt-0.5">✓</span>
+                  <span className="leading-relaxed">{item}</span>
+                </div>
+              ))}
+            </div>
+
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <Link
               href="/aziende"

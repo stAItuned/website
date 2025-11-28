@@ -90,6 +90,11 @@ export default async function MeetPage() {
               Dal 2022 stAItuned è il posto dove parliamo di AI pratica, senza hype: prima come community di writer, oggi anche come studio che aiuta PMI e aziende in crescita a sperimentare l'AI in modo veloce e concreto.
             </p>
           </div>
+          <div className="p-4 rounded-2xl bg-white/70 border border-slate-200 shadow-sm max-w-4xl dark:bg-slate-900/70 dark:border-slate-800">
+            <p className="text-sm text-slate-700 leading-relaxed dark:text-slate-300">
+              stAItuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell’orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.
+            </p>
+          </div>
           <div className="space-y-4 max-w-4xl pt-4 border-t-2 border-slate-200/50 dark:border-slate-800/50">
             <p className="text-lg text-slate-600 leading-relaxed dark:text-slate-300">
               Qui trovi chi guida la parte strategica e chi contribuisce con articoli, ricerca e punti di vista diversi.

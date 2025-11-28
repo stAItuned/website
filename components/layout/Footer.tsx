@@ -82,6 +82,9 @@ export function Footer() {
           />
           <p className="text-slate-200/80">© 2024 stAItuned. All rights reserved.</p>
         </div>
+        <p className="w-full text-[11px] text-slate-200/80 leading-relaxed">
+          stAItuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell’orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.
+        </p>
       </div>
     </footer>
   )

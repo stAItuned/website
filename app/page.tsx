@@ -1,6 +1,7 @@
 import { allPosts } from '@/lib/contentlayer'
 import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
 import { HomeDualTracks } from '@/components/home/HomeDualTracks'
+// import { HomeBusinessCTA } from '@/components/home/HomeBusinessCTA'
 import { HomeKpi } from '@/components/home/HomeKpi'
 import { HomeArticleShortlist } from '@/components/home/HomeArticleShortlist'
 import { HomeNextStep } from '@/components/home/HomeNextStep'
@@ -133,6 +134,7 @@ export default function HomePage() {
         <HomeArticleShortlist columns={shortlistColumns} posts={publishedPosts} />
 
         {/* Next step micro-block */}
+        {/* <HomeBusinessCTA /> */}
         <HomeNextStep />
 
       </main>
