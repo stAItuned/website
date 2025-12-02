@@ -91,7 +91,7 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">🧑‍🤝‍🧑</span>
     }
   ]
-  const primaryCta = { name: 'Prenota call', path: '/aziende#prenota-call' }
+  const primaryCta = { name: '💬', path: '/aziende#prenota-call' }
 
   return (
     <>
@@ -186,8 +186,11 @@ export function Header() {
               </svg>
             </button>
 
-            <CallModalTrigger className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
+            <CallModalTrigger className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 group relative">
               {primaryCta.name}
+              <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
+                Prenota call
+              </span>
             </CallModalTrigger>
           </nav>
         </div>
@@ -258,10 +261,11 @@ export function Header() {
               })}
 
               <CallModalTrigger
-                className="mt-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                onOpen={() => setIsMenuOpen(false)}
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                onOpen={() => setTimeout(() => setIsMenuOpen(false), 100)}
               >
-                {primaryCta.name}
+                <span>{primaryCta.name}</span>
+                <span>Prenota Call</span>
               </CallModalTrigger>
               
               {/* Mobile Authentication */}
