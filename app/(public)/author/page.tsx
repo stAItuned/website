@@ -7,7 +7,7 @@ import { PageTransition } from '@/components/ui/PageTransition'
 
 // Force static generation
 export const dynamic = 'force-static'
-export const revalidate = 3600 // 1 ora in secondi
+export const revalidate = 21600 // 6 ore (60*60*6) - increased from 1h to save function calls
 
 export const metadata: Metadata = {
   title: 'All Authors - stAItuned',

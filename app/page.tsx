@@ -1,4 +1,5 @@
 import { allPosts } from '@/lib/contentlayer'
+import { fetchGlobalAnalytics } from '@/lib/analytics-server'
 import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
 import { HomeDualTracks } from '@/components/home/HomeDualTracks'
 // import { HomeBusinessCTA } from '@/components/home/HomeBusinessCTA'
@@ -11,8 +12,11 @@ import { PageTransition } from '@/components/ui/PageTransition'
 export const dynamic = 'force-static'
 export const revalidate = 86400 // ISR ogni giorno
 
-export default function HomePage() {
+export default async function HomePage() {
   const publishedPosts = allPosts.filter(post => post.published !== false)
+  
+  // Fetch analytics server-side during ISR
+  const globalAnalytics = await fetchGlobalAnalytics()
 
   const totalArticles = publishedPosts.length
   const uniqueAuthors = new Set<string>()
@@ -122,6 +126,8 @@ export default function HomePage() {
         <HomeHeroWithAnalytics 
           totalArticles={totalArticles}
           totalWriters={totalWriters}
+          initialActiveUsers={globalAnalytics.totalStats.users}
+          initialSessions={globalAnalytics.totalStats.sessions}
         />
         
         {/* KPI block */}

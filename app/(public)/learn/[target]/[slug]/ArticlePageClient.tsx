@@ -13,6 +13,7 @@ import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
 import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
+import type { ArticleAnalytics } from '@/lib/analytics-server'
 
 export default function ArticlePageClient({
   coverImage,
@@ -21,8 +22,9 @@ export default function ArticlePageClient({
   target,
   targetDisplay,
   relatedArticles,
-  authorData
-}: any) {
+  authorData,
+  analytics
+}: any & { analytics: ArticleAnalytics }) {
   const isLarge = useScreenSize()
   const [showTocModal, setShowTocModal] = useState(false)
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
@@ -538,7 +540,7 @@ export default function ArticlePageClient({
               </div>
               {/* Article Analytics */}
               <div className="mb-4">
-                <ArticleAnalyticsStats slug={article.slug} />
+                <ArticleAnalyticsStats slug={article.slug} initialAnalytics={analytics} />
               </div>
               {/* Article Title (desktop) */}
               <div className="mb-6">
@@ -617,7 +619,7 @@ export default function ArticlePageClient({
               </div>
               {/* Article Analytics */}
               <div className="mb-4 flex flex-col gap-1">
-                <ArticleAnalyticsStats slug={article.slug} />
+                <ArticleAnalyticsStats slug={article.slug} initialAnalytics={analytics} />
               </div>
               {/* Article Title (mobile) */}
               <div className="mb-6">

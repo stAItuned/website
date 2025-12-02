@@ -3,11 +3,12 @@ import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { extractTOC } from '@/lib/markdown-headings'
 import { getAuthorData } from '@/lib/authors'
+import { fetchArticleAnalytics } from '@/lib/analytics-server'
 import ArticlePageClient from './ArticlePageClient'
 
 // Force static generation per articoli
 export const dynamic = 'force-static'
-export const revalidate = 21600 // ISR ogni 6 ore (60*60*6)
+export const revalidate = 43200 // ISR ogni 12 ore (60*60*12) - reduced from 6h to save function calls
 
 export const dynamicParams = false
 
@@ -118,6 +119,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   // Extract TOC from markdown using shared function
   const toc = extractTOC(article.body.raw)
   const authorData = article.author ? await getAuthorData(article.author) : null
+  
+  // Fetch analytics server-side during SSR/ISR (no client-side API call needed!)
+  const analytics = await fetchArticleAnalytics(slug)
+  
   return (
     <ArticlePageClient
       coverImage={coverImage}
@@ -127,6 +132,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
       targetDisplay={targetDisplay}
       relatedArticles={relatedArticles}
       authorData={authorData}
+      analytics={analytics}
     />
   )
 }

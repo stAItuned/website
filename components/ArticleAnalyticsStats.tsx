@@ -2,21 +2,35 @@
 
 import { useState, useEffect } from 'react'
 import { formatAnalyticsNumber } from '@/lib/hooks/useAnalytics'
+import type { ArticleAnalytics } from '@/lib/analytics-server'
 
 interface ArticleAnalyticsStatsProps {
   slug: string
+  initialAnalytics?: ArticleAnalytics // Accept server-side fetched analytics
 }
 
-export default function ArticleAnalyticsStats({ slug }: ArticleAnalyticsStatsProps) {
-  const [analytics, setAnalytics] = useState<any>({
+export default function ArticleAnalyticsStats({ slug, initialAnalytics }: ArticleAnalyticsStatsProps) {
+  const [analytics, setAnalytics] = useState<any>(initialAnalytics ?? {
     pageViews: 0,
     users: 0,
     likes: 0
   })
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!initialAnalytics) // No loading if we have initial data
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // If we have initialAnalytics from SSR, use it and skip the fetch
+    if (initialAnalytics) {
+      setAnalytics({
+        pageViews: initialAnalytics.pageViews ?? 0,
+        users: initialAnalytics.users ?? 0,
+        likes: initialAnalytics.likes ?? 0
+      })
+      setLoading(false)
+      return
+    }
+    
+    // Fallback: fetch client-side only if no initial data (shouldn't happen in production)
     const fetchAnalytics = async () => {
       try {
         setLoading(true)

@@ -16,11 +16,20 @@ export function HomeHeroWithAnalytics({
   initialActiveUsers = 0,
   initialSessions = 0
 }: HomeHeroWithAnalyticsProps) {
-  const [activeUsers, setActiveUsers] = useState<number | null>(null)
-  const [sessions, setSessions] = useState<number | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [activeUsers, setActiveUsers] = useState<number | null>(initialActiveUsers)
+  const [sessions, setSessions] = useState<number | null>(initialSessions)
+  const [loading, setLoading] = useState(false) // No loading if we have initial data
 
   useEffect(() => {
+    // If we have initial data from SSR, use it and skip the fetch
+    if (initialActiveUsers > 0 || initialSessions > 0) {
+      setActiveUsers(initialActiveUsers)
+      setSessions(initialSessions)
+      setLoading(false)
+      return
+    }
+    
+    // Fallback: fetch client-side only if no initial data (shouldn't happen in production)
     setActiveUsers(null);
     setSessions(null);
     setLoading(true);
@@ -42,7 +51,7 @@ export function HomeHeroWithAnalytics({
       }
     }
     fetchAnalytics();
-  }, [])
+  }, [initialActiveUsers, initialSessions])
 
   return (
     <HomeHero
