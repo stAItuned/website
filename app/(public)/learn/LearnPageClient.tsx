@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArticleCard } from '@/components/ArticleCard'
+import { LatestArticles } from '@/components/LatestArticles'
 import { useSearchParams } from 'next/navigation'
 
 interface Target {
@@ -34,9 +35,10 @@ interface LearnPageClientProps {
     expert: Article[]
     business: Article[]
   }
+  latestArticles: Article[]
 }
 
-export default function LearnPageClient({ targets, articlesByTarget }: LearnPageClientProps) {
+export default function LearnPageClient({ targets, articlesByTarget, latestArticles }: LearnPageClientProps) {
   const searchParams = useSearchParams()
   const target = searchParams.get('target')
   const targetSlug = useMemo(() => target?.toLowerCase().split('/')?.[0] || null, [target])
@@ -415,6 +417,18 @@ export default function LearnPageClient({ targets, articlesByTarget }: LearnPage
           <span aria-hidden className="text-base">→</span>
         </Link>
       </div>
+
+      {/* Latest Articles Section */}
+      {latestArticles.length > 0 && (
+        <div className="pt-12">
+          <LatestArticles 
+            articles={latestArticles}
+            maxArticles={6}
+            title="Latest Articles"
+            description="Discover our most recent content across all learning paths"
+          />
+        </div>
+      )}
     </div>
   )
 }

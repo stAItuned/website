@@ -52,6 +52,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Search Console Verification */}
+        <meta name="google-site-verification" content="googleefba438834d7fae6" />
         {/* Critical CSS for immediate render */}
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
         {/* Preload critical resources */}

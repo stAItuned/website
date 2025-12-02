@@ -49,6 +49,12 @@ export default function LearnPage() {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }
 
+  // Get latest articles across all categories
+  const latestArticles = allPosts
+    .filter(post => post.published !== false)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 6)
+
   return (
     <PageTransition>
   <section className="max-w-5xl mx-auto mt-[100px] mb-24 px-4 lg:px-6 space-y-16">
@@ -66,6 +72,7 @@ export default function LearnPage() {
           <LearnPageClient 
             targets={targets}
             articlesByTarget={articlesByTarget}
+            latestArticles={latestArticles}
           />
         </Suspense>
       </section>
