@@ -43,16 +43,20 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
       const fromTop = window.scrollY + OFFSET
       let current = headings[0].id
 
-      for (const heading of headings) {
-        if (getDocumentOffset(heading) <= fromTop) {
-          current = heading.id
-        } else {
-          break
-        }
-      }
+      // Check if we're at the bottom of the page first
+      const isAtBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 150
 
-      if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 150) {
+      if (isAtBottom) {
         current = headings[headings.length - 1].id
+      } else {
+        // Normal scroll position logic
+        for (const heading of headings) {
+          if (getDocumentOffset(heading) <= fromTop) {
+            current = heading.id
+          } else {
+            break
+          }
+        }
       }
 
       setActive(prev => {
