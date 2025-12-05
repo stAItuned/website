@@ -11,6 +11,8 @@ import { PageTransition } from '@/components/ui/PageTransition'
 import { RelatedArticles } from '@/components/RelatedArticles'
 import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
 import { ReadingProgress, EstimatedTimeRemaining } from '@/components/ui/ReadingProgress'
+import { FloatingShareBar } from '@/components/ui/FloatingShareBar'
+import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
 import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -30,11 +32,34 @@ export default function ArticlePageClient({
   const [showTocModal, setShowTocModal] = useState(false)
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [showMobileToc, setShowMobileToc] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
   
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
     setMounted(true)
   }, [])
+  
+  // Handle mobile TOC button visibility on scroll
+  useEffect(() => {
+    if (!mounted || isLarge) return
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      
+      // Show button when scrolling up, hide when scrolling down
+      if (currentScrollY < lastScrollY || currentScrollY < 100) {
+        setShowMobileToc(true)
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowMobileToc(false)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [mounted, isLarge, lastScrollY])
   
   // Debug screen size and TOC
   useEffect(() => {
@@ -398,7 +423,9 @@ export default function ArticlePageClient({
         {/* Mobile TOC Hamburger Button (below header logo) */}
         {mounted && !isLarge && toc.length > 0 && (
           <button
-            className="fixed left-4 top-20 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 text-primary-600 focus:outline-none transition-transform duration-200 active:scale-95 hover:bg-primary-50"
+            className={`fixed left-4 top-20 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 text-primary-600 dark:text-primary-400 focus:outline-none transition-all duration-300 hover:bg-primary-50 dark:hover:bg-slate-700 ${
+              showMobileToc ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0 pointer-events-none'
+            }`}
             aria-label="Open Table of Contents"
             onClick={() => {
               setModalActiveSlug(null);
@@ -412,7 +439,6 @@ export default function ArticlePageClient({
                 value: 1
               })
             }}
-            style={{ position: 'fixed' }}
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
@@ -491,20 +517,17 @@ export default function ArticlePageClient({
         {/* Responsive: Only render one article version at a time */}
         {/* Render desktop by default for SSR, then switch after mount */}
         {!mounted || isLarge ? (
-          <div className="grid grid-cols-[20rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
-            {/* Left: TOC Sidebar (Desktop only) */}
-            <aside className="self-stretch">
-              <div className="sticky top-14">
-                <div className="table-of-contents">
-                  <ArticleTOC 
-                    toc={toc} 
-                    enableScrollSpy={true}
-                    onLinkClick={handleTOCClick}
-                    sticky={false}
-                  />
-                </div>
-              </div>
-            </aside>
+          <div className="grid grid-cols-[5rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
+            {/* Left: Floating Share Bar (Desktop only) */}
+            <FloatingShareBar
+              title={article.title}
+              articleSlug={article.slug}
+              description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+              imageUrl={coverImage}
+              likes={analytics.likes || 0}
+              views={analytics.views || 0}
+              visitors={analytics.visitors || 0}
+            />
             {/* Center: Main Article Content */}
             <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
               {/* Article Header */}
@@ -540,17 +563,13 @@ export default function ArticlePageClient({
                   </div>
                 </div>
               </div>
-              {/* Article Analytics */}
-              <div className="mb-4">
-                <ArticleAnalyticsStats slug={article.slug} initialAnalytics={analytics} />
-              </div>
               {/* Article Title (desktop) */}
               <div className="mb-6">
                 <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-300 mb-4">
                   {article.title}
                 </h1>
                 {/* Share button below title */}
-                <div className="flex justify-start">
+                {/* <div className="flex justify-start">
                   <ShareOnLinkedIn
                     title={article.title}
                     description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
@@ -568,7 +587,7 @@ export default function ArticlePageClient({
                       value: 1,
                     })}
                   />
-                </div>
+                </div> */}
               </div>
               {/* Article Body */}
               <div id="article-root">
@@ -579,8 +598,19 @@ export default function ArticlePageClient({
                 />
               </div>
             </article>
-            {/* Right: Empty for future use or spacing */}
-            <div />
+            {/* Right: TOC Sidebar (Desktop only) */}
+            <aside className="self-stretch">
+              <div className="sticky top-24">
+                <div className="table-of-contents">
+                  <ArticleTOC 
+                    toc={toc} 
+                    enableScrollSpy={true}
+                    onLinkClick={handleTOCClick}
+                    sticky={false}
+                  />
+                </div>
+              </div>
+            </aside>
           </div>
         ) : (
           <div className="flex flex-col gap-10 max-w-2xl mx-auto my-10 px-4 sm:px-6 md:px-8">
@@ -620,34 +650,28 @@ export default function ArticlePageClient({
                 </div>
               </div>
               {/* Article Analytics */}
-              <div className="mb-4 flex flex-col gap-1">
+              <div className="mb-6 flex flex-col gap-1">
                 <ArticleAnalyticsStats slug={article.slug} initialAnalytics={analytics} />
               </div>
-              {/* Article Title (mobile) */}
-              <div className="mb-6">
-                <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-300 mb-4 text-center">
-                  {article.title}
-                </h1>
-                {/* Share button below title */}
-                <div className="flex justify-center">
-                  <ShareOnLinkedIn
-                    title={article.title}
-                    description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
-                    imageUrl={coverImage}
-                    onShareClick={() => event({
-                      action: 'share_linkedin',
-                      category: 'engagement',
-                      label: article.slug,
-                      value: 1,
-                    })}
-                    onCopyClick={() => event({
-                      action: 'share_copy_link',
-                      category: 'engagement',
-                      label: article.slug,
-                      value: 1,
-                    })}
-                  />
-                </div>
+              {/* Share button below analytics */}
+              <div className="flex justify-center mb-6">
+                <ShareOnLinkedIn
+                  title={article.title}
+                  description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                  imageUrl={coverImage}
+                  onShareClick={() => event({
+                    action: 'share_linkedin',
+                    category: 'engagement',
+                    label: article.slug,
+                    value: 1,
+                  })}
+                  onCopyClick={() => event({
+                    action: 'share_copy_link',
+                    category: 'engagement',
+                    label: article.slug,
+                    value: 1,
+                  })}
+                />
               </div>
               {/* Article Body */}
               <div id="article-root">
@@ -661,6 +685,10 @@ export default function ArticlePageClient({
           </div>
         )}
       </section>
+      {/* Author Bio Card */}
+      <div className="max-w-6xl mx-auto px-4">
+        <AuthorBioCard author={article.author} authorData={authorData} />
+      </div>
       {/* Back to Top Button (client component) */}
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
         <BackToTopButton />
