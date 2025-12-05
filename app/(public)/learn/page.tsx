@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { ArticleCardSkeleton } from '@/components/ui/LoadingStates'
 import { allPosts } from '@/lib/contentlayer'
 import LearnPageClient from './LearnPageClient'
 
@@ -82,18 +83,29 @@ export default function LearnPage() {
 
 function LearnPageFallback() {
   return (
-    <div className="flex lg:flex-row flex-col justify-between gap-16">
-      {targets.map((target) => (
-        <div key={target.slug} className="w-full px-8">
-          <div className="items-center flex flex-col">
-            <div className="relative w-64 h-64 mb-4 overflow-hidden rounded-lg bg-gray-200 animate-pulse" />
-            <div className="bg-gray-200 animate-pulse text-3xl py-6 px-8 rounded-full w-full text-center font-semibold">
-              &nbsp;
+    <div className="space-y-16">
+      {/* Target cards skeleton */}
+      <div className="flex lg:flex-row flex-col justify-between gap-16">
+        {targets.map((target) => (
+          <div key={target.slug} className="w-full px-8">
+            <div className="items-center flex flex-col space-y-4">
+              <div className="relative w-64 h-64 mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse" />
+              <div className="bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse h-12 rounded-full w-48" />
+              <div className="bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse h-6 rounded-lg w-full max-w-xs" />
             </div>
-            <div className="h-16 bg-gray-200 animate-pulse mt-4 w-full max-w-xs rounded" />
           </div>
+        ))}
+      </div>
+      
+      {/* Latest articles skeleton */}
+      <div className="space-y-4">
+        <div className="bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse h-10 rounded-lg w-48" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <ArticleCardSkeleton key={i} />
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   )
 }

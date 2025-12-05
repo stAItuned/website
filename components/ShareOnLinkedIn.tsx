@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useCallback, useState } from "react";
+import { useToast } from "./ui/Toast";
 
 type Props = {
   title?: string;
@@ -12,6 +13,7 @@ type Props = {
 export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, onCopyClick }: Props = {}) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const { showToast } = useToast();
 
   // Build the *current* page URL on the client
   const pageUrl = useMemo(() => {
@@ -48,11 +50,13 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
       setShowDropdown(false);
+      showToast('Link copied to clipboard! 📋', 'success');
       if (onCopyClick) onCopyClick();
     } catch (err) {
       console.error('Failed to copy:', err);
+      showToast('Failed to copy link. Please try again.', 'error');
     }
-  }, [pageUrl, onCopyClick]);
+  }, [pageUrl, onCopyClick, showToast]);
 
   const handleLinkedInShare = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -71,8 +75,9 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
     }
     
     setShowDropdown(false);
+    showToast('Opening LinkedIn share...', 'info');
     if (onShareClick) onShareClick();
-  }, [liUrl, onShareClick]);
+  }, [liUrl, onShareClick, showToast]);
 
   return (
     <div className="relative">

@@ -10,6 +10,7 @@ import { BackToTopButton } from '@/components/BackToTopButton'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RelatedArticles } from '@/components/RelatedArticles'
 import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
+import { ReadingProgress, EstimatedTimeRemaining } from '@/components/ui/ReadingProgress'
 import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -392,6 +393,7 @@ export default function ArticlePageClient({
   
   return (
     <PageTransition>
+      <ReadingProgress />
       <section className="relative">
         {/* Mobile TOC Hamburger Button (below header logo) */}
         {mounted && !isLarge && toc.length > 0 && (

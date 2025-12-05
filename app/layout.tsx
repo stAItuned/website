@@ -22,6 +22,8 @@ import PerformanceProvider from '@/components/PerformanceProvider'
 import { FirebaseAuthProvider } from '@/components/auth/FirebaseAuthProvider'
 import { CookieConsentProvider } from '@/components/cookies/CookieConsentProvider'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { ToastProvider } from '@/components/ui/Toast'
+import { TopLoadingBar } from '@/components/ui/PageProgress'
 
 
 const montserrat = Montserrat({ subsets: ['latin'] })
@@ -131,14 +133,16 @@ export default function RootLayout({
       </head>
       <body className={`${montserrat.className} antialiased stai-body`}>
         <ThemeProvider>
-          <FirebaseAuthProvider>
-            <CookieConsentProvider>
-              <PerformanceProvider 
-                enableMonitoring={process.env.NODE_ENV === 'production'}
-                sampleRate={0.1}
-              >
-              <GoogleAnalytics />
-              <ServiceWorkerRegister />
+          <ToastProvider>
+            <FirebaseAuthProvider>
+              <CookieConsentProvider>
+                <PerformanceProvider 
+                  enableMonitoring={process.env.NODE_ENV === 'production'}
+                  sampleRate={0.1}
+                >
+                <TopLoadingBar />
+                <GoogleAnalytics />
+                <ServiceWorkerRegister />
               {/* Solo i componenti essenziali sono server-side */}
               <SearchProvider>
                 <SafePageViewTracker />
@@ -157,6 +161,7 @@ export default function RootLayout({
               </PerformanceProvider>
             </CookieConsentProvider>
           </FirebaseAuthProvider>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

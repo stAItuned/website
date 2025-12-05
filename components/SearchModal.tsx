@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
@@ -21,6 +21,9 @@ export function SearchModal() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredArticles, setFilteredArticles] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // Filter articles based on search term
   useEffect(() => {
@@ -45,24 +48,55 @@ export function SearchModal() {
     }
   }, [searchTerm])
 
-  // Handle escape key
+  // Load recent searches from localStorage
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('recentSearches')
+      if (saved) {
+        setRecentSearches(JSON.parse(saved))
+      }
+    }
+  }, [])
+
+  // Save search to recent searches
+  const saveSearch = (term: string) => {
+    if (term.trim() && typeof window !== 'undefined') {
+      const updated = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5)
+      setRecentSearches(updated)
+      localStorage.setItem('recentSearches', JSON.stringify(updated))
+    }
+  }
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyboard = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         closeSearch()
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setSelectedIndex(prev => Math.min(prev + 1, filteredArticles.length - 1))
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setSelectedIndex(prev => Math.max(prev - 1, 0))
+      } else if (e.key === 'Enter' && filteredArticles[selectedIndex]) {
+        const article = filteredArticles[selectedIndex]
+        saveSearch(searchTerm)
+        window.location.href = `/learn/${(article.target || 'general').toLowerCase()}/${article.slug}`
       }
     }
 
     if (isSearchOpen) {
-      document.addEventListener('keydown', handleEscape)
+      document.addEventListener('keydown', handleKeyboard)
       document.body.style.overflow = 'hidden'
+      // Focus input when modal opens
+      setTimeout(() => inputRef.current?.focus(), 100)
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('keydown', handleKeyboard)
       document.body.style.overflow = 'unset'
     }
-  }, [isSearchOpen, closeSearch])
+  }, [isSearchOpen, closeSearch, filteredArticles, selectedIndex, searchTerm])
 
   // Reset search when modal closes
   useEffect(() => {
@@ -97,102 +131,166 @@ export function SearchModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto">
+    <div className="fixed inset-0 z-[100] overflow-y-auto animate-fade-in">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-300"
         onClick={closeSearch}
       />
       
       {/* Modal */}
       <div className="flex min-h-full items-start justify-center p-4 text-center sm:p-0 pt-20">
-        <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
-          <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+        <div className="relative transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all duration-300 sm:my-8 sm:w-full sm:max-w-2xl animate-slide-up">
+          <div className="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
-                Search Articles
+            <div className="flex items-center justify-between mb-6 animate-fade-in">
+              <h3 className="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100">
+                🔍 Search Articles
               </h3>
               <button
                 onClick={closeSearch}
-                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+                className="rounded-full p-2 bg-gray-100 dark:bg-gray-700 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none transition-all duration-300 hover:rotate-90 hover:scale-110"
               >
                 <span className="sr-only">Close</span>
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
             {/* Search Input */}
-            <div className="relative mb-6">
+            <div className="relative mb-6 animate-fade-in" style={{ animationDelay: '100ms' }}>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <input
+                ref={inputRef}
                 type="text"
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                className="block w-full pl-10 pr-3 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300"
                 placeholder="Search by title, author, or content..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                autoFocus
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
             </div>
+
+            {/* Recent Searches */}
+            {!searchTerm && recentSearches.length > 0 && (
+              <div className="mb-4 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Recent Searches</p>
+                <div className="flex flex-wrap gap-2">
+                  {recentSearches.map((search, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSearchTerm(search)}
+                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300 transition-all duration-300 hover:scale-105"
+                    >
+                      {search}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Results */}
             <div className="max-h-96 overflow-y-auto">
               {isLoading && (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-                  <p className="text-gray-500 mt-2">Searching...</p>
+                <div className="text-center py-12 animate-fade-in">
+                  <div className="relative inline-block">
+                    <div className="w-12 h-12 border-4 border-gray-200 dark:border-gray-600 rounded-full" />
+                    <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-primary-600 rounded-full animate-spin" />
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 mt-4 animate-pulse">Searching...</p>
                 </div>
               )}
               
               {!isLoading && searchTerm && filteredArticles.length === 0 && (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No articles found for &ldquo;{searchTerm}&rdquo;</p>
+                <div className="text-center py-12 animate-fade-in">
+                  <div className="text-6xl mb-4">🔍</div>
+                  <p className="text-gray-900 dark:text-gray-100 font-semibold mb-2">No articles found</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">Try different keywords for &ldquo;{searchTerm}&rdquo;</p>
                 </div>
               )}
               
               {!isLoading && filteredArticles.length > 0 && (
-                <div className="space-y-3">
-                  <p className="text-sm text-gray-500 mb-4">
-                    Found {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''}
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 px-1 animate-fade-in">
+                    Found <span className="font-semibold text-primary-600 dark:text-primary-400">{filteredArticles.length}</span> article{filteredArticles.length !== 1 ? 's' : ''}
                   </p>
-                  {filteredArticles.map((article) => {
+                  {filteredArticles.map((article, index) => {
                     const imageSrc = getValidImageSrc(article)
+                    const isSelected = index === selectedIndex
                     return (
                       <Link
                         key={article.slug}
                         href={`/learn/${(article.target || 'general').toLowerCase()}/${article.slug}`}
-                        onClick={closeSearch}
-                        className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                        onClick={() => {
+                          saveSearch(searchTerm)
+                          closeSearch()
+                        }}
+                        className={`block p-4 border-2 rounded-xl transition-all duration-300 animate-fade-in-up group ${
+                          isSelected 
+                            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md scale-[1.02]' 
+                            : 'border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:shadow-md hover:scale-[1.01]'
+                        }`}
+                        style={{ animationDelay: `${index * 50}ms` }}
+                        onMouseEnter={() => setSelectedIndex(index)}
                       >
-                        <div className="flex items-start space-x-3">
+                        <div className="flex items-start space-x-4">
                           {imageSrc && (
-                            <Image
-                              src={imageSrc}
-                              alt={article.title || ''}
-                              width={60}
-                              height={40}
-                              className="rounded object-cover flex-shrink-0"
-                              unoptimized={imageSrc.startsWith('http')}
-                            />
+                            <div className="relative flex-shrink-0 overflow-hidden rounded-lg">
+                              <Image
+                                src={imageSrc}
+                                alt={article.title || ''}
+                                width={80}
+                                height={60}
+                                className="rounded-lg object-cover transition-transform duration-300 group-hover:scale-110"
+                                unoptimized={imageSrc.startsWith('http')}
+                              />
+                            </div>
                           )}
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2">
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1.5 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                               {article.title}
                             </h4>
-                            <p className="text-xs text-gray-500 mb-1">
-                              By {article.author} • {formatDate(article.date)}
-                            </p>
-                            {article.target && (
-                              <span className="inline-block bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded">
-                                {article.target}
-                              </span>
+                            {article.meta && (
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+                                {article.meta}
+                              </p>
                             )}
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                By <span className="font-medium">{article.author}</span>
+                              </p>
+                              <span className="text-gray-400">•</span>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                {formatDate(article.date)}
+                              </p>
+                              {article.target && (
+                                <>
+                                  <span className="text-gray-400">•</span>
+                                  <span className="inline-block bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-300 text-xs px-2 py-0.5 rounded-full font-medium">
+                                    {article.target}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <div className={`flex-shrink-0 transition-all duration-300 ${isSelected ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
+                            <svg className="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
                           </div>
                         </div>
                       </Link>
@@ -200,6 +298,25 @@ export function SearchModal() {
                   })}
                 </div>
               )}
+            </div>
+
+            {/* Keyboard shortcuts hint */}
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">↑</kbd>
+                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">↓</kbd>
+                  <span>to navigate</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">↵</kbd>
+                  <span>to select</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">esc</kbd>
+                  <span>to close</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

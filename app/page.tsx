@@ -1,11 +1,8 @@
 import { allPosts } from '@/lib/contentlayer'
 import { fetchGlobalAnalytics } from '@/lib/analytics-server'
 import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
-import { HomeDualTracks } from '@/components/home/HomeDualTracks'
-// import { HomeBusinessCTA } from '@/components/home/HomeBusinessCTA'
 import { HomeKpi } from '@/components/home/HomeKpi'
-import { HomeArticleShortlist } from '@/components/home/HomeArticleShortlist'
-import { HomeNextStep } from '@/components/home/HomeNextStep'
+import { HomeAnimatedSections } from '@/components/home/HomeAnimatedSections'
 import { PageTransition } from '@/components/ui/PageTransition'
 
 // Force static generation
@@ -133,15 +130,8 @@ export default async function HomePage() {
         {/* KPI block */}
         <HomeKpi articleCount={totalArticles} writerCount={totalWriters} />
 
-        {/* Dual tracks overview */}
-        <HomeDualTracks />
-
-        {/* Shortlist per binari */}
-        <HomeArticleShortlist columns={shortlistColumns} posts={publishedPosts} />
-
-        {/* Next step micro-block */}
-        {/* <HomeBusinessCTA /> */}
-        <HomeNextStep />
+        {/* Animated sections: Dual tracks, Article shortlist, Next step */}
+        <HomeAnimatedSections shortlistColumns={shortlistColumns} posts={publishedPosts} />
 
       </main>
     </PageTransition>

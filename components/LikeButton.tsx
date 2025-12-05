@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { LikeIcon } from './icons/LikeIcon'
+import { useToast } from './ui/Toast'
 
 interface LikeButtonProps {
   articleSlug: string
@@ -12,6 +13,7 @@ interface LikeButtonProps {
 export function LikeButton({ articleSlug, initialLikes = 0 }: LikeButtonProps) {
   const [liked, setLiked] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { showToast } = useToast()
 
   // Optionally: fetch initial like count from Firestore on mount if not provided
   useEffect(() => {
@@ -34,6 +36,19 @@ export function LikeButton({ articleSlug, initialLikes = 0 }: LikeButtonProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug: articleSlug, action: newLiked ? 'like' : 'unlike' })
       });
+      
+      // Show success toast
+      showToast(
+        newLiked ? 'Added to your favorites! ❤️' : 'Removed from favorites',
+        'success'
+      )
+    } catch (error) {
+      // Revert on error
+      setLiked(!newLiked);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`like_${articleSlug}`, (!newLiked) ? 'true' : 'false');
+      }
+      showToast('Failed to update. Please try again.', 'error')
     } finally {
       setLoading(false);
     }
@@ -41,8 +56,16 @@ export function LikeButton({ articleSlug, initialLikes = 0 }: LikeButtonProps) {
 
   return (
     <button
-      className={`flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm text-sm font-semibold transition hover:bg-primary-50 dark:hover:bg-primary-900 ${liked ? 'text-white' : ''}`}
-      style={!liked ? { backgroundColor: 'rgb(179,202,251)' } : undefined}
+      className={`
+        flex items-center gap-2 px-3 py-1 rounded-full 
+        border shadow-sm text-sm font-semibold 
+        transition-all duration-300
+        ${liked 
+          ? 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600' 
+          : 'bg-primary-100 dark:bg-primary-900/40 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/60'
+        }
+        ${loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+      `}
       onClick={handleLike}
       disabled={loading}
       aria-pressed={liked}
@@ -50,7 +73,11 @@ export function LikeButton({ articleSlug, initialLikes = 0 }: LikeButtonProps) {
       type="button"
     >
       <LikeIcon
-        className={`w-5 h-5 transition-colors duration-200 ${liked ? 'text-white' : 'text-gray-400 dark:text-gray-500'}`}
+        className={`w-5 h-5 transition-all duration-300 ${
+          liked 
+            ? 'text-white scale-110' 
+            : 'text-primary-600 dark:text-primary-400'
+        }`}
       />
     </button>
   )

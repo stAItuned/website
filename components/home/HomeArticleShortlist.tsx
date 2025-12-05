@@ -4,6 +4,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
+import { ScrollReveal, FadeIn, StaggerContainer } from '@/components/ui/Animations'
 import type { Post } from 'contentlayer/generated'
 
 interface ShortlistItemDef {
@@ -215,15 +216,19 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
       </div>
 
       {/* Latest Articles */}
-      <div className="mt-14 space-y-5">
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Ultimi articoli dal blog</h3>
-          <Link href="/learn" className="inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600">
-            Vai al blog
-            <span aria-hidden className="text-base">→</span>
-          </Link>
-        </div>
-        <div className="grid gap-2.5 md:grid-cols-3">
+      <ScrollReveal threshold={0.2} triggerOnce={false}>
+        <div className="mt-14 space-y-5">
+          <FadeIn>
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Ultimi articoli dal blog</h3>
+              <Link href="/learn" className="inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600">
+                Vai al blog
+                <span aria-hidden className="text-base">→</span>
+              </Link>
+            </div>
+          </FadeIn>
+          <StaggerContainer staggerDelay={100}>
+            <div className="grid gap-2.5 md:grid-cols-3">
           {posts
             .filter((post) => post.published !== false)
             .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
@@ -235,8 +240,8 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
               const badgeText = post.target ?? 'General'
               const coverSrc = getCoverSrc(post)
               return (
+                <FadeIn key={post.slug}>
                 <Link
-                  key={post.slug}
                   href={href}
                   className="group block overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60"
                 >
@@ -277,10 +282,13 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                     </div>
                   </div>
                 </Link>
+                </FadeIn>
               )
             })}
+            </div>
+          </StaggerContainer>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   )
 }

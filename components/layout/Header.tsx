@@ -95,15 +95,15 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-300 ${isScrolled ? 'py-1 sm:py-1.5 bg-white/92 dark:bg-slate-900/92 backdrop-blur-md shadow-md' : 'py-1.5 sm:py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm'}`}>
+      <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-500 ease-out ${isScrolled ? 'py-1 sm:py-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-lg' : 'py-1.5 sm:py-3 bg-white/85 dark:bg-slate-900/85 backdrop-blur-lg shadow-sm'}`}>
         <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
-          <Link href="/" onClick={() => setIsMenuOpen(false)}>
+          <Link href="/" onClick={() => setIsMenuOpen(false)} className="transition-transform duration-300 hover:scale-105">
             <Image
               src={logoSrc}
               alt="stAItuned logo"
               width={360}
               height={80}
-              className={`h-auto hover:cursor-pointer transition-all duration-300 ${isScrolled ? 'w-24 sm:w-28 md:w-32 lg:w-36' : 'w-28 sm:w-32 md:w-36 lg:w-44'}`}
+              className={`h-auto hover:cursor-pointer transition-all duration-500 ease-out ${isScrolled ? 'w-24 sm:w-28 md:w-32 lg:w-36' : 'w-28 sm:w-32 md:w-36 lg:w-44'}`}
               sizes="(max-width: 640px) 5rem,
                      (max-width: 768px) 7rem,
                      (max-width: 1024px) 9rem,
@@ -114,7 +114,7 @@ export function Header() {
             />
           </Link>
 
-          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-2 lg:gap-3 rounded-full px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur">
+          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-2 lg:gap-3 rounded-full px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur transition-all duration-400">
             <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
               <ul className="flex items-center space-x-2">
                 {navigation.map((item) => {
@@ -125,11 +125,13 @@ export function Header() {
                         href={item.path}
                         aria-label={item.name}
                         aria-current={active ? 'page' : undefined}
-                        className={`group relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-200 ${active ? 'text-primary-700 dark:text-primary-200 bg-primary-50 dark:bg-primary-900/30 shadow-sm' : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 hover:text-primary-600 dark:hover:text-primary-300'}`}
+                        className={`group relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ease-out ${active ? 'text-primary-700 dark:text-primary-200 bg-primary-50 dark:bg-primary-900/30 shadow-md scale-105' : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 hover:text-primary-600 dark:hover:text-primary-300 hover:scale-110 hover:shadow-md'}`}
                       >
-                        {item.icon}
+                        <span className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                          {item.icon}
+                        </span>
                         <span className="sr-only">{item.name}</span>
-                        <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
+                        <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-md transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
                           {item.name}
                         </span>
                       </Link>
@@ -198,20 +200,20 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className={`fixed inset-0 z-50 lg:hidden flex items-start justify-end transition-all duration-300 ${isMenuOpen ? 'pointer-events-auto bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+        <div className={`fixed inset-0 z-50 lg:hidden flex items-start justify-end transition-all duration-400 ${isMenuOpen ? 'pointer-events-auto bg-slate-900/50 dark:bg-black/80 backdrop-blur-md' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
           style={{ transitionProperty: 'background,backdrop-filter' }}
           onClick={() => setIsMenuOpen(false)}
         >
           <div
-            className={`stai-drawer w-full max-w-xs h-full rounded-t-2xl flex flex-col pt-0 pb-8 px-0 relative transform transition-all duration-300 ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+            className={`stai-drawer w-full max-w-xs h-full rounded-t-2xl flex flex-col pt-0 pb-8 px-0 relative transform transition-all duration-500 ease-out ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
             style={{ transitionProperty: 'transform,opacity', willChange: 'transform' }}
             onClick={e => e.stopPropagation()}
           >
             {/* Mobile Menu Header with Logo and Close Button */}
-            <div className="relative flex items-center justify-between px-5 pt-5 pb-3 border-b stai-border">
+            <div className="relative flex items-center justify-between px-5 pt-5 pb-3 border-b stai-border animate-slide-down">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Menu</span>
-                <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400 animate-fade-in">Menu</span>
+                <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 transition-transform duration-300 hover:scale-105">
                 <Image
                   src="/assets/general/logo-text-dark.png"
                   alt="stAItuned logo"
@@ -234,7 +236,7 @@ export function Header() {
               </div>
               <button
                 type="button"
-                className="stai-icon-button w-10 h-10 !p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
+                className="stai-icon-button w-10 h-10 !p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500 transition-transform duration-300 hover:rotate-90"
                 onClick={() => setIsMenuOpen(false)}
                 aria-label="Close menu"
               >
@@ -244,24 +246,28 @@ export function Header() {
               </button>
             </div>
             <div className="flex flex-col pt-5 gap-2.5 px-5 stai-text">
-              {navigation.map((item) => {
+              {navigation.map((item, index) => {
                 const active = pathname === item.path
                 return (
                   <Link
                     key={item.path}
                     href={item.path}
                     aria-current={active ? 'page' : undefined}
-                    className={`stai-drawer-link flex items-center gap-3 py-4 text-lg font-semibold border-b stai-border rounded-lg px-3 mb-1 transition-all ${active ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200' : ''}`}
+                    className={`stai-drawer-link flex items-center gap-3 py-4 text-lg font-semibold border-b stai-border rounded-lg px-3 mb-1 transition-all duration-300 hover:translate-x-2 hover:bg-slate-100 dark:hover:bg-slate-800/50 ${active ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200 translate-x-1' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
+                    style={{ 
+                      animationDelay: `${index * 50}ms`,
+                      animation: 'slideRight 0.4s ease-out forwards'
+                    }}
                   >
-                    <span className="text-xl">{item.icon}</span>
-                    <span> {item.name}</span>
+                    <span className="text-xl transition-transform duration-300 hover:scale-125 hover:rotate-12">{item.icon}</span>
+                    <span>{item.name}</span>
                   </Link>
                 )
               })}
 
               <CallModalTrigger
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-xl hover:from-amber-300 hover:to-amber-400 transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 animate-fade-in"
                 onOpen={() => setTimeout(() => setIsMenuOpen(false), 100)}
               >
                 <span>{primaryCta.name}</span>
