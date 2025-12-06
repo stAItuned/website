@@ -40,11 +40,36 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
   }
   const url = `${base}/learn/${article.target}/${article.slug}`;
   
-  // Use actual cover image if available, otherwise generated OG image
+  // Use actual cover image if available, otherwise use default OG image
   // Note: article.imagePath contains the correct path to the article directory
-  const ogImage = article.cover 
-    ? `${base}${article.imagePath}/${article.cover}`
-    : `${base}/api/og/article/${article.slug}.png`;
+  let ogImage: string;
+  let imageType: string;
+  
+  if (article.cover) {
+    // Build the full image URL - article.imagePath is already '/content/articles/${slug}'
+    ogImage = `${base}${article.imagePath}/${article.cover}`;
+    
+    // Determine the correct MIME type based on file extension
+    if (article.cover.endsWith('.png')) {
+      imageType = 'image/png';
+    } else if (article.cover.endsWith('.webp')) {
+      imageType = 'image/webp';
+    } else if (article.cover.endsWith('.jpg') || article.cover.endsWith('.jpeg')) {
+      imageType = 'image/jpeg';
+    } else {
+      imageType = 'image/jpeg'; // Default fallback
+    }
+  } else {
+    // Use dynamic OG image as fallback
+    ogImage = `${base}/learn/${article.target}/${article.slug}/opengraph-image`;
+    imageType = 'image/png';
+  }
+  
+  // Ensure https (LinkedIn requirement)
+  ogImage = ogImage.replace('http://', 'https://');
+  
+  console.log(`[generateMetadata] Article: ${article.slug}, OG Image: ${ogImage}, Type: ${imageType}`);
+  
   return {
     title: article.seoTitle ?? article.title,
     description: article.seoDescription ?? article.meta ?? article.title,
@@ -52,20 +77,28 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
     openGraph: {
       url,
       type: 'article',
+      siteName: 'stAItuned',
+      locale: 'en_US',
       title: article.seoTitle ?? article.title,
       description: article.seoDescription ?? article.meta ?? article.title,
       publishedTime: article.date,
+      modifiedTime: article.date,
       authors: article.author ? [article.author] : undefined,
+      section: article.target ?? 'AI',
+      tags: article.topics,
       images: [{ 
-        url: ogImage, 
+        url: ogImage,
+        secureUrl: ogImage,
         alt: article.title,
         width: 1200,
         height: 630,
-        type: 'image/png'
+        type: imageType
       }],
     },
     twitter: {
       card: 'summary_large_image',
+      site: '@stAItuned',
+      creator: '@stAItuned',
       title: article.seoTitle ?? article.title,
       description: article.seoDescription ?? article.meta ?? article.title,
       images: [ogImage],

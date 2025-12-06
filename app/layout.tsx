@@ -29,6 +29,7 @@ import { TopLoadingBar } from '@/components/ui/PageProgress'
 const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
   title: 'stAItuned - Your Sharing Spot',
   description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
   icons: {
@@ -40,7 +41,30 @@ export const metadata: Metadata = {
     apple: '/favicon.ico',
   },
   manifest: '/manifest.json',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
+    siteName: 'stAItuned',
+    title: 'stAItuned - Your Sharing Spot',
+    description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
+    images: [
+      {
+        url: '/assets/general/logo-text.png',
+        width: 1200,
+        height: 630,
+        alt: 'stAItuned Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@stAItuned',
+    creator: '@stAItuned',
+    title: 'stAItuned - Your Sharing Spot',
+    description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
+    images: ['/assets/general/logo-text.png'],
+  },
 }
 
 export default function RootLayout({

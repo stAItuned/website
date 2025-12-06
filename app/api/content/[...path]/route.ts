@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 import fs from 'fs'
 
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  })
+}
+
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ path: string[] }> }
@@ -9,14 +20,15 @@ export async function GET(
   const params = await context.params
   try {
     const filePath = params.path.join('/')
-    const fullPath = path.join(process.cwd(), 'content', filePath)
+    // Fix: Files are in public/content, not just content
+    const fullPath = path.join(process.cwd(), 'public', 'content', filePath)
     
     console.log(`[Content API] Requested: ${filePath}`)
     console.log(`[Content API] Full path: ${fullPath}`)
     console.log(`[Content API] CWD: ${process.cwd()}`)
     
     // Security check: ensure the path is within the content directory
-    const contentDir = path.join(process.cwd(), 'content')
+    const contentDir = path.join(process.cwd(), 'public', 'content')
     if (!fullPath.startsWith(contentDir)) {
       console.log(`[Content API] Security violation: ${fullPath} not in ${contentDir}`)
       return new NextResponse('Forbidden', { status: 403 })
@@ -69,8 +81,10 @@ export async function GET(
     return new NextResponse(fileBuffer, {
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000', // Cache for 1 year
+        'Cache-Control': 'public, max-age=31536000, immutable', // Cache for 1 year
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+        'Cross-Origin-Resource-Policy': 'cross-origin',
       },
     })
   } catch (error) {
