@@ -15,13 +15,28 @@ export default function SignInPage() {
   // Redirect if already signed in
   useEffect(() => {
     if (!loading && user) {
-      router.push('/')
+      // Check if there's a redirect URL stored
+      const redirectUrl = localStorage.getItem('redirectAfterLogin')
+      if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin')
+        router.push(redirectUrl)
+      } else {
+        router.push('/')
+      }
     }
   }, [user, loading, router])
 
   const handleSignInSuccess = (user: User) => {
     console.log('Sign in successful:', user.email)
-    router.push('/')
+    
+    // Check if there's a redirect URL stored
+    const redirectUrl = localStorage.getItem('redirectAfterLogin')
+    if (redirectUrl) {
+      localStorage.removeItem('redirectAfterLogin')
+      router.push(redirectUrl)
+    } else {
+      router.push('/')
+    }
   }
 
   const handleSignInError = (error: { code: string; message: string }) => {

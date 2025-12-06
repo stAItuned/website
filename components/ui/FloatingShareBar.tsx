@@ -102,8 +102,10 @@ export function FloatingShareBar({
   const handleBookmark = async () => {
     // Require authentication
     if (!user) {
-      setShowAuthPrompt(true)
-      setTimeout(() => setShowAuthPrompt(false), 3000)
+      // Store current URL before redirecting to signin
+      const currentUrl = window.location.pathname
+      localStorage.setItem('redirectAfterLogin', currentUrl)
+      window.location.href = '/signin'
       return
     }
 

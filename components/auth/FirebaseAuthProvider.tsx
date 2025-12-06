@@ -1,35 +1,40 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { User } from 'firebase/auth'
 import { AuthContext } from './AuthContext'
 
 export function FirebaseAuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(false) // Don't load Firebase by default
+  const [loading, setLoading] = useState(true) // Start with loading=true to initialize auth
+  const [initialized, setInitialized] = useState(false)
 
-  const initializeAuth = async () => {
-    if (loading) return // Already initialized or initializing
-    
-    setLoading(true)
-    try {
-      // Dynamic import Firebase only when needed
-      const { onAuthStateChange } = await import('@/lib/firebase/auth')
-      
-      const unsubscribe = onAuthStateChange((user) => {
-        setUser(user)
+  // Initialize auth on mount
+  useEffect(() => {
+    if (initialized) return
+
+    const initializeAuth = async () => {
+      try {
+        // Dynamic import Firebase only when needed
+        const { onAuthStateChange } = await import('@/lib/firebase/auth')
+        
+        const unsubscribe = onAuthStateChange((user) => {
+          setUser(user)
+          setLoading(false)
+        })
+
+        setInitialized(true)
+        return unsubscribe
+      } catch (error) {
+        console.error('Failed to initialize Firebase Auth:', error)
         setLoading(false)
-      })
-
-      return unsubscribe
-    } catch (error) {
-      console.error('Failed to initialize Firebase Auth:', error)
-      setLoading(false)
+      }
     }
-  }
+
+    initializeAuth()
+  }, [initialized])
 
   const signIn = async () => {
-    await initializeAuth()
     const { signInWithGooglePopup } = await import('@/lib/firebase/auth')
     return signInWithGooglePopup()
   }

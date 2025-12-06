@@ -81,53 +81,56 @@ export function ShareOnLinkedIn({ title, description, imageUrl, onShareClick, on
 
   return (
     <div className="relative">
-      {/* Main Share Button - More subtle design */}
+      {/* Main Share Button - Mobile-optimized with larger touch target */}
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors border border-gray-200"
+        className="inline-flex items-center gap-2 px-4 py-3 md:px-3 md:py-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-gray-100 transition-colors border border-gray-200 dark:border-slate-700 touch-manipulation min-h-[44px]"
         aria-label="Share article"
         title="Share article"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg className="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
         </svg>
-        <span className="text-sm">Share</span>
+        <span className="text-sm md:text-sm font-medium">Share</span>
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - Mobile-optimized positioning and sizing */}
       {showDropdown && (
-        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 md:left-auto md:right-0 md:translate-x-0 mt-2 w-56 md:w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 z-50 backdrop-blur-sm">
           <div className="py-2">
-            {/* Copy Link Option */}
+            {/* Copy Link Option - Larger touch target for mobile */}
             <button
               onClick={handleCopyLink}
-              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-3"
+              className="w-full px-4 py-3 md:py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 active:bg-gray-100 dark:active:bg-slate-600 flex items-center gap-3 transition-colors touch-manipulation min-h-[44px]"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-              {copySuccess ? "Copied!" : "Copy Link"}
+              <span className="text-base md:text-sm font-medium">
+                {copySuccess ? "Copied!" : "Copy Link"}
+              </span>
             </button>
 
-            {/* LinkedIn Share Option */}
+            {/* LinkedIn Share Option - Larger touch target for mobile */}
             <button
               onClick={handleLinkedInShare}
-              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-3"
+              className="w-full px-4 py-3 md:py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 active:bg-gray-100 dark:active:bg-slate-600 flex items-center gap-3 transition-colors touch-manipulation min-h-[44px]"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-5 h-5 flex-shrink-0 text-[#0A66C2]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 0H5C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5v-9h3v9zM6.5 8.71A1.75 1.75 0 1 1 6.5 5.21a1.75 1.75 0 0 1 0 3.5zM20 19h-3v-4.5c0-1.08-.02-2.47-1.5-2.47s-1.73 1.17-1.73 2.39V19h-3v-9h2.89v1.23h.04c.4-.75 1.37-1.54 2.82-1.54 3.01 0 3.57 1.98 3.57 4.56V19z"/>
               </svg>
-              Share on LinkedIn
+              <span className="text-base md:text-sm font-medium">Share on LinkedIn</span>
             </button>
           </div>
         </div>
       )}
 
-      {/* Overlay to close dropdown */}
+      {/* Overlay to close dropdown - with better mobile UX */}
       {showDropdown && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-40 bg-black/10 md:bg-transparent"
           onClick={() => setShowDropdown(false)}
+          aria-hidden="true"
         />
       )}
     </div>
