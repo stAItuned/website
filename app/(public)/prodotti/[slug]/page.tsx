@@ -25,9 +25,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const product = getProductBySlug(params.slug)
+  const { slug } = await params
+  const product = getProductBySlug(slug)
 
   if (!product) {
     return {
@@ -54,12 +55,13 @@ export async function generateMetadata({
   }
 }
 
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
-  const product = getProductBySlug(params.slug)
+  const { slug } = await params
+  const product = getProductBySlug(slug)
 
   if (!product) {
     notFound()
@@ -170,7 +172,7 @@ export default function ProductDetailPage({
             <div className="relative">
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800">
                 <Image
-                  src={product.coverImage || product.image}
+                  src={product.coverImage || product.image || '/placeholder.jpg'}
                   alt={product.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -230,7 +232,7 @@ export default function ProductDetailPage({
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {product.features.map((feature, index) => (
+            {product.features?.map((feature, index) => (
               <div
                 key={index}
                 className="group p-6 rounded-2xl border-2 border-slate-200 bg-white hover:border-amber-300 hover:shadow-lg transition-all duration-300 dark:border-slate-800 dark:bg-slate-900/50"
