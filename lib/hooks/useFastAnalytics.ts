@@ -8,6 +8,7 @@ interface AnalyticsData {
   sessions: number
   avgTimeOnPage: number
   bounceRate: number
+  bookmarkCount?: number
   updatedAt?: string
 }
 

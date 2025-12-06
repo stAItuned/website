@@ -45,10 +45,10 @@ export const dailyAnalytics = onSchedule(
   // Use Application Default Credentials (ADC) for GA4 access
   const client = new BetaAnalyticsDataClient(); // uses runtime service account
       
-      // Fetch overall stats per gli ultimi 90 giorni
+      // Fetch overall stats per gli ultimi 365 giorni (1 anno)
       const [overallReport] = await client.runReport({
         property: PROPERTY,
-        dateRanges: [{ startDate: "90daysAgo", endDate: "today" }],
+        dateRanges: [{ startDate: "365daysAgo", endDate: "today" }],
         metrics: [
           { name: "screenPageViews" },
           { name: "activeUsers" },
@@ -58,10 +58,10 @@ export const dailyAnalytics = onSchedule(
         ]
       });
 
-      // Fetch top pages per gli ultimi 30 giorni
+      // Fetch top pages per gli ultimi 365 giorni (1 anno)
       const [topPagesReport] = await client.runReport({
         property: PROPERTY,
-        dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+        dateRanges: [{ startDate: "365daysAgo", endDate: "today" }],
         dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
         metrics: [
           { name: "screenPageViews" },
@@ -77,7 +77,7 @@ export const dailyAnalytics = onSchedule(
       // Fetch article-specific stats (pages che contengono /learn/)
       const [articlesReport] = await client.runReport({
         property: PROPERTY,
-        dateRanges: [{ startDate: "90daysAgo", endDate: "today" }],
+        dateRanges: [{ startDate: "365daysAgo", endDate: "today" }],
         dimensions: [{ name: "pagePath" }],
         dimensionFilter: {
           filter: {
@@ -162,7 +162,7 @@ export const dailyAnalytics = onSchedule(
       const analyticsData = {
         date: today,
         updatedAt: new Date().toISOString(),
-        dateRange: { startDate: "90daysAgo", endDate: "today" },
+        dateRange: { startDate: "365daysAgo", endDate: "today" },
         totalStats,
         topPages,
         articlesStats

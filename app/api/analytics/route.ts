@@ -5,7 +5,7 @@ import { db } from '@/lib/firebase/admin'
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const articleSlug = searchParams.get('slug')
-  // Only support the default range (last 90 days) for now
+  // Only support the default range (last 365 days / 1 year) for now
   // (You can extend this to support custom ranges if you store history in Firestore)
   try {
     if (articleSlug) {

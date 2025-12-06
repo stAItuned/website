@@ -11,6 +11,7 @@ export interface AuthorData {
   website?: string
   description: string
   speaker?: boolean
+  avatar?: string
 }
 
 export async function getAuthorData(authorName: string): Promise<AuthorData | null> {
@@ -78,7 +79,8 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
       email: Array.isArray(metadata.email) ? metadata.email[0] : metadata.email || '',
       website: Array.isArray(metadata.website) ? metadata.website[0] : metadata.website || '',
       description: Array.isArray(metadata.description) ? metadata.description[0] : metadata.description || '',
-      speaker: typeof metadata.speaker === 'boolean' ? metadata.speaker : (typeof metadata.speaker === 'string' ? metadata.speaker.trim().toLowerCase() === 'true' : false)
+      speaker: typeof metadata.speaker === 'boolean' ? metadata.speaker : (typeof metadata.speaker === 'string' ? metadata.speaker.trim().toLowerCase() === 'true' : false),
+      avatar: `/content/team/${authorSlug}/propic.jpg`
     }
   } catch (error) {
     console.error('Error reading author data:', error)

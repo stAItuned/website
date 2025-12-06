@@ -19,7 +19,7 @@ class AnalyticsCache {
 
   private getCacheKey(articleSlug?: string, startDate?: string, endDate?: string): string {
     const today = this.getTodayString()
-    const baseKey = `analytics_${articleSlug || 'global'}_${startDate || '30daysAgo'}_${endDate || 'today'}_${today}`
+    const baseKey = `analytics_${articleSlug || 'global'}_${startDate || '365daysAgo'}_${endDate || 'today'}_${today}`
     return getCacheKey(baseKey)
   }
 

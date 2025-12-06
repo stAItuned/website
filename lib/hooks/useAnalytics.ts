@@ -35,7 +35,7 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
   const {
     slug,
     // Remove target from default options
-    startDate = '90daysAgo',
+    startDate = '365daysAgo',
     endDate = 'today',
     enabled = true
   } = options
@@ -168,7 +168,7 @@ data: Array<{
 export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> = {}): UseMultipleAnalyticsResult {
   const {
     // Remove target from default options
-    startDate = '90daysAgo',
+    startDate = '365daysAgo',
     endDate = 'today',
     enabled = true
   } = options

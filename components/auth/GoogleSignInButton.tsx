@@ -75,6 +75,13 @@ export default function GoogleSignInButton({
       const result = await signInWithGooglePopup()
       
       if (result.success && result.user) {
+        // Check if there's a stored redirect URL
+        const redirectUrl = localStorage.getItem('redirectAfterLogin')
+        if (redirectUrl) {
+          localStorage.removeItem('redirectAfterLogin')
+          // Use window.location for immediate redirect
+          window.location.href = redirectUrl
+        }
         onSignInSuccess?.(result.user)
       } else if (!result.success && result.error) {
         onSignInError?.(result.error)

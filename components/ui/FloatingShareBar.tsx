@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { event } from '@/lib/gtag'
 import { useAuth } from '@/components/auth/AuthContext'
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
 import { app } from '@/lib/firebase/client'
 import Link from 'next/link'
 
@@ -28,6 +28,7 @@ export function FloatingShareBar({
 }: FloatingShareBarProps) {
   const [copied, setCopied] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
+  const [bookmarkCount, setBookmarkCount] = useState(0)
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
   const { user, loading } = useAuth()
 
@@ -52,6 +53,23 @@ export function FloatingShareBar({
     } else {
       setIsBookmarked(false)
     }
+
+    // Fetch bookmark count for this article
+    const fetchBookmarkCount = async () => {
+      try {
+        const db = getFirestore(app)
+        const articleStatsRef = doc(db, 'analytics/articles', articleSlug)
+        const articleStatsDoc = await getDoc(articleStatsRef)
+        
+        if (articleStatsDoc.exists()) {
+          const data = articleStatsDoc.data()
+          setBookmarkCount(data.bookmarkCount || 0)
+        }
+      } catch (error) {
+        console.error('Error fetching bookmark count:', error)
+      }
+    }
+    fetchBookmarkCount()
   }, [articleSlug, user])
 
   const handleCopyLink = async () => {
@@ -112,13 +130,24 @@ export function FloatingShareBar({
     try {
       const db = getFirestore(app)
       const userDocRef = doc(db, 'users', user.uid)
+      const articleStatsRef = doc(db, 'analytics/articles', articleSlug)
       
       if (isBookmarked) {
         // Remove bookmark
         await updateDoc(userDocRef, {
           bookmarks: arrayRemove(articleSlug)
         })
+        
+        // Decrement bookmark count
+        const statsDoc = await getDoc(articleStatsRef)
+        if (statsDoc.exists()) {
+          await updateDoc(articleStatsRef, {
+            bookmarkCount: increment(-1)
+          })
+        }
+        
         setIsBookmarked(false)
+        setBookmarkCount(prev => Math.max(0, prev - 1))
         
         event({
           action: 'bookmark_remove',
@@ -141,7 +170,24 @@ export function FloatingShareBar({
             bookmarks: arrayUnion(articleSlug)
           })
         }
+        
+        // Increment bookmark count
+        const statsDoc = await getDoc(articleStatsRef)
+        if (statsDoc.exists()) {
+          await updateDoc(articleStatsRef, {
+            bookmarkCount: increment(1)
+          })
+        } else {
+          // Create stats document if doesn't exist
+          await setDoc(articleStatsRef, {
+            bookmarkCount: 1,
+            slug: articleSlug,
+            updatedAt: new Date().toISOString()
+          })
+        }
+        
         setIsBookmarked(true)
+        setBookmarkCount(prev => prev + 1)
         
         event({
           action: 'bookmark_add',
@@ -273,12 +319,25 @@ export function FloatingShareBar({
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
         </svg>
+        
+        {/* Bookmark Count Badge */}
+        {bookmarkCount > 0 && (
+          <div className="absolute -bottom-1 -right-1 bg-yellow-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white dark:border-slate-900 shadow-sm">
+            {formatNumber(bookmarkCount)}
+          </div>
+        )}
+        
         {/* Tooltip */}
         <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
           <div className="font-semibold mb-0.5">{isBookmarked ? 'Remove Bookmark' : 'Bookmark Article'}</div>
           <div className="text-gray-300 dark:text-gray-400">
             {user ? (isBookmarked ? 'Unsave for later' : 'Save for later') : 'Sign in to bookmark'}
           </div>
+          {bookmarkCount > 0 && (
+            <div className="text-yellow-400 text-xs mt-1">
+              {bookmarkCount} {bookmarkCount === 1 ? 'bookmark' : 'bookmarks'}
+            </div>
+          )}
           {/* Arrow */}
           <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
         </div>
