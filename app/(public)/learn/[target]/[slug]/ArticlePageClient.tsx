@@ -13,6 +13,8 @@ import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
 import { ReadingProgress, EstimatedTimeRemaining } from '@/components/ui/ReadingProgress'
 import { FloatingShareBar } from '@/components/ui/FloatingShareBar'
 import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
+import { MobileActionBar } from '@/components/ui/MobileActionBar'
+import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
 import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -419,53 +421,43 @@ export default function ArticlePageClient({
   return (
     <PageTransition>
       <ReadingProgress />
+      <ReadingProgressBar />
       <section className="relative">
-        {/* Mobile TOC Hamburger Button (below header logo) */}
-        {mounted && !isLarge && toc.length > 0 && (
-          <button
-            className={`fixed left-4 top-20 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 text-primary-600 dark:text-primary-400 focus:outline-none transition-all duration-300 hover:bg-primary-50 dark:hover:bg-slate-700 ${
-              showMobileToc ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0 pointer-events-none'
-            }`}
-            aria-label="Open Table of Contents"
-            onClick={() => {
-              setModalActiveSlug(null);
-              setShowTocModal(true);
-              
-              // Track mobile TOC open
-              event({
-                action: 'mobile_toc_open',
-                category: 'navigation',
-                label: article.slug,
-                value: 1
-              })
-            }}
-          >
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
-          </button>
-        )}
-        {/* Mobile TOC Modal with animation and blur */}
+        {/* Mobile TOC Modal - Slide up from bottom */}
         {mounted && !isLarge && (
           <div
-            className={`fixed inset-0 z-50 flex items-start justify-start transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/40 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
-            style={{ transitionProperty: 'background,backdrop-filter' }}
+            className={`fixed inset-0 z-50 flex items-end justify-center transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/50 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
             onClick={() => setShowTocModal(false)}
           >
             <div
-              className={`w-full max-w-xs h-full bg-white shadow-2xl rounded-t-2xl p-4 overflow-y-auto relative transform transition-all duration-300 ${showTocModal ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
-              style={{ transitionProperty: 'transform,opacity' }}
+              className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-6 overflow-y-auto transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
               onClick={e => e.stopPropagation()}
             >
-              <button
-                className="absolute top-2 right-2 p-2 rounded-full hover:bg-primary-50 text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-300 transition-colors duration-200 shadow"
-                aria-label="Close TOC"
-                onClick={() => setShowTocModal(false)}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-              <div className="mb-4 text-lg font-bold text-primary-700 flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
-                Table of Contents
+              {/* Handle bar */}
+              <div className="flex justify-center mb-4">
+                <div className="w-12 h-1.5 bg-gray-300 dark:bg-slate-600 rounded-full"></div>
               </div>
+              
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  Table of Contents
+                </h2>
+                <button
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 transition-colors"
+                  aria-label="Close"
+                  onClick={() => setShowTocModal(false)}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              {/* TOC Content */}
               <div className="table-of-contents">
                 <ArticleTOC 
                   toc={toc} 
@@ -476,8 +468,9 @@ export default function ArticlePageClient({
                     setShowTocModal(false);
                     setTimeout(() => {
                       handleTOCClick(slug);
-                    }, 250);
+                    }, 100);
                   }}
+                  sticky={false}
                 />
               </div>
             </div>
@@ -613,75 +606,90 @@ export default function ArticlePageClient({
             </aside>
           </div>
         ) : (
-          <div className="flex flex-col gap-10 max-w-2xl mx-auto my-10 px-4 sm:px-6 md:px-8">
-            <article className="article-mobile-card prose prose-sm sm:prose-base max-w-2xl w-full mx-auto text-[0.72rem] leading-5 sm:text-[0.8rem] sm:leading-6 md:text-[0.9rem] lg:text-base rounded-[28px] bg-white/90 dark:bg-slate-900/80 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-700/40 p-6 sm:p-10 backdrop-blur-xl">
+          <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-24">
+            <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm">
               {/* Article Header */}
-              <div className="flex flex-col gap-4 items-center mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4 text-center">
+              <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
+                {/* Article Title */}
+                <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight">
+                  {article.title}
+                </h1>
                 {/* Author */}
-                <div className="flex flex-col items-center gap-1 justify-center">
+                <div className="flex flex-col items-center gap-2">
                   {article.author && (
                     <AuthorAvatar author={article.author} authorData={authorData} />
                   )}
                 </div>
-                {/* Article Title */}
-                <h1 className="text-2xl sm:text-4xl font-bold text-primary-600 dark:text-primary-300 mb-2 mt-2 leading-tight">
-                  {article.title}
-                </h1>
                 {/* Meta Info Group */}
-                <div className="flex flex-row flex-wrap items-center justify-center gap-3 text-gray-600 dark:text-gray-300 text-sm divide-x divide-gray-300 dark:divide-slate-700">
+                <div className="flex flex-row flex-wrap items-center justify-center gap-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                   {/* Date */}
-                  <div className="flex items-center gap-1 px-2 first:pl-0">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
                     </svg>
-                    <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                   </div>
+                  <span className="text-gray-400 dark:text-gray-500">•</span>
                   {/* Reading time */}
-                  <div className="flex items-center gap-1 px-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>{article.readingTime}m</span>
+                    <span>{article.readingTime} min read</span>
                   </div>
                 </div>
-                {/* Like Button */}
-                <div className="flex justify-center mt-2">
-                  <LikeButton articleSlug={article.slug} />
+                
+                {/* KPI Stats Row */}
+                <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
+                  {/* Views */}
+                  <div className="flex items-center gap-1.5" title="Total views">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span className="font-medium">{analytics.views || 0}</span>
+                  </div>
+                  
+                  <span className="text-gray-300 dark:text-gray-600">|</span>
+                  
+                  {/* Visitors */}
+                  <div className="flex items-center gap-1.5" title="Unique visitors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span className="font-medium">{analytics.visitors || 0}</span>
+                  </div>
+                  
+                  <span className="text-gray-300 dark:text-gray-600">|</span>
+                  
+                  {/* Likes */}
+                  <div className="flex items-center gap-1.5" title="Total likes">
+                    <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span className="font-medium">{analytics.likes || 0}</span>
+                  </div>
                 </div>
-              </div>
-              {/* Article Analytics */}
-              <div className="mb-6 flex flex-col gap-1">
-                <ArticleAnalyticsStats slug={article.slug} initialAnalytics={analytics} />
-              </div>
-              {/* Share button below analytics */}
-              <div className="flex justify-center mb-6">
-                <ShareOnLinkedIn
-                  title={article.title}
-                  description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
-                  imageUrl={coverImage}
-                  onShareClick={() => event({
-                    action: 'share_linkedin',
-                    category: 'engagement',
-                    label: article.slug,
-                    value: 1,
-                  })}
-                  onCopyClick={() => event({
-                    action: 'share_copy_link',
-                    category: 'engagement',
-                    label: article.slug,
-                    value: 1,
-                  })}
-                />
               </div>
               {/* Article Body */}
               <div id="article-root">
                 <MarkdownContent 
                   content={article.body.raw}
-                  className="prose prose-sm sm:prose-base md:prose-lg max-w-none article-mobile-markdown"
+                  className="prose prose-sm max-w-none text-gray-800 dark:text-gray-200"
                   articleSlug={article.slug}
                 />
               </div>
             </article>
+
+            {/* Mobile Action Bar */}
+            <MobileActionBar
+              articleSlug={article.slug}
+              title={article.title}
+              description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+              imageUrl={coverImage}
+              onTocClick={() => setShowTocModal(true)}
+              showToc={toc.length > 0}
+            />
           </div>
         )}
       </section>

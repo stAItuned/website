@@ -1,5 +1,6 @@
 import { allPosts } from '@/lib/contentlayer'
 import { fetchGlobalAnalytics } from '@/lib/analytics-server'
+import { getProductsForHomepage } from '@/lib/products'
 import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
 import { HomeKpi } from '@/components/home/HomeKpi'
 import { HomeAnimatedSections } from '@/components/home/HomeAnimatedSections'
@@ -64,23 +65,14 @@ export default async function HomePage() {
     }
   ]
 
-  const productShortlist = [
-    {
-      slug: 'docling-document-processing-ai',
-      title: 'Docling: estrazione documentale pronta per diventare prodotto',
-      description: 'Un esperimento nato da richieste PMI per automatizzare lettura e normalizzazione di PDF e contratti.'
-    },
-    {
-      slug: 'ai-translator-lara-global-communication',
-      title: 'LARA: traduzione AI con focus su contesto e tono',
-      description: 'Da prototipo di laboratorio a webapp usata per localizzare materiali marketing e supporto clienti.'
-    },
-    {
-      slug: 'google-vids-ai-video-creation-tool',
-      title: 'Video brevi generati da prompt: cosa funziona davvero',
-      description: 'Test di produzione con Google Vids per capire dove inserire automazioni video nei processi di comunicazione.'
-    }
-  ]
+  // Get products from centralized source
+  const productsForHome = getProductsForHomepage(3)
+  const productShortlist = productsForHome.map(product => ({
+    slug: `prodotti/${product.slug}`,
+    title: product.title,
+    description: product.description,
+    badge: product.status === 'live' ? 'Disponibile' : product.status === 'beta' ? 'Beta' : 'Prossimamente'
+  }))
 
   const shortlistColumns = [
     {
