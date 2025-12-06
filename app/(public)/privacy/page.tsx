@@ -44,6 +44,31 @@ export default function PrivacyPage() {
             </div>
 
             <div>
+              <h3 className="font-semibold text-slate-900">Autenticazione e funzionalità personalizzate</h3>
+              <p className="mt-1">
+                Se decidi di registrarti al sito tramite Google Sign-In, raccogliamo e conserviamo i seguenti dati dal tuo profilo Google:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>indirizzo email;</li>
+                <li>nome e cognome (display name);</li>
+                <li>foto profilo (se disponibile);</li>
+                <li>identificativo utente univoco (User ID).</li>
+              </ul>
+              <p className="mt-3">
+                Questi dati ci permettono di offrire funzionalità personalizzate come:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>salvare i tuoi articoli preferiti (bookmarks);</li>
+                <li>sincronizzare le tue preferenze su più dispositivi;</li>
+                <li>fornirti raccomandazioni di contenuti basate sui tuoi interessi;</li>
+                <li>consentirti di lasciare commenti o interagire con la community.</li>
+              </ul>
+              <p className="mt-3">
+                La base giuridica è il tuo consenso esplicito (art. 6.1.a GDPR), espresso al momento della registrazione. I dati vengono conservati in Firebase Authentication e Firestore (Google Cloud) con crittografia e misure di sicurezza appropriate. Puoi richiedere la cancellazione del tuo account in qualsiasi momento scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
+              </p>
+            </div>
+
+            <div>
               <h3 className="font-semibold text-slate-900">Richieste di contatto e &quot;Prenota la call&quot;</h3>
               <p className="mt-1">
                 Quando compili il modulo di contatto raccogliamo nome, email, azienda, messaggio e la tua preferenza sul marketing. Il consenso esplicito al trattamento dei dati ci serve per risponderti e per organizzare un appuntamento. Inviare la richiesta equivale ad accettare la presente informativa.

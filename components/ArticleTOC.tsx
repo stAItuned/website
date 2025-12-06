@@ -43,17 +43,23 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
       const fromTop = window.scrollY + OFFSET
       let current = headings[0].id
 
-      // Check if we're at the bottom of the page first
-      const isAtBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 150
+      // Check if we're truly at the bottom of the page (with stricter threshold)
+      const scrollTop = window.scrollY
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+      const isAtBottom = scrollTop + windowHeight >= documentHeight - 10
 
       if (isAtBottom) {
+        // Only set last heading if we're actually at the bottom
         current = headings[headings.length - 1].id
       } else {
-        // Normal scroll position logic
+        // Normal scroll position logic - find the last heading that's passed the offset
         for (const heading of headings) {
-          if (getDocumentOffset(heading) <= fromTop) {
+          const headingOffset = getDocumentOffset(heading)
+          if (headingOffset <= fromTop) {
             current = heading.id
           } else {
+            // Stop once we find a heading that hasn't been reached yet
             break
           }
         }
@@ -61,7 +67,7 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
 
       setActive(prev => {
         if (prev !== current) {
-          console.log(`[TOC] Scroll spy updating active heading: ${current}`)
+          console.log(`[TOC] Scroll spy updating active heading: ${current} (scrollY: ${scrollTop.toFixed(0)}, fromTop: ${fromTop.toFixed(0)})`)
           return current
         }
         return prev
@@ -96,7 +102,12 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
       }
 
       console.log(`[TOC] Found ${headings.length} headings; initializing scroll spy`)
-      updateActiveFromScroll()
+      console.log(`[TOC] Initial scroll position: ${window.scrollY}px`)
+      console.log(`[TOC] Headings:`, headings.map((h, i) => `${i}: ${h.id} at ${getDocumentOffset(h)}px`))
+      // Initial update - ensure we start with the correct heading based on current scroll position
+      requestAnimationFrame(() => {
+        updateActiveFromScroll()
+      })
       window.addEventListener('scroll', handleScroll, { passive: true })
       window.addEventListener('resize', handleScroll)
     }

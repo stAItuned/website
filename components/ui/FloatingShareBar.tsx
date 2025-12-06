@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { event } from '@/lib/gtag'
+import { useAuth } from '@/components/auth/AuthContext'
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import { app } from '@/lib/firebase/client'
+import Link from 'next/link'
 
 interface FloatingShareBarProps {
   title: string
@@ -24,12 +28,31 @@ export function FloatingShareBar({
 }: FloatingShareBarProps) {
   const [copied, setCopied] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false)
+  const { user, loading } = useAuth()
 
   useEffect(() => {
-    // Check if article is bookmarked
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarkedArticles') || '[]')
-    setIsBookmarked(bookmarks.includes(articleSlug))
-  }, [articleSlug])
+    // Check if article is bookmarked (only for authenticated users)
+    if (user) {
+      const checkBookmark = async () => {
+        try {
+          const db = getFirestore(app)
+          const userDocRef = doc(db, 'users', user.uid)
+          const userDoc = await getDoc(userDocRef)
+          
+          if (userDoc.exists()) {
+            const bookmarks = userDoc.data().bookmarks || []
+            setIsBookmarked(bookmarks.includes(articleSlug))
+          }
+        } catch (error) {
+          console.error('Error checking bookmark:', error)
+        }
+      }
+      checkBookmark()
+    } else {
+      setIsBookmarked(false)
+    }
+  }, [articleSlug, user])
 
   const handleCopyLink = async () => {
     const url = window.location.href
@@ -76,33 +99,57 @@ export function FloatingShareBar({
     })
   }
 
-  const handleBookmark = () => {
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarkedArticles') || '[]')
-    
-    if (isBookmarked) {
-      // Remove bookmark
-      const updated = bookmarks.filter((slug: string) => slug !== articleSlug)
-      localStorage.setItem('bookmarkedArticles', JSON.stringify(updated))
-      setIsBookmarked(false)
+  const handleBookmark = async () => {
+    // Require authentication
+    if (!user) {
+      setShowAuthPrompt(true)
+      setTimeout(() => setShowAuthPrompt(false), 3000)
+      return
+    }
+
+    try {
+      const db = getFirestore(app)
+      const userDocRef = doc(db, 'users', user.uid)
       
-      event({
-        action: 'bookmark_remove',
-        category: 'engagement',
-        label: articleSlug,
-        value: 0
-      })
-    } else {
-      // Add bookmark
-      bookmarks.push(articleSlug)
-      localStorage.setItem('bookmarkedArticles', JSON.stringify(bookmarks))
-      setIsBookmarked(true)
-      
-      event({
-        action: 'bookmark_add',
-        category: 'engagement',
-        label: articleSlug,
-        value: 1
-      })
+      if (isBookmarked) {
+        // Remove bookmark
+        await updateDoc(userDocRef, {
+          bookmarks: arrayRemove(articleSlug)
+        })
+        setIsBookmarked(false)
+        
+        event({
+          action: 'bookmark_remove',
+          category: 'engagement',
+          label: articleSlug,
+          value: 0
+        })
+      } else {
+        // Add bookmark - create document if doesn't exist
+        const userDoc = await getDoc(userDocRef)
+        if (!userDoc.exists()) {
+          await setDoc(userDocRef, {
+            bookmarks: [articleSlug],
+            email: user.email,
+            displayName: user.displayName,
+            createdAt: new Date().toISOString()
+          })
+        } else {
+          await updateDoc(userDocRef, {
+            bookmarks: arrayUnion(articleSlug)
+          })
+        }
+        setIsBookmarked(true)
+        
+        event({
+          action: 'bookmark_add',
+          category: 'engagement',
+          label: articleSlug,
+          value: 1
+        })
+      }
+    } catch (error) {
+      console.error('Error updating bookmark:', error)
     }
   }
 
@@ -227,10 +274,28 @@ export function FloatingShareBar({
         {/* Tooltip */}
         <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
           <div className="font-semibold mb-0.5">{isBookmarked ? 'Remove Bookmark' : 'Bookmark Article'}</div>
-          <div className="text-gray-300 dark:text-gray-400">{isBookmarked ? 'Unsave for later' : 'Save for later'}</div>
+          <div className="text-gray-300 dark:text-gray-400">
+            {user ? (isBookmarked ? 'Unsave for later' : 'Save for later') : 'Sign in to bookmark'}
+          </div>
           {/* Arrow */}
           <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
         </div>
+        {/* Auth Required Prompt */}
+        {showAuthPrompt && !user && (
+          <div className="absolute left-full ml-3 px-4 py-3 bg-primary-600 text-white text-sm rounded-lg shadow-2xl z-50 w-56 pointer-events-auto">
+            <div className="font-semibold mb-1">Sign in required</div>
+            <div className="text-primary-100 text-xs mb-3">Please sign in to bookmark articles</div>
+            <Link 
+              href="/signin"
+              className="block w-full text-center py-2 px-3 bg-white text-primary-600 rounded-lg font-semibold text-xs hover:bg-primary-50 transition-colors"
+              onClick={() => setShowAuthPrompt(false)}
+            >
+              Sign In Now
+            </Link>
+            {/* Arrow */}
+            <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-primary-600"></div>
+          </div>
+        )}
       </button>
 
       {/* Stats Divider */}

@@ -10,10 +10,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
 import { CallModalTrigger } from '@/app/(public)/aziende/CallModalTrigger'
 
-const DISABLE_AUTH = true
-  // typeof process !== 'undefined'
-  //   ? process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
-  //   : false
+const DISABLE_AUTH = false
 import { UserMenu } from '@/components/auth/UserMenu'
 
 export function Header() {
@@ -149,9 +146,16 @@ export function Header() {
                 ) : (
                   <Link
                     href="/signin"
-                    className="px-4 py-2 text-sm font-medium text-primary-600 bg-white rounded-md hover:bg-gray-50 transition-colors"
+                    aria-label="Sign In"
+                    className="group relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ease-out text-slate-800 dark:text-slate-100 hover:bg-gradient-to-br hover:from-primary-500 hover:to-secondary-500 hover:text-white hover:scale-110 hover:shadow-lg"
                   >
-                    Sign In
+                    <svg className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    <span className="sr-only">Sign In</span>
+                    <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-md transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
+                      Sign In
+                    </span>
                   </Link>
                 )}
               </div>
