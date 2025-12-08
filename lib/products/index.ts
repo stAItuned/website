@@ -17,6 +17,8 @@ import { editorialPlanner } from './editorial-planner'
 import { fundComparison } from './fund-comparison'
 import { docAssistant } from './doc-assistant'
 import { leaveTracker } from './leave-tracker'
+import { mySmartHaircut } from './my-smart-haircut'
+import { tattooTryOnAI } from './tattoo-try-on-ai'
 
 /**
  * All products array
@@ -27,6 +29,8 @@ export const allProducts: Product[] = [
   fundComparison,
   docAssistant,
   leaveTracker,
+  mySmartHaircut,
+  tattooTryOnAI,
 ]
 
 /**

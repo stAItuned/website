@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { getAllProducts } from '@/lib/products'
+import { ProductCardVideo } from '@/components/ProductCardVideo'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600 // every 6 hours
@@ -120,18 +121,27 @@ export default function DemoPage() {
                     className="group relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm transition-all duration-300 hover:border-amber-300 hover:shadow-lg hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/50"
                   >
                     <div className="space-y-5">
-                      <div className="relative h-48 w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800/70">
+                      <div className="relative h-56 sm:h-64 w-full overflow-hidden rounded-t-xl bg-slate-100 dark:bg-slate-800/70 flex items-center justify-center group/video">
                         {product.image && (
-                          <Image
-                            src={product.image}
-                            alt={product.title}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            priority={index < 2}
-                          />
+                          <>
+                            {product.image.endsWith('.mp4') ? (
+                              <ProductCardVideo
+                                src={product.image}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                            ) : (
+                              <Image
+                                src={product.image}
+                                alt={product.title}
+                                fill
+                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 50vw, 33vw"
+                                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                priority={index < 2}
+                              />
+                            )}
+                          </>
                         )}
-                        <span className={`absolute left-4 top-4 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${statusColors[product.status]}`}>
+                        <span className={`absolute left-3 top-3 md:left-4 md:top-4 px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-bold shadow-sm ${statusColors[product.status]}`}>
                           {statusLabels[product.status]}
                         </span>
                       </div>

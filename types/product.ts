@@ -75,11 +75,13 @@ export interface Product {
   longDescription?: string
   metaDescription?: string
   keywords?: string[]
+  language?: 'en' | 'it' // Language of the product content
   
   // Visual
   image?: string
   images?: string[]
   coverImage?: string
+  videoOrientation?: 'landscape' | 'portrait'
   
   // Status & Availability
   status: ProductStatus
