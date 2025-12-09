@@ -15,6 +15,8 @@ import { FloatingShareBar } from '@/components/ui/FloatingShareBar'
 import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
 import { MobileActionBar } from '@/components/ui/MobileActionBar'
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
+import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
+import { ReaderMode } from '@/components/ui/ReaderMode'
 import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -36,6 +38,10 @@ export default function ArticlePageClient({
   const [mounted, setMounted] = useState(false)
   const [showMobileToc, setShowMobileToc] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [touchStartY, setTouchStartY] = useState(0)
+  const [modalScrollTop, setModalScrollTop] = useState(0)
+  const [scrollPercent, setScrollPercent] = useState(0)
+  const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('normal')
   
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
@@ -57,11 +63,33 @@ export default function ArticlePageClient({
       }
       
       setLastScrollY(currentScrollY)
+
+      // Calculate scroll percentage
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrolled = Math.round((currentScrollY / docHeight) * 100)
+      setScrollPercent(Math.min(scrolled, 100))
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [mounted, isLarge, lastScrollY])
+
+  // Gesture handlers for TOC modal
+  const handleTocTouchStart = (e: React.TouchEvent) => {
+    setTouchStartY(e.touches[0].clientY)
+    const modal = e.currentTarget as HTMLElement
+    setModalScrollTop(modal.scrollTop)
+  }
+
+  const handleTocTouchMove = (e: React.TouchEvent) => {
+    const touchY = e.touches[0].clientY
+    const diff = touchY - touchStartY
+    
+    // Close modal if swiping down from top
+    if (diff > 50 && modalScrollTop === 0) {
+      setShowTocModal(false)
+    }
+  }
   
   // Debug screen size and TOC
   useEffect(() => {
@@ -432,6 +460,8 @@ export default function ArticlePageClient({
             <div
               className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-6 overflow-y-auto transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
               onClick={e => e.stopPropagation()}
+              onTouchStart={handleTocTouchStart}
+              onTouchMove={handleTocTouchMove}
             >
               {/* Handle bar */}
               <div className="flex justify-center mb-4">
@@ -607,7 +637,8 @@ export default function ArticlePageClient({
           </div>
         ) : (
           <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-24">
-            <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm">
+            <ReaderMode articleSlug={article.slug}>
+              <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
               {/* Article Header */}
               <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
                 {/* Article Title */}
@@ -672,14 +703,25 @@ export default function ArticlePageClient({
                 </div>
               </div>
               {/* Article Body */}
-              <div id="article-root">
+              <div 
+                id="article-root" 
+                className="article-mobile-markdown"
+                data-text-size={textSize}
+              >
                 <MarkdownContent 
                   content={article.body.raw}
-                  className="prose prose-sm max-w-none text-gray-800 dark:text-gray-200"
+                  className="prose max-w-none text-gray-800 dark:text-gray-200"
                   articleSlug={article.slug}
                 />
               </div>
             </article>
+            </ReaderMode>
+
+            {/* Quick Feedback Button */}
+            <QuickFeedbackButton 
+              articleSlug={article.slug}
+              articleTitle={article.title}
+            />
 
             {/* Mobile Action Bar */}
             <MobileActionBar
@@ -689,6 +731,10 @@ export default function ArticlePageClient({
               imageUrl={coverImage}
               onTocClick={() => setShowTocModal(true)}
               showToc={toc.length > 0}
+              readingTime={article.readingTime}
+              scrollPercent={scrollPercent}
+              onTextSizeChange={setTextSize}
+              currentTextSize={textSize}
             />
           </div>
         )}
@@ -697,10 +743,8 @@ export default function ArticlePageClient({
       <div className="max-w-6xl mx-auto px-4">
         <AuthorBioCard author={article.author} authorData={authorData} />
       </div>
-      {/* Back to Top Button (client component) */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
-        <BackToTopButton />
-      </div>
+      {/* Back to Top Button (client component) - Hidden on mobile to avoid overlap with action bar */}
+      <BackToTopButton />
       {/* Related Articles */}
       <div data-related-articles>
         <RelatedArticles relatedArticles={relatedArticles.map((post: any) => ({

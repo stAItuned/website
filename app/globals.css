@@ -263,6 +263,37 @@ body {
   }
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes progress {
   from {
     width: 100%;
@@ -276,8 +307,20 @@ body {
   animation: fadeIn 0.6s ease-out forwards;
 }
 
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
 .animate-slideIn {
   animation: slideIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out forwards;
 }
 
 .animate-progress {
@@ -376,32 +419,195 @@ html {
 
 @media (max-width: 768px) {
   .article-mobile-card {
-    padding: 1.25rem;
+    padding: 1rem 1rem 1.5rem;
     border-radius: 1.5rem;
   }
 
   .article-mobile-card .article-mobile-markdown {
-    font-size: 0.78rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.65;
   }
 
-  .article-mobile-card .article-mobile-markdown h1,
-  .article-mobile-card .article-mobile-markdown h2,
+  .article-mobile-card .article-mobile-markdown h1 {
+    font-size: 1.75rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .article-mobile-card .article-mobile-markdown h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
   .article-mobile-card .article-mobile-markdown h3 {
     font-size: 1.25rem;
-    margin-top: 1rem;
-    margin-bottom: 0.35rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
   }
 
-  .article-mobile-card .article-mobile-markdown h4,
+  .article-mobile-card .article-mobile-markdown h4 {
+    font-size: 1.125rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
   .article-mobile-card .article-mobile-markdown h5 {
-    font-size: 1.05rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
   }
 
   .article-mobile-card .article-mobile-markdown p {
     letter-spacing: 0;
+    margin-bottom: 1rem;
+  }
+
+  .article-mobile-card .article-mobile-markdown ul,
+  .article-mobile-card .article-mobile-markdown ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .article-mobile-card .article-mobile-markdown li {
+    margin-bottom: 0.5rem;
+  }
+
+  .article-mobile-card .article-mobile-markdown blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid rgba(59, 130, 246, 0.5);
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  /* Enhanced mobile link styling for better tap targets */
+  .article-mobile-card .article-mobile-markdown a {
+    padding: 2px 4px;
+    margin: -2px -4px;
+    border-radius: 4px;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    transition: background-color 0.2s, color 0.2s;
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .article-mobile-card .article-mobile-markdown a:active {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: rgb(37, 99, 235);
+  }
+
+  /* Better code block mobile styling */
+  .article-mobile-card .article-mobile-markdown pre {
+    font-size: 0.875rem;
+    padding: 1rem;
+    margin: 1rem -1rem;
+    border-radius: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .article-mobile-card .article-mobile-markdown code {
+    font-size: 0.875rem;
+    padding: 0.125rem 0.375rem;
+    background: rgba(107, 114, 128, 0.1);
+    border-radius: 0.25rem;
+  }
+
+  .article-mobile-card .article-mobile-markdown pre code {
+    background: transparent;
+    padding: 0;
+  }
+
+  /* Horizontal scroll indicator for code blocks */
+  .article-mobile-card .article-mobile-markdown pre::after {
+    content: '→';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.5rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .article-mobile-card .article-mobile-markdown pre:hover::after {
+    opacity: 1;
+  }
+
+  /* Better image handling on mobile */
+  .article-mobile-card .article-mobile-markdown img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    margin: 1.5rem 0;
+  }
+
+  /* Table mobile optimization */
+  .article-mobile-card .article-mobile-markdown table {
+    font-size: 0.875rem;
+  }
+
+  .article-mobile-card .article-mobile-markdown th,
+  .article-mobile-card .article-mobile-markdown td {
+    padding: 0.5rem;
+  }
+
+  /* Text size overrides for accessibility */
+  .article-mobile-markdown.text-size-small p,
+  .article-mobile-markdown.text-size-small li,
+  .article-mobile-markdown.text-size-small span {
+    font-size: 0.875rem !important;
+  }
+
+  .article-mobile-markdown.text-size-large p,
+  .article-mobile-markdown.text-size-large li,
+  .article-mobile-markdown.text-size-large span {
+    font-size: 1.125rem !important;
   }
 }
+
+/* Text size controls - works with data-text-size attribute (outside media query for global effect) */
+.article-mobile-markdown[data-text-size="small"] p,
+.article-mobile-markdown[data-text-size="small"] li,
+.article-mobile-markdown[data-text-size="small"] span,
+.article-mobile-markdown[data-text-size="small"] blockquote,
+.article-mobile-markdown[data-text-size="small"] td {
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+}
+
+.article-mobile-markdown[data-text-size="large"] p,
+.article-mobile-markdown[data-text-size="large"] li,
+.article-mobile-markdown[data-text-size="large"] span,
+.article-mobile-markdown[data-text-size="large"] blockquote,
+.article-mobile-markdown[data-text-size="large"] td {
+  font-size: 1.125rem !important;
+  line-height: 1.7 !important;
+}
+
+.article-mobile-markdown[data-text-size="normal"] p,
+.article-mobile-markdown[data-text-size="normal"] li,
+.article-mobile-markdown[data-text-size="normal"] span,
+.article-mobile-markdown[data-text-size="normal"] blockquote,
+.article-mobile-markdown[data-text-size="normal"] td {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
 
 .stai-markdown pre {
   background-color: rgba(var(--stai-surface-strong-rgb), 0.9);

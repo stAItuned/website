@@ -14,6 +14,10 @@ interface MobileActionBarProps {
   imageUrl?: string | null
   onTocClick: () => void
   showToc: boolean
+  readingTime?: number
+  scrollPercent?: number
+  onTextSizeChange?: (size: 'small' | 'normal' | 'large') => void
+  currentTextSize?: 'small' | 'normal' | 'large'
 }
 
 export function MobileActionBar({
@@ -22,12 +26,17 @@ export function MobileActionBar({
   description,
   imageUrl,
   onTocClick,
-  showToc
+  showToc,
+  readingTime = 5,
+  scrollPercent = 0,
+  onTextSizeChange,
+  currentTextSize = 'normal'
 }: MobileActionBarProps) {
   const [copied, setCopied] = useState(false)
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
+  const [showTextSizeMenu, setShowTextSizeMenu] = useState(false)
   const { user, loading } = useAuth()
 
   useEffect(() => {
@@ -154,8 +163,73 @@ export function MobileActionBar({
     setShowShareMenu(false)
   }
 
+  const handleTextSizeChange = (size: 'small' | 'normal' | 'large') => {
+    if (onTextSizeChange) {
+      onTextSizeChange(size)
+      event({
+        action: 'mobile_text_size_change',
+        category: 'accessibility',
+        label: size,
+        value: size === 'small' ? 1 : size === 'normal' ? 2 : 3
+      })
+    }
+    setShowTextSizeMenu(false)
+  }
+
   return (
     <>
+      {/* Text Size Menu */}
+      {showTextSizeMenu && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm animate-fade-in"
+          onClick={() => setShowTextSizeMenu(false)}
+        >
+          <div 
+            className="absolute bottom-20 left-4 right-4 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Text Size</h3>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => handleTextSizeChange('small')}
+                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
+                  currentTextSize === 'small'
+                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                <span className="text-sm font-medium">A-</span>
+                <span className="text-sm">Small</span>
+              </button>
+              
+              <button
+                onClick={() => handleTextSizeChange('normal')}
+                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
+                  currentTextSize === 'normal'
+                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                <span className="text-base font-medium">A</span>
+                <span className="text-sm">Normal</span>
+              </button>
+              
+              <button
+                onClick={() => handleTextSizeChange('large')}
+                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
+                  currentTextSize === 'large'
+                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                <span className="text-lg font-medium">A+</span>
+                <span className="text-sm">Large</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Share Menu Overlay */}
       {showShareMenu && (
         <div 
@@ -223,6 +297,31 @@ export function MobileActionBar({
         )}
         
         <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-slate-700 shadow-2xl">
+          {/* Progress Bar */}
+          <div className="h-1 bg-gray-200 dark:bg-slate-700">
+            <div 
+              className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300"
+              style={{ width: `${scrollPercent}%` }}
+            />
+          </div>
+          
+          {/* Reading Stats */}
+          <div className="flex items-center justify-center gap-4 px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-slate-700">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{readingTime} min read</span>
+            </div>
+            <span>•</span>
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span>{Math.round(scrollPercent)}% completed</span>
+            </div>
+          </div>
+          
           <div className="flex items-center justify-around px-2 py-3 max-w-md mx-auto">
             {/* Like Button */}
             <div className="flex-1 flex justify-center">
@@ -269,6 +368,25 @@ export function MobileActionBar({
               </svg>
               <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Share</span>
             </button>
+
+            {/* Text Size Button */}
+            {onTextSizeChange && (
+              <button
+                onClick={() => setShowTextSizeMenu(!showTextSizeMenu)}
+                className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
+                aria-label="Change text size"
+              >
+                <svg 
+                  className="w-6 h-6 text-gray-700 dark:text-gray-300" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h8m-8 6h16" />
+                </svg>
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Size</span>
+              </button>
+            )}
 
             {/* TOC Button */}
             {showToc && (

@@ -58,7 +58,7 @@ export function FloatingShareBar({
     const fetchBookmarkCount = async () => {
       try {
         const db = getFirestore(app)
-        const articleStatsRef = doc(db, 'analytics/articles', articleSlug)
+        const articleStatsRef = doc(db, 'articleStats', articleSlug)
         const articleStatsDoc = await getDoc(articleStatsRef)
         
         if (articleStatsDoc.exists()) {
@@ -130,7 +130,7 @@ export function FloatingShareBar({
     try {
       const db = getFirestore(app)
       const userDocRef = doc(db, 'users', user.uid)
-      const articleStatsRef = doc(db, 'analytics/articles', articleSlug)
+      const articleStatsRef = doc(db, 'articleStats', articleSlug)
       
       if (isBookmarked) {
         // Remove bookmark
