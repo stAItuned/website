@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { ANALYTICS_START_DATE, ANALYTICS_END_DATE } from '@/lib/analytics-date-config'
 
 interface AnalyticsData {
   articleUrl: string
@@ -35,8 +36,8 @@ export function useAnalytics(options: UseAnalyticsOptions = {}): UseAnalyticsRes
   const {
     slug,
     // Remove target from default options
-    startDate = '365daysAgo',
-    endDate = 'today',
+    startDate = ANALYTICS_START_DATE, // Use centralized config
+    endDate = ANALYTICS_END_DATE, // Use centralized config
     enabled = true
   } = options
 
@@ -168,8 +169,8 @@ data: Array<{
 export function useMultipleAnalytics(options: Omit<UseAnalyticsOptions, 'slug'> = {}): UseMultipleAnalyticsResult {
   const {
     // Remove target from default options
-    startDate = '365daysAgo',
-    endDate = 'today',
+    startDate = ANALYTICS_START_DATE, // Use centralized config
+    endDate = ANALYTICS_END_DATE, // Use centralized config
     enabled = true
   } = options
 

@@ -6,6 +6,9 @@ import { db } from "./firebase.js";
 setGlobalOptions({ region: "europe-west1", memory: "256MiB", timeoutSeconds: 120 });
 
 const PROPERTY = `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID!}`; // es. "properties/123456789"
+// Centralized analytics date configuration - Change this to match your website launch date
+const ANALYTICS_START_DATE = "2020-01-01";
+
 // Assicurati che l'account di servizio <project-id>@appspot.gserviceaccount.com
 // sia aggiunto in GA4 (Property access management) con ruolo Viewer/Analyst.
 
@@ -45,10 +48,10 @@ export const dailyAnalytics = onSchedule(
   // Use Application Default Credentials (ADC) for GA4 access
   const client = new BetaAnalyticsDataClient(); // uses runtime service account
       
-      // Fetch overall stats per gli ultimi 365 giorni (1 anno)
+      // Fetch overall stats - all time (since 2020-01-01 or adjust to your website launch date)
       const [overallReport] = await client.runReport({
         property: PROPERTY,
-        dateRanges: [{ startDate: "365daysAgo", endDate: "today" }],
+        dateRanges: [{ startDate: ANALYTICS_START_DATE, endDate: "today" }],
         metrics: [
           { name: "screenPageViews" },
           { name: "activeUsers" },
@@ -58,10 +61,10 @@ export const dailyAnalytics = onSchedule(
         ]
       });
 
-      // Fetch top pages per gli ultimi 365 giorni (1 anno)
+      // Fetch top pages - all time
       const [topPagesReport] = await client.runReport({
         property: PROPERTY,
-        dateRanges: [{ startDate: "365daysAgo", endDate: "today" }],
+        dateRanges: [{ startDate: ANALYTICS_START_DATE, endDate: "today" }],
         dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
         metrics: [
           { name: "screenPageViews" },
@@ -74,10 +77,10 @@ export const dailyAnalytics = onSchedule(
         limit: 20
       });
 
-      // Fetch article-specific stats (pages che contengono /learn/)
+      // Fetch article-specific stats (pages che contengono /learn/) - all time
       const [articlesReport] = await client.runReport({
         property: PROPERTY,
-        dateRanges: [{ startDate: "365daysAgo", endDate: "today" }],
+        dateRanges: [{ startDate: ANALYTICS_START_DATE, endDate: "today" }],
         dimensions: [{ name: "pagePath" }],
         dimensionFilter: {
           filter: {
@@ -162,7 +165,7 @@ export const dailyAnalytics = onSchedule(
       const analyticsData = {
         date: today,
         updatedAt: new Date().toISOString(),
-        dateRange: { startDate: "365daysAgo", endDate: "today" },
+        dateRange: { startDate: ANALYTICS_START_DATE, endDate: "today" },
         totalStats,
         topPages,
         articlesStats

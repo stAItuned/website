@@ -3,6 +3,10 @@
 import { useState } from 'react'
 import { useAnalytics, useMultipleAnalytics, formatAnalyticsNumber, formatDuration, formatBounceRate } from '@/lib/hooks/useAnalytics'
 import AnalyticsCacheStatus from './AnalyticsCacheStatus'
+import { 
+  ANALYTICS_DATE_RANGES, 
+  getDateRangeLabel 
+} from '@/lib/analytics-date-config'
 
 interface AnalyticsDashboardProps {
   articleSlug?: string
@@ -15,7 +19,7 @@ export default function AnalyticsDashboard({
   target = 'midway',
   className = '' 
 }: AnalyticsDashboardProps) {
-  const [dateRange, setDateRange] = useState('30daysAgo')
+  const [dateRange, setDateRange] = useState<string>(ANALYTICS_DATE_RANGES.ALL_TIME) // Use centralized config
   const [selectedTarget, setSelectedTarget] = useState<'newbie' | 'midway' | 'expert'>(target)
 
   // Fetch analytics for single article or multiple articles
@@ -44,14 +48,7 @@ export default function AnalyticsDashboard({
     setSelectedTarget(newTarget)
   }
 
-  const getDateRangeLabel = (range: string) => {
-    switch (range) {
-      case '7daysAgo': return 'Last 7 days'
-      case '30daysAgo': return 'Last 30 days'
-      case '90daysAgo': return 'Last 90 days'
-      default: return 'Last 30 days'
-    }
-  }
+  // Use centralized date range label function (removed local implementation)
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -89,9 +86,11 @@ export default function AnalyticsDashboard({
             onChange={(e) => handleDateRangeChange(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           >
-            <option value="7daysAgo">Last 7 days</option>
-            <option value="30daysAgo">Last 30 days</option>
-            <option value="90daysAgo">Last 90 days</option>
+            <option value={ANALYTICS_DATE_RANGES.LAST_7_DAYS}>Last 7 days</option>
+            <option value={ANALYTICS_DATE_RANGES.LAST_30_DAYS}>Last 30 days</option>
+            <option value={ANALYTICS_DATE_RANGES.LAST_90_DAYS}>Last 90 days</option>
+            <option value={ANALYTICS_DATE_RANGES.LAST_YEAR}>Last year</option>
+            <option value={ANALYTICS_DATE_RANGES.ALL_TIME}>All time</option>
           </select>
 
           <button

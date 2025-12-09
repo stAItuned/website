@@ -122,7 +122,7 @@ export default function ArticleAnalyticsStats({ slug, initialAnalytics }: Articl
             <div className="text-xs text-gray-400 text-left w-full sm:w-auto">{error}</div>
           ) : <span className="w-full sm:w-auto" />}
           <div className="text-[11px] text-gray-500 dark:text-gray-400 text-right select-none ml-2 w-full sm:w-auto">
-            * data referred to the last 90 days
+            * data referred to all time
           </div>
         </div>
       )}

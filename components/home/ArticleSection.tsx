@@ -280,7 +280,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
         <p className="text-xs text-right text-gray-300 dark:text-gray-200">
           {analyticsLoading 
             ? 'Loading view counts...' 
-            : '* View counts from Google Analytics (last 90 days)'
+            : '* View counts from Google Analytics (all time)'
           }
         </p>
       </div>

@@ -1,4 +1,5 @@
 import { ANALYTICS_CONFIG, logCacheOperation, getCacheKey } from './analytics-config'
+import { ANALYTICS_START_DATE, ANALYTICS_END_DATE } from './analytics-date-config'
 
 // In-memory cache for production (you might want to use Redis in production)
 interface CacheEntry {
@@ -19,7 +20,7 @@ class AnalyticsCache {
 
   private getCacheKey(articleSlug?: string, startDate?: string, endDate?: string): string {
     const today = this.getTodayString()
-    const baseKey = `analytics_${articleSlug || 'global'}_${startDate || '365daysAgo'}_${endDate || 'today'}_${today}`
+    const baseKey = `analytics_${articleSlug || 'global'}_${startDate || ANALYTICS_START_DATE}_${endDate || ANALYTICS_END_DATE}_${today}`
     return getCacheKey(baseKey)
   }
 

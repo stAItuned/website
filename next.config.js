@@ -13,6 +13,8 @@ try {
 }
 
 const nextConfig = {
+  // Add empty turbopack config to silence the warning (Next.js 16+)
+  turbopack: {},
   serverExternalPackages: ['googleapis', 'firebase-admin'],
   eslint: {
     // Warning: This allows production builds to successfully complete even if
