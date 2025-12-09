@@ -76,10 +76,33 @@ export default function RootLayout({
   // const articleCovers = getArticleCoversForPreload()
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="googleefba438834d7fae6" />
+        {/* Theme initialization script - runs before React hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme') || 
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                  const root = document.documentElement;
+                  if (theme === 'dark') {
+                    root.classList.add('dark');
+                    root.dataset.theme = 'dark';
+                    root.style.colorScheme = 'dark';
+                  } else {
+                    root.classList.remove('dark');
+                    root.dataset.theme = 'light';
+                    root.style.colorScheme = 'light';
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {/* Critical CSS for immediate render */}
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
         {/* Preload critical resources */}

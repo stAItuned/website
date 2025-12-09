@@ -16,22 +16,34 @@ import { UserMenu } from '@/components/auth/UserMenu'
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { openSearch } = useSearch()
   const { user, loading } = useAuth()
   const { resolvedTheme } = useTheme()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
+  
+  // Wait for component to mount before determining logo source
+  // This prevents hydration mismatch between server and client
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
   // Use the dark-text logo when in light mode, and the regular logo otherwise.
   // Requested: use /public/assets/general/logo-text-dark.png for light mode.
-  const logoSrc =
-    resolvedTheme === 'dark'
-      ? "/assets/general/logo-text.png"
-      : "/assets/general/logo-text-dark.png"
+  // Default to dark theme logo during SSR to match the inline script behavior
+  const logoSrc = mounted
+    ? (resolvedTheme === 'dark'
+        ? "/assets/general/logo-text.png"
+        : "/assets/general/logo-text-dark.png")
+    : "/assets/general/logo-text.png" // SSR default
+    
   // Mobile drawer should always swap based on theme only (light uses dark text logo).
-  const mobileLogoSrc =
-    resolvedTheme === 'dark'
-      ? "/assets/general/logo-text.png"
-      : "/assets/general/logo-text-dark.png"
+  const mobileLogoSrc = mounted
+    ? (resolvedTheme === 'dark'
+        ? "/assets/general/logo-text.png"
+        : "/assets/general/logo-text-dark.png")
+    : "/assets/general/logo-text.png" // SSR default
 
   useEffect(() => {
     const handleScroll = () => {
