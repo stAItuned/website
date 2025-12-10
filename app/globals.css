@@ -273,6 +273,73 @@ body {
   }
 }
 
+/* Floating orb animation for hero background */
+@keyframes float-orb {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(20px, -30px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(-15px, 20px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(25px, 10px) scale(1.02);
+  }
+}
+
+/* Brand gradient text utility */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #F59E0B 0%, #EA580C 50%, #DC2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated glow effects */
+.glow-amber {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3),
+    0 0 40px rgba(245, 158, 11, 0.2),
+    0 0 60px rgba(245, 158, 11, 0.1);
+}
+
+.glow-amber-subtle {
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.15),
+    0 0 30px rgba(245, 158, 11, 0.1);
+}
+
+/* Brand button styles */
+.btn-brand-primary {
+  @apply inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold rounded-full px-6 py-3 shadow-lg shadow-amber-500/25 hover:from-amber-300 hover:to-amber-400 hover:shadow-xl hover:shadow-amber-500/30 hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400;
+}
+
+.btn-brand-secondary {
+  @apply inline-flex items-center justify-center gap-2 border-2 border-white/60 text-white font-semibold rounded-full px-6 py-3 backdrop-blur-sm hover:border-white hover:bg-white/10 hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50;
+}
+
+/* Radial gradient background utility */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+}
+
+/* Hero stat card styles */
+.hero-stat-card {
+  @apply flex flex-col items-center justify-center px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white text-center transition-all duration-300 hover:bg-white/15 hover:border-white/30 hover:scale-105;
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;

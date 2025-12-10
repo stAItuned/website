@@ -25,13 +25,24 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { ToastProvider } from '@/components/ui/Toast'
 import { TopLoadingBar } from '@/components/ui/PageProgress'
 
+// SEO Structured Data
+import { JsonLd } from '@/components/seo/JsonLd'
+import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/seo/seo-schemas'
+
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
-  title: 'stAItuned - Your Sharing Spot',
-  description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
+  title: {
+    default: 'stAItuned - AI pratica per PMI',
+    template: '%s | stAItuned',
+  },
+  description: 'Prototipi di AI da testare sul campo, prima di investire in progetti lunghi e costosi. Aiutiamo PMI e team digitali a trasformare ipotesi su AI in esperimenti concreti.',
+  keywords: ['AI', 'intelligenza artificiale', 'PMI', 'machine learning', 'prototipi AI', 'progetti pilota', 'automazione', 'Italia'],
+  authors: [{ name: 'stAItuned' }],
+  creator: 'stAItuned',
+  publisher: 'stAItuned',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
@@ -43,27 +54,36 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'it_IT',
     url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
     siteName: 'stAItuned',
-    title: 'stAItuned - Your Sharing Spot',
-    description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
+    title: 'stAItuned - AI pratica per PMI',
+    description: 'Prototipi di AI da testare sul campo, prima di investire in progetti lunghi e costosi. Aiutiamo PMI e team digitali a trasformare ipotesi su AI in esperimenti concreti.',
     images: [
       {
         url: '/assets/general/logo-text.png',
         width: 1200,
         height: 630,
-        alt: 'stAItuned Logo',
+        alt: 'stAItuned - AI pratica per PMI',
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@stAItuned',
-    creator: '@stAItuned',
-    title: 'stAItuned - Your Sharing Spot',
-    description: 'Artificial intelligence within everyone\'s reach. The Italian community for AI enthusiasts, data scientists, and machine learning practitioners.',
-    images: ['/assets/general/logo-text.png'],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
+    types: {
+      'application/rss+xml': '/rss.xml',
+    },
   },
 }
 
@@ -78,6 +98,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* SEO Structured Data (JSON-LD) */}
+        <JsonLd data={generateOrganizationSchema()} />
+        <JsonLd data={generateWebsiteSchema()} />
+
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="googleefba438834d7fae6" />
         {/* Theme initialization script - runs before React hydration */}
