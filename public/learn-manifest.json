@@ -1,0 +1,92 @@
+{
+    "name": "stAItuned Learn - AI Education Hub",
+    "short_name": "Learn AI",
+    "description": "Curated AI learning paths, tutorials, and articles. Your pocket-sized AI education companion.",
+    "lang": "it-IT",
+    "dir": "ltr",
+    "scope": "/learn",
+    "start_url": "/learn?utm_source=pwa&utm_medium=learn_app",
+    "id": "/learn",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#0f172a",
+    "theme_color": "#3b82f6",
+    "categories": [
+        "education",
+        "books",
+        "news"
+    ],
+    "shortcuts": [
+        {
+            "name": "AI Fundamentals",
+            "short_name": "Fundamentals",
+            "description": "Start learning AI basics",
+            "url": "/learn/newbie",
+            "icons": [
+                {
+                    "src": "/assets/learn/newbie-card.jpg",
+                    "sizes": "192x192",
+                    "type": "image/jpeg"
+                }
+            ]
+        },
+        {
+            "name": "Intermediate Track",
+            "short_name": "Intermediate",
+            "description": "Level up your AI skills",
+            "url": "/learn/midway",
+            "icons": [
+                {
+                    "src": "/assets/learn/midway-card.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Expert Track",
+            "short_name": "Expert",
+            "description": "Advanced AI concepts",
+            "url": "/learn/expert",
+            "icons": [
+                {
+                    "src": "/assets/learn/expert-card.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        }
+    ],
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/favicon.ico",
+            "sizes": "16x16 32x32",
+            "type": "image/x-icon",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "prefer_related_applications": false,
+    "related_applications": [],
+    "handle_links": "preferred",
+    "launch_handler": {
+        "client_mode": "navigate-existing"
+    }
+}

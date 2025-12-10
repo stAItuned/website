@@ -71,7 +71,11 @@ export function HeroAnimatedBackground({
                         top: `${orb.y}%`,
                         width: orb.size,
                         height: orb.size,
-                        animation: `float-orb ${orb.duration}s ease-in-out infinite`,
+                        // Using separate properties instead of shorthand to avoid React warning
+                        animationName: 'float-orb',
+                        animationDuration: `${orb.duration}s`,
+                        animationTimingFunction: 'ease-in-out',
+                        animationIterationCount: 'infinite',
                         animationDelay: `${orb.delay}s`,
                     }}
                 />

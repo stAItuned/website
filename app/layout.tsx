@@ -51,7 +51,8 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
     apple: '/favicon.ico',
   },
-  manifest: '/manifest.json',
+  // PWA manifest removed - only /learn section is installable as PWA
+  // See: app/(public)/learn/layout.tsx for learn-specific PWA manifest
   openGraph: {
     type: 'website',
     locale: 'it_IT',
@@ -220,7 +221,7 @@ export default function RootLayout({
                 >
                   <TopLoadingBar />
                   <GoogleAnalytics />
-                  <ServiceWorkerRegister />
+                  {/* Main site SW removed - Learn section has its own PWA SW */}
                   {/* Solo i componenti essenziali sono server-side */}
                   <SearchProvider>
                     <SafePageViewTracker />

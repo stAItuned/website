@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { ArticleCard } from '@/components/ArticleCard'
 import { LatestArticles } from '@/components/LatestArticles'
 import { ContributorCTA } from '@/components/ui/ContributorCTA'
+import { PWAInstallInline } from '@/components/pwa'
 import { useSearchParams } from 'next/navigation'
 
 interface Target {
@@ -429,6 +430,9 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
           </div>
         ))}
       </div>
+
+      {/* PWA Install CTA - Strategic placement after stats, uses hero variant for impact */}
+      <PWAInstallInline variant="hero" />
 
       {/* Dual CTA Section: Write for stAItuned + Join the Lab */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto pt-4">
