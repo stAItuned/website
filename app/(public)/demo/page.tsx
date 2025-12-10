@@ -207,7 +207,7 @@ export default function DemoPage() {
             Le demo vengono aggiunte man mano che completiamo i progetti pilota con le PMI. Ogni webapp qui rappresenta un caso d'uso reale validato.
           </p>
           <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-            Per domande o suggerimenti: <a href="mailto:demo@staituned.it" className="text-amber-600 hover:text-amber-700 underline underline-offset-2">demo@staituned.it</a>
+            Per domande o suggerimenti: <a href="mailto:demo@staituned.com" className="text-amber-600 hover:text-amber-700 underline underline-offset-2">demo@staituned.com</a>
           </p>
         </section>
 

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArticleCard } from '@/components/ArticleCard'
 import { LatestArticles } from '@/components/LatestArticles'
+import { ContributorCTA } from '@/components/ui/ContributorCTA'
 import { useSearchParams } from 'next/navigation'
 
 interface Target {
@@ -418,8 +419,8 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
           <div
             key={idx}
             className={`text-center p-4 sm:p-6 rounded-2xl border shadow-sm ${(stat as any).highlight
-                ? 'bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/20 border-emerald-200 dark:border-emerald-700/50 ring-2 ring-emerald-500/20'
-                : 'bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border-slate-200 dark:border-slate-700'
+              ? 'bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/20 border-emerald-200 dark:border-emerald-700/50 ring-2 ring-emerald-500/20'
+              : 'bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border-slate-200 dark:border-slate-700'
               }`}
           >
             <div className="text-3xl sm:text-4xl mb-2">{stat.icon}</div>
@@ -429,18 +430,34 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
         ))}
       </div>
 
-      {/* Final Lab CTA */}
-      <div className="text-center space-y-3 max-w-2xl mx-auto pt-4">
-        <p className="text-base md:text-lg text-slate-700 dark:text-slate-300">
-          Want to move from theory to real experience?
-        </p>
-        <Link
-          href="/lab"
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-slate-800 dark:bg-white dark:text-slate-900"
-        >
-          Join the stAItuned Lab
-          <span aria-hidden className="text-base">→</span>
-        </Link>
+      {/* Dual CTA Section: Write for stAItuned + Join the Lab */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto pt-4">
+        {/* Write for stAItuned CTA - Using ContributorCTA component */}
+        <ContributorCTA source="learn-page" className="h-full" />
+
+        {/* Join the Lab CTA */}
+        <div className="rounded-2xl border-2 border-primary-200 bg-gradient-to-br from-primary-50 via-indigo-50 to-purple-50 p-6 shadow-md dark:border-primary-700/40 dark:from-primary-900/20 dark:via-indigo-900/10 dark:to-purple-900/10 transition-all hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-600/50">
+          <div className="flex flex-col h-full">
+            <div className="space-y-3 flex-1">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700 dark:bg-primary-800/30 dark:text-primary-300">
+                🚀 Practice
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50">
+                Join the stAItuned Lab
+              </h3>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                Work on real AI projects with company use-cases, receive mentorship, and get the chance to collaborate on paid work.
+              </p>
+            </div>
+            <Link
+              href="/lab"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-primary-500"
+            >
+              Discover the Lab
+              <span aria-hidden className="text-base">→</span>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Latest Articles Section */}

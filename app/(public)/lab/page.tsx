@@ -287,7 +287,7 @@ export default function LabPage() {
             <strong>Nota:</strong> Il Lab non è un corso strutturato, ma un'opportunità di crescita attraverso progetti veri. L'inserimento dipende dalle tue competenze attuali e dai progetti in corso.
           </p>
           <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-            Per domande: <a href="mailto:lab@staituned.it" className="text-blue-600 hover:text-blue-700 underline underline-offset-2">lab@staituned.it</a>
+            Per domande: <a href="mailto:lab@staituned.com" className="text-blue-600 hover:text-blue-700 underline underline-offset-2">lab@staituned.com</a>
           </p>
         </section>
 
