@@ -105,6 +105,13 @@ export default function RootLayout({
         />
         {/* Critical CSS for immediate render */}
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+        {/* RSS Feed autodiscovery */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="stAItuned RSS Feed"
+          href="/rss.xml"
+        />
         {/* Preload critical resources */}
         <link
           rel="preload"
@@ -183,31 +190,31 @@ export default function RootLayout({
           <ToastProvider>
             <FirebaseAuthProvider>
               <CookieConsentProvider>
-                <PerformanceProvider 
+                <PerformanceProvider
                   enableMonitoring={process.env.NODE_ENV === 'production'}
                   sampleRate={0.1}
                 >
-                <TopLoadingBar />
-                <GoogleAnalytics />
-                <ServiceWorkerRegister />
-              {/* Solo i componenti essenziali sono server-side */}
-              <SearchProvider>
-                <SafePageViewTracker />
-                <Header />
-                <section className="relative min-h-screen flex flex-col justify-between">
-                  <main className="flex flex-col">
-                    {children}
-                  </main>
-                  <Footer />
-                </section>
-                <SearchModal />
-              </SearchProvider>
-              <Suspense fallback={null}>
-                <FeedbackLoader />
-              </Suspense>
-              </PerformanceProvider>
-            </CookieConsentProvider>
-          </FirebaseAuthProvider>
+                  <TopLoadingBar />
+                  <GoogleAnalytics />
+                  <ServiceWorkerRegister />
+                  {/* Solo i componenti essenziali sono server-side */}
+                  <SearchProvider>
+                    <SafePageViewTracker />
+                    <Header />
+                    <section className="relative min-h-screen flex flex-col justify-between">
+                      <main className="flex flex-col">
+                        {children}
+                      </main>
+                      <Footer />
+                    </section>
+                    <SearchModal />
+                  </SearchProvider>
+                  <Suspense fallback={null}>
+                    <FeedbackLoader />
+                  </Suspense>
+                </PerformanceProvider>
+              </CookieConsentProvider>
+            </FirebaseAuthProvider>
           </ToastProvider>
         </ThemeProvider>
       </body>

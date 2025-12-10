@@ -13,6 +13,7 @@ import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
 import { ReadingProgress, EstimatedTimeRemaining } from '@/components/ui/ReadingProgress'
 import { FloatingShareBar } from '@/components/ui/FloatingShareBar'
 import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
+import { ContributorCTA } from '@/components/ui/ContributorCTA'
 import { MobileActionBar } from '@/components/ui/MobileActionBar'
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
 import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
@@ -786,6 +787,10 @@ export default function ArticlePageClient({
       {/* Author Bio Card */}
       <div className="max-w-6xl mx-auto px-4">
         <AuthorBioCard author={article.author} authorData={authorData} />
+      </div>
+      {/* Contributor CTA */}
+      <div className="max-w-2xl mx-auto px-4 my-8">
+        <ContributorCTA source={`article:${article.slug}`} />
       </div>
       {/* Back to Top Button (client component) - Hidden on mobile to avoid overlap with action bar */}
       <BackToTopButton />
