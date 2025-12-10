@@ -6,26 +6,23 @@ import { event } from '@/lib/gtag'
 interface ReaderModeProps {
   children: React.ReactNode
   articleSlug: string
+  textSize?: 'small' | 'normal' | 'large' // Accept from parent
 }
 
 type ReaderModeTheme = 'default' | 'sepia' | 'highContrast' | 'dark'
-type TextSize = 'small' | 'normal' | 'large'
 
-export function ReaderMode({ children, articleSlug }: ReaderModeProps) {
+export function ReaderMode({ children, articleSlug, textSize = 'normal' }: ReaderModeProps) {
   const [isReaderMode, setIsReaderMode] = useState(false)
   const [theme, setTheme] = useState<ReaderModeTheme>('default')
-  const [textSize, setTextSize] = useState<TextSize>('normal')
   const [showSettings, setShowSettings] = useState(false)
 
   useEffect(() => {
     // Load saved preferences
     const savedMode = localStorage.getItem('readerMode') === 'true'
     const savedTheme = (localStorage.getItem('readerTheme') as ReaderModeTheme) || 'default'
-    const savedSize = (localStorage.getItem('readerTextSize') as TextSize) || 'normal'
     
     setIsReaderMode(savedMode)
     setTheme(savedTheme)
-    setTextSize(savedSize)
   }, [])
 
   const toggleReaderMode = () => {
@@ -57,18 +54,6 @@ export function ReaderMode({ children, articleSlug }: ReaderModeProps) {
     })
   }
 
-  const changeTextSize = (newSize: TextSize) => {
-    setTextSize(newSize)
-    localStorage.setItem('readerTextSize', newSize)
-    
-    event({
-      action: 'mobile_text_size_change',
-      category: 'accessibility',
-      label: newSize,
-      value: newSize === 'small' ? 1 : newSize === 'normal' ? 2 : 3
-    })
-  }
-
   const getThemeClasses = () => {
     switch (theme) {
       case 'sepia':
@@ -79,17 +64,6 @@ export function ReaderMode({ children, articleSlug }: ReaderModeProps) {
         return 'bg-slate-900 text-gray-100'
       default:
         return ''
-    }
-  }
-
-  const getTextSizeClasses = () => {
-    switch (textSize) {
-      case 'small':
-        return 'text-sm'
-      case 'large':
-        return 'text-lg'
-      default:
-        return 'text-base'
     }
   }
 
@@ -181,54 +155,15 @@ export function ReaderMode({ children, articleSlug }: ReaderModeProps) {
                   </button>
                 </div>
               </div>
-
-              {/* Text Size */}
-              <div>
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Text Size</h4>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => changeTextSize('small')}
-                    className={`flex-1 p-3 rounded-lg border-2 transition-all ${
-                      textSize === 'small'
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-slate-600 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="text-xs font-medium text-gray-900 dark:text-white">A-</div>
-                  </button>
-                  
-                  <button
-                    onClick={() => changeTextSize('normal')}
-                    className={`flex-1 p-3 rounded-lg border-2 transition-all ${
-                      textSize === 'normal'
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-slate-600 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">A</div>
-                  </button>
-                  
-                  <button
-                    onClick={() => changeTextSize('large')}
-                    className={`flex-1 p-3 rounded-lg border-2 transition-all ${
-                      textSize === 'large'
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-slate-600 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="text-base font-medium text-gray-900 dark:text-white">A+</div>
-                  </button>
-                </div>
-              </div>
             </div>
           )}
         </div>
       )}
 
-      {/* Content Wrapper */}
+      {/* Content Wrapper - Only apply theme, no width constraints */}
       <div className={`transition-all duration-300 ${
         isReaderMode 
-          ? `max-w-3xl mx-auto px-8 py-6 my-4 rounded-2xl shadow-lg ${getThemeClasses()} ${getTextSizeClasses()}`
+          ? `py-4 rounded-2xl ${getThemeClasses()}`
           : ''
       }`}>
         {children}

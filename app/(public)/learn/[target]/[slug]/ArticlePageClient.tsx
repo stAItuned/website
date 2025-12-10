@@ -16,7 +16,10 @@ import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
 import { MobileActionBar } from '@/components/ui/MobileActionBar'
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
 import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
-import { ReaderMode } from '@/components/ui/ReaderMode'
+import { ContinueReadingPrompt } from '@/components/ui/ContinueReadingPrompt'
+import { SwipeNavigation } from '@/components/ui/SwipeNavigation'
+import { FloatingSectionIndicator } from '@/components/ui/FloatingSectionIndicator'
+import { useReadingProgress } from '@/lib/hooks/useReadingProgress'
 import { event } from '@/lib/gtag'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -41,38 +44,52 @@ export default function ArticlePageClient({
   const [touchStartY, setTouchStartY] = useState(0)
   const [modalScrollTop, setModalScrollTop] = useState(0)
   const [scrollPercent, setScrollPercent] = useState(0)
-  const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('normal')
-  
+  const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('small')
+  const [fontFamily, setFontFamily] = useState<'sans' | 'serif'>('sans')
+
+  // Reading progress persistence
+  const {
+    savedProgress,
+    showContinuePrompt,
+    saveProgress,
+    restorePosition,
+    dismissPrompt
+  } = useReadingProgress(article.slug)
+
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
     setMounted(true)
   }, [])
-  
+
   // Handle mobile TOC button visibility on scroll
   useEffect(() => {
     if (!mounted || isLarge) return
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-      
+
       // Show button when scrolling up, hide when scrolling down
       if (currentScrollY < lastScrollY || currentScrollY < 100) {
         setShowMobileToc(true)
       } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setShowMobileToc(false)
       }
-      
+
       setLastScrollY(currentScrollY)
 
       // Calculate scroll percentage
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
       const scrolled = Math.round((currentScrollY / docHeight) * 100)
-      setScrollPercent(Math.min(scrolled, 100))
+      const newPercent = Math.min(scrolled, 100)
+      setScrollPercent(newPercent)
+
+      // Save reading progress
+      saveProgress(newPercent)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [mounted, isLarge, lastScrollY])
+  }, [mounted, isLarge, lastScrollY, saveProgress])
 
   // Gesture handlers for TOC modal
   const handleTocTouchStart = (e: React.TouchEvent) => {
@@ -84,19 +101,19 @@ export default function ArticlePageClient({
   const handleTocTouchMove = (e: React.TouchEvent) => {
     const touchY = e.touches[0].clientY
     const diff = touchY - touchStartY
-    
+
     // Close modal if swiping down from top
     if (diff > 50 && modalScrollTop === 0) {
       setShowTocModal(false)
     }
   }
-  
+
   // Debug screen size and TOC
   useEffect(() => {
     console.log('[ARTICLE DEBUG] isLarge:', isLarge, 'window.innerWidth:', typeof window !== 'undefined' ? window.innerWidth : 'server')
     console.log('[ARTICLE DEBUG] TOC length:', toc.length)
   }, [isLarge, toc])
-  
+
   // Tracking refs and state
   const scrollTrackingRef = useRef({
     maxScrolled: 0,
@@ -111,64 +128,64 @@ export default function ArticlePageClient({
     slowScrollSections: new Set<string>(),
     readingSpeeds: [] as number[]
   })
-  
+
   // Track scroll depth
   const trackScrollDepth = useCallback(() => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
     const docHeight = document.documentElement.scrollHeight - window.innerHeight
     const scrollPercent = Math.round((scrollTop / docHeight) * 100)
     const now = Date.now()
-    
+
     const tracking = scrollTrackingRef.current
-    
+
     // Calculate scroll speed and direction
     const scrollDelta = scrollTop - tracking.lastScrollPosition
     const timeDelta = now - tracking.lastScrollTime
     const scrollSpeed = Math.abs(scrollDelta) / timeDelta // pixels per ms
-    
+
     // Detect scroll direction
     const newDirection = scrollDelta > 0 ? 'down' : 'up'
     if (newDirection !== tracking.scrollDirection) {
       tracking.scrollDirection = newDirection
     }
-    
+
     // Track fast scrolling (potential bounce indicator)
     if (scrollSpeed > 3) { // Fast scroll threshold
       tracking.fastScrollCount++
     }
-    
+
     // Track reading time in sections
     if (scrollSpeed < 0.5 && timeDelta > 1000) { // Slow scroll = reading
       const section = Math.floor(scrollPercent / 10) * 10 // 10% sections
       tracking.slowScrollSections.add(`section_${section}`)
       tracking.readingSpeeds.push(scrollSpeed)
     }
-    
+
     tracking.lastScrollPosition = scrollTop
     tracking.lastScrollTime = now
     tracking.totalScrollTime += timeDelta
-    
+
     // Update max scrolled
     if (scrollPercent > tracking.maxScrolled) {
       tracking.maxScrolled = scrollPercent
     }
-    
+
     // Track milestones (25%, 50%, 75%, 90%, 100%)
     const milestones = [25, 50, 75, 90, 100]
     milestones.forEach(milestone => {
       if (scrollPercent >= milestone && !tracking.scrollMilestones.has(milestone)) {
         tracking.scrollMilestones.add(milestone)
-        
+
         // Calculate time to reach milestone
         const timeToMilestone = now - tracking.startTime
-        
+
         event({
           action: 'scroll_depth',
           category: 'engagement',
           label: `${milestone}%`,
           value: milestone
         })
-        
+
         // Track reading pace
         event({
           action: 'reading_pace',
@@ -178,24 +195,24 @@ export default function ArticlePageClient({
         })
       }
     })
-    
+
     // Track engagement after 30 seconds of reading
     const timeSpent = now - tracking.startTime
     if (timeSpent > 30000 && !tracking.hasTrackedEngagement && scrollPercent > 10) {
       tracking.hasTrackedEngagement = true
-      
+
       // Calculate engagement quality
       const avgReadingSpeed = tracking.readingSpeeds.reduce((a, b) => a + b, 0) / tracking.readingSpeeds.length
       const readingSections = tracking.slowScrollSections.size
       const fastScrollRatio = tracking.fastScrollCount / (timeSpent / 1000)
-      
+
       event({
         action: 'engaged_reading',
         category: 'engagement',
         label: article.slug,
         value: Math.round(timeSpent / 1000)
       })
-      
+
       // Detailed engagement metrics
       event({
         action: 'reading_quality',
@@ -203,7 +220,7 @@ export default function ArticlePageClient({
         label: `sections_read_${readingSections}`,
         value: readingSections
       })
-      
+
       if (fastScrollRatio > 2) {
         event({
           action: 'fast_scroll_behavior',
@@ -214,32 +231,32 @@ export default function ArticlePageClient({
       }
     }
   }, [article.slug])
-  
+
   // Track link clicks
   const trackLinkClick = useCallback((clickEvent: Event) => {
     const target = clickEvent.target as HTMLElement
     const link = target.closest('a')
-    
+
     if (link) {
       const href = link.getAttribute('href') || ''
       const isExternal = href.startsWith('http') && !href.includes('staituned.com')
       const isInternal = href.startsWith('/') || href.includes('staituned.com')
       const isTOC = link.closest('.table-of-contents') !== null
       const isRelated = link.closest('[data-related-articles]') !== null
-      
+
       let linkType = 'other'
       if (isTOC) linkType = 'toc'
       else if (isRelated) linkType = 'related_article'
       else if (isExternal) linkType = 'external'
       else if (isInternal) linkType = 'internal'
-      
+
       event({
         action: 'link_click',
         category: 'engagement',
         label: `${linkType}: ${href}`,
         value: 1
       })
-      
+
       // Additional tracking for external links
       if (isExternal) {
         event({
@@ -251,13 +268,13 @@ export default function ArticlePageClient({
       }
     }
   }, [])
-  
+
   // Track time on page when user leaves
   const trackTimeOnPage = useCallback(() => {
     const timeSpent = Date.now() - scrollTrackingRef.current.startTime
     const maxScrolled = scrollTrackingRef.current.maxScrolled
     const tracking = scrollTrackingRef.current
-    
+
     // Basic metrics
     event({
       action: 'time_on_page',
@@ -265,19 +282,19 @@ export default function ArticlePageClient({
       label: article.slug,
       value: Math.round(timeSpent / 1000)
     })
-    
+
     event({
       action: 'max_scroll_depth',
       category: 'engagement',
       label: article.slug,
       value: maxScrolled
     })
-    
+
     // Bounce detection metrics
     const isLikelyBounce = timeSpent < 10000 && maxScrolled < 25
     const isShallowRead = timeSpent < 30000 && maxScrolled < 50
     const isFastScroller = tracking.fastScrollCount > 5 && timeSpent < 60000
-    
+
     if (isLikelyBounce) {
       event({
         action: 'bounce_likely',
@@ -286,7 +303,7 @@ export default function ArticlePageClient({
         value: Math.round(timeSpent / 1000)
       })
     }
-    
+
     if (isShallowRead) {
       event({
         action: 'shallow_read',
@@ -295,7 +312,7 @@ export default function ArticlePageClient({
         value: maxScrolled
       })
     }
-    
+
     if (isFastScroller) {
       event({
         action: 'fast_scanner',
@@ -304,21 +321,21 @@ export default function ArticlePageClient({
         value: tracking.fastScrollCount
       })
     }
-    
+
     // Content engagement analysis
-    const engagementScore = Math.min(100, 
-      (maxScrolled * 0.4) + 
-      (Math.min(timeSpent / 1000, 300) * 0.3) + 
+    const engagementScore = Math.min(100,
+      (maxScrolled * 0.4) +
+      (Math.min(timeSpent / 1000, 300) * 0.3) +
       (tracking.slowScrollSections.size * 10)
     )
-    
+
     event({
       action: 'engagement_score',
       category: 'content_analysis',
       label: article.slug,
       value: Math.round(engagementScore)
     })
-    
+
     // Track most engaging sections
     if (tracking.slowScrollSections.size > 0) {
       event({
@@ -329,7 +346,7 @@ export default function ArticlePageClient({
       })
     }
   }, [article.slug])
-  
+
   // Set up tracking
   useEffect(() => {
     // Track page view start
@@ -339,21 +356,21 @@ export default function ArticlePageClient({
       label: article.slug,
       value: 1
     })
-    
+
     // Track viewport and device info for bounce analysis
     const viewport = {
       width: window.innerWidth,
       height: window.innerHeight,
       isMobile: window.innerWidth < 768
     }
-    
+
     event({
       action: 'viewport_info',
       category: 'technical',
       label: `${viewport.width}x${viewport.height}_${viewport.isMobile ? 'mobile' : 'desktop'}`,
       value: viewport.width
     })
-    
+
     // Track page load performance
     const loadTime = performance.now()
     event({
@@ -362,7 +379,7 @@ export default function ArticlePageClient({
       label: article.slug,
       value: Math.round(loadTime)
     })
-    
+
     // Track if user came from search, social, direct, etc.
     const referrer = document.referrer
     let trafficSource = 'direct'
@@ -372,20 +389,20 @@ export default function ArticlePageClient({
     else if (referrer.includes('facebook')) trafficSource = 'facebook'
     else if (referrer && !referrer.includes('staituned.com')) trafficSource = 'external'
     else if (referrer.includes('staituned.com')) trafficSource = 'internal'
-    
+
     event({
       action: 'traffic_source',
       category: 'acquisition',
       label: trafficSource,
       value: 1
     })
-    
+
     // Track early exit intent (mouse leaving viewport quickly)
     let mouseLeaveCount = 0
     const handleMouseLeave = () => {
       mouseLeaveCount++
       const timeOnPage = Date.now() - scrollTrackingRef.current.startTime
-      
+
       if (timeOnPage < 10000 && mouseLeaveCount === 1) {
         event({
           action: 'early_exit_intent',
@@ -395,33 +412,33 @@ export default function ArticlePageClient({
         })
       }
     }
-    
+
     document.addEventListener('mouseleave', handleMouseLeave)
-    
+
     // Add scroll listener
     const handleScroll = () => {
       requestAnimationFrame(trackScrollDepth)
     }
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true })
-    
+
     // Add click listener for link tracking
     document.addEventListener('click', trackLinkClick)
-    
+
     // Track when user leaves page
     const handleBeforeUnload = () => {
       trackTimeOnPage()
     }
-    
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         trackTimeOnPage()
       }
     }
-    
+
     window.addEventListener('beforeunload', handleBeforeUnload)
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('click', trackLinkClick)
@@ -445,7 +462,7 @@ export default function ArticlePageClient({
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [article.slug])
-  
+
   return (
     <PageTransition>
       <ReadingProgress />
@@ -467,7 +484,7 @@ export default function ArticlePageClient({
               <div className="flex justify-center mb-4">
                 <div className="w-12 h-1.5 bg-gray-300 dark:bg-slate-600 rounded-full"></div>
               </div>
-              
+
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -486,11 +503,11 @@ export default function ArticlePageClient({
                   </svg>
                 </button>
               </div>
-              
+
               {/* TOC Content */}
               <div className="table-of-contents">
-                <ArticleTOC 
-                  toc={toc} 
+                <ArticleTOC
+                  toc={toc}
                   enableScrollSpy={false}
                   highlightSlug={modalActiveSlug || undefined}
                   onLinkClick={slug => {
@@ -614,7 +631,7 @@ export default function ArticlePageClient({
               </div>
               {/* Article Body */}
               <div id="article-root">
-                <MarkdownContent 
+                <MarkdownContent
                   content={article.body.raw}
                   className="prose prose-lg max-w-none"
                   articleSlug={article.slug}
@@ -625,8 +642,8 @@ export default function ArticlePageClient({
             <aside className="self-stretch">
               <div className="sticky top-24">
                 <div className="table-of-contents">
-                  <ArticleTOC 
-                    toc={toc} 
+                  <ArticleTOC
+                    toc={toc}
                     enableScrollSpy={true}
                     onLinkClick={handleTOCClick}
                     sticky={false}
@@ -636,94 +653,119 @@ export default function ArticlePageClient({
             </aside>
           </div>
         ) : (
-          <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-24">
-            <ReaderMode articleSlug={article.slug}>
-              <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
-              {/* Article Header */}
-              <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
-                {/* Article Title */}
-                <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight">
-                  {article.title}
-                </h1>
-                {/* Author */}
-                <div className="flex flex-col items-center gap-2">
-                  {article.author && (
-                    <AuthorAvatar author={article.author} authorData={authorData} />
-                  )}
-                </div>
-                {/* Meta Info Group */}
-                <div className="flex flex-row flex-wrap items-center justify-center gap-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
-                  {/* Date */}
-                  <div className="flex items-center gap-1.5">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
-                    </svg>
-                    <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                  </div>
-                  <span className="text-gray-400 dark:text-gray-500">•</span>
-                  {/* Reading time */}
-                  <div className="flex items-center gap-1.5">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{article.readingTime} min read</span>
-                  </div>
-                </div>
-                
-                {/* KPI Stats Row */}
-                <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
-                  {/* Views */}
-                  <div className="flex items-center gap-1.5" title="Total views">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    <span className="font-medium">{analytics.pageViews || 0}</span>
-                  </div>
-                  
-                  <span className="text-gray-300 dark:text-gray-600">|</span>
-                  
-                  {/* Visitors */}
-                  <div className="flex items-center gap-1.5" title="Unique visitors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span className="font-medium">{analytics.users || 0}</span>
-                  </div>
-                  
-                  <span className="text-gray-300 dark:text-gray-600">|</span>
-                  
-                  {/* Likes */}
-                  <div className="flex items-center gap-1.5" title="Total likes">
-                    <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
-                    <span className="font-medium">{analytics.likes || 0}</span>
-                  </div>
-                </div>
-              </div>
-              {/* Article Body */}
-              <div 
-                id="article-root" 
-                className="article-mobile-markdown"
-                data-text-size={textSize}
-              >
-                <MarkdownContent 
-                  content={article.body.raw}
-                  className="prose max-w-none text-gray-800 dark:text-gray-200"
-                  articleSlug={article.slug}
-                />
-              </div>
-            </article>
-            </ReaderMode>
+          <>
+            <SwipeNavigation
+              prevArticle={relatedArticles[0] ? {
+                slug: relatedArticles[0].slug,
+                title: relatedArticles[0].title,
+                target: relatedArticles[0].target?.toLowerCase()
+              } : null}
+              nextArticle={relatedArticles[1] ? {
+                slug: relatedArticles[1].slug,
+                title: relatedArticles[1].title,
+                target: relatedArticles[1].target?.toLowerCase()
+              } : null}
+            >
+              <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-24">
+                {/* Floating Section Indicator */}
+                <FloatingSectionIndicator toc={toc} />
 
-            {/* Quick Feedback Button */}
-            <QuickFeedbackButton 
+                <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
+                  {/* Article Header */}
+                  <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
+                    {/* Article Title */}
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight">
+                      {article.title}
+                    </h1>
+                    {/* Author */}
+                    <div className="flex flex-col items-center gap-2">
+                      {article.author && (
+                        <AuthorAvatar author={article.author} authorData={authorData} />
+                      )}
+                    </div>
+                    {/* Meta Info Group */}
+                    <div className="flex flex-row flex-wrap items-center justify-center gap-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+                      {/* Date */}
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+                        </svg>
+                        <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                      </div>
+                      <span className="text-gray-400 dark:text-gray-500">•</span>
+                      {/* Reading time */}
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{article.readingTime} min read</span>
+                      </div>
+                    </div>
+
+                    {/* KPI Stats Row */}
+                    <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
+                      {/* Views */}
+                      <div className="flex items-center gap-1.5" title="Total views">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <span className="font-medium">{analytics.pageViews || 0}</span>
+                      </div>
+
+                      <span className="text-gray-300 dark:text-gray-600">|</span>
+
+                      {/* Visitors */}
+                      <div className="flex items-center gap-1.5" title="Unique visitors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span className="font-medium">{analytics.users || 0}</span>
+                      </div>
+
+                      <span className="text-gray-300 dark:text-gray-600">|</span>
+
+                      {/* Likes */}
+                      <div className="flex items-center gap-1.5" title="Total likes">
+                        <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span className="font-medium">{analytics.likes || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Article Body */}
+                  <div
+                    id="article-root"
+                    className="article-mobile-markdown"
+                    data-text-size={textSize}
+                    data-font-family={fontFamily}
+                  >
+                    <MarkdownContent
+                      content={article.body.raw}
+                      className="prose max-w-none text-gray-800 dark:text-gray-200"
+                      articleSlug={article.slug}
+                    />
+                  </div>
+                </article>
+              </div>
+            </SwipeNavigation>
+
+            {/* Quick Feedback Button - Outside SwipeNavigation to preserve fixed positioning */}
+            <QuickFeedbackButton
               articleSlug={article.slug}
               articleTitle={article.title}
             />
 
-            {/* Mobile Action Bar */}
+            {/* Continue Reading Prompt */}
+            <ContinueReadingPrompt
+              show={showContinuePrompt}
+              scrollPercent={savedProgress?.scrollPercent || 0}
+              onContinue={restorePosition}
+              onDismiss={dismissPrompt}
+            />
+
+            {/* Mobile Action Bar - Outside SwipeNavigation to preserve fixed positioning */}
             <MobileActionBar
               articleSlug={article.slug}
               title={article.title}
@@ -735,8 +777,10 @@ export default function ArticlePageClient({
               scrollPercent={scrollPercent}
               onTextSizeChange={setTextSize}
               currentTextSize={textSize}
+              onFontFamilyChange={setFontFamily}
+              currentFontFamily={fontFamily}
             />
-          </div>
+          </>
         )}
       </section>
       {/* Author Bio Card */}
