@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { allPosts } from "@/lib/contentlayer";
+import { getAllProducts } from "@/lib/products";
 
-export const runtime = "nodejs";           // ensure Node
-export const revalidate = 3600;            // make this route static for 1h
+export const runtime = "nodejs";
+export const revalidate = 3600; // Revalidate every hour
 
 const baseUrl = "https://staituned.com";
+
+// Current date for static pages (updated on each build/revalidation)
+const buildDate = new Date().toISOString();
 
 // Escape special XML chars
 function escapeXml(text: string | null | undefined): string {
@@ -17,12 +21,12 @@ function escapeXml(text: string | null | undefined): string {
     .replace(/'/g, "&#39;");
 }
 
-// Robust slugify for author URLs, then encode
+// Robust slugify for author URLs
 function authorSlug(name: string) {
   return encodeURIComponent(
     name
       .normalize("NFKD")
-      .replace(/[\u0300-\u036f]/g, "") // strip diacritics
+      .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-zA-Z0-9\s-]/g, "")
       .trim()
       .replace(/\s+/g, "-")
@@ -30,52 +34,94 @@ function authorSlug(name: string) {
   );
 }
 
+// Find the most recent post date for a category/section
+function getMostRecentPostDate(posts: typeof allPosts, section?: string): string {
+  const filtered = section
+    ? posts.filter(p => (p.target || "general").toLowerCase() === section.toLowerCase())
+    : posts;
+
+  if (filtered.length === 0) return buildDate;
+
+  const dates = filtered.map(p => new Date(p.updatedAt || p.date || 0).getTime());
+  return new Date(Math.max(...dates)).toISOString();
+}
+
 export async function GET() {
   // Only published posts
   const posts = allPosts.filter((p) => p.published !== false);
+
+  // All products
+  const products = getAllProducts();
 
   // Unique authors
   const authors = Array.from(
     new Set(posts.map((p) => p.author).filter(Boolean) as string[])
   );
 
-  // Build XML chunks
+  // Calculate dynamic lastmod dates for category pages
+  const learnLastmod = getMostRecentPostDate(posts);
+  const newbieLastmod = getMostRecentPostDate(posts, "newbie");
+  const midwayLastmod = getMostRecentPostDate(posts, "midway");
+  const expertLastmod = getMostRecentPostDate(posts, "expert");
+  const businessLastmod = getMostRecentPostDate(posts, "business");
+
+  // Static pages with priority and lastmod
+  // Note: changefreq removed as Google ignores it, preferring lastmod
   const staticUrls = [
-    { loc: `${baseUrl}/`, changefreq: "daily", priority: "1.0" },
-    { loc: `${baseUrl}/meet/`, changefreq: "monthly", priority: "0.8" },
-    { loc: `${baseUrl}/learn/`, changefreq: "weekly", priority: "0.8" },
-    { loc: `${baseUrl}/author/`, changefreq: "weekly", priority: "0.7" },
+    // Core pages - highest priority
+    { loc: `${baseUrl}/`, priority: "1.0", lastmod: learnLastmod },
+    { loc: `${baseUrl}/learn/`, priority: "0.9", lastmod: learnLastmod },
+    { loc: `${baseUrl}/aziende/`, priority: "0.9", lastmod: buildDate },
+
+    // Section/target pages - dynamically updated when new posts added
+    { loc: `${baseUrl}/learn/newbie/`, priority: "0.8", lastmod: newbieLastmod },
+    { loc: `${baseUrl}/learn/midway/`, priority: "0.8", lastmod: midwayLastmod },
+    { loc: `${baseUrl}/learn/expert/`, priority: "0.8", lastmod: expertLastmod },
+    { loc: `${baseUrl}/learn/business/`, priority: "0.8", lastmod: businessLastmod },
+
+    // Secondary pages
+    { loc: `${baseUrl}/prodotti/`, priority: "0.8", lastmod: buildDate },
+    { loc: `${baseUrl}/lab/`, priority: "0.7", lastmod: buildDate },
+    { loc: `${baseUrl}/meet/`, priority: "0.7", lastmod: buildDate },
+    { loc: `${baseUrl}/author/`, priority: "0.6", lastmod: learnLastmod },
+    { loc: `${baseUrl}/business/`, priority: "0.7", lastmod: businessLastmod },
+
+    // Legal pages - low priority, rarely updated
+    { loc: `${baseUrl}/privacy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },
+    { loc: `${baseUrl}/cookie-policy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },
   ]
-    .map(
-      (u) => `
+    .map((u) => `
   <url>
     <loc>${escapeXml(u.loc)}</loc>
-    <changefreq>${u.changefreq}</changefreq>
+    <lastmod>${u.lastmod}</lastmod>
     <priority>${u.priority}</priority>
-  </url>`
-    )
+  </url>`)
     .join("");
 
+  // Author pages - use most recent post by that author
   const authorUrls = authors
     .map((name) => {
       const url = `${baseUrl}/author/${authorSlug(name)}/`;
+      const authorPosts = posts.filter(p => p.author === name);
+      const lastmod = authorPosts.length > 0
+        ? new Date(Math.max(...authorPosts.map(p => new Date(p.updatedAt || p.date || 0).getTime()))).toISOString()
+        : buildDate;
+
       return `
   <url>
     <loc>${escapeXml(url)}</loc>
-    <changefreq>weekly</changefreq>
+    <lastmod>${lastmod}</lastmod>
     <priority>0.6</priority>
   </url>`;
     })
     .join("");
 
+  // Article pages - use actual update date
   const postUrls = posts
     .map((post) => {
       const section = (post.target || "general").toLowerCase();
       const url = `${baseUrl}/learn/${section}/${post.slug}/`;
-
-      const last = new Date(
-        post.updatedAt || post.date || Date.now()
-      ).toISOString();
+      const lastmod = new Date(post.updatedAt || post.date || Date.now()).toISOString();
 
       const coverUrl = post.cover
         ? post.cover.startsWith("http")
@@ -83,27 +129,46 @@ export async function GET() {
           : `${baseUrl}/content/articles/${post.slug}/${post.cover.replace("./", "")}`
         : null;
 
-      // hreflang – only if you truly have alternates; here we just set one language
-      const hreflang =
-        post.language
-          ? `<xhtml:link rel="alternate" hreflang="${post.language === "Italian" ? "it" : "en"}" href="${escapeXml(url)}" />`
-          : "";
+      // hreflang for multilingual content
+      const hreflang = post.language
+        ? `<xhtml:link rel="alternate" hreflang="${post.language === "Italian" ? "it" : "en"}" href="${escapeXml(url)}" />`
+        : "";
 
-      const image =
-        coverUrl
-          ? `<image:image>
+      const image = coverUrl
+        ? `<image:image>
       <image:loc>${escapeXml(coverUrl)}</image:loc>
     </image:image>`
-          : "";
+        : "";
 
       return `
   <url>
     <loc>${escapeXml(url)}</loc>
-    <lastmod>${last}</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>${lastmod}</lastmod>
     <priority>0.7</priority>
     ${hreflang}
     ${image}
+  </url>`;
+    })
+    .join("");
+
+  // Product pages
+  const productUrls = products
+    .map((product) => {
+      const url = `${baseUrl}/prodotti/${product.slug}/`;
+
+      const imageTag = product.image
+        ? `<image:image>
+      <image:loc>${escapeXml(product.image.startsWith("http") ? product.image : `${baseUrl}${product.image}`)}</image:loc>
+      <image:title>${escapeXml(product.title)}</image:title>
+    </image:image>`
+        : "";
+
+      return `
+  <url>
+    <loc>${escapeXml(url)}</loc>
+    <lastmod>${buildDate}</lastmod>
+    <priority>0.6</priority>
+    ${imageTag}
   </url>`;
     })
     .join("");
@@ -117,6 +182,7 @@ export async function GET() {
   ${staticUrls}
   ${authorUrls}
   ${postUrls}
+  ${productUrls}
 </urlset>`;
 
   return new NextResponse(xml, {
