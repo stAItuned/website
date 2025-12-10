@@ -606,9 +606,17 @@ export default function ArticlePageClient({
               </div>
               {/* Article Title (desktop) */}
               <div className="mb-6">
-                <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-300 mb-4">
-                  {article.title}
-                </h1>
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-300">
+                    {article.title}
+                  </h1>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                    </svg>
+                    FREE
+                  </span>
+                </div>
                 {/* Share button below title */}
                 {/* <div className="flex justify-start">
                   <ShareOnLinkedIn
@@ -678,6 +686,13 @@ export default function ArticlePageClient({
                     <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight">
                       {article.title}
                     </h1>
+                    {/* FREE Badge */}
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                      </svg>
+                      FREE
+                    </span>
                     {/* Author */}
                     <div className="flex flex-col items-center gap-2">
                       {article.author && (
