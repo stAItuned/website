@@ -86,7 +86,7 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                     </div>
                     <div>
                         <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
-                            Take AI learning mobile
+                            Take stAI tuned on mobile
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
                             Install for offline reading
@@ -94,19 +94,18 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                     </div>
                 </div>
 
-                {isPromptReady && (
-                    <button
-                        onClick={handleInstall}
-                        className="
-              px-4 py-2 text-sm font-semibold
-              bg-blue-600 text-white rounded-lg
-              hover:bg-blue-700 transition-colors
-              whitespace-nowrap
-            "
-                    >
-                        Install
-                    </button>
-                )}
+                <button
+                    onClick={handleInstall}
+                    disabled={!isPromptReady}
+                    className={`
+              px-4 py-2 text-sm font-semibold rounded-lg whitespace-nowrap transition-colors
+              ${isPromptReady
+                            ? 'bg-blue-600 text-white hover:bg-blue-700'
+                            : 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 cursor-default'}
+            `}
+                >
+                    Install
+                </button>
             </div>
         )
     }

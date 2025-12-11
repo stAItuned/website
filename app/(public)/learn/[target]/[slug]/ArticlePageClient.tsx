@@ -4,16 +4,15 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { LikeButton } from '@/components/LikeButton'
-import ArticleAnalyticsStats from '@/components/ArticleAnalyticsStats'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RelatedArticles } from '@/components/RelatedArticles'
-import { ShareOnLinkedIn } from '@/components/ShareOnLinkedIn'
-import { ReadingProgress, EstimatedTimeRemaining } from '@/components/ui/ReadingProgress'
+import { ReadingProgress } from '@/components/ui/ReadingProgress'
 import { FloatingShareBar } from '@/components/ui/FloatingShareBar'
 import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
 import { ContributorCTA } from '@/components/ui/ContributorCTA'
+import { PWAInstallInline } from '@/components/pwa'
 import { MobileActionBar } from '@/components/ui/MobileActionBar'
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
 import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
@@ -555,6 +554,10 @@ export default function ArticlePageClient({
             <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom text-current" title={article.title}>{article.title}</span>
           </nav>
         </div>
+        {/* PWA Install CTA - Top placement, same as bottom */}
+        <div className="max-w-2xl mx-auto px-4 my-6">
+          <PWAInstallInline variant="compact" />
+        </div>
         {/* Responsive: Only render one article version at a time */}
         {/* Render desktop by default for SSR, then switch after mount */}
         {!mounted || isLarge ? (
@@ -806,6 +809,10 @@ export default function ArticlePageClient({
       {/* Contributor CTA */}
       <div className="max-w-2xl mx-auto px-4 my-8">
         <ContributorCTA source={`article:${article.slug}`} />
+      </div>
+      {/* PWA Install CTA - Strategic placement after article, before related content */}
+      <div className="max-w-2xl mx-auto px-4 mb-8">
+        <PWAInstallInline variant="compact" />
       </div>
       {/* Back to Top Button (client component) - Hidden on mobile to avoid overlap with action bar */}
       <BackToTopButton />
