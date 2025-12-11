@@ -13,6 +13,8 @@ try {
 }
 
 const nextConfig = {
+  // Standalone output for minimal production bundle (reduces Firebase deploy from ~240MB to ~80MB)
+  output: 'standalone',
   // Add empty turbopack config to silence the warning (Next.js 16+)
   turbopack: {},
   serverExternalPackages: ['googleapis', 'firebase-admin'],
@@ -57,7 +59,7 @@ const nextConfig = {
   // Handle the content submodule
   webpack: (config, { dev, isServer }) => {
     config.resolve.symlinks = false
-    
+
     // Exclude Firebase Admin SDK from client-side bundles
     if (!isServer) {
       config.externals = config.externals || []
@@ -67,7 +69,7 @@ const nextConfig = {
         'firebase-admin/firestore': 'firebase-admin/firestore',
       })
     }
-    
+
     // Optimize bundle splitting - AGGRESSIVE OPTIMIZATION
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
@@ -138,7 +140,7 @@ const nextConfig = {
         }
       }
     }
-    
+
     return config
   },
   transpilePackages: ['contentlayer'],
@@ -189,17 +191,30 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/sw-learn.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/learn',
+          },
+        ],
+      },
     ]
   },
   async rewrites() {
     const rewrites = []
-    
+
     // Serve images from content directory
     rewrites.push({
       source: '/content/:path*',
       destination: '/api/content/:path*',
     })
-    
+
     return rewrites
   },
 }

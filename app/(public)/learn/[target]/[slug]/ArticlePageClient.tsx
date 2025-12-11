@@ -12,7 +12,7 @@ import { ReadingProgress } from '@/components/ui/ReadingProgress'
 import { FloatingShareBar } from '@/components/ui/FloatingShareBar'
 import { AuthorBioCard } from '@/components/ui/AuthorBioCard'
 import { ContributorCTA } from '@/components/ui/ContributorCTA'
-import { PWAInstallInline } from '@/components/pwa'
+import { PWAInstallInline, SaveForOfflineButton } from '@/components/pwa'
 import { MobileActionBar } from '@/components/ui/MobileActionBar'
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
 import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
@@ -601,7 +601,8 @@ export default function ArticlePageClient({
                     </div>
                   </div>
                 </div>
-                <div className="flex-shrink-0 w-full sm:w-auto flex justify-end sm:justify-center mt-2 sm:mt-0">
+                <div className="flex-shrink-0 w-full sm:w-auto flex items-center justify-end sm:justify-center gap-2 mt-2 sm:mt-0">
+                  <SaveForOfflineButton articleSlug={article.slug} />
                   <div className="w-full sm:w-auto">
                     <LikeButton articleSlug={article.slug} />
                   </div>

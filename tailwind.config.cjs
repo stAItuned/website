@@ -34,6 +34,24 @@ module.exports = {
           400: '#FFF7A8',
           500: '#FFF272',
           600: '#FFE700'
+        },
+        // Accent colors for brand highlights
+        accent: {
+          50: '#FFFBEB',
+          100: '#FEF3C7',
+          200: '#FDE68A',
+          300: '#FCD34D',
+          400: '#FBBF24',
+          500: '#F59E0B',
+          600: '#D97706',
+          700: '#B45309',
+        },
+        // Brand-specific named colors
+        brand: {
+          navy: '#1A1E3B',
+          blue: '#383F74',
+          gold: '#FFF272',
+          amber: '#F59E0B',
         }
       },
       animation: {
