@@ -51,6 +51,19 @@ export function ArticleCard({ article }: ArticleCardProps) {
     return `/content/team/${authorSlug}/propic.jpg`
   }
 
+  const isArticleNew = (dateString?: string) => {
+    if (!dateString) return false
+    const publishedDate = new Date(dateString)
+    if (Number.isNaN(publishedDate.getTime())) return false
+
+    const today = new Date()
+    return (
+      publishedDate.getFullYear() === today.getFullYear() &&
+      publishedDate.getMonth() === today.getMonth() &&
+      publishedDate.getDate() === today.getDate()
+    )
+  }
+
   const getTargetStyle = (target?: string) => {
     const targetStyles = {
       'Newbie': 'bg-green-500 text-white',
@@ -63,6 +76,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
   const imageSrc = getValidImageSrc(article.cover)
   const authorImageSrc = getAuthorImageSrc(article.author)
+  const isNewArticle = isArticleNew(article.date)
 
   const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'
 
@@ -93,14 +107,22 @@ export function ArticleCard({ article }: ArticleCardProps) {
           {/* Gradient overlay on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
-          {/* Views Badge */}
-          <div className="absolute top-2 left-2 z-20 flex items-center bg-white/95 dark:bg-gray-800/95 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1.5 shadow-lg text-xs font-semibold gap-1.5 backdrop-blur-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-primary-500 group-hover:text-white">
-            <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M1.5 12s4.5-7.5 10.5-7.5S22.5 12 22.5 12s-4.5 7.5-10.5 7.5S1.5 12 1.5 12z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-            {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData?.pageViews || 0)}
-            <span className="ml-1">views</span>
+          {/* Badges stack (new + views) */}
+          <div className="absolute top-2 left-2 z-20 flex flex-col items-start gap-2">
+            {isNewArticle ? (
+              <span className="inline-flex items-center rounded-full bg-emerald-500/95 text-white px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-wide shadow-lg backdrop-blur-sm">
+                New
+              </span>
+            ) : (
+              <div className="flex items-center bg-white/95 dark:bg-gray-800/95 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1.5 shadow-lg text-xs font-semibold gap-1.5 backdrop-blur-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-primary-500 group-hover:text-white">
+                <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M1.5 12s4.5-7.5 10.5-7.5S22.5 12 22.5 12s-4.5 7.5-10.5 7.5S1.5 12 1.5 12z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData?.pageViews || 0)}
+                <span className="ml-1">views</span>
+              </div>
+            )}
           </div>
 
           {/* Bookmarks Badge */}
@@ -122,7 +144,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         {/* Post Info fills remaining height */}
         <div className="relative bg-slate-50 dark:bg-gray-800 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full transition-colors duration-300 group-hover:bg-slate-100 dark:group-hover:bg-gray-750">
           {/* Date */}
-          <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex space-x-2 font-semibold text-white bg-slate-700/60 dark:bg-gray-900/70 backdrop-blur-sm rounded-lg transition-all duration-300 group-hover:bg-primary-600/80">
+          <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex items-center gap-2 sm:gap-3 font-semibold text-white bg-slate-700/60 dark:bg-gray-900/70 backdrop-blur-sm rounded-lg transition-all duration-300 group-hover:bg-primary-600/80">
             <svg className="w-4 h-4 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
             </svg>

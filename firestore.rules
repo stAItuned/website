@@ -1,6 +1,8 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+    
     // Allow authenticated users to read/write their own drafts
     match /drafts/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
@@ -17,9 +19,9 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
     
-    // User profiles
+    // User profiles - users can read, write, and delete their own data
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write, delete: if request.auth != null && request.auth.uid == userId;
     }
     
     // Analytics data - Allow Cloud Functions to write, public read access
@@ -31,6 +33,38 @@ service cloud.firestore {
     match /analytics/articles/{articleSlug} {
       allow read: if true;
       allow write: if true; // Cloud Functions will write with admin SDK
+    }
+    
+    // Agent states - read-only for frontend, only backend (service account) can write
+    match /agent_states/{articleId} {
+      allow read: if true;  // Public read access
+      allow write: if false; // Only backend can write
+    }
+    
+    // Usage logs - read-only for frontend
+    match /usage_logs/{logId} {
+      allow read: if true;
+      allow write: if false; // Only backend can write
+    }
+    
+    // Articles - full access (you may want to restrict this later)
+    match /articles/{articleId} {
+      allow read, write: if true;
+    }
+    
+    // Backlog items - full access (you may want to restrict this later)
+    match /backlog/{itemId} {
+      allow read, write: if true;
+    }
+    
+    // User preferences - full access
+    match /preferences/{userId} {
+      allow read, write: if true;
+    }
+    
+    // Default: deny all
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

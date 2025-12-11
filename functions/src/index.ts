@@ -1,6 +1,9 @@
 import { onSchedule } from "firebase-functions/v2/scheduler";
+import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onDocumentUpdated } from "firebase-functions/v2/firestore";
 import { setGlobalOptions } from "firebase-functions/v2";
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
+import { getMessaging } from "firebase-admin/messaging";
 import { db } from "./firebase.js";
 
 setGlobalOptions({ region: "europe-west1", memory: "256MiB", timeoutSeconds: 120 });
@@ -43,11 +46,11 @@ export const dailyAnalytics = onSchedule(
     }
 
     console.log('📊 Fetching GA4 data for date:', today);
-    
+
     try {
-  // Use Application Default Credentials (ADC) for GA4 access
-  const client = new BetaAnalyticsDataClient(); // uses runtime service account
-      
+      // Use Application Default Credentials (ADC) for GA4 access
+      const client = new BetaAnalyticsDataClient(); // uses runtime service account
+
       // Fetch overall stats - all time (since 2020-01-01 or adjust to your website launch date)
       const [overallReport] = await client.runReport({
         property: PROPERTY,
@@ -124,17 +127,17 @@ export const dailyAnalytics = onSchedule(
       // Process articles stats
       const articlesStats: { [slug: string]: any } = {};
       console.log(`📝 Processing ${articlesReport.rows?.length || 0} article rows from GA4`);
-      
+
       (articlesReport.rows ?? []).forEach((r, index) => {
         const path = r.dimensionValues?.[0]?.value ?? "";
         console.log(`Row ${index}: path = "${path}"`);
-        
+
         // Match /learn/{category}/{slug} and extract just the slug part
         const match = path.match(/\/learn\/[^/]+\/([^/?#]+)/);
         if (match) {
           const slug = match[1];
           console.log(`✅ Matched slug: "${slug}" from path: "${path}"`);
-          
+
           // If this slug already exists, aggregate the metrics
           if (articlesStats[slug]) {
             articlesStats[slug].pageViews += Number(r.metricValues?.[0]?.value ?? 0);
@@ -182,20 +185,20 @@ export const dailyAnalytics = onSchedule(
           .replace(/[^a-zA-Z0-9\-_]/g, '') // Remove any other invalid characters
           .replace(/-+/g, '-')             // Replace multiple hyphens with single hyphen
           .replace(/^-+|-+$/g, '');        // Remove leading/trailing hyphens
-        
+
         // Ensure the sanitized slug is not empty and is valid
         if (sanitizedSlug && sanitizedSlug.length > 0) {
           // Use a different collection structure: articles/{slug} instead of analytics/articles/{slug}
           const docPath = `articles/${sanitizedSlug}`;
           console.log(`Saving analytics for slug: "${slug}" -> sanitized: "${sanitizedSlug}"`);
           console.log(`Document path: "${docPath}"`);
-          
+
           // Validate Firestore document path
           if (!isValidFirestoreDocPath(docPath)) {
             console.error(`Invalid Firestore document path: "${docPath}"`);
             continue;
           }
-          
+
           try {
             await db.doc(docPath).set({
               ...stats,
@@ -213,7 +216,7 @@ export const dailyAnalytics = onSchedule(
 
       console.log('✅ Daily analytics job completed successfully');
       console.log(`📈 Processed ${topPages.length} top pages, ${Object.keys(articlesStats).length} articles`);
-      
+
     } catch (error) {
       console.error('❌ Daily analytics job failed:', error);
       throw error;
@@ -221,3 +224,218 @@ export const dailyAnalytics = onSchedule(
   }
 );
 
+/**
+ * Send New Article Notification
+ * 
+ * Sends push notification to 'new-articles' topic subscribers.
+ * Call from CMS or publishing workflow.
+ */
+export const sendNewArticleNotification = onCall(
+  { region: "europe-west1", memory: "256MiB" },
+  async (request) => {
+    const { title, slug, target, description, imageUrl } = request.data;
+
+    if (!title || !slug || !target) {
+      throw new HttpsError('invalid-argument', 'Missing: title, slug, target');
+    }
+
+    const articleUrl = `https://staituned.com/learn/${target}/${slug}`;
+
+    const message = {
+      topic: 'new-articles',
+      notification: {
+        title: '📚 New Article: ' + title,
+        body: description || 'A new article has been published!',
+      },
+      webpush: {
+        fcmOptions: { link: articleUrl },
+        notification: {
+          icon: 'https://staituned.com/icon-192.png',
+          badge: 'https://staituned.com/icon-192.png',
+          tag: `new-article-${slug}`,
+          ...(imageUrl && { image: imageUrl })
+        }
+      },
+      data: {
+        url: articleUrl,
+        articleSlug: slug,
+        target: target,
+        type: 'new-article'
+      }
+    };
+
+    try {
+      const messaging = getMessaging();
+      const response = await messaging.send(message);
+
+      console.log(`✅ Notification sent: ${response}, Article: ${title}`);
+
+      await db.collection('notifications').add({
+        type: 'new-article',
+        title, slug, target,
+        sentAt: new Date().toISOString(),
+        messageId: response
+      });
+
+      return { success: true, messageId: response };
+    } catch (error) {
+      console.error('❌ Failed to send notification:', error);
+      throw new HttpsError('internal', 'Failed to send notification');
+    }
+  }
+);
+
+/**
+ * Send Test Notification to specific tokens
+ */
+export const sendTestNotification = onCall(
+  { region: "europe-west1", memory: "256MiB" },
+  async (request) => {
+    const { tokens, title, body, url } = request.data;
+
+    if (!tokens?.length || !title || !body) {
+      throw new HttpsError('invalid-argument', 'Required: tokens[], title, body');
+    }
+
+    const message = {
+      tokens,
+      notification: { title, body },
+      webpush: {
+        fcmOptions: { link: url || 'https://staituned.com/learn' },
+        notification: {
+          icon: 'https://staituned.com/icon-192.png',
+          badge: 'https://staituned.com/icon-192.png'
+        }
+      },
+      data: { url: url || 'https://staituned.com/learn', type: 'test' }
+    };
+
+    try {
+      const messaging = getMessaging();
+      const response = await messaging.sendEachForMulticast(message);
+
+      console.log(`✅ Test sent: ${response.successCount}/${tokens.length}`);
+      return {
+        success: true,
+        successCount: response.successCount,
+        failureCount: response.failureCount
+      };
+    } catch (error) {
+      console.error('❌ Failed:', error);
+      throw new HttpsError('internal', 'Failed to send');
+    }
+  }
+);
+
+/**
+ * Firestore Trigger: Send notification when article is published
+ * 
+ * Triggers when an article document is updated and status changes from "draft" to "publish"
+ * Document path: articles/{articleId}
+ */
+export const onArticlePublished = onDocumentUpdated(
+  {
+    document: "articles/{articleId}",
+    region: "europe-west1"
+  },
+  async (event) => {
+    const beforeData = event.data?.before.data();
+    const afterData = event.data?.after.data();
+
+    if (!beforeData || !afterData) {
+      console.log('No data in event');
+      return;
+    }
+
+    // Check if status changed from draft to publish/published
+    const wasPublished =
+      (beforeData.status === 'draft' || !beforeData.status) &&
+      (afterData.status === 'publish' || afterData.status === 'published');
+
+    if (!wasPublished) {
+      console.log(`Status change: ${beforeData.status} -> ${afterData.status}, skipping notification`);
+      return;
+    }
+
+    console.log(`📢 Article published: ${event.params.articleId}`);
+
+    // Extract article info
+    const title = afterData.title || 'New Article';
+    const slug = afterData.slug || event.params.articleId;
+    const target = (afterData.target || 'expert').toLowerCase();
+    const description = afterData.meta || afterData.description || '';
+    const imageUrl = afterData.cover || '';
+    const articleUrl = `https://staituned.com/learn/${target}/${slug}`;
+
+    // Get all tokens subscribed to new-articles
+    const tokensSnapshot = await db.collection('fcm_tokens').get();
+    const tokens: string[] = [];
+
+    tokensSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.active !== false && (data.topics || []).includes('new-articles')) {
+        tokens.push(doc.id);
+      }
+    });
+
+    if (tokens.length === 0) {
+      console.log('No subscribers to notify');
+      return;
+    }
+
+    console.log(`📱 Sending to ${tokens.length} subscriber(s)`);
+
+    const messaging = getMessaging();
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const token of tokens) {
+      try {
+        await messaging.send({
+          token,
+          notification: {
+            title: `📚 New Article: ${title}`,
+            body: description || 'A new article has been published!',
+          },
+          webpush: {
+            fcmOptions: { link: articleUrl },
+            notification: {
+              icon: 'https://staituned.com/icon-192.png',
+              badge: 'https://staituned.com/icon-192.png',
+              tag: `new-article-${slug}`,
+              ...(imageUrl && { image: imageUrl })
+            }
+          },
+          data: {
+            url: articleUrl,
+            articleSlug: slug,
+            target: target,
+            type: 'new-article'
+          }
+        });
+        successCount++;
+      } catch (error: any) {
+        failCount++;
+        console.log(`Failed to send to token: ${error.message}`);
+        if (error.code === 'messaging/registration-token-not-registered') {
+          await db.collection('fcm_tokens').doc(token).update({ active: false });
+        }
+      }
+    }
+
+    // Log notification
+    await db.collection('notifications').add({
+      type: 'new-article',
+      title,
+      slug,
+      target,
+      articleId: event.params.articleId,
+      sentAt: new Date().toISOString(),
+      successCount,
+      failCount,
+      trigger: 'firestore'
+    });
+
+    console.log(`✅ Notification sent: ${successCount} success, ${failCount} failed`);
+  }
+);

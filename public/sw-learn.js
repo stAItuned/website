@@ -1,129 +1,305 @@
 /**
- * Service Worker for /learn PWA scope
+ * Optimized Service Worker for /learn PWA scope
  * 
- * This service worker is specifically designed for the learn section,
- * caching only /learn/* pages and their resources for offline reading.
+ * Performance-focused service worker with:
+ * - Stale-while-revalidate for instant page loads
+ * - App shell precaching for fast cold starts
+ * - Smart caching strategies per resource type
+ * - Efficient cache management
+ * 
+ * @version 2.0.0
  */
 
-const VERSION = 'staituned-learn-v1'
-const STATIC_CACHE = `${VERSION}-static`
-const ARTICLES_CACHE = `${VERSION}-articles`
-const RUNTIME_CACHE = `${VERSION}-runtime`
-const FALLBACK_URL = '/offline.html'
+// Cache versioning - increment on major changes
+const SW_VERSION = 'v2.0.0'
+const CACHE_PREFIX = 'staituned-learn'
 
-// Learn-specific precache URLs
-const PRECACHE_URLS = [
+// Cache names with versioning
+const CACHE_NAMES = {
+    SHELL: `${CACHE_PREFIX}-shell-${SW_VERSION}`,      // App shell and critical assets
+    STATIC: `${CACHE_PREFIX}-static-${SW_VERSION}`,    // Static assets (JS, CSS, fonts)
+    ARTICLES: `${CACHE_PREFIX}-articles-${SW_VERSION}`, // Article pages and content
+    IMAGES: `${CACHE_PREFIX}-images-${SW_VERSION}`,    // Images (long-lived)
+    RUNTIME: `${CACHE_PREFIX}-runtime-${SW_VERSION}`,  // Runtime/API responses
+}
+
+// App shell - critical assets for instant startup
+// These are cached on install for immediate availability
+const APP_SHELL = [
     '/learn',
     '/learn-manifest.json',
-    FALLBACK_URL,
-    '/assets/general/logo-text.png',
-    '/assets/general/logo-text-dark.png',
-    '/assets/learn/newbie-card.jpg',
-    '/assets/learn/midway-card.png',
-    '/assets/learn/expert-card.png',
+    '/pwa-app-shell.html',
     '/icon-192.png',
     '/icon-512.png',
     '/favicon.ico',
-    '/icon.svg'
+    '/assets/general/logo-text.png',
+    '/assets/general/logo-text-dark.png',
 ]
 
-// Maximum number of articles to cache
-const MAX_CACHED_ARTICLES = 50
+// Static asset patterns to precache
+const STATIC_ASSET_PATTERNS = [
+    '/assets/learn/',
+]
 
+// Maximum cache sizes
+const CACHE_LIMITS = {
+    ARTICLES: 100,  // Max cached article pages
+    IMAGES: 200,    // Max cached images  
+    RUNTIME: 50,    // Max runtime cache entries
+}
+
+// ===============================
+// LIFECYCLE EVENTS
+// ===============================
+
+/**
+ * Install event - precache app shell for instant startup
+ */
 self.addEventListener('install', (event) => {
+    console.log('[Learn SW] Installing version:', SW_VERSION)
+
     event.waitUntil(
-        caches.open(STATIC_CACHE)
-            .then((cache) => cache.addAll(PRECACHE_URLS))
-            .then(() => self.skipWaiting())
+        Promise.all([
+            // Cache app shell
+            caches.open(CACHE_NAMES.SHELL).then((cache) => {
+                console.log('[Learn SW] Precaching app shell')
+                return cache.addAll(APP_SHELL)
+            }),
+            // Force immediate activation
+            self.skipWaiting()
+        ])
     )
 })
 
+/**
+ * Activate event - cleanup old caches and claim clients
+ */
 self.addEventListener('activate', (event) => {
+    console.log('[Learn SW] Activating version:', SW_VERSION)
+
     event.waitUntil(
-        (async () => {
-            const cacheNames = await caches.keys()
-            await Promise.all(
-                cacheNames
-                    .filter((name) =>
-                        name.startsWith('staituned-learn-') &&
-                        name !== STATIC_CACHE &&
-                        name !== ARTICLES_CACHE &&
-                        name !== RUNTIME_CACHE
-                    )
-                    .map((name) => caches.delete(name))
-            )
-            await self.clients.claim()
-            await sendMessageToClients({
-                type: 'SW_VERSION',
-                version: VERSION,
+        Promise.all([
+            // Clean up old versioned caches
+            cleanupOldCaches(),
+            // Take control of all clients immediately
+            self.clients.claim(),
+            // Notify clients of update
+            notifyClients({
+                type: 'SW_ACTIVATED',
+                version: SW_VERSION,
                 scope: 'learn'
             })
-        })()
+        ])
     )
 })
 
+/**
+ * Fetch event - smart routing based on request type
+ */
 self.addEventListener('fetch', (event) => {
     const { request } = event
     const url = new URL(request.url)
 
-    // Only handle GET requests
-    if (request.method !== 'GET') {
-        return
-    }
+    // Skip non-GET requests
+    if (request.method !== 'GET') return
 
-    // Only handle same-origin requests
-    if (url.origin !== self.location.origin) {
-        return
-    }
+    // Skip cross-origin requests
+    if (url.origin !== self.location.origin) return
 
-    // Handle learn section navigation (article pages)
-    if (request.mode === 'navigate' && isLearnUrl(url.pathname)) {
-        event.respondWith(networkFirstWithArticleCache(request))
-        return
-    }
-
-    // Handle static assets used by learn section
-    if (isStaticAsset(request)) {
-        event.respondWith(cacheFirst(request))
-        return
-    }
-
-    // Handle API requests for learn content
-    if (isLearnApiRequest(url.pathname)) {
-        event.respondWith(networkFirst(request))
-        return
-    }
-
-    // For non-learn URLs in navigation, let them through (will open in browser)
-    if (request.mode === 'navigate' && !isLearnUrl(url.pathname)) {
-        return
-    }
-
-    // Default: network first for other requests
-    event.respondWith(networkFirst(request))
-})
-
-self.addEventListener('message', (event) => {
-    if (event.data?.type === 'SKIP_WAITING') {
-        self.skipWaiting()
-    }
-
-    // Allow manual article caching for offline reading
-    if (event.data?.type === 'CACHE_ARTICLE') {
-        const articleUrl = event.data.url
-        if (articleUrl && isLearnUrl(articleUrl)) {
-            cacheArticle(articleUrl)
-        }
-    }
-
-    // Clear article cache
-    if (event.data?.type === 'CLEAR_ARTICLES_CACHE') {
-        caches.delete(ARTICLES_CACHE)
+    // Route based on request type
+    const strategy = selectStrategy(request, url)
+    if (strategy) {
+        event.respondWith(strategy)
     }
 })
 
 /**
- * Check if URL is within the /learn scope
+ * Message event - handle client communications
+ */
+self.addEventListener('message', (event) => {
+    const { type, ...data } = event.data || {}
+
+    switch (type) {
+        case 'SKIP_WAITING':
+            self.skipWaiting()
+            break
+
+        case 'CACHE_ARTICLE':
+            if (data.url && isLearnUrl(data.url)) {
+                cacheArticleManually(data.url)
+            }
+            break
+
+        case 'CLEAR_ARTICLES_CACHE':
+            caches.delete(CACHE_NAMES.ARTICLES)
+            break
+
+        case 'GET_CACHE_STATUS':
+            event.ports[0]?.postMessage({
+                version: SW_VERSION,
+                caches: Object.keys(CACHE_NAMES)
+            })
+            break
+    }
+})
+
+// ===============================
+// ROUTING & STRATEGY SELECTION
+// ===============================
+
+/**
+ * Select appropriate caching strategy based on request
+ */
+function selectStrategy(request, url) {
+    const pathname = url.pathname
+
+    // Navigation requests (page loads) - STALE WHILE REVALIDATE for instant loads
+    if (request.mode === 'navigate') {
+        if (isLearnUrl(pathname)) {
+            return staleWhileRevalidate(request, CACHE_NAMES.ARTICLES)
+        }
+        // Non-learn navigation - let browser handle
+        return null
+    }
+
+    // Static assets - CACHE FIRST (bundle files, fonts)
+    if (isStaticAsset(pathname) || isNextStaticAsset(pathname)) {
+        return cacheFirst(request, CACHE_NAMES.STATIC)
+    }
+
+    // Images - CACHE FIRST with fallback
+    if (isImage(request)) {
+        return cacheFirst(request, CACHE_NAMES.IMAGES)
+    }
+
+    // Learn content assets
+    if (pathname.startsWith('/content/articles/')) {
+        return cacheFirst(request, CACHE_NAMES.ARTICLES)
+    }
+
+    // API requests - NETWORK FIRST with cache fallback
+    if (isApiRequest(pathname)) {
+        return networkFirst(request, CACHE_NAMES.RUNTIME)
+    }
+
+    // Default - network with cache fallback
+    return networkFirst(request, CACHE_NAMES.RUNTIME)
+}
+
+// ===============================
+// CACHING STRATEGIES
+// ===============================
+
+/**
+ * Stale-While-Revalidate - Return cached immediately, update in background
+ * Best for: Navigation, content that changes but stale is acceptable
+ */
+async function staleWhileRevalidate(request, cacheName) {
+    const cache = await caches.open(cacheName)
+    const cachedResponse = await cache.match(request)
+
+    // Start network request in background
+    const networkPromise = fetch(request)
+        .then(async (response) => {
+            if (response.ok) {
+                // Clone before caching
+                const responseToCache = response.clone()
+                await cache.put(request, responseToCache)
+                await trimCache(cacheName, CACHE_LIMITS.ARTICLES)
+            }
+            return response
+        })
+        .catch((error) => {
+            console.log('[Learn SW] Network failed:', error.message)
+            return null
+        })
+
+    // Return cached response immediately if available
+    if (cachedResponse) {
+        // Revalidate in background (don't await)
+        networkPromise.then((response) => {
+            if (response) {
+                // Optionally notify clients of update
+                notifyClients({
+                    type: 'CONTENT_UPDATED',
+                    url: request.url
+                })
+            }
+        })
+        return cachedResponse
+    }
+
+    // No cache - wait for network
+    const networkResponse = await networkPromise
+    if (networkResponse) {
+        return networkResponse
+    }
+
+    // Both failed - return offline page
+    return getOfflinePage()
+}
+
+/**
+ * Cache-First - Check cache, fallback to network
+ * Best for: Static assets, images, bundled files
+ */
+async function cacheFirst(request, cacheName) {
+    const cachedResponse = await caches.match(request)
+
+    if (cachedResponse) {
+        return cachedResponse
+    }
+
+    try {
+        const response = await fetch(request)
+
+        if (response.ok) {
+            const cache = await caches.open(cacheName)
+            cache.put(request, response.clone())
+
+            // Trim cache if needed
+            if (cacheName === CACHE_NAMES.IMAGES) {
+                await trimCache(cacheName, CACHE_LIMITS.IMAGES)
+            }
+        }
+
+        return response
+    } catch (error) {
+        // Return placeholder for images
+        if (isImage(request)) {
+            return createPlaceholderImage()
+        }
+        return createOfflineResponse()
+    }
+}
+
+/**
+ * Network-First - Try network, fallback to cache
+ * Best for: API requests, dynamic content
+ */
+async function networkFirst(request, cacheName) {
+    try {
+        const response = await fetch(request)
+
+        if (response.ok) {
+            const cache = await caches.open(cacheName)
+            cache.put(request, response.clone())
+            await trimCache(cacheName, CACHE_LIMITS.RUNTIME)
+        }
+
+        return response
+    } catch (error) {
+        const cachedResponse = await caches.match(request)
+        return cachedResponse || createOfflineResponse()
+    }
+}
+
+// ===============================
+// HELPER FUNCTIONS
+// ===============================
+
+/**
+ * Check if URL is within /learn scope
  */
 function isLearnUrl(pathname) {
     return pathname === '/learn' || pathname.startsWith('/learn/')
@@ -132,194 +308,192 @@ function isLearnUrl(pathname) {
 /**
  * Check if request is for a static asset
  */
-function isStaticAsset(request) {
+function isStaticAsset(pathname) {
+    return (
+        pathname.startsWith('/assets/') ||
+        pathname.endsWith('.css') ||
+        pathname.endsWith('.js') ||
+        pathname.endsWith('.woff2') ||
+        pathname.endsWith('.woff')
+    )
+}
+
+/**
+ * Check if request is for Next.js static assets
+ */
+function isNextStaticAsset(pathname) {
+    return pathname.startsWith('/_next/static/')
+}
+
+/**
+ * Check if request is for an image
+ */
+function isImage(request) {
     const pathname = new URL(request.url).pathname
     return (
-        pathname.startsWith('/_next/static/') ||
-        pathname.startsWith('/assets/') ||
-        pathname.startsWith('/content/') ||
-        request.destination === 'style' ||
-        request.destination === 'script' ||
         request.destination === 'image' ||
-        request.destination === 'font'
+        /\.(jpg|jpeg|png|gif|webp|avif|svg|ico)$/i.test(pathname)
     )
 }
 
 /**
- * Check if request is for learn-related API
+ * Check if request is for an API endpoint
  */
-function isLearnApiRequest(pathname) {
-    return (
-        pathname.startsWith('/api/articles') ||
-        pathname.startsWith('/api/learn')
-    )
+function isApiRequest(pathname) {
+    return pathname.startsWith('/api/')
 }
 
 /**
- * Cache-first strategy for static assets
+ * Manually cache an article for offline reading
  */
-async function cacheFirst(request) {
-    const cached = await caches.match(request)
-    if (cached) return cached
-
-    try {
-        const response = await fetch(request)
-        if (response.ok) {
-            const cache = await caches.open(RUNTIME_CACHE)
-            cache.put(request, response.clone())
-        }
-        return response
-    } catch (error) {
-        return cached || createOfflineTextResponse()
-    }
-}
-
-/**
- * Network-first strategy with fallback to cache
- */
-async function networkFirst(request) {
-    try {
-        const response = await fetch(request)
-        if (response.ok) {
-            const cache = await caches.open(RUNTIME_CACHE)
-            cache.put(request, response.clone())
-        }
-        return response
-    } catch (error) {
-        const cached = await caches.match(request)
-        return cached || createOfflineTextResponse()
-    }
-}
-
-/**
- * Network-first strategy with special article caching
- */
-async function networkFirstWithArticleCache(request) {
-    try {
-        const response = await fetch(request)
-        if (response.ok) {
-            // Cache articles separately with LRU-like behavior
-            const cache = await caches.open(ARTICLES_CACHE)
-            await cache.put(request, response.clone())
-            await trimArticleCache()
-        }
-        return response
-    } catch (error) {
-        // Try to find in article cache first
-        const cached = await caches.match(request)
-        if (cached) return cached
-
-        // Fallback to offline page
-        return getOfflinePage()
-    }
-}
-
-/**
- * Cache a specific article for offline reading
- */
-async function cacheArticle(url) {
+async function cacheArticleManually(url) {
     try {
         const response = await fetch(url)
         if (response.ok) {
-            const cache = await caches.open(ARTICLES_CACHE)
+            const cache = await caches.open(CACHE_NAMES.ARTICLES)
             await cache.put(url, response)
-            await trimArticleCache()
-            console.log(`[Learn SW] Cached article: ${url}`)
+            await trimCache(CACHE_NAMES.ARTICLES, CACHE_LIMITS.ARTICLES)
+            console.log('[Learn SW] Article cached:', url)
         }
     } catch (error) {
-        console.error(`[Learn SW] Failed to cache article: ${url}`, error)
+        console.error('[Learn SW] Failed to cache article:', url, error)
     }
 }
 
 /**
- * Trim article cache to stay under MAX_CACHED_ARTICLES
+ * Trim cache to stay under size limit (LRU-like)
  */
-async function trimArticleCache() {
-    const cache = await caches.open(ARTICLES_CACHE)
+async function trimCache(cacheName, maxItems) {
+    const cache = await caches.open(cacheName)
     const keys = await cache.keys()
 
-    if (keys.length > MAX_CACHED_ARTICLES) {
-        // Remove oldest entries (first in, first out)
-        const toDelete = keys.slice(0, keys.length - MAX_CACHED_ARTICLES)
-        await Promise.all(toDelete.map(key => cache.delete(key)))
+    if (keys.length > maxItems) {
+        // Delete oldest entries (first in cache)
+        const overflow = keys.length - maxItems
+        const toDelete = keys.slice(0, overflow)
+        await Promise.all(toDelete.map((key) => cache.delete(key)))
     }
 }
 
 /**
- * Get offline fallback page
+ * Clean up old versioned caches on activation
+ */
+async function cleanupOldCaches() {
+    const cacheNames = await caches.keys()
+    const validCaches = Object.values(CACHE_NAMES)
+
+    const toDelete = cacheNames.filter((name) =>
+        name.startsWith(CACHE_PREFIX) && !validCaches.includes(name)
+    )
+
+    await Promise.all(toDelete.map((name) => {
+        console.log('[Learn SW] Deleting old cache:', name)
+        return caches.delete(name)
+    }))
+}
+
+/**
+ * Notify all clients of a message
+ */
+async function notifyClients(message) {
+    const clients = await self.clients.matchAll({ includeUncontrolled: true })
+    clients.forEach((client) => client.postMessage(message))
+}
+
+// ===============================
+// FALLBACK RESPONSES
+// ===============================
+
+/**
+ * Get cached offline page or generate inline fallback
  */
 async function getOfflinePage() {
-    const cachedOffline = await caches.match(FALLBACK_URL)
-    if (cachedOffline) return cachedOffline
+    // Try app shell first
+    const shellResponse = await caches.match('/pwa-app-shell.html')
+    if (shellResponse) return shellResponse
 
+    // Generate inline offline page
     return new Response(`
-    <!DOCTYPE html>
-    <html lang="it">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Offline - stAItuned Learn</title>
-      <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - stAItuned Learn</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-          font-family: system-ui, -apple-system, sans-serif;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 100vh;
-          margin: 0;
-          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-          color: #f1f5f9;
-          text-align: center;
-          padding: 1rem;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            text-align: center;
+            padding: 2rem;
         }
-        h1 { color: #3b82f6; margin-bottom: 0.5rem; }
-        p { color: #94a3b8; max-width: 400px; }
-        .icon { font-size: 4rem; margin-bottom: 1rem; }
-        .retry-btn {
-          margin-top: 1.5rem;
-          padding: 0.75rem 1.5rem;
-          background: #3b82f6;
-          color: white;
-          border: none;
-          border-radius: 0.5rem;
-          font-size: 1rem;
-          cursor: pointer;
+        .container { max-width: 400px; }
+        .icon { font-size: 4rem; margin-bottom: 1.5rem; }
+        h1 { color: #3b82f6; margin-bottom: 0.75rem; font-size: 1.75rem; }
+        p { color: #94a3b8; line-height: 1.6; margin-bottom: 1rem; }
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.875rem 2rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.625rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        .retry-btn:hover { background: #2563eb; }
-      </style>
-    </head>
-    <body>
-      <div class="icon">📚</div>
-      <h1>Sei offline</h1>
-      <p>Non riesco a caricare questa pagina. Controlla la tua connessione e riprova.</p>
-      <button class="retry-btn" onclick="location.reload()">Riprova</button>
-    </body>
-    </html>
-  `, {
+        .btn:hover { background: #2563eb; }
+        .btn:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📚</div>
+        <h1>You're Offline</h1>
+        <p>Can't load this page right now. Check your connection and try again.</p>
+        <button class="btn" onclick="location.reload()">Retry</button>
+    </div>
+</body>
+</html>
+    `, {
         status: 503,
         statusText: 'Offline',
-        headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        headers: {
+            'Content-Type': 'text/html; charset=utf-8',
+            'Cache-Control': 'no-store'
+        }
     })
 }
 
 /**
  * Create simple offline text response
  */
-function createOfflineTextResponse() {
+function createOfflineResponse() {
     return new Response('Offline', {
         status: 503,
-        statusText: 'Offline',
         headers: { 'Content-Type': 'text/plain' }
     })
 }
 
 /**
- * Send message to all clients
+ * Create placeholder for missing images
  */
-async function sendMessageToClients(message) {
-    const clients = await self.clients.matchAll({ includeUncontrolled: true })
-    for (const client of clients) {
-        client.postMessage(message)
-    }
+function createPlaceholderImage() {
+    // 1x1 transparent PNG
+    const data = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+    return new Response(
+        Uint8Array.from(atob(data), (c) => c.charCodeAt(0)),
+        {
+            status: 200,
+            headers: { 'Content-Type': 'image/png' }
+        }
+    )
 }

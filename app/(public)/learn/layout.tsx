@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnServiceWorkerRegister } from '@/components/LearnServiceWorkerRegister'
-import { PWAInstallBanner, PWAInstallCard, PWAUpdateBanner, PWAInlineLoader } from '@/components/pwa'
+import { PWAInstallBanner, PWAInstallCard, PWAUpdateBanner, PWAInlineLoader, PushNotificationPrompt } from '@/components/pwa'
 
 /**
  * Metadata for the /learn section
@@ -31,6 +31,7 @@ export const metadata: Metadata = {
  * - Overrides the PWA manifest to use learn-manifest.json
  * - Registers the learn-specific service worker (sw-learn.js)
  * - Shows PWA install CTAs for users in browser mode
+ * - Shows push notification prompt for PWA users
  * - Provides learn-scoped PWA functionality
  * 
  * Users can install the learn section as a standalone PWA
@@ -56,6 +57,8 @@ export default function LearnLayout({
             <PWAInstallCard delay={3000} />
             {/* Update notification - shows when new version is available */}
             <PWAUpdateBanner />
+            {/* Push notification prompt - shows in PWA mode */}
+            <PushNotificationPrompt />
 
             {children}
         </>

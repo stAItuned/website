@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>stAItuned Learn</title>
+    <link rel="manifest" href="/learn-manifest.json">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <style>
+        /* Critical CSS - Inlined for instant render */
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* App Shell Structure */
+        .app-shell {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--bg-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            animation: logoGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 12px var(--accent-glow);
+            }
+
+            50% {
+                box-shadow: 0 4px 20px var(--accent-glow), 0 0 30px var(--accent-glow);
+            }
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Loading Container */
+        .loading-container {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* App Icon */
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px var(--accent-glow);
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        .app-icon svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        @keyframes iconFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Loading Title */
+        .loading-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtitle {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 8px;
+            width: 0%;
+            animation: progressFill 3s ease-out forwards;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    transparent 100%);
+            animation: progressShine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes progressFill {
+            0% {
+                width: 0%;
+            }
+
+            20% {
+                width: 25%;
+            }
+
+            40% {
+                width: 45%;
+            }
+
+            60% {
+                width: 65%;
+            }
+
+            80% {
+                width: 85%;
+            }
+
+            100% {
+                width: 95%;
+            }
+        }
+
+        @keyframes progressShine {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
+        }
+
+        /* Loading Status */
+        .loading-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Loading Tips */
+        .loading-tips {
+            margin-top: 2.5rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tip-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-light);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tip-text {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            animation: fadeInTip 0.5s ease-out;
+        }
+
+        @keyframes fadeInTip {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Top Progress Line */
+        .top-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform-origin: left;
+            animation: topProgressFill 2.5s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes topProgressFill {
+            0% {
+                transform: scaleX(0);
+            }
+
+            50% {
+                transform: scaleX(0.6);
+            }
+
+            100% {
+                transform: scaleX(0.95);
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-primary: #ffffff;
+                --bg-secondary: #f1f5f9;
+                --bg-tertiary: #e2e8f0;
+                --text-primary: #0f172a;
+                --text-secondary: #475569;
+                --text-muted: #64748b;
+            }
+
+            .header {
+                background: rgba(255, 255, 255, 0.95);
+                border-bottom-color: rgba(0, 0, 0, 0.08);
+            }
+
+            .loading-tips {
+                border-color: rgba(0, 0, 0, 0.06);
+            }
+
+            .progress-container {
+                background: var(--bg-tertiary);
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .header {
+                padding: 0.875rem 1rem;
+            }
+
+            .main {
+                padding: 1.5rem 1rem;
+            }
+
+            .app-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+
+            .app-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
+            .loading-title {
+                font-size: 1.25rem;
+            }
+
+            .loading-subtitle {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Safe area insets for notched devices */
+        @supports (padding: max(0px)) {
+            .header {
+                padding-top: max(1rem, env(safe-area-inset-top));
+                padding-left: max(1.5rem, env(safe-area-inset-left));
+                padding-right: max(1.5rem, env(safe-area-inset-right));
+            }
+
+            .main {
+                padding-left: max(2rem, env(safe-area-inset-left));
+                padding-right: max(2rem, env(safe-area-inset-right));
+                padding-bottom: max(2rem, env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+        <!-- Top Progress Line -->
+        <div class="top-progress" aria-hidden="true"></div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon" aria-hidden="true"></div>
+                <span class="logo-text">stAItuned Learn</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="loading-container" role="status" aria-live="polite">
+                <!-- App Icon -->
+                <div class="app-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                </div>
+
+                <!-- Loading Title -->
+                <h1 class="loading-title">Loading Your Content</h1>
+                <p class="loading-subtitle">
+                    Preparing your personalized AI learning experience...
+                </p>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+
+                <!-- Loading Status -->
+                <div class="loading-status">
+                    <div class="loading-dots">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                    <span id="status-text">Initializing...</span>
+                </div>
+
+                <!-- Loading Tips -->
+                <div class="loading-tips">
+                    <div class="tip-label">💡 Did you know?</div>
+                    <p class="tip-text" id="tip-text">
+                        You can save articles for offline reading by tapping the bookmark icon.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Status messages to cycle through
+        const statusMessages = [
+            'Initializing...',
+            'Loading resources...',
+            'Preparing content...',
+            'Almost ready...'
+        ];
+
+        // Tips to show
+        const tips = [
+            'You can save articles for offline reading by tapping the bookmark icon.',
+            'Swipe left or right to navigate between articles.',
+            'Tap on the section indicator to jump to any chapter.',
+            'This app works offline once content is cached.',
+            'Long press on code blocks to copy them.'
+        ];
+
+        let statusIndex = 0;
+        let tipIndex = Math.floor(Math.random() * tips.length);
+
+        const statusEl = document.getElementById('status-text');
+        const tipEl = document.getElementById('tip-text');
+
+        // Set initial random tip
+        tipEl.textContent = tips[tipIndex];
+
+        // Cycle status messages
+        const statusInterval = setInterval(() => {
+            statusIndex = (statusIndex + 1) % statusMessages.length;
+            if (statusEl) {
+                statusEl.style.opacity = '0';
+                setTimeout(() => {
+                    statusEl.textContent = statusMessages[statusIndex];
+                    statusEl.style.opacity = '1';
+                }, 150);
+            }
+        }, 1500);
+
+        // Cycle tips
+        const tipInterval = setInterval(() => {
+            tipIndex = (tipIndex + 1) % tips.length;
+            if (tipEl) {
+                tipEl.style.animation = 'none';
+                tipEl.offsetHeight; // Trigger reflow
+                tipEl.style.animation = 'fadeInTip 0.5s ease-out';
+                tipEl.textContent = tips[tipIndex];
+            }
+        }, 4000);
+
+        // Clean up when real app loads
+        window.addEventListener('load', () => {
+            clearInterval(statusInterval);
+            clearInterval(tipInterval);
+
+            // Complete the progress bar
+            const progressBar = document.querySelector('.progress-bar');
+            const topProgress = document.querySelector('.top-progress');
+
+            if (progressBar) {
+                progressBar.style.animation = 'none';
+                progressBar.style.width = '100%';
+            }
+
+            if (topProgress) {
+                topProgress.style.animation = 'none';
+                topProgress.style.transform = 'scaleX(1)';
+                setTimeout(() => {
+                    topProgress.style.opacity = '0';
+                    topProgress.style.transition = 'opacity 0.3s ease';
+                }, 300);
+            }
+
+            if (statusEl) {
+                statusEl.textContent = 'Ready!';
+            }
+        });
+
+        // Transition smoothly
+        statusEl.style.transition = 'opacity 0.15s ease';
+    </script>
+</body>
+
+</html>
