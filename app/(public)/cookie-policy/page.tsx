@@ -15,6 +15,7 @@ export default function CookiePolicyPage() {
           <p className="text-base text-slate-600">
             Il banner di consenso gestisce i cookie non essenziali e mantiene attivo solo quanto serve a far funzionare il sito. Qui trovi le informazioni dettagliate su quali cookie usiamo e perché.
           </p>
+          <p className="text-xs text-slate-400">Ultimo aggiornamento: 11 dicembre 2024</p>
         </header>
 
         <section className="space-y-4 text-sm text-slate-600">
@@ -36,6 +37,18 @@ export default function CookiePolicyPage() {
                 <div>
                   <dt className="font-semibold text-slate-700">Esempi</dt>
                   <dd>Session cookie di Next.js / 15 minuti, cookie CSRF o di autenticazione per funzionalità dell'app.</dd>
+                </div>
+              </dl>
+            </article>
+            <article>
+              <h3 className="text-base font-semibold text-slate-900">Archiviazione locale per funzionalità offline</h3>
+              <p className="mt-1">
+                La funzione &quot;Salva per offline&quot; consente di memorizzare articoli nel browser (IndexedDB/Cache API) per la lettura senza connessione. Questi dati restano sul tuo dispositivo e non vengono trasmessi a terzi. Puoi eliminarli manualmente dalle impostazioni del browser o rimuovendo gli articoli salvati dall&apos;app.
+              </p>
+              <dl className="mt-2 grid gap-2 text-xs text-slate-500">
+                <div>
+                  <dt className="font-semibold text-slate-700">Tecnologie</dt>
+                  <dd>Service Worker, Cache API, IndexedDB (persistenza locale controllata dall&apos;utente).</dd>
                 </div>
               </dl>
             </article>
@@ -63,6 +76,22 @@ export default function CookiePolicyPage() {
                     </a>
                     .
                   </dd>
+                </div>
+              </dl>
+            </article>
+            <article>
+              <h3 className="text-base font-semibold text-slate-900">Notifiche push (Firebase Cloud Messaging)</h3>
+              <p className="mt-1">
+                Se accetti di ricevere notifiche push, il tuo browser genera un token univoco che ci consente di inviarti avvisi su nuovi articoli o aggiornamenti. Il token è gestito tramite Firebase Cloud Messaging (Google LLC) e non contiene dati personali identificabili. Puoi disattivare le notifiche in qualsiasi momento dalle impostazioni del browser o del dispositivo.
+              </p>
+              <dl className="mt-2 grid gap-2 text-xs text-slate-500">
+                <div>
+                  <dt className="font-semibold text-slate-700">Dati raccolti</dt>
+                  <dd>Token di registrazione FCM (identificativo tecnico del dispositivo, non dell&apos;utente).</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-700">Come disattivare</dt>
+                  <dd>Revoca il permesso notifiche dal browser, oppure dalle impostazioni del tuo dispositivo mobile.</dd>
                 </div>
               </dl>
             </article>

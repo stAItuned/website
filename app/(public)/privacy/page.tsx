@@ -18,6 +18,7 @@ export default function PrivacyPage() {
           <p className="text-sm text-slate-500">
             Il titolare del trattamento è Daniele Moltisanti. Email di contatto: <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
           </p>
+          <p className="text-xs text-slate-400">Ultimo aggiornamento: 11 dicembre 2024</p>
         </header>
 
         <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/50 p-6 shadow-sm">
@@ -83,6 +84,28 @@ export default function PrivacyPage() {
             </div>
 
             <div>
+              <h3 className="font-semibold text-slate-900">Notifiche push</h3>
+              <p className="mt-1">
+                Se abiliti le notifiche push nel browser o nell&apos;app, generiamo un token identificativo del dispositivo tramite Firebase Cloud Messaging (Google LLC). Questo token ci permette di inviarti avvisi su nuovi articoli o contenuti rilevanti. Non raccogliamo dati personali aggiuntivi attraverso le notifiche.
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>il token è un identificativo tecnico, non associato alla tua identità personale;</li>
+                <li>puoi disabilitare le notifiche in qualsiasi momento dalle impostazioni del browser o del dispositivo;</li>
+                <li>i token vengono conservati finché l&apos;utente non revoca il permesso o disinstalla l&apos;app.</li>
+              </ul>
+              <p className="mt-3">
+                La base giuridica è il consenso esplicito (art. 6.1.a GDPR), espresso quando accetti di ricevere le notifiche.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900">Contenuti offline (PWA)</h3>
+              <p className="mt-1">
+                La funzionalità &quot;Salva per offline&quot; memorizza articoli localmente sul tuo dispositivo utilizzando le API del browser (Cache API, IndexedDB). Questi dati non vengono trasmessi ai nostri server e restano sotto il tuo controllo. Puoi eliminarli rimuovendo gli articoli salvati o cancellando i dati del sito dalle impostazioni del browser.
+              </p>
+            </div>
+
+            <div>
               <h3 className="font-semibold text-slate-900">Candidature per collaborazioni e stAItuned Lab</h3>
               <p className="mt-1">
                 Quando compili il modulo di candidatura al Lab o ci contatti per possibili collaborazioni, raccogliamo i dati necessari a valutare il tuo profilo, ad esempio:
@@ -127,6 +150,7 @@ export default function PrivacyPage() {
               <li>fornitori di hosting e infrastruttura (es. Firebase, Firestore);</li>
               <li>servizi di email e newsletter per gestire iscrizioni e conferme di call;</li>
               <li>strumenti di analytics (es. Google Analytics), attivati solo previo consenso esplicito;</li>
+              <li>Firebase Cloud Messaging (Google LLC) per l&apos;invio di notifiche push;</li>
               <li>strumenti di messaggistica, automazione o task management necessari per coordinare progetti o rispondere alle richieste.</li>
             </ul>
           </div>
