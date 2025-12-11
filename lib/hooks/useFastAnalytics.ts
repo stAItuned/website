@@ -30,12 +30,15 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const shouldSkipAnalytics =
+    process.env.NODE_ENV === 'development' ||
+    (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname))
 
   // Create cache key
   const cacheKey = `fast_analytics_${slug || 'global'}`
   
   const fetchAnalytics = useCallback(async () => {
-    if (!enabled) return
+    if (!enabled || shouldSkipAnalytics) return
 
     // Check local cache first (5 minutes for fast analytics)
     if (typeof window !== 'undefined') {
@@ -161,7 +164,7 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
     } finally {
       setLoading(false)
     }
-  }, [slug, enabled, cacheKey])
+  }, [slug, enabled, shouldSkipAnalytics, cacheKey])
 
   const refetch = useCallback(() => {
     // Clear cache and refetch

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnServiceWorkerRegister } from '@/components/LearnServiceWorkerRegister'
-import { PWAInstallBanner, PWAInstallCard, PWAUpdateBanner, PWAInlineLoader, PushNotificationPrompt } from '@/components/pwa'
+import { PWAInstallBanner, PWAInstallCard, PWAUpdateBanner, PushNotificationPrompt } from '@/components/pwa'
 
 /**
  * Metadata for the /learn section
@@ -27,7 +27,6 @@ export const metadata: Metadata = {
  * Learn Section Layout
  * 
  * This layout:
- * - Shows instant loading indicator on first load (before JS hydrates)
  * - Overrides the PWA manifest to use learn-manifest.json
  * - Registers the learn-specific service worker (sw-learn.js)
  * - Shows PWA install CTAs for users in browser mode
@@ -44,9 +43,6 @@ export default function LearnLayout({
 }) {
     return (
         <>
-            {/* Instant loading indicator - appears before JS loads */}
-            <PWAInlineLoader />
-
             {/* Register learn-specific service worker */}
             <LearnServiceWorkerRegister />
 

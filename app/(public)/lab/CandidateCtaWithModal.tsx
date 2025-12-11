@@ -76,8 +76,7 @@ export function CandidateCtaWithModal() {
         onClick={() => setIsOpen(true)}
         className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white text-slate-900 font-semibold shadow hover:shadow-md"
       >
-        <span className="hidden sm:block">Candidati al Lab</span>
-        <span className="sm:hidden">Candidati</span>
+        <span>Candidati<span className="hidden sm:inline"> al Lab</span></span>
       </button>
 
       {isOpen && (

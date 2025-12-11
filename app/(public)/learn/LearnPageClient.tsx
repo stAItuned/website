@@ -45,20 +45,7 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
   const target = searchParams.get('target')
   const targetSlug = useMemo(() => target?.toLowerCase().split('/')?.[0] || null, [target])
   const [currentPage, setCurrentPage] = useState(1)
-  const [isMobile, setIsMobile] = useState(false)
   const pageSize = 15
-
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   // Reset page when target changes
   useEffect(() => {
@@ -158,12 +145,13 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                 </svg>
-                {isMobile ? 'Prev' : 'Previous'}
+                <span className="sm:hidden">Prev</span>
+                <span className="hidden sm:inline">Previous</span>
               </button>
 
               {/* Page numbers with smart display logic */}
               {(() => {
-                const maxVisiblePages = isMobile ? 3 : 5
+                const maxVisiblePages = 5 // Fixed to avoid hydration mismatch
                 let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
                 const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
 
@@ -324,8 +312,8 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr opacity-5 rounded-full blur-2xl transition-opacity duration-300 group-hover:opacity-10"
                   style={{ backgroundImage: `linear-gradient(to top right, var(--tw-gradient-stops))` }}></div>
 
-                {/* Image Section */}
-                <div className="relative w-full aspect-[4/3] overflow-hidden">
+                {/* Image Section - Compact on mobile */}
+                <div className="relative w-full aspect-[16/9] lg:aspect-[4/3] overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 z-10"></div>
                   <Image
                     src={target.image}
@@ -340,24 +328,24 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
                   />
 
                   {/* FREE Badge */}
-                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-emerald-500 text-white rounded-full px-2.5 py-1 shadow-lg">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="absolute top-2 left-2 lg:top-3 lg:left-3 z-20 flex items-center gap-1 bg-emerald-500 text-white rounded-full px-2 py-0.5 lg:px-2.5 lg:py-1 shadow-lg">
+                    <svg className="w-2.5 h-2.5 lg:w-3 lg:h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-[10px] font-bold uppercase tracking-wide">Free</span>
+                    <span className="text-[9px] lg:text-[10px] font-bold uppercase tracking-wide">Free</span>
                   </div>
 
                   {/* Article Count Badge */}
-                  <div className="absolute top-3 right-3 z-20 flex items-center gap-1 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm text-slate-900 dark:text-slate-100 rounded-full px-3 py-1.5 shadow border border-slate-200/50 dark:border-slate-700/50">
-                    <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <div className="absolute top-2 right-2 lg:top-3 lg:right-3 z-20 flex items-center gap-1 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm text-slate-900 dark:text-slate-100 rounded-full px-2 py-1 lg:px-3 lg:py-1.5 shadow border border-slate-200/50 dark:border-slate-700/50">
+                    <svg className="w-2.5 h-2.5 lg:w-3 lg:h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                     </svg>
-                    <span className="text-xs font-bold">{articleCount}</span>
+                    <span className="text-[10px] lg:text-xs font-bold">{articleCount}</span>
                   </div>
                 </div>
 
-                {/* Content Section */}
-                <div className="relative flex-1 p-4 lg:p-6 space-y-3">
+                {/* Content Section - Compact on mobile */}
+                <div className="relative flex-1 p-3 lg:p-6 space-y-2 lg:space-y-3">
                   {/* Icon and Title */}
                   <div className="space-y-3">
                     <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r ${gradients[target.slug as keyof typeof gradients]} group-hover:from-${hoverGradients[target.slug as keyof typeof hoverGradients].split(' ')[0]} text-white shadow transition-all duration-300`}>
