@@ -560,8 +560,9 @@ export default function ArticlePageClient({
         </div>
         {/* Responsive: Only render one article version at a time */}
         {/* Render desktop by default for SSR, then switch after mount */}
+        {/* Use opacity to prevent flash of broken layout during hydration */}
         {!mounted || isLarge ? (
-          <div className="grid grid-cols-[5rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start">
+          <div className={`grid grid-cols-[5rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start transition-opacity duration-200 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
             {/* Left: Floating Share Bar (Desktop only) */}
             <FloatingShareBar
               title={article.title}
