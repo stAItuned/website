@@ -2,8 +2,28 @@
 # Exclude content submodule to avoid symlink issues
 content/
 
+# Exclude large content directory from Cloud Functions bundle
+# (it should be served statically by Firebase Hosting)
+public/content/
+
+# Exclude Next.js cache from deployment
+.next/cache/
+.next/trace/
+
+# Exclude Contentlayer generated files
+.contentlayer/
+
 # Standard ignores
 node_modules/
 .git/
 *.log
 .DS_Store
+.env*
+.firebase/
+
+# Development files
+vendor/
+scripts/
+*.sh
+.vscode/
+.idea/

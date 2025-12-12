@@ -6,6 +6,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    paths:
+      # Only trigger for content changes
+      - 'public/content/articles/**'
+      - 'public/content/team/**'
 
 concurrency:
   group: deploy-production
@@ -18,16 +22,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code with submodules
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          submodules: true
-          token: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
-
-      - name: Update submodule to latest (shallow)
-        run: |
-          git -c protocol.version=2 submodule update --init --recursive --depth 1
-          git -c protocol.version=2 submodule update --remote --recursive --depth 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,7 +44,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .next/cache
-          key: next-${{ hashFiles('package-lock.json') }}-${{ hashFiles('content/**') }}
+          key: next-${{ hashFiles('package-lock.json') }}-${{ hashFiles('public/content/**') }}
           restore-keys: |
             next-${{ hashFiles('package-lock.json') }}-
 
@@ -58,24 +54,12 @@ jobs:
       - name: Enable Firebase Web Frameworks experiment
         run: firebase experiments:enable webframeworks
 
-      - name: Copy content to public (replace symlink)
-        run: |
-          rm -f public/content
-          cp -r content public/content
-          # Ensure all static assets are properly accessible
-          ls -la public/assets/ || echo "No assets directory found"
-          ls -la public/sw.js || echo "No service worker found"
-
       - name: Debug content structure
         run: |
           echo "=== Content directory structure ==="
-          ls -la content/ || echo "No content directory"
-          echo "=== Content articles ==="
-          find content/articles -name "*.md" | head -10 || echo "No articles found"
-          echo "=== Public content ==="
-          ls -la public/content/ || echo "No public/content"
-          echo "=== Articles with title field ==="
-          grep -r "title:" content/articles/ | head -5 || echo "No titles found"
+          ls -la public/content/ || echo "No public/content directory"
+          echo "=== Articles count ==="
+          find public/content/articles -name "*.md" 2>/dev/null | wc -l || echo "0 articles"
 
       - name: Build (Contentlayer + Next)
         run: npm run build
@@ -109,15 +93,8 @@ jobs:
           rm -rf .firebase
           # Clean up build artifacts that might contain symlinks
           rm -rf .next/cache 2>/dev/null || true
-          # Remove any symlinks that might exist (but keep content directory)
-          find . -type l -not -path "./node_modules/*" -not -path "./content/*" -delete 2>/dev/null || true
-
-      - name: Debug frameworks output
-        run: |
-          echo "PROJECT=$FIREBASE_PROJECT_ID"
-          ls -la .firebase || true
-          ls -la .firebase/$FIREBASE_PROJECT_ID || true
-          ls -la .firebase/$FIREBASE_PROJECT_ID/functions || true
+          # Remove any symlinks that might exist
+          find . -type l -not -path "./node_modules/*" -delete 2>/dev/null || true
 
       - name: Set cleanup policy (once)
         run: firebase functions:artifacts:setpolicy --location europe-west1 --days 7 --project "$FIREBASE_PROJECT_ID"
@@ -125,14 +102,15 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
 
-      - name: Deploy Firebase
+      - name: Deploy Firebase (hosting only for content updates)
         run: |
-          # Deploy solo hosting per gli update di contenuto (veloce)
-          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
-            echo "Content update detected - deploying hosting only"
+          # For content-only updates, deploy just hosting (faster)
+          if [ "${{ github.event_name }}" == "repository_dispatch" ] || \
+             [[ "$(git diff --name-only HEAD~1 2>/dev/null || echo '')" == public/content/* ]]; then
+            echo "📄 Content update detected - deploying hosting only"
             firebase deploy --only hosting --project "$FIREBASE_PROJECT_ID" --non-interactive
           else
-            echo "Code update detected - deploying full stack"
+            echo "📦 Full deployment"
             firebase deploy --project "$FIREBASE_PROJECT_ID" --non-interactive
           fi
         env:
