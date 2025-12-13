@@ -84,8 +84,8 @@ jobs:
           GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
           GOOGLE_ANALYTICS_PROJECT_ID: ${{ secrets.GOOGLE_ANALYTICS_PROJECT_ID }}
           
-          # Firebase Admin SDK
-          FB_SERVICE_ACCOUNT_KEY: ${{ secrets.FB_SERVICE_ACCOUNT_KEY }}
+          # Firebase Admin SDK (base64 encoded to avoid JSON parsing issues)
+          FB_SERVICE_ACCOUNT_KEY_B64: ${{ secrets.FB_SERVICE_ACCOUNT_KEY_B64 }}
           
           # GitHub Token for workflow
           WEBSITE_DISPATCH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
