@@ -2,7 +2,7 @@
 title: "ML vs DL vs GenAI: Building a Strong AI Career Foundation"
 author: Daniele Moltisanti
 topics: [AI, ML, GenAI]
-target: General Tech Audience
+target: Newbie
 business: false
 language: English
 cover: https://storage.googleapis.com/editorial-planner-images/article-images/3fdc0f56-d2fb-4e74-bfbc-29cc23844b7f/cover_20251211_172136.webp
