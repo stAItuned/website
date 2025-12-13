@@ -1,15 +1,13 @@
-name: Deploy on content update
+name: Deploy on code update
 
 on:
-  repository_dispatch:
-    types: [content-updated]
-  workflow_dispatch:
   push:
-    branches: [master]
-    paths:
-      # Only trigger for content changes
-      - 'public/content/articles/**'
-      - 'public/content/team/**'
+    branches: [main]
+    paths-ignore:
+      # Don't trigger for content-only changes (handled by deploy-on-content.yml)
+      - 'public/content/**'
+      - '*.md'
+      - '.agent/**'
 
 concurrency:
   group: deploy-production
@@ -54,68 +52,40 @@ jobs:
       - name: Enable Firebase Web Frameworks experiment
         run: firebase experiments:enable webframeworks
 
-      - name: Debug content structure
-        run: |
-          echo "=== Content directory structure ==="
-          ls -la public/content/ || echo "No public/content directory"
-          echo "=== Articles count ==="
-          find public/content/articles -name "*.md" 2>/dev/null | wc -l || echo "0 articles"
-
       - name: Build (Contentlayer + Next)
         run: npm run build
         env:
-          # Authentication (disabled for development - will be production only)
           NEXT_PUBLIC_DISABLE_AUTH: ${{ secrets.NEXT_PUBLIC_DISABLE_AUTH }}
-          
-          # Google Analytics
           NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
-          
-          # Firebase Client Configuration  
           NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
           NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
           NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
           NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
           NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
-          
-          # Google Analytics Server-side
           GOOGLE_ANALYTICS_PROPERTY_ID: ${{ secrets.GOOGLE_ANALYTICS_PROPERTY_ID }}
           GOOGLE_ANALYTICS_CLIENT_EMAIL: ${{ secrets.GOOGLE_ANALYTICS_CLIENT_EMAIL }}
           GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
           GOOGLE_ANALYTICS_PROJECT_ID: ${{ secrets.GOOGLE_ANALYTICS_PROJECT_ID }}
-          
-          # Firebase Admin SDK (base64 encoded to avoid JSON parsing issues)
           FB_SERVICE_ACCOUNT_KEY_B64: ${{ secrets.FB_SERVICE_ACCOUNT_KEY_B64 }}
-          
-          # GitHub Token for workflow
           WEBSITE_DISPATCH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
 
       - name: Clean up before deployment
         run: |
-          # Clean Firebase cache
           rm -rf .firebase
-          # Clean up build artifacts that might contain symlinks
           rm -rf .next/cache 2>/dev/null || true
-          # Remove any symlinks that might exist
           find . -type l -not -path "./node_modules/*" -delete 2>/dev/null || true
 
-      - name: Set cleanup policy (once)
+      - name: Set cleanup policy
         run: firebase functions:artifacts:setpolicy --location europe-west1 --days 7 --project "$FIREBASE_PROJECT_ID"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
 
-      - name: Deploy Firebase (hosting only for content updates)
+      - name: Deploy Firebase (full stack)
         run: |
-          # For content-only updates, deploy just hosting (faster)
-          if [ "${{ github.event_name }}" == "repository_dispatch" ] || \
-             [[ "$(git diff --name-only HEAD~1 2>/dev/null || echo '')" == public/content/* ]]; then
-            echo "📄 Content update detected - deploying hosting only"
-            firebase deploy --only hosting --project "$FIREBASE_PROJECT_ID" --non-interactive
-          else
-            echo "📦 Full deployment"
-            firebase deploy --project "$FIREBASE_PROJECT_ID" --non-interactive
-          fi
+          echo "🚀 Code change detected - deploying full stack (hosting + functions)"
+          firebase deploy --project "$FIREBASE_PROJECT_ID" --non-interactive
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
