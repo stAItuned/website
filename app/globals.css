@@ -214,6 +214,24 @@ body {
   }
 }
 
+/* Ticker marquee animation using CSS custom property for pixel-based seamless loop */
+@keyframes ticker-marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(var(--ticker-translate, -50%));
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [style*="animation"] {
+    animation: none !important;
+  }
+}
+
 /* Custom animations */
 @keyframes fadeIn {
   from {

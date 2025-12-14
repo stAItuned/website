@@ -6,7 +6,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // Try to load contentlayer, but don't fail if it's not available (e.g., in Firebase deploy)
 let withContentlayer
 try {
-  withContentlayer = require('next-contentlayer').withContentlayer
+  const contentlayerModule = require('next-contentlayer')
+  withContentlayer = contentlayerModule.withContentlayer
+  if (typeof withContentlayer !== 'function') {
+    console.warn('next-contentlayer withContentlayer is not a function, skipping')
+    withContentlayer = (config) => config
+  }
 } catch (e) {
   console.warn('next-contentlayer not available, skipping')
   withContentlayer = (config) => config
