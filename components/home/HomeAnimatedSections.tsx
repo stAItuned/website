@@ -81,12 +81,12 @@ export function HomeAnimatedSections({
 
             <div className="relative flex flex-row items-stretch gap-0">
               {/* Controls Section - Sidebar on Left */}
-              <div className="flex-shrink-0 flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-2 px-1.5 py-1.5 sm:px-4 sm:py-3 z-10 w-auto bg-transparent">
+              <div className="absolute left-0 top-0 bottom-0 sm:relative flex-shrink-0 flex flex-row sm:flex-col items-center justify-center gap-2 px-1.5 py-1.5 sm:px-4 sm:py-3 z-30 w-auto bg-transparent">
 
                 {/* Toggle Switch - Icon only on mobile, Text on desktop */}
                 <button
                   onClick={toggleTab}
-                  className="flex items-center justify-center gap-2 w-10 h-10 sm:w-[100px] sm:h-auto sm:px-3 sm:py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex-shrink-0"
+                  className="flex items-center justify-center gap-2 w-10 h-10 sm:w-[100px] sm:h-auto sm:px-3 sm:py-2 rounded-lg bg-transparent transition-all flex-shrink-0"
                   aria-label={`Switch to ${activeTab === 'latest' ? 'Trending' : 'Latest'}`}
                 >
                   {activeTab === 'latest' ? (

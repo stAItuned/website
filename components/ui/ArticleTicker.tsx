@@ -298,14 +298,14 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
       role="region"
       aria-label="Article ticker"
     >
-      {/* Gradient fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-16 bg-gradient-to-r from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-16 bg-gradient-to-l from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
-
-      {/* Scrollable Container */}
+      {/* Scrollable Container with Mask for Fade Effect */}
       <div
         ref={scrollRef}
         className="overflow-x-auto scrollbar-none flex items-center"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)',
+        }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onTouchStart={() => setIsHovered(true)}
