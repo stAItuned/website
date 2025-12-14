@@ -14,6 +14,7 @@ interface TickerArticle {
   readingTime?: number
   target?: string
   language?: string
+  isNew?: boolean  // Published in last 7 days
 }
 
 interface ArticleTickerProps {
@@ -75,21 +76,43 @@ function TickerItem({
 
   const coverSrc = getCoverImage()
 
+  // Featured = 100+ views
+  const isFeatured = !analyticsLoading && (analytics?.pageViews || 0) >= 100
+  const isNew = article.isNew === true
+
   return (
     <Link
       href={getArticleLink()}
-      className="
+      className={`
         flex-shrink-0 flex items-start gap-2 py-2 px-2.5
         rounded-lg
-        bg-white/80 dark:bg-slate-800/80
-        border border-slate-200/60 dark:border-slate-700/50
-        hover:bg-primary-50/80 dark:hover:bg-primary-900/40
-        hover:border-primary-300/70 dark:hover:border-primary-600/60
         transition-all duration-100
         group
         min-w-[200px] max-w-[240px]
-      "
+        relative
+        ${isFeatured
+          ? 'bg-gradient-to-br from-amber-50/90 to-white/90 dark:from-amber-900/20 dark:to-slate-800/90 border-2 border-amber-400/60 dark:border-amber-500/50 shadow-md shadow-amber-200/30 dark:shadow-amber-900/20'
+          : 'bg-white/80 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/50'
+        }
+        hover:bg-primary-50/80 dark:hover:bg-primary-900/40
+        hover:border-primary-300/70 dark:hover:border-primary-600/60
+      `}
     >
+      {/* NEW Badge - inside card to avoid clipping */}
+      {isNew && (
+        <span className="absolute top-1 right-1 px-1.5 py-0.5 text-[7px] font-bold uppercase tracking-wider bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded shadow-sm z-10">
+          NEW
+        </span>
+      )}
+
+      {/* Featured star icon - inside card to avoid clipping */}
+      {isFeatured && (
+        <span className="absolute top-1 left-1 w-4 h-4 flex items-center justify-center bg-amber-400 text-amber-900 rounded shadow-sm z-10">
+          <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+        </span>
+      )}
       {showCover && coverSrc && (
         <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 mt-0.5">
           <Image

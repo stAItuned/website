@@ -26,6 +26,9 @@ export default async function HomePage() {
   const totalWriters = uniqueAuthors.size
 
   // Get the latest 20 articles for the ticker, sorted by date
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
   const tickerArticles = [...publishedPosts]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 20)
@@ -38,10 +41,8 @@ export default async function HomePage() {
       readingTime: post.readingTime,
       target: post.target,
       language: post.language,
+      isNew: new Date(post.date) >= sevenDaysAgo, // New if published in last 7 days
     }))
-
-  // DEBUG: Log article counts
-  console.log('[HomePage] Published posts:', publishedPosts.length, 'Ticker articles:', tickerArticles.length)
 
   const businessShortlist = [
     {

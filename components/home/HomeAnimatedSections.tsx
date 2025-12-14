@@ -31,6 +31,7 @@ interface HomeAnimatedSectionsProps {
     readingTime?: number
     target?: string
     language?: string
+    isNew?: boolean  // Published in last 7 days
   }[]
 }
 
@@ -68,7 +69,7 @@ export function HomeAnimatedSections({ shortlistColumns, posts, tickerArticles }
               <div className="flex-1 overflow-hidden">
                 <ArticleTicker
                   articles={tickerArticles}
-                  speed="fast"
+                  speed="normal"
                   pauseOnHover={true}
                   showCover={true}
                   showDate={true}

@@ -45,3 +45,10 @@ package-lock.json.*
 env.local
 env.local.new
 env.staituned-production-163f4
+scripts/analyze-function-calls.js
+scripts/send-test-to-token.js
+.gitignore
+scripts/send-test-admin.js
+.gitignore
+deploy.yaml
+scripts/subscribe-to-topic.js
