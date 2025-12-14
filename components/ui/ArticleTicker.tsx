@@ -92,12 +92,12 @@ function TickerItem({
         min-w-[200px] max-w-[240px] relative
         focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
         ${isFeatured
-          ? 'bg-gradient-to-br from-amber-50 to-white dark:from-amber-900/20 dark:to-slate-800 border-2 border-amber-400/60 dark:border-amber-500/50 shadow-md'
-          : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
+          ? 'bg-gradient-to-br from-amber-50 to-white dark:from-amber-900/20 dark:to-slate-800 border-2 border-amber-400/60 dark:border-amber-500/50 shadow-lg'
+          : 'bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 shadow-md'
         }
         hover:bg-primary-50 dark:hover:bg-primary-900/40
-        hover:border-primary-300 dark:hover:border-primary-600
-        hover:shadow-lg hover:scale-[1.02]
+        hover:border-primary-400 dark:hover:border-primary-500
+        hover:shadow-xl hover:scale-[1.02]
       `}
       aria-label={`Read article: ${article.title}`}
     >
@@ -163,12 +163,6 @@ function TickerItem({
         </div>
       </div>
 
-      <span className="hidden sm:flex items-center gap-0.5 text-[9px] font-medium text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1">
-        Read
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </span>
     </Link>
   )
 }
@@ -268,9 +262,8 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          animation: trackWidth > 0 && shouldAnimate ? `ticker-marquee ${duration}s linear infinite` : 'none',
-          transform: !shouldAnimate ? `translateX(${manualOffset}px)` : undefined,
-          transition: !shouldAnimate ? 'transform 0.3s ease-out' : undefined,
+          animation: trackWidth > 0 ? `ticker-marquee ${duration}s linear infinite` : 'none',
+          animationPlayState: shouldAnimate ? 'running' : 'paused',
           ['--ticker-translate' as string]: `-${trackWidth}px`,
         }}
       >

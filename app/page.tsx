@@ -129,7 +129,8 @@ export default async function HomePage() {
 
   return (
     <PageTransition>
-      <main className="min-h-screen">
+      {/* pb-32 sm:pb-36 to account for fixed ticker at bottom */}
+      <main className="min-h-screen pb-32 sm:pb-36">
         {/* Hero Section */}
         <HomeHeroWithAnalytics
           totalArticles={totalArticles}

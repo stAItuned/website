@@ -231,6 +231,8 @@ export default function RootLayout({
                         {children}
                       </main>
                       <Footer />
+                      {/* Spacer for fixed ticker at bottom - hidden on mobile where ticker is hidden */}
+                      <div className="hidden sm:block h-32" aria-hidden="true" />
                     </section>
                     <SearchModal />
                   </SearchProvider>
