@@ -169,6 +169,7 @@ function TickerItem({
 
 // ========== Main ArticleTicker Component ==========
 
+// Main ArticleTicker Component
 export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(function ArticleTicker({
   articles,
   speed = 'normal',
@@ -183,16 +184,23 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [isTabVisible, setIsTabVisible] = useState(true)
   const [trackWidth, setTrackWidth] = useState(0)
-  const [manualOffset, setManualOffset] = useState(0)
-  const trackRef = useRef<HTMLDivElement>(null)
 
-  // Expose scroll methods via ref
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const animationRef = useRef<number | null>(null)
+  const lastTimeRef = useRef<number>(0)
+
+  // Expose scroll methods via ref - smooth native scroll
   useImperativeHandle(ref, () => ({
     scrollNext: () => {
-      setManualOffset(prev => prev - 260)
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: 260, behavior: 'smooth' })
+      }
     },
     scrollPrev: () => {
-      setManualOffset(prev => Math.min(prev + 260, 0))
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: -260, behavior: 'smooth' })
+      }
     }
   }), [])
 
@@ -212,14 +220,16 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
-  // Measure track width for animation
+  // Measure track width (half of total doubled content)
   useEffect(() => {
     const measure = () => {
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth / 2)
       }
     }
-    const timeout = setTimeout(measure, 100)
+    // Measure immediately and after a delay to ensure fonts/images load
+    measure()
+    const timeout = setTimeout(measure, 500)
     window.addEventListener('resize', measure)
     return () => {
       clearTimeout(timeout)
@@ -227,55 +237,95 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
     }
   }, [articles])
 
-  // Reset manual offset periodically to prevent accumulation
+  // JS Animation Loop
   useEffect(() => {
-    if (manualOffset !== 0 && !externalPaused) {
-      const timeout = setTimeout(() => setManualOffset(0), 2000)
-      return () => clearTimeout(timeout)
+    const container = scrollRef.current
+    if (!container || prefersReducedMotion) return
+
+    const shouldAnimate = !externalPaused && !(pauseOnHover && isHovered) && isTabVisible
+
+    if (!shouldAnimate) {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+      return
     }
-  }, [manualOffset, externalPaused])
+
+    const pixelsPerSecond = SPEED_MAP[speed]
+
+    const animate = (currentTime: number) => {
+      if (lastTimeRef.current === 0) {
+        lastTimeRef.current = currentTime
+      }
+
+      const deltaTime = currentTime - lastTimeRef.current
+      lastTimeRef.current = currentTime
+
+      // Only scroll if we have a valid delta
+      if (container && deltaTime > 0 && deltaTime < 100) { // Limit huge jumps
+        const scrollAmount = (pixelsPerSecond * deltaTime) / 1000
+        container.scrollLeft += scrollAmount
+
+        // Seamless loop: reset when reaching the second set of items
+        if (trackWidth > 0 && container.scrollLeft >= trackWidth) {
+          container.scrollLeft = container.scrollLeft - trackWidth
+        }
+      }
+
+      animationRef.current = requestAnimationFrame(animate)
+    }
+
+    lastTimeRef.current = 0
+    animationRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+    }
+  }, [externalPaused, pauseOnHover, isHovered, isTabVisible, prefersReducedMotion, speed, trackWidth])
 
   if (!articles || articles.length === 0) return null
-
-  const pixelsPerSecond = SPEED_MAP[speed]
-  const duration = trackWidth > 0 ? trackWidth / pixelsPerSecond : 30
-
-  // Determine if animation should run
-  const shouldAnimate = !prefersReducedMotion && !externalPaused && !(pauseOnHover && isHovered) && isTabVisible
 
   // Double the articles for seamless loop
   const displayArticles = [...articles, ...articles]
 
   return (
     <section
-      className={`relative overflow-hidden ${className}`}
+      className={`relative ${className}`}
       role="region"
       aria-label="Article ticker"
     >
-      {/* Gradient fade edges - matches container gradient */}
-      <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 bg-gradient-to-r from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 bg-gradient-to-l from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
+      {/* Gradient fade edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-16 bg-gradient-to-r from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-16 bg-gradient-to-l from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
 
+      {/* Scrollable Container */}
       <div
-        ref={trackRef}
-        className="flex gap-2 py-1"
+        ref={scrollRef}
+        className="overflow-x-auto scrollbar-none flex items-center"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{
-          animation: trackWidth > 0 ? `ticker-marquee ${duration}s linear infinite` : 'none',
-          animationPlayState: shouldAnimate ? 'running' : 'paused',
-          ['--ticker-translate' as string]: `-${trackWidth}px`,
-        }}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={() => setTimeout(() => setIsHovered(false), 2000)}
       >
-        {displayArticles.map((article, index) => (
-          <TickerItem
-            key={`${article.slug}-${index}`}
-            article={article}
-            showCover={showCover}
-            showDate={showDate}
-            showStats={showStats}
-          />
-        ))}
+        {/* Content Track */}
+        <div
+          ref={trackRef}
+          className="flex flex-nowrap w-max gap-2 py-1 px-4"
+        >
+          {displayArticles.map((article, index) => (
+            <TickerItem
+              key={`${article.slug}-${index}`}
+              article={article}
+              showCover={showCover}
+              showDate={showDate}
+              showStats={showStats}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

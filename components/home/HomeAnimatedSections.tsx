@@ -72,49 +72,48 @@ export function HomeAnimatedSections({
     <>
       {/* Fixed Article Ticker - Premium Bottom Overlay */}
       {tickerArticles && tickerArticles.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 hidden sm:block animate-slide-up">
+        <div className="fixed bottom-0 left-0 right-0 z-40 block animate-slide-up">
           {/* Top accent gradient line */}
           <div className="h-[2px] bg-gradient-to-r from-transparent via-primary-500 to-transparent" />
 
-          {/* Solid container */}
-          <div className="relative bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-[0_-12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_-12px_40px_rgba(0,0,0,0.4)]">
+          {/* Solid container with unified gradient */}
+          <div className="relative bg-gradient-to-r from-slate-50 via-white to-slate-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 border-t border-slate-200 dark:border-slate-700 shadow-[0_-12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_-12px_40px_rgba(0,0,0,0.4)]">
 
-            <div className="relative flex items-stretch gap-0">
-              {/* Left side: Toggle and Controls - Vertical layout */}
-              <div className="flex-shrink-0 flex flex-col items-center justify-center gap-3 px-4 py-3 border-r border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            <div className="relative flex flex-row items-stretch gap-0">
+              {/* Controls Section - Sidebar on Left */}
+              <div className="flex-shrink-0 flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-2 px-1.5 py-1.5 sm:px-4 sm:py-3 z-10 w-auto bg-transparent">
 
-                {/* Single Toggle Switch for Latest/Trending - FIXED WIDTH */}
+                {/* Toggle Switch - Icon only on mobile, Text on desktop */}
                 <button
                   onClick={toggleTab}
-                  className="relative flex items-center justify-center gap-2 w-[100px] px-3 py-2 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 shadow-sm hover:shadow-md transition-all"
-                  aria-label={`Currently showing ${activeTab}. Click to switch.`}
-                  title={`Switch to ${activeTab === 'latest' ? 'Trending' : 'Latest'}`}
+                  className="flex items-center justify-center gap-2 w-10 h-10 sm:w-[100px] sm:h-auto sm:px-3 sm:py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex-shrink-0"
+                  aria-label={`Switch to ${activeTab === 'latest' ? 'Trending' : 'Latest'}`}
                 >
                   {activeTab === 'latest' ? (
                     <>
                       <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse flex-shrink-0" />
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">
+                      <span className="hidden sm:inline text-[11px] font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">
                         Latest
                       </span>
                     </>
                   ) : (
                     <>
-                      <svg className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
+                      <svg className="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
                       </svg>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                      <span className="hidden sm:inline text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
                         Trend
                       </span>
                     </>
                   )}
-                  {/* Switch indicator */}
-                  <svg className="w-3 h-3 text-slate-400 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Switch indicator - Desktop only */}
+                  <svg className="w-3 h-3 text-slate-400 ml-auto flex-shrink-0 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                   </svg>
                 </button>
 
-                {/* Play/Pause and Prev/Next buttons - below toggle */}
-                <div className="flex items-center gap-1.5">
+                {/* Controls Group - Desktop Only */}
+                <div className="hidden sm:flex items-center gap-1.5">
                   {/* Play/Pause */}
                   <button
                     onClick={() => setIsPaused(!isPaused)}
@@ -123,7 +122,6 @@ export function HomeAnimatedSections({
                       : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
                       }`}
                     aria-label={isPaused ? 'Play' : 'Pause'}
-                    title={isPaused ? 'Play' : 'Pause'}
                   >
                     {isPaused ? (
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -136,24 +134,20 @@ export function HomeAnimatedSections({
                     )}
                   </button>
 
-                  {/* Prev */}
                   <button
                     onClick={scrollPrev}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
+                    className="flex w-8 h-8 items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
                     aria-label="Previous"
-                    title="Previous (pauses auto-scroll)"
                   >
                     <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
 
-                  {/* Next */}
                   <button
                     onClick={scrollNext}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
+                    className="flex w-8 h-8 items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
                     aria-label="Next"
-                    title="Next (pauses auto-scroll)"
                   >
                     <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -162,8 +156,8 @@ export function HomeAnimatedSections({
                 </div>
               </div>
 
-              {/* Ticker container with gradient background */}
-              <div className="flex-1 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800">
+              {/* Ticker container with parent gradient background */}
+              <div className="flex-1 min-w-0 py-2 sm:py-3 bg-transparent">
                 <ArticleTicker
                   ref={tickerRef}
                   key={activeTab} // Force remount when tab changes

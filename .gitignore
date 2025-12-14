@@ -52,3 +52,4 @@ scripts/send-test-admin.js
 .gitignore
 deploy.yaml
 scripts/subscribe-to-topic.js
+.agent/workflows/publish-article.md
