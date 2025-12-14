@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { ScrollReveal, FadeIn } from '@/components/ui/Animations'
 import { HomeDualTracks } from './HomeDualTracks'
 import { HomeArticleShortlist } from './HomeArticleShortlist'
 import { HomeNextStep } from './HomeNextStep'
-import { ArticleTicker, type TickerArticle } from '@/components/ui/ArticleTicker'
+import { ArticleTicker, type TickerArticle, type ArticleTickerRef } from '@/components/ui/ArticleTicker'
 import type { Post } from 'contentlayer/generated'
 
 interface ColumnShortlist {
@@ -35,6 +35,7 @@ export function HomeAnimatedSections({
 }: HomeAnimatedSectionsProps) {
   const [isPaused, setIsPaused] = useState(false)
   const [activeTab, setActiveTab] = useState<'latest' | 'trending'>('latest')
+  const tickerRef = useRef<ArticleTickerRef>(null)
 
   // Create pseudo-trending by shuffling articles (in production, use real trendingArticles prop)
   const pseudoTrending = useMemo(() => {
@@ -56,17 +57,15 @@ export function HomeAnimatedSections({
     setActiveTab(prev => prev === 'latest' ? 'trending' : 'latest')
   }
 
-  // Handle navigation using the exposed window functions
+  // Handle navigation using ref - auto pause when using arrows
   const scrollNext = () => {
-    if ((window as any).__tickerScrollNext) {
-      (window as any).__tickerScrollNext()
-    }
+    setIsPaused(true) // Pause to enable manual navigation
+    tickerRef.current?.scrollNext()
   }
 
   const scrollPrev = () => {
-    if ((window as any).__tickerScrollPrev) {
-      (window as any).__tickerScrollPrev()
-    }
+    setIsPaused(true) // Pause to enable manual navigation
+    tickerRef.current?.scrollPrev()
   }
 
   return (
@@ -142,7 +141,7 @@ export function HomeAnimatedSections({
                     onClick={scrollPrev}
                     className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
                     aria-label="Previous"
-                    title="Previous"
+                    title="Previous (pauses auto-scroll)"
                   >
                     <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -154,7 +153,7 @@ export function HomeAnimatedSections({
                     onClick={scrollNext}
                     className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
                     aria-label="Next"
-                    title="Next"
+                    title="Next (pauses auto-scroll)"
                   >
                     <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -166,6 +165,7 @@ export function HomeAnimatedSections({
               {/* Ticker container */}
               <div className="flex-1 py-3 bg-white dark:bg-slate-900">
                 <ArticleTicker
+                  ref={tickerRef}
                   key={activeTab} // Force remount when tab changes
                   articles={displayArticles}
                   speed="normal"

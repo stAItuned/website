@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
@@ -15,6 +15,12 @@ export interface TickerArticle {
   target?: string
   language?: string
   isNew?: boolean
+}
+
+// Exposed methods via ref
+export interface ArticleTickerRef {
+  scrollNext: () => void
+  scrollPrev: () => void
 }
 
 interface ArticleTickerProps {
@@ -95,14 +101,12 @@ function TickerItem({
       `}
       aria-label={`Read article: ${article.title}`}
     >
-      {/* NEW Badge */}
       {isNew && (
         <span className="absolute top-1 right-1 px-1.5 py-0.5 text-[7px] font-bold uppercase tracking-wider bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded shadow-sm z-10">
           NEW
         </span>
       )}
 
-      {/* Featured star */}
       {isFeatured && (
         <span className="absolute top-1 left-1 w-4 h-4 flex items-center justify-center bg-amber-400 text-amber-900 rounded shadow-sm z-10">
           <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
@@ -111,7 +115,6 @@ function TickerItem({
         </span>
       )}
 
-      {/* Cover image */}
       {showCover && coverSrc && (
         <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 mt-0.5">
           <Image
@@ -124,7 +127,6 @@ function TickerItem({
         </div>
       )}
 
-      {/* Content */}
       <div className="flex flex-col gap-1 min-w-0 flex-1">
         <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 line-clamp-2 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
           {article.title}
@@ -161,7 +163,6 @@ function TickerItem({
         </div>
       </div>
 
-      {/* Read CTA on hover */}
       <span className="hidden sm:flex items-center gap-0.5 text-[9px] font-medium text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1">
         Read
         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,9 +174,8 @@ function TickerItem({
 }
 
 // ========== Main ArticleTicker Component ==========
-// Uses CSS animation for smooth infinite scroll
 
-export function ArticleTicker({
+export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(function ArticleTicker({
   articles,
   speed = 'normal',
   pauseOnHover = true,
@@ -184,12 +184,23 @@ export function ArticleTicker({
   showStats = true,
   className = '',
   externalPaused = false,
-}: ArticleTickerProps) {
+}, ref) {
   const [isHovered, setIsHovered] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [isTabVisible, setIsTabVisible] = useState(true)
   const [trackWidth, setTrackWidth] = useState(0)
+  const [manualOffset, setManualOffset] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
+
+  // Expose scroll methods via ref
+  useImperativeHandle(ref, () => ({
+    scrollNext: () => {
+      setManualOffset(prev => prev - 260)
+    },
+    scrollPrev: () => {
+      setManualOffset(prev => Math.min(prev + 260, 0))
+    }
+  }), [])
 
   // Check reduced motion preference
   useEffect(() => {
@@ -222,6 +233,14 @@ export function ArticleTicker({
     }
   }, [articles])
 
+  // Reset manual offset periodically to prevent accumulation
+  useEffect(() => {
+    if (manualOffset !== 0 && !externalPaused) {
+      const timeout = setTimeout(() => setManualOffset(0), 2000)
+      return () => clearTimeout(timeout)
+    }
+  }, [manualOffset, externalPaused])
+
   if (!articles || articles.length === 0) return null
 
   const pixelsPerSecond = SPEED_MAP[speed]
@@ -249,8 +268,9 @@ export function ArticleTicker({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          animation: trackWidth > 0 ? `ticker-marquee ${duration}s linear infinite` : 'none',
-          animationPlayState: shouldAnimate ? 'running' : 'paused',
+          animation: trackWidth > 0 && shouldAnimate ? `ticker-marquee ${duration}s linear infinite` : 'none',
+          transform: !shouldAnimate ? `translateX(${manualOffset}px)` : undefined,
+          transition: !shouldAnimate ? 'transform 0.3s ease-out' : undefined,
           ['--ticker-translate' as string]: `-${trackWidth}px`,
         }}
       >
@@ -266,6 +286,6 @@ export function ArticleTicker({
       </div>
     </section>
   )
-}
+})
 
 export default ArticleTicker
