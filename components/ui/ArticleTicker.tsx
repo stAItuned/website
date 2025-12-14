@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
 
-interface TickerArticle {
+export interface TickerArticle {
   title: string
   slug: string
   cover?: string
@@ -14,7 +14,7 @@ interface TickerArticle {
   readingTime?: number
   target?: string
   language?: string
-  isNew?: boolean  // Published in last 7 days
+  isNew?: boolean
 }
 
 interface ArticleTickerProps {
@@ -25,9 +25,9 @@ interface ArticleTickerProps {
   showDate?: boolean
   showStats?: boolean
   className?: string
+  externalPaused?: boolean
 }
 
-// Pixels per second for each speed
 const SPEED_MAP = {
   slow: 30,
   normal: 50,
@@ -41,9 +41,8 @@ const formatShortDate = (dateString?: string) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-/**
- * Single ticker item
- */
+// ========== Single Ticker Item ==========
+
 function TickerItem({
   article,
   showCover,
@@ -75,8 +74,6 @@ function TickerItem({
   }
 
   const coverSrc = getCoverImage()
-
-  // Featured = 100+ views
   const isFeatured = !analyticsLoading && (analytics?.pageViews || 0) >= 100
   const isNew = article.isNew === true
 
@@ -85,27 +82,27 @@ function TickerItem({
       href={getArticleLink()}
       className={`
         flex-shrink-0 flex items-start gap-2 py-2 px-2.5
-        rounded-lg
-        transition-all duration-100
-        group
-        min-w-[200px] max-w-[240px]
-        relative
+        rounded-lg transition-all duration-100 group
+        min-w-[200px] max-w-[240px] relative
+        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
         ${isFeatured
-          ? 'bg-gradient-to-br from-amber-50/90 to-white/90 dark:from-amber-900/20 dark:to-slate-800/90 border-2 border-amber-400/60 dark:border-amber-500/50 shadow-md shadow-amber-200/30 dark:shadow-amber-900/20'
-          : 'bg-white/80 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/50'
+          ? 'bg-gradient-to-br from-amber-50 to-white dark:from-amber-900/20 dark:to-slate-800 border-2 border-amber-400/60 dark:border-amber-500/50 shadow-md'
+          : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
         }
-        hover:bg-primary-50/80 dark:hover:bg-primary-900/40
-        hover:border-primary-300/70 dark:hover:border-primary-600/60
+        hover:bg-primary-50 dark:hover:bg-primary-900/40
+        hover:border-primary-300 dark:hover:border-primary-600
+        hover:shadow-lg hover:scale-[1.02]
       `}
+      aria-label={`Read article: ${article.title}`}
     >
-      {/* NEW Badge - inside card to avoid clipping */}
+      {/* NEW Badge */}
       {isNew && (
         <span className="absolute top-1 right-1 px-1.5 py-0.5 text-[7px] font-bold uppercase tracking-wider bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded shadow-sm z-10">
           NEW
         </span>
       )}
 
-      {/* Featured star icon - inside card to avoid clipping */}
+      {/* Featured star */}
       {isFeatured && (
         <span className="absolute top-1 left-1 w-4 h-4 flex items-center justify-center bg-amber-400 text-amber-900 rounded shadow-sm z-10">
           <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
@@ -113,6 +110,8 @@ function TickerItem({
           </svg>
         </span>
       )}
+
+      {/* Cover image */}
       {showCover && coverSrc && (
         <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 mt-0.5">
           <Image
@@ -125,6 +124,7 @@ function TickerItem({
         </div>
       )}
 
+      {/* Content */}
       <div className="flex flex-col gap-1 min-w-0 flex-1">
         <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 line-clamp-2 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
           {article.title}
@@ -132,11 +132,8 @@ function TickerItem({
 
         <div className="flex items-center gap-1.5 text-[9px] text-slate-400 dark:text-slate-500">
           {showDate && article.date && (
-            <span className="whitespace-nowrap">
-              {formatShortDate(article.date)}
-            </span>
+            <span className="whitespace-nowrap">{formatShortDate(article.date)}</span>
           )}
-
           {showStats && (
             <>
               {showDate && <span className="text-slate-300 dark:text-slate-600">•</span>}
@@ -164,30 +161,37 @@ function TickerItem({
         </div>
       </div>
 
-      <svg className="w-3 h-3 text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
+      {/* Read CTA on hover */}
+      <span className="hidden sm:flex items-center gap-0.5 text-[9px] font-medium text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1">
+        Read
+        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </span>
     </Link>
   )
 }
 
-/**
- * ArticleTicker with true seamless infinite scroll using CSS custom properties
- */
+// ========== Main ArticleTicker Component ==========
+// Uses CSS animation for smooth infinite scroll
+
 export function ArticleTicker({
   articles,
-  speed = 'fast',
+  speed = 'normal',
   pauseOnHover = true,
   showCover = true,
   showDate = true,
   showStats = true,
   className = '',
+  externalPaused = false,
 }: ArticleTickerProps) {
-  const [isPaused, setIsPaused] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  const [singleTrackWidth, setSingleTrackWidth] = useState(0)
-  const firstTrackRef = useRef<HTMLDivElement>(null)
+  const [isTabVisible, setIsTabVisible] = useState(true)
+  const [trackWidth, setTrackWidth] = useState(0)
+  const trackRef = useRef<HTMLDivElement>(null)
 
+  // Check reduced motion preference
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReducedMotion(mediaQuery.matches)
@@ -196,85 +200,69 @@ export function ArticleTicker({
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
 
-  // Measure the FIRST track width only
+  // Page Visibility API
   useEffect(() => {
-    const measureWidth = () => {
-      if (firstTrackRef.current) {
-        const width = firstTrackRef.current.getBoundingClientRect().width
-        setSingleTrackWidth(width)
+    const handleVisibilityChange = () => setIsTabVisible(!document.hidden)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
+  // Measure track width for animation
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current) {
+        setTrackWidth(trackRef.current.scrollWidth / 2)
       }
     }
-
-    // Measure after render
-    const timeoutId = setTimeout(measureWidth, 100)
-    window.addEventListener('resize', measureWidth)
-
+    const timeout = setTimeout(measure, 100)
+    window.addEventListener('resize', measure)
     return () => {
-      clearTimeout(timeoutId)
-      window.removeEventListener('resize', measureWidth)
+      clearTimeout(timeout)
+      window.removeEventListener('resize', measure)
     }
   }, [articles])
 
   if (!articles || articles.length === 0) return null
 
   const pixelsPerSecond = SPEED_MAP[speed]
-  const duration = singleTrackWidth > 0 ? singleTrackWidth / pixelsPerSecond : 20
-  const shouldAnimate = !prefersReducedMotion && !isPaused
+  const duration = trackWidth > 0 ? trackWidth / pixelsPerSecond : 30
+
+  // Determine if animation should run
+  const shouldAnimate = !prefersReducedMotion && !externalPaused && !(pauseOnHover && isHovered) && isTabVisible
+
+  // Double the articles for seamless loop
+  const displayArticles = [...articles, ...articles]
 
   return (
-    <section className={`relative overflow-hidden ${className}`}>
+    <section
+      className={`relative overflow-hidden ${className}`}
+      role="region"
+      aria-label="Article ticker"
+    >
       {/* Gradient fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-white/95 dark:from-slate-900/95 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-white/95 dark:from-slate-900/95 to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
 
       <div
-        className="relative"
-        onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-        onMouseLeave={() => pauseOnHover && setIsPaused(false)}
+        ref={trackRef}
+        className="flex gap-2 py-1"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          animation: trackWidth > 0 ? `ticker-marquee ${duration}s linear infinite` : 'none',
+          animationPlayState: shouldAnimate ? 'running' : 'paused',
+          ['--ticker-translate' as string]: `-${trackWidth}px`,
+        }}
       >
-        {/* 
-          Seamless scroll using CSS custom property for pixel-based translation.
-          Two identical tracks side by side - we animate the wrapper by exactly 
-          the width of one track in pixels.
-        */}
-        <div
-          className="flex"
-          style={{
-            // Use CSS custom property for the pixel translation
-            ['--ticker-translate' as string]: `-${singleTrackWidth}px`,
-            animationName: prefersReducedMotion || singleTrackWidth === 0 ? 'none' : 'ticker-marquee',
-            animationDuration: `${duration}s`,
-            animationTimingFunction: 'linear',
-            animationIterationCount: 'infinite',
-            animationPlayState: shouldAnimate ? 'running' : 'paused',
-          }}
-        >
-          {/* First track - we measure this one */}
-          <div ref={firstTrackRef} className="flex gap-2 flex-shrink-0 pr-2">
-            {articles.map((article, index) => (
-              <TickerItem
-                key={`a-${article.slug}-${index}`}
-                article={article}
-                showCover={showCover}
-                showDate={showDate}
-                showStats={showStats}
-              />
-            ))}
-          </div>
-
-          {/* Second track (identical duplicate for seamless loop) */}
-          <div className="flex gap-2 flex-shrink-0 pr-2">
-            {articles.map((article, index) => (
-              <TickerItem
-                key={`b-${article.slug}-${index}`}
-                article={article}
-                showCover={showCover}
-                showDate={showDate}
-                showStats={showStats}
-              />
-            ))}
-          </div>
-        </div>
+        {displayArticles.map((article, index) => (
+          <TickerItem
+            key={`${article.slug}-${index}`}
+            article={article}
+            showCover={showCover}
+            showDate={showDate}
+            showStats={showStats}
+          />
+        ))}
       </div>
     </section>
   )

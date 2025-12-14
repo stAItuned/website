@@ -1,10 +1,11 @@
 'use client'
 
+import { useState, useMemo } from 'react'
 import { ScrollReveal, FadeIn } from '@/components/ui/Animations'
 import { HomeDualTracks } from './HomeDualTracks'
 import { HomeArticleShortlist } from './HomeArticleShortlist'
 import { HomeNextStep } from './HomeNextStep'
-import { ArticleTicker } from '@/components/ui/ArticleTicker'
+import { ArticleTicker, type TickerArticle } from '@/components/ui/ArticleTicker'
 import type { Post } from 'contentlayer/generated'
 
 interface ColumnShortlist {
@@ -22,20 +23,52 @@ interface ColumnShortlist {
 interface HomeAnimatedSectionsProps {
   shortlistColumns: ColumnShortlist[]
   posts: Post[]
-  tickerArticles?: {
-    title: string
-    slug: string
-    cover?: string
-    author?: string
-    date?: string
-    readingTime?: number
-    target?: string
-    language?: string
-    isNew?: boolean  // Published in last 7 days
-  }[]
+  tickerArticles?: TickerArticle[]
+  trendingArticles?: TickerArticle[]
 }
 
-export function HomeAnimatedSections({ shortlistColumns, posts, tickerArticles }: HomeAnimatedSectionsProps) {
+export function HomeAnimatedSections({
+  shortlistColumns,
+  posts,
+  tickerArticles,
+  trendingArticles
+}: HomeAnimatedSectionsProps) {
+  const [isPaused, setIsPaused] = useState(false)
+  const [activeTab, setActiveTab] = useState<'latest' | 'trending'>('latest')
+
+  // Create pseudo-trending by shuffling articles (in production, use real trendingArticles prop)
+  const pseudoTrending = useMemo(() => {
+    if (trendingArticles && trendingArticles.length > 0) {
+      return trendingArticles
+    }
+    // Shuffle the latest articles as a demo
+    if (tickerArticles) {
+      return [...tickerArticles].sort(() => Math.random() - 0.5)
+    }
+    return []
+  }, [tickerArticles, trendingArticles])
+
+  // Get active articles based on tab selection
+  const displayArticles = activeTab === 'trending' ? pseudoTrending : (tickerArticles || [])
+
+  // Toggle between Latest and Trending
+  const toggleTab = () => {
+    setActiveTab(prev => prev === 'latest' ? 'trending' : 'latest')
+  }
+
+  // Handle navigation using the exposed window functions
+  const scrollNext = () => {
+    if ((window as any).__tickerScrollNext) {
+      (window as any).__tickerScrollNext()
+    }
+  }
+
+  const scrollPrev = () => {
+    if ((window as any).__tickerScrollPrev) {
+      (window as any).__tickerScrollPrev()
+    }
+  }
+
   return (
     <>
       {/* Fixed Article Ticker - Premium Bottom Overlay */}
@@ -44,45 +77,104 @@ export function HomeAnimatedSections({ shortlistColumns, posts, tickerArticles }
           {/* Top accent gradient line */}
           <div className="h-[2px] bg-gradient-to-r from-transparent via-primary-500 to-transparent" />
 
-          {/* Glass container */}
-          <div className="relative bg-gradient-to-r from-white/95 via-white/90 to-white/95 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-slate-900/95 backdrop-blur-xl border-t border-white/20 dark:border-slate-700/30 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
-            {/* Subtle inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary-500/[0.03] to-transparent pointer-events-none" />
+          {/* Solid container */}
+          <div className="relative bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-[0_-12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_-12px_40px_rgba(0,0,0,0.4)]">
 
-            <div className="relative flex items-center gap-4 py-3 px-2">
-              {/* Latest badge - enhanced */}
-              <div className="flex-shrink-0 pl-3 flex items-center gap-3">
-                <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-primary-500/15 to-primary-600/10 dark:from-primary-400/20 dark:to-primary-500/15 border border-primary-500/20 dark:border-primary-400/20">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-60"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-gradient-to-br from-primary-400 to-primary-600 shadow-sm"></span>
-                  </span>
-                  <span className="text-xs font-bold text-primary-700 dark:text-primary-300 uppercase tracking-wider">
-                    Latest<br />Articles
-                  </span>
+            <div className="relative flex items-stretch gap-0">
+              {/* Left side: Toggle and Controls - Vertical layout */}
+              <div className="flex-shrink-0 flex flex-col items-center justify-center gap-3 px-4 py-3 border-r border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+
+                {/* Single Toggle Switch for Latest/Trending - FIXED WIDTH */}
+                <button
+                  onClick={toggleTab}
+                  className="relative flex items-center justify-center gap-2 w-[100px] px-3 py-2 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 shadow-sm hover:shadow-md transition-all"
+                  aria-label={`Currently showing ${activeTab}. Click to switch.`}
+                  title={`Switch to ${activeTab === 'latest' ? 'Trending' : 'Latest'}`}
+                >
+                  {activeTab === 'latest' ? (
+                    <>
+                      <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse flex-shrink-0" />
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">
+                        Latest
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                        Trend
+                      </span>
+                    </>
+                  )}
+                  {/* Switch indicator */}
+                  <svg className="w-3 h-3 text-slate-400 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                  </svg>
+                </button>
+
+                {/* Play/Pause and Prev/Next buttons - below toggle */}
+                <div className="flex items-center gap-1.5">
+                  {/* Play/Pause */}
+                  <button
+                    onClick={() => setIsPaused(!isPaused)}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all shadow-sm ${isPaused
+                        ? 'bg-primary-500 border-primary-500 text-white hover:bg-primary-600'
+                        : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
+                      }`}
+                    aria-label={isPaused ? 'Play' : 'Pause'}
+                    title={isPaused ? 'Play' : 'Pause'}
+                  >
+                    {isPaused ? (
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+
+                  {/* Prev */}
+                  <button
+                    onClick={scrollPrev}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
+                    aria-label="Previous"
+                    title="Previous"
+                  >
+                    <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Next */}
+                  <button
+                    onClick={scrollNext}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm active:scale-95"
+                    aria-label="Next"
+                    title="Next"
+                  >
+                    <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
-                {/* Separator */}
-                <div className="h-6 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600" />
               </div>
 
-              {/* Ticker */}
-              <div className="flex-1 overflow-hidden">
+              {/* Ticker container */}
+              <div className="flex-1 py-3 bg-white dark:bg-slate-900">
                 <ArticleTicker
-                  articles={tickerArticles}
+                  key={activeTab} // Force remount when tab changes
+                  articles={displayArticles}
                   speed="normal"
                   pauseOnHover={true}
                   showCover={true}
                   showDate={true}
                   showStats={true}
+                  externalPaused={isPaused}
                 />
-              </div>
-
-              {/* Fade hint on right */}
-              <div className="flex-shrink-0 pr-4 hidden lg:flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
-                <span className="opacity-60">hover to pause</span>
-                <svg className="w-4 h-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
               </div>
             </div>
           </div>
@@ -112,4 +204,3 @@ export function HomeAnimatedSections({ shortlistColumns, posts, tickerArticles }
     </>
   )
 }
-
