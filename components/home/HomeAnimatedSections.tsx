@@ -119,8 +119,8 @@ export function HomeAnimatedSections({
                   <button
                     onClick={() => setIsPaused(!isPaused)}
                     className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all shadow-sm ${isPaused
-                        ? 'bg-primary-500 border-primary-500 text-white hover:bg-primary-600'
-                        : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
+                      ? 'bg-primary-500 border-primary-500 text-white hover:bg-primary-600'
+                      : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
                       }`}
                     aria-label={isPaused ? 'Play' : 'Pause'}
                     title={isPaused ? 'Play' : 'Pause'}
@@ -162,8 +162,8 @@ export function HomeAnimatedSections({
                 </div>
               </div>
 
-              {/* Ticker container */}
-              <div className="flex-1 py-3 bg-white dark:bg-slate-900">
+              {/* Ticker container with gradient background */}
+              <div className="flex-1 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800">
                 <ArticleTicker
                   ref={tickerRef}
                   key={activeTab} // Force remount when tab changes

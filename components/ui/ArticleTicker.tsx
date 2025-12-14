@@ -252,9 +252,9 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
       role="region"
       aria-label="Article ticker"
     >
-      {/* Gradient fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none" />
+      {/* Gradient fade edges - matches container gradient */}
+      <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 bg-gradient-to-r from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 bg-gradient-to-l from-slate-50 dark:from-slate-800 to-transparent z-10 pointer-events-none" />
 
       <div
         ref={trackRef}
