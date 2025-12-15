@@ -18,12 +18,12 @@ const targets = [
   },
   {
     name: 'Midway',
-    slug: 'midway', 
+    slug: 'midway',
     description: 'Building on the basics? Explore intermediate AI concepts and applications.',
     image: '/assets/learn/midway-card.png'
   },
   {
-    name: 'Expert', 
+    name: 'Expert',
     slug: 'expert',
     description: 'Ready for advanced AI concepts and cutting-edge research.',
     image: '/assets/learn/expert-card.png'
@@ -56,9 +56,25 @@ export default function LearnPage() {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 6)
 
+  // Get articles for the ticker (latest 15 articles)
+  const tickerArticles = allPosts
+    .filter(post => post.published !== false)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 15)
+    .map(post => ({
+      title: post.title,
+      slug: post.slug,
+      cover: post.cover,
+      author: post.author,
+      date: post.date,
+      readingTime: post.readingTime,
+      target: post.target,
+      language: post.language,
+    }))
+
   return (
     <PageTransition>
-  <section className="max-w-5xl mx-auto mt-[100px] mb-24 px-4 lg:px-6 space-y-16">
+      <section className="max-w-5xl mx-auto mt-[100px] mb-24 px-4 lg:px-6 space-y-16">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-3 text-primary-500 w-full md:w-fit bg-white/60 backdrop-blur-sm px-6 py-3 rounded-2xl font-medium shadow-sm border border-slate-200/50 dark:bg-slate-900/60 dark:border-slate-800/50 dark:text-primary-400 transition-all hover:shadow-md">
           <Link href="/" className="text-sm lg:text-base opacity-60 hover:opacity-100 transition-opacity hover:underline underline-offset-4">
@@ -70,10 +86,11 @@ export default function LearnPage() {
 
         {/* Suspense per componenti client */}
         <Suspense fallback={<LearnPageFallback />}>
-          <LearnPageClient 
+          <LearnPageClient
             targets={targets}
             articlesByTarget={articlesByTarget}
             latestArticles={latestArticles}
+            tickerArticles={tickerArticles}
           />
         </Suspense>
       </section>
@@ -96,7 +113,7 @@ function LearnPageFallback() {
           </div>
         ))}
       </div>
-      
+
       {/* Latest articles skeleton */}
       <div className="space-y-4">
         <div className="bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse h-10 rounded-lg w-48" />
