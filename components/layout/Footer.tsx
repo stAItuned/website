@@ -7,106 +7,264 @@ import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 import { ScrollReveal, StaggerContainer, FadeIn } from '@/components/ui/Animations'
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup'
 
+// =============================================================================
+// Configuration
+// =============================================================================
+
 const socialLinks = [
   {
-    name: 'linkedin',
+    name: 'LinkedIn',
     url: 'https://www.linkedin.com/company/stai-tuned/',
     icon: LinkedInIcon
   },
 ]
 
+const footerNavigation = {
+  explore: {
+    title: 'Esplora',
+    links: [
+      { name: 'Blog', href: '/learn' },
+      { name: 'Lab', href: '/lab' },
+      { name: 'Chi siamo', href: '/meet' },
+      { name: 'Per le aziende', href: '/business' },
+    ]
+  },
+  resources: {
+    title: 'Risorse',
+    links: [
+      { name: 'RSS Feed', href: '/rss.xml', external: true },
+      { name: 'Prodotti', href: '/prodotti' },
+    ]
+  },
+  legal: {
+    title: 'Legale',
+    links: [
+      { name: 'Privacy Policy', href: '/privacy' },
+      { name: 'Cookie Policy', href: '/cookie-policy' },
+    ]
+  }
+}
+
+// =============================================================================
+// Sub-components
+// =============================================================================
+
+/**
+ * Newsletter section with value proposition - compact version
+ */
+function NewsletterSection() {
+  return (
+    <div className="lg:col-span-2">
+      <div className="bg-gradient-to-r from-primary-500/40 to-primary-600/60 rounded-xl p-4 border border-slate-500/20">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xl">📬</span>
+            <h3 className="text-sm font-semibold text-white whitespace-nowrap">
+              Newsletter AI
+            </h3>
+          </div>
+          <div className="flex-1">
+            <NewsletterSignup source="footer" variant="inline" showHeader={false} />
+          </div>
+        </div>
+        <p className="text-[10px] text-slate-400 mt-2 text-center sm:text-left">
+          Niente spam · Disiscriviti quando vuoi
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Single navigation column
+ */
+interface NavColumnProps {
+  title: string
+  links: Array<{ name: string; href: string; external?: boolean }>
+  onCookieClick?: () => void
+  showCookieButton?: boolean
+}
+
+function NavColumn({ title, links, onCookieClick, showCookieButton }: NavColumnProps) {
+  return (
+    <div>
+      <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+        {title}
+      </h4>
+      <ul className="space-y-3">
+        {links.map((link) => (
+          <li key={link.name}>
+            <Link
+              href={link.href}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener noreferrer' : undefined}
+              className="text-slate-300 hover:text-amber-300 transition-colors duration-200 text-sm flex items-center gap-1 group"
+            >
+              <span className="group-hover:translate-x-1 transition-transform duration-200">
+                {link.name}
+              </span>
+              {link.external && (
+                <svg className="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              )}
+            </Link>
+          </li>
+        ))}
+        {showCookieButton && onCookieClick && (
+          <li>
+            <button
+              type="button"
+              onClick={onCookieClick}
+              className="text-amber-300 hover:text-amber-200 transition-colors duration-200 text-sm font-medium flex items-center gap-1 group"
+            >
+              <span className="group-hover:translate-x-1 transition-transform duration-200">
+                Gestisci cookie
+              </span>
+            </button>
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+}
+
+/**
+ * Social links row
+ */
+function SocialLinks() {
+  return (
+    <div className="flex items-center gap-4">
+      {socialLinks.map((social) => {
+        const IconComponent = social.icon
+        return (
+          <a
+            key={social.name}
+            href={social.url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Seguici su ${social.name}`}
+            className="group flex items-center gap-2 text-slate-300 hover:text-amber-300 transition-all duration-300"
+          >
+            <span className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-amber-500/20 transition-colors duration-300">
+              <IconComponent className="w-5 h-5" />
+            </span>
+            <span className="text-sm font-medium hidden sm:inline">
+              {social.name}
+            </span>
+          </a>
+        )
+      })}
+    </div>
+  )
+}
+
+/**
+ * Bottom bar with logo, copyright, and disclaimer
+ */
+function BottomBar() {
+  const currentYear = new Date().getFullYear()
+
+  return (
+    <div className="border-t border-slate-500/30 pt-6 mt-8">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Logo and copyright */}
+        <div className="flex items-center gap-4">
+          <Link href="/" className="block">
+            <Image
+              src="/assets/general/logo-text.png"
+              alt="stAItuned"
+              width={140}
+              height={30}
+              className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+            />
+          </Link>
+          <span className="text-sm text-slate-400">
+            © {currentYear} stAItuned
+          </span>
+        </div>
+
+        {/* Social links */}
+        <SocialLinks />
+      </div>
+
+      {/* Disclaimer */}
+      <p className="text-[11px] text-slate-500 leading-relaxed mt-6 text-center md:text-left max-w-4xl">
+        stAItuned è un progetto indipendente di formazione e sperimentazione su AI.
+        Le attività vengono svolte al di fuori dell&apos;orario di lavoro dipendente e senza
+        utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.
+      </p>
+    </div>
+  )
+}
+
+// =============================================================================
+// Main Footer Component
+// =============================================================================
+
 export function Footer() {
   const { openPreferences } = useCookieConsent()
 
   return (
-    <footer className="px-8 py-8 bg-primary-600 text-slate-200">
-      <ScrollReveal threshold={0.2} triggerOnce={false}>
-        <div className="max-w-6xl mx-auto space-y-6">
-          {/* Newsletter Signup Row */}
+    <footer className="bg-primary-600 text-slate-200">
+      <ScrollReveal threshold={0.1} triggerOnce={true}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12 lg:py-14">
+
+          {/* Newsletter Row - separate from nav */}
           <FadeIn>
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-slate-500/30">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-slate-500/30">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">📬</span>
+                <span className="text-sm font-medium text-white">Resta aggiornato</span>
+              </div>
               <div className="flex-1 max-w-md">
-                <NewsletterSignup source="footer" variant="inline" showHeader={true} />
+                <NewsletterSignup source="footer" variant="inline" showHeader={false} />
               </div>
               <Link
                 href="/rss.xml"
                 target="_blank"
-                className="text-xs text-slate-300 hover:text-amber-300 transition flex items-center gap-1"
+                className="text-xs text-slate-400 hover:text-amber-300 transition flex items-center gap-1"
               >
                 <span>📡</span> RSS Feed
               </Link>
             </div>
           </FadeIn>
 
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Social Links with Stagger Animation */}
-            <StaggerContainer staggerDelay={80}>
-              <div className="flex items-center gap-3">
-                {socialLinks.map((social) => {
-                  const IconComponent = social.icon
-                  return (
-                    <FadeIn key={social.name}>
-                      <a
-                        href={social.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${social.name} icon`}
-                        className="text-slate-200 opacity-60 hover:opacity-100 hover:scale-110 transition-all duration-300"
-                      >
-                        <IconComponent className="w-4 h-4" />
-                      </a>
-                    </FadeIn>
-                  )
-                })}
-              </div>
-            </StaggerContainer>
+          {/* Navigation Grid - 3 columns */}
+          <StaggerContainer staggerDelay={100}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-16">
 
-            {/* Navigation Links with Fade In */}
-            <FadeIn delay={200}>
-              <div className="flex items-center gap-6 text-xs uppercase tracking-wide text-slate-200/90">
-                <Link href="/meet" className="transition hover:text-white hover:scale-105 inline-block">
-                  Chi siamo
-                </Link>
-                <Link href="/lab" className="transition hover:text-white hover:scale-105 inline-block">
-                  Lab
-                </Link>
-                <Link href="/privacy" className="transition hover:text-white hover:scale-105 inline-block">
-                  Privacy Policy
-                </Link>
-                <Link href="/cookie-policy" className="transition hover:text-white hover:scale-105 inline-block">
-                  Cookie Policy
-                </Link>
-                <button
-                  type="button"
-                  onClick={openPreferences}
-                  className="font-semibold tracking-[0.2em] text-amber-200 underline-offset-2 transition hover:text-white hover:scale-105"
-                >
-                  Gestisci i cookie
-                </button>
-              </div>
-            </FadeIn>
-
-            {/* Logo and Copyright with Fade In */}
-            <FadeIn delay={300}>
-              <div className="flex items-center gap-3 text-xs">
-                <Image
-                  src="/assets/general/logo-text.png"
-                  alt="stAItuned"
-                  width={140}
-                  height={30}
-                  className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+              <FadeIn>
+                <NavColumn
+                  title={footerNavigation.explore.title}
+                  links={footerNavigation.explore.links}
                 />
-                <p className="text-slate-200/80">© 2024 stAItuned. All rights reserved.</p>
-              </div>
-            </FadeIn>
+              </FadeIn>
 
-            {/* Disclaimer with Fade In */}
-            <FadeIn delay={400}>
-              <p className="w-full text-[11px] text-slate-200/80 leading-relaxed">
-                stAItuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell'orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.
-              </p>
-            </FadeIn>
-          </div>
+              <FadeIn delay={100}>
+                <NavColumn
+                  title={footerNavigation.resources.title}
+                  links={footerNavigation.resources.links}
+                />
+              </FadeIn>
+
+              <FadeIn delay={200}>
+                <NavColumn
+                  title={footerNavigation.legal.title}
+                  links={footerNavigation.legal.links}
+                  onCookieClick={openPreferences}
+                  showCookieButton={true}
+                />
+              </FadeIn>
+
+            </div>
+          </StaggerContainer>
+
+          {/* Bottom bar */}
+          <FadeIn delay={300}>
+            <BottomBar />
+          </FadeIn>
+
         </div>
       </ScrollReveal>
     </footer>
