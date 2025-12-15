@@ -5,6 +5,7 @@ import { Montserrat } from 'next/font/google'
 import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { TickerSpacer } from '@/components/layout/TickerSpacer'
 import { CRITICAL_CSS } from '@/lib/performance/criticalStyles'
 
 import FeedbackLoader from '@/components/feedback/FeedbackLoader.client'
@@ -232,6 +233,7 @@ export default function RootLayout({
                         {children}
                       </main>
                       <Footer />
+                      <TickerSpacer />
                     </section>
                     <SearchModal />
                     {/* PWA navigation helper - shows "Torna a Learn" on non-learn pages */}

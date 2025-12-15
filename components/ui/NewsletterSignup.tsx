@@ -104,7 +104,7 @@ export function NewsletterSignup({
                             📬 Resta aggiornato
                         </h3>
                         <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            Nuovi articoli, tool e casi d'uso AI direttamente nella tua inbox.
+                            Nuovi articoli, tool e casi d\'uso AI direttamente nella tua inbox.
                         </p>
                     </div>
                 )}

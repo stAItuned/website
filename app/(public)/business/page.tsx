@@ -8,7 +8,7 @@ export const revalidate = 21600
 
 export const metadata: Metadata = {
   title: 'Articoli Business - stAItuned',
-  description: 'Articoli per decisori PMI su come applicare l’AI a costi, tempi e qualità. Selezione curata per CEO, COO e manager.'
+  description: 'Articoli per decisori PMI su come applicare l\'AI a costi, tempi e qualità. Selezione curata per CEO, COO e manager.'
 }
 
 const formatDate = (dateString?: string | Date) => {
@@ -71,7 +71,7 @@ export default function BusinessArticlesPage() {
                   {readingTime && <span>{readingTime}</span>}
                 </div>
                 <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-amber-700 group-hover:text-amber-600">
-                  Leggi l’articolo
+                  Leggi l'articolo
                   <span aria-hidden className="text-base">→</span>
                 </div>
               </Link>

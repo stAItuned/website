@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function DemoPage() {
   const products = getAllProducts()
-  
+
   return (
     <PageTransition>
       <div className="max-w-7xl mx-auto mb-32 mt-[120px] px-4 lg:px-6 space-y-24">
@@ -62,7 +62,7 @@ export default function DemoPage() {
           </div>
           <div className="space-y-4 max-w-4xl pt-4 border-t-2 border-slate-200/50 dark:border-slate-800/50">
             <p className="text-lg text-slate-600 leading-relaxed dark:text-slate-300">
-              Ogni webapp qui sotto è nata da un caso d'uso reale: un problema di una PMI, un'idea di automazione, o un esperimento che volevamo validare velocemente.
+              Ogni webapp qui sotto è nata da un caso d\'uso reale: un problema di una PMI, un'idea di automazione, o un esperimento che volevamo validare velocemente.
             </p>
             <p className="text-lg font-semibold text-slate-800 leading-relaxed dark:text-slate-100 bg-amber-50/50 dark:bg-amber-900/10 p-4 rounded-xl border border-amber-200/50 dark:border-amber-800/30">
               Questi prodotti sono il risultato dei nostri progetti pilota con le PMI. Se uno di questi casi ti assomiglia, possiamo adattarlo e portarlo nei tuoi processi in 2–4 settimane.
@@ -204,7 +204,7 @@ export default function DemoPage() {
         {/* Info finale */}
         <section className="text-center space-y-4 max-w-3xl mx-auto">
           <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-            Le demo vengono aggiunte man mano che completiamo i progetti pilota con le PMI. Ogni webapp qui rappresenta un caso d'uso reale validato.
+            Le demo vengono aggiunte man mano che completiamo i progetti pilota con le PMI. Ogni webapp qui rappresenta un caso d\'uso reale validato.
           </p>
           <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
             Per domande o suggerimenti: <a href="mailto:demo@staituned.com" className="text-amber-600 hover:text-amber-700 underline underline-offset-2">demo@staituned.com</a>

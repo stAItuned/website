@@ -47,6 +47,9 @@ export default function ArticlePageClient({
   const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('small')
   const [fontFamily, setFontFamily] = useState<'sans' | 'serif'>('sans')
 
+  // Live analytics state - starts with SSR/ISR cached values, refreshes on mount
+  const [liveAnalytics, setLiveAnalytics] = useState<ArticleAnalytics>(analytics)
+
   // Reading progress persistence
   const {
     savedProgress,
@@ -60,6 +63,26 @@ export default function ArticlePageClient({
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Refresh analytics on mount to get fresh data when page is cached
+  useEffect(() => {
+    const refreshAnalytics = async () => {
+      try {
+        const response = await fetch(`/api/analytics/fast?slug=${encodeURIComponent(article.slug)}`)
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success && result.data) {
+            setLiveAnalytics(result.data)
+          }
+        }
+      } catch (error) {
+        // Silently fail - we already have cached analytics from SSR
+        console.warn('Failed to refresh analytics:', error)
+      }
+    }
+
+    refreshAnalytics()
+  }, [article.slug])
 
   // Handle mobile TOC button visibility on scroll
   useEffect(() => {
@@ -569,9 +592,9 @@ export default function ArticlePageClient({
               articleSlug={article.slug}
               description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
               imageUrl={coverImage}
-              likes={analytics.likes || 0}
-              views={analytics.pageViews || 0}
-              visitors={analytics.users || 0}
+              likes={liveAnalytics.likes || 0}
+              views={liveAnalytics.pageViews || 0}
+              visitors={liveAnalytics.users || 0}
             />
             {/* Center: Main Article Content */}
             <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
@@ -731,7 +754,7 @@ export default function ArticlePageClient({
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <span className="font-medium">{analytics.pageViews || 0}</span>
+                        <span className="font-medium">{liveAnalytics.pageViews || 0}</span>
                       </div>
 
                       <span className="text-gray-300 dark:text-gray-600">|</span>
@@ -741,7 +764,7 @@ export default function ArticlePageClient({
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span className="font-medium">{analytics.users || 0}</span>
+                        <span className="font-medium">{liveAnalytics.users || 0}</span>
                       </div>
 
                       <span className="text-gray-300 dark:text-gray-600">|</span>
@@ -751,7 +774,7 @@ export default function ArticlePageClient({
                         <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
                           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                         </svg>
-                        <span className="font-medium">{analytics.likes || 0}</span>
+                        <span className="font-medium">{liveAnalytics.likes || 0}</span>
                       </div>
                     </div>
                   </div>

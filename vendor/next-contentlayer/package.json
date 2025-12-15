@@ -34,9 +34,7 @@
     "./src",
     "./package.json"
   ],
-  "scripts": {
-    "prepack": "sed '/^import\\|^export/d' dist/index-cjs.js > dist/index-cjs.cjs; cp src/hooks/jsx-runtime.cjs dist/hooks/jsx-runtime.cjs"
-  },
+  "scripts": {},
   "dependencies": {
     "@contentlayer/core": "0.3.4",
     "@contentlayer/utils": "0.3.4"

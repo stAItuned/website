@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArticleCard } from '@/components/ArticleCard'
@@ -8,6 +8,7 @@ import { LatestArticles } from '@/components/LatestArticles'
 import { ContributorCTA } from '@/components/ui/ContributorCTA'
 import { PWAInstallInline } from '@/components/pwa'
 import { useSearchParams } from 'next/navigation'
+import { ArticleTicker, type ArticleTickerRef, type TickerArticle } from '@/components/ui/ArticleTicker'
 
 interface Target {
   name: string
@@ -38,14 +39,17 @@ interface LearnPageClientProps {
     business: Article[]
   }
   latestArticles: Article[]
+  tickerArticles?: TickerArticle[]
 }
 
-export default function LearnPageClient({ targets, articlesByTarget, latestArticles }: LearnPageClientProps) {
+export default function LearnPageClient({ targets, articlesByTarget, latestArticles, tickerArticles }: LearnPageClientProps) {
   const searchParams = useSearchParams()
   const target = searchParams.get('target')
   const targetSlug = useMemo(() => target?.toLowerCase().split('/')?.[0] || null, [target])
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 15
+  const [isTickerPaused, setIsTickerPaused] = useState(false)
+  const tickerRef = useRef<ArticleTickerRef>(null)
 
   // Reset page when target changes
   useEffect(() => {
@@ -266,6 +270,85 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
           </p>
         </div>
       </div>
+
+      {/* Article Ticker Section */}
+      {tickerArticles && tickerArticles.length > 0 && (
+        <div className="space-y-3">
+          {/* Ticker Header with Controls */}
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                Trending Now
+              </span>
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-1.5">
+              {/* Play/Pause */}
+              <button
+                onClick={() => setIsTickerPaused(!isTickerPaused)}
+                className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all shadow-sm ${isTickerPaused
+                    ? 'bg-primary-50 border-primary-200 text-primary-600 dark:bg-primary-900/30 dark:border-primary-700 dark:text-primary-400'
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600'
+                  }`}
+                aria-label={isTickerPaused ? 'Play ticker' : 'Pause ticker'}
+              >
+                {isTickerPaused ? (
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Navigation Arrows */}
+              <button
+                onClick={() => {
+                  setIsTickerPaused(true)
+                  tickerRef.current?.scrollPrev()
+                }}
+                className="w-8 h-8 flex items-center justify-center rounded-lg border bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-all shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600"
+                aria-label="Previous article"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => {
+                  setIsTickerPaused(true)
+                  tickerRef.current?.scrollNext()
+                }}
+                className="w-8 h-8 flex items-center justify-center rounded-lg border bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-all shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600"
+                aria-label="Next article"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Ticker Component */}
+          <div className="-mx-4 lg:-mx-6">
+            <ArticleTicker
+              ref={tickerRef}
+              articles={tickerArticles}
+              speed="normal"
+              pauseOnHover={true}
+              showCover={true}
+              showDate={true}
+              showStats={true}
+              externalPaused={isTickerPaused}
+              className="py-2"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Target Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
