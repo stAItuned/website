@@ -32,7 +32,7 @@ interface PaginationData {
 }
 
 interface MyArticlesProps {
-    userEmail: string
+    userEmail: string | null | undefined
 }
 
 type SortOption = 'date' | 'readers' | 'views' | 'time'
@@ -55,10 +55,16 @@ export function MyArticles({ userEmail }: MyArticlesProps) {
     }
 
     useEffect(() => {
+        if (!userEmail) return
         fetchArticles(1, sortBy, sortOrder)
     }, [userEmail, sortBy, sortOrder])
 
     const fetchArticles = async (page: number, sort: SortOption, order: SortOrder) => {
+        if (!userEmail) {
+            setLoading(false)
+            return
+        }
+        
         setLoading(true)
         setError(null)
         try {

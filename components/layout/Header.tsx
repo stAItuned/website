@@ -85,7 +85,7 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">🏢</span>
     },
     {
-      name: 'Impara',
+      name: 'Blog',
       path: '/learn',
       icon: <span aria-hidden className="text-lg">📚</span>
     },

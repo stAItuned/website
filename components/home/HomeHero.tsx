@@ -93,7 +93,7 @@ export function HomeHero() {
               href="/learn"
               className="btn-brand-secondary text-lg group"
             >
-              <span>Impara con stAI tuned Lab</span>
+              <span>Entra nel blog di stAI tuned</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </Link>
           </div>
