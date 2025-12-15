@@ -11,14 +11,14 @@ export const Post = defineDocumentType(() => ({
     topics: { type: 'list', of: { type: 'string' }, required: false },
     meta: { type: 'string', required: false },
     target: { type: 'string', required: false },
-  business: { type: 'boolean', required: false },
+    business: { type: 'boolean', required: false },
     language: { type: 'string', required: false },
     cover: { type: 'string', required: false },
     published: { type: 'boolean', required: false },
   },
   computedFields: {
-    url: { 
-      type: 'string', 
+    url: {
+      type: 'string',
       resolve: (doc) => {
         const pathParts = doc._raw.flattenedPath.split('/')
         const slug = pathParts[1] // Get the article directory name
@@ -62,6 +62,7 @@ export const Team = defineDocumentType(() => ({
   name: 'Team',
   filePathPattern: `team/**/meta.md`,
   contentType: 'markdown',
+  // Trigger rebuild for email field schema update
   fields: {
     name: { type: 'string', required: false },
     role: { type: 'string', required: false },
@@ -70,6 +71,7 @@ export const Team = defineDocumentType(() => ({
     linkedin: { type: 'string', required: false },
     github: { type: 'string', required: false },
     website: { type: 'string', required: false },
+    email: { type: 'string', required: false },
   },
   computedFields: {
     slug: {

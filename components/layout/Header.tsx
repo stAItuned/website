@@ -22,27 +22,27 @@ export function Header() {
   const { resolvedTheme } = useTheme()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
-  
+
   // Wait for component to mount before determining logo source
   // This prevents hydration mismatch between server and client
   useEffect(() => {
     setMounted(true)
   }, [])
-  
+
   // Use the dark-text logo when in light mode, and the regular logo otherwise.
   // Requested: use /public/assets/general/logo-text-dark.png for light mode.
   // Default to dark theme logo during SSR to match the inline script behavior
   const logoSrc = mounted
     ? (resolvedTheme === 'dark'
-        ? "/assets/general/logo-text.png"
-        : "/assets/general/logo-text-dark.png")
+      ? "/assets/general/logo-text.png"
+      : "/assets/general/logo-text-dark.png")
     : "/assets/general/logo-text.png" // SSR default
-    
+
   // Mobile drawer should always swap based on theme only (light uses dark text logo).
   const mobileLogoSrc = mounted
     ? (resolvedTheme === 'dark'
-        ? "/assets/general/logo-text.png"
-        : "/assets/general/logo-text-dark.png")
+      ? "/assets/general/logo-text.png"
+      : "/assets/general/logo-text-dark.png")
     : "/assets/general/logo-text.png" // SSR default
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function Header() {
 
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('keydown', handleKeyDown)
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('keydown', handleKeyDown)
@@ -172,9 +172,9 @@ export function Header() {
                 )}
               </div>
             )}
-            
+
             <ThemeToggle />
-            
+
             <button
               type="button"
               className="stai-icon-button relative group w-10 h-10"
@@ -188,7 +188,7 @@ export function Header() {
                 ⌘K / Ctrl+K
               </span>
             </button>
-            
+
             <button
               type="button"
               className="lg:hidden stai-icon-button w-10 h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
@@ -230,24 +230,24 @@ export function Header() {
               <div className="flex items-center gap-3">
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400 animate-fade-in">Menu</span>
                 <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 transition-transform duration-300 hover:scale-105">
-                <Image
-                  src="/assets/general/logo-text-dark.png"
-                  alt="stAItuned logo"
-                  width={120}
-                  height={30}
-                  className="h-8 w-auto block dark:hidden"
-                  priority={isHomepage}
-                  loading={isHomepage ? "eager" : "lazy"}
-                />
-                <Image
-                  src="/assets/general/logo-text.png"
-                  alt="stAItuned logo"
-                  width={120}
-                  height={30}
-                  className="h-8 w-auto hidden dark:block"
-                  priority={isHomepage}
-                  loading={isHomepage ? "eager" : "lazy"}
-                />
+                  <Image
+                    src="/assets/general/logo-text-dark.png"
+                    alt="stAItuned logo"
+                    width={120}
+                    height={30}
+                    className="h-8 w-auto block dark:hidden"
+                    priority={isHomepage}
+                    loading={isHomepage ? "eager" : "lazy"}
+                  />
+                  <Image
+                    src="/assets/general/logo-text.png"
+                    alt="stAItuned logo"
+                    width={120}
+                    height={30}
+                    className="h-8 w-auto hidden dark:block"
+                    priority={isHomepage}
+                    loading={isHomepage ? "eager" : "lazy"}
+                  />
                 </Link>
               </div>
               <button
@@ -271,7 +271,7 @@ export function Header() {
                     aria-current={active ? 'page' : undefined}
                     className={`stai-drawer-link flex items-center gap-3 py-4 text-lg font-semibold border-b stai-border rounded-lg px-3 mb-1 transition-all duration-300 hover:translate-x-2 hover:bg-slate-100 dark:hover:bg-slate-800/50 ${active ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200 translate-x-1' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
-                    style={{ 
+                    style={{
                       animationDelay: `${index * 50}ms`,
                       animation: 'slideRight 0.4s ease-out forwards'
                     }}
@@ -289,7 +289,7 @@ export function Header() {
                 <span>{primaryCta.name}</span>
                 <span>Prenota Call</span>
               </CallModalTrigger>
-              
+
               {/* Mobile Authentication */}
               {!DISABLE_AUTH && !loading && (
                 <div className="py-4 border-b border-primary-500">
@@ -321,16 +321,7 @@ export function Header() {
                         </div>
                       </div>
                       <div className="space-y-2 px-2">
-                        <Link
-                          href="/writer"
-                          className="flex items-center text-white text-base hover:text-secondary-500 transition p-2 rounded"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                          Writer Dashboard
-                        </Link>
+
                         <Link
                           href="/profile"
                           className="flex items-center text-white text-base hover:text-secondary-500 transition p-2 rounded"
@@ -370,7 +361,7 @@ export function Header() {
                   )}
                 </div>
               )}
-              
+
               <button
                 type="button"
                 onClick={() => {

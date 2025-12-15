@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'
 import { app } from '@/lib/firebase/client'
 import Link from 'next/link'
+import { MyArticles } from '@/components/account/MyArticles'
 
 export default function AccountSettingsPage() {
   const { user, loading: authLoading } = useAuth()
@@ -59,10 +60,10 @@ export default function AccountSettingsPage() {
     try {
       const db = getFirestore(app)
       const userDocRef = doc(db, 'users', user.uid)
-      
+
       // Delete user data from Firestore
       await deleteDoc(userDocRef)
-      
+
       setUserData(null)
       setShowDataDeleteConfirm(false)
       alert('Your data has been successfully deleted. Your account remains active.')
@@ -107,7 +108,7 @@ export default function AccountSettingsPage() {
       // Sign out and redirect
       const { signOutUser } = await import('@/lib/firebase/auth')
       await signOutUser()
-      
+
       router.push('/')
       alert('Your account has been permanently deleted.')
     } catch (error) {
@@ -135,8 +136,8 @@ export default function AccountSettingsPage() {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 mb-4 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,8 +145,8 @@ export default function AccountSettingsPage() {
             </svg>
             Back to Home
           </Link>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-2">
-            Account Settings
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 bg-clip-text text-transparent mb-2">
+            Profile
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Manage your account data and privacy settings
@@ -192,6 +193,9 @@ export default function AccountSettingsPage() {
             )}
           </div>
         </div>
+
+        {/* My Articles (Only shows if user is an author) */}
+        <MyArticles userEmail={user?.email} />
 
         {/* Your Data */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
