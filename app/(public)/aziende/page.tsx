@@ -2,6 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { CallModalTrigger } from './CallModalTrigger'
+import { allPosts } from '@/lib/contentlayer'
+import { BusinessTicker } from './BusinessTicker'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600
@@ -9,24 +11,24 @@ export const revalidate = 21600
 export const metadata: Metadata = {
   title: 'Per le aziende - stAItuned',
   description:
-    'AI pratica per PMI: in 2–6 settimane esploriamo casi d’uso rilevanti, costruiamo un prototipo e decidiamo se scalare.',
+    'AI pratica per PMI: in 2–6 settimane esploriamo casi d\'uso rilevanti, costruiamo un prototipo e decidiamo se scalare.',
 }
 
 const prototypeReasons = [
   'vedere se i dati che hai sono davvero sufficienti',
   'capire se il team userà davvero lo strumento, non solo sulla carta',
   'misurare un primo impatto su tempi, errori o qualità del lavoro',
-  'decidere se fermarti lì, migliorare un po’ o scalare in produzione'
+  'decidere se fermarti lì, migliorare un po\' o scalare in produzione'
 ]
 
 const timeline = [
   {
-    title: 'Settimana 1 – Allineamento e casi d’uso',
+    title: 'Settimana 1 – Allineamento e casi d\'uso',
     items: [
       '1 call di kick-off con le persone chiave (owner del processo, IT/digital se serve)',
-      'mappiamo il processo: dov’è oggi il collo di bottiglia?',
+      'mappiamo il processo: dov\'è oggi il collo di bottiglia?',
       'raccogliamo quali dati esistono già (anche se sono sparsi: CSV, CRM, strumenti interni)',
-      'scegliamo insieme 1 caso d’uso principale + 1 di backup'
+      'scegliamo insieme 1 caso d\'uso principale + 1 di backup'
     ]
   },
   {
@@ -34,7 +36,7 @@ const timeline = [
     items: [
       'costruiamo un prototipo di AI focalizzato sul problema scelto',
       'condividiamo una prima versione con il tuo team per feedback rapidi',
-      'facciamo 1–2 cicli di aggiustamento sull’esperienza d’uso',
+      'facciamo 1–2 cicli di aggiustamento sull\'esperienza d\'uso',
       'impostiamo 2–3 metriche semplici (es. tempo risparmiato, errori evitati, qualità percepita)'
     ]
   },
@@ -53,7 +55,7 @@ const typicalProblems = [
   'reportistica manuale fatta copiando/incollando dati da più sistemi',
   'knowledge sparsa tra file, documenti, chat e nessuno che sa dove trovare cosa',
   'decisioni sempre urgenti che si basano su intuizione, non su fatti',
-  'processi operativi che dipendono da 1–2 persone “chiave” e non sono replicabili'
+  'processi operativi che dipendono da 1–2 persone "chiave" e non sono replicabili'
 ]
 
 const doList = [
@@ -64,13 +66,33 @@ const doList = [
 ]
 
 const dontList = [
-  'non vendiamo “trasformazioni aziendali” generiche',
+  'non vendiamo "trasformazioni aziendali" generiche',
   'non entriamo nei dettagli dei tuoi contratti o dati sensibili senza motivo',
   'non sostituiamo il tuo team di sviluppo: lo aiutiamo a partire con il piede giusto',
   'non spingiamo progetti grandi se il prototipo dice chiaramente che non ha senso'
 ]
 
+// Get business articles for the ticker
+function getBusinessArticles() {
+  return allPosts
+    .filter((post) => ((post as any).business === true || post.target?.toLowerCase() === 'business') && post.published !== false)
+    .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
+    .slice(0, 15)
+    .map(post => ({
+      title: post.title,
+      slug: post.slug,
+      cover: post.cover,
+      author: post.author,
+      date: post.date,
+      readingTime: post.readingTime,
+      target: post.target || 'business',
+      language: post.language,
+    }))
+}
+
 export default function AziendePage() {
+  const tickerArticles = getBusinessArticles()
+
   return (
     <PageTransition>
       <div className="max-w-6xl mx-auto mt-[120px] mb-28 px-4 space-y-20 text-slate-900 dark:text-slate-100">
@@ -90,10 +112,10 @@ export default function AziendePage() {
               AI pratica per PMI che vogliono risultati, non buzzword
             </h1>
             <p className="text-lg md:text-xl text-slate-700 leading-relaxed dark:text-slate-200">
-              In 2–6 settimane esploriamo 1–2 casi d’uso di AI davvero rilevanti, costruiamo un prototipo e ti aiutiamo a decidere se vale la pena scalare.
+              In 2–6 settimane esploriamo 1–2 casi d\'uso di AI davvero rilevanti, costruiamo un prototipo e ti aiutiamo a decidere se vale la pena scalare.
             </p>
             <p className="text-base md:text-lg text-slate-700 leading-relaxed dark:text-slate-300">
-              Se sei una PMI o un’azienda in crescita, probabilmente ti hanno già parlato di “trasformazione AI” in modo vago. Noi lavoriamo all’opposto: pochi casi d’uso, problemi concreti, prototipi leggeri e metriche chiare. Ti affianchi un AI engineer con esperienza reale e usi i risultati per decidere se investire di più, senza legarti a progetti infiniti.
+              Se sei una PMI o un'azienda in crescita, probabilmente ti hanno già parlato di "trasformazione AI" in modo vago. Noi lavoriamo all'opposto: pochi casi d\'uso, problemi concreti, prototipi leggeri e metriche chiare. Ti affianchi un AI engineer con esperienza reale e usi i risultati per decidere se investire di più, senza legarti a progetti infiniti.
             </p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {[
@@ -120,7 +142,7 @@ export default function AziendePage() {
             <div className="space-y-3 text-sm text-slate-700 dark:text-slate-200">
               {[
                 'ci racconti brevemente azienda, team e processo che ti crea più attrito',
-                'facciamo 2–3 ipotesi di casi d’uso AI realistici (niente “AI ovunque”, solo dove ha senso)',
+                'facciamo 2–3 ipotesi di casi d\'uso AI realistici(niente "AI ovunque", solo dove ha senso)',
                 'ti propongo uno schema di esperimento (prototipo, dati richiesti, metriche base)',
                 'se alla fine non ha senso fare nulla, lo diciamo chiaramente e ti rimangono comunque le idee'
               ].map((item) => (
@@ -131,16 +153,31 @@ export default function AziendePage() {
               ))}
             </div>
             <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
-              Nessun funnel nascosto: l’obiettivo è aiutarti a prendere una decisione lucida se partire con un prototipo oppure no.
+              Nessun funnel nascosto: l'obiettivo è aiutarti a prendere una decisione lucida se partire con un prototipo oppure no.
             </p>
           </div>
         </section>
+
+        {/* Business Article Ticker */}
+        {tickerArticles.length > 0 && (
+          <section className="space-y-4">
+            <div className="text-center space-y-2">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                Articoli per decisori aziendali
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Letture pratiche su AI, automazione e decisioni per PMI
+              </p>
+            </div>
+            <BusinessTicker articles={tickerArticles} />
+          </section>
+        )}
 
         {/* Perché prototipi */}
         <section className="space-y-5 rounded-3xl border-2 border-slate-200 bg-white/80 p-8 shadow-md dark:border-slate-800 dark:bg-slate-900/70">
           <h2 className="text-3xl font-bold">Perché iniziamo sempre da un prototipo</h2>
           <p className="text-base md:text-lg text-slate-700 leading-relaxed dark:text-slate-300">
-            I progetti AI falliscono quando partono troppo grandi, troppo astratti o scollegati dai processi veri. Un prototipo ben disegnato fa il contrario: prende un problema concreto, lo collega ai dati che hai già e lo traduce in un “esperimento” che il tuo team può toccare con mano.
+            I progetti AI falliscono quando partono troppo grandi, troppo astratti o scollegati dai processi veri. Un prototipo ben disegnato fa il contrario: prende un problema concreto, lo collega ai dati che hai già e lo traduce in un "esperimento" che il tuo team può toccare con mano.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {prototypeReasons.map((item) => (
@@ -184,7 +221,7 @@ export default function AziendePage() {
         <section className="space-y-4 rounded-3xl border-2 border-slate-200 bg-white/80 p-8 shadow-md dark:border-slate-800 dark:bg-slate-900/70">
           <h2 className="text-3xl font-bold">Che tipo di problemi ha senso portarci</h2>
           <p className="text-base md:text-lg text-slate-700 leading-relaxed dark:text-slate-300">
-            Non serve avere “big data” o un team AI interno. Serve solo un problema chiaro e un minimo di dati disponibili. Alcuni esempi che vediamo spesso:
+            Non serve avere "big data" o un team AI interno. Serve solo un problema chiaro e un minimo di dati disponibili. Alcuni esempi che vediamo spesso:
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {typicalProblems.map((item) => (
@@ -241,7 +278,7 @@ export default function AziendePage() {
             Il modo più semplice per iniziare è una mini-call di 30 minuti. Ci racconti azienda, processo e problema principale; io ti faccio qualche domanda, ti propongo 1–2 possibili esperimenti e ti dico onestamente se secondo me ha senso procedere con un prototipo.
           </p>
           <p className="text-sm text-slate-200/80">
-            Se alla fine della call non vediamo un caso d’uso forte, va benissimo così: avrai una seconda opinione e qualche idea in più, senza nessun impegno.
+            Se alla fine della call non vediamo un caso d\'uso forte, va benissimo così: avrai una seconda opinione e qualche idea in più, senza nessun impegno.
           </p>
           <div className="flex flex-wrap gap-3">
             <CallModalTrigger className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-[13px] font-semibold text-slate-900 shadow-md transition hover:-translate-y-[1px] hover:shadow-lg">
