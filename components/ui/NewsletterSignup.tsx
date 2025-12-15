@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import { trackNewsletterSubscribe, trackNewsletterSubscribeSuccess, trackNewsletterSubscribeError } from '@/lib/analytics'
 
 interface NewsletterSignupProps {
     /** Where the signup is placed (for analytics) */
@@ -39,6 +40,9 @@ export function NewsletterSignup({
         setStatus('loading')
         setMessage('')
 
+        // Track subscribe attempt
+        trackNewsletterSubscribe(source)
+
         try {
             const res = await fetch('/api/newsletter/subscribe', {
                 method: 'POST',
@@ -54,14 +58,20 @@ export function NewsletterSignup({
                 setStatus('success')
                 setMessage('🎉 Iscrizione completata!')
                 setEmail('')
+                // Track successful subscription
+                trackNewsletterSubscribeSuccess(source)
             } else {
                 const data = await res.json().catch(() => ({}))
                 setStatus('error')
                 setMessage(data.error || 'Errore. Riprova.')
+                // Track subscription error
+                trackNewsletterSubscribeError(source)
             }
         } catch {
             setStatus('error')
             setMessage('Errore di connessione. Riprova.')
+            // Track subscription error
+            trackNewsletterSubscribeError(source)
         }
     }
 

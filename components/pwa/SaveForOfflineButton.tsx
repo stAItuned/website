@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useOfflineArticle } from '@/hooks/useOfflineArticle'
 import { usePWADetection } from '@/hooks/usePWADetection'
+import { trackArticleSavedOffline } from '@/lib/analytics'
 
 // Inline SVG Icons
 function DownloadIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -70,6 +71,8 @@ export function SaveForOfflineButton({
         if (success) {
             setJustSaved(true)
             setTimeout(() => setJustSaved(false), 3000)
+            // Track article saved for offline
+            trackArticleSavedOffline(articleSlug)
         }
     }
 

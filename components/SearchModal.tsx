@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
+import { trackSearchPerformed, trackSearchResultClicked } from '@/lib/analytics'
 
 interface SearchResult {
   slug: string
@@ -34,8 +35,8 @@ export function SearchModal() {
         const filtered = allPosts.filter((article: SearchResult) =>
           article.published !== false &&
           (article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           article.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           article.meta?.toLowerCase().includes(searchTerm.toLowerCase()))
+            article.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            article.meta?.toLowerCase().includes(searchTerm.toLowerCase()))
         )
         setFilteredArticles(filtered)
         setIsLoading(false)
@@ -58,12 +59,14 @@ export function SearchModal() {
     }
   }, [])
 
-  // Save search to recent searches
+  // Save search to recent searches and track
   const saveSearch = (term: string) => {
     if (term.trim() && typeof window !== 'undefined') {
       const updated = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5)
       setRecentSearches(updated)
       localStorage.setItem('recentSearches', JSON.stringify(updated))
+      // Track search performed
+      trackSearchPerformed(term)
     }
   }
 
@@ -111,10 +114,10 @@ export function SearchModal() {
   const formatDate = (dateString?: string) => {
     if (!dateString) return ''
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      day: '2-digit', 
-      month: 'short', 
-      year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
     })
   }
 
@@ -133,11 +136,11 @@ export function SearchModal() {
   return (
     <div className="fixed inset-0 z-[100] overflow-y-auto animate-fade-in">
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-300"
         onClick={closeSearch}
       />
-      
+
       {/* Modal */}
       <div className="flex min-h-full items-start justify-center p-4 text-center sm:p-0 pt-20">
         <div className="relative transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all duration-300 sm:my-8 sm:w-full sm:max-w-2xl animate-slide-up">
@@ -214,7 +217,7 @@ export function SearchModal() {
                   <p className="text-gray-500 dark:text-gray-400 mt-4 animate-pulse">Searching...</p>
                 </div>
               )}
-              
+
               {!isLoading && searchTerm && filteredArticles.length === 0 && (
                 <div className="text-center py-12 animate-fade-in">
                   <div className="text-6xl mb-4">🔍</div>
@@ -222,7 +225,7 @@ export function SearchModal() {
                   <p className="text-gray-500 dark:text-gray-400 text-sm">Try different keywords for &ldquo;{searchTerm}&rdquo;</p>
                 </div>
               )}
-              
+
               {!isLoading && filteredArticles.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 px-1 animate-fade-in">
@@ -237,13 +240,13 @@ export function SearchModal() {
                         href={`/learn/${(article.target || 'general').toLowerCase()}/${article.slug}`}
                         onClick={() => {
                           saveSearch(searchTerm)
+                          trackSearchResultClicked(searchTerm, article.slug)
                           closeSearch()
                         }}
-                        className={`block p-4 border-2 rounded-xl transition-all duration-300 animate-fade-in-up group ${
-                          isSelected 
-                            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md scale-[1.02]' 
+                        className={`block p-4 border-2 rounded-xl transition-all duration-300 animate-fade-in-up group ${isSelected
+                            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md scale-[1.02]'
                             : 'border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:shadow-md hover:scale-[1.01]'
-                        }`}
+                          }`}
                         style={{ animationDelay: `${index * 50}ms` }}
                         onMouseEnter={() => setSelectedIndex(index)}
                       >

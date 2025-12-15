@@ -25,7 +25,7 @@ import { CookieConsentProvider } from '@/components/cookies/CookieConsentProvide
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { ToastProvider } from '@/components/ui/Toast'
 import { TopLoadingBar } from '@/components/ui/PageProgress'
-import { PWALearnNavigator } from '@/components/pwa'
+import { PWALearnNavigator, PWAAnalyticsTracker } from '@/components/pwa'
 
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -238,6 +238,8 @@ export default function RootLayout({
                     <SearchModal />
                     {/* PWA navigation helper - shows "Torna a Learn" on non-learn pages */}
                     <PWALearnNavigator />
+                    {/* PWA Analytics - tracks standalone mode sessions */}
+                    <PWAAnalyticsTracker />
                   </SearchProvider>
                   <Suspense fallback={null}>
                     <FeedbackLoader />

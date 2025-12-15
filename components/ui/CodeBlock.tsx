@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { useToast } from './Toast'
+import { trackArticleCopyCode } from '@/lib/analytics'
 
 interface CodeBlockProps {
   code: string
@@ -11,6 +12,8 @@ interface CodeBlockProps {
   highlightLines?: number[]
   maxHeight?: number
   children?: string
+  /** Article slug for analytics tracking */
+  articleSlug?: string
 }
 
 /**
@@ -23,7 +26,8 @@ export function CodeBlock({
   showLineNumbers = true,
   highlightLines = [],
   maxHeight = 400,
-  children
+  children,
+  articleSlug
 }: CodeBlockProps) {
   const code = children || initialCode
   const [isCopied, setIsCopied] = useState(false)
@@ -33,8 +37,8 @@ export function CodeBlock({
   const codeRef = useRef<HTMLElement>(null)
 
   const lines = code?.split('\n') || []
-  const needsExpansion = codeRef.current 
-    ? codeRef.current.scrollHeight > maxHeight 
+  const needsExpansion = codeRef.current
+    ? codeRef.current.scrollHeight > maxHeight
     : lines.length > 15
 
   const handleCopy = async () => {
@@ -43,6 +47,10 @@ export function CodeBlock({
       setIsCopied(true)
       showToast('Code copied to clipboard!', 'success', 2000)
       setTimeout(() => setIsCopied(false), 2000)
+      // Track code copy event
+      if (articleSlug) {
+        trackArticleCopyCode(articleSlug, language)
+      }
     } catch (err) {
       showToast('Failed to copy code', 'error', 2000)
     }
@@ -78,7 +86,7 @@ export function CodeBlock({
             {language.toUpperCase()}
           </span>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {needsExpansion && (
             <button
@@ -86,17 +94,17 @@ export function CodeBlock({
               className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-all duration-200 group/expand"
               title={isExpanded ? 'Collapse' : 'Expand'}
             >
-              <svg 
-                className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} 
-                fill="none" 
-                viewBox="0 0 24 24" 
+              <svg
+                className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
           )}
-          
+
           <button
             onClick={handleCopy}
             className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-all duration-200 group/copy"
@@ -116,15 +124,15 @@ export function CodeBlock({
       </div>
 
       {/* Code Content */}
-      <div 
+      <div
         className="relative overflow-hidden"
-        style={{ 
+        style={{
           maxHeight: isExpanded ? 'none' : `${maxHeight}px`,
           transition: 'max-height 0.3s ease-out'
         }}
       >
         <pre className="overflow-x-auto p-4 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-          <code 
+          <code
             ref={codeRef}
             className="block text-sm font-mono"
           >
@@ -132,17 +140,16 @@ export function CodeBlock({
               const lineNumber = index + 1
               const isHighlighted = highlightLines.includes(lineNumber)
               const isHovered = hoveredLine === lineNumber
-              
+
               return (
                 <div
                   key={index}
-                  className={`transition-all duration-200 ${
-                    isHighlighted 
-                      ? 'bg-primary-100 dark:bg-primary-900/30 border-l-4 border-primary-600 pl-3' 
+                  className={`transition-all duration-200 ${isHighlighted
+                      ? 'bg-primary-100 dark:bg-primary-900/30 border-l-4 border-primary-600 pl-3'
                       : isHovered
-                      ? 'bg-gray-100 dark:bg-gray-800'
-                      : ''
-                  }`}
+                        ? 'bg-gray-100 dark:bg-gray-800'
+                        : ''
+                    }`}
                   onMouseEnter={() => setHoveredLine(lineNumber)}
                   onMouseLeave={() => setHoveredLine(null)}
                 >
@@ -157,7 +164,7 @@ export function CodeBlock({
             })}
           </code>
         </pre>
-        
+
         {/* Fade overlay when collapsed */}
         {needsExpansion && !isExpanded && (
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent pointer-events-none" />

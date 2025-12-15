@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { trackPWAEvent } from './usePWAAnalytics'
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>
@@ -15,7 +16,7 @@ interface PWAInstallState {
     /** Whether the user has already installed the app */
     isInstalled: boolean
     /** Trigger the native install prompt */
-    promptInstall: () => Promise<boolean>
+    promptInstall: (source?: string) => Promise<boolean>
     /** Whether the user previously dismissed the prompt */
     wasDismissed: boolean
 }
@@ -28,12 +29,21 @@ const DISMISSED_EXPIRY_DAYS = 7
  * 
  * Captures the beforeinstallprompt event and provides a way to trigger it.
  * Also tracks if user previously dismissed the prompt.
+ * 
+ * Analytics events tracked:
+ * - pwa_install_prompt_shown: When the install prompt becomes available
+ * - pwa_install_accepted: User accepted the install
+ * - pwa_install_dismissed: User dismissed the install
+ * - pwa_app_installed: App was successfully installed
  */
 export function usePWAInstall(): PWAInstallState {
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
     const [isInstalled, setIsInstalled] = useState(false)
     const [wasDismissed, setWasDismissed] = useState(false)
     const [canInstall, setCanInstall] = useState(false)
+
+    // Track if we've already sent the prompt_shown event
+    const hasTrackedPrompt = useRef(false)
 
     useEffect(() => {
         // Check if browser supports PWA installation (client-side only)
@@ -60,6 +70,14 @@ export function usePWAInstall(): PWAInstallState {
             e.preventDefault()
             setDeferredPrompt(e as BeforeInstallPromptEvent)
             setCanInstall(true)
+
+            // Track that install prompt is available (once per session)
+            if (!hasTrackedPrompt.current) {
+                hasTrackedPrompt.current = true
+                trackPWAEvent('pwa_install_prompt_shown', {
+                    page: window.location.pathname,
+                })
+            }
         }
 
         // Detect when app is installed
@@ -71,6 +89,11 @@ export function usePWAInstall(): PWAInstallState {
             } catch {
                 // Ignore localStorage errors
             }
+
+            // Track successful installation
+            trackPWAEvent('pwa_app_installed', {
+                page: window.location.pathname,
+            })
         }
 
         window.addEventListener('beforeinstallprompt', handleBeforeInstall)
@@ -82,7 +105,7 @@ export function usePWAInstall(): PWAInstallState {
         }
     }, [])
 
-    const promptInstall = useCallback(async (): Promise<boolean> => {
+    const promptInstall = useCallback(async (source?: string): Promise<boolean> => {
         if (!deferredPrompt) return false
 
         try {
@@ -92,6 +115,13 @@ export function usePWAInstall(): PWAInstallState {
             if (outcome === 'accepted') {
                 setIsInstalled(true)
                 setDeferredPrompt(null)
+
+                // Track accepted install
+                trackPWAEvent('pwa_install_accepted', {
+                    source: source || 'prompt',
+                    page: window.location.pathname,
+                })
+
                 return true
             } else {
                 // User dismissed - save with timestamp
@@ -101,6 +131,13 @@ export function usePWAInstall(): PWAInstallState {
                     // Ignore localStorage errors
                 }
                 setWasDismissed(true)
+
+                // Track dismissed install
+                trackPWAEvent('pwa_install_dismissed', {
+                    source: source || 'prompt',
+                    page: window.location.pathname,
+                })
+
                 return false
             }
         } catch (error) {
