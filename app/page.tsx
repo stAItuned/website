@@ -1,7 +1,6 @@
 import { allPosts } from '@/lib/contentlayer'
-import { fetchGlobalAnalytics } from '@/lib/analytics-server'
-import { getProductsForHomepage } from '@/lib/products'
-import { HomeHeroWithAnalytics } from '@/components/home/HomeHeroWithAnalytics'
+import { getAllProducts } from '@/lib/products'
+import { HomeHero } from '@/components/home/HomeHero'
 import { HomeKpi } from '@/components/home/HomeKpi'
 import { HomeAnimatedSections } from '@/components/home/HomeAnimatedSections'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -13,9 +12,6 @@ export const revalidate = 86400 // ISR ogni giorno
 export default async function HomePage() {
   const publishedPosts = allPosts.filter(post => post.published !== false)
 
-  // Fetch analytics server-side during ISR
-  const globalAnalytics = await fetchGlobalAnalytics()
-
   const totalArticles = publishedPosts.length
   const uniqueAuthors = new Set<string>()
   publishedPosts.forEach(post => {
@@ -24,6 +20,9 @@ export default async function HomePage() {
     }
   })
   const totalWriters = uniqueAuthors.size
+
+  // Get total product count
+  const totalProducts = getAllProducts().length
 
   // Get the latest 20 articles for the ticker, sorted by date
   const sevenDaysAgo = new Date()
@@ -85,7 +84,8 @@ export default async function HomePage() {
   ]
 
   // Get products from centralized source
-  const productsForHome = getProductsForHomepage(3)
+  const allProductsList = getAllProducts()
+  const productsForHome = allProductsList.slice(0, 3)
   const productShortlist = productsForHome.map(product => ({
     slug: `prodotti/${product.slug}`,
     title: product.title,
@@ -131,16 +131,15 @@ export default async function HomePage() {
     <PageTransition>
       {/* pb-32 sm:pb-36 to account for fixed ticker at bottom */}
       <main className="min-h-screen pb-32 sm:pb-36">
-        {/* Hero Section */}
-        <HomeHeroWithAnalytics
-          totalArticles={totalArticles}
-          totalWriters={totalWriters}
-          initialActiveUsers={globalAnalytics.totalStats.users}
-          initialSessions={globalAnalytics.totalStats.sessions}
-        />
+        {/* Hero Section - simplified, stats moved to KPI block */}
+        <HomeHero />
 
-        {/* KPI block */}
-        <HomeKpi articleCount={totalArticles} writerCount={totalWriters} />
+        {/* KPI block - main stats section */}
+        <HomeKpi
+          articleCount={totalArticles}
+          writerCount={totalWriters}
+          productCount={totalProducts}
+        />
 
         {/* Animated sections: Ticker, Dual tracks, Article shortlist, Next step */}
         <HomeAnimatedSections

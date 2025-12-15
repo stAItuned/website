@@ -6,9 +6,10 @@ import { ScrollReveal } from '@/components/ui/Animations'
 interface HomeKpiProps {
   articleCount: number
   writerCount: number
+  productCount: number
 }
 
-export function HomeKpi({ articleCount, writerCount }: HomeKpiProps) {
+export function HomeKpi({ articleCount, writerCount, productCount }: HomeKpiProps) {
   const { data, loading } = useFastAnalytics()
   const users = data?.users ?? 0
   const usersLabel = loading && data === null
@@ -32,7 +33,7 @@ export function HomeKpi({ articleCount, writerCount }: HomeKpiProps) {
       description: 'Persone che vogliono portare l’AI nel lavoro di tutti i giorni.'
     },
     {
-      value: '10+',
+      value: `${productCount}`,
       label: 'Prototipi AI sviluppati',
       description: 'Strumenti reali per testare sul campo cosa può fare l’AI.'
     },

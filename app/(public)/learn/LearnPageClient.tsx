@@ -40,9 +40,11 @@ interface LearnPageClientProps {
   }
   latestArticles: Article[]
   tickerArticles?: TickerArticle[]
+  /** Total published articles count (for consistent stats with homepage) */
+  totalArticleCount?: number
 }
 
-export default function LearnPageClient({ targets, articlesByTarget, latestArticles, tickerArticles }: LearnPageClientProps) {
+export default function LearnPageClient({ targets, articlesByTarget, latestArticles, tickerArticles, totalArticleCount }: LearnPageClientProps) {
   const searchParams = useSearchParams()
   const target = searchParams.get('target')
   const targetSlug = useMemo(() => target?.toLowerCase().split('/')?.[0] || null, [target])
@@ -289,8 +291,8 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
               <button
                 onClick={() => setIsTickerPaused(!isTickerPaused)}
                 className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all shadow-sm ${isTickerPaused
-                    ? 'bg-primary-50 border-primary-200 text-primary-600 dark:bg-primary-900/30 dark:border-primary-700 dark:text-primary-400'
-                    : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600'
+                  ? 'bg-primary-50 border-primary-200 text-primary-600 dark:bg-primary-900/30 dark:border-primary-700 dark:text-primary-400'
+                  : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600'
                   }`}
                 aria-label={isTickerPaused ? 'Play ticker' : 'Pause ticker'}
               >
@@ -484,7 +486,7 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto pt-8">
         {[
           { label: 'Always Free', value: '100%', icon: '🆓', highlight: true },
-          { label: 'Total Articles', value: Object.values(articlesByTarget).flat().length, icon: '📚' },
+          { label: 'Total Articles', value: totalArticleCount ?? Object.values(articlesByTarget).flat().length, icon: '📚' },
           { label: 'Learning Paths', value: targets.length.toString(), icon: '🎯' },
           { label: 'Expert Writers', value: '10+', icon: '✍️' }
         ].map((stat, idx) => (

@@ -56,6 +56,9 @@ export default function LearnPage() {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 6)
 
+  // Total published articles count (for stats consistency with homepage)
+  const totalPublishedArticles = allPosts.filter(post => post.published !== false).length
+
   // Get articles for the ticker (latest 15 articles)
   const tickerArticles = allPosts
     .filter(post => post.published !== false)
@@ -91,6 +94,7 @@ export default function LearnPage() {
             articlesByTarget={articlesByTarget}
             latestArticles={latestArticles}
             tickerArticles={tickerArticles}
+            totalArticleCount={totalPublishedArticles}
           />
         </Suspense>
       </section>

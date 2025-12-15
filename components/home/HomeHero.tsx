@@ -1,54 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { HeroAnimatedBackground } from './HeroAnimatedBackground'
-import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
-
-interface HomeHeroProps {
-  totalArticles: number
-  totalWriters: number
-  activeUsers: number | string
-  sessions: number | string
-}
 
 /**
- * Enhanced HomeHero component with:
+ * Simplified HomeHero component with:
  * - Animated floating background orbs
- * - Animated stat counters
  * - Improved visual hierarchy
  * - Better CTAs with micro-interactions
+ * 
+ * Stats are now shown in the dedicated HomeKpi section below.
  */
-export function HomeHero({
-  totalArticles,
-  totalWriters,
-  activeUsers,
-  sessions
-}: HomeHeroProps) {
-  // Stats configuration
-  const stats = [
-    {
-      label: 'Articoli',
-      value: totalArticles,
-      icon: '📚',
-      href: '/learn'
-    },
-    {
-      label: 'Utenti',
-      value: typeof activeUsers === 'number' ? activeUsers : 0,
-      icon: '👥',
-    },
-    {
-      label: 'Sessioni',
-      value: typeof sessions === 'number' ? sessions : 0,
-      icon: '📊',
-    },
-    {
-      label: 'Contributor',
-      value: totalWriters,
-      icon: '✍️',
-      href: '/meet'
-    },
-  ]
-
+export function HomeHero() {
   return (
     <section className="relative min-h-[90vh] overflow-hidden shadow-2xl">
       {/* Background Image */}
@@ -118,50 +80,8 @@ export function HomeHero({
             </ul>
           </div>
 
-          {/* Stats Row */}
-          <div className="flex flex-wrap gap-4 pt-4 animate-fade-in" style={{ animationDelay: '500ms' }}>
-            {stats.map((stat, index) => {
-              const statContent = (
-                <>
-                  <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">
-                    {stat.icon}
-                  </span>
-                  <span className="text-2xl font-bold text-amber-400">
-                    {typeof stat.value === 'number' ? (
-                      <AnimatedCounter
-                        value={stat.value}
-                        duration={1500 + index * 200}
-                        suffix=""
-                      />
-                    ) : stat.value}
-                  </span>
-                  <span className="text-xs text-slate-300 uppercase tracking-wider">
-                    {stat.label}
-                  </span>
-                </>
-              )
-
-              return stat.href ? (
-                <Link
-                  key={stat.label}
-                  href={stat.href}
-                  className="hero-stat-card group cursor-pointer"
-                >
-                  {statContent}
-                </Link>
-              ) : (
-                <div
-                  key={stat.label}
-                  className="hero-stat-card group cursor-default"
-                >
-                  {statContent}
-                </div>
-              )
-            })}
-          </div>
-
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in" style={{ animationDelay: '600ms' }}>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
             <Link
               href="/aziende"
               className="btn-brand-primary text-lg group"
