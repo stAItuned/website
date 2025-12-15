@@ -1,116 +1,137 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { allPosts, allTeams } from '@/lib/contentlayer'
-import { fetchArticleAnalytics } from '@/lib/analytics-server'
+import { allPosts } from '@/lib/contentlayer'
+import { fetchMultipleArticlesAnalytics } from '@/lib/analytics-server'
+import { getAuthorByEmail } from '@/lib/getAuthorByEmail'
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
     try {
-        const body = await request.json()
-        const { email, page = 1, limit = 6 } = body
+        const { searchParams } = new URL(request.url)
+        const email = searchParams.get('email')
+        const page = parseInt(searchParams.get('page') || '1')
+        const limit = parseInt(searchParams.get('limit') || '6')
+        const sortBy = searchParams.get('sortBy') || 'date'
+        const sortOrder = searchParams.get('sortOrder') || 'desc'
 
         if (!email) {
-            return NextResponse.json(
-                { success: false, error: 'Email is required' },
-                { status: 400 }
-            )
+            return NextResponse.json({ success: false, error: 'Email is required' }, { status: 400 })
         }
 
-        // 1. Find author by email
-        const normalizedEmail = email.toLowerCase().trim()
-        const teamMember = allTeams.find((member: any) =>
-            member.email?.toLowerCase().trim() === normalizedEmail
-        )
+        // 1. Find the author
+        const authorName = getAuthorByEmail(email)
 
-        if (!teamMember || !teamMember.name) {
-            return NextResponse.json({
-                success: true,
-                data: [], // No author found for this email
-                pagination: {
-                    total: 0,
-                    pages: 0,
-                    current: 1
-                },
-                message: 'User is not a registered author'
-            })
-        }
-
-        const authorName = teamMember.name
-
-        // 2. Find articles by author
-        const allAuthorArticles = allPosts
-            .filter(post => post.author === authorName && post.published !== false)
-            .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())
-
-        const totalArticles = allAuthorArticles.length
-
-        if (totalArticles === 0) {
+        if (!authorName) {
             return NextResponse.json({
                 success: true,
                 data: [],
                 pagination: {
                     total: 0,
                     pages: 0,
-                    current: 1
-                }
+                    current: page
+                },
+                author: null
             })
         }
 
-        // Pagination values
-        const currentPage = Math.max(1, parseInt(page.toString()))
-        const itemsPerPage = Math.max(1, parseInt(limit.toString()))
-        const totalPages = Math.ceil(totalArticles / itemsPerPage)
+        // 2. Get ALL articles by this author
+        const authorArticles = allPosts.filter(post => {
+            // Check if post has an author field and it matches
+            return post.author === authorName
+        })
 
-        // Slice articles for current page
-        const startIndex = (currentPage - 1) * itemsPerPage
-        const endIndex = startIndex + itemsPerPage
-        const paginatedArticles = allAuthorArticles.slice(startIndex, endIndex)
+        // 3. Batch fetch analytics for ALL articles (needed for sorting)
+        // We only need to fetch analytics if we are sorting by an analytics metric
+        // OR if we want to display analytics for all items (which we do)
+        const slugs = authorArticles.map(a => a.slug)
+        const analyticsMap = await fetchMultipleArticlesAnalytics(slugs)
 
-        // 3. Fetch analytics for these articles
-        // We fetch in parallel using the existing server-side function
-        const articlesWithAnalytics = await Promise.all(
-            paginatedArticles.map(async (article) => {
-                const analytics = await fetchArticleAnalytics(article.slug)
+        // 4. Combine data
+        const articlesWithAnalytics = authorArticles.map(article => {
+            const analytics = analyticsMap[article.slug] || {
+                pageViews: 0,
+                users: 0,
+                sessions: 0,
+                avgTimeOnPage: 0,
+                bounceRate: 0,
+                likes: 0,
+                updatedAt: null
+            }
 
-                // Resolve cover image path
-                let cover = article.cover
-                if (cover && !cover.startsWith('http') && !cover.startsWith('/')) {
-                    // It's a relative path, prepend the imagePath
-                    // Remove potential leading ./
-                    const cleanCover = cover.replace(/^\.\//, '')
-                    cover = `${article.imagePath}/${cleanCover}`
-                }
+            // Resolve cover image path
+            let cover = article.cover
+            if (cover && !cover.startsWith('http') && !cover.startsWith('/')) {
+                const cleanCover = cover.replace(/^\.\//, '')
+                cover = `${article.imagePath}/${cleanCover}`
+            }
 
-                return {
-                    title: article.title,
-                    slug: article.slug,
-                    cover: cover,
-                    date: article.date,
-                    target: article.target,
-                    readingTime: article.readingTime,
-                    url: article.url,
-                    analytics
-                }
-            })
-        )
+            return {
+                title: article.title,
+                slug: article.slug,
+                cover: cover,
+                date: article.date,
+                target: article.target,
+                readingTime: article.readingTime,
+                url: article.url,
+                analytics
+            }
+        })
+
+        // 5. Sort
+        articlesWithAnalytics.sort((a, b) => {
+            let valA, valB
+
+            switch (sortBy) {
+                case 'views':
+                    valA = a.analytics.pageViews
+                    valB = b.analytics.pageViews
+                    break
+                case 'readers':
+                    valA = a.analytics.users
+                    valB = b.analytics.users
+                    break
+                case 'time':
+                    valA = a.analytics.avgTimeOnPage
+                    valB = b.analytics.avgTimeOnPage
+                    break
+                case 'date':
+                default:
+                    valA = new Date(a.date).getTime()
+                    valB = new Date(b.date).getTime()
+                    break
+            }
+
+            if (sortOrder === 'asc') {
+                return valA > valB ? 1 : -1
+            } else {
+                return valA < valB ? 1 : -1
+            }
+        })
+
+        // 6. Paginate
+        const total = articlesWithAnalytics.length
+        const totalPages = Math.ceil(total / limit)
+        const startIndex = (page - 1) * limit
+        const endIndex = startIndex + limit
+        const paginatedData = articlesWithAnalytics.slice(startIndex, endIndex)
 
         return NextResponse.json({
             success: true,
-            data: articlesWithAnalytics,
+            data: paginatedData,
             pagination: {
-                total: totalArticles,
+                total,
                 pages: totalPages,
-                current: currentPage
+                current: page
             },
             author: {
-                name: authorName,
-                role: teamMember.title
+                name: authorName
+            }
+        }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300'
             }
         })
 
     } catch (error) {
-        console.error('Error fetching author articles:', error)
-        return NextResponse.json(
-            { success: false, error: 'Internal server error' },
-            { status: 500 }
-        )
+        console.error('Error fetching account articles:', error)
+        return NextResponse.json({ success: false, error: 'Failed to fetch articles' }, { status: 500 })
     }
 }
