@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
   const { target, slug } = await params;
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com';
   // Find the article
-  const article = allPosts.find((post) => 
+  const article = allPosts.find((post) =>
     post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
   );
   if (!article) {
@@ -39,16 +39,20 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
     };
   }
   const url = `${base}/learn/${article.target}/${article.slug}`;
-  
+
   // Use actual cover image if available, otherwise use default OG image
   // Note: article.imagePath contains the correct path to the article directory
   let ogImage: string;
   let imageType: string;
-  
+
   if (article.cover) {
-    // Build the full image URL - article.imagePath is already '/content/articles/${slug}'
-    ogImage = `${base}${article.imagePath}/${article.cover}`;
-    
+    if (article.cover.startsWith('http://') || article.cover.startsWith('https://')) {
+      ogImage = article.cover;
+    } else {
+      // Build the full image URL - article.imagePath is already '/content/articles/${slug}'
+      ogImage = `${base}${article.imagePath}/${article.cover}`;
+    }
+
     // Determine the correct MIME type based on file extension
     if (article.cover.endsWith('.png')) {
       imageType = 'image/png';
@@ -64,12 +68,12 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
     ogImage = `${base}/learn/${article.target}/${article.slug}/opengraph-image`;
     imageType = 'image/png';
   }
-  
+
   // Ensure https (LinkedIn requirement)
   ogImage = ogImage.replace('http://', 'https://');
-  
+
   console.log(`[generateMetadata] Article: ${article.slug}, OG Image: ${ogImage}, Type: ${imageType}`);
-  
+
   return {
     title: article.seoTitle ?? article.title,
     description: article.seoDescription ?? article.meta ?? article.title,
@@ -86,7 +90,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
       authors: article.author ? [article.author] : undefined,
       section: article.target ?? 'AI',
       tags: article.topics,
-      images: [{ 
+      images: [{
         url: ogImage,
         secureUrl: ogImage,
         alt: article.title,
@@ -111,7 +115,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   // Debug: log on mount
   console.log('[ArticlePage] MOUNTED', { target, slug })
   // Find the article
-  const article = allPosts.find((post) => 
+  const article = allPosts.find((post) =>
     post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
   )
   if (!article) {
@@ -120,8 +124,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   // Find related articles
   const getRelatedArticles = () => {
     // Filter articles by same target, excluding current article
-    let relatedArticlesByTarget = allPosts.filter((post) => 
-      post.target?.toLowerCase() === target.toLowerCase() && 
+    let relatedArticlesByTarget = allPosts.filter((post) =>
+      post.target?.toLowerCase() === target.toLowerCase() &&
       post.slug !== slug &&
       post.published !== false
     )
@@ -152,10 +156,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   // Extract TOC from markdown using shared function
   const toc = extractTOC(article.body.raw)
   const authorData = article.author ? await getAuthorData(article.author) : null
-  
+
   // Fetch analytics server-side during SSR/ISR (no client-side API call needed!)
   const analytics = await fetchArticleAnalytics(slug)
-  
+
   return (
     <ArticlePageClient
       coverImage={coverImage}
