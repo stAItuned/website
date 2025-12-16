@@ -100,9 +100,10 @@ function TickerItem({
       aria-label={`Read article: ${article.title}`}
     >
       {isNew && (
-        <span className={tickerConfig.badges.new.className}>
-          NEW
-        </span>
+        <span
+          className={tickerConfig.badges.new.className}
+          aria-label="New article"
+        />
       )}
 
       {isFeatured && (

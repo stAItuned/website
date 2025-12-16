@@ -49,7 +49,10 @@ export const tickerConfig = {
     // Badge styling
     badges: {
         new: {
-            className: 'absolute top-1 right-1 px-1.5 py-0.5 text-[7px] font-bold uppercase tracking-wider bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded shadow-sm z-10',
+            // Modern dot indicator - subtle but noticeable, follows UX best practices
+            className: 'absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full shadow-sm z-10 ring-2 ring-white dark:ring-slate-800',
+            // Alternative pill style if text is needed
+            pillClassName: 'absolute top-1 right-1 px-1 py-px text-[6px] font-medium uppercase bg-emerald-500 text-white rounded-full z-10',
         },
         featured: {
             className: 'absolute top-1 left-1 w-4 h-4 flex items-center justify-center bg-amber-400 text-amber-900 rounded shadow-sm z-10',
