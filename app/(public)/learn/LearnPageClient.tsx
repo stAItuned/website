@@ -9,6 +9,7 @@ import { ContributorCTA } from '@/components/ui/ContributorCTA'
 import { PWAInstallInline } from '@/components/pwa'
 import { useSearchParams } from 'next/navigation'
 import { ArticleTicker, type ArticleTickerRef, type TickerArticle } from '@/components/ui/ArticleTicker'
+import { trackTargetLevelSelected } from '@/lib/analytics'
 
 interface Target {
   name: string
@@ -388,6 +389,7 @@ export default function LearnPageClient({ targets, articlesByTarget, latestArtic
             <Link
               key={target.slug}
               href={`/learn?target=${target.slug}`}
+              onClick={() => trackTargetLevelSelected(target.slug as 'newbie' | 'midway' | 'expert')}
               className="group relative"
             >
               <div className="relative h-full flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow transition-all duration-300 overflow-hidden hover:shadow-lg hover:scale-[1.01] hover:border-slate-300 dark:hover:border-slate-700">
