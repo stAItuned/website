@@ -28,6 +28,8 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
     const name = (formData.get('name') as string) || ''
     const email = (formData.get('email') as string) || ''
     const company = (formData.get('company') as string) || ''
+    const preferredDate = (formData.get('preferredDate') as string) || ''
+    const preferredTime = (formData.get('preferredTime') as string) || ''
     const message = (formData.get('message') as string) || ''
     const website = (formData.get('website') as string) || '' // honeypot
     const consent = (formData.get('consent') as string) === 'on'
@@ -52,6 +54,8 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
           name,
           email,
           company,
+          preferredDate,
+          preferredTime,
           message,
           website,
           consent,
@@ -134,116 +138,181 @@ export function ContactCtaWithModal({ isOpen: controlledIsOpen, setIsOpen: contr
                 </button>
               </div>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-              {/* Honeypot field (bots will fill this) */}
-              <input type="hidden" name="website" />
-              <div className="grid gap-4 sm:grid-cols-2">
+              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                {/* Honeypot field (bots will fill this) */}
+                <input type="hidden" name="website" />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Nome e cognome
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="company"
+                      className="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Azienda / ruolo
+                    </label>
+                    <input
+                      id="company"
+                      name="company"
+                      type="text"
+                      className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="email"
                     className="text-xs font-medium uppercase tracking-wide text-slate-400"
                   >
-                    Nome e cognome
+                    Email di contatto
                   </label>
                   <input
-                    id="name"
-                    name="name"
-                    type="text"
+                    id="email"
+                    name="email"
+                    type="email"
                     required
                     className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
                   />
                 </div>
+
+                {/* Date and Time Slot Selection */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="preferredDate"
+                      className="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      📅 Data preferita
+                    </label>
+                    <input
+                      id="preferredDate"
+                      name="preferredDate"
+                      type="date"
+                      min={new Date().toISOString().split('T')[0]}
+                      className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="preferredTime"
+                      className="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      🕐 Fascia oraria
+                    </label>
+                    <select
+                      id="preferredTime"
+                      name="preferredTime"
+                      className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
+                    >
+                      <option value="">Seleziona orario</option>
+                      <option value="09:00">09:00</option>
+                      <option value="09:15">09:15</option>
+                      <option value="09:30">09:30</option>
+                      <option value="09:45">09:45</option>
+                      <option value="10:00">10:00</option>
+                      <option value="10:15">10:15</option>
+                      <option value="10:30">10:30</option>
+                      <option value="10:45">10:45</option>
+                      <option value="11:00">11:00</option>
+                      <option value="11:15">11:15</option>
+                      <option value="11:30">11:30</option>
+                      <option value="11:45">11:45</option>
+                      <option value="14:00">14:00</option>
+                      <option value="14:15">14:15</option>
+                      <option value="14:30">14:30</option>
+                      <option value="14:45">14:45</option>
+                      <option value="15:00">15:00</option>
+                      <option value="15:15">15:15</option>
+                      <option value="15:30">15:30</option>
+                      <option value="15:45">15:45</option>
+                      <option value="16:00">16:00</option>
+                      <option value="16:15">16:15</option>
+                      <option value="16:30">16:30</option>
+                      <option value="16:45">16:45</option>
+                      <option value="17:00">17:00</option>
+                      <option value="17:15">17:15</option>
+                      <option value="17:30">17:30</option>
+                      <option value="17:45">17:45</option>
+                    </select>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-400 -mt-2">
+                  Indica quando preferisci essere contattato. Confermeremo via email.
+                </p>
+
                 <div>
                   <label
-                    htmlFor="company"
+                    htmlFor="message"
                     className="text-xs font-medium uppercase tracking-wide text-slate-400"
                   >
-                    Azienda / ruolo
+                    Cosa vorresti esplorare nella call?
                   </label>
-                  <input
-                    id="company"
-                    name="company"
-                    type="text"
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={3}
                     className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
+                    placeholder="Esempio: vogliamo capire se ha senso costruire un assistente AI interno per il team commerciale..."
                   />
                 </div>
-              </div>
 
-              <div>
-                <label
-                  htmlFor="email"
-                  className="text-xs font-medium uppercase tracking-wide text-slate-400"
-                >
-                  Email di contatto
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className="text-xs font-medium uppercase tracking-wide text-slate-400"
-                >
-                  Cosa vorresti esplorare nella call?
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 outline-none focus:border-amber-500 focus:ring-amber-300/50"
-                  placeholder="Esempio: vogliamo capire se ha senso costruire un assistente AI interno per il team commerciale..."
-                />
-              </div>
-
-              <div className="mt-2 space-y-3">
-                <div className="flex items-start gap-3">
-                  <input id="consent" name="consent" type="checkbox" className="mt-1 h-4 w-4 rounded" />
-                  <label htmlFor="consent" className="text-xs text-slate-400">
-                    Acconsento al trattamento dei dati secondo la{' '}
-                    <Link className="text-amber-500 underline" href="/privacy">
-                      privacy policy
-                    </Link>
-                    .
-                  </label>
+                <div className="mt-2 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <input id="consent" name="consent" type="checkbox" className="mt-1 h-4 w-4 rounded" />
+                    <label htmlFor="consent" className="text-xs text-slate-400">
+                      Acconsento al trattamento dei dati secondo la{' '}
+                      <Link className="text-amber-500 underline" href="/privacy">
+                        privacy policy
+                      </Link>
+                      .
+                    </label>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <input id="marketingConsent" name="marketingConsent" type="checkbox" className="mt-1 h-4 w-4 rounded" />
+                    <label htmlFor="marketingConsent" className="text-xs text-slate-400">
+                      Desidero ricevere aggiornamenti, articoli e inviti agli eventi (marketing) da stAItuned.
+                    </label>
+                  </div>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsOpen(false)}
+                      className="rounded-full px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      Annulla
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSending}
+                      className="rounded-full bg-slate-900 px-5 py-2 text-xs font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 disabled:opacity-60"
+                    >
+                      {isSending ? 'Invio...' : 'Invia la richiesta'}
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <input id="marketingConsent" name="marketingConsent" type="checkbox" className="mt-1 h-4 w-4 rounded" />
-                  <label htmlFor="marketingConsent" className="text-xs text-slate-400">
-                    Desidero ricevere aggiornamenti, articoli e inviti agli eventi (marketing) da stAItuned.
-                  </label>
-                </div>
-                <div className="flex flex-wrap justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsOpen(false)}
-                    className="rounded-full px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100"
-                  >
-                    Annulla
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSending}
-                    className="rounded-full bg-slate-900 px-5 py-2 text-xs font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 disabled:opacity-60"
-                  >
-                    {isSending ? 'Invio...' : 'Invia la richiesta'}
-                  </button>
-                </div>
-              </div>
-            </form>
-                <p className="mt-4 text-xs text-slate-500">
-                  Consulta la <Link className="text-amber-500 underline" href="/privacy">privacy policy</Link> per capire come utilizziamo le informazioni della call e di questo form.
-                </p>
+              </form>
+              <p className="mt-4 text-xs text-slate-500">
+                Consulta la <Link className="text-amber-500 underline" href="/privacy">privacy policy</Link> per capire come utilizziamo le informazioni della call e di questo form.
+              </p>
             </div>
           </div>,
           document.body
         )
       }
-  </>
+    </>
   )
 }

@@ -15,7 +15,7 @@ interface ShortlistItemDef {
   href?: string
 }
 
-interface ColumnShortlist {
+export interface ColumnShortlist {
   heading: string
   description: string
   linkLabel: string
@@ -87,13 +87,13 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(251,191,36,0.12),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(255,255,255,0.08),transparent_30%)]" />
         <div className="relative space-y-3 text-center text-white">
           <span className="inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-amber-300 shadow-sm">
-            Content hub
+            Playbook & Demo
           </span>
           <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-            Cosa trovi su <span className="text-amber-300">stAItuned</span>
+            Ultimi playbook e demo <span className="text-amber-300">(cose applicabili)</span>
           </h2>
           <p className="text-base md:text-lg text-slate-100/90 max-w-3xl mx-auto">
-            Risorse vere e articoli cliccabili per chi deve decidere dove usare l’AI in azienda, per chi vuole imparare, e per scoprire i nostri prodotti.
+            Meno news, più guide operative e casi reali. Articoli per chi deve decidere e per chi costruisce.
           </p>
         </div>
       </div>
@@ -109,11 +109,10 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
                   key={column.heading}
                   type="button"
                   onClick={() => setActiveTab(index)}
-                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                    isActive
-                      ? 'bg-slate-900 text-white shadow-md dark:bg-white dark:text-slate-900'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
-                  }`}
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${isActive
+                    ? 'bg-slate-900 text-white shadow-md dark:bg-white dark:text-slate-900'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+                    }`}
                   aria-pressed={isActive}
                 >
                   {column.heading}
@@ -229,62 +228,62 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
           </FadeIn>
           <StaggerContainer staggerDelay={100}>
             <div className="grid gap-2.5 md:grid-cols-3">
-          {posts
-            .filter((post) => post.published !== false)
-            .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
-            .slice(0, 3)
-            .map((post) => {
-              const href = getArticleHref(post, post.slug)
-              const formattedDate = formatDate(post.date)
-              const readingTime = post.readingTime ? `${post.readingTime} min` : null
-              const badgeText = post.target ?? 'General'
-              const coverSrc = getCoverSrc(post)
-              return (
-                <FadeIn key={post.slug}>
-                <Link
-                  href={href}
-                  className="group block overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60"
-                >
-                  <div className="relative aspect-[5/4] w-full overflow-hidden border-b border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-800/60">
-                    {coverSrc ? (
-                      <Image
-                        src={coverSrc}
-                        alt={post.title}
-                        fill
-                        sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                        priority={false}
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-gradient-to-br from-amber-50 via-white to-slate-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800" />
-                    )}
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent" />
-                  </div>
-                  <div className="p-3.5">
-                    <div className="flex items-center justify-between gap-2.5">
-                      <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
-                        {badgeText}
-                      </span>
-                      {readingTime && (
-                        <span className="text-[10px] font-medium text-amber-700 bg-amber-100 px-2 py-1 rounded-full shadow-sm">
-                          {readingTime}
-                        </span>
-                      )}
-                    </div>
-                    <h4 className="mt-1.5 text-sm font-bold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2">
-                      {post.title}
-                    </h4>
-                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">{post.meta}</p>
-                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] font-medium text-slate-500 dark:text-slate-400">
-                      {formattedDate && <span>{formattedDate}</span>}
-                      {formattedDate && readingTime && <span aria-hidden>•</span>}
-                      {readingTime && <span>{readingTime}</span>}
-                    </div>
-                  </div>
-                </Link>
-                </FadeIn>
-              )
-            })}
+              {posts
+                .filter((post) => post.published !== false)
+                .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
+                .slice(0, 3)
+                .map((post) => {
+                  const href = getArticleHref(post, post.slug)
+                  const formattedDate = formatDate(post.date)
+                  const readingTime = post.readingTime ? `${post.readingTime} min` : null
+                  const badgeText = post.target ?? 'General'
+                  const coverSrc = getCoverSrc(post)
+                  return (
+                    <FadeIn key={post.slug}>
+                      <Link
+                        href={href}
+                        className="group block overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60"
+                      >
+                        <div className="relative aspect-[5/4] w-full overflow-hidden border-b border-slate-100 bg-slate-100 dark:border-slate-800 dark:bg-slate-800/60">
+                          {coverSrc ? (
+                            <Image
+                              src={coverSrc}
+                              alt={post.title}
+                              fill
+                              sizes="(min-width: 1280px) 320px, (min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                              className="object-cover transition duration-500 group-hover:scale-105"
+                              priority={false}
+                            />
+                          ) : (
+                            <div className="h-full w-full bg-gradient-to-br from-amber-50 via-white to-slate-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800" />
+                          )}
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/25 via-slate-900/5 to-transparent" />
+                        </div>
+                        <div className="p-3.5">
+                          <div className="flex items-center justify-between gap-2.5">
+                            <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
+                              {badgeText}
+                            </span>
+                            {readingTime && (
+                              <span className="text-[10px] font-medium text-amber-700 bg-amber-100 px-2 py-1 rounded-full shadow-sm">
+                                {readingTime}
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="mt-1.5 text-sm font-bold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2">
+                            {post.title}
+                          </h4>
+                          <p className="mt-1 text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">{post.meta}</p>
+                          <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] font-medium text-slate-500 dark:text-slate-400">
+                            {formattedDate && <span>{formattedDate}</span>}
+                            {formattedDate && readingTime && <span aria-hidden>•</span>}
+                            {readingTime && <span>{readingTime}</span>}
+                          </div>
+                        </div>
+                      </Link>
+                    </FadeIn>
+                  )
+                })}
             </div>
           </StaggerContainer>
         </div>

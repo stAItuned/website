@@ -8,6 +8,17 @@ html {
 @tailwind components;
 @tailwind utilities;
 
+/* Urgency bar header offset - shifts fixed header down when bar is visible */
+html.urgency-bar-visible header {
+  top: 2.5rem !important; /* 40px - same as urgency bar height */
+}
+
+@media (min-width: 640px) {
+  html.urgency-bar-visible header {
+    top: 2.25rem !important; /* 36px - sm:h-9 */
+  }
+}
+
 /* Custom styles */
 
 body {
