@@ -16,18 +16,7 @@ The AI landscape shifted dramatically in December 2025, revealing a surprising n
 
 ## What Do the Latest LMArena December 2025 Updates Reveal?
 
-![Create a clean, modern infographic-style image visualizing: A dynamic digital leaderboard comparing Gemini 3 Pro and GPT-5.2. On the left, Gemini 3 Pro's side is vibrant and artistic, showing a trophy for 'Text Arena' with a score of '1492'. On the right, GPT-5.2's side is sleek and code-focused, showing a rising graph for 'WebDev' with a score of '80.0% on SWE-Bench'. The mood is competitive and futuristic, with a color palette of cool blues and electric purples.
-
-Key data points to represent visually:
-- Gemini 3 Pro: #1 in Text Arena
-- Score: 1492 (15,871 votes)
-- GPT-5.2: #2 (Preliminary) in WebDev
-- 80.0% on SWE-Bench Verified
-
-Style: Minimalist data visualization with clear visual hierarchy.
-Use bold colors for emphasis, professional iconography, and intuitive visual flow.
-Show data relationships through size, color, and position of visual elements.
-Do NOT include actual text, numbers, or labels - use icons, charts, and visual metaphors instead.](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_infographic_0_20251214_142750.webp)
+![Infographic for: What Do the Latest LMArena December 2025 Updates Reveal?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_infographic_0_20251214_142750.webp)
 
 The late 2025 AI race isn't about a single champion—it's about specialization. For tech enthusiasts and developers tracking the bleeding edge, understanding the latest LMArena updates is critical. These public arenas offer a window into user preferences and model performance, signaling where the industry is heading. The **LMArena**, a platform where users blindly vote for the best AI responses, provides invaluable insights into what models and capabilities are resonating with the public. This evolution is reshaping how we interact with and utilize AI technologies. The December updates from LMArena reveal a fascinating split at the top. The data suggests the era of one model trying to do everything is giving way to a more fragmented, strategic landscape.
 
@@ -37,18 +26,7 @@ On the other side, OpenAI's newly released **GPT-5.2** is making a different kin
 
 ## How is Gemini 3 Pro Dominating the LMArena Text and Vision Categories?
 
-![Create a clean, modern infographic-style image visualizing: An infographic comparing Gemini 3 Pro and GPT-5.2's strengths. The left side, themed for creativity with vibrant, warm colors, shows Gemini 3 Pro with icons for text writing, image generation, and video. The right side, themed for logic and code with a darker, more structured blue palette, shows GPT-5.2 with icons for web development, debugging, and data analysis. A large central score card highlights 'Gemini 3 Pro: 1492' in the LMArena Text Arena.
-
-Key data points to represent visually:
-- Gemini 3 Pro: #1 in LMArena Text Arena
-- Score: 1492 (15,871 votes)
-- Leads in creative writing & image generation
-- GPT-5.2: #2 (Preliminary) in WebDev Arena
-
-Style: Minimalist data visualization with clear visual hierarchy.
-Use bold colors for emphasis, professional iconography, and intuitive visual flow.
-Show data relationships through size, color, and position of visual elements.
-Do NOT include actual text, numbers, or labels - use icons, charts, and visual metaphors instead.](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_infographic_1_20251214_142750.webp)
+![Infographic for: How is Gemini 3 Pro Dominating the LMArena Text and Vision Categories?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_infographic_1_20251214_142750.webp)
 
 Gemini 3 Pro’s performance on LMArena isn't just a win; it's a statement. Users are gravitating towards Gemini 3 Pro for its intuitive outputs and broad utility, as it has firmly established itself as the default choice for the vast majority of creative and general-purpose AI tasks, effectively cornering the mainstream market and forcing competitors into specialized niches.
 
@@ -68,21 +46,7 @@ A recent YouTube comparison highlighted this perfectly. A content creator tested
 
 ## Is GPT-5.2's WebDev Prowess a Retreat from the Generalist AI Race?
 
-![Create a clear technical diagram image showing: A strategic diagram showing two diverging paths for AI development. On one side, a wide, vibrant path labeled 'Generalist AI (Gemini 3 Pro)' is filled with icons for creative writing, image generation, and video. On the other side, a precise, focused path labeled 'Specialist AI (GPT-5.2)' leads to a fortified area representing 'Professional Developer Market' with icons for code, databases, and security. The style is clean and modern, with a cool blue and green color palette.
-
-Visual elements to include:
-- Gemini 3 Pro Path (Creative)
-- GPT-5.2 Path (Developer)
-- Icons: Text, Images, Video
-- Icons: Code, Security, APIs
-- Diverging arrows
-- Label: 'High-Volume Mainstream'
-- Label: 'High-Margin Niche'
-
-Style: Clean flowchart or system diagram with connected nodes and directional flow.
-Use consistent shapes (rectangles, circles, diamonds) with connecting arrows.
-Apply a professional color scheme (blues, grays, with accent colors for key elements).
-Do NOT include text labels - use shapes, icons, and visual cues to convey structure.](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_diagram_2_20251214_142751.webp)
+![Diagram for: Is GPT-5.2's WebDev Prowess a Retreat from the Generalist AI Race?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_diagram_2_20251214_142751.webp)
 
 While it’s tempting to view every new model release as another shot in the “one AI to rule them all” war, GPT-5.2’s laser focus on web development suggests something different. This isn't just a new feature; it looks like a calculated pivot. As Gemini 3 Pro solidifies its commanding lead in the high-volume text and vision arenas on LMArena, OpenAI appears to be ceding the creative mainstream to capture a more defensible—and profitable—professional market.
 
@@ -98,20 +62,7 @@ OpenAI's own messaging reinforces this pivot. Product lead Max Schwarzer explici
 
 ## What Strategic Implications Does This LMArena Fragmentation Hold?
 
-![Create a clear technical diagram image showing: A strategic diagram illustrating the divergence in the AI market. A central path labeled 'General AI Race' splits into two distinct, diverging paths. The top path, colored in Google's vibrant palette, is labeled 'Gemini 3 Pro' and points to icons representing 'Creative Writing,' 'Vision,' and 'Multimodal Search.' The bottom path, in OpenAI's teal and purple, is labeled 'GPT-5.2' and points to icons for 'Web Development,' 'Code Refactoring,' and 'Enterprise Tools.' The style is clean, modern, and conceptual.
-
-Visual elements to include:
-- Central path: 'General AI Race'
-- Diverging point
-- Top path: 'Gemini 3 Pro'
-- Bottom path: 'GPT-5.2'
-- Icons for Gemini: Creative Writing, Vision
-- Icons for GPT-5.2: Web Development, Enterprise Tools
-
-Style: Clean flowchart or system diagram with connected nodes and directional flow.
-Use consistent shapes (rectangles, circles, diamonds) with connecting arrows.
-Apply a professional color scheme (blues, grays, with accent colors for key elements).
-Do NOT include text labels - use shapes, icons, and visual cues to convey structure.](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_diagram_3_20251214_142749.webp)
+![Diagram for: What Strategic Implications Does This LMArena Fragmentation Hold?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_diagram_3_20251214_142749.webp)
 
 The December 2025 LMArena results aren't just a scoreboard update; they're a map of the new AI landscape. The fragmentation we're seeing, with Gemini 3 Pro dominating creative tasks and GPT-5.2 targeting elite developers, signals a critical maturation of the market. The AI arms race has pivoted from a tech demo competition—a scramble for benchmark supremacy—to a real business battle focused on capturing profitable, defensible niches.
 
@@ -123,10 +74,7 @@ This shift forces a new question: not which model is 'best,' but which model is 
 
 ## How Can General Tech Users Navigate the Specialized AI Landscape?
 
-![Create a supporting image for an article section titled "How Can General Tech Users Navigate the Specialized AI Landscape?".
-Section context: A forward-looking, optimistic scene depicting a tech user at a minimalist desk. On their screen, multiple AI tools are represented by distinct, colorful icons, working together on a single project. The mood is one of focused productivity and intelligent workflow, with a slightly futuristic, clean aesthetic and a color palette of cool blues and energetic oranges.
-Style: Clean, informative, professional illustration or concept visualization.
-Do not include any text in the image.](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_visual_4_20251214_142752.webp)
+![Visual for: How Can General Tech Users Navigate the Specialized AI Landscape?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_visual_4_20251214_142752.webp)
 
 So, how do you navigate this newly fragmented AI world? The era of betting on a single, do-it-all model is over. Instead of looking for one king, it’s time to build a specialized council.
 
