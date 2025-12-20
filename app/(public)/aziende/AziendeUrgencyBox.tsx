@@ -38,7 +38,7 @@ export function AziendeUrgencyBox() {
                 {/* Right: CTA */}
                 <div className="flex-shrink-0 text-center sm:text-right">
                     <CallModalTrigger className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white font-bold text-base shadow-lg hover:-translate-y-0.5 hover:shadow-xl transition-all dark:from-white dark:via-slate-100 dark:to-white dark:text-slate-900">
-                        <span>Candidati per uno slot Pilot</span>
+                        <span>Assicurati uno slot Pilot</span>
                         <span>→</span>
                     </CallModalTrigger>
                     <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">

@@ -20,7 +20,7 @@ export function AziendeCTAFinale() {
             </h2>
 
             <CallModalTrigger className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white font-bold text-lg shadow-xl hover:-translate-y-1 hover:shadow-2xl transition-all dark:from-white dark:via-slate-100 dark:to-white dark:text-slate-900">
-                <span>Candidati per uno slot Pilot (15 min)</span>
+                <span>Assicurati uno slot Pilot (15 min)</span>
                 <span>→</span>
             </CallModalTrigger>
 

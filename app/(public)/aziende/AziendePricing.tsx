@@ -1,6 +1,6 @@
 /**
  * AziendePricing - Packages with clear scope (no prices)
- * Clear scope = reduces friction and filtering
+ * Added anti-objection phrase
  */
 export function AziendePricing() {
     const packages = [
@@ -76,14 +76,18 @@ export function AziendePricing() {
                 })}
             </div>
 
-            {/* Risk reversal */}
-            <div className="text-center max-w-2xl mx-auto">
+            {/* Risk reversal + Anti-objection */}
+            <div className="text-center max-w-2xl mx-auto space-y-3">
                 <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
                     Se dopo l&apos;Assessment non c&apos;è un caso d&apos;uso forte,{' '}
                     <strong className="text-slate-900 dark:text-slate-100">chiudiamo lì e ti rimane la roadmap</strong>.
                 </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                <p className="text-sm text-slate-500 dark:text-slate-400">
                     Niente progetti infiniti. Decidi tu se andare avanti.
+                </p>
+                {/* Anti-objection */}
+                <p className="text-sm text-emerald-700 dark:text-emerald-300 font-medium">
+                    💡 Non serve rifare l&apos;IT. Partiamo dai tuoi PDF/email e integriamo solo dove serve.
                 </p>
             </div>
         </section>

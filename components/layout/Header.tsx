@@ -90,7 +90,7 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">📚</span>
     },
     {
-      name: 'Prodotti',
+      name: 'Lab',
       path: '/prodotti',
       icon: <span aria-hidden className="text-lg">🛠️</span>
     },

@@ -4,9 +4,9 @@
     "description": "Curated AI learning paths, tutorials, and articles. Your pocket-sized AI education companion.",
     "lang": "en",
     "dir": "ltr",
-    "scope": "/learn",
-    "start_url": "/learn?utm_source=pwa&utm_medium=learn_app",
-    "id": "/learn",
+    "scope": "/",
+    "start_url": "/learn/articles?utm_source=pwa&utm_medium=learn_app",
+    "id": "/learn/articles",
     "display_override": [
         "standalone",
         "minimal-ui"
@@ -22,10 +22,23 @@
     ],
     "shortcuts": [
         {
-            "name": "AI Fundamentals",
-            "short_name": "Fundamentals",
+            "name": "All Articles",
+            "short_name": "All",
+            "description": "Browse all AI articles",
+            "url": "/learn/articles",
+            "icons": [
+                {
+                    "src": "/icon-192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Newbie Articles",
+            "short_name": "Newbie",
             "description": "Start learning AI basics",
-            "url": "/learn/newbie",
+            "url": "/learn/articles?level=newbie",
             "icons": [
                 {
                     "src": "/assets/learn/newbie-card.jpg",
@@ -35,10 +48,10 @@
             ]
         },
         {
-            "name": "Intermediate Track",
-            "short_name": "Intermediate",
+            "name": "Midway Articles",
+            "short_name": "Midway",
             "description": "Level up your AI skills",
-            "url": "/learn/midway",
+            "url": "/learn/articles?level=midway",
             "icons": [
                 {
                     "src": "/assets/learn/midway-card.png",
@@ -48,10 +61,10 @@
             ]
         },
         {
-            "name": "Expert Track",
+            "name": "Expert Articles",
             "short_name": "Expert",
             "description": "Advanced AI concepts",
-            "url": "/learn/expert",
+            "url": "/learn/articles?level=expert",
             "icons": [
                 {
                     "src": "/assets/learn/expert-card.png",

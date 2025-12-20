@@ -132,7 +132,7 @@ export default async function ProductDetailPage({
       },
       breadcrumb: {
         home: 'Home',
-        products: 'Prodotti'
+        products: 'Lab'
       },
       sections: {
         techStack: 'Stack tecnologico',

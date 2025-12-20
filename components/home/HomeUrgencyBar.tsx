@@ -40,6 +40,14 @@ export function HomeUrgencyBar() {
 
     if (isDismissed) return null
 
+    // Dynamic next month
+    const nextMonth = new Date()
+    nextMonth.setMonth(nextMonth.getMonth() + 1)
+    const nextMonthFull = nextMonth.toLocaleString('it-IT', { month: 'long', year: 'numeric' })
+    const capitalizedMonth = nextMonthFull.charAt(0).toUpperCase() + nextMonthFull.slice(1)
+    const nextMonthShort = nextMonth.toLocaleString('it-IT', { month: 'short', year: 'numeric' })
+    const capitalizedMonthShort = nextMonthShort.charAt(0).toUpperCase() + nextMonthShort.slice(1)
+
     return (
         <>
             {/* Fixed urgency bar at the very top, above header */}
@@ -57,11 +65,11 @@ export function HomeUrgencyBar() {
                         {/* Message */}
                         <p className="text-xs sm:text-sm text-slate-200 leading-snug">
                             <span className="hidden sm:inline">
-                                Solo <strong className="text-white">2 slot Pilot/mese</strong> per garantire qualità.{' '}
-                                <span className="text-amber-300">Prossimo avvio: Gennaio 2025.</span>
+                                <strong className="text-white">2 Pilot/mese</strong>.{' '}
+                                <span className="text-amber-300">Assessment parte subito. Se c&apos;è fit, blocchi il prossimo slot.</span>
                             </span>
                             <span className="sm:hidden">
-                                <strong className="text-white">2 Pilot/mese</strong> · Avvio Gen 2025
+                                <strong className="text-white">2 Pilot/mese</strong> · Assessment subito
                             </span>
                         </p>
 

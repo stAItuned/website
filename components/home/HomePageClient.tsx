@@ -1,10 +1,9 @@
 'use client'
 
-import { HomeUrgencyBar } from './HomeUrgencyBar'
 import { HomeHero } from './HomeHero'
 import { HomeRoleSelector } from './HomeRoleSelector'
-import { HomeWhyDifferent } from './HomeWhyDifferent'
-import { HomeHowWeWork } from './HomeHowWeWork'
+import { HomeProofStrip } from './HomeProofStrip'
+import { HomeForBusiness } from './HomeForBusiness'
 import { HomeAnimatedSections } from './HomeAnimatedSections'
 import { type TickerArticle } from '@/components/ui/ArticleTicker'
 
@@ -13,27 +12,24 @@ interface HomePageClientProps {
 }
 
 /**
- * Homepage client wrapper - Snella structure
- * urgency → hero + CTA → selector → perché noi → 3 fasi → ticker
- * Proof e articoli vanno su /aziende e /learn
+ * Homepage client wrapper - Neutral Router structure
+ * hero (neutral) → entry points → proof strip → business (bajo) → ticker
+ * Serves both blog readers and B2B prospects
  */
 export function HomePageClient({ tickerArticles }: HomePageClientProps) {
     return (
         <>
-            {/* Urgency Top Bar - scarsità reason-based */}
-            <HomeUrgencyBar />
-
-            {/* Hero Section - 10gg+4sett + CTA primaria */}
+            {/* Hero Section - Neutral dual CTA */}
             <HomeHero />
 
-            {/* Role Selector - redirect a /aziende o /learn */}
+            {/* Role Selector - Entry points (Learn / Build) */}
             <HomeRoleSelector />
 
-            {/* Perché noi - 3 colonne (time-to-value, qualità, prodotto) */}
-            <HomeWhyDifferent />
+            {/* Proof Strip - Transversal (works for both) */}
+            <HomeProofStrip />
 
-            {/* Percorso 3 fasi (assessment/pilot/scale) + CTA */}
-            <HomeHowWeWork />
+            {/* For Business - Lower positioned, not aggressive */}
+            <HomeForBusiness />
 
             {/* Ticker articoli in basso */}
             <HomeAnimatedSections
@@ -44,5 +40,3 @@ export function HomePageClient({ tickerArticles }: HomePageClientProps) {
         </>
     )
 }
-
-

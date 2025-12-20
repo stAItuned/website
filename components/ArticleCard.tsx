@@ -38,10 +38,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const formatDate = (dateString?: string) => {
     if (!dateString) return ''
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      day: '2-digit', 
-      month: 'long', 
-      year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
     })
   }
 
@@ -67,7 +67,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const getTargetStyle = (target?: string) => {
     const targetStyles = {
       'Newbie': 'bg-green-500 text-white',
-      'Midway': 'bg-yellow-500 text-white', 
+      'Midway': 'bg-yellow-500 text-white',
       'Expert': 'bg-red-500 text-white',
       'General': 'bg-gray-500 text-white'
     }
@@ -142,7 +142,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         )}
         {/* Post Info fills remaining height */}
-        <div className="relative bg-slate-50 dark:bg-gray-800 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full transition-colors duration-300 group-hover:bg-slate-100 dark:group-hover:bg-gray-750">
+        <div className="relative bg-slate-50 dark:bg-gray-800 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full transition-colors duration-300 group-hover:bg-slate-100 dark:group-hover:bg-gray-700/80 dark:group-hover:ring-1 dark:group-hover:ring-primary-500/30">
           {/* Date */}
           <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex items-center gap-2 sm:gap-3 font-semibold text-white bg-slate-700/60 dark:bg-gray-900/70 backdrop-blur-sm rounded-lg transition-all duration-300 group-hover:bg-primary-600/80">
             <svg className="w-4 h-4 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +183,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             {/* Title & Meta with fixed heights and overflow handling */}
             <div className="space-y-2">
               <h1
-                className="font-bold text-base sm:text-lg leading-tight line-clamp-2 overflow-hidden transition-colors duration-300 group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-400"
+                className="font-bold text-base sm:text-lg leading-tight line-clamp-2 overflow-hidden transition-colors duration-300 group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-300"
                 title={article.title}
               >
                 {article.title}

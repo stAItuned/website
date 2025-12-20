@@ -9,10 +9,10 @@ export const dynamic = 'force-static'
 export const revalidate = 21600 // every 6 hours
 
 export const metadata: Metadata = {
-  title: 'Prodotti & Webapp - stAItuned',
+  title: 'Lab Projects - stAItuned',
   description: 'Esperimenti di AI che diventano prodotti. Webapp nate da progetti pilota con PMI, riadattabili ai tuoi processi in poche settimane.',
   openGraph: {
-    title: 'Prodotti & Webapp - stAItuned',
+    title: 'Lab Projects - stAItuned',
     description: 'Prodotti e webapp di AI nati da casi d\'uso reali. Progetti pilota che diventano soluzioni concrete.',
     type: 'website',
   },
@@ -39,7 +39,7 @@ export default function DemoPage() {
           <div className="space-y-6">
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 bg-clip-text text-transparent leading-[1.1]">
-                Prodotti & Webapp
+                stAI tuned Lab
               </h1>
               <h2 className="text-3xl lg:text-4xl font-bold text-slate-800 dark:text-slate-200">
                 Esperimenti di AI che diventano prodotti
