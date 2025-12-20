@@ -1,9 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useLearnLocale, LearnLocaleToggle } from '@/lib/i18n'
-import { ContributorCTA } from '@/components/ui/ContributorCTA'
 
 interface LearnHeroProps {
     className?: string
@@ -19,29 +17,22 @@ interface LearnHeroProps {
  */
 export function LearnHero({ className = '' }: LearnHeroProps) {
     const { t } = useLearnLocale()
-    const [showContributorForm, setShowContributorForm] = useState(false)
 
     return (
-        <section className={`relative overflow-hidden ${className}`}>
-            {/* Animated Gradient Background */}
-            <div className="absolute inset-0 -z-10">
-                {/* Primary gradient orbs */}
-                <div className="absolute top-0 -left-40 w-80 h-80 bg-primary-500/30 rounded-full blur-[100px] animate-pulse" />
-                <div className="absolute top-20 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-[120px] animate-[pulse_4s_ease-in-out_infinite]" />
-                <div className="absolute -bottom-20 left-1/3 w-72 h-72 bg-amber-500/20 rounded-full blur-[80px] animate-[pulse_5s_ease-in-out_infinite]" />
+        <section className={`relative ${className}`}>
+            {/* Background that blends seamlessly with page */}
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+                {/* Radial gradient that fades to transparent at edges */}
+                <div className="absolute inset-0 bg-gradient-to-b from-primary-50/40 via-transparent to-transparent dark:from-primary-950/20 dark:via-transparent dark:to-transparent" />
 
-                {/* Subtle grid pattern */}
-                <div
-                    className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]"
-                    style={{
-                        backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px),
-                                          linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
-                        backgroundSize: '60px 60px'
-                    }}
-                />
+                {/* Animated gradient orbs with very soft edges */}
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-400/10 dark:bg-primary-500/15 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-indigo-400/8 dark:bg-indigo-500/12 rounded-full blur-[140px] animate-[pulse_4s_ease-in-out_infinite]" />
+                <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-amber-400/8 dark:bg-amber-500/12 rounded-full blur-[100px] animate-[pulse_5s_ease-in-out_infinite]" />
             </div>
 
-            <div className="relative space-y-6 py-2">
+            {/* Content - no container, just content */}
+            <div className="relative space-y-6 py-6">
                 {/* Language Toggle + Badge in one row */}
                 <div className="flex items-center justify-between px-4">
                     {/* Floating Badge - left aligned on mobile, can also be centered */}
@@ -130,24 +121,16 @@ export function LearnHero({ className = '' }: LearnHeroProps) {
                                     ))}
                                 </ul>
 
-                                {/* CTAs */}
-                                <div className="space-y-3">
-                                    <Link
-                                        href="/learn/articles"
-                                        className="group/btn flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 hover:from-primary-500 hover:to-primary-400 transition-all duration-300"
-                                    >
-                                        {t.router.read.ctaPrimary}
-                                        <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                        </svg>
-                                    </Link>
-                                    <button
-                                        onClick={() => setShowContributorForm(!showContributorForm)}
-                                        className="w-full text-center text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors py-2"
-                                    >
-                                        {t.router.read.ctaSecondary}
-                                    </button>
-                                </div>
+                                {/* CTA */}
+                                <Link
+                                    href="/learn/articles"
+                                    className="group/btn flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 hover:from-primary-500 hover:to-primary-400 transition-all duration-300"
+                                >
+                                    {t.router.read.ctaPrimary}
+                                    <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </Link>
                             </div>
                         </div>
 
@@ -237,13 +220,6 @@ export function LearnHero({ className = '' }: LearnHeroProps) {
                         </span>
                     </div>
                 </div>
-
-                {/* Collapsible Contributor Form */}
-                {showContributorForm && (
-                    <div className="animate-in slide-in-from-top-4 duration-300 max-w-lg mx-auto px-4">
-                        <ContributorCTA source="learn-hero" className="text-left" />
-                    </div>
-                )}
             </div>
         </section>
     )

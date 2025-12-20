@@ -131,27 +131,27 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             title: "Start here",
             subtitle: "Choose your path.",
             read: {
-                badge: "📚 Read & Write",
-                title: "Read & Write",
-                description: "Actionable articles that help others decide and implement.",
+                badge: "📚 Blog",
+                title: "Learn What Actually Works",
+                description: "No fluff. No hype. Just practical AI content you can apply today.",
                 features: [
-                    "Read curated, practical content",
-                    "Propose topics + editorial review",
-                    "Build reputation via distribution"
+                    "30+ curated, battle-tested articles",
+                    "From newbie to expert paths",
+                    "100% free, no paywall ever"
                 ],
-                ctaPrimary: "Explore Articles →",
-                ctaSecondary: "Become a Contributor →"
+                ctaPrimary: "Start Reading →",
+                ctaSecondary: "Write for us →"
             },
             build: {
-                badge: "🧪 Build & Ship",
-                title: "Build & Ship (Lab)",
-                description: "Real projects, real constraints, fast feedback. From data to demo.",
+                badge: "🧪 Lab",
+                title: "Ship Real Projects",
+                description: "Stop tutorials. Build something real with feedback from experts.",
                 features: [
-                    "Real use-cases",
-                    "Review on architecture/eval/UX",
-                    "Potential collaborations"
+                    "Real data → Real code → Real demo",
+                    "Architecture and UX review",
+                    "Potential team collaborations"
                 ],
-                ctaPrimary: "Join the Lab →",
+                ctaPrimary: "Apply to Lab →",
                 ctaSecondary: "See how it works →"
             }
         },
@@ -248,27 +248,27 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             title: "Inizia qui",
             subtitle: "Scegli il tuo percorso.",
             read: {
-                badge: "📚 Leggi & Scrivi",
-                title: "Leggi & Scrivi",
-                description: "Articoli pratici che aiutano altri a decidere e implementare.",
+                badge: "📚 Blog",
+                title: "Impara Cosa Funziona Davvero",
+                description: "Zero fuffa. Zero hype. Solo contenuti AI pratici che puoi applicare oggi.",
                 features: [
-                    "Leggi contenuti curati e pratici",
-                    "Proponi topic + review editoriale",
-                    "Costruisci reputazione via distribuzione"
+                    "30+ articoli curati e testati sul campo",
+                    "Percorsi da newbie a expert",
+                    "100% gratis, nessun paywall mai"
                 ],
-                ctaPrimary: "Esplora Articoli →",
-                ctaSecondary: "Diventa Contributor →"
+                ctaPrimary: "Inizia a Leggere",
+                ctaSecondary: "Scrivi per noi →"
             },
             build: {
-                badge: "🧪 Costruisci & Vai live",
-                title: "Costruisci & Vai live (Lab)",
-                description: "Progetti reali, vincoli reali, feedback veloci. Dai dati alla demo.",
+                badge: "🧪 Lab",
+                title: "Costruisci Progetti Veri",
+                description: "Basta tutorial. Costruisci qualcosa di reale con feedback da esperti.",
                 features: [
-                    "Use-case reali",
-                    "Review su architettura/eval/UX",
-                    "Potenziali collaborazioni"
+                    "Dati reali → Codice reale → Demo reale",
+                    "Review su architettura e UX",
+                    "Potenziali collaborazioni in team"
                 ],
-                ctaPrimary: "Entra nel Lab →",
+                ctaPrimary: "Candidati al Lab →",
                 ctaSecondary: "Come funziona →"
             }
         },

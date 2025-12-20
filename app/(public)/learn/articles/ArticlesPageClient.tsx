@@ -94,30 +94,33 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
 
                 <div className="relative z-10">
-                    {/* Breadcrumb */}
-                    <nav className="flex items-center gap-2 text-sm text-slate-400 mb-6">
-                        <Link href="/" className="hover:text-white transition-colors">Home</Link>
-                        <span>/</span>
-                        <Link href="/learn" className="hover:text-white transition-colors">Learn</Link>
-                        <span>/</span>
-                        <span className="text-white font-medium">Articles</span>
-                    </nav>
+                    {/* Breadcrumb + Free Badge Row */}
+                    <div className="relative flex items-center mb-6">
+                        <nav className="flex items-center gap-2 text-sm text-slate-400">
+                            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+                            <span>/</span>
+                            <Link href="/learn" className="hover:text-white transition-colors">Learn</Link>
+                            <span>/</span>
+                            <span className="text-white font-medium">Articles</span>
+                        </nav>
+
+                        {/* Centered badge */}
+                        <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium border border-emerald-500/30 absolute left-1/2 -translate-x-1/2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            100% Free • No Paywall • Ever
+                        </div>
+                    </div>
 
                     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
                         <div className="space-y-4 max-w-2xl">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-medium border border-emerald-500/30">
-                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                                100% Free • No Paywall • Ever 
-                            </div>
 
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                                AI Knowledge,
-                                <span className="bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent"> Distilled</span>
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight whitespace-nowrap">
+                                AI Knowledge, <span className="bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">Distilled</span>
                             </h1>
 
                             <p className="text-lg text-slate-300 leading-relaxed">
                                 Practical guides, benchmarks, and deep dives. Written by practitioners,
-                                reviewed by experts. No fluff, just actionable knowledge.
+                                reviewed by experts. <strong>No fluff, just actionable knowledge.</strong>
                             </p>
                         </div>
 
@@ -223,13 +226,13 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                 </p>
 
                 {/* Contributor CTA - inline */}
-                <Link
-                    href="/learn#contribute"
+                <button
+                    onClick={() => document.getElementById('contributor-form')?.scrollIntoView({ behavior: 'smooth' })}
                     className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors group"
                 >
                     <span>✍️ Write for us</span>
                     <span className="group-hover:translate-x-0.5 transition-transform">→</span>
-                </Link>
+                </button>
             </div>
 
             {/* Articles Grid */}
@@ -321,53 +324,205 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                 </div>
             )}
 
-            {/* Bottom CTA Section */}
-            <div className="mt-16 relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary-600 via-primary-500 to-cyan-500 p-8 sm:p-12">
-                {/* Background decoration */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+            {/* Bottom CTA - Contributor Form */}
+            <ContributorInlineForm />
+        </div>
+    )
+}
 
-                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                    <div className="space-y-4 max-w-xl">
-                        <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                            Share Your Knowledge
-                        </h2>
-                        <p className="text-lg text-white/90">
-                            Got insights to share? Join our contributor program. Get editorial support, reach thousands of AI practitioners, and build your reputation.
+/**
+ * Inline contributor application form
+ * Sends to /api/contributors/apply which triggers Telegram notification
+ */
+function ContributorInlineForm() {
+    const [isExpanded, setIsExpanded] = useState(false)
+    const [formData, setFormData] = useState({ name: '', email: '', expertise: '', consent: false })
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const [message, setMessage] = useState('')
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!formData.name.trim() || !formData.email.trim() || !formData.expertise.trim()) {
+            setStatus('error')
+            setMessage('Please fill in all fields')
+            return
+        }
+        if (!formData.consent) {
+            setStatus('error')
+            setMessage('Please accept the privacy policy')
+            return
+        }
+
+        setStatus('loading')
+        try {
+            const res = await fetch('/api/contributors/apply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    expertise: formData.expertise,
+                    bio: `Quick application from /learn/articles`,
+                    source: 'articles-inline-form',
+                    website: '', // honeypot
+                }),
+            })
+
+            if (res.ok) {
+                setStatus('success')
+                setMessage('🎉 Application received! We\'ll be in touch soon.')
+                setFormData({ name: '', email: '', expertise: '', consent: false })
+            } else {
+                const data = await res.json().catch(() => ({}))
+                setStatus('error')
+                setMessage(data.error || 'Something went wrong')
+            }
+        } catch {
+            setStatus('error')
+            setMessage('Connection error. Please try again.')
+        }
+    }
+
+    return (
+        <div id="contributor-form" className="mt-16 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 border border-slate-700/50">
+            {status === 'success' ? (
+                <div className="text-center py-4">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500/20 mb-4">
+                        <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <p className="text-lg font-semibold text-white">{message}</p>
+                    <p className="text-sm text-slate-400 mt-2">Check your inbox for next steps.</p>
+                </div>
+            ) : !isExpanded ? (
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-indigo-500 flex items-center justify-center">
+                                <span className="text-xl">✍️</span>
+                            </div>
+                            <h3 className="text-xl font-bold text-white">
+                                Build Your AI Reputation
+                            </h3>
+                        </div>
+                        <p className="text-slate-300 max-w-xl">
+                            Write for stAItuned and join a growing community of AI practitioners.
+                            <span className="text-white font-medium"> Gain visibility, build your portfolio, and connect with professionals</span> who share your passion.
                         </p>
-                        <div className="flex flex-wrap gap-4 text-sm text-white/80">
-                            <span className="flex items-center gap-2">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                                </svg>
-                                Editorial review
+                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-400">
+                            <span className="flex items-center gap-1.5">
+                                <span className="text-emerald-400">✓</span> 10k+ LinkedIn reach
                             </span>
-                            <span className="flex items-center gap-2">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                                </svg>
-                                Build your portfolio
+                            <span className="flex items-center gap-1.5">
+                                <span className="text-emerald-400">✓</span> Editorial support
                             </span>
-                            <span className="flex items-center gap-2">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                                </svg>
-                                Reach thousands
+                            <span className="flex items-center gap-1.5">
+                                <span className="text-emerald-400">✓</span> Portfolio builder
                             </span>
                         </div>
                     </div>
 
-                    <Link
-                        href="/learn#contribute"
-                        className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary-600 font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
+                    <button
+                        onClick={() => setIsExpanded(true)}
+                        className="flex-shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold shadow-lg hover:shadow-xl transition-all group"
                     >
-                        Become a Contributor
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        Start Writing
+                        <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
-                    </Link>
+                    </button>
                 </div>
-            </div>
+            ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="flex items-center justify-between mb-2">
+                        <div>
+                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                <span>✍️</span> Start Writing
+                            </h3>
+                            <p className="text-xs text-slate-400 mt-1">Just a quick intro – no commitment required</p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsExpanded(false)}
+                            className="text-slate-400 hover:text-white transition-colors"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input
+                            type="text"
+                            placeholder="Your name"
+                            value={formData.name}
+                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                            className="px-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            required
+                            disabled={status === 'loading'}
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                            className="px-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            required
+                            disabled={status === 'loading'}
+                        />
+                    </div>
+
+                    <textarea
+                        placeholder="What article would you like to write? (e.g. 'A guide to fine-tuning LLMs for RAG')"
+                        value={formData.expertise}
+                        onChange={(e) => setFormData(prev => ({ ...prev, expertise: e.target.value }))}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                        rows={2}
+                        required
+                        disabled={status === 'loading'}
+                    />
+
+                    {status === 'error' && (
+                        <p className="text-sm text-red-400">{message}</p>
+                    )}
+
+                    {/* Privacy consent */}
+                    <label className="flex items-start gap-3 cursor-pointer group">
+                        <input
+                            type="checkbox"
+                            checked={formData.consent}
+                            onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
+                            className="mt-0.5 w-4 h-4 rounded border-slate-500 bg-slate-700 text-primary-500 focus:ring-primary-500 focus:ring-offset-0"
+                            disabled={status === 'loading'}
+                        />
+                        <span className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">
+                            I agree to the{' '}
+                            <a href="/privacy" target="_blank" className="text-primary-400 hover:underline">
+                                Privacy Policy
+                            </a>
+                            . We'll only use your data to contact you about contributing.
+                        </span>
+                    </label>
+
+                    <div className="flex items-center justify-between gap-4">
+                        <p className="text-xs text-slate-500">
+                            We'll get back to you within 48h
+                        </p>
+                        <button
+                            type="submit"
+                            disabled={status === 'loading' || !formData.consent}
+                            className="px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-white font-semibold shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                        >
+                            {status === 'loading' ? 'Sending...' : 'Send'}
+                        </button>
+                    </div>
+
+                    {/* Honeypot */}
+                    <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+                </form>
+            )}
         </div>
     )
 }

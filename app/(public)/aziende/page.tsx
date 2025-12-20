@@ -29,16 +29,7 @@ export default function AziendePage() {
       {/* Urgency bar at top */}
       <HomeUrgencyBar />
 
-      <div className="max-w-5xl mx-auto mt-[120px] mb-32 px-4 space-y-12 text-slate-900 dark:text-slate-100">
-        {/* Breadcrumb */}
-        <nav className="inline-flex w-fit items-center gap-3 text-sm font-medium text-slate-600 bg-white border border-slate-200 px-5 py-2.5 rounded-xl shadow-sm dark:bg-slate-900/60 dark:border-slate-800">
-          <Link href="/" className="opacity-60 hover:opacity-100 transition-opacity">
-            Home
-          </Link>
-          <span className="text-slate-400">/</span>
-          <span className="text-slate-900 font-semibold dark:text-slate-100">Per le aziende</span>
-        </nav>
-
+      <div className="max-w-5xl mx-auto mt-24 mb-32 px-4 space-y-12 text-slate-900 dark:text-slate-100">
         {/* === HERO === */}
         <section className="space-y-6">
           {/* Headline with visual hierarchy */}
