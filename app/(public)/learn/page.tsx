@@ -77,7 +77,7 @@ export default function LearnPage() {
 
   return (
     <PageTransition>
-      <section className="max-w-5xl mx-auto mt-[100px] mb-24 px-4 lg:px-6 space-y-16">
+      <section className="max-w-5xl mx-auto mt-[100px] mb-24 px-4 lg:px-6 space-y-6">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-3 text-primary-500 w-full md:w-fit bg-white/60 backdrop-blur-sm px-6 py-3 rounded-2xl font-medium shadow-sm border border-slate-200/50 dark:bg-slate-900/60 dark:border-slate-800/50 dark:text-primary-400 transition-all hover:shadow-md">
           <Link href="/" className="text-sm lg:text-base opacity-60 hover:opacity-100 transition-opacity hover:underline underline-offset-4">

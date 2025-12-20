@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { LearnLocaleProvider, useLearnLocale } from '@/lib/i18n'
-import { LearnHero, LearnStats, LearnHowItWorks } from './components'
+import { LearnHero, LearnStats, LearnHowItWorks, LearnContributorSection } from './components'
 
 interface LearnPageClientProps {
   // Props kept for compatibility but not used in main view
@@ -23,6 +23,7 @@ interface LearnPageClientProps {
  * - Animated hero section with glassmorphism cards
  * - Stats section with animated counters
  * - Enhanced How It Works timeline
+ * - Contributor section with benefits
  * - Final CTA section
  */
 export default function LearnPageClient({ totalArticleCount = 30 }: LearnPageClientProps) {
@@ -58,7 +59,10 @@ export default function LearnPageClient({ totalArticleCount = 30 }: LearnPageCli
         {/* 3. How It Works (contributor + lab paths) */}
         <LearnHowItWorks />
 
-        {/* 4. Final CTA Section */}
+        {/* 4. Contributor Section - Strong CTA to contribute */}
+        <LearnContributorSection />
+
+        {/* 5. Final CTA Section */}
         <FinalCTA />
       </div>
     </LearnLocaleProvider>

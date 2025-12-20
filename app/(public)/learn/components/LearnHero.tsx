@@ -41,34 +41,33 @@ export function LearnHero({ className = '' }: LearnHeroProps) {
                 />
             </div>
 
-            <div className="relative space-y-12 py-8">
-                {/* Language Toggle - top right */}
-                <div className="flex justify-end">
+            <div className="relative space-y-6 py-2">
+                {/* Language Toggle + Badge in one row */}
+                <div className="flex items-center justify-between px-4">
+                    {/* Floating Badge - left aligned on mobile, can also be centered */}
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-500/10 via-indigo-500/10 to-primary-500/10 border border-primary-500/20 text-xs sm:text-sm font-medium text-primary-600 dark:text-primary-400 backdrop-blur-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
+                        stAItuned Learn
+                    </span>
+
+                    {/* Language Toggle - right */}
                     <LearnLocaleToggle />
                 </div>
 
-                {/* Floating Badge */}
-                <div className="text-center">
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary-500/10 via-indigo-500/10 to-primary-500/10 border border-primary-500/20 text-sm font-medium text-primary-600 dark:text-primary-400 backdrop-blur-sm animate-[fadeIn_0.5s_ease-out]">
-                        <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
-                        stAItuned Learn
-                    </span>
-                </div>
-
                 {/* H1 + Subtitle + Slogan */}
-                <div className="text-center space-y-6 max-w-4xl mx-auto px-4">
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+                <div className="text-center space-y-4 max-w-4xl mx-auto px-4">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
                         <span className="bg-gradient-to-br from-slate-900 via-slate-700 to-slate-800 dark:from-white dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
                             {t.hero.title}
                         </span>
                     </h1>
 
-                    <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-base lg:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
                         {t.hero.subtitle}
                     </p>
 
                     {t.hero.slogan && (
-                        <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold uppercase tracking-wider shadow-lg shadow-primary-500/25 animate-[fadeIn_0.8s_ease-out]">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-xs sm:text-sm font-bold uppercase tracking-wider shadow-lg shadow-primary-500/25">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping opacity-75" />
                             {t.hero.slogan}
                         </div>
