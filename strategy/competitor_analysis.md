@@ -281,7 +281,46 @@ Competitor cambiano (system integrator, piattaforme, consulenze): qui la regola 
 
 ---
 
-# 7) Lista “competitor watchlist” (cosa monitorare)
+# 7) Market Sizing (TAM/SAM/SOM) — *The Opportunity*
+
+Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opportunità di business.
+
+## TAM (Total Addressable Market) — €640M+
+**Mercato Europeo Tech Education / Coding Bootcamps**
+
+*Definizione:* Valore totale della spesa per "online coding bootcamps/tech education" in Europa.
+*Dati (2024):*
+- Il mercato globale dei coding bootcamp è stimato a **$4.4 Miliardi**.
+- L'Europa rappresenta circa il **25%** del mercato globale e il segmento "online" pesa per il **62%**.
+- **Calcolo**: $4.4B * 25% * 62% ≈ **$678M (~€640M)**.
+*Perché è rilevante:* Rappresenta il "wallet share" già esistente: gli utenti sono abituati a spendere cifre significative per accelerare la carriera tech.
+
+## SAM (Serviceable Available Market) — €30M
+**Mercato "AI Career Prep & Acceleration" in Italia (Target Iniziale)**
+
+*Definizione:* Il segmento di Junior/Neolaureati STEM e Career Switcher in Italia che cercano attivamente ruoli in ambito Dati/AI.
+*Dati (Italia 2023/24):*
+- **Laureati STEM**: ~290.000 all'anno (Fonte: Istat/MUR).
+- **Domanda Lavoro**: LinkedIn Italia ha registrato ~184.000 job post ICT in 18 mesi; la domanda di profili AI-specialized è cresciuta dell'**88%** nel 2024.
+*Calcolo Bottom-up:*
+- Assumiamo un target conservativo del **10%** dei laureati STEM interessati verticalmente all'AI (~29.000 utenti/anno).
+- Aggiungiamo un volume equivalente di **Career Switcher/Junior Pro** (~29.000 utenti/anno).
+- **Totale Utenti Target**: ~60.000 utenti/anno.
+- **Valore Economico**: 60.000 * €500 (LTV medio stimato tra Starter e Pro) = **€30.000.000**.
+
+## SOM (Serviceable Obtainable Market) — €1.5M - €2M
+**Obiettivo realistico a 18-24 mesi (Market Share)**
+
+*Definizione:* La quota di mercato che stAItuned può realisticamente catturare con le risorse attuali e il modello ibrido (Tool + Community), senza soffrire i colli di bottiglia dei bootcamp tradizionali (docenti/aule).
+*Target:* Penetrazione del **~5% del SAM**.
+*Metriche Operative:*
+- **Studenti/Clienti**: ~3.000 - 4.000 all'anno.
+- **Revenue Run-rate**: ~€1.5M - €2M ARR.
+*Fattibilità:* Raggiungibile grazie al modello scalabile "Career OS" che non richiede 1:1 costante, permettendo volumi superiori a una singola agenzia di coaching ma con costi inferiori a un bootcamp.
+
+---
+
+# 8) Lista “competitor watchlist” (cosa monitorare)
 
 - Bootcamp IT: nuove offerte “AI engineer / GenAI engineer” e nuove garanzie (risk reversal)
 - Tool ATS: se scendono di prezzo o integrano coaching umano
