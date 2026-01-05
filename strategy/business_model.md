@@ -6,6 +6,45 @@ stAItuned vende un percorso **AI Career OS** (prima 1:1, poi coorti) per **junio
 
 Il 1:1 serve a estrarre playbook e proof; le **coorti** servono a scalare; i **tool** (editorial planner + career OS) diventano upsell/retention e riducono costo di delivery.
 
+### 1.1) Market Sizing (TAM/SAM/SOM) — *The Opportunity*
+
+Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opportunità di business.
+
+#### TAM (Total Addressable Market) — €3 Miliardi+
+**Mercato EdTech & Digital Training Italia**
+*Definizione:* Valore totale del mercato e-learning e formazione digitale in Italia.
+*Dati (2024):*
+- Il mercato **e-Learning in Italia** ha superato i **€3 Miliardi** nel 2024, con una crescita del **+18%** sull'anno precedente.
+- Il solo segmento "Core EdTech" (aziende puramente tecnologiche per la formazione) genera oltre €2.7 Miliardi.
+- **Perché è rilevante:** Dimostra che la spesa per la formazione digitale nel nostro paese è massiva e in doppia cifra di crescita.
+
+#### SAM (Serviceable Available Market) — €30M
+**Mercato "AI Career Prep & Acceleration" in Italia (Target Iniziale)**
+*Definizione:* Il segmento di Junior/Neolaureati STEM e Career Switcher in Italia che cercano attivamente ruoli in ambito Dati/AI.
+*Dati (Italia 2023/24):*
+- **Laureati STEM**: ~290.000 all'anno (Fonte: Istat/MUR).
+- **Domanda Lavoro**: LinkedIn Italia ha registrato ~184.000 job post ICT in 18 mesi; la domanda di profili AI-specialized è cresciuta dell'**88%** nel 2024.
+*Calcolo Bottom-up:*
+- Assumiamo un target conservativo del **10%** dei laureati STEM interessati verticalmente all'AI (~29.000 utenti/anno).
+- Aggiungiamo un volume equivalente di **Career Switcher/Junior Pro** (~29.000 utenti/anno).
+- **Totale Utenti Target**: ~60.000 utenti/anno.
+- **Valore Economico**: 60.000 * €500 (LTV medio stimato tra Starter e Pro) = **€30.000.000**.
+
+#### SOM (Serviceable Obtainable Market) — €1.5M - €2M
+**Obiettivo realistico a 18-24 mesi (Market Share)**
+*Definizione:* La quota di mercato che stAItuned può realisticamente catturare con le risorse attuali e il modello ibrido (Tool + Community), senza soffrire i colli di bottiglia dei bootcamp tradizionali.
+*Target:* Penetrazione del **~5% del SAM**.
+*Metriche Operative:*
+- **Studenti/Clienti**: ~3.000 - 4.000 all'anno.
+- **Revenue Run-rate**: ~€1.5M - €2M ARR.
+*Fattibilità:* Raggiungibile grazie al modello scalabile "Career OS".
+
+#### 💡 So What? (Implicazioni Strategiche)
+
+1.  **Nicchia profonda, non piccola:** Non serve diventare generalisti subito. Dominare il **5% del target verticale AI (SOM)** basta per creare un business da **~€2M ARR**.
+2.  **Validazione Premium:** Un TAM da €3B conferma che la propensione alla spesa c'è. Un SAM concentrato (€30M su 60k utenti) suggerisce che il mercato premia la **verticalità e l'outcome** (LTV alto) piuttosto che i volumi low-cost generalisti.
+3.  **Expansion Path:** Una volta conquistata la "testa di ponte" sull'AI (il segmento più hot del momento), il brand ha **spazio infinito per espandersi** orizzontalmente (Data Engineering, Cloud, Cyber) aggredendo il resto dei €3 Miliardi di TAM.
+
 ---
 
 ## 2) Business Model Canvas (versione operativa)

@@ -9,6 +9,26 @@ Questo è il corridoio in cui il tuo prezzo deve *avere senso* agli occhi di un 
 
 **Implicazione:** tu NON puoi competere come “servizio CV” (troppo economico) e NON devi sembrare un bootcamp (troppo lungo/corso). Ti posizioni nel mezzo, ma con una proposta **più outcome-based**.
 
+## 1.1) Market Evidence (Perché €590 - €1.190 funzionerà)
+
+Non è un prezzo a caso. È blindato da 3 dati di fatto.
+
+### A) Il "Buco di Mercato" (Price Gap)
+Esiste un vuoto enorme tra le due alternative attuali:
+*   **Low-End (€50 - €150):** Revisioni CV generiche o tool automatici (basso impatto).
+*   **High-End (€1.900 - €5.000):** Bootcamp completi (Start2Impact, Boolean, Epicode). 
+*   **IL TUO SPAZIO (€500 - €1.200):** Non c'è quasi nulla che offra *outcome reale* a questo prezzo. Sei la scelta logica per chi vuole risultati "bootcamp" ma non ha €3k o 6 mesi.
+
+### B) ROI Immediato (Ancoraggio alla RAL)
+Il target (Junior AI Engineer) punta a stipendi **€28k - €35k** (RAL).
+*   **Starter (€590):** Costa il **2% della RAL** annuale (o **mezzo stipendio netto**).
+*   **Insight:** Spendere mezzo stipendio futuro per sbloccare l'intera carriera è un trade-off a basso rischio e altissimo rendimento.
+
+### C) Willingness to Pay: Validazione > Contenuto
+I dati mostrano che i junior pagano per la **validazione Umana**, non per i video.
+*   Coursera costa €49/mese (contenuto infinito).
+*   Tu costi €590 perché offri un Senior che dice "Questo va bene, questo no". Quella *Expert Guidance* giustifica il premium price.
+
 ---
 
 ## 2) Che cosa stai vendendo (che giustifica il prezzo)
