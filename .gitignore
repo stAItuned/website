@@ -54,3 +54,6 @@ deploy.yaml
 scripts/subscribe-to-topic.js
 .agent/workflows/publish-article.md
 .github/workflows/article-notification.yml
+scripts/deploy-preview-fast.sh
+.gitignore
+scripts/deploy-preview.sh
