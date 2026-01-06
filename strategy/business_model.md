@@ -6,44 +6,99 @@ stAItuned vende un percorso **AI Career OS** (prima 1:1, poi coorti) per **junio
 
 Il 1:1 serve a estrarre playbook e proof; le **coorti** servono a scalare; i **tool** (editorial planner + career OS) diventano upsell/retention e riducono costo di delivery.
 
-### 1.1) Market Sizing (TAM/SAM/SOM) — *The Opportunity*
+### 1.1) Market Sizing (TAM / SAM / SOM) — *The Opportunity* (Italia, B2C)
 
-Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opportunità di business.
+#### Market signals (perché il problema è reale “adesso”)
 
-#### TAM (Total Addressable Market) — €3 Miliardi+
-**Mercato EdTech & Digital Training Italia**
-*Definizione:* Valore totale del mercato e-learning e formazione digitale in Italia.
-*Dati (2024):*
-- Il mercato **e-Learning in Italia** ha superato i **€3 Miliardi** nel 2024, con una crescita del **+18%** sull'anno precedente.
-- Il solo segmento "Core EdTech" (aziende puramente tecnologiche per la formazione) genera oltre €2.7 Miliardi.
-- **Perché è rilevante:** Dimostra che la spesa per la formazione digitale nel nostro paese è massiva e in doppia cifra di crescita.
+*   **Domanda digitale strutturalmente alta:** Tra gen 2023 e ago 2024 risultano **~184.000 annunci ICT** pubblicati su LinkedIn in Italia (Fonte: Assintel/Anitec-Assinform).
+*   **AI in accelerazione:** Nello stesso periodo, >21.000 annunci hanno menzionato skill IA, con **+73%** rispetto ad agosto 2023.
+*   **Ricerca di specialisti AI in forte crescita:** Hays riporta che nel I quadrimestre 2024 la richiesta di figure specializzate in IA è quasi raddoppiata (**+88%**) vs stesso periodo dell’anno precedente.
+    *   *Implicazione:* stAItuned non “vende formazione”, ma riduce il **time-to-offer** (candidabilità + proof + interview readiness) in un mercato dove l’AI è un acceleratore della domanda.
 
-#### SAM (Serviceable Available Market) — €30M
-**Mercato "AI Career Prep & Acceleration" in Italia (Target Iniziale)**
-*Definizione:* Il segmento di Junior/Neolaureati STEM e Career Switcher in Italia che cercano attivamente ruoli in ambito Dati/AI.
-*Dati (Italia 2023/24):*
-- **Laureati STEM**: ~290.000 all'anno (Fonte: Istat/MUR).
-- **Domanda Lavoro**: LinkedIn Italia ha registrato ~184.000 job post ICT in 18 mesi; la domanda di profili AI-specialized è cresciuta dell'**88%** nel 2024.
-*Calcolo Bottom-up:*
-- Assumiamo un target conservativo del **10%** dei laureati STEM interessati verticalmente all'AI (~29.000 utenti/anno).
-- Aggiungiamo un volume equivalente di **Career Switcher/Junior Pro** (~29.000 utenti/anno).
-- **Totale Utenti Target**: ~60.000 utenti/anno.
-- **Valore Economico**: 60.000 * €500 (LTV medio stimato tra Starter e Pro) = **€30.000.000**.
+#### TAM (Total Addressable Market) — macro contesto di spesa
+**Mercato EdTech / tecnologie a supporto della formazione (Italia)**
 
-#### SOM (Serviceable Obtainable Market) — €1.5M - €2M
-**Obiettivo realistico a 18-24 mesi (Market Share)**
-*Definizione:* La quota di mercato che stAItuned può realisticamente catturare con le risorse attuali e il modello ibrido (Tool + Community), senza soffrire i colli di bottiglia dei bootcamp tradizionali.
-*Target:* Penetrazione del **~5% del SAM**.
-*Metriche Operative:*
-- **Studenti/Clienti**: ~3.000 - 4.000 all'anno.
-- **Revenue Run-rate**: ~€1.5M - €2M ARR.
-*Fattibilità:* Raggiungibile grazie al modello scalabile "Career OS".
+*   **Stime Osservatorio EdTech (Politecnico di Milano):** **~€2,8B** (2022) (+26% vs 2021).
+*   *Nota di onestà:* Questo TAM è un tailwind (propensione alla spesa su digitale/formazione), ma non coincide con il mercato “diretto” (career acceleration outcome-based).
+
+#### SAM (Serviceable Available Market) — segmento servibile nei prossimi 24 mesi
+**Definizione SAM (fase 1):**
+Junior / neolaureati in Italia (0–18 mesi) che stanno attivamente candidandosi a ruoli AI/ML/GenAI/DS e sono disposti a pagare per un percorso outcome-driven con deliverable.
+
+**Base data (pool annuale):**
+*   **Laureati universitari in Italia (2024):** ~415.553 (Fonte: USTAT).
+*   **Quota STEM (proxy ISTAT):** ~24% (18,3 STEM su 76,4 laureati per 1.000).
+*   **Stima pool STEM annuo:** **~100.000**.
+
+**Funnel bottom-up (con assunzioni da validare):**
+1.  **STEM annui:** ~100.000
+2.  **AI-oriented** (assunzione 8–15%): 8.000–15.000
+3.  **In “job search attivo”** (assunzione 40–60%): 3.200–9.000
+4.  **Willingness-to-pay** (assunzione 5–12%): **160–1.080 clienti/anno**
+
+**SAM in valore (€) sui programmi (one-off):**
+*Ipotesi ticket medio “blended”: €900–€1.200*
+
+*   **Conservativo:** 160 × €900 ≈ **€144k/anno**
+*   **Base:** 500 × €1.000 ≈ **€500k/anno**
+*   **Upside:** 1.080 × €1.200 ≈ **€1,3M/anno**
+
+*(Nota: "Career Switcher" da trattare come segmento addizionale).*
+
+#### SOM (Serviceable Obtainable Market) — 18–24 mesi, guidato da capacità (coorti 8–10)
+Il vincolo non è il mercato ma la **delivery capacity** (QA e gestione coorti).
+
+**Unità di scala:**
+*   Coorte = 8–10 persone
+*   Ticket medio = €1.000–€1.200
+
+**Scenario A — Founder-led “sano” (qualità alta)**
+*   1 coorte/mese (8–10 pax) + 2 mentor 1:1 premium
+*   **Totale:** ~120–144 studenti/anno
+*   **Revenue (Programmi):** ~**€120k–€173k/anno**
+
+**Scenario B — Scale controllata (SOP + tool maturi)**
+*   2 coorti/mese (8–10 pax) + 4 mentor 1:1 premium
+*   **Totale:** ~240–288 studenti/anno
+*   **Revenue (Programmi):** ~**€240k–€346k/anno**
+
+**Scenario C — Small team (1–2 mentor + QA forte)**
+*   4 coorti/mese (8–10 pax) + 6 mentor 1:1 premium
+*   **Totale:** ~456–552 studenti/anno
+*   **Revenue (Programmi):** ~**€456k–€662k/anno**
+
+*(Check: Per riempire 1 coorte/mese servono ~30-40 application qualificate/mese).*
 
 #### 💡 So What? (Implicazioni Strategiche)
 
-1.  **Nicchia profonda, non piccola:** Non serve diventare generalisti subito. Dominare il **5% del target verticale AI (SOM)** basta per creare un business da **~€2M ARR**.
-2.  **Validazione Premium:** Un TAM da €3B conferma che la propensione alla spesa c'è. Un SAM concentrato (€30M su 60k utenti) suggerisce che il mercato premia la **verticalità e l'outcome** (LTV alto) piuttosto che i volumi low-cost generalisti.
-3.  **Expansion Path:** Una volta conquistata la "testa di ponte" sull'AI (il segmento più hot del momento), il brand ha **spazio infinito per espandersi** orizzontalmente (Data Engineering, Cloud, Cyber) aggredendo il resto dei €3 Miliardi di TAM.
+1.  **Mercato grande + Urgenza:** Il problema è monetizzabile (domanda ICT/AI alta e in crescita).
+2.  **Qualità vs Volume:** Con coorti piccole (8–10) si vince sul posizionamento premium e sul tasso di successo (outcome).
+3.  **Obiettivo Realistico:** Un SOM da **€250k–€650k/anno** è raggiungibile in 18–24 mesi in bootstrap, mantenendo un cap rigoroso sulla delivery.
+4.  **ARR vs One-off:** I programmi generano cassa (Revenue), i tool e la community generano stabilità (ARR).
+
+### 1.2) Deep Dive: Strategia "Deep Niche" (Perché è un vantaggio)
+
+Il mercato è di nicchia, ma **grande abbastanza da costruirci un business serio**. La definizione chiave è: **nicchia profonda, non piccola**.
+
+#### Il "Vero" Mercato (Beachhead)
+Non siamo nel generic "EdTech". Siamo nella categoria:
+> **Outcome-based AI career acceleration** per junior/neolaureati, con deliverable + proof pubblica.
+
+È un **Beachhead Market** (alla Geoffrey Moore): abbastanza stretto da **dominare** e diventare la "default choice" prima di espandersi.
+
+#### Perché NON è "macroscopicamente piccola"
+Una nicchia è limitante solo se il CAC è alto o il WTP è basso. Qui invece:
+1.  **WTP Alto:** Vendiamo "trasformazione con asset" (non ore di lezione), giustificando ticket premium.
+2.  **Rinnovo Naturale:** Il mercato si rigenera ogni anno con nuove coorti di laureati.
+3.  **Expansion Path:** Da "Junior AI" → Career Switcher → EU/EN → Altri ruoli Tech (Data Eng / Cloud).
+
+#### Peter Thiel Rule
+> *"Meglio essere un monopolio in una nicchia che uno dei tanti in un mercato largo."*
+
+**Framing credibile per Pitch:**
+*   **TAM** = Contesto macro (spesa education/digital).
+*   **SAM** = Nicchia pagante (Junior AI Job-seekers).
+*   **SOM** = Capacità operativa (Quante coorti da 8-10 possiamo servire eccellentemente?).
 
 ---
 
