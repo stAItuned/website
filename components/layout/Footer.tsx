@@ -23,17 +23,17 @@ const footerNavigation = {
   explore: {
     title: 'Esplora',
     links: [
-      { name: 'Blog', href: '/learn' },
-      { name: 'Lab', href: '/lab' },
+      { name: 'Blog', href: '/' },
+      { name: 'Career OS', href: '/career-os' },
+      { name: 'Lab', href: '/prodotti' },
       { name: 'Chi siamo', href: '/meet' },
-      { name: 'Per le aziende', href: '/business' },
     ]
   },
   resources: {
     title: 'Risorse',
     links: [
+      { name: 'AI Audit', href: '/audit' },
       { name: 'RSS Feed', href: '/rss.xml', external: true },
-      { name: 'Prodotti', href: '/prodotti' },
     ]
   },
   legal: {

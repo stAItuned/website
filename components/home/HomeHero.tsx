@@ -1,12 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
 import { HeroAnimatedBackground } from './HeroAnimatedBackground'
 
 /**
- * HomeHero - Neutral hero serving both blog readers and B2B prospects
- * Dual CTA with equal weight: Learn and Build
+ * HomeHero - Authority Hub
+ * Positioning: Expert in AI Engineering.
  */
 export function HomeHero() {
   return (
@@ -42,42 +41,47 @@ export function HomeHero() {
             </span>
           </div>
 
-          {/* Main Headline - Neutral */}
+          {/* Main Headline - Market Urgency Hook */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-white animate-fade-in-up">
-            Tutti fanno AI
+            The AI market is moving fast.
             <br />
-            {/* <br /> */}
-
-            <span className="text-gradient-gold"> Noi la rendiamo efficace e misurabile.</span>
+            <span className="text-gradient-gold">Don't get left behind.</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-slate-200 leading-relaxed max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '200ms' }}>
-            <strong>Contenuti pratici</strong> e <strong>pilot su dati reali</strong> per trasformare use case in KPI verificabili.
+            Stop being a tourist. Cross the gap from <strong>'Enthusiast'</strong> to <strong>'Hired Pro'</strong> with deep technical insights and career strategy.
           </p>
 
-          {/* Dual CTAs - Equal weight */}
+          {/* Single CTA - Scroll Down (Curiosity First) */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
-            {/* CTA 2 - Aziende */}
-            <Link
-              href="/aziende"
+            {/* CTA - Scroll to Articles */}
+            <a
+              href="#articles"
               className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-900 font-bold text-base shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all"
             >
-              <span>🏢</span>
-              <span>Per aziende: Avvia un Pilot</span>
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
-            
-            {/* CTA 1 - Blog */}
-            <Link
-              href="/learn"
-              className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white text-slate-900 font-bold text-base shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all"
-            >
-              <span>📚</span>
-              <span>Approfondisci l'AI</span>
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
+              <span>↓</span>
+              <span>Explore Latest Articles</span>
+              <span className="group-hover:translate-y-1 transition-transform">↓</span>
+            </a>
+          </div>
 
+          {/* Authority Strip */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 pt-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
+            <div className="flex items-center gap-2 text-white/70">
+              <span className="text-xl">📚</span>
+              <span className="text-sm font-medium">96+ Technical Articles</span>
+            </div>
+            <div className="hidden sm:block w-px h-5 bg-white/30" />
+            <div className="flex items-center gap-2 text-white/70">
+              <span className="text-xl">✍️</span>
+              <span className="text-sm font-medium">24 AI Expert Contributors</span>
+            </div>
+            <div className="hidden sm:block w-px h-5 bg-white/30" />
+            <div className="flex items-center gap-2 text-white/70">
+              <span className="text-xl">🎯</span>
+              <span className="text-sm font-medium">Career-Focused Content</span>
+            </div>
           </div>
 
         </div>

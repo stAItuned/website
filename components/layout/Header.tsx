@@ -8,7 +8,7 @@ import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
-import { CallModalTrigger } from '@/app/(public)/aziende/CallModalTrigger'
+
 
 const DISABLE_AUTH = false
 import { UserMenu } from '@/components/auth/UserMenu'
@@ -80,13 +80,13 @@ export function Header() {
 
   const navigation = [
     {
-      name: 'Per le aziende',
-      path: '/aziende',
-      icon: <span aria-hidden className="text-lg">🏢</span>
+      name: 'Career OS',
+      path: '/career-os',
+      icon: <span aria-hidden className="text-lg">🚀</span>
     },
     {
       name: 'Blog',
-      path: '/learn',
+      path: '/',
       icon: <span aria-hidden className="text-lg">📚</span>
     },
     {
@@ -100,7 +100,7 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">🧑‍🤝‍🧑</span>
     }
   ]
-  const primaryCta = { name: '💬', path: '/aziende#prenota-call' }
+  const primaryCta = { name: '🎯', path: '/audit' }
 
   return (
     <>
@@ -204,12 +204,18 @@ export function Header() {
               </svg>
             </button>
 
-            <CallModalTrigger className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 group relative">
-              {primaryCta.name}
-              <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
-                Prenota call
+            <Link
+              href="/audit"
+              className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 group relative"
+            >
+              <span className="flex items-center gap-1">
+                {primaryCta.name}
+                <span>Start Audit</span>
               </span>
-            </CallModalTrigger>
+              <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
+                Start Audit
+              </span>
+            </Link>
           </nav>
         </div>
       </header>
@@ -282,13 +288,16 @@ export function Header() {
                 )
               })}
 
-              <CallModalTrigger
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-xl hover:from-amber-300 hover:to-amber-400 transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 animate-fade-in"
-                onOpen={() => setTimeout(() => setIsMenuOpen(false), 100)}
+              <Link
+                href="/audit"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-xl hover:from-amber-300 hover:to-amber-400 transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-amber-400 animate-fade-in"
+                onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
               >
-                <span>{primaryCta.name}</span>
-                <span>Prenota Call</span>
-              </CallModalTrigger>
+                <div className="flex items-center gap-2">
+                  <span>{primaryCta.name}</span>
+                  <span>Start Audit</span>
+                </div>
+              </Link>
 
               {/* Mobile Authentication */}
               {!DISABLE_AUTH && !loading && (
