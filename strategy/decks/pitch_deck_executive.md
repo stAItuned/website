@@ -22,7 +22,7 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 
 ### 3. Visual FX
 *   **Glassmorphism:** White/Blue opacity 10% + Blur.
-*   **Gglows:** Soft radial gradients behind key elements using `#4d84d4`.
+*   **Glows:** Soft radial gradients behind key elements using `#4d84d4`.
 
 ---
 
@@ -46,6 +46,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > **Presenter:** Founder
 > **Target Market:** Italy
 
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **System vs. Course:** We use **"OS"** (Operating System) instead of "Course" to command authority. Courses are commodities; Systems are essential infrastructure.
+> *   **Validation First:** The core value prop isn't "learning", it's **"validating"**. This solves the #1 anxiety of the user: Imposter Syndrome.
+
 ---
 
 ### Slide 2: The Problem (The "Junior Gap")
@@ -67,6 +72,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > Juniors are stuck between cheap Udemy courses (no outcome) and €4k Bootcamps (too expensive).
 >
 > **Bottom Line:** The market is flooded with **Theorists**, but starving for **Practitioners**.
+
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **Attack the "Generalist":** By framing competitors as "Too General", we turn their biggest strength (size) into their fatal weakness.
+> *   **The Real Pain:** We focus on the **"Credibility Gap"**. Juniors aren't afraid of *not knowing*, they are afraid of *not being believed*. We sell the solution to that fear.
 
 ---
 
@@ -91,6 +101,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > **[Card 4] Job Strategy**
 > Tailored CV & LinkedIn strategy to bypass filters and signal competence.
 
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **Speed is a Feature:** 4-8 weeks promises **ROI in "weeks, not years"**. This is the anti-bootcamp position.
+> *   **The "Proof Engine":** This is our **Moat**. Anyone can stream video content; few can guarantee a published article on a credible platform. This tangible asset justifies the premium price.
+
 ---
 
 ### Slide 4: Market Opportunity (Italy)
@@ -111,6 +126,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > **SOM (24-Month Target) — €2 Million ARR**
 > **Goal:** Capturing just **5%** of the target market.
 > *We don't need to win everyone. We just need the top 5%.*
+
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **Small Pond Strategy:** Focusing on Italy First allows us to dominate SEO and Brand Voice quickly (Zero to One).
+> *   **Realistic Som:** Targeting €2M (5% share) is ambitious but mathematically sane. It signals to investors: "We know our lane."
 
 ---
 
@@ -136,6 +156,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > *   Authority (Expert Led)
 > *   Public Proof (Publisher)
 
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **The "Accessible Premium":** We avoid the "Race to the Bottom" (Tools) and the "Heavy Operations" (Bootcamps).
+> *   **Strategic Wedge:** Mid-price allows us to be an "impulse buy" for serious professionals, lowering Sales Friction while maintaining margin.
+
 ---
 
 ### Slide 6: Business Model & Unit Economics
@@ -156,6 +181,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > *   **Cost of Delivery:** ~€20 + Time
 > *   **Gross Margin:** **~90%**
 > *   **Hourly Value:** ~€100/h (1:1) → ~€130/h (Cohorts).
+
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **Do Things That Don't Scale (Initially):** We start with 1:1 to extract the perfect Playbook.
+> *   ** The "Cohort Lever":** We explicitly show the path to Cohorts to answer the "How do you scale?" question before it's asked.
 
 ---
 
@@ -180,6 +210,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > **3. Willingness to Pay**
 > Users pay for **Human Validation** (Expert review), not static content.
 
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **ROI Anchoring:** We shift the conversation from "Cost per Hour" to "Cost per Outcome".
+> *   **Validation Value:** We monetize the "Senior Stamp of Approval", which has Infinite ROI for a Junior seeking their first break.
+
 ---
 
 ### Slide 8: Go-to-Market (The Funnel)
@@ -203,6 +238,11 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 >
 > **Target:** 40 Leads/mo → **5-7 Sales/mo** (Breakeven).
 
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **The "Audit" Hook:** Generic newsletters fail. An Audit appeals to the user's *Ego* and *Anxiety*, creating a burning need for the solution.
+> *   **No Ads:** We trade Founder Time (Authority) for Leads. This keeps CAC at €0 and ensures high-quality, high-intent leads.
+
 ---
 
 ### Slide 9: Financial Feasibility
@@ -225,27 +265,82 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > Market demand exceeds 5 users/month.
 > Delivery capacity is only 50-60 hours/month (leaving 100h for growth).
 
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **The "Freedom Number":** By defining the exact number (5 clients), we demystify the mountain. Selling 5 is a tactical problem, not a strategic miracle.
+> *   **Viability Logic:** Showing the massive spare capacity (100h+) proves that the Founder won't burn out in Year 1.
+
 ---
 
-### Slide 10: Execution Roadmap
+### Slide 10: The Vision (3-5 Years)
 **Visual Spec:**
-*   **Layout:** Timeline / gantt.
-*   **Colors:** Q1 `Amber`, Q2 `Blue`, Q3 `Green`.
+*   **Layout:** Split Vertical Layout.
+*   **Top Half ("The Path"):** A simple linear timeline arrow from Left (Service) to Right (Product).
+*   **Bottom Half ("The Engine"):** A 5-step Circular Flywheel diagram.
+*   **Icons:** Use distinct icons for each flywheel step (School, Badge, Magnet, Factory, Box).
 
 **Slide Copy:**
-> **Headline:** 2026 Execution Plan.
+> **Headline:** From Service Studio $\to$ Product Company.
 >
-> **Phase 0: Foundation (Jan - Mar)**
-> *   Launch Lead Magnet (Audit).
-> *   Close First 10 Beta Clients.
-> *   *Goal:* €10k Revenue.
+> **Part 1: The Evolution (Linear Path)**
+> **[Now] Service Studio** (Career OS) $\to$ **[Future] Product Company** (Scalable Tools).
+> *We use Service Revenue to fund Product R&D.*
 >
-> **Phase 1: Scale (Apr - Jun)**
-> *   Launch Cohort-Lite.
-> *   Automate Operations.
-> *   *Goal:* €30k Revenue.
+> **Part 2: The Flywheel Engine (How we get there)**
+> *   **(1) Career OS** $\to$ Generates **Talent**.
+> *   $\downarrow$
+> *   **(2) Talent** $\to$ Creates **Proof** (Articles/Projects).
+> *   $\downarrow$
+> *   **(3) Proof** $\to$ Drives **Authority** (Zero CAC Inbound).
+> *   $\downarrow$
+> *   **(4) Inbound** $\to$ Attracts **Contributors** (Internal Pipeline).
+> *   $\downarrow$
+> *   **(5) Contributors** $\to$ Build **Standard Products** (B2C/B2B).
+> *   $\nearrow$ *(Restart Loop)*
+
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **The Real Asset:** We aren't just selling courses. We are building a **Talent Engine**. The best students become the builders of the future Product Company.
+> *   **Bootstrap Physics:** We use Service Revenue (Education) to fund Product Development without VC dilution.
+> *   **Why B2B Later?** We only attack B2B when we have a "Productized Process" and a "Vetted Talent Pool" to execute it. No low-margin consulting.
+
+---
+
+### Slide 11: Execution Roadmap & Gates (2026-2027)
+**Visual Spec:**
+*   **Layout:** Horizontal Gantt/Milestone Chart.
+*   **Visual Logic:** Show "Gates" (Vertical Bars) that must be unlocked to move to the next phase.
+*   **Color Coding:** Phase 0 (Amber - Validation), Phase 1 (Blue - Scale), Phase 2+ (Green - Ecosystem).
+
+**Slide Copy:**
+> **Headline:** Disciplined Growth: The 4-Phase Horizon.
 >
-> **The Ask:**
+> **Phase 0: Foundation (Jan - Mar '26)**
+> *Focus:* 1:1 Validation & Playbook Extraction.
+> *Gate:* **10 Success Stories** + **Validated Lead Magnet**.
+>
+> **Phase 1: Scale B2C (Apr - Sept '26)**
+> *Focus:* Launch Cohorts (Batch Delivery).
+> *Gate:* **Recurring Revenue** + **Operationally Sustainable (<10h/client)**.
+>
+> **Phase 2: Talent Ecosystem (Late '26)**
+> *Focus:* Hire best students as "Apprentice Contributors".
+> *Gate:* **Internal Quality Bar Met** + **Contributors handling QA**.
+>
+> **Phase 3: Productize B2B (2027+)**
+> *Focus:* Standardized Modules for Companies (No Consulting).
+> *Gate:* **Vetted Talent Pool Ready** + **Repeating Customer Need**.
+
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **The "Gate" Logic:** We do not scale what is broken. We force ourselves to hit specific quality metrics (Gates) before unlocking complexity. This kills "Premature Scaling".
+> *   **Long Game:** We show Phase 3 (B2B) now to prove we know the destination, but we execute Phase 0 (Foundation) today to ensure we survive to get there.
+
+**The Ask:**
 > We are live. Join the pilot.
->
 > **stAItuned.com**
+
+> [!TIP]
+> **💎 Executive Insight (The Why)**
+> *   **Phased discipline:** We explicitly block "Scaling" until "Validation" is done. This shows operational maturity.
+> *   **Action Bias:** The "Ask" is immediate and commercial. No fluff.
