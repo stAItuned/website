@@ -195,7 +195,7 @@ export default function AccountSettingsPage() {
         </div>
 
         {/* My Articles (Only shows if user is an author) */}
-        <MyArticles userEmail={user?.email} />
+        {user?.email && <MyArticles userEmail={user.email} />}
 
         {/* Your Data */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">

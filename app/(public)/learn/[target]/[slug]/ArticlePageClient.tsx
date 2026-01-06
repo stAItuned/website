@@ -21,6 +21,11 @@ import { SwipeNavigation } from '@/components/ui/SwipeNavigation'
 import { FloatingSectionIndicator } from '@/components/ui/FloatingSectionIndicator'
 import { useReadingProgress } from '@/lib/hooks/useReadingProgress'
 import { event } from '@/lib/gtag'
+import {
+  trackArticleScrollDepth,
+  trackArticleReadComplete,
+  trackArticleTimeOnPage
+} from '@/lib/analytics'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { ArticleAnalytics } from '@/lib/analytics-server'
@@ -216,6 +221,16 @@ export default function ArticlePageClient({
           label: `time_to_${milestone}%`,
           value: Math.round(timeToMilestone / 1000)
         })
+
+        // Centralized tracking for GA4 consistency
+        if (milestone === 25 || milestone === 50 || milestone === 75 || milestone === 100) {
+          trackArticleScrollDepth(milestone as 25 | 50 | 75 | 100, article.slug)
+        }
+
+        // Track article completion
+        if (milestone === 100) {
+          trackArticleReadComplete(article.slug, Math.round(timeToMilestone / 1000))
+        }
       }
     })
 
@@ -305,6 +320,9 @@ export default function ArticlePageClient({
       label: article.slug,
       value: Math.round(timeSpent / 1000)
     })
+
+    // Centralized tracking for GA4 consistency
+    trackArticleTimeOnPage(article.slug, Math.round(timeSpent / 1000))
 
     event({
       action: 'max_scroll_depth',
