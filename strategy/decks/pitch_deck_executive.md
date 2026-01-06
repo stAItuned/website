@@ -96,7 +96,7 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > Mentorship from Seniors who actually build and hire. No generic coaching.
 >
 > **[Card 3] Proof Engine**
-> You graduate with **1 Published Article** and **1 Tech Project Repo**. Verified Proof.
+> You graduate with **1 Published Proof Asset** (article or write-up) and **1 Tech Project Repo** (demo + eval). Verified Proof.
 >
 > **[Card 4] Job Strategy**
 > Tailored CV & LinkedIn strategy to bypass filters and signal competence.
@@ -104,7 +104,7 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > [!TIP]
 > **💎 Executive Insight (The Why)**
 > *   **Speed is a Feature:** 4-8 weeks promises **ROI in "weeks, not years"**. This is the anti-bootcamp position.
-> *   **The "Proof Engine":** This is our **Moat**. Anyone can stream video content; few can guarantee a published article on a credible platform. This tangible asset justifies the premium price.
+> *   **The "Proof Engine":** This is our **Moat**. Anyone can stream video content; few can ship a public LLM app with a clean repo + demo + evaluation. This tangible asset justifies the premium price.
 
 ---
 
@@ -121,7 +121,7 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > Italian EdTech & Digital Training Market (+18% YoY growth).
 >
 > **SAM (Serviceable Available Market) — €30 Million**
-> AI Career Prep: 60,000 STEM Grads & Switchers x €500 LTV.
+> Applied GenAI Career Prep: 60,000 STEM Grads & Switchers x €500 LTV.
 >
 > **SOM (24-Month Target) — €2 Million ARR**
 > **Goal:** Capturing just **5%** of the target market.
@@ -227,10 +227,10 @@ This deck must strictly follow the **stAItuned Premium Dark Mode** aesthetic.
 > **Headline:** "Inbound Led by Authority" (No Ads).
 >
 > **1. Attract (LinkedIn)**
-> Founder's "Opinionated Takes" on AI careers build trust.
+> Founder's "Opinionated Takes" on GenAI careers build trust.
 >
 > **2. Capture (Lead Magnet)**
-**"AI Career Fit Audit"**
+**"GenAI Role Fit Audit"**
 > Free diagnostic to identify profile gaps.
 >
 > **3. Convert (Consultative)**

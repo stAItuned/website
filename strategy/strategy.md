@@ -10,14 +10,14 @@ Ridurre progressivamente i ricavi legati alle ore umane, aumentare quelli legati
 
 ## Wedge iniziale (core 2026)
 
-### **B2C: stAItuned Career OS (junior/neolaureati in Italia → ruoli AI/ML/GenAI/DS)**
+### **B2C: stAItuned GenAI Career OS (Italia, B2C → ruoli Applied GenAI / LLM apps)**
 
 Un percorso guidato che porta a:
 
 - decisione del ruolo “giusto” (role-fit)
 - candidabilità (CV/LinkedIn/JD tailoring/interview)
-- **proof pubblica** (es. **1 articolo pubblicato su stAItuned** nello Starter)
-- (nei tier superiori) proof tecnica (mini-progetto)
+- **proof pubblica “da engineer”** (es. demo + repo + evaluation + write-up / articolo)
+- (nei tier superiori) progetto GenAI standardizzato per track (RAG / Agent / Product)
 
 ### **AI Expert Guidance (differenziatore chiave)**
 
@@ -68,7 +68,7 @@ Il blog **non è un canale di marketing, è un asset fondamentale** del modello.
 
 1. **Career OS produce risultati**
 2. Risultati → **proof pubblica** (articoli, progetti, case study)
-3. Proof → **credibilità + inbound** (nuovi utenti e opportunità)
+3. Proof → **credibilità + inbound** (LinkedIn + SEO/blog → nuovi utenti e opportunità)
 4. Percorso → **talent pipeline** (top performers formati “alla stAItuned”)
 5. Talent + pattern reali → **prodotti standard** (B2C tool + B2B moduli)
     
@@ -160,6 +160,7 @@ Obiettivo: più scala, meno dipendenza dal tempo umano.
 
 - % utenti che completano deliverable (outcome rate)
 - ore del team per outcome (time per outcome)
+- traffico organico (blog) e conversione → audit/application
 
 # proof pubblicate/mese (articoli/progetti/case study)
 
@@ -173,7 +174,7 @@ Obiettivo: più scala, meno dipendenza dal tempo umano.
 
 ## Assunzioni chiave (da validare sul campo)
 
-- Junior AI paga per outcome, non solo contenuti
+- Junior GenAI paga per outcome, non solo contenuti
 - Proof pubblica su stAItuned aumenta credibilità reale
 - Coorti mantengono qualità grazie a standard e QA
 - Il talent pipeline esiste (alcuni partecipanti diventano contributor validi)
@@ -213,11 +214,11 @@ Questo è coerente con:
 
 ---
 
-## 2) Wedge iniziale (core): stAItuned Career OS (B2C)
+## 2) Wedge iniziale (core): stAItuned GenAI Career OS (B2C)
 
 ### Cos’è (definizione semplice)
 
-**Career OS** è un percorso guidato per junior/neolaureati che puntano a ruoli AI (AI/ML/GenAI/DS) che combina:
+**Career OS** è un percorso guidato per laureandi magistrali/neolaureati STEM che puntano a ruoli **Applied GenAI (LLM apps)** che combina:
 
 - decisione del ruolo “giusto” (role-fit)
 - preparazione candidabilità (CV/LinkedIn/JD tailoring/interview)

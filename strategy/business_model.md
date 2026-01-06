@@ -1,49 +1,104 @@
-# Business Model — stAItuned Career OS (B2C)
+# Business Model — stAItuned GenAI Career OS (B2C)
 
 ## 1) Tesi del business model (in 5 righe)
 
-stAItuned vende un percorso **AI Career OS** (prima 1:1, poi coorti) per **junior/neolaureati in Italia** che puntano a ruoli AI (AI/ML/GenAI/DS). Il prodotto non è “formazione”: è **trasformazione con deliverable** (CV/LinkedIn, pacchetti candidature, interview prep, e **1 articolo pubblicato su stAItuned** nello Starter; più proof tecnica nel Pro).
+stAItuned vende un percorso **GenAI Career OS** (prima 1:1, poi coorti **track-based**) per **laureandi magistrali/neolaureati STEM in Italia** che puntano a ruoli **Applied GenAI (LLM apps)**. Il prodotto non è “formazione”: è **trasformazione con deliverable** standardizzabili (role-fit + job targeting, CV/LinkedIn + application pack, e **proof pubblica “da engineer”**: demo + repo pulita + evaluation + write-up; interview prep specifica GenAI).
 
-Il 1:1 serve a estrarre playbook e proof; le **coorti** servono a scalare; i **tool** (editorial planner + career OS) diventano upsell/retention e riducono costo di delivery.
+Il 1:1 serve a estrarre playbook e proof; le **coorti** (8–10, un track per coorte) servono a scalare e ridurre varianza; i **tool** (editorial planner + career OS) diventano upsell/retention e riducono costo di delivery.
 
-### 1.1) Market Sizing (TAM/SAM/SOM) — *The Opportunity*
+### 1.1) Market Sizing (TAM / SAM / SOM) — *The Opportunity* (Italia, B2C)
 
-Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opportunità di business.
+#### Market signals (perché il problema è reale “adesso”)
 
-#### TAM (Total Addressable Market) — €3 Miliardi+
-**Mercato EdTech & Digital Training Italia**
-*Definizione:* Valore totale del mercato e-learning e formazione digitale in Italia.
-*Dati (2024):*
-- Il mercato **e-Learning in Italia** ha superato i **€3 Miliardi** nel 2024, con una crescita del **+18%** sull'anno precedente.
-- Il solo segmento "Core EdTech" (aziende puramente tecnologiche per la formazione) genera oltre €2.7 Miliardi.
-- **Perché è rilevante:** Dimostra che la spesa per la formazione digitale nel nostro paese è massiva e in doppia cifra di crescita.
+*   **Domanda digitale strutturalmente alta:** Tra gen 2023 e ago 2024 risultano **~184.000 annunci ICT** pubblicati su LinkedIn in Italia (Fonte: Assintel/Anitec-Assinform).
+*   **AI in accelerazione:** Nello stesso periodo, >21.000 annunci hanno menzionato skill IA, con **+73%** rispetto ad agosto 2023.
+*   **Ricerca di specialisti AI in forte crescita:** Hays riporta che nel I quadrimestre 2024 la richiesta di figure specializzate in IA è quasi raddoppiata (**+88%**) vs stesso periodo dell’anno precedente.
+    *   *Implicazione:* stAItuned non “vende formazione”, ma riduce il **time-to-offer** (candidabilità + proof + interview readiness) in un mercato dove l’AI è un acceleratore della domanda.
 
-#### SAM (Serviceable Available Market) — €30M
-**Mercato "AI Career Prep & Acceleration" in Italia (Target Iniziale)**
-*Definizione:* Il segmento di Junior/Neolaureati STEM e Career Switcher in Italia che cercano attivamente ruoli in ambito Dati/AI.
-*Dati (Italia 2023/24):*
-- **Laureati STEM**: ~290.000 all'anno (Fonte: Istat/MUR).
-- **Domanda Lavoro**: LinkedIn Italia ha registrato ~184.000 job post ICT in 18 mesi; la domanda di profili AI-specialized è cresciuta dell'**88%** nel 2024.
-*Calcolo Bottom-up:*
-- Assumiamo un target conservativo del **10%** dei laureati STEM interessati verticalmente all'AI (~29.000 utenti/anno).
-- Aggiungiamo un volume equivalente di **Career Switcher/Junior Pro** (~29.000 utenti/anno).
-- **Totale Utenti Target**: ~60.000 utenti/anno.
-- **Valore Economico**: 60.000 * €500 (LTV medio stimato tra Starter e Pro) = **€30.000.000**.
+#### TAM (Total Addressable Market) — macro contesto di spesa
+**Mercato EdTech / tecnologie a supporto della formazione (Italia)**
 
-#### SOM (Serviceable Obtainable Market) — €1.5M - €2M
-**Obiettivo realistico a 18-24 mesi (Market Share)**
-*Definizione:* La quota di mercato che stAItuned può realisticamente catturare con le risorse attuali e il modello ibrido (Tool + Community), senza soffrire i colli di bottiglia dei bootcamp tradizionali.
-*Target:* Penetrazione del **~5% del SAM**.
-*Metriche Operative:*
-- **Studenti/Clienti**: ~3.000 - 4.000 all'anno.
-- **Revenue Run-rate**: ~€1.5M - €2M ARR.
-*Fattibilità:* Raggiungibile grazie al modello scalabile "Career OS".
+*   **Stime Osservatorio EdTech (Politecnico di Milano):** **~€2,8B** (2022) (+26% vs 2021).
+*   *Nota di onestà:* Questo TAM è un tailwind (propensione alla spesa su digitale/formazione), ma non coincide con il mercato “diretto” (career acceleration outcome-based).
+*   *Nota di metodo:* il TAM qui resta 1 numero “macro”; usiamo scenari soprattutto su SAM/SOM perché dipendono da assunzioni e capacity.
+
+#### SAM (Serviceable Available Market) — segmento servibile nei prossimi 24 mesi
+**Definizione SAM (fase 1):**
+Laureandi magistrali / neolaureati STEM in Italia (ultimo anno o ≤12 mesi) che stanno attivamente candidandosi a ruoli **Applied GenAI (LLM apps)** e sono disposti a pagare per un percorso outcome-driven con deliverable.
+
+**Base data (pool annuale):**
+*   **Laureati universitari in Italia (2024):** ~415.553 (Fonte: USTAT).
+*   **Quota STEM (proxy ISTAT):** ~24% (18,3 STEM su 76,4 laureati per 1.000).
+*   **Stima pool STEM annuo:** **~100.000**.
+    *   *Nota:* usiamo i laureati come proxy; includere “ultimo anno magistrale” aumenta il pool ma non cambia l’ordine di grandezza.
+
+**Scenari bottom-up (assunzioni da validare):**
+
+| Scenario | % GenAI-only su STEM | % job search attivo | % willingness-to-pay | Clienti/anno (stima) |
+| --- | --- | --- | --- | --- |
+| Conservativo | 5% | 40% | 7% | ~140 |
+| Base | 8% | 50% | 10% | ~400 |
+| Upside | 10% | 60% | 15% | ~900 |
+
+*Formula: pool STEM annuo × %GenAI × %attivi × %WTP.*
+
+**SAM in valore (€) (programmi + add-on one-off):**
+*Ipotesi ARPU “blended”: €1.000–€1.400 (mix Starter/Pro/Elite + attach rate add-on; SAM più stretto → WTP medio più alto)*
+
+*   **Conservativo:** 140 × €1.000 ≈ **€140k/anno**
+*   **Base:** 400 × €1.200 ≈ **€480k/anno**
+*   **Upside:** 900 × €1.400 ≈ **€1,26M/anno**
+
+*(Nota: l’ARPU dipende dal mix 1:1 vs coorti; con prezzi coorte più bassi l’ARPU scende, ma scendono anche le ore per studente → vedi unit economics).*
+
+*(Nota: ICP secondario (Junior SWE pivot) non incluso nel funnel sopra; da stimare come add-on quando scegliamo una proxy per la base numerica).*
+
+#### SOM (Serviceable Obtainable Market) — 18–24 mesi, guidato da capacità (coorti 8–10)
+Il vincolo non è il mercato ma la **delivery capacity** (QA e gestione coorti).
+
+**Scenari SOM (capacity-driven):**
+
+| Scenario | Coorti/mese | Seats/anno |
+| --- | --- | --- |
+| Conservativo | 1 | 96–120 |
+| Base | 2 | 192–240 |
+| Upside | 4 | 384–480 |
+
+**Nota:** 1:1 premium come add-on (non incluso nel conteggio sopra). Il SOM resta **capacity-driven** perché QA e coaching sono il collo di bottiglia.
+
+*(Check: Per riempire 1 coorte/mese servono ~30-40 application qualificate/mese).*
 
 #### 💡 So What? (Implicazioni Strategiche)
 
-1.  **Nicchia profonda, non piccola:** Non serve diventare generalisti subito. Dominare il **5% del target verticale AI (SOM)** basta per creare un business da **~€2M ARR**.
-2.  **Validazione Premium:** Un TAM da €3B conferma che la propensione alla spesa c'è. Un SAM concentrato (€30M su 60k utenti) suggerisce che il mercato premia la **verticalità e l'outcome** (LTV alto) piuttosto che i volumi low-cost generalisti.
-3.  **Expansion Path:** Una volta conquistata la "testa di ponte" sull'AI (il segmento più hot del momento), il brand ha **spazio infinito per espandersi** orizzontalmente (Data Engineering, Cloud, Cyber) aggredendo il resto dei €3 Miliardi di TAM.
+1.  **Mercato grande + Urgenza:** Il problema è monetizzabile (domanda ICT/AI alta e in crescita).
+2.  **SAM più stretto, ma più sano:** pain più specifico → **conversione e WTP** più alti; proof standardizzabile → meno ore per studente.
+3.  **Qualità vs Volume:** Con coorti piccole (8–10) e track-based si vince su posizionamento premium e outcome.
+4.  **SOM è capacity-driven:** 1 coorte/mese = 96–120/anno; 2 coorti/mese = 192–240/anno; 1:1 premium come add-on.
+5.  **ARR vs One-off:** I programmi generano cassa (Revenue), i tool e la community generano stabilità (ARR).
+
+### 1.2) Deep Dive: Strategia "Deep Niche" (Perché è un vantaggio)
+
+Il mercato è di nicchia, ma **grande abbastanza da costruirci un business serio**. La definizione chiave è: **nicchia profonda, non piccola**.
+
+#### Il "Vero" Mercato (Beachhead)
+Non siamo nel generic "EdTech". Siamo nella categoria:
+> **Outcome-based Applied GenAI career acceleration** per junior, con deliverable + proof pubblica “da engineer”.
+
+È un **Beachhead Market** (alla Geoffrey Moore): abbastanza stretto da **dominare** e diventare la "default choice" prima di espandersi.
+
+#### Perché NON è "macroscopicamente piccola"
+Una nicchia è limitante solo se il CAC è alto o il WTP è basso. Qui invece:
+1.  **WTP Alto:** Vendiamo "trasformazione con asset" (non ore di lezione), giustificando ticket premium.
+2.  **Rinnovo Naturale:** Il mercato si rigenera ogni anno con nuove coorti di laureati.
+3.  **Expansion Path:** Da "Junior Applied GenAI" → Career Switcher → EU/EN → Altri ruoli Tech (Data Eng / Cloud).
+
+#### Peter Thiel Rule
+> *"Meglio essere un monopolio in una nicchia che uno dei tanti in un mercato largo."*
+
+**Framing credibile per Pitch:**
+*   **TAM** = Contesto macro (spesa education/digital).
+*   **SAM** = Nicchia pagante (Junior **Applied GenAI** job-seekers).
+*   **SOM** = Capacità operativa (Quante coorti da 8-10 possiamo servire eccellentemente?).
 
 ---
 
@@ -51,11 +106,23 @@ Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opp
 
 ### Customer segments (chi paga)
 
-**Segmento core (iniziale):**
+**Beachhead ICP (core):**
 
-- Junior / neolaureati (0–18 mesi) in Italia
-- Obiettivo: primo lavoro o primo “ruolo serio” in AI/ML/GenAI/DS
-- Urgenza: alta (candidature in corso, scadenze, paura di essere “indietro”)
+- Laureando magistrale / neolaureato STEM (ultimo anno o ≤12 mesi) in Italia
+- Obiettivo: primo ruolo serio in **Applied GenAI (LLM apps)**
+- Ruoli target: Applied GenAI Engineer / LLM Application Engineer, RAG Engineer, Agent Engineer, GenAI Product Engineer
+- Trigger di acquisto: candidature in corso (o entro 4–8 settimane), 20–40 candidature senza risposta, colloqui tecnici in arrivo (LLM app system design + RAG/agent/eval)
+
+**ICP secondario (ad altissima conversione):**
+
+- Junior SWE (0–2 anni) che pivot verso GenAI Engineer (basi SWE già solide → focus su posizionamento, proof, eval, tradeoff)
+
+**Segmenti da escludere (anti agency trap):**
+
+- “Voglio entrare nell’AI” senza target GenAI chiaro
+- career switcher senza basi coding
+- richiesta “lavoro garantito”
+- rifiuto di pubblicare proof (repo/demo/write-up o articolo)
 
 **Segmenti futuri (non core oggi):**
 
@@ -66,11 +133,10 @@ Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opp
 ### Value proposition (perché comprano)
 
 - **🎯 AI Expert Guidance**: mentoring da senior AI professionals che assumono e lavorano nel campo — insider knowledge, non teoria
-- **Role-fit**: scegliere il ruolo giusto e la roadmap
-- **Candidabilità**: CV/LinkedIn/JD tailoring + strategia candidature + interview prep
-- **Proof**: asset pubblici e verificabili
-    - Starter: **1 articolo su stAItuned**
-    - Pro: articolo + mini-progetto (repo/demo)
+- **Role-fit + job targeting**: titoli corretti, keyword/query, aziende target
+- **Candidabilità**: CV/LinkedIn + JD tailoring + application pack
+- **Proof pubblica “da engineer”**: demo + repo pulita + evaluation + write-up (e/o articolo), con QA
+- **Interview readiness GenAI**: RAG/Agents/Eval/Tradeoffs (reliability, latency/cost, sicurezza)
 
 > **Differenziatore chiave**: impari da chi assume per questi ruoli, non da career coach generici.
 
@@ -102,14 +168,14 @@ Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opp
 - Delivery del programma (call + review + QA)
 - Produzione/QA articoli e proof
 - Aggiornamento template/rubriche (standardizzazione)
-- Marketing (contenuti, funnel, call)
+- Marketing (contenuti, funnel, call) + mantenimento SEO/blog (asset di compounding)
 - Sviluppo/maintenance tool (mirato a ridurre ore umane)
 
 ### Key resources
 
 - **AI Expert team**: Senior AI professionals che assumono e lavorano nel campo
 - Playbook (SOP, rubriche, checklist)
-- Brand stAItuned (pubblicazioni + proof)
+- Brand stAItuned (pubblicazioni + proof) + **blog come “publisher” e asset SEO**
 - Tooling (editorial planner + career OS)
 - Community/alumni (flywheel referral)
 - Competenza core (AI + product + delivery)
@@ -164,46 +230,55 @@ Il blog stAItuned **non è una spesa di marketing**: è una **risorsa chiave** d
 
 ## 3) Offerta (packaging) — con guardrail anti-overdelivery
 
-### Starter (4 settimane) — include 1 articolo su stAItuned
+### Struttura per coorti (8–10) — “Track-based”
+
+Ogni coorte sceglie **1 track** (riduce varianza e rende la proof standard):
+
+- **Track A — RAG Engineer**: ingestion/chunking, retrieval + re-ranking, citations/grounding, evaluation + monitoring, cost/latency
+- **Track B — Agent Engineer**: tool-use loop, orchestration, guardrails, reliability, eval su task success
+- **Track C — GenAI Product Engineer**: UI + backend + LLM integration, UX patterns (streaming/confirmations/fallback), telemetry + eval
+
+### Starter (4 settimane) — “Candidabile + Proof-lite”
 
 **Deliverable minimi:**
 
-- Role fit + roadmap 30/60/90
-- CV + LinkedIn ottimizzati (rubriche)
-- JD pack (3 job description): CV + cover letter personalizzati (utente compila con tool + nostra review)
-- **1 articolo pubblicato su stAItuned**
+- GenAI Role Fit (scelta track + “JD archetype” target)
+- CV + LinkedIn ottimizzati (rubrica + 1 round revisione)
+- JD pack (3): tailoring CV + cover letter (utente compila con tool + nostra review)
+- **Proof pubblica (scelta 1):**
+    - A) Articolo tecnico su stAItuned (GenAI-aligned), oppure
+    - B) Mini “case write-up” (1 pagina) su una demo/repo già esistente
 
-**Guardrail articolo (fondamentali):**
+**Guardrail (fondamentali):**
 
-- range parole + topic “role-aligned”
 - max 2 round di revisione
 - no ghostwriting (scrive il candidato, tu guidi e fai editing)
 - pubblicazione subordinata a standard qualità (QA)
 
-### Pro (8 settimane) — best seller
+### Pro (8 settimane) — “Best seller: Proof seria + Interview”
 
 Tutto Starter +:
 
-- mini-progetto AI (repo/demo) **scope piccolo ma pulito**
-- JD pack (es. 10 JD)
-- 1 mock interview
-- **“Supporto ‘Job Targeting’: suggerimento di posizioni affini e titoli/varianti ruolo coerenti con il profilo (lista + criteri di ricerca)”**
-- **“Crediti tool aggiuntivi acquistabili”** (es. extra JD, extra articoli, extra review; modello a crediti come upsell).
+- **GenAI Project (standardizzato per track):** demo (webapp/API) + repo pulita + evaluation (test set + metriche/rubrica + report) + write-up
+- JD pack (10)
+- 1 mock interview (GenAI: tradeoff + debug + design)
+- Job Targeting Kit: lista titoli/varianti + keyword map + query replicabili + shortlist aziende (20–40)
+- Crediti/add-on acquistabili (JD extra, mock extra, review extra, articolo/write-up extra)
 
 ### Elite (8 settimane + 12 mesi)
 
 Tutto Pro +:
 
 - accesso tool per 12 mesi (con cap/crediti)
-- office hours/review mensile
-- priority review
+- 1 office hour/mese (review, job strategy, iterazioni)
+- priority review (2 asset per mese/trim, entro cap)
 
 ### Add-on (upsell semplici)
 
 - JD pack extra (x5 / x10)
 - mock interview extra
-- revisione articolo extra
-- articolo extra su stAItuned (se vuoi trasformarlo in recurring)
+- review extra (CV/LinkedIn/progetto/write-up)
+- articolo extra su stAItuned (solo se supera QA, max revisioni)
 - Pacchetti crediti tool (upsell): crediti per (a) JD extra (CV+cover), (b) articolo extra (con QA), (c) review extra / priority review.
 
 ---
@@ -272,20 +347,20 @@ Se il **€/h effettivo** è basso, sei un “servizio”; se sale grazie a coor
 
 ### Workflow standard (SOP)
 
-1. Application + onboarding (obiettivi, vincoli, baseline)
-2. Role fit (decisione + roadmap)
+1. Application + onboarding (obiettivi, vincoli, baseline, **scelta track**, disponibilità 5–8h/settimana)
+2. Role fit + job targeting (decisione track + JD archetype + roadmap)
 3. CV/LinkedIn con rubriche (score + iterazione limitata)
 4. JD tailoring (utente compila con tool + nostra review): Starter = 3 JD, Pro/Elite = 10 JD.
 5. (Solo Pro/Elite) Job targeting: definizione ruoli affini + keyword + query + filtri; output: shortlist posizioni e criteri replicabili.
 6. Interview prep (script + sessione)
-7. Articolo stAItuned (outline → draft → QA → publish)
-8. (Pro) Mini-progetto (scope → sprint → review → publish)
+7. Proof pubblica (Starter: articolo o write-up; Pro/Elite: write-up + progetto) con QA
+8. (Pro/Elite) Progetto standard per track (scope → sprint → review → **evaluation** → publish)
 
 ### QA e standard
 
 - Rubrica CV/LinkedIn (score e checklist)
-- Rubrica articolo (accuratezza, chiarezza, originalità, struttura)
-- Rubrica progetto (readme, riproducibilità, pulizia, demo)
+- Rubrica articolo/write-up (accuratezza tecnica, struttura, originalità, claim sobri)
+- Rubrica progetto (setup <10 min, README “da engineer”, evaluation presente, demo + screenshot/gif, tradeoff cost/latency/quality)
 
 Questo è ciò che rende la qualità replicabile quando passi alle coorti.
 
@@ -296,7 +371,7 @@ Questo è ciò che rende la qualità replicabile quando passi alle coorti.
 ### Funnel minimo
 
 1. Contenuto (LinkedIn + blog) su “role confusion → role fit”
-2. Lead magnet: “AI Role Fit Audit” (gratuito o low ticket)
+2. Lead magnet: “GenAI Role Fit Audit” (gratuito o low ticket)
 3. Call 15 min
 4. Application (selezione = aumenta conversione e qualità)
 5. Offerta tier + pagamento
@@ -320,12 +395,13 @@ Non sono numeri “a caso”: sono le metriche che decidono se il modello è san
 - call booked
 - show rate
 - conversion rate call → paid
+- traffico organico blog (sessioni) e conversione → audit/application
 
 ### Delivery & outcome
 
 - % utenti che completano deliverable minimi
 - ore reali per utente (T)
-- tempo medio di publish articolo
+- tempo medio di publish proof (articolo/write-up) e/o repo/demo
 
 # candidature inviate (da utente)
 

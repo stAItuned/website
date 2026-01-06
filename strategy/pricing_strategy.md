@@ -20,7 +20,7 @@ Esiste un vuoto enorme tra le due alternative attuali:
 *   **IL TUO SPAZIO (€500 - €1.200):** Non c'è quasi nulla che offra *outcome reale* a questo prezzo. Sei la scelta logica per chi vuole risultati "bootcamp" ma non ha €3k o 6 mesi.
 
 ### B) ROI Immediato (Ancoraggio alla RAL)
-Il target (Junior AI Engineer) punta a stipendi **€28k - €35k** (RAL).
+Il target (Junior GenAI Engineer / LLM App Engineer) punta a stipendi **€28k - €35k** (RAL).
 *   **Starter (€590):** Costa il **2% della RAL** annuale (o **mezzo stipendio netto**).
 *   **Insight:** Spendere mezzo stipendio futuro per sbloccare l'intera carriera è un trade-off a basso rischio e altissimo rendimento.
 
@@ -37,8 +37,8 @@ Il tuo prezzo si giustifica perché non vendi “CV + LinkedIn”. Vendi:
 
 - **Decisione del ruolo (role-fit)**
 - **Candidabilità** (CV/LinkedIn + JD pack + interview prep)
-- **Proof pubblica**: *1 articolo pubblicato su stAItuned* (nello Starter)
-- (Nel Pro) **Proof tecnica**: mini-progetto “portfolio-grade”
+- **Proof pubblica “da engineer”**: demo + repo pulita + evaluation + write-up (e/o articolo), con QA
+- (Nel Pro) **Proof tecnica standard**: progetto GenAI “portfolio-grade” per track (RAG / Agent / Product)
 
 Questo ti permette un prezzo *molto* più alto del CV service senza dover arrivare ai prezzi bootcamp.
 
@@ -57,7 +57,7 @@ Sconti solo codificati (early bird, scholarship studenti limitata, referral).
 Non promettere “lavoro”, ma prometti **deliverable**:
 
 - “Se entro 4 settimane non hai CV/LinkedIn + JD pack pronti *secondo rubrica*, aggiungiamo 2 review async gratuite.”
-- “Se l’articolo non passa QA, hai 1 round extra (entro limiti).”
+- “Se la proof pubblica (articolo/write-up) non passa QA, hai 1 round extra (entro limiti).”
 
 Questo replica il vantaggio percepito dei bootcamp (garanzie/finanziamenti) senza distruggerti. start2impact ed Epicode spingono garanzie e formule pay-later: devi controbilanciarle. [start2impact+2EPICODE+2](https://www.start2impact.it/master/data-science-analytics/?utm_source=chatgpt.com)
 
@@ -71,8 +71,8 @@ Per junior, è un boost enorme di conversione perché bootcamp usano rate/finanz
 
 Ti do tre set “pronti” (da testare). Tutti presuppongono:
 
-- Starter include **1 articolo** su stAItuned (con guardrail)
-- Pro include mini-progetto + più JD pack
+- Starter include **1 proof pubblica** (articolo o case write-up), con guardrail
+- Pro include **progetto GenAI standard** (demo + repo + evaluation + write-up) + più JD pack
 - Elite include continuità/priority
 
 ### Scenario 1 — **Balanced (consigliato per partire)**
