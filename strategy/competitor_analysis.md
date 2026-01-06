@@ -4,11 +4,11 @@
 
 Per un junior/neolaureato:
 
-**“Voglio capire quale ruolo AI è giusto per me, diventare candidabile in tempi brevi, ottenere colloqui, e dimostrare credibilità con proof pubblica.”**
+**“Voglio capire quale ruolo Applied GenAI (LLM apps) è giusto per me, diventare candidabile in tempi brevi, ottenere colloqui, e dimostrare credibilità con proof pubblica.”**
 
 ## La tua proposta (come “categoria mentale”)
 
-**Outcome-based Career OS per ruoli AI** + **Proof Engine** (articolo stAItuned incluso nello Starter) + (nel Pro) **mini-progetto pubblicabile**.
+**Outcome-based GenAI Career OS per ruoli Applied GenAI (LLM apps)** + **Proof Engine** (proof pubblica “da engineer”: demo + repo + evaluation + write-up / articolo, con QA).
 
 Questa combinazione ti mette in competizione su 3 assi contemporaneamente:
 
@@ -86,7 +86,7 @@ Esempi:
 ### Debolezze (spazio per te)
 
 - Non risolvono **role-fit** (la confusione rimane)
-- Non creano **proof** (zero portfolio, zero articolo, zero segnale pubblico)
+- Non creano **proof** (zero demo/repo/eval, zero segnale pubblico)
 - Non insegnano strategia candidature/interview in modo sistemico
 
 ### Come competi
@@ -124,7 +124,7 @@ Tu devi trasformare i tool in **commodities** (“anche noi li abbiamo”) e com
 
 - rubriche + feedback umano
 - standard qualità (QA)
-- proof engine (articolo stAItuned)
+- proof engine (repo/demo/eval + publish con QA)
     
     In pratica: *tool come feature, non come prodotto core*.
     
@@ -258,7 +258,7 @@ Sì, alcune parti sono replicabili. Il moat reale deve diventare:
 Obiettivo competitivo: vincere contro bootcamp e CV service con:
 
 - promessa corta (4 settimane candidabile)
-- proof pubblica (articolo incluso)
+- proof pubblica “da engineer” (repo/demo/eval; in Starter proof-lite)
 - application (selezione = segnale qualità)
 
 ## Fase 2 (coorti + tool)
@@ -295,7 +295,7 @@ Competitor cambiano (system integrator, piattaforme, consulenze): qui la regola 
 
 ## Conclusione (in una frase)
 
-**Il tuo vantaggio competitivo non è “AI + tool”** (troppo facilmente copiabile): è **Outcome + Proof pubblica + Metodo standardizzato + Community**, incastrati in un percorso breve e credibile, posizionato tra “CV service” e “bootcamp”.
+**Il tuo vantaggio competitivo non è “LLM + tool”** (troppo facilmente copiabile): è **Outcome + Proof pubblica + Metodo standardizzato + Community**, incastrati in un percorso breve e credibile, posizionato tra “CV service” e “bootcamp”.
 
 ---
 
@@ -303,12 +303,12 @@ Competitor cambiano (system integrator, piattaforme, consulenze): qui la regola 
 
 | Competitor | Categoria | Cosa promette (percepito dall’utente) | Prezzo/ancoraggio (pubblico) | Punti forti | Debolezza attaccabile | Come vinciamo (messaggio stAItuned) | Quando NON siamo il fit |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Start2Impact | Bootcamp/Master (coorti) | “Percorso strutturato + progetti + career” | Listino €2.900, promo €1.900; accesso 1 anno + rinnovo €499/anno indicato. | Struttura, community, percezione “accademia” | Standardizzato e più lungo: role-fit e proof su misura non sono il focus | “In 4 settimane sei candidabile + 1 proof pubblica (articolo stAItuned). In 8 settimane aggiungi proof tecnica (Pro). Percorso corto e su misura.” | Se uno deve imparare da zero basi di programmazione/ML e vuole mesi di lezione strutturata |
-| Epicode | Bootcamp con “risk reversal” | “Bootcamp + paghi dopo + garanzie” | Prezzo indicato €4.900 (da €6.200) + formula “inizi a pagare tra 2 anni” e meccaniche di rimborso/garanzia. | Riduce attrito economico, brand forte, narrativa placement | Lungo + generalista; “paghi dopo” ti vincola; non ottimizzato per speed-to-candidacy | “No mesi di corso: outcome in settimane. Deliverable verificabili (CV/LinkedIn + JD pack + articolo pubblicato).” | Se cercano esplicitamente un percorso “finanziato” lungo e non hanno urgenza |
-| Develhope (Data & AI Analyst) | Bootcamp entry | “Entry-level, pagamenti dilazionati” | Costo totale riportato €2.900 (da €3.500), costo mensile €93 e formula “inizi a pagare tra 2 anni” presente in comunicazione. | Prezzo percepito accessibile, orientamento junior | Ruolo target meno “AI Eng/GenAI Eng”; spesso “data/analyst” più generico | “No ‘data generico’: scegliamo il ruolo AI giusto e costruiamo proof mirata al ruolo (articolo + progetto nel Pro).” | Se l’obiettivo è “qualsiasi lavoro data/analyst” senza focalizzazione su AI roles |
-| Boolean (Data Analytics) | Academy (più data analytics) | “Percorso chiaro + qualità didattica” | €4.500 indicati e rate €210/mese (esempio). | Percezione qualità, percorso lineare | Non AI-first (più analytics); tempo e costo alti vs outcome rapido | “Siamo AI-only e outcome-based: candidabilità + proof in 4–8 settimane.” | Se vogliono soprattutto “formazione ampia” su analytics e fondamentali |
-| Talent Garden | Academy (catalogo corsi) | “Up-skilling e certificazioni” | Esempio corso promo €2.448 (da €2.880). | Brand, network, “certificato” | Spesso più generalista/manageriale, meno proof tecnica mirata | “Il certificato da solo non basta: ti facciamo uscire con proof pubblica (articolo) e (Pro) proof tecnica.” | Se l’obiettivo è “AI per business/management” più che ruolo tecnico |
-| Servizi CV/LinkedIn (vari) | Career service low-ticket | “Ti sistemo CV/LinkedIn velocemente” | Esempi: LinkedIn review €69; pacchetti CV+LinkedIn+lettera €159. | Economici, immediati, delega completa | Commodity: non risolvono role-fit, JD strategy, interview, proof | “Non vendiamo impaginazione: vendiamo percorso + deliverable + proof pubblica (articolo stAItuned incluso nello Starter).” | Se uno vuole solo “un CV bello” senza percorso/strategia |
+| Start2Impact | Bootcamp/Master (coorti) | “Percorso strutturato + progetti + career” | Listino €2.900, promo €1.900; accesso 1 anno + rinnovo €499/anno indicato. | Struttura, community, percezione “accademia” | Standardizzato e più lungo: role-fit e proof su misura non sono il focus | “In 4 settimane sei candidabile + 1 proof pubblica (articolo o write-up). In 8 settimane aggiungi progetto GenAI (demo+repo+eval).” | Se uno deve imparare da zero basi di programmazione/ML e vuole mesi di lezione strutturata |
+| Epicode | Bootcamp con “risk reversal” | “Bootcamp + paghi dopo + garanzie” | Prezzo indicato €4.900 (da €6.200) + formula “inizi a pagare tra 2 anni” e meccaniche di rimborso/garanzia. | Riduce attrito economico, brand forte, narrativa placement | Lungo + generalista; “paghi dopo” ti vincola; non ottimizzato per speed-to-candidacy | “No mesi di corso: outcome in settimane. Deliverable verificabili (CV/LinkedIn + JD pack + proof pubblica con QA).” | Se cercano esplicitamente un percorso “finanziato” lungo e non hanno urgenza |
+| Develhope (Data & AI Analyst) | Bootcamp entry | “Entry-level, pagamenti dilazionati” | Costo totale riportato €2.900 (da €3.500), costo mensile €93 e formula “inizi a pagare tra 2 anni” presente in comunicazione. | Prezzo percepito accessibile, orientamento junior | Ruolo target meno “AI Eng/GenAI Eng”; spesso “data/analyst” più generico | “No ‘data generico’: scegliamo il ruolo GenAI giusto e costruiamo proof mirata al ruolo (write-up/articolo + progetto nel Pro).” | Se l’obiettivo è “qualsiasi lavoro data/analyst” senza focalizzazione su GenAI roles |
+| Boolean (Data Analytics) | Academy (più data analytics) | “Percorso chiaro + qualità didattica” | €4.500 indicati e rate €210/mese (esempio). | Percezione qualità, percorso lineare | Non AI-first (più analytics); tempo e costo alti vs outcome rapido | “Siamo GenAI-only e outcome-based: candidabilità + proof in 4–8 settimane.” | Se vogliono soprattutto “formazione ampia” su analytics e fondamentali |
+| Talent Garden | Academy (catalogo corsi) | “Up-skilling e certificazioni” | Esempio corso promo €2.448 (da €2.880). | Brand, network, “certificato” | Spesso più generalista/manageriale, meno proof tecnica mirata | “Il certificato da solo non basta: ti facciamo uscire con proof pubblica (write-up/articolo) e (Pro) progetto GenAI.” | Se l’obiettivo è “AI per business/management” più che ruolo tecnico |
+| Servizi CV/LinkedIn (vari) | Career service low-ticket | “Ti sistemo CV/LinkedIn velocemente” | Esempi: LinkedIn review €69; pacchetti CV+LinkedIn+lettera €159. | Economici, immediati, delega completa | Commodity: non risolvono role-fit, JD strategy, interview, proof | “Non vendiamo impaginazione: vendiamo percorso + deliverable + proof pubblica (write-up/articolo) con QA.” | Se uno vuole solo “un CV bello” senza percorso/strategia |
 
 ---
 
@@ -316,7 +316,7 @@ Competitor cambiano (system integrator, piattaforme, consulenze): qui la regola 
 
 | Tool | Categoria | Cosa promette | Prezzo/ancoraggio (pubblico) | Punti forti | Debolezza attaccabile | Come vinciamo (messaggio stAItuned) |
 | --- | --- | --- | --- | --- | --- | --- |
-| Jobscan | ATS optimization | “Aumento match ATS” | $49.95/mese indicato. | Immediato, self-serve | Senza strategia e feedback rischi “spray & pray” | Tool ≠ outcome: noi aggiungiamo metodo + rubriche + review + proof. Starter: 3 JD complete + articolo pubblicato. Pro: 10 JD + job targeting assistito (ruoli affini/keyword/query) + proof tecnica (mini-progetto). |
+| Jobscan | ATS optimization | “Aumento match ATS” | $49.95/mese indicato. | Immediato, self-serve | Senza strategia e feedback rischi “spray & pray” | Tool ≠ outcome: noi aggiungiamo metodo + rubriche + review + proof. Starter: 3 JD complete + 1 proof pubblica (write-up/articolo). Pro: 10 JD + job targeting assistito (ruoli affini/keyword/query) + progetto GenAI (demo+repo+eval). |
 | Rezi | Resume builder | “CV ottimizzato e veloce” | $29/mese; lifetime $149. | Economico, rapido | Non risolve role-fit, narrative, proof | “Usiamo strumenti, ma vendiamo sistema: candidabilità + proof pubblica.” |
 | Teal | Job tracker + resume | “Gestione job search end-to-end” | Teal+ piani tipo $9/settimana / $29/mese. | Tracking, workflow | Mancanza di feedback umano e standard qualità | “Noi ti diciamo *cosa fare* e *come farlo bene*; il tool è solo acceleratore.” |
 | Kickresume | Resume builder | “CV belli + template” | “da $8/mese” indicato. | Prezzo basso | Non crea proof e non decide il percorso | “Stesso discorso: outcome + proof, non template.” |

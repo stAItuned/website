@@ -3,7 +3,7 @@
 
 ## 1) What it is (product definition)
 
-A goal-driven “Career Operating System” tool for **AI/ML/GenAI junior candidates** that helps users:
+A goal-driven “Career Operating System” tool for **Applied GenAI (LLM apps) junior candidates** that helps users:
 
 * choose a clear target (role + constraints),
 * transform their experience into **credible, role-aligned evidence**,
@@ -22,7 +22,7 @@ A goal-driven “Career Operating System” tool for **AI/ML/GenAI junior candid
 
 Juniors don’t fail because they lack intelligence—they fail because they:
 
-* don’t know which AI role to target,
+* don’t know which Applied GenAI role to target,
 * apply with generic material,
 * can’t translate experience into “evidence” that matches a JD,
 * don’t know what gaps are truly blocking them,
@@ -43,7 +43,7 @@ It converts:
 
 ## 3) Target user and usage context
 
-**ICP:** junior / new grad targeting roles like AI Engineer, ML Engineer, GenAI Engineer, Data Scientist (entry-level).
+**ICP:** junior / new grad targeting Applied GenAI roles like LLM Application Engineer, RAG Engineer, Agent Engineer, GenAI Product Engineer (entry-level).
 **Context:** they’re actively applying and need results in 4–8 weeks.
 **Constraints:** limited time, incomplete portfolio, needs guidance.
 
@@ -361,4 +361,3 @@ This is what makes it an “OS”.
 
 * Everything is “guided”: users don’t know what to do next
 * Always show: *what to do now*, *why it matters*, *what output you’ll get*
-

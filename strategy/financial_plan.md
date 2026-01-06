@@ -1,4 +1,4 @@
-# Financial Plan — stAItuned Career OS
+# Financial Plan — stAItuned GenAI Career OS
 
 Questo documento traduce la strategia e il business model in numeri concreti. Serve a guidare le decisioni operative (budget, pricing, assunzioni) e a monitorare la sostenibilità.
 
@@ -56,7 +56,7 @@ Obiettivo: Validare il modello, raggiungere il Break-even operativo e iniziare a
 Dove vanno i soldi. L'obiettivo è mantenere i costi fissi al minimo (lean).
 
 ### Costi Fissi (Burn Rate) - Stima Mensile
-*   **Tech Stack (Hosting, Tool No-Code, AI API):** ~€200 - €400
+*   **Tech Stack (Hosting, Tool No-Code, LLM API):** ~€200 - €400
 *   **Marketing (Tool, Content, piccolissimo budget Ads test):** ~€300 - €500
 *   **Admin/Commercialista/Legale:** ~€150 (media mensile)
 *   **Totale Costi Fissi:** **~€650 - €1.000 / mese**
@@ -137,9 +137,9 @@ Con il modello **1:1 Pro**, ti bastano **5 clienti al mese** per coprirti lo sti
 ## 7) "Why Now" Finanziario (Leva Operativa)
 
 Perché i margini previsti oggi sono superiori a quelli di un'agenzia tradizionale?
-1.  **AI Leverage:** Usi l'AI per correggere bozze, generare JD pack e analizzare gap, riducendo il tempo umano del 50-70% rispetto a un career coach classico.
+1.  **LLM Leverage:** Usi l'AI/LLM per correggere bozze, generare JD pack e analizzare gap, riducendo il tempo umano del 50-70% rispetto a un career coach classico.
 2.  **No Costi Struttura:** Non hai uffici, aule fisiche o hardware da noleggiare (vs Bootcamp tradizionali).
-3.  **High Willingness to Pay:** Il target (AI Engineer) ha aspettative di stipendio alte (RAL 30k-40k+ entry level), quindi spendere €500-1000 per accedere al ruolo è percepito come un investimento ad alto ROI (1-2 mesi di stipendio extra ripagano tutto).
+3.  **High Willingness to Pay:** Il target (GenAI Engineer / LLM App Engineer) ha aspettative di stipendio alte (RAL 30k-40k+ entry level), quindi spendere €500-1000 per accedere al ruolo è percepito come un investimento ad alto ROI (1-2 mesi di stipendio extra ripagano tutto).
 
 ---
 
@@ -157,4 +157,3 @@ Abbiamo analizzato se stAItuned può sostenere un founder full-time (€4.500 st
 *   **Smetti di preoccuparti della Delivery:** Hai capito che puoi gestire 10 clienti 1:1 senza morire. Non è quello il collo di bottiglia.
 *   **Tutta l'energia sull'ACQUISITION:** Il vero rischio non è "non riuscire a seguirli", ma "non trovare i 5 clienti al mese".
 *   **Azione chiave:** Il tuo unico KPI nei prossimi 3 mesi è **generare 30-40 lead qualificati al mese** (per chiuderne 5-7). Tutto il resto (sito perfetto, logo, business plan complessi) è rumore.
-
