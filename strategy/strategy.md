@@ -32,6 +32,38 @@ Questo significa:
 
 ---
 
+## Blog stAItuned: Asset Strategico (non solo marketing)
+
+Il blog **non è un canale di marketing, è un asset fondamentale** del modello. Merita trattamento equivalente al prodotto Career OS.
+
+### Funzione strategica
+
+| Ruolo | Come contribuisce |
+|---|---|
+| **Authority Building** | 85+ articoli tecnici → posizionamento "AI Expert" |
+| **Trust / Pre-selling** | I lettori vedono competenza prima di pagare |
+| **SEO / Inbound** | Traffico organico continuo (compounding asset) |
+| **Lead Qualification** | Chi legge 3+ articoli è un lead "caldo" |
+| **Proof pubblica** | Gli articoli dei clienti Career OS generano altro traffico |
+| **Talent Magnet** | I contributor migliori spesso arrivano dal blog |
+
+### Metriche blog (strategic, non vanity)
+
+- **Articoli pubblicati / mese** (output)
+- **Traffico organico / mese** (reach)
+- **Conversione lettore → lead magnet / audit** (funnel top)
+- **Referral da blog → Career OS sale** (attribution)
+
+### Guardrail
+
+1. **Qualità non negoziabile**: ogni articolo passa QA (rubrica accuratezza + chiarezza)
+2. **No ghostwriting puro**: se un cliente scrive, il suo nome è sull'articolo
+3. **Contenuto "role-aligned"**: gli articoli devono parlare a junior AI (no off-topic)
+
+> **Bottom line:** Il blog è il "flywheel fuel". Senza contenuti di valore, l'inbound si ferma. Investire nel blog = investire nell'acquisizione a costo zero.
+
+---
+
 ## Flywheel (motore strategico)
 
 1. **Career OS produce risultati**

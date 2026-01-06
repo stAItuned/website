@@ -65,6 +65,32 @@ Dove vanno i soldi. L'obiettivo è mantenere i costi fissi al minimo (lean).
 *   **Collaboratori (Tutor/Correction - Futuro):** ~20% del fatturato coorte (solo in fase scaling).
 *   **Payment Fees (Stripe/PayPal):** ~3% del transato.
 
+### Blog Economics (Impatto Finanziario del Blog)
+
+Il blog non appare come "costo" nel P&L tradizionale, ma ha un impatto finanziario reale.
+
+| Voce | Valore Stimato | Note |
+|---|---|---|
+| **Tempo investito** | ~4h/settimana | QA, editing, pubblicazione |
+| **Costo implicito** | ~€800/mese | (16h * €50/h valore imputato) |
+| **Costo cash** | ~€0 | (hosting già incluso nei costi fissi) |
+
+**ROI vs Paid Acquisition:**
+
+| Canale | Costo Mensile | Lead Generati | CAC Effettivo |
+|---|---|---|---|
+| **Blog (Organic)** | €0 cash (€800 tempo) | ~50-100 | **€8-16** |
+| **LinkedIn Ads** | €500 | ~30-50 | **€10-17** |
+| **Google Ads** | €500 | ~20-30 | **€17-25** |
+
+**Compounding Effect (Valore Nascosto):**
+*   Un articolo scritto oggi genera traffico per **12-24 mesi**.
+*   Con 85+ articoli, il blog genera un "floor" di traffico organico costante.
+*   **Stima:** Ogni articolo vale ~€50-100/anno in lead equivalenti (conservativo).
+*   **Asset Value:** 85 articoli * €75 = **~€6.000/anno** di "marketing gratuito".
+
+> **Bottom line:** Il blog costa ~€800/mese in tempo, ma genera un flusso di lead a CAC ~€10 (vs €15-25 paid). È il canale più efficiente. La vera domanda non è "quanto costa il blog?", ma "quanto costerebbe NON averlo?".
+
 **Punto di Break-Even:**
 Con costi fissi di ~€1.000, bastano **2 clienti Starter (1:1)** o **4 clienti Cohort** al mese per coprire le spese vive (escluso stipendio founder). Il rischio finanziario è bassissimo.
 

@@ -131,6 +131,37 @@ Un'analisi reale dei volumi di mercato (Bottom-up e Top-down) per validare l'opp
 
 ---
 
+## 2b) Il Blog: Asset Strategico (non costo)
+
+Il blog stAItuned **non è una spesa di marketing**: è una **risorsa chiave** del business model, con ROI composto.
+
+### Perché è un asset
+
+| Dimensione | Impatto |
+|---|---|
+| **Acquisizione** | Traffico organico SEO → Lead a costo marginale zero |
+| **Conversione** | Lettori "educati" convertono meglio (conoscono il brand) |
+| **Proof** | Ogni articolo pubblicato è un sample della qualità (pre-selling) |
+| **Flywheel** | Articoli dei clienti Career OS → nuovo traffico → nuovi clienti |
+| **Retention** | Contenuti utili mantengono gli alumni engaged (referral) |
+
+### Metriche chiave
+
+- **Articoli/mese** (throughput)
+- **Traffico organico SEO** (reach)
+- **Conversione Blog → Audit/Lead Magnet** (funnel efficacy)
+- **Attribuzione Blog → Sale** (business impact)
+
+### Costi reali
+
+- **Tempo team** per QA e editing (principale)
+- Hosting/infra (trascurabile)
+- Tool (Notion, CMS) = ~€20/mese
+
+> **Bottom line:** Il blog ha un "costo" in tempo, ma genera un flusso di lead a CAC ~€0 che si accumula nel tempo. È l'opposto di un costo: è un investimento con compounding return.
+
+---
+
 ## 3) Offerta (packaging) — con guardrail anti-overdelivery
 
 ### Starter (4 settimane) — include 1 articolo su stAItuned
