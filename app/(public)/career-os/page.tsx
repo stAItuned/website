@@ -170,10 +170,10 @@ export default function CareerOSPage() {
                 <section className="py-24 bg-slate-50 dark:bg-[#151925]">
                     <div className="max-w-5xl mx-auto px-6">
                         <h2 className="text-3xl font-bold text-center mb-6 text-[#1A1E3B] dark:text-white">
-                            Il problema che <span className="text-rose-500">nessuno ti dice</span>
+                            Perché le tue candidature AI <span className="text-rose-500">non ricevono risposta</span>
                         </h2>
                         <p className="text-center text-slate-600 dark:text-slate-400 mb-16 max-w-2xl mx-auto">
-                            Puoi leggere tutti gli articoli AI del mondo. Ma se non sai come posizionarti, i recruiter non ti chiameranno mai.
+                            20-40 candidature inviate, zero callback. Ecco i 3 motivi.
                         </p>
 
                         <div className="grid md:grid-cols-3 gap-8">
@@ -184,10 +184,10 @@ export default function CareerOSPage() {
                                     <UserX className="w-6 h-6" />
                                 </div>
                                 <h3 className="text-xl font-bold mb-4 text-[#1A1E3B] dark:text-white">
-                                    Confusione Ruoli
+                                    Non sai quale ruolo AI sei
                                 </h3>
                                 <p className="text-slate-600 dark:text-slate-300">
-                                    DS, ML Eng, GenAI Eng… <strong>Quale sei?</strong> Se non lo sai tu, perché dovrebbe saperlo un recruiter?
+                                    Data Scientist? ML Engineer? GenAI Engineer? Ogni ruolo ha requisiti diversi. <strong>Se applichi a tutti, non convinci nessuno.</strong>
                                 </p>
                             </div>
 
@@ -198,10 +198,10 @@ export default function CareerOSPage() {
                                     <FileQuestion className="w-6 h-6" />
                                 </div>
                                 <h3 className="text-xl font-bold mb-4 text-[#1A1E3B] dark:text-white">
-                                    CV Invisibile
+                                    Il CV dice &quot;entusiasta&quot;, non &quot;engineer&quot;
                                 </h3>
                                 <p className="text-slate-600 dark:text-slate-300">
-                                    "AI Enthusiast" non basta. Se il tuo CV dice <em>entusiasta</em> invece di <em>engineer</em>, finisce nel cestino.
+                                    I recruiter cercano keyword specifiche: <strong>RAG, Agents, Evaluation</strong>. Se scrivi "appassionato di AI", finisci nel cestino.
                                 </p>
                             </div>
 
@@ -212,10 +212,10 @@ export default function CareerOSPage() {
                                     <VideoOff className="w-6 h-6" />
                                 </div>
                                 <h3 className="text-xl font-bold mb-4 text-[#1A1E3B] dark:text-white">
-                                    Nessuna Proof
+                                    Nessuna prova pubblica
                                 </h3>
                                 <p className="text-slate-600 dark:text-slate-300">
-                                    Gli hiring manager vogliono <strong>demo, repo, evaluation</strong>. Non un altro CV con "Python/LangChain" senza contesto.
+                                    Gli hiring manager vogliono vedere: <strong>demo funzionante, repo pulita, evaluation con metriche</strong>. Non un altro "progetto Kaggle".
                                 </p>
                             </div>
                         </div>
@@ -230,7 +230,7 @@ export default function CareerOSPage() {
                                 La Soluzione: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#383F74] to-[#4d84d4] dark:from-[#FFF272] dark:to-[#F59E0B]">Career OS™</span>
                             </h2>
                             <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                                Non un corso. Un sistema per generare <strong>outcome di carriera</strong> in 4-8 settimane.
+                                Un percorso che produce <strong>deliverable concreti</strong>, non ore di video.
                             </p>
                         </div>
 
@@ -239,22 +239,22 @@ export default function CareerOSPage() {
                                 {
                                     icon: <Target className="w-8 h-8 text-indigo-600 dark:text-[#FFF272]" />,
                                     title: 'Role-Fit + Job Targeting',
-                                    desc: 'Scegli il track giusto (RAG / Agent / Product) e identifica le aziende target.'
+                                    desc: 'Scopri se sei RAG Engineer, Agent Engineer o GenAI Product Engineer. Ricevi una lista di 20-40 aziende target.'
                                 },
                                 {
                                     icon: <FileSearch className="w-8 h-8 text-indigo-600 dark:text-[#FFF272]" />,
                                     title: 'CV/LinkedIn Ottimizzati',
-                                    desc: 'Rubrica + revisione per passare ATS e hiring manager AI.'
+                                    desc: 'CV riscritto con keyword che passano ATS + LinkedIn ottimizzato. Fino a 10 candidature personalizzate.'
                                 },
                                 {
                                     icon: <CheckCircle2 className="w-8 h-8 text-indigo-600 dark:text-[#FFF272]" />,
                                     title: 'Proof Pubblica "da Engineer"',
-                                    desc: 'Demo + repo pulita + evaluation + write-up. Validata da chi lavora nel campo.'
+                                    desc: 'Progetto GenAI completo: demo funzionante + repo GitHub professionale + evaluation con metriche + write-up tecnico.'
                                 },
                                 {
                                     icon: <BrainCircuit className="w-8 h-8 text-indigo-600 dark:text-[#FFF272]" />,
                                     title: 'Interview Readiness GenAI',
-                                    desc: 'Prep specifica: RAG, Agents, Evaluation, Tradeoffs reali.'
+                                    desc: 'Mock interview con Senior AI su: system design RAG/Agents, tradeoff costo/latenza, debugging live.'
                                 }
                             ].map((feature, i) => (
                                 <div key={i} className="p-6 rounded-2xl bg-slate-50 dark:bg-[#151925] border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-[#FFF272]/50 transition-colors group">
@@ -278,8 +278,8 @@ export default function CareerOSPage() {
                                 AI Expert Guidance
                             </h2>
                             <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-                                Mentoring da <strong>Senior AI professionals</strong> che assumono, costruiscono e shippano AI ogni giorno.<br />
-                                <em>Non teoria. Insider knowledge reale.</em>
+                                Impari da <strong>chi assume per questi ruoli</strong>, non da career coach generici.<br />
+                                <em>Insider knowledge reale, non teoria.</em>
                             </p>
                         </div>
 
@@ -288,9 +288,9 @@ export default function CareerOSPage() {
                                 <div className="w-14 h-14 rounded-xl bg-[#FFF272]/20 text-[#FFF272] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                     <Target className="w-7 h-7" />
                                 </div>
-                                <h3 className="text-xl font-bold mb-3">Sai Cosa Conta</h3>
+                                <h3 className="text-xl font-bold mb-3">Focus su ciò che le aziende cercano</h3>
                                 <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-                                    Focus solo su skill che gli hiring manager cercano oggi. Niente teoria accademica obsoleta.
+                                    Ti diciamo esattamente quali skill mostrano i candidati che vengono assunti: evaluation pipeline, reliability, cost optimization.
                                 </p>
                                 <div className="pt-6 border-t border-white/10">
                                     <p className="text-xs uppercase tracking-widest text-slate-500 font-semibold mb-3">Proven Roles</p>
@@ -305,9 +305,9 @@ export default function CareerOSPage() {
                                 <div className="w-14 h-14 rounded-xl bg-[#FFF272]/20 text-[#FFF272] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                     <Zap className="w-7 h-7" />
                                 </div>
-                                <h3 className="text-xl font-bold mb-3">Accelerazione</h3>
+                                <h3 className="text-xl font-bold mb-3">Roadmap collaudata, zero tutorial hell</h3>
                                 <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-                                    Eviti mesi di "tutorial hell". Ti diamo la roadmap esatta per costruire proof che converte.
+                                    In 4-8 settimane costruisci una proof che abbiamo visto convertire in offer. Niente "fai quello che vuoi".
                                 </p>
                                 <div className="pt-6 border-t border-white/10">
                                     <p className="text-xs uppercase tracking-widest text-slate-500 font-semibold mb-3">Proven Roles</p>
@@ -322,9 +322,9 @@ export default function CareerOSPage() {
                                 <div className="w-14 h-14 rounded-xl bg-[#FFF272]/20 text-[#FFF272] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                     <CheckCircle2 className="w-7 h-7" />
                                 </div>
-                                <h3 className="text-xl font-bold mb-3">Credibilità</h3>
+                                <h3 className="text-xl font-bold mb-3">Feedback tecnico da chi lavora nel campo</h3>
                                 <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-                                    La tua proof viene validata da chi lavora nel campo. Feedback tecnico reale, non pacche sulla spalla.
+                                    Il tuo progetto viene rivisto con la stessa severità di una code review aziendale. Niente pacche sulla spalla.
                                 </p>
                                 <div className="pt-6 border-t border-white/10">
                                     <p className="text-xs uppercase tracking-widest text-slate-500 font-semibold mb-3">Proven Roles</p>
@@ -347,10 +347,10 @@ export default function CareerOSPage() {
 
                         <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent before:dark:via-slate-700">
                             {[
-                                { week: 'Week 1-2', title: 'Role-Fit + Job Targeting', desc: 'Scelta del track (RAG/Agent/Product), definizione JD archetype, roadmap personale.' },
-                                { week: 'Week 3-4', title: 'CV/LinkedIn + JD Tailoring', desc: 'Ottimizzazione CV con rubrica, LinkedIn strategy, pack candidature (3-10 JD).' },
-                                { week: 'Week 5-6', title: 'Proof Project', desc: 'Progetto standard per track: demo + repo pulita + evaluation + write-up.' },
-                                { week: 'Week 7-8', title: 'Interview Prep + Mock', desc: 'Prep specifica GenAI (RAG/Agents/Eval/Tradeoffs) + mock interview con Senior AI.' }
+                                { week: 'Week 1-2', title: 'Role-Fit + Job Targeting', desc: 'Output: sai esattamente quale ruolo AI fa per te + hai una lista di 20-40 aziende target.' },
+                                { week: 'Week 3-4', title: 'CV/LinkedIn + Candidature', desc: 'Output: CV riscritto + LinkedIn ottimizzato + fino a 10 candidature pronte da inviare.' },
+                                { week: 'Week 5-6', title: 'Proof Project', desc: 'Output: progetto GenAI completo con demo live, repo GitHub pulita, evaluation e write-up tecnico.' },
+                                { week: 'Week 7-8', title: 'Interview Prep + Mock', desc: 'Output: sei pronto per colloqui tecnici GenAI + hai fatto almeno 1 mock interview reale.' }
                             ].map((step, i) => (
                                 <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                                     {/* Icon/Dot */}
@@ -409,16 +409,16 @@ export default function CareerOSPage() {
                             {/* Starter Card */}
                             <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                                 <h3 className="text-2xl font-bold mb-2">Starter</h3>
-                                <p className="text-slate-400 text-sm mb-4">4 settimane • Candidabile + Proof-lite</p>
+                                <p className="text-slate-400 text-sm mb-4">4 settimane • Pronto a candidarti con CV e proof</p>
                                 <div className="mb-6">
                                     <span className="text-sm line-through text-slate-500">€590</span>
                                     <div className="text-4xl font-bold">€390 <span className="text-lg font-normal text-[#FFF272]">Beta</span></div>
                                 </div>
                                 <ul className="space-y-3 mb-8 text-slate-300 text-sm">
-                                    <li>✓ Role-Fit Audit completo</li>
-                                    <li>✓ CV + LinkedIn ottimizzati</li>
-                                    <li>✓ 3 JD pack (tailoring + cover)</li>
-                                    <li>✓ 1 Articolo su stAItuned (con QA)</li>
+                                    <li>✓ Scopri quale ruolo AI sei (RAG/Agent/Product)</li>
+                                    <li>✓ CV e LinkedIn riscritti con keyword AI</li>
+                                    <li>✓ 3 candidature complete (CV + cover)</li>
+                                    <li>✓ 1 articolo tecnico pubblicato come proof</li>
                                 </ul>
                                 <Link href="/audit" className="block w-full py-3 rounded-xl border border-white/20 text-center font-semibold hover:bg-white hover:text-[#1A1E3B] transition-all">
                                     Prenota Audit
@@ -431,17 +431,17 @@ export default function CareerOSPage() {
                                     Più Popolare
                                 </div>
                                 <h3 className="text-2xl font-bold mb-2">Pro</h3>
-                                <p className="text-slate-300 text-sm mb-4">8 settimane • Proof seria + Interview</p>
+                                <p className="text-slate-300 text-sm mb-4">8 settimane • Tutto per ottenere offer</p>
                                 <div className="mb-6">
                                     <span className="text-sm line-through text-slate-500">€1.190</span>
                                     <div className="text-4xl font-bold">€790 <span className="text-lg font-normal text-[#FFF272]">Beta</span></div>
                                 </div>
                                 <ul className="space-y-3 mb-8 text-white text-sm font-medium">
                                     <li>✓ <strong>Tutto in Starter</strong></li>
-                                    <li>✓ 10 JD pack</li>
-                                    <li>✓ Progetto GenAI standard (demo+repo+eval)</li>
-                                    <li>✓ 1 Mock Interview con Senior AI</li>
-                                    <li>✓ Job Targeting Kit (20-40 aziende)</li>
+                                    <li>✓ 10 candidature complete pronte da inviare</li>
+                                    <li>✓ 1 progetto GenAI con demo + repo + evaluation</li>
+                                    <li>✓ 1 mock interview con Senior AI Engineer</li>
+                                    <li>✓ Lista 20-40 aziende target con contatti</li>
                                 </ul>
                                 <Link href="/audit" className="block w-full py-3 rounded-xl bg-[#FFF272] text-[#1A1E3B] text-center font-bold hover:bg-[#F59E0B] transition-all shadow-lg">
                                     Prenota Audit
@@ -451,16 +451,16 @@ export default function CareerOSPage() {
                             {/* Elite Card */}
                             <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                                 <h3 className="text-2xl font-bold mb-2">Elite</h3>
-                                <p className="text-slate-400 text-sm mb-4">8 settimane + 12 mesi supporto</p>
+                                <p className="text-slate-400 text-sm mb-4">8 settimane + Supporto continuo fino all'offer</p>
                                 <div className="mb-6">
                                     <span className="text-sm line-through text-slate-500">€1.990</span>
                                     <div className="text-4xl font-bold">€1.490 <span className="text-lg font-normal text-[#FFF272]">Beta</span></div>
                                 </div>
                                 <ul className="space-y-3 mb-8 text-slate-300 text-sm">
                                     <li>✓ <strong>Tutto in Pro</strong></li>
-                                    <li>✓ Accesso tool 12 mesi</li>
-                                    <li>✓ 1 Office Hour / mese</li>
-                                    <li>✓ Priority review (2 asset/mese)</li>
+                                    <li>✓ Tool Career OS per 12 mesi</li>
+                                    <li>✓ 1 call mensile di supporto strategico</li>
+                                    <li>✓ Review prioritaria su 2 asset/mese</li>
                                 </ul>
                                 <Link href="/audit" className="block w-full py-3 rounded-xl border border-white/20 text-center font-semibold hover:bg-white hover:text-[#1A1E3B] transition-all">
                                     Prenota Audit
