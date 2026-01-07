@@ -37,6 +37,7 @@
 		"github-slugger": "^2.0.0",
 		"google-auth-library": "^10.2.1",
 		"googleapis": "^155.0.1",
+		"lucide-react": "^0.562.0",
 		"marked": "^16.1.2",
 		"next": "^16.0.7",
 		"next-auth": "^4.24.5",

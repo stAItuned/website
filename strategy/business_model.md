@@ -10,8 +10,8 @@ Il 1:1 serve a estrarre playbook e proof; le **coorti** (8–10, un track per co
 
 #### Market signals (perché il problema è reale “adesso”)
 
-*   **Domanda digitale strutturalmente alta:** Tra gen 2023 e ago 2024 risultano **~184.000 annunci ICT** pubblicati su LinkedIn in Italia (Fonte: Assintel/Anitec-Assinform).
-*   **AI in accelerazione:** Nello stesso periodo, >21.000 annunci hanno menzionato skill IA, con **+73%** rispetto ad agosto 2023.
+*   **Domanda digitale strutturalmente alta:** Tra gen 2023 e ago 2024 risultano **~184.000 annunci ICT** pubblicati su LinkedIn in Italia. ([Fonte: Anitec-Assinform, Dic 2024](https://www.anitec-assinform.it/media/comunicati-stampa/184mila-annunci-per-professionisti-ict-le-aziende-formano-in-autonomia.kl))
+*   **AI in accelerazione:** Nello stesso periodo, >21.000 annunci hanno menzionato skill IA, con **+73%** rispetto ad agosto 2023. (Rielaborazioni Talents Venture su dati Revelio Labs / annunci LinkedIn — [Fonte: Anitec-Assinform, Dic 2024](https://www.anitec-assinform.it/media/comunicati-stampa/184mila-annunci-per-professionisti-ict-le-aziende-formano-in-autonomia.kl))
 *   **Ricerca di specialisti AI in forte crescita:** Hays riporta che nel I quadrimestre 2024 la richiesta di figure specializzate in IA è quasi raddoppiata (**+88%**) vs stesso periodo dell’anno precedente.
     *   *Implicazione:* stAItuned non “vende formazione”, ma riduce il **time-to-offer** (candidabilità + proof + interview readiness) in un mercato dove l’AI è un acceleratore della domanda.
 
