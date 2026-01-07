@@ -17,148 +17,543 @@
 
 # 1) Setup Sito stAItuned
 
-## Il Problema Attuale
+## Filosofia di Design
 
-Il sito stAItuned ha due anime:
-- **Blog/Learn:** Contenuti per chi vuole imparare AI (ampio, SEO, traffico)
-- **Career OS:** Servizio per chi vuole diventare GenAI Engineer (stretto, conversione)
+> **Principio guida:** Il sito deve **attrarre e incuriosire** chi è interessato all'AI, **senza dare la sensazione di vendere**. L'utente deve scoprire Career OS naturalmente, non sentirselo spinto addosso.
 
-**Rischio:** Confondere i visitatori. Chi arriva per un articolo non capisce che vendi anche un servizio.
+### Il Problema da Evitare
+
+```
+❌ Approccio "Venditore Aggressivo"
+┌────────────────────────────────────────────────────────────────┐
+│  Utente arriva → BAM! Pop-up "Compra Career OS!"               │
+│  Scrolls → Banner "Iscriviti subito!"                          │
+│  Legge articolo → CTA enorme "Non perdere l'offerta!"          │
+│                                                                │
+│  Risultato: Utente scappa, brand percepito come spam           │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### L'Approccio Corretto: "Content-First, Problem-Aware"
+
+```
+✅ Approccio "Valore Prima, Vendita Dopo"
+┌────────────────────────────────────────────────────────────────┐
+│  Utente arriva → Contenuto interessante, zero pressione        │
+│  Scrolls → Si incuriosisce, scopre articoli di qualità         │
+│  Legge 2-3 articoli → Vede CTA sottili, problem-aware          │
+│  Riconosce il problema → Clicca spontaneamente su Career OS    │
+│                                                                │
+│  Risultato: Utente convinto, non forzato                       │
+└────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Opzioni di Posizionamento
+## User Journey Strategico
 
-### Opzione A: Sito Unico con Sezioni Chiare
+### Il Funnel Visivo
+
+```mermaid
+flowchart TD
+    A[Utente arriva su Homepage] --> B[Hero: Incuriosisce]
+    B --> C[Scroll: 9 articoli trending]
+    C --> D{Interessato?}
+    
+    D -->|Sì| E[Clicca articolo → /learn/articles]
+    D -->|No| F[Esce - normale]
+    
+    E --> G[Legge 1-2 articoli]
+    G --> H{È nel target Career OS?}
+    
+    H -->|Sì: Neolaureato/Junior| I[Vede CTA problem-aware]
+    H -->|No: Senior/Curioso| J[Continua a leggere, CTA nascoste]
+    
+    I --> K{Riconosce il problema?}
+    K -->|Sì| L[Clicca → /career-os]
+    K -->|No| M[Prosegue, CTA meno invasive]
+    
+    L --> N[Landing Career OS → Conversion]
+```
+
+---
+
+## Struttura Homepage
+
+### Layout Proposto
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                          HEADER                                  │
+│  [Logo] | Learn | Career OS | Chi Siamo | [CTA: Inizia Gratis]  │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                    HERO SECTION (Pain + Mission)                │
+│                                                                 │
+│   🎯 "L'AI sta cambiando tutto.                                 │
+│       Tu stai cambiando con lei?"                               │
+│                                                                 │
+│   Il mercato AI cerca genai engineers, ma il 90% dei            │
+│   candidati non sa come posizionarsi.                           │
+│                                                                 │
+│   stAItuned: Impara l'AI da chi la costruisce ogni giorno.      │
+│   Articoli, guide e tutorial per chi vuole capire davvero.      │
+│                                                                 │
+│   [Esplora gli articoli ↓]        [Scopri Career OS →]          │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                    ARTICLES SECTION (9)                         │
+│                                                                 │
+│   [🔥 Trending]  [🕐 Recent]  ← Toggle switch                   │
+│                                                                 │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐                        │
+│   │ Art. 1  │  │ Art. 2  │  │ Art. 3  │                        │
+│   └─────────┘  └─────────┘  └─────────┘                        │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐                        │
+│   │ Art. 4  │  │ Art. 5  │  │ Art. 6  │                        │
+│   └─────────┘  └─────────┘  └─────────┘                        │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐                        │
+│   │ Art. 7  │  │ Art. 8  │  │ Art. 9  │                        │
+│   └─────────┘  └─────────┘  └─────────┘                        │
+│                                                                 │
+│              [Vedi tutti gli articoli → /learn/articles]        │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│              INTERMEZZO CTA (Solo utenti target)                │
+│              + Lead Magnet opzionale                            │
+│                                                                 │
+│   ⚠️ Stai cercando lavoro nell'AI ma nessuno risponde?         │
+│                                                                 │
+│   Il problema non è il mercato. È come ti presenti.             │
+│   [Scopri come posizionarti →]                                  │
+│                                                                 │
+│   ------- oppure -------                                        │
+│                                                                 │
+│   📥 Scarica la CV Rubric: la checklist per passare lo screening│
+│   [Scarica Gratis →]                                            │
+│                                                                 │
+│   (Lead magnet come alternativa soft per chi non è pronto)      │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                         FOOTER                                  │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## CTA Strategy: Pain-First Progressive Disclosure
+
+### Il Principio
+
+> **Il pain deve emergere SUBITO.** Non aspettare che leggano articoli. Chi arriva vede contenuto interessante E viene incuriosito dal problema che risolvi.
+
+### Visibilità CTA: Chi Vede Cosa
+
+| Utente | Vede CTA? | Tipo CTA | Note |
+|:-------|:----------|:---------|:-----|
+| Prima visita (sconosciuto) | ✅ Sì | Soft (problem-aware) | Incuriosisce senza vendere |
+| Ha letto 2+ articoli | ✅ Sì | Strong (pain-focused) | Più diretto |
+| Ha scaricato lead magnet | ✅ Sì | Strong + Audit CTA | Già qualificato |
+| Ha cliccato "Non ora" | ❌ No per 30 giorni | Nessuna | Rispetto della scelta |
+
+> **IMPORTANTE:** Anche alla prima visita, l'utente VEDE una CTA soft. Il pain è visibile fin da subito, non nascosto.
+
+---
+
+### Level 1: CTA Soft (Problem-Aware) — VISIBILE A TUTTI
+
+**Quando appare:** Subito, per tutti gli utenti (anche prima visita).
+
+**Dove:**
+- Homepage: Intermezzo section
+- Articoli: Banner in-article (dopo paragrafo 2-3)
+- Sidebar/Footer
+
+**CTA Example (Banner in-article):**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ⚠️ Ti riconosci?                                     [× Non ora]│
+│                                                                 │
+│  "50+ candidature AI, zero risposte"                            │
+│  "Non so se sono DS, ML Eng o GenAI Eng"                        │
+│  "Il mio CV dice 'AI enthusiast' ma non ho proof"               │
+│                                                                 │
+│  Se una di queste ti suona familiare, non sei solo.             │
+│  [Scopri come uscirne →]                                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Caratteristiche:**
+- **Pain subito visibile** (le frasi sono pain statements)
+- Non dice "compra", dice "scopri"
+- Ha bottone dismiss ("Non ora") → nasconde per 30 giorni
+- Tono identificativo (il target si riconosce)
+
+---
+
+### Level 2: CTA Strong (Pain-Focused) — AFTER ENGAGEMENT
+
+**Quando appare:** Dopo che l'utente ha:
+- Visitato 2+ articoli
+- **O** scaricato un lead magnet
+- **O** tempo sul sito > 5 minuti
+
+**CTA Example (Intermezzo section homepage):**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│   ⚠️ Il problema che nessuno ti dice                 [× Non ora]│
+│                                                                 │
+│   Puoi leggere tutti gli articoli AI del mondo.                 │
+│   Ma se il tuo CV dice "AI Enthusiast" invece di                │
+│   "GenAI Engineer", i recruiter non ti chiameranno mai.         │
+│                                                                 │
+│   Il mercato AI sta esplodendo.                                 │
+│   La domanda è: tu sarai pronto quando busseranno?              │
+│                                                                 │
+│   [Fai il GenAI Role Fit Check gratuito →]                      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Caratteristiche:**
+- Enfatizza il **problema reale** (FOMO + urgenza)
+- Tono diretto ma non aggressivo
+- CTA è un "check" gratuito, non un acquisto
+- Ha bottone dismiss → nasconde per 30 giorni
+
+---
+
+## Smart CTA Hiding: Non Infastidire Chi Non È Interessato
+
+> **✅ DECISIONE:** Approccio semplificato. Tracking solo di chi clicca "Non mi interessa".
+
+### Il Meccanismo (Semplificato)
+
+Alcuni utenti **non sono nel target** Career OS:
+- Senior AI professional (leggono per aggiornarsi)
+- Curiosi/Manager (capiscono AI per il lavoro)
+- Sviluppatori già impiegati (non cercano lavoro)
+
+**Obiettivo:** Non fargli vedere CTA Career OS (li infastidisce e danneggia il brand).
+
+### Unico Segnale Tracciato
+
+| Segnale | Azione |
+|:--------|:-------|
+| Ha cliccato "Non mi interessa" / "X" su CTA | Nascondi CTA per 30 giorni |
+
+> **Nota:** Per utenti che non danno consenso cookie, le CTA appaiono normalmente (non possiamo tracciare). È accettabile.
+
+### Implementazione Tecnica
+
+```typescript
+// Logica CTA visibility (semplificata)
+
+const CTA_DISMISSED_KEY = 'career_cta_dismissed';
+const DISMISS_DURATION_DAYS = 30;
+
+function shouldShowCareerCTA(): boolean {
+  // Check localStorage (funziona anche senza cookie consent per preferenze UX)
+  const dismissed = localStorage.getItem(CTA_DISMISSED_KEY);
+  
+  if (dismissed) {
+    const dismissedDate = new Date(dismissed);
+    const now = new Date();
+    const daysSinceDismiss = (now - dismissedDate) / (1000 * 60 * 60 * 24);
+    
+    if (daysSinceDismiss < DISMISS_DURATION_DAYS) {
+      return false; // Ancora nascosto
+    }
+  }
+  
+  return true; // Mostra CTA
+}
+
+function dismissCareerCTA(): void {
+  localStorage.setItem(CTA_DISMISSED_KEY, new Date().toISOString());
+  
+  // Track su GA (se consenso dato)
+  if (window.gtag) {
+    gtag('event', 'cta_dismissed', {
+      event_category: 'career_os',
+      event_label: 'user_not_interested'
+    });
+  }
+}
+```
+
+### CTA Dismissal UX
+
+Ogni CTA ha un piccolo "× Non ora" che:
+1. Nasconde la CTA immediatamente
+2. Salva in localStorage (no cookie necessario)
+3. **Non mostra più CTA Career OS per 30 giorni**
+4. Traccia evento su GA (se consenso dato)
+5. Mostra toast: "Ok, non ti mostreremo più questo per 30 giorni"
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ⚠️ Ti riconosci in questo problema?                 [× Non ora]│
+│  ...                                                            │
+└─────────────────────────────────────────────────────────────────┘
+
+↓ Click "Non ora"
+
+┌─────────────────────────────────────────────────────────────────┐
+│  ✓ Ok, non ti mostreremo più questo per 30 giorni              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### GA Tracking Events (da implementare)
+
+| Evento | Trigger | Parametri |
+|:-------|:--------|:----------|
+| `cta_view` | CTA appare in viewport | `cta_type: soft/strong`, `location: homepage/article` |
+| `cta_click` | Click su CTA | `cta_type`, `destination: career-os/audit` |
+| `cta_dismissed` | Click su "X" / "Non ora" | `cta_type`, `location` |
+| `article_view` | Visita articolo | `article_slug`, `category` |
+| `scroll_depth` | 25/50/75/100% scroll | `depth`, `article_slug` |
+
+---
+
+## Route Structure
 
 ```
 staituned.com/
-├── / (Home) → Hero con doppio path: "Impara" vs "Accelera la tua carriera"
-├── /learn → Blog/Articoli (reader)
-├── /career-os → Landing page Career OS (target)
-└── /career-os/apply → Application form
+├── /                        → Homepage (Hero + 9 trending + CTA smart)
+├── /learn                   → Redirect a /learn/articles
+├── /learn/articles          → Blog completo (tutti gli articoli, filtri, search)
+├── /learn/articles/[slug]   → Singolo articolo (CTA in-article smart)
+├── /career-os               → Landing page Career OS
+├── /career-os/apply         → Form application (embedded o dedicato)
+└── /chi-siamo               → About page
 ```
-
-**Pro:**
-- Un solo dominio = più autorità SEO
-- Cross-selling naturale (chi legge articoli vede Career OS)
-- Meno infrastruttura da gestire
-
-**Contro:**
-- Richiede design homepage chiaro
-- Chi arriva da SEO potrebbe confondersi
 
 ---
 
-### Opzione B: Subdomain Separato
+## Homepage: Effort e Priorità
 
-```
-staituned.com/ → Blog/Learn (focus reader)
-careeroscorpio.staituned.com/ → Career OS (focus conversion)
-```
+| Componente | Stato Attuale | Effort | Priorità |
+|:-----------|:--------------|:-------|:---------|
+| Hero (nuovo copy) | 🔄 Revisionare | 2h | 🔴 Alta |
+| Trending articles (9) | 🔄 Limit a 9 | 1h | 🔴 Alta |
+| Link a /learn/articles | ✅ Semplice | 30min | 🔴 Alta |
+| Intermezzo CTA | 🆕 Creare | 2-3h | 🟡 Media |
+| Smart CTA hiding | 🆕 Creare | 4-6h | 🟡 Media |
 
-**Pro:**
-- Posizionamento netto per ogni audience
-- Messagging più mirato
-
-**Contro:**
-- Due "siti" da gestire
-- Meno cross-pollination
-- Subdomain penalizzato SEO
+**Effort totale homepage:** ~1 giorno
 
 ---
 
-### Opzione C: Landing Page Dedicata (Minimalista)
+# 1.B) Career OS Landing Page
 
-```
-staituned.com/ → Blog/Learn
-staituned.com/career-os → Landing page unica con form embedded
-```
+## Filosofia
 
-**Pro:**
-- Veloce da implementare
-- Il blog resta intatto
-- La landing è focalizzata sulla conversione
+> La landing Career OS deve **convertire**, ma con **rispetto**. Chi arriva qui ha già mostrato interesse — non serve urlare. Serve chiarire il valore.
 
-**Contro:**
-- Meno "presenza" del Career OS
-- Dipende dalla qualità della landing
+### Tone of Voice
 
----
-
-## 🔍 Analisi Trade-off
-
-| Criterio | Opzione A | Opzione B | Opzione C |
-|:---------|:----------|:----------|:----------|
-| **Sforzo implementazione** | 🟡 Medio | 🔴 Alto | 🟢 Basso |
-| **Chiarezza posizionamento** | 🟡 Medio | 🟢 Alto | 🟡 Medio |
-| **SEO/Authority** | 🟢 Alto | 🔴 Basso | 🟢 Alto |
-| **Cross-selling** | 🟢 Alto | 🔴 Basso | 🟡 Medio |
-| **Velocità lancio** | 🟡 3-5 gg | 🔴 5-10 gg | 🟢 1-2 gg |
+| ❌ Da Evitare | ✅ Da Usare |
+|:--------------|:-----------|
+| "OFFERTA IMPERDIBILE!!!" | "Ecco cosa ottieni" |
+| "Ultimi 3 posti!" (fake scarcity) | "Posti limitati a 10 per coorte" (vero) |
+| "Garantiamo il lavoro" | "Ti prepariamo, non promettiamo miracoli" |
+| Testimonial finti | Case study reali con nomi |
 
 ---
 
-## 💡 Raccomandazione: Opzione A (Variante Ibrida)
+## Struttura Landing Page
 
-**Approccio:** Sito unico con navigazione chiara + CTA strategiche.
+### Option A: Long-Form Sales Page (Consigliata)
 
-### Homepage (nuovo design)
+Per un prodotto €590-1.190, serve **spiegare bene**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  stAItuned — Expert-Level AI Education & Career Acceleration   │
+│                         HERO (Pain-First)                       │
+│                                                                 │
+│   "50+ candidature AI. Zero risposte.                           │
+│   Ti suona familiare?"                                          │
+│                                                                 │
+│   Il problema non sei tu. È che nessuno ti ha insegnato         │
+│   come posizionarti per ruoli Applied GenAI.                    │
+│                                                                 │
+│   Career OS è il percorso che ti porta da "nessuna risposta"    │
+│   a "colloquio fissato". In 4-8 settimane.                      │
+│                                                                 │
+│   Mentoring da AI professionals che assumono.                   │
+│   Non teoria. Insider knowledge reale.                          │
+│                                                                 │
+│   [Prenota un Audit Gratuito →]                                 │
+│                                                                 │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ┌─────────────────────┐    ┌─────────────────────────────────┐│
-│  │   📚 IMPARA         │    │  🚀 CAREER OS                   ││
-│  │   Articoli, guide,  │    │  Il percorso per diventare      ││
-│  │   tutorial AI       │    │  GenAI Engineer                 ││
-│  │                     │    │                                 ││
-│  │   [Vai al Blog →]   │    │  [Scopri Career OS →]           ││
-│  └─────────────────────┘    └─────────────────────────────────┘│
+│                     IL PROBLEMA (Approfondimento)               │
+│                                                                 │
+│   • Confuso tra DS, ML Eng, e GenAI Eng?                        │
+│   • CV con "AI/ML enthusiast" ma nessuna proof "da engineer"?   │
+│   • Colloqui tecnici GenAI in arrivo e non sai cosa aspettarti? │
+│                                                                 │
+│   Il mercato cerca GenAI Engineers.                             │
+│   Ma se non sai come presentarti, resti invisibile.             │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     LA SOLUZIONE                                │
+│                                                                 │
+│   Career OS è un percorso di 4-8 settimane (track-based):       │
+│                                                                 │
+│   ✅ Role-fit: Scegli il track giusto (RAG / Agent / Product)   │
+│   ✅ CV/LinkedIn: Ottimizzati per ATS e hiring manager AI       │
+│   ✅ Proof pubblica "da engineer": demo + repo + evaluation     │
+│   ✅ Interview readiness: RAG/Agents/Eval/Tradeoffs reali       │
+│                                                                 │
+│   Impari da chi assume per questi ruoli, non career coach.      │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     AI EXPERT GUIDANCE                          │
+│                                                                 │
+│   [Foto Team] + Bio breve                                       │
+│   "Senior AI professionals che assumono, costruiscono e         │
+│    shippano AI ogni giorno. Insider knowledge reale."           │
+│                                                                 │
+│   • Sai cosa conta davvero per gli hiring manager               │
+│   • Accelerazione: evitiamo perdite di tempo                    │
+│   • Credibilità: la tua proof validata da chi lavora nel campo  │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     COME FUNZIONA                               │
+│                                                                 │
+│   Week 1-2: Role-fit + Job targeting (track selection)          │
+│   Week 3-4: CV/LinkedIn + JD tailoring                          │
+│   Week 5-6: Proof project standard per track (demo+repo+eval)   │
+│   Week 7-8: Interview prep GenAI + mock                         │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     RISULTATI (Case Study)                      │
+│                                                                 │
+│   ┌─────────────────┐  ┌─────────────────┐                     │
+│   │ [Foto] Marco    │  │ [Foto] Sara     │                     │
+│   │ 0 → 5 colloqui  │  │ Pivot → GenAI   │                     │
+│   │ in 6 settimane  │  │ in 4 settimane  │                     │
+│   │ [Leggi storia]  │  │ [Leggi storia]  │                     │
+│   └─────────────────┘  └─────────────────┘                     │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     PRICING (3 TIER)                            │
+│                                                                 │
+│ ┌────────────┐  ┌────────────┐  ┌────────────────┐             │
+│ │  STARTER   │  │    PRO     │  │     ELITE      │             │
+│ │   €590     │  │  €1.190    │  │    €1.990      │             │
+│ │ 4 settimane│  │ 8 settimane│  │ 8 sett + 12 mo │             │
+│ │            │  │            │  │                │             │
+│ │• Role-fit  │  │✓ Tutto     │  │✓ Tutto Pro +   │             │
+│ │• CV/LinkedIn│  │  Starter + │  │• Tool 12 mesi  │             │
+│ │• 3 JD pack │  │• 10 JD pack│  │• 1 office hour │             │
+│ │• 1 articolo│  │• Progetto  │  │  /mese         │             │
+│ │            │  │• Mock interv│  │• Priority review│             │
+│ │            │  │ ← Popolare │  │                │             │
+│ │[Scegli →]  │  │[Scegli →]  │  │ [Scegli →]     │             │
+│ └────────────┘  └────────────┘  └────────────────┘             │
+│                                                                 │
+│   💳 Pagamento in 2 rate disponibile                            │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     FAQ                                         │
+│                                                                 │
+│   ▸ "Garantite il lavoro?"                                      │
+│     No. Promettiamo deliverable e processo, non miracoli.       │
+│                                                                 │
+│   ▸ "E se non sono soddisfatto?"                                │
+│     Feedback garantito + iterazioni entro limiti concordati.    │
+│                                                                 │
+│   ▸ "Quanto tempo devo dedicare?"                               │
+│     5-8 ore/settimana per homework e sessioni.                  │
+│                                                                 │
+│   ▸ "Qual è la differenza con un bootcamp?"                     │
+│     Noi = outcome-based (proof + candidabilità), non ore video. │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                     CTA FINALE                                  │
+│                                                                 │
+│   Non sei sicuro se fa per te?                                  │
+│   Prenota un GenAI Role Fit Audit gratuito (15 min).            │
+│   Ti dico onestamente se Career OS ha senso per la tua          │
+│   situazione.                                                   │
+│                                                                 │
+│   [Prenota Audit Gratuito →]                                    │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-### Navigazione
-
-```
-[Logo stAItuned] | Learn | Career OS | Chi Siamo | [CTA: Prenota Audit]
-```
-
-### CTA in ogni articolo
-
-Ogni articolo del blog ha un banner/box:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  💡 Vuoi diventare GenAI Engineer?                              │
-│                                                                 │
-│  Con Career OS ti aiuto a passare da "leggere articoli"         │
-│  a "essere pronto per il colloquio".                            │
-│                                                                 │
-│  [Prenota un Audit Gratuito →]                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Pagine necessarie
-
-| Pagina | Stato | Effort |
-|:-------|:------|:-------|
-| `/` (Home) | 🔄 Redesign | 4-6 ore |
-| `/learn` | ✅ Esiste | 0 |
-| `/career-os` | 🆕 Creare | 4-6 ore |
-| `/career-os/apply` | 🆕 Creare (o embed form) | 1-2 ore |
-
-**Effort totale:** ~1-2 giorni
 
 ---
 
-## ❓ Domande Aperte (Da Decidere)
+### Option B: Short Landing + Calendly (Alternativa veloce)
 
-1. **Homepage:** Dual-path (Learn vs Career OS) o focus su uno solo con l'altro in nav?
-2. **Career OS landing:** Lunga (tipo sales page) o corta (tipo Calendly embed)?
-3. **CTA primaria:** Form application o direttamente Calendly?
+Se vuoi lanciare **subito** con meno sforzo.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│   "Vuoi diventare GenAI Engineer?"                              │
+│                                                                 │
+│   Career OS è un percorso 1:1 di 4-8 settimane.                 │
+│   Ti preparo per il ruolo, il CV, e il colloquio.               │
+│                                                                 │
+│   [Vedi dettagli ↓]        [Prenota Call Gratuita →]            │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Cosa include:                                                 │
+│   ✅ Role-fit + Job targeting                                   │
+│   ✅ CV/LinkedIn ottimizzati                                    │
+│   ✅ Proof project (articolo + demo)                            │
+│   ✅ Interview prep GenAI                                       │
+│                                                                 │
+│   Prezzi: Starter €590 | Pro €1.190                             │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   [Calendly Embed - Prenota 15 min]                             │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Effort:** 2-3 ore vs 6-8 ore per long-form.
+
+---
+
+## Raccomandazione Landing Career OS
+
+| Fase | Approccio | Razionale |
+|:-----|:----------|:----------|
+| **Settimana 1-2** | Short landing + Calendly | Lancia veloce, valida interesse |
+| **Dopo 5 clienti** | Long-form sales page | Hai case study, puoi convincere meglio |
+
+---
+
+## ❓ Domande da Decidere (Sito)
+
+1. **Smart CTA hiding:** Vuoi implementarlo subito o partire semplice?
+   - Semplice: CTA sempre visibili dopo 2 articoli
+   - Smart: Logica di hiding (effort ~4-6h extra)
+
+2. **Landing Career OS:** Long-form o short landing inizialmente?
+
+3. **Intermezzo CTA homepage:** Copy esatto da usare per il pain-focused message?
+
+4. **Tracking:** Vuoi setup analytics per tracciare il funnel (article views → CTA click → apply)?
 
 ---
 
@@ -238,26 +633,31 @@ Ogni articolo del blog ha un banner/box:
 
 ---
 
-## 💡 Raccomandazione: Stripe Payment Links (ora), poi Checkout integrato
+## ✅ DECISIONE: Stripe Payment Links (solo in call)
 
-**Fase 0-1 (primi 10 clienti):** Payment Links
-- Zero sforzo
-- Valida che la gente paga
-- Impara cosa funziona
+> **Approccio:** Payment link mandato **solo durante/dopo la discovery call**. Non esposto sul sito.
 
-**Fase 2+ (10+ clienti):** Checkout integrato
-- Migliora UX
-- Tracking migliore
-- Upsell/cross-sell
+**Razionale:**
+- Nessuno compra €590+ senza parlare prima
+- Il link è personale (puoi tracciare chi paga)
+- Zero friction di setup
 
 **Setup immediato:**
 1. Crea prodotti su Stripe:
-   - "Career OS Starter (Founding Member)" - €390
+   - "Career OS Starter (Beta Offer)" - €390
    - "Career OS Starter" - €590
-   - "Career OS Pro (Founding Member)" - €790
+   - "Career OS Pro (Beta Offer)" - €790
    - "Career OS Pro" - €1.190
+   - "Career OS Elite (Beta Offer)" - €1.490
+   - "Career OS Elite" - €1.990
 2. Genera Payment Links per ciascuno
 3. Salva i link in un doc/Notion per usarli nelle call
+4. Invia link via messaggio/email dopo la call
+
+**Flow:**
+```
+Call → Decisione tier → "Ti mando il link per pagare" → Stripe Payment Link
+```
 
 **Effort:** 30-45 minuti
 
@@ -265,120 +665,133 @@ Ogni articolo del blog ha un banner/box:
 
 # 3) Application Form
 
-## La Domanda Chiave
+## ✅ DECISIONE: Form Custom (Next.js + Firebase + Telegram)
 
-> **"Se me lo creo io ci metterei mezza giornata. Ha vantaggi farlo custom?"**
-
-Analizziamo.
-
----
-
-## Opzioni
-
-### Opzione A: Tool esterno (Tally, Typeform, Google Forms)
-
-| Tool | Costo | Pro | Contro |
-|:-----|:------|:----|:-------|
-| **Tally** | Free (illimitato) | Bello, potente, embed facile | Meno customizzabile |
-| **Typeform** | €25+/mese | UX migliore, logic flows | Costoso |
-| **Google Forms** | Free | Velocissimo | Brutto, no branding |
-
-**Effort:** 30-60 minuti
+> **Motivi:**
+> - Pro-brand (UX integrata)
+> - Veloce da implementare (~mezza giornata)
+> - Facile da tracciare su GA
+> - Telegram già connesso (notifiche gratis)
+> - Firebase già disponibile
 
 ---
 
-### Opzione B: Form custom (Next.js + DB)
+## Stack Tecnico
 
-**Stack:**
-- Form component React
-- API route Next.js
-- DB (già hai Firebase? o Supabase/Postgres)
-- Email notification (Resend/SendGrid)
-
-**Effort:** Mezza giornata (4-6 ore)
-
----
-
-## 🔍 Vantaggi Build Custom
-
-| Vantaggio | Impatto | Rilevanza Ora |
-|:----------|:--------|:--------------|
-| **Branding completo** | UX più integrata | 🟡 Medio |
-| **Dati in tuo DB** | Ownership, analytics custom | 🟢 Alto |
-| **Logic condizionale** | Scoring, routing, segmentazione | 🟢 Alto |
-| **Automazioni custom** | Email auto, webhook, CRM sync | 🟢 Alto |
-| **Nessun limite** | Infinite submissions | 🟢 Alto (se scala) |
-| **Integrazioni future** | CV upload, LinkedIn scraping, AI analysis | 🟢 Alto |
-| **No dipendenza** | Non ti cambiano pricing/features | 🟡 Medio |
+| Componente | Tecnologia | Note |
+|:-----------|:-----------|:-----|
+| **Frontend** | React + Next.js | Form multi-step |
+| **Backend** | Next.js API Route | Salva + notifica |
+| **Database** | Firebase Firestore | Collection `applications` |
+| **Notifiche** | Telegram Bot | Già configurato |
+| **Analytics** | GA4 | Eventi custom |
 
 ---
 
-## 🔍 Vantaggi Tool Esterno
+## Contenuto Form (Domande Essenziali)
 
-| Vantaggio | Impatto | Rilevanza Ora |
-|:----------|:--------|:--------------|
-| **Velocità** | Risparmi 3-4 ore | 🟢 Alto |
-| **Zero manutenzione** | Non devi debuggare | 🟢 Alto |
-| **Analytics built-in** | Conversion tracking gratis | 🟡 Medio |
-| **Prova prima** | Validi domande/flow prima di buildare | 🟢 Alto |
+> **Principio:** Minimo necessario per qualificare + dare contesto alla call.
 
----
+### Step 1: Chi sei
 
-## 💡 Raccomandazione: Ibrida (Tally ora, Custom dopo)
+| Campo | Tipo | Obbligatorio | Perché |
+|:------|:-----|:-------------|:-------|
+| Nome | Text | ✅ | Personalizzazione |
+| Email | Email | ✅ | Contatto |
+| Background | Select: Studente magistrale / Neolaureato (≤12 mesi) / Junior SWE (0-2y) / Career switcher / Altro | ✅ | Segmentazione ICP |
 
-### Fase 0 (primi 10 clienti): Tally
+### Step 2: Obiettivo
 
-**Perché:**
-- Validi le domande giuste
-- Impari cosa serve davvero
-- Zero time investment
+| Campo | Tipo | Obbligatorio | Perché |
+|:------|:-----|:-------------|:-------|
+| Ruolo target | Select: RAG Engineer / Agent Engineer / GenAI Product Eng / Non so ancora | ✅ | Track selection |
+| Timeline | Select: Sto cercando ora / Nei prossimi 3 mesi / Più avanti | ✅ | Urgenza |
 
-**Cosa fare:**
-1. Crea form su Tally (30 min)
-2. Embed su `/career-os/apply`
-3. Configura notifica email
-4. Traccia conversion rate
+### Step 3: Situazione attuale
 
----
+| Campo | Tipo | Obbligatorio | Perché |
+|:------|:-----|:-------------|:-------|
+| Blocco principale | Select: Non so quale ruolo / CV non converte / No portfolio / Interview anxiety / Altro | ✅ | Pain |
+| Candidature ultimo mese | Select: 0 / 1-10 / 11-30 / 30+ | ✅ | Urgenza/effort |
 
-### Fase 1+ (10+ clienti): Valuta Custom
+### Step 4: Contatto (opzionale)
 
-**Trigger per buildare custom:**
-- Hai bisogno di scoring lead automatico
-- Vuoi integrare con CRM/DB interno
-- Vuoi fare AI analysis del profilo (LinkedIn, CV)
-- Limiti di Tally diventano bloccanti
-
-**Se buildi custom, includi:**
-1. Form multi-step (migliore UX)
-2. Scoring automatico (A/B/C lead)
-3. Salvataggio in DB interno
-4. Email automatica (conferma + te)
-5. Webhook per Slack/notifiche
-6. (Future) CV upload + parsing
-7. (Future) LinkedIn URL → scraping profilo
-
-**Effort stimato custom completo:** 1-1.5 giorni
+| Campo | Tipo | Obbligatorio | Perché |
+|:------|:-----|:-------------|:-------|
+| LinkedIn URL | URL | ⬜ | Pre-review profilo |
+| Note aggiuntive | Textarea | ⬜ | Contesto libero |
 
 ---
 
-## ❓ Domande per Decidere
+## GA Tracking Events
 
-1. **Hai già un DB setup (Firebase, Supabase)?**
-   - Sì → Custom ha meno overhead
-   - No → Tally per ora
+| Evento | Trigger | Parametri |
+|:-------|:--------|:----------|
+| `form_start` | Form aperto | `source: homepage/career-os` |
+| `form_step_complete` | Ogni step completato | `step: 1/2/3/4` |
+| `form_submit` | Submit finale | `background`, `role_target`, `urgency` |
+| `form_abandon` | Chiuso senza submit | `last_step` |
 
-2. **Quante application ti aspetti/mese?**
-   - <30 → Tally basta
-   - >30 → Custom ha più senso (analytics, automazioni)
+---
 
-3. **Vuoi scoring automatico dei lead?**
-   - Sì → Custom (o Tally → Zapier → Sheet con formula)
-   - No → Tally basta
+## Telegram Notification Format
 
-4. **Vuoi AI analysis del profilo (futuro)?**
-   - Sì → Custom necessario (integrazioni)
-   - No → Tally per sempre
+```
+🆕 Nuova Application Career OS
+
+👤 Nome: [nome]
+📧 Email: [email]
+🎓 Background: [background]
+🎯 Ruolo: [ruolo_target]
+⏰ Timeline: [timeline]
+🚧 Blocco: [blocco]
+📝 Candidature: [candidature]
+🔗 LinkedIn: [url o "Non fornito"]
+
+📅 Prenota call: [link calendly con pre-fill email]
+```
+
+---
+
+## Implementazione
+
+```typescript
+// Pseudo-struttura API route
+
+interface ApplicationData {
+  name: string;
+  email: string;
+  background: 'student' | 'new_grad' | 'junior_swe' | 'switcher' | 'other';
+  roleTarget: 'rag' | 'agent' | 'product' | 'unsure';
+  timeline: 'now' | '3months' | 'later';
+  mainBlock: 'role' | 'cv' | 'portfolio' | 'interview' | 'other';
+  applications: '0' | '1-10' | '11-30' | '30+';
+  linkedinUrl?: string;
+  notes?: string;
+  createdAt: Timestamp;
+  source: string; // da query param
+}
+
+// POST /api/career-os/apply
+async function handler(req, res) {
+  const data: ApplicationData = req.body;
+  
+  // 1. Salva in Firestore
+  await db.collection('applications').add({
+    ...data,
+    createdAt: FieldValue.serverTimestamp(),
+  });
+  
+  // 2. Notifica Telegram
+  await sendTelegramNotification(formatApplicationMessage(data));
+  
+  // 3. (Opzionale) GA server-side event
+  
+  return res.json({ success: true });
+}
+```
+
+**Effort stimato:** 4-6 ore (mezza giornata)
 
 ---
 
@@ -531,36 +944,106 @@ Analizziamo.
 
 ---
 
-## 💡 Raccomandazione: Stack Progressivo
+## ✅ DECISIONE: Multi-Magnet Strategy
 
-### Week 1: CV Rubric (Quick Win)
+> **Principio:** Sì, ha senso avere più di un lead magnet in posti diversi del sito. Ogni lead magnet cattura utenti in fasi diverse del funnel.
 
-**Perché:**
-- Alto valore percepito
-- Direttamente legato al pain
-- Crea reciprocità ("mi ha dato qualcosa di utile")
-- Effort ragionevole (3-4 ore)
+### Lead Magnet Approvati
 
-**Distribuzione:**
-- Landing page con form (email → download)
-- CTA negli articoli blog
-- Menzione nei post LinkedIn
+| Lead Magnet | Formato | Effort | Fase Funnel | Priorità |
+|:------------|:--------|:-------|:------------|:---------|
+| ✅ **Role Fit Guide** | PDF/Notion | 2-3h | Early (curiosità) | 🟡 2° |
+| ✅ **CV Rubric** | PDF/Template | 3-4h | Mid (problema chiaro) | 🔴 1° |
+| ✅ **5-Day Sprint** | Unico contenuto (pagina lunga) | 1-2gg | Mid (engagement) | 🟡 3° |
+| ✅ **Interview Bank** | Notion/PDF | 4-6h | Late (già candidati) | 🔴 1° |
+| ✅ **Proof Template** | GitHub + Tutorial | 1-2gg | Late (chi costruisce) | 🟡 3° |
 
----
-
-### Week 2-3: Interview Questions Bank
-
-**Perché:**
-- Complementare al CV Rubric
-- Cattura chi è più avanti nel funnel (già candidati)
-- SEO potential alto ("domande colloquio AI")
+> **✅ Decisioni confermate:**
+> - **5-Day Sprint:** Multi-pagina (non email sequence, non pagina singola)
+> - **Email capture:** Custom implementation Firebase + Telegram per notifiche
 
 ---
 
-### Month 2: 5-Day Email Sprint
+## Strategia di Placement: Dove Mettere Cosa
 
-**Perché:**
-- Nurturing automatico
+### Il Principio
+
+> Ogni lead magnet intercetta un **intent diverso**. Posizionali dove l'utente ha quell'intent.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         USER JOURNEY                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  [Curioso AI]  →  [Valuta carriera]  →  [Cerca lavoro]  →  [Preparato] │
+│       ↓                  ↓                   ↓                  ↓      │
+│  Role Fit Guide    CV Rubric        Interview Bank    Proof Template   │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Placement Map
+
+| Posizione | Lead Magnet | Trigger/Contesto |
+|:----------|:------------|:-----------------|
+| **Homepage (Intermezzo CTA)** | CV Rubric | Dopo scroll articoli, problem-aware |
+| **Articoli Career (ruoli, CV)** | CV Rubric + Role Fit Guide | In-article CTA |
+| **Articoli Interview** | Interview Bank | Naturale correlazione |
+| **Articoli Tecnici (RAG, Agents)** | Proof Template | Chi legge vuole costruire |
+| **Landing Career OS** | 5-Day Sprint (o CV Rubric) | Chi considera ma non pronto |
+| **Footer/Sidebar** | Role Fit Guide | Catch-all generico |
+
+---
+
+## Implementazione Lead Magnet
+
+### Struttura Comune (per tutti i lead magnet)
+
+```
+┌─────────────────────────────────────────────────────┐
+│  🎯 [Titolo Lead Magnet]                            │
+│                                                     │
+│  [Breve descrizione valore - 1-2 righe]             │
+│                                                     │
+│  📧 Email: [________________]                       │
+│                                                     │
+│  [Scarica Gratis →]                                 │
+│                                                     │
+│  ✓ Niente spam, solo valore                         │
+└─────────────────────────────────────────────────────┘
+```
+
+### Dopo il Download
+
+1. **Email automatica** con link al contenuto
+2. **Redirect a thank-you page** con:
+   - Link download
+   - CTA: "Vuoi un feedback personalizzato? Prenota Audit"
+3. **Nurturing** (opzionale, futuro): sequenza 3 email post-download
+
+---
+
+## Timeline Creazione Lead Magnet
+
+| Week | Lead Magnet | Effort | Note |
+|:-----|:------------|:-------|:-----|
+| **Week 1** | CV Rubric | 3-4h | Prima priorità, più actionable |
+| **Week 1** | Interview Bank | 4-6h | Complementare, stesso effort session |
+| **Week 3** | Role Fit Guide | 2-3h | Catch-all per early funnel |
+| **Month 2** | 5-Day Sprint (pagina) | 1-2gg | Contenuto deep, engagement |
+| **Month 2-3** | Proof Template | 1-2gg | Per pubblico tecnico avanzato |
+
+---
+
+## ❓ Domande Residue
+
+1. **Email capture:** Usi Mailchimp, ConvertKit, o implementi custom con Firebase?
+   - Custom = pieno controllo + GA tracking
+   - External = più feature automation ma dipendenza
+
+2. **Formato 5-Day Sprint:** Preferisci una pagina lunga scrollabile o un PDF multi-pagina?
+
+3. **CV Rubric:** Vuoi creare il contenuto insieme ora?
 - Libera tempo (non devi follow-up manualmente)
 - Mostra il tuo framework completo
 
@@ -626,30 +1109,43 @@ Dai un punteggio 0-2 per ogni criterio. Totale < 8 = CV non pronto.
 
 ---
 
-# 📊 Riepilogo Decisioni
+# 📊 Riepilogo Decisioni Confermate
 
 ## Matrice Decisionale Finale
 
-| Area | Decisione Raccomandata | Effort | Priorità |
-|:-----|:-----------------------|:-------|:---------|
-| **1. Setup Sito** | Opzione A (Home dual-path + /career-os) | 1-2 giorni | 🔴 Alta |
-| **2. Pagamento** | Stripe Payment Links (per ora) | 30-45 min | 🔴 Alta |
-| **3. Application Form** | Tally (ora), custom dopo 10 clienti | 30-60 min | 🔴 Alta |
-| **4. Lead Magnet** | CV Rubric (prima), poi Interview Bank | 3-4 ore + 4-6 ore | 🟡 Media |
+| Area | Decisione | Dettaglio | Effort | Priorità |
+|:-----|:----------|:----------|:-------|:---------|
+| **1. Setup Sito** | Homepage Content-First | Trending/Recent toggle, CTA progressive | 1-2 giorni | 🔴 Alta |
+| **1b. Career OS** | Long-form Landing | 3 tier, allineata a strategy | 4-6h | 🔴 Alta |
+| **2. Pagamento** | Stripe Payment Links | Solo in call, non sul sito | 30-45 min | 🔴 Alta |
+| **3. Application Form** | Custom (Firebase + Telegram) | Form multi-step, GA tracking | 4-6h | 🔴 Alta |
+| **4. Lead Magnet** | Multi-Magnet Strategy | CV Rubric + Interview Bank (priorità 1) | 7-10h | 🟡 Media |
 
 ---
 
-## 📅 Timeline Proposta
+## ✅ Tecnologie Confermate
+
+| Componente | Tecnologia |
+|:-----------|:-----------|
+| Database | Firebase Firestore |
+| Notifiche | Telegram Bot (già connesso) |
+| Analytics | GA4 (tutti i comportamenti) |
+| Payment | Stripe Payment Links |
+| Email (futuro) | TBD (custom o ConvertKit) |
+
+---
+
+## 📅 Timeline Proposta (Aggiornata)
 
 ### Week 1 (Foundation)
 
 | Giorno | Task | Effort |
 |:-------|:-----|:-------|
-| **Day 1** | Setup Stripe Products + Payment Links | 1h |
-| **Day 1** | Creare form application su Tally | 1h |
-| **Day 2-3** | Redesign homepage (dual-path) | 4-6h |
-| **Day 3-4** | Creare landing `/career-os` | 4-6h |
-| **Day 5** | Creare CV Rubric (lead magnet) | 3-4h |
+| **Day 1** | Setup Stripe Products + Payment Links (6 tier) | 45 min |
+| **Day 1-2** | Creare form application custom | 4-6h |
+| **Day 2-3** | Homepage: trending/recent toggle + CTA dimissibili | 3-4h |
+| **Day 3-4** | Creare landing `/career-os` (long-form, 3 tier) | 4-6h |
+| **Day 5** | Creare CV Rubric + Interview Bank | 7-10h |
 
 ### Week 2 (Soft Launch)
 
@@ -661,14 +1157,32 @@ Dai un punteggio 0-2 per ogni criterio. Totale < 8 = CV non pronto.
 
 ---
 
-## ❓ Domande per Proseguire
+## 📈 GA Events da Implementare
 
-1. **Homepage:** Vuoi che prepari un mockup/wireframe della nuova homepage dual-path?
+| Evento | Trigger |
+|:-------|:--------|
+| `cta_view` | CTA appare in viewport |
+| `cta_click` | Click su CTA Career OS |
+| `cta_dismissed` | Click su "X" / "Non ora" |
+| `article_view` | Visita articolo |
+| `scroll_depth` | 25/50/75/100% scroll |
+| `form_start` | Form application aperto |
+| `form_step_complete` | Ogni step completato |
+| `form_submit` | Submit finale |
+| `form_abandon` | Chiuso senza submit |
+| `lead_magnet_download` | Download lead magnet |
 
-2. **Landing Career OS:** Preferisci landing lunga (sales page) o corta (hero + form)?
+---
 
-3. **CV Rubric:** Vuoi che creiamo insieme il contenuto completo?
+## ❓ Domanda Finale
 
-4. **Tally vs Custom:** Hai già Firebase/Supabase setup? Se sì, potrebbe valere la pena fare custom subito.
+**Priorità implementazione:** Quale dei 4 pilastri affrontiamo per primo?
 
-5. **Priorità assoluta:** Quale dei 4 pilastri vuoi affrontare per primo?
+| Opzione | Effort | Dipendenze |
+|:--------|:-------|:-----------|
+| **A) Homepage + CTA** | 3-4h | Nessuna |
+| **B) Form custom** | 4-6h | Nessuna |
+| **C) Landing Career OS** | 4-6h | Nessuna |
+| **D) Lead Magnet (CV Rubric)** | 3-4h | Nessuna |
+
+> **Suggerimento:** Consiglio **B) Form custom** o **C) Landing Career OS** perché sono i punti di conversione diretta. Gli altri li puoi fare in parallelo dopo.
