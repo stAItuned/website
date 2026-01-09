@@ -20,7 +20,23 @@ const faqs = [
     {
         q: "Qual è la differenza con un bootcamp?",
         a: "I bootcamp vendono ore di video. Noi vendiamo outcome: proof pubblica, candidabilità, interview readiness. Non ore, risultati."
-    }
+    },
+    {
+        q: "Che background devo avere?",
+        a: "Serve un background tecnico minimo (programmazione base, familiarità con Python/JS). Non devi essere già esperto di AI, ma devi saper scrivere codice."
+    },
+    {
+        q: "Cosa succede se non finisco in 8 settimane?",
+        a: "Hai 2 settimane di buffer incluse. Se hai bisogno di più tempo, possiamo valutare un'estensione. L'obiettivo è quality, non fretta."
+    },
+    {
+        q: "Come funziona il pagamento a rate?",
+        a: "Offriamo pagamento in 2-3 rate senza interessi. Contattaci dopo la candidatura per i dettagli."
+    },
+    {
+        q: "Posso vedere un esempio di deliverable?",
+        a: "Sì! Nella call di audit ti mostriamo esempi reali di CV, proof project e evaluation report di partecipanti precedenti (anonimizzati)."
+    },
 ]
 
 export default function FAQ() {
