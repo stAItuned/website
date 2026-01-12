@@ -1,30 +1,7 @@
 
-
-## Indice
-- [Week 1 — Dal Caos alla Strategia (Profilo & Posizionamento)](#week-1--dal-caos-alla-strategia-profilo--posizionamento)
-    - [1. Logica & Attività](#1-logica--attività)
-    - [2. Input & Output](#2-input--output)
-    - [3. Execution Mode (Human vs Tool)](#3-execution-mode-human-vs-tool)
-- [Week 2 — Setup della Pipeline & Ricerca Mirata](#week-2--setup-della-pipeline--ricerca-mirata)
-    - [1. Logica & Attività](#1-logica--attività)
-    - [2. Input & Output](#2-input--output)
-    - [3. Execution Mode (Human vs Tool)](#3-execution-mode-human-vs-tool)
-- [Week 3 — Creazione Asset & Prime Candidature (CV, LinkedIn)](#week-3--creazione-asset--prime-candidature-cv-linkedin)
-    - [1. Logica & Attività](#1-logica--attività)
-    - [2. Input & Output](#2-input--output)
-    - [3. Execution Mode (Human vs Tool)](#3-execution-mode-human-vs-tool)
-- [Week 4 — Prima Proof Pubblica & Preparazione Colloqui](#week-4--prima-proof-pubblica--preparazione-colloqui)
-    - [1. Logica & Attività](#1-logica--attività)
-    - [2. Input & Output](#2-input--output)
-    - [3. Execution Mode (Human vs Tool)](#3-execution-mode-human-vs-tool)
-- [Week 5 — Setup della "Proof Platform" (GCP & Vibe Coding)](#week-5--setup-della-proof-platform-gcp--vibe-coding)
-    - [1. Logica & Attività](#1-logica--attività)
-    - [2. Input & Output](#2-input--output)
-    - [3. Execution Mode (Human vs Tool)](#3-execution-mode-human-vs-tool)
-
----
-
 # Roadmap unificata Week 1–4 (Starter+ / Pro / Elite)
+
+# Starter Track Week 1–4
 
 ## Week 1 — Dal Caos alla Strategia (Profilo & Posizionamento)
 
@@ -148,7 +125,8 @@ Chi passa a Pro/Elite entra nell’Advanced Track.
 
 ---
 
-# Advanced Track Week 5–8 (solo Pro / Elite)
+
+# Advanced Track (Pro/Elite) Week 5–8
 
 ## Week 5 — Setup della "Proof Platform" (GCP & Vibe Coding)
 
@@ -242,27 +220,27 @@ Chi passa a Pro/Elite entra nell’Advanced Track.
 **Focus:** Allenarsi "sotto fuoco", chiudere il gap e pianificare il futuro.
 
 ### 1. Logica & Attività
+*   **JD-Specific Intelligence (x10)**: Per le 10 JD target (W7), generiamo un report di intelligence profonda.
+    *   *Perché:* Non andare alla cieca. Devi sapere: Cultura azienda, Pro/Contro, Domande probabili.
 *   **Mock Interview (Hard & Soft)**: Simulazione reale con AI Expert Senior.
     *   *Perché:* Meglio fallire qui dentro e imparare, che fallire l'opportunità della vita fuori.
-*   **Debrief & Gap Closing**: Analizziamo la performance e copriamo gli ultimi buchi.
-    *   *Perché:* Il feedback immediato è il miglior modo di imparare.
 *   **Piano Next 30 Days**: Strategia per continuare da sol* post-percorso.
     *   *Perché:* L'obiettivo è renderti autonomo, non dipendente.
 
 ### 2. Input & Output
 | Input Richiesto (Tu) | Output Generato (Noi/Insieme) |
 | :--- | :--- |
-| Interview Prep (W4+W7) | **Mock Interview Scorecard** (Voti e feedback dettagliati) |
-| CV Finale | **Drill Plan** (Esercizi su dove sei stato debole) |
+| Lista 10 JD Target (W7) | **10 JD Intelligence Reports** (Context, Pros/Cons, Custom Q&A) |
+| Interview Prep (W4) | **Mock Interview Scorecard** (Voti e feedback dettagliati) |
 | | **Career OS Playbook** (Il tuo piano per i prossimi 6 mesi) |
 
 ### 3. Execution Mode (Human vs Tool)
+*   **Company Deep-Dive**: 🤖 *Tool* (Antigravity) → Analizza azienda e JD per darti "insight segreti" e domande custom.
 *   **Mock Interview**: 👤 *Senior Expert* (Roleplay) → Pressione reale, domande cattive.
-*   **Interview Simulator**: 🤖 *Tool* (Warm-up) → Per scaldarsi prima della sessione umana.
 *   **Strategy Session**: 🤝 *Ibrido* → Co-creation del piano futuro.
 
 **Gate di fine percorso:**
-> Sei pronto. Sai difendere le tue scelte tecniche, hai le prove del tuo valore e sai come muoverti nel mercato.
+> Sei pronto. Sai difendere le tue scelte tecniche, conosci i tuoi target meglio di loro stessi, e hai le prove del tuo valore.
 
 ---
 
