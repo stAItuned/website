@@ -61,7 +61,7 @@ La headline non è un elenco di buzzword: è un posizionamento.
 
 Esempi (adatta):
 * “Applied GenAI Engineer | RAG & Agents | Evaluation-driven systems”
-* “ML Engineer | LLMOps & Deployment | Cost/latency aware pipelines”
+* “Building [ProjectName] (Live Demo) | GenAI Engineer | RAG Focus”
 * “Product-minded AI Engineer | GenAI prototypes → production | RAG + guardrails”
 
 Regole:
@@ -92,16 +92,17 @@ Regole:
 * Se non hai numeri, usa proxy credibili (tempo risparmiato, riduzione errori, copertura eval, ecc.).
 * Inserisci link (brevi) dove possibile.
 
-## 5) Featured: prova sociale e proof (non “vetrina”)
-Minimo 3 asset:
-1. Repo / demo (il tuo miglior proof tecnico)
-2. Article/case study (spiega scelte + tradeoff + misure)
-3. CV/portfolio (se ha senso) o “Project one-pager”
+## 5) Featured: Prova Sociale (La tua Landing Page)
+Non caricare PDF a caso. Hai 3 slot "Prime Real Estate".
+
+**Strategy "Flagship First":**
+1.  **Slot 1 (The Hook):** Video Demo del Flagship Project (W6). Usa Loom o YouTube. Thumbnail con titolo "Live Project".
+2.  **Slot 2 (The Authority):** Articolo Tecnico stAItuned (W4). Dimostra che sai scrivere e ragionare.
+3.  **Slot 3 (The Resume):** Link al PDF del CV "Hiring-Ready" (o Portfolio WebApp).
 
 Checklist Featured:
-* titolo chiaro (“RAG System + Evaluation Report”, non “Project”)
-* link funzionanti
-* un asset “tecnico” + uno “narrativo” (spiega bene)
+* Descrizione sotto il link: "Built end-to-end RAG system with GCP" (non lasciare vuoto).
+* Thumbnail leggibili da mobile.
 
 ## 6) Experience: bullet “impact + ownership + proof”
 Ogni esperienza:

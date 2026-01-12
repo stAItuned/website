@@ -127,14 +127,17 @@ Esempi di trasformazione:
 
 ---
 
-## 6) Progetti: solo se “da hiring”
-Inserisci progetti se:
-* sono coerenti col ruolo target
-* hanno un output verificabile (repo/demo/report)
-* mostrano maturità: architettura, tradeoff, evaluation, docs
+## 6) Progetti: "Project Injection" (Il tuo vantaggio competitivo)
+Se sei Junior o Pivot, il tuo progetto "Flagship" (Week 6) vale più dell'esperienza.
+Non nasconderlo in fondo. Se è forte, mettilo **subito dopo l'esperienza** (o prima, se non hai esperienza rilevante).
 
-Template bullet progetto:
-* “Costruito `[cosa]` per `[chi/contesto]` usando `[come]`, misurando `[metrica]` e documentando `[proof]`.”
+**Format Vincente (Project Injection):**
+> **[Nome Progetto] (Live Demo: portfolio-mario.web.app)** | *Next.js, Python, Firestore, OpenAI*
+> *   **Built** an end-to-end RAG assistant for [Target User] that reduces research time by **80%**.
+> *   **Architected** a scalable serverless backend on **GCP (Cloud Functions)** handling concurrent user requests.
+> *   **Implemented** custom **Hallucination Guardrails** increasing answer accuracy to **95%** (verified vs baseline).
+
+Regola: Deve avere un **Link Live** (HTTPS) e metriche di **Eval/Impact**.
 
 ---
 

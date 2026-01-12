@@ -63,13 +63,13 @@ Evita “accesso generico”. Usa metriche:
 **Scopo:** togliere il caos, far partire pipeline, costruire asset base.
 Metti qui:
 
-* Role-fit + positioning (output chiari)
-* CV master + LinkedIn base (con 1 review)
-* **JD credits pochi** (per imparare il metodo)
-* Job feed per alcune settimane (cadence limitata)
-* Interview bank generale
-* Playbook core
-* (Opzionale) micro-proof: 1 articolo tecnico “light”
+*   Role-fit + positioning (output chiari)
+*   CV master + LinkedIn base (con 1 review)
+*   **JD credits base** (per imparare il metodo)
+*   Job feed per 4 settimane
+*   Interview Manual 360° (Base)
+*   Playbook core (W1-W4)
+*   **Proof pubblica Light**: 1 Articolo tecnico stAItuned
 
 **Cosa NON mettere qui:** proof project completo, mock con senior, priority/SLA.
 
@@ -82,15 +82,13 @@ Metti qui:
 **Scopo:** produrre la proof pubblica completa + aumentare callback rate + preparare interview.
 Metti qui:
 
-* Tutto Starter
-* **Supervised vibe coding** (protocollo + rubric) per proof project completo:
-
-  * demo + repo + eval report + write-up
-* **JD credits “seri”** (per 8 settimane di pipeline)
-* Job feed per tutta la durata
-* **Interview pack JD-specific** (alcuni)
-* **1 mock interview con Senior** + debrief
-* 2–3 review extra (CV/repo/write-up)
+*   Tutto Starter
+*   **Supervised Vibe Coding** (con Antigravity) (GCP Platform + Flagship Project W5-W6)
+*   **JD credits "Scaling"** (per 10-Application Sprint W7)
+*   Job feed per 8 settimane
+*   **10 JD Intelligence Reports** (Custom reports per le aziende target W8)
+*   **1 Mock Interview con Senior** + debrief
+*   2–3 review extra (CV/repo/write-up)
 
 **Perché:** è il pacchetto “outcome” più chiaro (“ti rendiamo assumibile”).
 
@@ -146,9 +144,9 @@ Se una feature richiede:
 
 ## 6) Il tuo differenziatore “supervised vibe coding”: dove sta?
 
-* In Starter: solo “introduzione + checklist minima”
-* In Pro: **protocollo completo + design review + quality gate**
-* In Elite: **review prioritaria** e iterazioni più frequenti (cap)
+*   In Starter: solo **Article Proof** (stAItuned)
+*   In Pro: **Supervised Vibe Coding Protocol (con Antigravity) + Design Review**
+*   In Elite: **Review prioritaria** e supporto continuo
 
 ----
 ----
@@ -187,8 +185,8 @@ Eccoti la **tabella SSOT** “Feature → costo → valore → tier → cap” (
 | Proof        | Observability minima (tracing/logging)           | 1 checklist + implementazione | Medio                        | Media       | Pro/Elite                             | “minimo” definito (no enterprise)      |
 | Authority    | Article Builder stAItuned                        | 1 article credit              | Basso                        | Alta        | Starter+ (base) / Elite (più accesso) | crediti inclusi + pacchetti extra      |
 | Authority    | Review articolo tecnico (accuratezza, chiarezza) | 1 review                      | Medio                        | Media       | Pro/Elite                             | 1–2 review                             |
-| Interview    | Question bank generale (soft+hard)               | accesso                       | Basso                        | Alta        | Starter+                              | n/a                                    |
-| Interview    | JD-specific interview pack                       | 1 JD interview credit         | Basso→Medio                  | Alta        | Pro/Elite + add-on                    | crediti inclusi + extra                |
+| Interview    | Question bank generale (Interview Manual 360)    | accesso                       | Basso                        | Alta        | Starter+                              | n/a                                    |
+| Interview    | **JD Intelligence Reports** (Context + Q&A)      | 1 JD report                   | Basso→Medio                  | Alta        | Pro/Elite                     | 10 inclusi in Pro/Elite                |
 | Interview    | Mock interview con Senior + debrief              | 1 mock credit                 | Alto                         | Bassa       | Pro/Elite                             | Pro: 1, Elite: 2–3 (cap)               |
 | Support      | Async feedback (thread-based)                    | 1 thread                      | Medio (tempo)                | Media       | Pro/Elite                             | 1 thread attivo alla volta             |
 | SLA          | Priority lane / SLA (72h/48h/24h)                | livello SLA                   | Alto (stress)                | Bassa       | Elite only                            | SLA solo su asset “definiti”           |
