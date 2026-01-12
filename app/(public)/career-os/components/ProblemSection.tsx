@@ -59,6 +59,16 @@ export default function ProblemSection() {
                         </p>
                     </div>
                 </div>
+
+                {/* Bridge CTA to next section */}
+                <div className="mt-12 text-center">
+                    <a
+                        href="#ai-expert"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1A1E3B] dark:bg-white/10 text-white font-semibold hover:bg-[#383F74] dark:hover:bg-white/20 transition-colors"
+                    >
+                        Scopri come Career OS risolve questi 3 problemi →
+                    </a>
+                </div>
             </div>
         </section>
     )

@@ -1,14 +1,16 @@
-import { Code2, BarChart3, FileText, CheckCircle2, Users } from 'lucide-react'
+import { Code2, BarChart3, FileText, CheckCircle2, Users, ExternalLink } from 'lucide-react'
 
 /**
  * SocialProofSection - Process Proof & Output Standards
- * Instead of contestable metrics, we show tangible outputs and quality standards.
+ * Shows tangible outputs and quality standards with real example placeholders.
  */
 
 interface ProcessProofItem {
     icon: React.ElementType
     title: string
     description: string
+    exampleLabel: string
+    exampleLink: string | null // null = placeholder
 }
 
 const PROCESS_PROOF: ProcessProofItem[] = [
@@ -16,16 +18,22 @@ const PROCESS_PROOF: ProcessProofItem[] = [
         icon: Code2,
         title: 'Repo + Demo',
         description: 'GitHub pubblico, demo riproducibile, README professionale',
+        exampleLabel: 'Vedi esempio repo →',
+        exampleLink: null, // TODO: Replace with real GitHub link
     },
     {
         icon: BarChart3,
         title: 'Evaluation Report',
         description: 'Metriche, error analysis, decision log documentati',
+        exampleLabel: 'Vedi esempio report →',
+        exampleLink: null, // TODO: Replace with real example
     },
     {
         icon: FileText,
         title: 'Write-up Tecnico',
         description: 'Articolo/portfolio che comunica il progetto',
+        exampleLabel: 'Vedi articolo →',
+        exampleLink: null, // TODO: Replace with stAItuned article link
     },
 ]
 
@@ -43,7 +51,7 @@ export default function SocialProofSection() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <span className="inline-block px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-4">
-                        🎯 What You'll Build
+                        🎯 Cosa Costruirai
                     </span>
                     <h2 className="text-2xl md:text-3xl font-bold text-[#1A1E3B] dark:text-white mb-3">
                         Output tangibili, non slide
@@ -68,9 +76,25 @@ export default function SocialProofSection() {
                                 <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white mb-2">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                                     {item.description}
                                 </p>
+                                {/* Example link/placeholder */}
+                                {item.exampleLink ? (
+                                    <a
+                                        href={item.exampleLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+                                    >
+                                        <ExternalLink className="w-4 h-4" />
+                                        {item.exampleLabel}
+                                    </a>
+                                ) : (
+                                    <span className="inline-flex items-center gap-1 text-sm text-slate-400 dark:text-slate-500 italic">
+                                        Esempi in arrivo (beta)
+                                    </span>
+                                )}
                             </div>
                         )
                     })}
@@ -115,7 +139,18 @@ export default function SocialProofSection() {
                         </div>
                     </div>
                 </div>
+
+                {/* CTA to Pricing */}
+                <div className="mt-10 text-center">
+                    <a
+                        href="#pricing"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1A1E3B] dark:bg-white/10 text-white font-semibold hover:bg-[#383F74] dark:hover:bg-white/20 transition-colors"
+                    >
+                        Scegli il tuo piano →
+                    </a>
+                </div>
             </div>
         </section>
     )
 }
+

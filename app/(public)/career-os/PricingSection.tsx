@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useCareerOS } from './context/CareerOSContext'
 
 type PricingMode = 'classe' | '1to1'
 
@@ -98,11 +97,34 @@ const pricingData = {
 }
 
 export default function PricingSection() {
-    const [mode, setMode] = useState<PricingMode>('1to1')
+    const { mode, setMode, objective } = useCareerOS()
     const current = pricingData[mode]
 
+    // Determine which plan to highlight based on objective
+    // If objective is 'start', highlight Starter.
+    // If objective is 'pro', highlight Pro (or Elite, but Pro is safer default).
+    // If null, keep default 'popular' flag from data.
+    const tiersWithHighlight = current.tiers.map(tier => {
+        if (!objective) return tier
+
+        let isPopular = tier.popular
+
+        if (objective === 'start') {
+            isPopular = tier.name === 'Starter'
+        } else if (objective === 'pro') {
+            // For Pro objective, we highlight Pro. 
+            // If they are in 1to1, Elite is also an option but Pro is the direct match.
+            isPopular = tier.name === 'Pro'
+        }
+
+        return {
+            ...tier,
+            popular: isPopular
+        }
+    })
+
     return (
-        <section className="py-24 bg-[#1A1E3B] text-white">
+        <section id="pricing" className="py-24 bg-[#1A1E3B] text-white">
             <div className="max-w-6xl mx-auto px-6">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
                     Investi nel tuo <span className="text-[#FFF272]">ROI</span>
@@ -148,7 +170,7 @@ export default function PricingSection() {
                                 : 'text-white/70 hover:text-white'
                                 }`}
                         >
-                            🎓 Classe
+                            🎓 Classe (Cohort)
                         </button>
                     </div>
                 </div>
@@ -168,17 +190,17 @@ export default function PricingSection() {
 
                 {/* Pricing Cards */}
                 <div className={`grid gap-8 max-w-5xl mx-auto ${current.tiers.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-4xl'}`}>
-                    {current.tiers.map((tier, i) => (
+                    {tiersWithHighlight.map((tier, i) => (
                         <div
                             key={i}
                             className={`relative p-8 rounded-3xl transition-all ${tier.popular
-                                ? 'bg-gradient-to-b from-[#383F74] to-[#1A1E3B] border-2 border-[#FFF272] shadow-[0_0_30px_rgba(255,242,114,0.15)]'
+                                ? 'bg-gradient-to-b from-[#383F74] to-[#1A1E3B] border-2 border-[#FFF272] shadow-[0_0_30px_rgba(255,242,114,0.15)] transform scale-105 z-10'
                                 : 'bg-white/5 border border-white/10 hover:bg-white/10'
                                 }`}
                         >
                             {tier.popular && (
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FFF272] text-[#1A1E3B] px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide">
-                                    Consigliato
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FFF272] text-[#1A1E3B] px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
+                                    {objective ? 'Selezionato per te' : 'Consigliato'}
                                 </div>
                             )}
                             <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
@@ -225,6 +247,19 @@ export default function PricingSection() {
                     <p className="text-slate-400 text-sm">
                         💳 Pagamento in rate disponibile • Nessun abbonamento nascosto
                     </p>
+                </div>
+
+                {/* Audit Escape Valve - for users with questions */}
+                <div className="mt-8 text-center">
+                    <p className="text-slate-400 text-sm mb-3">
+                        Hai dubbi? Parliamone.
+                    </p>
+                    <a
+                        href="/audit"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white/80 font-medium hover:bg-white/5 hover:text-white transition-all"
+                    >
+                        📞 Prenota Audit gratuito (15 min)
+                    </a>
                 </div>
             </div>
         </section>

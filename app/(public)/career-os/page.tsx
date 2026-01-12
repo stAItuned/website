@@ -16,6 +16,8 @@ import ApplicationFormSection from './components/ApplicationFormSection'
 import FAQ from './FAQ'
 import PricingSection from './PricingSection'
 
+import { CareerOSProvider } from './context/CareerOSContext'
+
 export const metadata: Metadata = {
     title: 'Career OS — Il Percorso per Diventare GenAI Engineer | stAItuned',
     description: 'Smetti di mandare CV a vuoto. Career OS ti prepara per ruoli Applied GenAI in 4-8 settimane: Role-fit, CV ottimizzato, Proof pubblica, Interview prep. Da chi assume, non da career coach.',
@@ -40,19 +42,21 @@ export const metadata: Metadata = {
 export default function CareerOSPage() {
     return (
         <PageTransition>
-            <div className="min-h-screen bg-white dark:bg-[#0F1117]">
-                <HeroSection />
-                <ProblemSection />
-                <AIExpertSection />
-                <JourneySection />
-                <SocialProofSection />
-                <TargetAudienceSection />
-                <PricingSection />
-                <TransparencySection />
-                <FAQ />
-                <ApplicationFormSection />
-                <FinalCTASection />
-            </div>
+            <CareerOSProvider>
+                <div className="min-h-screen bg-white dark:bg-[#0F1117]">
+                    <HeroSection />
+                    <ProblemSection />
+                    <AIExpertSection />
+                    <JourneySection />
+                    <SocialProofSection />
+                    <TargetAudienceSection />
+                    <PricingSection />
+                    <TransparencySection />
+                    <FAQ />
+                    <ApplicationFormSection />
+                    <FinalCTASection />
+                </div>
+            </CareerOSProvider>
         </PageTransition>
     )
 }
