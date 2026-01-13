@@ -54,7 +54,6 @@ export default function CareerOSPage() {
                     <TransparencySection />
                     <FAQ />
                     <ApplicationFormSection />
-                    <FinalCTASection />
                 </div>
             </CareerOSProvider>
         </PageTransition>

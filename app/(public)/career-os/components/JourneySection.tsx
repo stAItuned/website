@@ -25,16 +25,31 @@ import { useCareerOS, type ObjectiveType } from '../context/CareerOSContext'
  * Step definitions for the gamified journey
  */
 const JOURNEY_STEPS = [
-    { id: 1, label: 'Scegli obiettivo', icon: '🎯', targetId: 'step-objective' },
-    { id: 2, label: 'Esplora percorso', icon: '📅', targetId: 'step-timeline' },
-    { id: 3, label: 'Scegli modalità', icon: '🎓', targetId: 'step-mode' },
-    { id: 4, label: 'Vedi prezzi', icon: '💰', targetId: 'pricing' },
+    { id: 1, label: 'Scegli traguardo', icon: '🎯', targetId: 'step-objective' },
+    { id: 2, label: 'Esplora settimane', icon: '📅', targetId: 'step-timeline' },
+    { id: 3, label: 'Scegli supporto', icon: '🎓', targetId: 'step-mode' },
+    { id: 4, label: 'Prezzi', icon: '💰', targetId: 'pricing' },
 ]
 
 /**
  * ProgressStepper - Visual progress bar showing journey steps
  * Sticky overlay for better UX
  */
+function ChapterBreak({ label = 'Next Step' }: { label?: string }) {
+    return (
+        <div className="py-20 flex items-center justify-center gap-6 opacity-60">
+            <div className="h-px w-16 md:w-32 bg-gradient-to-r from-transparent to-slate-400 dark:to-slate-600" />
+            <div className="flex flex-col items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                    {label}
+                </span>
+                <ChevronDown className="w-4 h-4 text-slate-400 dark:text-slate-500 animate-bounce" />
+            </div>
+            <div className="h-px w-16 md:w-32 bg-gradient-to-l from-transparent to-slate-400 dark:to-slate-600" />
+        </div>
+    )
+}
+
 function ProgressStepper({
     currentStep,
     completedSteps
@@ -104,7 +119,7 @@ function ProgressStepper({
             {/* Mobile stepper - compact */}
             <div className="md:hidden flex items-center justify-between w-full">
                 <span className="text-sm font-bold text-[#1A1E3B] dark:text-white">
-                    Step {currentStep}/4: <span className="text-indigo-600 dark:text-indigo-400">{JOURNEY_STEPS[currentStep - 1].label}</span>
+                    Fase {currentStep}/4: <span className="text-indigo-600 dark:text-indigo-400">{JOURNEY_STEPS[currentStep - 1].label}</span>
                 </span>
                 <div className="flex gap-1.5">
                     {JOURNEY_STEPS.map(step => {
@@ -195,7 +210,7 @@ function StepCard({
 /**
  * Artifact tag types for deliverables (lowercase for readability)
  */
-type ArtifactTag = 'Doc' | 'Sheet' | 'Repo' | 'Demo' | 'Report' | 'Profile'
+type ArtifactTag = 'Doc' | 'Sheet' | 'Repo' | 'Demo' | 'Report' | 'Profile' | 'Project'
 
 /**
  * Deliverable with artifact tag
@@ -204,6 +219,7 @@ interface Deliverable {
     name: string
     tag: ArtifactTag
     description?: string
+    highlight?: boolean
 }
 
 /**
@@ -241,6 +257,7 @@ const TAG_COLORS: Record<ArtifactTag, string> = {
     Demo: 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300',
     Report: 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300',
     Profile: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-300',
+    Project: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300',
 }
 
 /**
@@ -253,16 +270,17 @@ const TAG_GLOSSARY: Record<ArtifactTag, string> = {
     Demo: 'App/tool funzionante',
     Report: 'Analisi con metriche',
     Profile: 'Profilo ottimizzato',
+    Project: 'Progetto completo/WebApp',
 }
 
 /**
  * Fit bar chips - quick recognition for target audience
  */
 const FIT_CHIPS = [
-    { icon: '👨‍💻', label: 'Per dev/data STEM' },
+    { icon: '👨‍💻', label: 'Per dev & data' },
     { icon: '⏱️', label: '4-8h/settimana' },
-    { icon: '🤖', label: 'Ruoli Applied GenAI' },
-    { icon: '📦', label: 'Output verificabili' },
+    { icon: '🚀', label: 'Ruoli GenAI applicata' },
+    { icon: '📦', label: 'Output verificabili (repo/demo)' },
 ]
 
 /**
@@ -311,8 +329,8 @@ const FOUNDATIONAL_WEEKS: WeekNode[] = [
         subtitle: 'Filtro automatico + impatto',
         icon: FileSearch,
         deliverables: [
-            { name: 'Master CV (Impact Bullets)', tag: 'Doc', description: 'formula azione+tech+outcome' },
-            { name: 'LinkedIn V2', tag: 'Profile', description: 'headline + about + featured' },
+            { name: 'CV Master ottimizzato (impact bullets)', tag: 'Doc', description: 'formula azione+tech+outcome' },
+            { name: 'LinkedIn ottimizzato', tag: 'Profile', description: 'headline + about + featured' },
             { name: 'Application Bundle', tag: 'Doc', description: 'template CV/Cover replicabile' },
         ],
         qualityCheck: 'Primo terzo CV comunica segnali GenAI + numeri',
@@ -329,7 +347,7 @@ const FOUNDATIONAL_WEEKS: WeekNode[] = [
         subtitle: 'Articolo + preparazione completa',
         icon: Users,
         deliverables: [
-            { name: 'Technical Article (stAItuned)', tag: 'Doc', description: 'articolo pubblicato' },
+            { name: 'Technical Article (stAItuned)', tag: 'Doc', description: 'articolo pubblicato', highlight: true },
             { name: 'Interview Manual 360°', tag: 'Doc', description: 'soft + hard + negotiation' },
             { name: 'LinkedIn Share Kit', tag: 'Doc', description: 'strategia di distribuzione' },
         ],
@@ -369,7 +387,7 @@ const ADVANCED_WEEKS: WeekNode[] = [
         subtitle: 'Tool end-to-end',
         icon: Zap,
         deliverables: [
-            { name: 'Flagship AI Tool', tag: 'Demo', description: 'funzionante live nella webapp' },
+            { name: 'Progetto AI End-to-End', tag: 'Project', description: 'funzionante live nella webapp', highlight: true },
             { name: 'Backend Repo', tag: 'Repo', description: 'strutturata e pulita' },
             { name: 'Demo Video', tag: 'Demo', description: 'screen recording del tool' },
         ],
@@ -387,7 +405,7 @@ const ADVANCED_WEEKS: WeekNode[] = [
         subtitle: 'README + application in massa',
         icon: TrendingUp,
         deliverables: [
-            { name: 'CV V2 (Project Injection)', tag: 'Doc', description: 'progetto in cima al CV' },
+            { name: 'CV con progetto in evidenza', tag: 'Doc', description: 'progetto in cima al CV' },
             { name: 'Killer README', tag: 'Repo', description: 'architettura + demo link' },
             { name: '10 Custom Applications', tag: 'Sheet', description: 'CV tailored inviati' },
         ],
@@ -422,14 +440,14 @@ const ADVANCED_WEEKS: WeekNode[] = [
 
 const CHECKPOINTS: Record<'week4' | 'week8', Checkpoint> = {
     week4: {
-        title: 'Sei Candidabile',
+        title: 'Pronto a candidarti',
         emoji: '✅',
         tier: 'Starter+',
-        hint: 'Asset base pronti + authority pubblica + interview prep completo.',
+        hint: 'CV/LinkedIn pronti + proof pubblica + interview kit: inizi a candidarti con credibilità e metodo.',
         deliverables: [
             { name: 'Career Goal + Positioning', tag: 'Doc', description: 'narrativa chiara' },
-            { name: 'Master CV + LinkedIn V2', tag: 'Doc', description: 'ATS-ready + ottimizzati' },
-            { name: 'Technical Article', tag: 'Doc', description: 'pubblicato su stAItuned' },
+            { name: 'CV Master + LinkedIn ottimizzato', tag: 'Doc', description: 'ATS-ready + ottimizzati' },
+            { name: 'AI Article', tag: 'Doc', description: 'pubblicato su stAItuned', highlight: true },
             { name: 'Interview Manual 360°', tag: 'Doc', description: 'soft + hard + negotiation' },
         ],
     },
@@ -437,10 +455,10 @@ const CHECKPOINTS: Record<'week4' | 'week8', Checkpoint> = {
         title: 'Offer-Ready',
         emoji: '🎯',
         tier: 'Pro / Elite',
-        hint: 'Prodotto live + 10 candidature + intelligence specifica: sei pronto a negoziare.',
+        hint: 'Prodotto live + candidature mirate + mock: arrivi ai loop tecnici e alla negoziazione con prove solide.',
         deliverables: [
-            { name: 'Flagship Project (Live)', tag: 'Demo', description: 'webapp funzionante' },
-            { name: 'CV V2 + 10 Applications', tag: 'Sheet', description: 'candidature perfette' },
+            { name: 'Progetto AI End-to-End', tag: 'Project', description: 'webapp funzionante', highlight: true },
+            { name: 'CV + 10 Tailored Applications', tag: 'Sheet', description: 'candidature perfette' },
             { name: '10 JD Intelligence Reports', tag: 'Report', description: 'context + domande custom' },
             { name: 'Mock Interview Scorecard', tag: 'Report', description: 'debrief con Senior' },
         ],
@@ -479,7 +497,7 @@ function ObjectiveToggle({
             <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="w-7 h-7 rounded-full bg-indigo-600 text-white text-sm font-bold flex items-center justify-center">1</span>
                 <span className="text-base font-bold text-[#1A1E3B] dark:text-white">
-                    Qual è il tuo obiettivo?
+                    Dove vuoi arrivare?
                 </span>
             </div>
 
@@ -496,13 +514,13 @@ function ObjectiveToggle({
                         }
                     `}
                 >
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap sm:flex-nowrap">
                         <span className="text-xl">🚀</span>
-                        <span className="font-bold text-lg">Start</span>
-                        <span className={`text-sm ${selected === 'start' ? 'text-white/70' : 'text-slate-500'}`}>(4 sett.)</span>
+                        <span className="font-bold text-lg leading-tight">Pronto a candidarti</span>
+                        <span className={`text-sm whitespace-nowrap ml-auto sm:ml-0 ${selected === 'start' ? 'text-white/70' : 'text-slate-500'}`}>(4 sett.)</span>
                     </div>
                     <p className={`text-sm ${selected === 'start' ? 'text-white/80' : 'text-slate-500 dark:text-slate-400'}`}>
-                        CV pronto + profilo ottimizzato per iniziare a candidarti
+                        CV + LinkedIn ottimizzati e strategia di candidatura: inizi a candidarti con metodo.
                     </p>
                 </button>
 
@@ -517,13 +535,13 @@ function ObjectiveToggle({
                         }
                     `}
                 >
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap sm:flex-nowrap">
                         <span className="text-xl">🏆</span>
-                        <span className="font-bold text-lg">Pro</span>
-                        <span className={`text-sm ${selected === 'pro' ? 'text-white/70' : 'text-slate-500'}`}>(8 sett.)</span>
+                        <span className="font-bold text-lg leading-tight">Offer-Ready</span>
+                        <span className={`text-sm whitespace-nowrap ml-auto sm:ml-0 ${selected === 'pro' ? 'text-white/70' : 'text-slate-500'}`}>(8 sett.)</span>
                     </div>
                     <p className={`text-sm ${selected === 'pro' ? 'text-white/80' : 'text-slate-500 dark:text-slate-400'}`}>
-                        Tutto quello che serve per superare i colloqui (Portfolio + Mock)
+                        Portfolio live + progetto GenAI + mock: arrivi ai colloqui tecnici e alla negoziazione con prove solide.
                     </p>
                 </button>
             </div>
@@ -570,16 +588,16 @@ function WeekNodeCompact({
     const Icon = node.icon
     const colorClasses = variant === 'foundational'
         ? 'border-indigo-500/30 hover:border-indigo-500/60'
-        : 'border-[#FFF272]/30 hover:border-[#FFF272]/60'
+        : 'border-[#FDE047] hover:border-[#F59E0B]'
     const iconBg = variant === 'foundational'
         ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
-        : 'bg-[#FFF272]/10 text-[#F59E0B]'
+        : 'bg-[#FFF9C4] text-[#B45309]'
     const weekBadge = variant === 'foundational'
         ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-300'
-        : 'bg-[#FFF272]/20 text-[#1A1E3B] dark:text-[#FFF272]'
+        : 'bg-[#FCD34D] text-[#451a03]'
     const selectedRing = variant === 'foundational'
         ? 'ring-indigo-500'
-        : 'ring-[#FFF272]'
+        : 'ring-[#F59E0B]'
 
     const nodeButton = (
         <button
@@ -610,7 +628,7 @@ function WeekNodeCompact({
                             px-2 py-0.5 rounded-full text-[10px] font-bold cursor-help
                             ${node.week === 4
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-[#FFF272] text-[#1A1E3B]'
+                                : 'bg-[#FCD34D] text-[#451a03]'
                             }
                             shadow-sm
                         `}
@@ -655,9 +673,9 @@ function DetailPanel({
     node: WeekNode
     variant: 'foundational' | 'advanced'
 }) {
-    const borderColor = variant === 'foundational' ? 'border-indigo-500/30' : 'border-[#FFF272]/30'
-    const bgGradient = variant === 'foundational' ? 'from-indigo-500/5 to-transparent' : 'from-[#FFF272]/5 to-transparent'
-    const accentColor = variant === 'foundational' ? 'text-indigo-600 dark:text-indigo-400' : 'text-[#F59E0B] dark:text-[#FFF272]'
+    const borderColor = variant === 'foundational' ? 'border-indigo-500/30' : 'border-[#FCD34D]'
+    const bgGradient = variant === 'foundational' ? 'from-indigo-500/5 to-transparent' : 'from-[#FCD34D]/10 to-transparent'
+    const accentColor = variant === 'foundational' ? 'text-indigo-600 dark:text-indigo-400' : 'text-[#B45309]'
 
     return (
         <div id="journey-detail" className="w-[100%] min-h-[420px] md:h-[580px] rounded-3xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden animate-In flex flex-col">
@@ -673,11 +691,11 @@ function DetailPanel({
 
             <div className="p-6 flex-1 flex flex-col justify-between gap-6">
                 {/* 1. VALUE PROP (Why it matters) - Top */}
-                <div className="shrink-0">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
-                        <span className="text-amber-500 text-base">💡</span> Focus: {node.subtitle}
+                <div className="shrink-0 p-5 rounded-2xl bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100/50 dark:border-amber-500/20">
+                    <p className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-2 flex items-center gap-2">
+                        <span className="text-lg">💡</span> Focus settimana: {node.subtitle}
                     </p>
-                    <p className="text-base font-medium text-slate-700 dark:text-slate-300 leading-relaxed">
+                    <p className="text-base font-medium text-amber-900/80 dark:text-amber-100/90 leading-relaxed">
                         {node.why}
                     </p>
                 </div>
@@ -687,15 +705,29 @@ function DetailPanel({
                     {/* 2. Outputs */}
                     <div>
                         <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">
-                            Output Tangibili (Asset)
+                            Output (cosa costruisci)
                         </p>
                         <div className="grid sm:grid-cols-3 gap-3">
                             {node.deliverables.map((d, i) => (
-                                <div key={i} className="group p-3 rounded-xl bg-white dark:bg-[#1A1E3B] border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 transition-colors shadow-sm">
+                                <div
+                                    key={i}
+                                    className={`
+                                        group p-3 rounded-xl transition-all duration-300
+                                        ${d.highlight
+                                            ? 'bg-gradient-to-br from-[#FFF9C4] via-[#FCD34D] to-[#F59E0B] border-[3px] border-[#FDE047] shadow-[0_10px_30px_-5px_rgba(251,191,36,0.5)] hover:shadow-[0_20px_40px_-5px_rgba(251,191,36,0.6)] scale-[1.02] hover:scale-[1.04] z-10'
+                                            : 'bg-white dark:bg-[#1A1E3B] border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 shadow-sm'
+                                        }
+                                    `}
+                                >
                                     <div className="flex items-center gap-2 mb-2">
                                         <DeliverableTag tag={d.tag} />
+                                        {d.highlight && (
+                                            <span className="text-[9px] font-extrabold bg-white text-[#B45309] px-2 py-0.5 rounded-full shadow-sm ml-auto tracking-wide border border-[#FDE047] flex items-center gap-1">
+                                                <span>✨</span> FEATURED
+                                            </span>
+                                        )}
                                     </div>
-                                    <p className="text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight mb-1">
+                                    <p className={`text-sm font-bold leading-tight mb-1 transition-colors ${d.highlight ? 'text-[#451a03] dark:text-[#2a1002]' : 'text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400'}`}>
                                         {d.name}
                                     </p>
                                     <p className="text-[10px] text-slate-400 line-clamp-2">
@@ -711,7 +743,7 @@ function DetailPanel({
                         {/* Box 1: Outcome (Primary) */}
                         <div className="p-5 rounded-2xl bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-500/20">
                             <p className="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2">
-                                Primary Outcome
+                                Outcome chiave
                             </p>
                             <p className="text-lg font-bold text-[#1A1E3B] dark:text-white leading-tight">
                                 {node.outcome}
@@ -721,10 +753,10 @@ function DetailPanel({
                         {/* Box 2: Gate (Quality Check) */}
                         <div className="p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-500/20">
                             <p className="text-xs font-bold uppercase tracking-wider text-emerald-500 mb-2 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Qualità (Gate)
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Gate qualità (criterio di avanzamento)
                             </p>
-                            <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100 italic">
-                                "{node.qualityCheck}"
+                            <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
+                                {node.qualityCheck}
                             </p>
                         </div>
                     </div>
@@ -738,8 +770,8 @@ function DetailPanel({
  * PlaceholderPanel - Shown when no week is selected
  */
 function PlaceholderPanel({ variant }: { variant: 'foundational' | 'advanced' }) {
-    const borderColor = variant === 'foundational' ? 'border-indigo-500/20' : 'border-[#FFF272]/20'
-    const textColor = variant === 'foundational' ? 'text-indigo-600 dark:text-indigo-400' : 'text-[#F59E0B] dark:text-[#FFF272]'
+    const borderColor = variant === 'foundational' ? 'border-indigo-500/20' : 'border-[#FCD34D]/40'
+    const textColor = variant === 'foundational' ? 'text-indigo-600 dark:text-indigo-400' : 'text-[#B45309]'
 
     return (
         <div className={`w-full min-h-[420px] md:h-[580px] flex flex-col items-center justify-center p-8 rounded-3xl border-2 border-dashed ${borderColor} text-center animate-fadeIn`}>
@@ -756,7 +788,10 @@ function PlaceholderPanel({ variant }: { variant: 'foundational' | 'advanced' })
  */
 function OutcomeTile({ d }: { d: Deliverable }) {
     return (
-        <div className="p-3 rounded-xl bg-white/70 dark:bg-[#1A1E3B]/60 border border-slate-200 dark:border-slate-700">
+        <div className={`p-3 rounded-xl transition-all ${d.highlight
+            ? 'bg-gradient-to-br from-[#FFF9C4] via-[#FCD34D] to-[#F59E0B] border-[2px] border-[#FDE047] shadow-md shadow-amber-500/20 scale-[1.02]'
+            : 'bg-white/70 dark:bg-[#1A1E3B]/60 border border-slate-200 dark:border-slate-700'
+            }`}>
             <div className="flex items-start justify-between gap-2">
                 <p className="text-sm font-semibold text-[#1A1E3B] dark:text-white leading-snug">
                     {d.name}
@@ -780,14 +815,14 @@ function CheckpointCard({ checkpoint, week }: { checkpoint: Checkpoint; week: 4 
 
     const borderColor = isWeek4
         ? 'border-indigo-500/40 hover:border-indigo-500/70'
-        : 'border-[#FFF272]/40 hover:border-[#FFF272]/70'
+        : 'border-[#FCD34D] hover:border-[#F59E0B]'
     const bgGradient = isWeek4
         ? 'from-indigo-500/10 to-transparent'
-        : 'from-[#FFF272]/10 to-transparent'
+        : 'from-[#FCD34D]/10 to-transparent'
     const tierBg = isWeek4
         ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300'
-        : 'bg-[#FFF272]/30 dark:bg-[#FFF272]/20 text-[#1A1E3B] dark:text-[#FFF272]'
-    const accent = isWeek4 ? 'text-indigo-700 dark:text-indigo-300' : 'text-[#F59E0B]'
+        : 'bg-[#FCD34D] text-[#451a03]'
+    const accent = isWeek4 ? 'text-indigo-700 dark:text-indigo-300' : 'text-[#B45309]'
 
     return (
         <div
@@ -838,7 +873,7 @@ function CheckpointCard({ checkpoint, week }: { checkpoint: Checkpoint; week: 4 
 function TimelineConnector({ variant }: { variant: 'foundational' | 'advanced' }) {
     const color = variant === 'foundational'
         ? 'from-indigo-300 to-indigo-500 dark:from-indigo-500/50 dark:to-indigo-400'
-        : 'from-[#FFF272]/50 to-[#F59E0B] dark:from-[#FFF272]/30 dark:to-[#FFF272]'
+        : 'from-[#FCD34D] to-[#B45309]'
 
     return (
         <div className={`
@@ -852,7 +887,7 @@ function TimelineConnector({ variant }: { variant: 'foundational' | 'advanced' }
  * BridgeMarker - Minimal indicator pointing to detail panel
  */
 function BridgeMarker({ variant }: { variant: 'foundational' | 'advanced' }) {
-    const line = variant === 'foundational' ? 'bg-indigo-400' : 'bg-[#FFF272]'
+    const line = variant === 'foundational' ? 'bg-indigo-400' : 'bg-[#FCD34D]'
 
     return (
         <div className="flex flex-col items-center">
@@ -888,12 +923,12 @@ function DesktopTimeline({
     const baseLine =
         variant === 'foundational'
             ? 'from-indigo-200 via-indigo-300 to-indigo-200 dark:from-indigo-500/20 dark:via-indigo-400/30 dark:to-indigo-500/20'
-            : 'from-[#FFF272]/20 via-[#FFF272]/40 to-[#FFF272]/20 dark:from-[#FFF272]/10 dark:via-[#FFF272]/25 dark:to-[#FFF272]/10'
+            : 'from-[#FCD34D]/20 via-[#F59E0B]/40 to-[#FCD34D]/20 dark:from-[#FCD34D]/10 dark:via-[#FCD34D]/25 dark:to-[#FCD34D]/10'
 
     const fillLine =
         variant === 'foundational'
             ? 'from-indigo-500 to-indigo-400'
-            : 'from-[#FFF272] to-[#F59E0B]'
+            : 'from-[#FCD34D] to-[#B45309]'
 
     return (
         <div className="hidden md:block relative">
@@ -943,19 +978,19 @@ function MobileWeekItem({
 }) {
     const iconBg = variant === 'foundational'
         ? 'bg-indigo-500/10 border-indigo-500/30'
-        : 'bg-[#FFF272]/10 border-[#FFF272]/30'
+        : 'bg-[#FFF9C4] border-[#FDE047]'
     const iconColor = variant === 'foundational'
         ? 'text-indigo-600 dark:text-indigo-400'
-        : 'text-[#F59E0B]'
+        : 'text-[#B45309]'
     const lineBg = variant === 'foundational'
         ? 'bg-indigo-200 dark:bg-indigo-500/30'
-        : 'bg-[#FFF272]/30'
+        : 'bg-[#FCD34D]/40'
     const weekBadgeBg = variant === 'foundational'
         ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-300'
-        : 'bg-[#FFF272]/20 text-[#1A1E3B] dark:text-[#FFF272]'
+        : 'bg-[#FCD34D] text-[#451a03]'
     const selectedBorder = variant === 'foundational'
         ? 'border-indigo-500'
-        : 'border-[#FFF272]'
+        : 'border-[#F59E0B]'
 
     return (
         <div className="flex gap-4">
@@ -1019,7 +1054,7 @@ function TimelineGuide({ variant }: { variant: 'foundational' | 'advanced' }) {
         <div className="mb-6">
             {/* Instruction */}
             <p className="text-center text-sm text-slate-600 dark:text-slate-400 mb-4">
-                <span className="font-medium">👆 Clicca su una settimana</span> per vedere i deliverable
+                <span className="font-medium">👆 Clicca una settimana</span> per vedere cosa costruisci + il gate qualità.
             </p>
 
             {/* Mini progress visualization */}
@@ -1057,7 +1092,7 @@ function CheckpointCompare({
             <div className="text-center mb-6">
                 <h3 className="text-xl md:text-2xl font-bold text-[#1A1E3B] dark:text-white">
                     Il salto di valore: da <span className="text-indigo-600 dark:text-indigo-300">Candidabile</span> a{' '}
-                    <span className="text-[#F59E0B] dark:text-[#FFF272]">Offer-Ready</span>
+                    <span className="text-[#B45309] dark:text-[#FCD34D]">Offer-Ready</span>
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
                     Non "lezioni": <strong>asset verificabili</strong> che riducono il rischio percepito per l'hiring manager.
@@ -1116,22 +1151,22 @@ function LockedAdvancedCallout() {
     }
 
     return (
-        <div className="mt-8 p-5 rounded-2xl border-2 border-dashed border-[#FFF272]/40 bg-[#FFF272]/5 dark:bg-[#FFF272]/5">
+        <div className="mt-8 p-5 rounded-2xl border-2 border-dashed border-[#FCD34D]/40 bg-[#FCD34D]/5 dark:bg-[#FCD34D]/5">
             <div className="flex flex-col md:flex-row items-center gap-4">
                 <div className="text-3xl">🔒</div>
                 <div className="flex-1 text-center md:text-left">
                     <p className="text-sm font-semibold text-[#1A1E3B] dark:text-white mb-1">
-                        Vuoi arrivare a Offer-Ready?
+                        Vuoi arrivare fino all’offerta?
                     </p>
                     <p className="text-xs text-slate-600 dark:text-slate-400">
-                        Sblocca Week 5–8 (Pro): portfolio live, progetto GenAI, candidature mirate + mock interview.
+                        Week 5–8 (Pro): portfolio live, progetto GenAI, candidature mirate + mock interview.
                     </p>
                 </div>
                 <button
                     onClick={handleUpgrade}
                     className="px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg transition-all"
                 >
-                    Scopri Pro (8 sett.) →
+                    → Vai a Offer-Ready →
                 </button>
             </div>
         </div>
@@ -1143,71 +1178,95 @@ function LockedAdvancedCallout() {
  */
 function ModeSelectionCard({ onSelect }: { onSelect: (mode: 'classe' | '1to1') => void }) {
     return (
-        <div id="step-mode" className="max-w-4xl mx-auto mb-16 scroll-mt-32">
-            <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-[#1A1E3B] dark:text-white mb-3">
+        <div id="step-mode" className="max-w-5xl mx-auto mb-16 scroll-mt-32">
+            <div className="text-center mb-10">
+                <h3 className="text-2xl md:text-3xl font-bold text-[#1A1E3B] dark:text-white mb-3">
                     Come vuoi affrontare il percorso?
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400">
-                    Scegli l'intensità e il livello di supporto che preferisci.
+                <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+                    Scegli il livello di supporto (coorte o 1:1).
                 </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-                {/* Class Mode */}
+            <div className="grid md:grid-cols-2 gap-8">
+                {/* Class Mode - Indigo Theme */}
                 <button
                     onClick={() => onSelect('classe')}
-                    className="group relative p-8 rounded-3xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all hover:shadow-xl text-left"
+                    className="
+                        group relative flex flex-col p-8 rounded-[32px] text-left transition-all duration-300
+                        bg-white dark:bg-[#151925] 
+                        border-2 border-slate-100 dark:border-slate-800 
+                        hover:border-indigo-500/50 dark:hover:border-indigo-500/50 
+                        hover:shadow-2xl hover:shadow-indigo-500/10
+                        hover:-translate-y-1
+                    "
                 >
-                    <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Check className="w-6 h-6 text-indigo-500" />
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 border border-indigo-100 dark:border-indigo-500/20">
+                            🎓
+                        </div>
+                        <div className="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-700 group-hover:border-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 flex items-center justify-center transition-colors">
+                            <div className="w-4 h-4 rounded-full bg-indigo-500 scale-0 group-hover:scale-100 transition-transform" />
+                        </div>
                     </div>
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        🎓
-                    </div>
-                    <h4 className="text-xl font-bold text-[#1A1E3B] dark:text-white mb-2">Classe (Cohort)</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 min-h-[40px]">
+
+                    <h4 className="text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">Classe (Cohort)</h4>
+                    <p className="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                         Impara con altri 8-10 peer selezionati. Scadenze fisse, confronto costante e networking.
                     </p>
-                    <ul className="space-y-2 mb-8">
-                        <li className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                            <Check className="w-4 h-4 text-indigo-500" /> Data di inizio fissa
+
+                    <ul className="space-y-3 mb-8 mt-auto">
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Data di inizio fissata (coorte)
                         </li>
-                        <li className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                            <Check className="w-4 h-4 text-indigo-500" /> Supporto di gruppo
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Feedback continuo + confronto con i peer
                         </li>
                     </ul>
-                    <span className="inline-block text-indigo-600 dark:text-indigo-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">
-                        Seleziona Classe →
-                    </span>
+
+                    <div className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                        Seleziona Classe
+                    </div>
                 </button>
 
-                {/* 1:1 Mode */}
+                {/* 1:1 Mode - Amber Theme */}
                 <button
                     onClick={() => onSelect('1to1')}
-                    className="group relative p-8 rounded-3xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-500 transition-all hover:shadow-xl text-left"
+                    className="
+                        group relative flex flex-col p-8 rounded-[32px] text-left transition-all duration-300
+                        bg-white dark:bg-[#151925] 
+                        border-2 border-slate-100 dark:border-slate-800 
+                        hover:border-amber-500/50 dark:hover:border-amber-500/50 
+                        hover:shadow-2xl hover:shadow-amber-500/10
+                        hover:-translate-y-1
+                    "
                 >
-                    <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Check className="w-6 h-6 text-amber-500" />
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 border border-amber-100 dark:border-amber-500/20">
+                            ⚡
+                        </div>
+                        <div className="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-700 group-hover:border-amber-500 group-hover:bg-amber-50 dark:group-hover:bg-amber-900/20 flex items-center justify-center transition-colors">
+                            <div className="w-4 h-4 rounded-full bg-amber-500 scale-0 group-hover:scale-100 transition-transform" />
+                        </div>
                     </div>
-                    <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        ⚡
-                    </div>
-                    <h4 className="text-xl font-bold text-[#1A1E3B] dark:text-white mb-2">1:1 Premium</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 min-h-[40px]">
+
+                    <h4 className="text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">1:1 Premium</h4>
+                    <p className="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                         Massima flessibilità e focus su di te. Inizia quando vuoi, vai alla tua velocità.
                     </p>
-                    <ul className="space-y-2 mb-8">
-                        <li className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                            <Check className="w-4 h-4 text-amber-500" /> Inizio immediato
+
+                    <ul className="space-y-3 mb-8 mt-auto">
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0" /> Inizia quando vuoi
                         </li>
-                        <li className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                            <Check className="w-4 h-4 text-amber-500" /> Sessioni private dedicate
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0" /> Sessioni 1:1 + review personalizzate
                         </li>
                     </ul>
-                    <span className="inline-block text-amber-600 dark:text-amber-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">
-                        Seleziona 1:1 →
-                    </span>
+
+                    <div className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-center group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                        Seleziona 1:1 Premium
+                    </div>
                 </button>
             </div>
         </div>
@@ -1223,14 +1282,14 @@ export default function JourneySection() {
     const { objective, setObjective, setMode, scrollToSection } = useCareerOS()
 
     // Local UI State
-    const [selectedWeek, setSelectedWeek] = useState<number | null>(null)
+    const [selectedWeek, setSelectedWeek] = useState<number | null>(1)
     const [currentStep, setCurrentStep] = useState(1)
     const [completedSteps, setCompletedSteps] = useState<number[]>([])
 
     // Handlers
     const handleObjectiveChange = (newObjective: ObjectiveType) => {
         setObjective(newObjective) // updates context
-        setSelectedWeek(null)
+        setSelectedWeek(1)
 
         // Reset gamified state: whenever objective is clicked/changed, 
         // we reset downstream progress. Step 1 is done, next is Step 2.
@@ -1293,16 +1352,16 @@ export default function JourneySection() {
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF272]/20 text-[#1A1E3B] dark:text-[#FFF272] text-sm font-semibold mb-6">
                         <Sparkles className="w-4 h-4" />
-                        Il Percorso Completo
+                        Il percorso
                     </div>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1A1E3B] dark:text-white mb-4">
-                        Cosa ottieni{' '}
+                        Cosa porti a casa{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#383F74] to-[#4d84d4] dark:from-[#FFF272] dark:to-[#F59E0B]">
                             (in 4 o 8 settimane)
                         </span>
                     </h2>
                     <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-6">
-                        Non "lezioni": <strong>asset verificabili</strong> che riducono il rischio percepito per l'hiring manager.
+                        Non "lezioni": <strong>prove concrete</strong> (repo, demo, report) che riducono il rischio percepito per chi ti seleziona.
                     </p>
 
                     {/* Fit Bar - Quick recognition chips */}
@@ -1313,7 +1372,7 @@ export default function JourneySection() {
                 <ProgressStepper currentStep={currentStep} completedSteps={completedSteps} />
 
                 {/* STEP 1: Objective Toggle */}
-                <ObjectiveToggle selected={objective ?? 'start'} onSelect={handleObjectiveChange} />
+                <ObjectiveToggle selected={objective} onSelect={handleObjectiveChange} />
 
                 {/* Progressive Disclosure: Only show timeline if objective is selected */}
                 {objective && (
@@ -1329,6 +1388,7 @@ export default function JourneySection() {
 
                         {/* STEP 2: Timeline Section */}
                         <div id="step-timeline" className="scroll-mt-32">
+                            <ChapterBreak label="Percorso" />
                             <div className="text-center mb-8">
                                 <h3 className="text-xl md:text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">
                                     Come li costruiamo, settimana per settimana
@@ -1346,7 +1406,7 @@ export default function JourneySection() {
                                     <div className="flex items-center gap-3 mb-6">
                                         <div className={`px-4 py-2 rounded-full font-bold text-sm ${objective === 'start'
                                             ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300'
-                                            : 'bg-gradient-to-r from-indigo-100 to-[#FFF272]/30 dark:from-indigo-500/20 dark:to-[#FFF272]/10 text-slate-700 dark:text-slate-200'
+                                            : 'bg-gradient-to-r from-indigo-100 to-[#FCD34D]/30 dark:from-indigo-500/20 dark:to-[#FCD34D]/10 text-slate-700 dark:text-slate-200'
                                             }`}>
                                             {objective === 'start' ? 'FOUNDATIONAL' : 'FULL JOURNEY'}
                                         </div>
@@ -1375,9 +1435,9 @@ export default function JourneySection() {
                                             />
                                             {/* Bridge */}
                                             <div className="flex items-center justify-center gap-2 py-2">
-                                                <div className="h-px flex-1 bg-gradient-to-r from-indigo-300 to-[#FFF272]/50" />
+                                                <div className="h-px flex-1 bg-gradient-to-r from-indigo-300 to-[#FCD34D]/50" />
                                                 <ArrowRight className="w-4 h-4 text-slate-400" />
-                                                <div className="h-px flex-1 bg-gradient-to-r from-[#FFF272]/50 to-[#FFF272]" />
+                                                <div className="h-px flex-1 bg-gradient-to-r from-[#FCD34D]/50 to-[#FCD34D]" />
                                             </div>
                                             {/* Advanced (W5-8) */}
                                             <DesktopTimeline
@@ -1416,44 +1476,93 @@ export default function JourneySection() {
                                 </div>
                             </div>
 
-                            {/* Playbook callout - moved here to contextually close the timeline section */}
-                            <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-indigo-50 to-[#FFF272]/10 dark:from-[#1A1E3B] dark:to-[#151925] border border-slate-200 dark:border-slate-700">
-                                <div className="flex flex-col md:flex-row items-center gap-6">
-                                    <div className="p-4 bg-white dark:bg-[#0F1117] rounded-xl shadow-sm">
-                                        <Sparkles className="w-10 h-10 text-indigo-600 dark:text-[#FFF272]" />
+                            {/* 2.5: Upsell (Moved before Playbook) */}
+                            {objective === 'start' && (
+                                <div className="mt-12 mb-8">
+                                    <LockedAdvancedCallout />
+                                </div>
+                            )}
+
+                            {/* Playbook callout - Premium Style */}
+                            <div className="mt-8 mb-8 relative overflow-hidden rounded-3xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-700 shadow-xl p-0.5 animate-fadeIn">
+                                {/* Gradient Border Effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-[#FCD34D]/40 to-indigo-500/20 opacity-50" />
+
+                                <div className="relative bg-white dark:bg-[#151925] rounded-[22px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
+                                    {/* Icon Box */}
+                                    <div className="shrink-0 relative">
+                                        <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 rounded-full" />
+                                        <div className="relative w-16 h-16 bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900/50 dark:to-slate-900 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 flex items-center justify-center shadow-sm">
+                                            <Sparkles className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                                        </div>
                                     </div>
+
+                                    {/* Content */}
                                     <div className="flex-1 text-center md:text-left">
-                                        <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white mb-2">
-                                            + Playbook Library (metodo replicabile)
-                                        </h3>
-                                        <p className="text-slate-600 dark:text-slate-400">
-                                            Ogni fase include un <strong>documento operativo che resta tuo</strong>: role-fit, targeting, CV tailoring, supervised vibe coding, evaluation, interview prep.
-                                            <span className="text-indigo-600 dark:text-[#FFF272] font-medium"> Dopo, puoi replicare da solo.</span>
+                                        <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2 justify-center md:justify-start">
+                                            <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
+                                                + Playbook Library
+                                            </h3>
+                                            <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FCD34D] text-[#451a03] shadow-sm w-fit mx-auto md:mx-0">
+                                                Metodo Replicabile
+                                            </span>
+                                        </div>
+
+                                        <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-2xl mb-4">
+                                            Ogni fase include un <strong>documento operativo che resta tuo</strong>.
+                                            Non è solo teoria, è un kit completo di strumenti pronta consegna:
+                                        </p>
+
+                                        <div className="flex flex-wrap gap-2.5 mb-5 justify-center md:justify-start">
+                                            {[
+                                                'Role Fit',
+                                                'Company Targeting',
+                                                'CV Tailoring',
+                                                'Supervised Vibe Coding',
+                                                'Evaluation Matrix',
+                                                'Interview Prep'
+                                            ].map((item, i) => (
+                                                <span
+                                                    key={i}
+                                                    className="
+                                                        flex items-center gap-1.5
+                                                        px-3 py-1.5 rounded-lg 
+                                                        bg-indigo-50 dark:bg-indigo-900/20 
+                                                        border border-indigo-200/60 dark:border-indigo-500/30 
+                                                        text-xs font-bold text-indigo-700 dark:text-indigo-300 
+                                                        shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-400
+                                                        transition-all duration-200 cursor-default hover:-translate-y-0.5
+                                                    "
+                                                >
+                                                    <CheckCircle2 className="w-3.5 h-3.5 opacity-70" />
+                                                    {item}
+                                                </span>
+                                            ))}
+                                        </div>
+
+                                        <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-2 flex items-center justify-center md:justify-start gap-2">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                                            Dopo il percorso, puoi replicare tutto il processo da solo.
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Locked Advanced Upsell (only for Start selection) */}
-                        {objective === 'start' && (
-                            <div className="mb-16">
-                                <LockedAdvancedCallout />
-                            </div>
-                        )}
+                            {/* CHAPTER BREAK: Visual Separator */}
+                            <ChapterBreak />
+                        </div>
 
                         {/* STEP 3: Mode Selection */}
                         <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
                             <ModeSelectionCard onSelect={handleModeSelect} />
                         </div>
 
-
-
                         {/* Bridge CTA to Pricing */}
-                        <div className="mt-12 text-center">
+                        <ChapterBreak label="Prezzi" />
+                        <div className="mt-0 text-center">
                             <a
                                 href="#pricing"
-                                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#FCD34D] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                             >
                                 Vedi i prezzi →
                             </a>

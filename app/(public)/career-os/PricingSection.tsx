@@ -3,6 +3,7 @@
 import { useCareerOS } from './context/CareerOSContext'
 
 type PricingMode = 'classe' | '1to1'
+import { CheckCircle2 } from 'lucide-react'
 
 const pricingData = {
     classe: {
@@ -11,30 +12,34 @@ const pricingData = {
         tiers: [
             {
                 name: 'Starter',
+                outcome: 'Outcome: Candidati con metodo',
                 duration: '4 settimane',
                 description: 'Candidabile + Proof-lite',
                 price: 299,
                 originalPrice: 450,
                 features: [
-                    'Role-Fit Audit completo',
-                    'CV + LinkedIn ottimizzati',
-                    '3 JD pack (tailoring + cover)',
-                    '1 Articolo su stAItuned (con QA)',
+                    'Role-Fit Audit & Positioning (W1)',
+                    'Target List (W2)',
+                    'CV Master + LinkedIn (ATS-Proof) (W3)',
+                    'Technical Article (Proof Pubblica) (W4)',
+                    'Accesso community Career OS',
                 ],
                 popular: false,
             },
             {
                 name: 'Pro',
+                outcome: 'Outcome: Offer-Ready',
                 duration: '8 settimane',
                 description: 'Proof seria + Interview',
                 price: 599,
                 originalPrice: 890,
                 features: [
                     'Tutto in Starter',
-                    '10 JD pack',
-                    'Progetto GenAI standard (demo+repo+eval)',
-                    '1 Mock Interview con Senior AI',
-                    'Job Targeting Kit (20-40 aziende)',
+                    'WebApp + Project AI Live (W6)',
+                    '10 Candidature Personalizzate (W7)',
+                    '10 JD Intelligence Reports (W8)',
+                    'Simulazione Colloquio (W8)',
+                    'Supporto prioritario',
                 ],
                 popular: true,
             },
@@ -46,37 +51,40 @@ const pricingData = {
         tiers: [
             {
                 name: 'Starter',
+                outcome: 'Outcome: Candidati con metodo',
                 duration: '4 settimane',
                 description: 'Candidabile + Proof-lite',
                 price: 590,
                 originalPrice: 790,
                 features: [
-                    'Role-Fit Audit completo',
-                    'CV + LinkedIn ottimizzati',
-                    '3 JD pack (tailoring + cover)',
-                    '1 Articolo su stAItuned (con QA)',
-                    'Sessioni 1:1 dedicate',
+                    'Role-Fit Audit & Positioning (W1)',
+                    'Target List (W2)',
+                    'CV Master + LinkedIn (ATS-Proof) (W3)',
+                    'Technical Article (Proof Pubblica) (W4)',
+                    '4 Sessioni 1:1 dedicate (Strategy & Review)',
                 ],
                 popular: false,
             },
             {
                 name: 'Pro',
+                outcome: 'Outcome: Offer-Ready',
                 duration: '8 settimane',
                 description: 'Proof seria + Interview',
                 price: 1190,
                 originalPrice: 1490,
                 features: [
                     'Tutto in Starter',
-                    '10 JD pack',
-                    'Progetto GenAI standard (demo+repo+eval)',
-                    '2 Mock Interview con Senior AI',
-                    'Job Targeting Kit (20-40 aziende)',
-                    'Supporto prioritario async',
+                    'WebApp + Project AI Live (W6)',
+                    '10 Candidature Personalizzate (W7)',
+                    '10 JD Intelligence Reports (W8)',
+                    '2 Simulazioni Colloquio (Tecnico + Soft)',
+                    'Supporto prioritario',
                 ],
                 popular: true,
             },
             {
                 name: 'Elite',
+                outcome: 'Outcome: Career Partner',
                 duration: '8 settimane + 12 mesi',
                 description: 'Supporto fino all\'offerta (cap)',
                 price: 1990,
@@ -84,10 +92,11 @@ const pricingData = {
                 features: [
                     'Tutto in Pro',
                     'Tool Career OS per 12 mesi',
+                    'Tool Editorial Planner per 12 mesi',
                     '1 call/mese (45 min) per 12 mesi',
                     '2 review prioritarie/mese (asset)',
                     'Supporto async con SLA 72h',
-                    '+1 mock interview (totale 2)',
+                    '+1 mock interview (totale 3)',
                 ],
                 popular: false,
                 note: 'Posti limitati (max 8 attivi). Nessuna "job guarantee".',
@@ -126,38 +135,43 @@ export default function PricingSection() {
     return (
         <section id="pricing" className="py-24 bg-[#1A1E3B] text-white">
             <div className="max-w-6xl mx-auto px-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+                <h2 className="text-3xl md:text-3xl font-bold text-center mb-6">
                     Investi nel tuo <span className="text-[#FFF272]">ROI</span>
                 </h2>
 
-                {/* Bootcamp Comparison */}
-                <div className="max-w-3xl mx-auto mb-10">
-                    <div className="p-5 rounded-2xl bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 mb-4">
-                        <p className="text-center text-base text-rose-300 font-medium">
-                            ❌ Bootcamp tradizionali: <strong className="text-white">€4.000+</strong> • <strong className="text-white">6 mesi</strong> • ore di video
-                        </p>
+                {/* Compact "ROI" Comparison */}
+                <div className="max-w-4xl mx-auto mb-8">
+                    <div className="grid md:grid-cols-2 gap-4">
+                        {/* Old Way */}
+                        <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex flex-col items-center justify-center text-center">
+                            <span className="text-rose-400 font-bold text-sm mb-1 uppercase tracking-wider">🚫 Bootcamp Tradizionali</span>
+                            <p className="text-slate-300 text-sm">
+                                €4.000+ • 6 mesi • <span className="underline decoration-rose-500/50">Ore di video</span>
+                            </p>
+                        </div>
+
+                        {/* New Way */}
+                        <div className="p-4 rounded-xl bg-gradient-to-br from-[#1A1E3B] to-[#FCD34D]/10 border border-[#FCD34D]/30 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                            <div className="absolute inset-0 bg-[#FCD34D]/5 animate-pulse" />
+                            <span className="text-[#FCD34D] font-bold text-sm mb-1 uppercase tracking-wider relative z-10">✅ Career OS (Start / Pro)</span>
+                            <p className="text-slate-200 text-sm relative z-10">
+                                da €299 • 4-8 settimane • <span className="font-bold text-white">Solo OUTCOME</span>
+                            </p>
+                        </div>
                     </div>
-                    <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-transparent border border-emerald-500/20">
-                        <p className="text-center text-base text-emerald-300 font-medium">
-                            ✅ Career OS: da <strong className="text-white">€299</strong> • <strong className="text-white">4-8 settimane</strong> • proof concreta
-                        </p>
-                    </div>
-                    <div className="mt-6 text-center">
-                        <p className="text-xl text-slate-200 font-medium">
-                            Non vendiamo ore. Vendiamo <span className="text-[#FFF272] font-bold">OUTCOME</span>:
-                            <br />
-                            <span className="text-white font-bold">CV, Proof Pubblica, Interview Readiness.</span>
-                        </p>
-                    </div>
+                    {/* Tagline integrated compactly */}
+                    <p className="text-center text-xs text-slate-400 mt-3">
+                        Non vendiamo ore. Vendiamo <strong className="text-white">CV, Proof Pubblica, Interview Readiness.</strong>
+                    </p>
                 </div>
 
                 {/* Toggle */}
-                <div className="flex justify-center mb-8">
+                <div className="flex justify-center mb-4">
                     <div className="inline-flex rounded-full bg-white/10 p-1">
                         <button
                             onClick={() => setMode('1to1')}
-                            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${mode === '1to1'
-                                ? 'bg-[#FFF272] text-[#1A1E3B]'
+                            className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${mode === '1to1'
+                                ? 'bg-[#FCD34D] text-[#1A1E3B]'
                                 : 'text-white/70 hover:text-white'
                                 }`}
                         >
@@ -165,8 +179,8 @@ export default function PricingSection() {
                         </button>
                         <button
                             onClick={() => setMode('classe')}
-                            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${mode === 'classe'
-                                ? 'bg-[#FFF272] text-[#1A1E3B]'
+                            className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${mode === 'classe'
+                                ? 'bg-[#FCD34D] text-[#1A1E3B]'
                                 : 'text-white/70 hover:text-white'
                                 }`}
                         >
@@ -176,65 +190,89 @@ export default function PricingSection() {
                 </div>
 
                 {/* Sublabel */}
-                <p className="text-center text-slate-400 text-sm mb-6">
+                <p className="text-center text-slate-400 text-xs mb-8">
                     {current.sublabel}
                 </p>
 
                 {/* Urgency Badge */}
-                <div className="flex justify-center mb-8">
+                {/* <div className="flex justify-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/20 text-amber-300 text-sm font-medium">
                         <span className="animate-pulse">●</span>
                         Prossima cohort: inizio 20 Gennaio • 4 posti rimasti
                     </div>
-                </div>
+                </div> */}
 
                 {/* Pricing Cards */}
                 <div className={`grid gap-8 max-w-5xl mx-auto ${current.tiers.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-4xl'}`}>
-                    {tiersWithHighlight.map((tier, i) => (
+                    {tiersWithHighlight.map((tier: any, i) => (
                         <div
                             key={i}
-                            className={`relative p-8 rounded-3xl transition-all ${tier.popular
-                                ? 'bg-gradient-to-b from-[#383F74] to-[#1A1E3B] border-2 border-[#FFF272] shadow-[0_0_30px_rgba(255,242,114,0.15)] transform scale-105 z-10'
+                            className={`relative flex flex-col p-6 rounded-3xl transition-all duration-300 group ${tier.popular
+                                ? 'bg-gradient-to-br from-[#FFF9C4] via-[#FCD34D] to-[#F59E0B] border-[3px] border-[#FDE047] shadow-[0_20px_50px_-10px_rgba(251,191,36,0.5)] transform scale-105 z-10 hover:shadow-[0_25px_60px_-10px_rgba(251,191,36,0.6)]'
                                 : 'bg-white/5 border border-white/10 hover:bg-white/10'
                                 }`}
                         >
                             {tier.popular && (
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FFF272] text-[#1A1E3B] px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
-                                    {objective ? 'Selezionato per te' : 'Consigliato'}
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-[#B45309] px-6 py-2 rounded-full text-sm font-black uppercase tracking-widest shadow-xl border-2 border-[#FDE047] whitespace-nowrap z-20 flex items-center gap-2">
+                                    <span className="text-lg">✨</span> {objective ? 'Selezionato per te' : 'Consigliato'}
                                 </div>
                             )}
-                            <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
-                            <p className="text-slate-400 text-sm mb-4">
+
+                            {/* Outcome Badge */}
+                            <div className={`inline-block px-3 py-1 rounded-lg text-xs font-bold mb-4 uppercase tracking-wider ${tier.popular ? 'bg-white/40 text-[#713F12] border border-white/20' : 'bg-white/10 text-white/70'
+                                }`}>
+                                {tier.outcome || 'Outcome Garaito'}
+                            </div>
+
+                            <h3 className={`text-2xl font-bold mb-1 ${tier.popular ? 'text-[#451a03]' : 'text-white'}`}>{tier.name}</h3>
+                            <p className={`text-xs mb-4 ${tier.popular ? 'text-[#78350F]' : 'text-slate-400'}`}>
                                 {tier.duration} • {tier.description}
                             </p>
+
                             <div className="mb-6">
-                                <span className="text-sm line-through text-slate-500">
-                                    €{tier.originalPrice}
-                                </span>
-                                <div className="text-4xl font-bold">
-                                    €{tier.price}{' '}
-                                    <span className="text-lg font-normal text-[#FFF272]">Beta</span>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className={`text-lg font-bold line-through ml-1 ${tier.popular ? 'text-[#78350F]/50 decoration-[#78350F]/50' : 'text-slate-500 decoration-slate-500'}`}>
+                                        €{tier.originalPrice}
+                                    </span>
+                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${tier.popular ? 'bg-rose-500/20 text-rose-700' : 'bg-rose-500/20 text-rose-300'}`}>
+                                        -{Math.round(((tier.originalPrice - tier.price) / tier.originalPrice) * 100)}%
+                                    </span>
                                 </div>
+
+                                <div className={`text-4xl font-bold ${tier.popular ? 'text-[#451a03]' : 'text-white'}`}>
+                                    €{tier.price}
+                                </div>
+                                <p className={`text-[10px] uppercase tracking-wide font-bold mt-1 ${tier.popular ? 'text-rose-700 animate-pulse' : 'text-rose-400'}`}>
+                                    🔥 Scadenza: Fine Gennaio
+                                </p>
                             </div>
-                            <ul className={`space-y-3 mb-6 text-sm ${tier.popular ? 'text-white font-medium' : 'text-slate-300'}`}>
-                                {tier.features.map((f, j) => (
-                                    <li key={j}>✓ {f}</li>
+
+                            <ul className="space-y-3 mb-8 text-sm font-medium flex-grow">
+                                {tier.features.map((f: string, j: number) => (
+                                    <li key={j} className={`flex items-start gap-3 ${tier.popular ? 'text-[#422006]' : 'text-slate-300'}`}>
+                                        <CheckCircle2 className={`w-5 h-5 shrink-0 ${tier.popular ? 'text-[#B45309] fill-white' : 'text-emerald-400'}`} />
+                                        <span className="leading-snug">{f}</span>
+                                    </li>
                                 ))}
                             </ul>
+
                             {'note' in tier && tier.note && (
-                                <p className="text-xs text-white/50 leading-relaxed mb-6 border-t border-white/10 pt-4">
+                                <p className={`text-xs leading-relaxed mb-6 border-t pt-4 ${tier.popular ? 'border-[#713F12]/10 text-[#713F12]/80' : 'border-white/10 text-white/50'}`}>
                                     <strong>Nota:</strong> {tier.note}
                                 </p>
                             )}
-                            <a
-                                href="#candidati"
-                                className={`block w-full py-3 rounded-xl text-center font-semibold transition-all ${tier.popular
-                                    ? 'bg-[#FFF272] text-[#1A1E3B] hover:bg-[#F59E0B] shadow-lg'
-                                    : 'border border-white/20 hover:bg-white hover:text-[#1A1E3B]'
-                                    }`}
-                            >
-                                Candidati Ora →
-                            </a>
+
+                            <div className="mt-auto">
+                                <a
+                                    href="#candidati"
+                                    className={`block w-full py-4 rounded-xl text-center font-bold text-lg transition-all shadow-xl active:scale-95 active:shadow-sm ${tier.popular
+                                        ? 'bg-white text-[#B45309] hover:bg-[#FFFBEB] hover:text-[#92400E] hover:shadow-2xl hover:-translate-y-0.5'
+                                        : 'bg-white/10 border border-white/10 text-white hover:bg-white hover:text-indigo-950'
+                                        }`}
+                                >
+                                    Candidati Ora →
+                                </a>
+                            </div>
                         </div>
                     ))}
                 </div>
