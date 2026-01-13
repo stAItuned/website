@@ -13,6 +13,13 @@ import { useTheme } from '@/components/ThemeProvider'
 const DISABLE_AUTH = false
 import { UserMenu } from '@/components/auth/UserMenu'
 
+function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
+  // @ts-ignore
+  if (typeof window === 'undefined' || !window.gtag) return
+  // @ts-ignore
+  window.gtag('event', eventName, params)
+}
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -206,6 +213,7 @@ export function Header() {
 
             <Link
               href="/audit"
+              onClick={() => trackGtagEvent('cta_click', { section: 'navbar', label: 'start_audit' })}
               className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 group relative"
             >
               <span className="flex items-center gap-1">
@@ -291,7 +299,10 @@ export function Header() {
               <Link
                 href="/audit"
                 className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-xl hover:from-amber-300 hover:to-amber-400 transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-amber-400 animate-fade-in"
-                onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
+                onClick={() => {
+                  trackGtagEvent('cta_click', { section: 'navbar_mobile', label: 'start_audit' })
+                  setTimeout(() => setIsMenuOpen(false), 100)
+                }}
               >
                 <div className="flex items-center gap-2">
                   <span>{primaryCta.name}</span>

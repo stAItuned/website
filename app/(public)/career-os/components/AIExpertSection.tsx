@@ -1,4 +1,13 @@
+'use client'
+
 import { Target, Zap, CheckCircle2, User } from 'lucide-react'
+
+function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
+    // @ts-ignore
+    if (typeof window === 'undefined' || !window.gtag) return
+    // @ts-ignore
+    window.gtag('event', eventName, params)
+}
 
 /**
  * AIExpertSection - Differentiator section showing AI Expert Guidance value
@@ -117,13 +126,14 @@ export default function AIExpertSection() {
                     </div>
                 </div>
 
-                {/* Bridge CTA to Journey */}
+                {/* Bridge CTA to Social Proof */}
                 <div className="mt-12 text-center">
                     <a
-                        href="#journey"
+                        href="#social-proof"
+                        onClick={() => trackGtagEvent('cta_click', { section: 'expert', label: 'vedi_cosa_costruirai' })}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FCD34D] text-[#1A1E3B] font-bold hover:bg-[#F59E0B] transition-colors shadow-lg"
                     >
-                        Vedi il percorso completo →
+                        Vedi cosa costruirai →
                     </a>
                 </div>
             </div>

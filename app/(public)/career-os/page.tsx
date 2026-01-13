@@ -7,9 +7,6 @@ import ProblemSection from './components/ProblemSection'
 import AIExpertSection from './components/AIExpertSection'
 import JourneySection from './components/JourneySection'
 import SocialProofSection from './components/SocialProofSection'
-import TargetAudienceSection from './components/TargetAudienceSection'
-import TransparencySection from './components/TransparencySection'
-import FinalCTASection from './components/FinalCTASection'
 import ApplicationFormSection from './components/ApplicationFormSection'
 
 // Existing components
@@ -17,6 +14,8 @@ import FAQ from './FAQ'
 import PricingSection from './PricingSection'
 
 import { CareerOSProvider } from './context/CareerOSContext'
+import ApplicationModal from './components/modals/ApplicationModal'
+import AuditModal from './components/modals/AuditModal'
 
 export const metadata: Metadata = {
     title: 'Career OS — Il Percorso per Diventare GenAI Engineer | stAItuned',
@@ -26,18 +25,15 @@ export const metadata: Metadata = {
 /**
  * CareerOSPage - Main landing page for Career OS
  *
- * Structure (Optimized for conversion):
- * 1. HeroSection - Stats, pain/solution, CTA above fold
- * 2. ProblemSection - 3 pain cards (why you fail)
+ * Structure (Optimized - 8 sections):
+ * 1. HeroSection - Market urgency, hook stats, CTA
+ * 2. ProblemSection - 3 pain cards
  * 3. AIExpertSection - Differentiator (who guides you)
- * 4. JourneySection - Unified 8-week timeline with checkpoints
- * 5. SocialProofSection - Beta stats & future testimonials
- * 6. TargetAudienceSection - Chi è per / Chi non è per
- * 7. PricingSection - ROI + tiers
- * 8. TransparencySection - Cosa NON è (reduced)
- * 9. FAQ - Expanded accordion
- * 10. ApplicationFormSection - Main conversion form
- * 11. FinalCTASection - Final CTA with urgency
+ * 4. JourneySection - 8-week timeline with progressive disclosure
+ * 5. SocialProofSection - Real proof items
+ * 6. PricingSection - ROI + tiers
+ * 7. FAQ - Consolidated (includes target audience + transparency info)
+ * 8. ApplicationFormSection - Main conversion form
  */
 export default function CareerOSPage() {
     return (
@@ -47,14 +43,14 @@ export default function CareerOSPage() {
                     <HeroSection />
                     <ProblemSection />
                     <AIExpertSection />
-                    <JourneySection />
                     <SocialProofSection />
-                    <TargetAudienceSection />
+                    <JourneySection />
                     <PricingSection />
-                    <TransparencySection />
                     <FAQ />
                     <ApplicationFormSection />
                 </div>
+                <ApplicationModal />
+                <AuditModal />
             </CareerOSProvider>
         </PageTransition>
     )

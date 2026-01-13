@@ -15,6 +15,16 @@ interface CareerOSContextType {
     mode: PricingMode
     setMode: (mode: PricingMode) => void
 
+    // Modals State
+    isAppModalOpen: boolean
+    appModalData: { source?: string; tier?: string } | null
+    openAppModal: (data?: { source?: string; tier?: string }) => void
+    closeAppModal: () => void
+
+    isAuditModalOpen: boolean
+    openAuditModal: () => void
+    closeAuditModal: () => void
+
     // Scroll helpers
     scrollToSection: (id: string) => void
 }
@@ -22,8 +32,25 @@ interface CareerOSContextType {
 const CareerOSContext = createContext<CareerOSContextType | undefined>(undefined)
 
 export function CareerOSProvider({ children }: { children: ReactNode }) {
-    const [objective, setObjective] = useState<ObjectiveType>(null) // Default null as requested
-    const [mode, setMode] = useState<PricingMode>('classe') // Default classe
+    const [objective, setObjective] = useState<ObjectiveType>(null)
+    const [mode, setMode] = useState<PricingMode>('classe')
+
+    const [isAppModalOpen, setIsAppModalOpen] = useState(false)
+    const [appModalData, setAppModalData] = useState<{ source?: string; tier?: string } | null>(null)
+
+    const [isAuditModalOpen, setIsAuditModalOpen] = useState(false)
+
+    const openAppModal = (data?: { source?: string; tier?: string }) => {
+        setAppModalData(data || null)
+        setIsAppModalOpen(true)
+    }
+    const closeAppModal = () => {
+        setIsAppModalOpen(false)
+        setAppModalData(null)
+    }
+
+    const openAuditModal = () => setIsAuditModalOpen(true)
+    const closeAuditModal = () => setIsAuditModalOpen(false)
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id)
@@ -48,6 +75,13 @@ export function CareerOSProvider({ children }: { children: ReactNode }) {
             setObjective,
             mode,
             setMode,
+            isAppModalOpen,
+            appModalData,
+            openAppModal,
+            closeAppModal,
+            isAuditModalOpen,
+            openAuditModal,
+            closeAuditModal,
             scrollToSection
         }}>
             {children}

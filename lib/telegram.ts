@@ -34,9 +34,9 @@ export async function sendTelegramFeedback(p: FeedbackPayload) {
     return;
   }
 
-  const header = `🆕 Feedback (${p.category || "n/a"})`;
+  const header = `🆕 Feedback (${p.category || "n/a"})\n\n`;
   const body =
-    `Message: ${p.message}\n` +
+    `Message: ${p.message}\n\n` +
     `From: ${p.email || "n/a"}\n` +
     `Page: ${p.page}\n` +
     (p.userAgent ? `UA: ${p.userAgent}` : "");

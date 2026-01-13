@@ -122,7 +122,7 @@ function ProofCard({ item }: { item: ProcessProofItem }) {
 
 export default function SocialProofSection() {
     return (
-        <section className="py-16 md:py-20 px-6 bg-white dark:bg-[#0F1117]">
+        <section id="social-proof" className="py-16 md:py-20 px-6 bg-white dark:bg-[#0F1117]">
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
@@ -170,7 +170,7 @@ export default function SocialProofSection() {
                 </div>
 
                 {/* Cohort Badge */}
-                <div className="mt-8 flex justify-center">
+                {/* <div className="mt-8 flex justify-center">
                     <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-800 shadow-sm">
                         <Users className="w-5 h-5 text-[#FFF272]" />
                         <div>
@@ -182,15 +182,15 @@ export default function SocialProofSection() {
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                {/* CTA to Pricing */}
+                {/* CTA to Journey */}
                 <div className="mt-10 text-center">
                     <a
-                        href="#pricing"
+                        href="#journey"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1A1E3B] dark:bg-white/10 text-white font-semibold hover:bg-[#383F74] dark:hover:bg-white/20 transition-colors"
                     >
-                        Scegli il tuo piano →
+                        Scopri il percorso →
                     </a>
                 </div>
             </div>

@@ -72,7 +72,7 @@ export default function PrivacyPage() {
             <div>
               <h3 className="font-semibold text-slate-900">Richieste di contatto e &quot;Prenota la call&quot;</h3>
               <p className="mt-1">
-                Quando compili il modulo di contatto raccogliamo nome, email, azienda, messaggio e la tua preferenza sul marketing. Il consenso esplicito al trattamento dei dati ci serve per risponderti e per organizzare un appuntamento. Inviare la richiesta equivale ad accettare la presente informativa.
+                Quando compili il modulo di contatto raccogliamo nome, email, eventuale numero di telefono (facoltativo), azienda, messaggio e la tua preferenza sul marketing. Il consenso esplicito al trattamento dei dati ci serve per risponderti e per organizzare un appuntamento. Inviare la richiesta equivale ad accettare la presente informativa.
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export default function PrivacyPage() {
         <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/60 p-6 text-sm text-slate-600 shadow-sm">
           <h2 className="text-xl font-semibold text-slate-900">Domande o richieste specifiche</h2>
           <p>
-            Per chiarimenti o per cancellare definitivamente i tuoi dati, scrivi a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>. Aggiorniamo questa informativa periodicamente, quindi ti suggeriamo di verificarla ogni volta che prenoti una call o ti iscrivi alla community.
+            Per chiarimenti o per cancellare definitivamente i tuoi dati, scrivi a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>. Aggiorniamo questa informativa periodicamente, quindi ti suggeriamo di verificarla ogni volta che prenoti una call o ti iscrivi alla community. Consulta anche i nostri <Link href="/terms" className="text-amber-600 underline">Termini e Condizioni</Link>.
           </p>
         </section>
       </div>

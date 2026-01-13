@@ -37,38 +37,18 @@ export async function POST(req: NextRequest) {
             applicationsLastMonth,
             linkedinUrl,
             notes,
+            phone,
+            acceptedPrivacy,
             source,
+            pricingTier,
             page,
             userAgent,
         } = body || {}
-
-        if (!name || typeof name !== 'string' || !name.trim()) {
-            return NextResponse.json({ error: 'Name is required' }, { status: 400 })
-        }
-
-        if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
-            return NextResponse.json({ error: 'Valid email is required' }, { status: 400 })
-        }
-
-        if (!background || typeof background !== 'string') {
-            return NextResponse.json({ error: 'Background is required' }, { status: 400 })
-        }
-
-        if (!roleTarget || typeof roleTarget !== 'string') {
-            return NextResponse.json({ error: 'Role target is required' }, { status: 400 })
-        }
-
-        if (!timeline || typeof timeline !== 'string') {
-            return NextResponse.json({ error: 'Timeline is required' }, { status: 400 })
-        }
-
-        if (!mainBlock || typeof mainBlock !== 'string') {
-            return NextResponse.json({ error: 'Main block is required' }, { status: 400 })
-        }
-
-        if (!applicationsLastMonth || typeof applicationsLastMonth !== 'string') {
-            return NextResponse.json({ error: 'Applications count is required' }, { status: 400 })
-        }
+        if (!name || typeof name !== 'string' || !name.trim()) return NextResponse.json({ error: 'Nome richiesto.' }, { status: 400 })
+        if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) return NextResponse.json({ error: 'Email non valida.' }, { status: 400 })
+        if (!background || typeof background !== 'string') return NextResponse.json({ error: 'Background richiesto.' }, { status: 400 })
+        if (!roleTarget || typeof roleTarget !== 'string') return NextResponse.json({ error: 'Ruolo richiesto.' }, { status: 400 })
+        if (!acceptedPrivacy) return NextResponse.json({ error: 'Accettazione privacy richiesta.' }, { status: 400 })
 
         const normalizedEmail = email.trim().toLowerCase()
         const calendlyBaseUrl =
@@ -76,37 +56,49 @@ export async function POST(req: NextRequest) {
             process.env.NEXT_PUBLIC_CAREER_OS_CALENDLY_URL ||
             ''
 
-        const calendlyLink = buildCalendlyLink(calendlyBaseUrl, normalizedEmail, name.trim())
+        // DB Saving (Fail-safe)
+        try {
+            const applicationsRef = db().collection('career_os_applications')
+            await applicationsRef.add({
+                name: name.trim(),
+                email: normalizedEmail,
+                phone: phone?.trim() || null,
+                background: background.trim(),
+                roleTarget,
+                timeline,
+                mainBlock,
+                applicationsLastMonth,
+                linkedinUrl: linkedinUrl?.trim() || null,
+                notes: notes?.trim() || null,
+                acceptedPrivacy: true,
+                source: source || 'unknown',
+                pricingTier: pricingTier || null,
+                userAgent,
+                page,
+                createdAt: new Date().toISOString(), // Use ISO string for broader compatibility
+            })
+        } catch (dbError) {
+            console.error('FIREBASE SAVE ERROR:', dbError)
+            // We continue even if DB fails, as we want to send Telegram at least
+        }
 
-        const applicationsRef = db().collection('career_os_applications')
-        await applicationsRef.add({
-            name: name.trim(),
-            email: normalizedEmail,
-            background: background.trim(),
-            roleTarget: roleTarget.trim(),
-            timeline: timeline.trim(),
-            mainBlock: mainBlock.trim(),
-            applicationsLastMonth: applicationsLastMonth.trim(),
-            linkedinUrl: linkedinUrl?.trim() || null,
-            notes: notes?.trim() || null,
-            source: source || 'career-os',
-            status: 'new',
-            createdAt: new Date().toISOString(),
-            userAgent: userAgent || req.headers.get('user-agent') || null,
-            referrer: req.headers.get('referer') || null,
-        })
+        // 3. Telegram Notification
+        const calendlyLink = `${calendlyBaseUrl}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(name.trim())}`
 
         const telegramMessage = [
             '🆕 Nuova Application Career OS',
             '',
             `👤 Nome: ${name.trim()}`,
             `📧 Email: ${normalizedEmail}`,
+            phone ? `📱 Telefono: ${phone.trim()}` : '',
             `🎓 Background: ${background.trim()}`,
-            `🎯 Ruolo: ${roleTarget.trim()}`,
-            `⏰ Timeline: ${timeline.trim()}`,
-            `🚧 Blocco: ${mainBlock.trim()}`,
-            `📝 Candidature: ${applicationsLastMonth.trim()}`,
-            `🔗 LinkedIn: ${linkedinUrl?.trim() || 'Non fornito'}`,
+            `🎯 Ruolo Target: ${roleTarget}`,
+            `⏳ Timeline: ${timeline}`,
+            `🚧 Blocco: ${mainBlock}`,
+            `� Candidature/mese: ${applicationsLastMonth}`,
+            linkedinUrl ? `🔗 LinkedIn: ${linkedinUrl}` : '',
+            pricingTier ? `💎 Interesse: ${pricingTier}` : '',
+            source ? `📍 Source: ${source}` : '',
             notes?.trim() ? `🗒 Note: ${notes.trim()}` : '',
             '',
             `📅 Prenota call: ${calendlyLink}`,

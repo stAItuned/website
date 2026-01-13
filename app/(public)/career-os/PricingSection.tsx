@@ -5,6 +5,13 @@ import { useCareerOS } from './context/CareerOSContext'
 type PricingMode = 'classe' | '1to1'
 import { CheckCircle2 } from 'lucide-react'
 
+function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
+    // @ts-ignore
+    if (typeof window === 'undefined' || !window.gtag) return
+    // @ts-ignore
+    window.gtag('event', eventName, params)
+}
+
 const pricingData = {
     classe: {
         label: 'Classe',
@@ -106,7 +113,7 @@ const pricingData = {
 }
 
 export default function PricingSection() {
-    const { mode, setMode, objective } = useCareerOS()
+    const { mode, setMode, objective, openAppModal, openAuditModal } = useCareerOS()
     const current = pricingData[mode]
 
     // Determine which plan to highlight based on objective
@@ -263,15 +270,25 @@ export default function PricingSection() {
                             )}
 
                             <div className="mt-auto">
-                                <a
-                                    href="#candidati"
+                                <button
+                                    onClick={() => {
+                                        trackGtagEvent('pricing_select', {
+                                            tier: tier.name,
+                                            mode: current.label,
+                                            price: tier.price
+                                        })
+                                        openAppModal({
+                                            source: 'pricing_card',
+                                            tier: `${tier.name} (${current.label})`
+                                        })
+                                    }}
                                     className={`block w-full py-4 rounded-xl text-center font-bold text-lg transition-all shadow-xl active:scale-95 active:shadow-sm ${tier.popular
                                         ? 'bg-white text-[#B45309] hover:bg-[#FFFBEB] hover:text-[#92400E] hover:shadow-2xl hover:-translate-y-0.5'
                                         : 'bg-white/10 border border-white/10 text-white hover:bg-white hover:text-indigo-950'
                                         }`}
                                 >
                                     Candidati Ora →
-                                </a>
+                                </button>
                             </div>
                         </div>
                     ))}
@@ -292,12 +309,12 @@ export default function PricingSection() {
                     <p className="text-slate-400 text-sm mb-3">
                         Hai dubbi? Parliamone.
                     </p>
-                    <a
-                        href="/audit"
+                    <button
+                        onClick={openAuditModal}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white/80 font-medium hover:bg-white/5 hover:text-white transition-all"
                     >
-                        📞 Prenota Audit gratuito (15 min)
-                    </a>
+                        📞 Richiedi Audit gratuito (15 min)
+                    </button>
                 </div>
             </div>
         </section>

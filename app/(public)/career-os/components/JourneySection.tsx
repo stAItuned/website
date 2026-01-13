@@ -22,6 +22,13 @@ import { Tooltip } from '@/components/ui/Tooltip'
 import { HoverCard } from '@/components/ui/HoverCard'
 import { useCareerOS, type ObjectiveType } from '../context/CareerOSContext'
 
+function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
+    // @ts-ignore
+    if (typeof window === 'undefined' || !window.gtag) return
+    // @ts-ignore
+    window.gtag('event', eventName, params)
+}
+
 /**
  * Step definitions for the gamified journey
  */
@@ -602,7 +609,15 @@ function WeekNodeCompact({
 
     const nodeButton = (
         <button
-            onClick={onSelect}
+            onClick={() => {
+                onSelect()
+                if (!isSelected) {
+                    trackGtagEvent('journey_expand', {
+                        week: node.week,
+                        title: node.title
+                    })
+                }
+            }}
             className={`
                 relative w-16 h-16 md:w-20 md:h-20 rounded-full border-2 
                 bg-white dark:bg-[#0F1117]
@@ -1315,47 +1330,7 @@ function ModeSelectionCard({ onSelect }: { onSelect: (mode: 'classe' | '1to1') =
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-                {/* Class Mode - Indigo Theme */}
-                <button
-                    onClick={() => onSelect('classe')}
-                    className="
-                        group relative flex flex-col p-8 rounded-[32px] text-left transition-all duration-300
-                        bg-white dark:bg-[#151925] 
-                        border-2 border-slate-100 dark:border-slate-800 
-                        hover:border-indigo-500/50 dark:hover:border-indigo-500/50 
-                        hover:shadow-2xl hover:shadow-indigo-500/10
-                        hover:-translate-y-1
-                    "
-                >
-                    <div className="flex items-start justify-between mb-6">
-                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 border border-indigo-100 dark:border-indigo-500/20">
-                            🎓
-                        </div>
-                        <div className="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-700 group-hover:border-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 flex items-center justify-center transition-colors">
-                            <div className="w-4 h-4 rounded-full bg-indigo-500 scale-0 group-hover:scale-100 transition-transform" />
-                        </div>
-                    </div>
-
-                    <h4 className="text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">Classe (Cohort)</h4>
-                    <p className="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-                        Impara con altri 8-10 peer selezionati. Scadenze fisse, confronto costante e networking.
-                    </p>
-
-                    <ul className="space-y-3 mb-8 mt-auto">
-                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
-                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Data di inizio fissata (coorte)
-                        </li>
-                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
-                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Feedback continuo + confronto con i peer
-                        </li>
-                    </ul>
-
-                    <div className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                        Seleziona Classe
-                    </div>
-                </button>
-
-                {/* 1:1 Mode - Amber Theme */}
+                {/* 1:1 Mode - Amber Theme (FIRST) */}
                 <button
                     onClick={() => onSelect('1to1')}
                     className="
@@ -1392,6 +1367,46 @@ function ModeSelectionCard({ onSelect }: { onSelect: (mode: 'classe' | '1to1') =
 
                     <div className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-center group-hover:bg-amber-500 group-hover:text-white transition-colors">
                         Seleziona 1:1 Premium
+                    </div>
+                </button>
+
+                {/* Class Mode - Indigo Theme (SECOND) */}
+                <button
+                    onClick={() => onSelect('classe')}
+                    className="
+                        group relative flex flex-col p-8 rounded-[32px] text-left transition-all duration-300
+                        bg-white dark:bg-[#151925] 
+                        border-2 border-slate-100 dark:border-slate-800 
+                        hover:border-indigo-500/50 dark:hover:border-indigo-500/50 
+                        hover:shadow-2xl hover:shadow-indigo-500/10
+                        hover:-translate-y-1
+                    "
+                >
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 border border-indigo-100 dark:border-indigo-500/20">
+                            🎓
+                        </div>
+                        <div className="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-700 group-hover:border-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 flex items-center justify-center transition-colors">
+                            <div className="w-4 h-4 rounded-full bg-indigo-500 scale-0 group-hover:scale-100 transition-transform" />
+                        </div>
+                    </div>
+
+                    <h4 className="text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">Classe (Cohort)</h4>
+                    <p className="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                        Impara con altri 8-10 peer selezionati. Scadenze fisse, confronto costante e networking.
+                    </p>
+
+                    <ul className="space-y-3 mb-8 mt-auto">
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Data di inizio fissata (coorte)
+                        </li>
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Feedback continuo + confronto con i peer
+                        </li>
+                    </ul>
+
+                    <div className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                        Seleziona Classe
                     </div>
                 </button>
             </div>
@@ -1488,7 +1503,7 @@ export default function JourneySection() {
                         </span>
                     </h2>
                     <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-6">
-                        Non "lezioni": <strong>prove concrete</strong> (repo, demo, report) che riducono il rischio percepito per chi ti seleziona.
+                        Non "lezioni": <strong>Prove Concrete</strong> (repo, demo, report) che riducono il rischio percepito per chi ti seleziona.
                     </p>
 
                     {/* Fit Bar - Quick recognition chips */}
