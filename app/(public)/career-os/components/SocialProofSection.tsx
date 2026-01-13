@@ -1,39 +1,48 @@
-import { Code2, BarChart3, FileText, CheckCircle2, Users, ExternalLink } from 'lucide-react'
+import { Code2, FileText, FileCheck2, CheckCircle2, Users } from 'lucide-react'
+import Image from 'next/image'
 
 /**
  * SocialProofSection - Process Proof & Output Standards
- * Shows tangible outputs and quality standards with real example placeholders.
+ * Shows tangible outputs with REAL visual examples
  */
 
 interface ProcessProofItem {
     icon: React.ElementType
     title: string
     description: string
-    exampleLabel: string
-    exampleLink: string | null // null = placeholder
+    mediaType: 'gif' | 'image' | 'video'
+    mediaSrc: string
+    mediaAlt: string
+    articleLink?: string
+    articleLabel?: string
 }
 
 const PROCESS_PROOF: ProcessProofItem[] = [
     {
         icon: Code2,
         title: 'Repo + Demo',
-        description: 'GitHub pubblico, demo riproducibile, README professionale',
-        exampleLabel: 'Vedi esempio repo →',
-        exampleLink: null, // TODO: Replace with real GitHub link
+        description: 'GitHub pubblico con demo riproducibile. Esempio: progetto "HairStyle Try-On" con AI generativa.',
+        mediaType: 'gif',
+        mediaSrc: '/assets/products/my-smart-haircut/demo.gif',
+        mediaAlt: 'Demo HairStyle Try-On - progetto AI generativa',
     },
     {
-        icon: BarChart3,
-        title: 'Evaluation Report',
-        description: 'Metriche, error analysis, decision log documentati',
-        exampleLabel: 'Vedi esempio report →',
-        exampleLink: null, // TODO: Replace with real example
+        icon: FileCheck2,
+        title: 'CV Personalizzato su JD',
+        description: 'CV tailored automatico su ogni job description, con keyword match e formatting ottimizzato.',
+        mediaType: 'video',
+        mediaSrc: '/assets/career-os/Video_Demo_Without_Explanation.mp4',
+        mediaAlt: 'Demo CV personalizzato su Job Description',
     },
     {
         icon: FileText,
         title: 'Write-up Tecnico',
-        description: 'Articolo/portfolio che comunica il progetto',
-        exampleLabel: 'Vedi articolo →',
-        exampleLink: null, // TODO: Replace with stAItuned article link
+        description: 'Articolo pubblicato su stAItuned che dimostra le tue competenze.',
+        mediaType: 'image',
+        mediaSrc: '/assets/career-os/articolo_screen.png',
+        mediaAlt: 'Esempio articolo tecnico pubblicato',
+        articleLink: 'https://staituned.com/learn/expert/cag-vs-rag',
+        articleLabel: 'CAG vs RAG: Which Enterprise AI Approach Wins?',
     },
 ]
 
@@ -43,6 +52,73 @@ const QUALITY_STANDARDS = [
     'Decision Log',
     'Peer Review',
 ]
+
+/**
+ * ProofCard - Individual proof item with visual media
+ */
+function ProofCard({ item }: { item: ProcessProofItem }) {
+    const Icon = item.icon
+
+    return (
+        <div className="group p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-white dark:from-[#151925] dark:to-[#1A1E3B] border border-slate-200 dark:border-slate-800 hover:border-indigo-500/40 hover:shadow-lg transition-all">
+            {/* Media Preview */}
+            <div className="relative aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 dark:bg-slate-800">
+                {item.mediaType === 'gif' && (
+                    <img
+                        src={item.mediaSrc}
+                        alt={item.mediaAlt}
+                        className="w-full h-full object-cover"
+                    />
+                )}
+                {item.mediaType === 'image' && (
+                    <Image
+                        src={item.mediaSrc}
+                        alt={item.mediaAlt}
+                        fill
+                        className="object-cover"
+                    />
+                )}
+                {item.mediaType === 'video' && (
+                    <video
+                        src={item.mediaSrc}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                    />
+                )}
+            </div>
+
+            {/* Content */}
+            <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                    <Icon className="w-5 h-5" />
+                </div>
+                <div>
+                    <h3 className="text-lg font-bold text-[#1A1E3B] dark:text-white mb-1">
+                        {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {item.description}
+                    </p>
+                    {/* Article Link for Write-up */}
+                    {item.articleLink && (
+                        <a
+                            href={item.articleLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                        >
+                            <span>→</span>
+                            <span className="line-clamp-1">{item.articleLabel}</span>
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
+}
 
 export default function SocialProofSection() {
     return (
@@ -63,41 +139,9 @@ export default function SocialProofSection() {
 
                 {/* Process Proof Grid */}
                 <div className="grid md:grid-cols-3 gap-6 mb-10">
-                    {PROCESS_PROOF.map((item, i) => {
-                        const Icon = item.icon
-                        return (
-                            <div
-                                key={i}
-                                className="p-6 rounded-2xl bg-gradient-to-br from-slate-50 to-white dark:from-[#151925] dark:to-[#1A1E3B] border border-slate-200 dark:border-slate-800 hover:border-indigo-500/40 transition-all group"
-                            >
-                                <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 mb-4 group-hover:scale-105 transition-transform">
-                                    <Icon className="w-7 h-7" />
-                                </div>
-                                <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white mb-2">
-                                    {item.title}
-                                </h3>
-                                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                                    {item.description}
-                                </p>
-                                {/* Example link/placeholder */}
-                                {item.exampleLink ? (
-                                    <a
-                                        href={item.exampleLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
-                                    >
-                                        <ExternalLink className="w-4 h-4" />
-                                        {item.exampleLabel}
-                                    </a>
-                                ) : (
-                                    <span className="inline-flex items-center gap-1 text-sm text-slate-400 dark:text-slate-500 italic">
-                                        Esempi in arrivo (beta)
-                                    </span>
-                                )}
-                            </div>
-                        )
-                    })}
+                    {PROCESS_PROOF.map((item, i) => (
+                        <ProofCard key={i} item={item} />
+                    ))}
                 </div>
 
                 {/* Quality Standards Checklist */}

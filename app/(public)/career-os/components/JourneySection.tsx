@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     Target,
     Briefcase,
@@ -1078,6 +1079,131 @@ function TimelineGuide({ variant }: { variant: 'foundational' | 'advanced' }) {
 }
 
 /**
+ * CondensedTimelineView - Simple 2-card overview for first-time viewers
+ * Expands to full timeline on demand
+ */
+function CondensedTimelineView({
+    objective,
+    onExpand,
+    onGoToPricing,
+}: {
+    objective: ObjectiveType
+    onExpand: () => void
+    onGoToPricing: () => void
+}) {
+    const isStart = objective === 'start'
+
+    return (
+        <div className="max-w-4xl mx-auto">
+            {/* Header for Pro - make it explicit it's the full journey */}
+            {!isStart && (
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/10 to-[#FCD34D]/20 border border-indigo-200/50 dark:border-indigo-500/20 mb-3">
+                        <span className="text-indigo-600 dark:text-indigo-400 font-bold text-sm">Week 1-4</span>
+                        <ArrowRight className="w-4 h-4 text-slate-400" />
+                        <span className="text-[#B45309] dark:text-[#FCD34D] font-bold text-sm">Week 5-8</span>
+                    </div>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Il percorso completo di <strong>8 settimane</strong>: prima costruisci le basi, poi arrivi all'offerta.
+                    </p>
+                </div>
+            )}
+
+            {/* Quick Summary Cards */}
+            <div className={`grid ${isStart ? 'md:grid-cols-1 max-w-md mx-auto' : 'md:grid-cols-2'} gap-6 mb-8`}>
+                {/* Week 4 Card */}
+                <div className="relative p-6 rounded-2xl bg-gradient-to-br from-indigo-50 to-white dark:from-[#1A1E3B] dark:to-[#151925] border-2 border-indigo-300/50 dark:border-indigo-500/30 shadow-lg">
+                    <div className="absolute -top-3 left-6 flex items-center gap-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-md">
+                            {isStart ? 'IL TUO PIANO' : 'FASE 1'}
+                        </span>
+                        {!isStart && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">
+                                INCLUSO
+                            </span>
+                        )}
+                    </div>
+                    <div className="mt-3">
+                        <div className="flex items-center gap-3 mb-1">
+                            <span className="text-3xl">🚀</span>
+                            <div>
+                                <h4 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
+                                    Pronto a Candidarti
+                                </h4>
+                                {!isStart && (
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">Week 1-4</span>
+                                )}
+                            </div>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                            CV + LinkedIn ottimizzati, proof pubblica, e strategia di candidatura.
+                        </p>
+                        <ul className="space-y-2">
+                            {['Role-fit chiaro', 'CV Master ATS-ready', 'LinkedIn ottimizzato', 'Articolo tecnico pubblicato'].map((item, i) => (
+                                <li key={i} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                                    <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                {/* Week 8 Card - Only for Pro */}
+                {!isStart && (
+                    <div className="relative p-6 rounded-2xl bg-gradient-to-br from-[#FFF9C4] via-[#FCD34D]/20 to-white dark:from-[#FCD34D]/10 dark:to-[#151925] border-2 border-[#FCD34D] shadow-lg">
+                        <div className="absolute -top-3 left-6">
+                            <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#F59E0B] text-white shadow-md">
+                                FASE 2
+                            </span>
+                        </div>
+                        <div className="mt-3">
+                            <div className="flex items-center gap-3 mb-1">
+                                <span className="text-3xl">🏆</span>
+                                <div>
+                                    <h4 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
+                                        Offer-Ready
+                                    </h4>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">Week 5-8</span>
+                                </div>
+                            </div>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                                Portfolio live, progetto GenAI, candidature mirate + mock interview.
+                            </p>
+                            <ul className="space-y-2">
+                                {['Portfolio WebApp live', 'Progetto AI end-to-end', '10 candidature tailored', 'Mock interview con feedback'].map((item, i) => (
+                                    <li key={i} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                                        <CheckCircle2 className="w-4 h-4 text-[#B45309]" />
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button
+                    onClick={onExpand}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold hover:border-indigo-500 hover:text-indigo-600 dark:hover:border-indigo-400 dark:hover:text-indigo-400 transition-colors"
+                >
+                    <ChevronDown className="w-4 h-4" />
+                    Esplora settimana per settimana
+                </button>
+                <button
+                    onClick={onGoToPricing}
+                    className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[#FCD34D] to-[#F59E0B] text-[#1A1E3B] font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                >
+                    Vai ai prezzi →
+                </button>
+            </div>
+        </div>
+    )
+}
+
+/**
  * CheckpointCompare - Side-by-side Week 4 vs Week 8 value comparison
  */
 function CheckpointCompare({
@@ -1285,6 +1411,7 @@ export default function JourneySection() {
     const [selectedWeek, setSelectedWeek] = useState<number | null>(1)
     const [currentStep, setCurrentStep] = useState(1)
     const [completedSteps, setCompletedSteps] = useState<number[]>([])
+    const [isTimelineExpanded, setIsTimelineExpanded] = useState(false)
 
     // Handlers
     const handleObjectiveChange = (newObjective: ObjectiveType) => {
@@ -1377,154 +1504,214 @@ export default function JourneySection() {
                 {/* Progressive Disclosure: Only show timeline if objective is selected */}
                 {objective && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        {/* Value Proposition based on selection */}
-                        <div className="mb-12">
-                            {objective === 'start' ? (
-                                <CheckpointCard checkpoint={CHECKPOINTS.week4} week={4} />
+                        {/* CONDENSED VIEW (Default) vs EXPANDED VIEW with AnimatePresence */}
+                        <AnimatePresence mode="wait">
+                            {!isTimelineExpanded ? (
+                                <motion.div
+                                    key="condensed"
+                                    id="step-timeline"
+                                    className="scroll-mt-32"
+                                    initial={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20, transition: { duration: 0.3 } }}
+                                >
+                                    <CondensedTimelineView
+                                        objective={objective}
+                                        onExpand={() => {
+                                            setIsTimelineExpanded(true)
+                                            setCompletedSteps(prev => prev.includes(2) ? prev : [...prev, 2])
+                                            setCurrentStep(3)
+                                            // Smooth scroll to expanded timeline after animation
+                                            setTimeout(() => {
+                                                document.getElementById('expanded-timeline')?.scrollIntoView({
+                                                    behavior: 'smooth',
+                                                    block: 'start'
+                                                })
+                                            }, 400)
+                                        }}
+                                        onGoToPricing={() => {
+                                            setCompletedSteps([1, 2, 3])
+                                            setCurrentStep(4)
+                                            scrollToSection('pricing')
+                                        }}
+                                    />
+                                </motion.div>
                             ) : (
-                                <CheckpointCompare left={CHECKPOINTS.week4} right={CHECKPOINTS.week8} />
-                            )}
-                        </div>
-
-                        {/* STEP 2: Timeline Section */}
-                        <div id="step-timeline" className="scroll-mt-32">
-                            <ChapterBreak label="Percorso" />
-                            <div className="text-center mb-8">
-                                <h3 className="text-xl md:text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">
-                                    Come li costruiamo, settimana per settimana
-                                </h3>
-                            </div>
-
-                            {/* Timeline Guide */}
-                            <TimelineGuide variant={variant} />
-
-                            {/* SPLIT VIEW: Timeline + Detail Panel */}
-                            <div className="grid md:grid-cols-[1fr_1.2fr] gap-8 items-center mb-20">
-                                {/* Left: Timeline */}
-                                <div>
-                                    {/* Track Header */}
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className={`px-4 py-2 rounded-full font-bold text-sm ${objective === 'start'
-                                            ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300'
-                                            : 'bg-gradient-to-r from-indigo-100 to-[#FCD34D]/30 dark:from-indigo-500/20 dark:to-[#FCD34D]/10 text-slate-700 dark:text-slate-200'
-                                            }`}>
-                                            {objective === 'start' ? 'FOUNDATIONAL' : 'FULL JOURNEY'}
-                                        </div>
-                                        <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-                                        <span className="text-sm text-slate-500 dark:text-slate-400">
-                                            Week {objective === 'start' ? '1-4' : '1-8'}
-                                        </span>
+                                <motion.div
+                                    key="expanded"
+                                    id="expanded-timeline"
+                                    className="scroll-mt-24"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
+                                >
+                                    {/* Collapse button */}
+                                    <div className="flex justify-center mb-6">
+                                        <button
+                                            onClick={() => setIsTimelineExpanded(false)}
+                                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                        >
+                                            <ChevronDown className="w-4 h-4 rotate-180" />
+                                            Torna alla vista compatta
+                                        </button>
                                     </div>
 
-                                    {/* Desktop Timeline */}
-                                    {objective === 'start' ? (
-                                        <DesktopTimeline
-                                            weeks={FOUNDATIONAL_WEEKS}
-                                            selectedWeek={selectedWeek}
-                                            onSelect={handleWeekSelect}
-                                            variant="foundational"
-                                        />
-                                    ) : (
-                                        <div className="hidden md:block space-y-8">
-                                            {/* Foundational (W1-4) */}
-                                            <DesktopTimeline
-                                                weeks={FOUNDATIONAL_WEEKS}
-                                                selectedWeek={selectedWeek && selectedWeek <= 4 ? selectedWeek : null}
-                                                onSelect={handleWeekSelect}
-                                                variant="foundational"
-                                            />
-                                            {/* Bridge */}
-                                            <div className="flex items-center justify-center gap-2 py-2">
-                                                <div className="h-px flex-1 bg-gradient-to-r from-indigo-300 to-[#FCD34D]/50" />
-                                                <ArrowRight className="w-4 h-4 text-slate-400" />
-                                                <div className="h-px flex-1 bg-gradient-to-r from-[#FCD34D]/50 to-[#FCD34D]" />
-                                            </div>
-                                            {/* Advanced (W5-8) */}
-                                            <DesktopTimeline
-                                                weeks={ADVANCED_WEEKS}
-                                                selectedWeek={selectedWeek && selectedWeek >= 5 ? selectedWeek : null}
-                                                onSelect={handleWeekSelect}
-                                                variant="advanced"
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Mobile Timeline */}
-                                    <div className="md:hidden space-y-2">
-                                        {activeWeeks.map((node) => (
-                                            <MobileWeekItem
-                                                key={node.week}
-                                                node={node}
-                                                isSelected={selectedWeek === node.week}
-                                                onSelect={() => handleWeekSelect(node.week)}
-                                                variant={node.week <= 4 ? 'foundational' : 'advanced'}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Right: Detail Panel (Sticky on desktop) */}
-                                <div>
-                                    {selectedNode ? (
-                                        <DetailPanel
-                                            node={selectedNode}
-                                            variant={selectedNode.week <= 4 ? 'foundational' : 'advanced'}
-                                        />
-                                    ) : (
-                                        <PlaceholderPanel variant={variant} />
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* 2.5: Upsell (Moved before Playbook) */}
-                            {objective === 'start' && (
-                                <div className="mt-12 mb-8">
-                                    <LockedAdvancedCallout />
-                                </div>
-                            )}
-
-                            {/* Playbook callout - Premium Style */}
-                            <div className="mt-8 mb-8 relative overflow-hidden rounded-3xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-700 shadow-xl p-0.5 animate-fadeIn">
-                                {/* Gradient Border Effect */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-[#FCD34D]/40 to-indigo-500/20 opacity-50" />
-
-                                <div className="relative bg-white dark:bg-[#151925] rounded-[22px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-                                    {/* Icon Box */}
-                                    <div className="shrink-0 relative">
-                                        <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 rounded-full" />
-                                        <div className="relative w-16 h-16 bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900/50 dark:to-slate-900 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 flex items-center justify-center shadow-sm">
-                                            <Sparkles className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                                        </div>
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="flex-1 text-center md:text-left">
-                                        <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2 justify-center md:justify-start">
-                                            <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
-                                                + Playbook Library
-                                            </h3>
-                                            <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FCD34D] text-[#451a03] shadow-sm w-fit mx-auto md:mx-0">
-                                                Metodo Replicabile
-                                            </span>
-                                        </div>
-
-                                        <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-2xl mb-4">
-                                            Ogni fase include un <strong>documento operativo che resta tuo</strong>.
-                                            Non è solo teoria, è un kit completo di strumenti pronta consegna:
+                                    {/* Header for expanded view */}
+                                    <div className="text-center mb-8">
+                                        <h3 className="text-xl md:text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">
+                                            📅 Esplora il percorso settimana per settimana
+                                        </h3>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                                            Clicca su ogni settimana per vedere gli output e i criteri di qualità.
                                         </p>
+                                    </div>
 
-                                        <div className="flex flex-wrap gap-2.5 mb-5 justify-center md:justify-start">
-                                            {[
-                                                'Role Fit',
-                                                'Company Targeting',
-                                                'CV Tailoring',
-                                                'Supervised Vibe Coding',
-                                                'Evaluation Matrix',
-                                                'Interview Prep'
-                                            ].map((item, i) => (
-                                                <span
-                                                    key={i}
-                                                    className="
+                                    {/* Value Proposition based on selection */}
+                                    <div className="mb-12">
+                                        {objective === 'start' ? (
+                                            <CheckpointCard checkpoint={CHECKPOINTS.week4} week={4} />
+                                        ) : (
+                                            <CheckpointCompare left={CHECKPOINTS.week4} right={CHECKPOINTS.week8} />
+                                        )}
+                                    </div>
+
+                                    {/* STEP 2: Timeline Section */}
+                                    <div id="step-timeline" className="scroll-mt-32">
+                                        <ChapterBreak label="Percorso" />
+                                        <div className="text-center mb-8">
+                                            <h3 className="text-xl md:text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">
+                                                Come li costruiamo, settimana per settimana
+                                            </h3>
+                                        </div>
+
+                                        {/* Timeline Guide */}
+                                        <TimelineGuide variant={variant} />
+
+                                        {/* SPLIT VIEW: Timeline + Detail Panel */}
+                                        <div className="grid md:grid-cols-[1fr_1.2fr] gap-8 items-center mb-20">
+                                            {/* Left: Timeline */}
+                                            <div>
+                                                {/* Track Header */}
+                                                <div className="flex items-center gap-3 mb-6">
+                                                    <div className={`px-4 py-2 rounded-full font-bold text-sm ${objective === 'start'
+                                                        ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300'
+                                                        : 'bg-gradient-to-r from-indigo-100 to-[#FCD34D]/30 dark:from-indigo-500/20 dark:to-[#FCD34D]/10 text-slate-700 dark:text-slate-200'
+                                                        }`}>
+                                                        {objective === 'start' ? 'FOUNDATIONAL' : 'FULL JOURNEY'}
+                                                    </div>
+                                                    <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+                                                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                                                        Week {objective === 'start' ? '1-4' : '1-8'}
+                                                    </span>
+                                                </div>
+
+                                                {/* Desktop Timeline */}
+                                                {objective === 'start' ? (
+                                                    <DesktopTimeline
+                                                        weeks={FOUNDATIONAL_WEEKS}
+                                                        selectedWeek={selectedWeek}
+                                                        onSelect={handleWeekSelect}
+                                                        variant="foundational"
+                                                    />
+                                                ) : (
+                                                    <div className="hidden md:block space-y-8">
+                                                        {/* Foundational (W1-4) */}
+                                                        <DesktopTimeline
+                                                            weeks={FOUNDATIONAL_WEEKS}
+                                                            selectedWeek={selectedWeek && selectedWeek <= 4 ? selectedWeek : null}
+                                                            onSelect={handleWeekSelect}
+                                                            variant="foundational"
+                                                        />
+                                                        {/* Bridge */}
+                                                        <div className="flex items-center justify-center gap-2 py-2">
+                                                            <div className="h-px flex-1 bg-gradient-to-r from-indigo-300 to-[#FCD34D]/50" />
+                                                            <ArrowRight className="w-4 h-4 text-slate-400" />
+                                                            <div className="h-px flex-1 bg-gradient-to-r from-[#FCD34D]/50 to-[#FCD34D]" />
+                                                        </div>
+                                                        {/* Advanced (W5-8) */}
+                                                        <DesktopTimeline
+                                                            weeks={ADVANCED_WEEKS}
+                                                            selectedWeek={selectedWeek && selectedWeek >= 5 ? selectedWeek : null}
+                                                            onSelect={handleWeekSelect}
+                                                            variant="advanced"
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                {/* Mobile Timeline */}
+                                                <div className="md:hidden space-y-2">
+                                                    {activeWeeks.map((node) => (
+                                                        <MobileWeekItem
+                                                            key={node.week}
+                                                            node={node}
+                                                            isSelected={selectedWeek === node.week}
+                                                            onSelect={() => handleWeekSelect(node.week)}
+                                                            variant={node.week <= 4 ? 'foundational' : 'advanced'}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Right: Detail Panel (Sticky on desktop) */}
+                                            <div>
+                                                {selectedNode ? (
+                                                    <DetailPanel
+                                                        node={selectedNode}
+                                                        variant={selectedNode.week <= 4 ? 'foundational' : 'advanced'}
+                                                    />
+                                                ) : (
+                                                    <PlaceholderPanel variant={variant} />
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* 2.5: Upsell (Moved before Playbook) */}
+                                        {objective === 'start' && (
+                                            <div className="mt-12 mb-8">
+                                                <LockedAdvancedCallout />
+                                            </div>
+                                        )}
+
+                                        {/* Playbook callout - Premium Style */}
+                                        <div className="mt-8 mb-8 relative overflow-hidden rounded-3xl bg-white dark:bg-[#151925] border border-slate-200 dark:border-slate-700 shadow-xl p-0.5 animate-fadeIn">
+                                            {/* Gradient Border Effect */}
+                                            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-[#FCD34D]/40 to-indigo-500/20 opacity-50" />
+
+                                            <div className="relative bg-white dark:bg-[#151925] rounded-[22px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
+                                                {/* Icon Box */}
+                                                <div className="shrink-0 relative">
+                                                    <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 rounded-full" />
+                                                    <div className="relative w-16 h-16 bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900/50 dark:to-slate-900 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 flex items-center justify-center shadow-sm">
+                                                        <Sparkles className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                                                    </div>
+                                                </div>
+
+                                                {/* Content */}
+                                                <div className="flex-1 text-center md:text-left">
+                                                    <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2 justify-center md:justify-start">
+                                                        <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
+                                                            + Playbook Library
+                                                        </h3>
+                                                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FCD34D] text-[#451a03] shadow-sm w-fit mx-auto md:mx-0">
+                                                            Metodo Replicabile
+                                                        </span>
+                                                    </div>
+
+                                                    <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-2xl mb-4">
+                                                        Ogni fase include un <strong>documento operativo che resta tuo</strong>.
+                                                        Non è solo teoria, è un kit completo di strumenti pronta consegna:
+                                                    </p>
+
+                                                    <div className="flex flex-wrap gap-2.5 mb-5 justify-center md:justify-start">
+                                                        {[
+                                                            'Role Fit',
+                                                            'Company Targeting',
+                                                            'CV Tailoring',
+                                                            'Supervised Vibe Coding',
+                                                            'Evaluation Matrix',
+                                                            'Interview Prep'
+                                                        ].map((item, i) => (
+                                                            <span
+                                                                key={i}
+                                                                className="
                                                         flex items-center gap-1.5
                                                         px-3 py-1.5 rounded-lg 
                                                         bg-indigo-50 dark:bg-indigo-900/20 
@@ -1533,44 +1720,46 @@ export default function JourneySection() {
                                                         shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-400
                                                         transition-all duration-200 cursor-default hover:-translate-y-0.5
                                                     "
-                                                >
-                                                    <CheckCircle2 className="w-3.5 h-3.5 opacity-70" />
-                                                    {item}
-                                                </span>
-                                            ))}
+                                                            >
+                                                                <CheckCircle2 className="w-3.5 h-3.5 opacity-70" />
+                                                                {item}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+
+                                                    <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-2 flex items-center justify-center md:justify-start gap-2">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                                                        Dopo il percorso, puoi replicare tutto il processo da solo.
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-2 flex items-center justify-center md:justify-start gap-2">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                                            Dopo il percorso, puoi replicare tutto il processo da solo.
-                                        </p>
+                                        {/* CHAPTER BREAK: Visual Separator */}
+                                        <ChapterBreak />
                                     </div>
-                                </div>
-                            </div>
 
-                            {/* CHAPTER BREAK: Visual Separator */}
-                            <ChapterBreak />
-                        </div>
+                                    {/* STEP 3: Mode Selection */}
+                                    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+                                        <ModeSelectionCard onSelect={handleModeSelect} />
+                                    </div>
 
-                        {/* STEP 3: Mode Selection */}
-                        <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-                            <ModeSelectionCard onSelect={handleModeSelect} />
-                        </div>
-
-                        {/* Bridge CTA to Pricing */}
-                        <ChapterBreak label="Prezzi" />
-                        <div className="mt-0 text-center">
-                            <a
-                                href="#pricing"
-                                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#FCD34D] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
-                            >
-                                Vedi i prezzi →
-                            </a>
-                        </div>
+                                    {/* Bridge CTA to Pricing */}
+                                    <ChapterBreak label="Prezzi" />
+                                    <div className="mt-0 text-center">
+                                        <a
+                                            href="#pricing"
+                                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#FCD34D] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                                        >
+                                            Vedi i prezzi →
+                                        </a>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 )}
             </div>
         </section>
     )
 }
-
