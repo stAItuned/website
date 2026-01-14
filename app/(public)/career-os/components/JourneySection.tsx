@@ -1370,45 +1370,47 @@ function ModeSelectionCard({ onSelect }: { onSelect: (mode: 'classe' | '1to1') =
                     </div>
                 </button>
 
-                {/* Class Mode - Indigo Theme (SECOND) */}
-                <button
-                    onClick={() => onSelect('classe')}
+                {/* Class Mode - Disabled with Coming Soon */}
+                <div
                     className="
-                        group relative flex flex-col p-8 rounded-[32px] text-left transition-all duration-300
-                        bg-white dark:bg-[#151925] 
-                        border-2 border-slate-100 dark:border-slate-800 
-                        hover:border-indigo-500/50 dark:hover:border-indigo-500/50 
-                        hover:shadow-2xl hover:shadow-indigo-500/10
-                        hover:-translate-y-1
+                        group relative flex flex-col p-8 rounded-[32px] text-left
+                        bg-slate-50 dark:bg-slate-900/50 
+                        border-2 border-dashed border-slate-200 dark:border-slate-700 
+                        opacity-60 cursor-not-allowed
                     "
                 >
+                    {/* Coming Soon Badge */}
+                    <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
+                        Coming Soon
+                    </div>
+
                     <div className="flex items-start justify-between mb-6">
-                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 border border-indigo-100 dark:border-indigo-500/20">
+                        <div className="w-14 h-14 rounded-2xl bg-indigo-50/50 dark:bg-indigo-900/10 flex items-center justify-center text-3xl border border-indigo-100/50 dark:border-indigo-500/10">
                             🎓
                         </div>
-                        <div className="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-700 group-hover:border-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 flex items-center justify-center transition-colors">
-                            <div className="w-4 h-4 rounded-full bg-indigo-500 scale-0 group-hover:scale-100 transition-transform" />
+                        <div className="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                            <div className="w-4 h-4 rounded-full bg-slate-300 dark:bg-slate-600" />
                         </div>
                     </div>
 
-                    <h4 className="text-2xl font-bold text-[#1A1E3B] dark:text-white mb-2">Classe (Cohort)</h4>
-                    <p className="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                    <h4 className="text-2xl font-bold text-slate-400 dark:text-slate-500 mb-2">Classe (Cohort)</h4>
+                    <p className="text-base text-slate-400 dark:text-slate-500 mb-8 leading-relaxed">
                         Impara con altri 8-10 peer selezionati. Scadenze fisse, confronto costante e networking.
                     </p>
 
                     <ul className="space-y-3 mb-8 mt-auto">
-                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
-                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Data di inizio fissata (coorte)
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-400 dark:text-slate-500">
+                            <CheckCircle2 className="w-5 h-5 text-slate-300 dark:text-slate-600 shrink-0" /> Data di inizio fissata (coorte)
                         </li>
-                        <li className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
-                            <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" /> Feedback continuo + confronto con i peer
+                        <li className="flex items-center gap-3 text-sm font-medium text-slate-400 dark:text-slate-500">
+                            <CheckCircle2 className="w-5 h-5 text-slate-300 dark:text-slate-600 shrink-0" /> Feedback continuo + confronto con i peer
                         </li>
                     </ul>
 
-                    <div className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                        Seleziona Classe
+                    <div className="w-full py-3 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-center">
+                        Presto disponibile
                     </div>
-                </button>
+                </div>
             </div>
         </div>
     )

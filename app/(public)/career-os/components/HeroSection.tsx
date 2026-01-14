@@ -36,12 +36,12 @@ export default function HeroSection() {
                     {/* LEFT: Message + CTAs */}
                     <div className="text-center lg:text-left space-y-6">
                         {/* Pre-headline: Market urgency */}
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF272]/10 border border-[#FFF272]/30">
+                        {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF272]/10 border border-[#FFF272]/30">
                             <span className="w-2 h-2 rounded-full bg-[#FFF272] animate-pulse" />
                             <span className="text-sm font-semibold text-[#FFF272]">
                                 +88% domanda GenAI — 21k+ posizioni in Italia
                             </span>
-                        </div>
+                        </div> */}
 
                         {/* Headline: 2 lines - Competitive positioning */}
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] text-white">

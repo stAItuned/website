@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useCareerOS } from './context/CareerOSContext'
 
 type PricingMode = 'classe' | '1to1'
@@ -116,26 +117,22 @@ export default function PricingSection() {
     const { mode, setMode, objective, openAppModal, openAuditModal } = useCareerOS()
     const current = pricingData[mode]
 
-    // Determine which plan to highlight based on objective
-    // If objective is 'start', highlight Starter.
-    // If objective is 'pro', highlight Pro (or Elite, but Pro is safer default).
-    // If null, keep default 'popular' flag from data.
+    // Selected tier state - default based on objective or 'Pro'
+    const getDefaultTier = () => {
+        if (objective === 'start') return 'Starter'
+        return 'Pro' // Default to Pro
+    }
+    const [selectedTier, setSelectedTier] = useState<string>(getDefaultTier())
+
+    // The recommended tier (for badge) - always Pro
+    const recommendedTier = 'Pro'
+
+    // Determine which plan to highlight based on selection
     const tiersWithHighlight = current.tiers.map(tier => {
-        if (!objective) return tier
-
-        let isPopular = tier.popular
-
-        if (objective === 'start') {
-            isPopular = tier.name === 'Starter'
-        } else if (objective === 'pro') {
-            // For Pro objective, we highlight Pro. 
-            // If they are in 1to1, Elite is also an option but Pro is the direct match.
-            isPopular = tier.name === 'Pro'
-        }
-
         return {
             ...tier,
-            popular: isPopular
+            isSelected: tier.name === selectedTier,
+            isRecommended: tier.name === recommendedTier
         }
     })
 
@@ -185,13 +182,11 @@ export default function PricingSection() {
                             👤 1:1 Premium
                         </button>
                         <button
-                            onClick={() => setMode('classe')}
-                            className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${mode === 'classe'
-                                ? 'bg-[#FCD34D] text-[#1A1E3B]'
-                                : 'text-white/70 hover:text-white'
-                                }`}
+                            disabled
+                            className={`px-5 py-2 rounded-full text-xs font-bold transition-all relative
+                                text-white/40 cursor-not-allowed`}
                         >
-                            🎓 Classe (Cohort)
+                            🎓 Classe (Coming Soon)
                         </button>
                     </div>
                 </div>
@@ -214,57 +209,58 @@ export default function PricingSection() {
                     {tiersWithHighlight.map((tier: any, i) => (
                         <div
                             key={i}
-                            className={`relative flex flex-col p-6 rounded-3xl transition-all duration-300 group ${tier.popular
+                            onClick={() => setSelectedTier(tier.name)}
+                            className={`relative flex flex-col p-6 rounded-3xl transition-all duration-300 group cursor-pointer ${tier.isSelected
                                 ? 'bg-gradient-to-br from-[#FFF9C4] via-[#FCD34D] to-[#F59E0B] border-[3px] border-[#FDE047] shadow-[0_20px_50px_-10px_rgba(251,191,36,0.5)] transform scale-105 z-10 hover:shadow-[0_25px_60px_-10px_rgba(251,191,36,0.6)]'
-                                : 'bg-white/5 border border-white/10 hover:bg-white/10'
+                                : 'bg-white/5 border-2 border-white/10 hover:border-[#FCD34D]/50 hover:bg-white/10'
                                 }`}
                         >
-                            {tier.popular && (
+                            {tier.isRecommended && (
                                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-[#B45309] px-6 py-2 rounded-full text-sm font-black uppercase tracking-widest shadow-xl border-2 border-[#FDE047] whitespace-nowrap z-20 flex items-center gap-2">
-                                    <span className="text-lg">✨</span> {objective ? 'Selezionato per te' : 'Consigliato'}
+                                    <span className="text-lg">✨</span> Consigliato
                                 </div>
                             )}
 
                             {/* Outcome Badge */}
-                            <div className={`inline-block px-3 py-1 rounded-lg text-xs font-bold mb-4 uppercase tracking-wider ${tier.popular ? 'bg-white/40 text-[#713F12] border border-white/20' : 'bg-white/10 text-white/70'
+                            <div className={`inline-block px-3 py-1 rounded-lg text-xs font-bold mb-4 uppercase tracking-wider ${tier.isSelected ? 'bg-white/40 text-[#713F12] border border-white/20' : 'bg-white/10 text-white/70'
                                 }`}>
                                 {tier.outcome || 'Outcome Garaito'}
                             </div>
 
-                            <h3 className={`text-2xl font-bold mb-1 ${tier.popular ? 'text-[#451a03]' : 'text-white'}`}>{tier.name}</h3>
-                            <p className={`text-xs mb-4 ${tier.popular ? 'text-[#78350F]' : 'text-slate-400'}`}>
+                            <h3 className={`text-2xl font-bold mb-1 ${tier.isSelected ? 'text-[#451a03]' : 'text-white'}`}>{tier.name}</h3>
+                            <p className={`text-xs mb-4 ${tier.isSelected ? 'text-[#78350F]' : 'text-slate-400'}`}>
                                 {tier.duration} • {tier.description}
                             </p>
 
                             <div className="mb-6">
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className={`text-lg font-bold line-through ml-1 ${tier.popular ? 'text-[#78350F]/50 decoration-[#78350F]/50' : 'text-slate-500 decoration-slate-500'}`}>
+                                    <span className={`text-lg font-bold line-through ml-1 ${tier.isSelected ? 'text-[#78350F]/50 decoration-[#78350F]/50' : 'text-slate-500 decoration-slate-500'}`}>
                                         €{tier.originalPrice}
                                     </span>
-                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${tier.popular ? 'bg-rose-500/20 text-rose-700' : 'bg-rose-500/20 text-rose-300'}`}>
+                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${tier.isSelected ? 'bg-rose-500/20 text-rose-700' : 'bg-rose-500/20 text-rose-300'}`}>
                                         -{Math.round(((tier.originalPrice - tier.price) / tier.originalPrice) * 100)}%
                                     </span>
                                 </div>
 
-                                <div className={`text-4xl font-bold ${tier.popular ? 'text-[#451a03]' : 'text-white'}`}>
+                                <div className={`text-4xl font-bold ${tier.isSelected ? 'text-[#451a03]' : 'text-white'}`}>
                                     €{tier.price}
                                 </div>
-                                <p className={`text-[10px] uppercase tracking-wide font-bold mt-1 ${tier.popular ? 'text-rose-700 animate-pulse' : 'text-rose-400'}`}>
+                                <p className={`text-[10px] uppercase tracking-wide font-bold mt-1 ${tier.isSelected ? 'text-rose-700 animate-pulse' : 'text-rose-400'}`}>
                                     🔥 Scadenza: Fine Gennaio
                                 </p>
                             </div>
 
                             <ul className="space-y-3 mb-8 text-sm font-medium flex-grow">
                                 {tier.features.map((f: string, j: number) => (
-                                    <li key={j} className={`flex items-start gap-3 ${tier.popular ? 'text-[#422006]' : 'text-slate-300'}`}>
-                                        <CheckCircle2 className={`w-5 h-5 shrink-0 ${tier.popular ? 'text-[#B45309] fill-white' : 'text-emerald-400'}`} />
+                                    <li key={j} className={`flex items-start gap-3 ${tier.isSelected ? 'text-[#422006]' : 'text-slate-300'}`}>
+                                        <CheckCircle2 className={`w-5 h-5 shrink-0 ${tier.isSelected ? 'text-[#B45309] fill-white' : 'text-emerald-400'}`} />
                                         <span className="leading-snug">{f}</span>
                                     </li>
                                 ))}
                             </ul>
 
                             {'note' in tier && tier.note && (
-                                <p className={`text-xs leading-relaxed mb-6 border-t pt-4 ${tier.popular ? 'border-[#713F12]/10 text-[#713F12]/80' : 'border-white/10 text-white/50'}`}>
+                                <p className={`text-xs leading-relaxed mb-6 border-t pt-4 ${tier.isSelected ? 'border-[#713F12]/10 text-[#713F12]/80' : 'border-white/10 text-white/50'}`}>
                                     <strong>Nota:</strong> {tier.note}
                                 </p>
                             )}
@@ -282,7 +278,7 @@ export default function PricingSection() {
                                             tier: `${tier.name} (${current.label})`
                                         })
                                     }}
-                                    className={`block w-full py-4 rounded-xl text-center font-bold text-lg transition-all shadow-xl active:scale-95 active:shadow-sm ${tier.popular
+                                    className={`block w-full py-4 rounded-xl text-center font-bold text-lg transition-all shadow-xl active:scale-95 active:shadow-sm ${tier.isSelected
                                         ? 'bg-white text-[#B45309] hover:bg-[#FFFBEB] hover:text-[#92400E] hover:shadow-2xl hover:-translate-y-0.5'
                                         : 'bg-white/10 border border-white/10 text-white hover:bg-white hover:text-indigo-950'
                                         }`}

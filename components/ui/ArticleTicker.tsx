@@ -15,6 +15,7 @@ export interface TickerArticle {
   readingTime?: number
   target?: string
   language?: string
+  meta?: string
   isNew?: boolean
 }
 

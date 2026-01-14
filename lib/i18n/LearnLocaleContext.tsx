@@ -139,16 +139,22 @@ export function LearnLocaleToggle({ className = '' }: { className?: string }) {
         setMounted(true)
     }, [])
 
+    // ...existing code...
     if (!mounted) {
         // Skeleton during SSR
         return (
             <button
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ${className}`}
+                className={`inline-flex items-center gap-1 p-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 ${className}`}
                 aria-label="Language toggle"
             >
-                <span className="opacity-50">IT</span>
-                <span className="text-slate-300 dark:text-slate-600">/</span>
-                <span className="opacity-100">EN</span>
+                <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-white dark:bg-slate-700 shadow-sm opacity-50">
+                    <span>🇮🇹</span>
+                    <span className="text-slate-900 dark:text-white">IT</span>
+                </span>
+                <span className="flex items-center gap-1 px-2 py-1 rounded-full opacity-50">
+                    <span>🇬🇧</span>
+                    <span>EN</span>
+                </span>
             </button>
         )
     }
@@ -156,12 +162,23 @@ export function LearnLocaleToggle({ className = '' }: { className?: string }) {
     return (
         <button
             onClick={toggleLocale}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors ${className}`}
+            className={`group inline-flex items-center gap-0.5 p-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-all hover:border-slate-300 dark:hover:border-slate-600 ${className}`}
             aria-label={`Switch language to ${locale === 'en' ? 'Italian' : 'English'}`}
         >
-            <span className={locale === 'it' ? 'opacity-100 font-semibold' : 'opacity-50'}>IT</span>
-            <span className="text-slate-300 dark:text-slate-600">/</span>
-            <span className={locale === 'en' ? 'opacity-100 font-semibold' : 'opacity-50'}>EN</span>
+            <span className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 ${locale === 'it'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
+                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
+                }`}>
+                <span>🇮🇹</span>
+                <span>IT</span>
+            </span>
+            <span className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 ${locale === 'en'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
+                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
+                }`}>
+                <span>🇬🇧</span>
+                <span>EN</span>
+            </span>
         </button>
     )
 }

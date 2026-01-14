@@ -30,6 +30,7 @@ import { PWALearnNavigator, PWAAnalyticsTracker } from '@/components/pwa'
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
 import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/seo/seo-schemas'
+import { LearnLocaleProvider } from '@/lib/i18n'
 
 
 const montserrat = Montserrat({ subsets: ['latin'] })
@@ -217,34 +218,36 @@ export default function RootLayout({
           <ToastProvider>
             <FirebaseAuthProvider>
               <CookieConsentProvider>
-                <PerformanceProvider
-                  enableMonitoring={process.env.NODE_ENV === 'production'}
-                  sampleRate={0.1}
-                >
-                  <TopLoadingBar />
-                  <GoogleAnalytics />
-                  {/* Main site SW removed - Learn section has its own PWA SW */}
-                  {/* Solo i componenti essenziali sono server-side */}
-                  <SearchProvider>
-                    <SafePageViewTracker />
-                    <Header />
-                    <section className="relative min-h-screen flex flex-col justify-between">
-                      <main className="flex flex-col">
-                        {children}
-                      </main>
-                      <Footer />
-                      <TickerSpacer />
-                    </section>
-                    <SearchModal />
-                    {/* PWA navigation helper - shows "Torna a Learn" on non-learn pages */}
-                    <PWALearnNavigator />
-                    {/* PWA Analytics - tracks standalone mode sessions */}
-                    <PWAAnalyticsTracker />
-                  </SearchProvider>
-                  <Suspense fallback={null}>
-                    <FeedbackLoader />
-                  </Suspense>
-                </PerformanceProvider>
+                <LearnLocaleProvider>
+                  <PerformanceProvider
+                    enableMonitoring={process.env.NODE_ENV === 'production'}
+                    sampleRate={0.1}
+                  >
+                    <TopLoadingBar />
+                    <GoogleAnalytics />
+                    {/* Main site SW removed - Learn section has its own PWA SW */}
+                    {/* Solo i componenti essenziali sono server-side */}
+                    <SearchProvider>
+                      <SafePageViewTracker />
+                      <Header />
+                      <section className="relative min-h-screen flex flex-col justify-between">
+                        <main className="flex flex-col">
+                          {children}
+                        </main>
+                        <Footer />
+                        <TickerSpacer />
+                      </section>
+                      <SearchModal />
+                      {/* PWA navigation helper - shows "Torna a Learn" on non-learn pages */}
+                      <PWALearnNavigator />
+                      {/* PWA Analytics - tracks standalone mode sessions */}
+                      <PWAAnalyticsTracker />
+                    </SearchProvider>
+                    <Suspense fallback={null}>
+                      <FeedbackLoader />
+                    </Suspense>
+                  </PerformanceProvider>
+                </LearnLocaleProvider>
               </CookieConsentProvider>
             </FirebaseAuthProvider>
           </ToastProvider>

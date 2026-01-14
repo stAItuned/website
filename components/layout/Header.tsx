@@ -8,6 +8,7 @@ import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
+import { LearnLocaleToggle } from '@/lib/i18n'
 
 
 const DISABLE_AUTH = false
@@ -97,11 +98,6 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">📚</span>
     },
     {
-      name: 'Lab',
-      path: '/prodotti',
-      icon: <span aria-hidden className="text-lg">🛠️</span>
-    },
-    {
       name: 'Chi siamo',
       path: '/meet',
       icon: <span aria-hidden className="text-lg">🧑‍🤝‍🧑</span>
@@ -179,6 +175,10 @@ export function Header() {
                 )}
               </div>
             )}
+
+            <div className="hidden lg:flex items-center mr-2">
+              <LearnLocaleToggle />
+            </div>
 
             <ThemeToggle />
 

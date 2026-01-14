@@ -33,7 +33,7 @@ const CareerOSContext = createContext<CareerOSContextType | undefined>(undefined
 
 export function CareerOSProvider({ children }: { children: ReactNode }) {
     const [objective, setObjective] = useState<ObjectiveType>(null)
-    const [mode, setMode] = useState<PricingMode>('classe')
+    const [mode, setMode] = useState<PricingMode>('1to1')
 
     const [isAppModalOpen, setIsAppModalOpen] = useState(false)
     const [appModalData, setAppModalData] = useState<{ source?: string; tier?: string } | null>(null)

@@ -7,7 +7,6 @@ import ProblemSection from './components/ProblemSection'
 import AIExpertSection from './components/AIExpertSection'
 import JourneySection from './components/JourneySection'
 import SocialProofSection from './components/SocialProofSection'
-import ApplicationFormSection from './components/ApplicationFormSection'
 
 // Existing components
 import FAQ from './FAQ'
@@ -25,15 +24,14 @@ export const metadata: Metadata = {
 /**
  * CareerOSPage - Main landing page for Career OS
  *
- * Structure (Optimized - 8 sections):
+ * Structure (Optimized - 7 sections):
  * 1. HeroSection - Market urgency, hook stats, CTA
  * 2. ProblemSection - 3 pain cards
  * 3. AIExpertSection - Differentiator (who guides you)
- * 4. JourneySection - 8-week timeline with progressive disclosure
- * 5. SocialProofSection - Real proof items
+ * 4. SocialProofSection - Real proof items
+ * 5. JourneySection - 8-week timeline with progressive disclosure
  * 6. PricingSection - ROI + tiers
  * 7. FAQ - Consolidated (includes target audience + transparency info)
- * 8. ApplicationFormSection - Main conversion form
  */
 export default function CareerOSPage() {
     return (
@@ -47,7 +45,6 @@ export default function CareerOSPage() {
                     <JourneySection />
                     <PricingSection />
                     <FAQ />
-                    <ApplicationFormSection />
                 </div>
                 <ApplicationModal />
                 <AuditModal />
