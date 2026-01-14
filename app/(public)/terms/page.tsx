@@ -79,6 +79,22 @@ export default function TermsPage() {
                     </p>
                 </section>
 
+                <section className="space-y-4 text-sm text-slate-600">
+                    <h2 className="text-2xl font-semibold text-slate-900">6. Contenuti Gratuiti e Lead Magnet</h2>
+                    <p>
+                        stAItuned offre strumenti gratuiti come il <strong>Role Fit Audit</strong> e altri lead magnet a scopo informativo e orientativo. Questi strumenti:
+                    </p>
+                    <ul className="list-disc pl-4 space-y-1">
+                        <li>Forniscono valutazioni indicative basate sulle risposte dell&apos;utente;</li>
+                        <li>Non costituiscono consulenza professionale, legale o lavorativa;</li>
+                        <li>Offrono suggerimenti generici che devono essere valutati criticamente dall&apos;utente;</li>
+                        <li>Non garantiscono risultati specifici in termini di carriera o occupazione.</li>
+                    </ul>
+                    <p>
+                        Le informazioni raccolte tramite questi strumenti sono trattate secondo la nostra <Link href="/privacy" className="text-amber-600 underline">Privacy Policy</Link>.
+                    </p>
+                </section>
+
                 <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/60 p-6 text-sm text-slate-600 shadow-sm">
                     <h2 className="text-xl font-semibold text-slate-900">Assistenza e Supporto</h2>
                     <p>

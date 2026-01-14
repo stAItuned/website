@@ -40,6 +40,7 @@ const footerNavigation = {
     title: 'Legale',
     links: [
       { name: 'Privacy Policy', href: '/privacy' },
+      { name: 'Termini e Condizioni', href: '/terms' },
       { name: 'Cookie Policy', href: '/cookie-policy' },
     ]
   }

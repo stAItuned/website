@@ -133,6 +133,31 @@ export default function PrivacyPage() {
                 I dati possono essere trattati con l&apos;aiuto di strumenti che usiamo per gestire candidature e collaborazione (es. Google Workspace, Notion, Trello), sempre nel rispetto di adeguate misure di sicurezza.
               </p>
             </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900">Role Fit Audit (Lead Magnet)</h3>
+              <p className="mt-1">
+                Quando compili il questionario &quot;Role Fit Audit&quot; raccogliamo:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>indirizzo email (obbligatorio per l&apos;invio del report);</li>
+                <li>nome (opzionale);</li>
+                <li>link LinkedIn o GitHub (opzionale, per una review più accurata);</li>
+                <li>le risposte alle domande del questionario (skill assessment);</li>
+                <li>i risultati calcolati (score, archetipo, raccomandazioni).</li>
+              </ul>
+              <p className="mt-3">
+                Utilizziamo questi dati per:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>generare e inviarti il report personalizzato;</li>
+                <li>analizzare in forma aggregata i profili degli utenti per migliorare il prodotto;</li>
+                <li>contattarti per offerte relative al Career OS (solo se hai dato consenso esplicito).</li>
+              </ul>
+              <p className="mt-3">
+                La base giuridica è il consenso esplicito (art. 6.1.a GDPR), espresso al momento dell&apos;invio del questionario. I dati vengono conservati in Firebase (Firestore) con crittografia e misure di sicurezza appropriate. Puoi richiedere la cancellazione dei tuoi dati in qualsiasi momento scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
+              </p>
+            </div>
           </div>
         </section>
 
