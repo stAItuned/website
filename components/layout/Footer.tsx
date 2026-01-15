@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { LinkedInIcon } from '@/components/icons/SocialIcons'
+import { trackExternalLinkClicked } from '@/lib/analytics/trackEvent'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 import { ScrollReveal, StaggerContainer, FadeIn } from '@/components/ui/Animations'
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup'
@@ -23,16 +24,15 @@ const footerNavigation = {
   explore: {
     title: 'Esplora',
     links: [
-      { name: 'Blog', href: '/' },
+      { name: 'Blog', href: '/learn/articles' },
       { name: 'Career OS', href: '/career-os' },
-      { name: 'Lab', href: '/prodotti' },
       { name: 'Chi siamo', href: '/meet' },
     ]
   },
   resources: {
     title: 'Risorse',
     links: [
-      { name: 'AI Audit', href: '/audit' },
+      { name: 'Role Fit Audit', href: '/role-fit-audit' },
       { name: 'RSS Feed', href: '/rss.xml', external: true },
     ]
   },
@@ -145,6 +145,7 @@ function SocialLinks() {
             target="_blank"
             rel="noreferrer"
             aria-label={`Seguici su ${social.name}`}
+            onClick={() => trackExternalLinkClicked('linkedin', social.name)}
             className="group flex items-center gap-2 text-slate-300 hover:text-amber-300 transition-all duration-300"
           >
             <span className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-amber-500/20 transition-colors duration-300">

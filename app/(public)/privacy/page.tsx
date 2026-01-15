@@ -155,6 +155,9 @@ export default function PrivacyPage() {
                 <li>contattarti per offerte relative al Career OS (solo se hai dato consenso esplicito).</li>
               </ul>
               <p className="mt-3">
+                <strong>Nota AI:</strong> Le risposte fornite vengono elaborate da servizi di Intelligenza Artificiale (Google Gemini) al solo scopo di generare il contenuto del report. Tali dati non vengono utilizzati per l&apos;addestramento dei modelli pubblici.
+              </p>
+              <p className="mt-3">
                 La base giuridica è il consenso esplicito (art. 6.1.a GDPR), espresso al momento dell&apos;invio del questionario. I dati vengono conservati in Firebase (Firestore) con crittografia e misure di sicurezza appropriate. Puoi richiedere la cancellazione dei tuoi dati in qualsiasi momento scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
               </p>
             </div>
@@ -174,6 +177,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-4">
               <li>fornitori di hosting e infrastruttura (es. Firebase, Firestore);</li>
               <li>servizi di email e newsletter per gestire iscrizioni e conferme di call;</li>
+              <li>servizi di Intelligenza Artificiale (Google Gemini) per la generazione automatica dei report;</li>
               <li>strumenti di analytics (es. Google Analytics), attivati solo previo consenso esplicito;</li>
               <li>Firebase Cloud Messaging (Google LLC) per l&apos;invio di notifiche push;</li>
               <li>strumenti di messaggistica, automazione o task management necessari per coordinare progetti o rispondere alle richieste.</li>

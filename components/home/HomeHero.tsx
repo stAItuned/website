@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { HeroAnimatedBackground } from './HeroAnimatedBackground'
-import { useLearnLocale, LearnLocaleToggle, homeTranslations } from '@/lib/i18n'
+import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 /**
  * HomeHero - Authority Hub
@@ -49,17 +49,12 @@ export function HomeHero({ articleCount, contributorCount }: HomeHeroProps) {
       <HeroAnimatedBackground orbCount={3} showGrid={false} />
 
       {/* Content Container */}
-      <div className="relative z-20 max-w-5xl mx-auto px-6 py-16 md:py-24 flex flex-col justify-center min-h-[70vh]">
+      <div className="relative z-20 max-w-5xl mx-auto px-6 pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col justify-center min-h-[70vh]">
         <div className="space-y-8 text-center">
 
-          {/* Eyebrow Badge with Language Toggle */}
-          <div className="flex items-center justify-center gap-4 animate-fade-in">
-            {/* Language Toggle */}
-            <LearnLocaleToggle className="!bg-white/10 !border-white/20 !text-white/80 hover:!bg-white/20" />
-          </div>
 
           {/* Main Headline - Pain-first + Mission */}
-          <div className="space-y-4 animate-fade-in-up">
+          <div className="space-y-6 animate-fade-in-up">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-white">
               {t.hero.headline}
               <br />

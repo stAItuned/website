@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { ArticleCard } from '@/components/ArticleCard'
+import { useLearnLocale } from '@/lib/i18n'
 
 interface Article {
     title: string
@@ -39,6 +40,7 @@ interface ArticlesPageClientProps {
 const PAGE_SIZE = 12
 
 export function ArticlesPageClient({ articles, levels, articleCounts }: ArticlesPageClientProps) {
+    const { t } = useLearnLocale()
     const searchParams = useSearchParams()
     const levelFromUrl = searchParams.get('level')
 
@@ -107,7 +109,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         {/* Centered badge */}
                         <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium border border-emerald-500/30 absolute left-1/2 -translate-x-1/2">
                             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                            100% Free • No Paywall • Ever
+                            100% {t.articlesPage.privacyNote.includes('Privacy') ? 'Free' : 'Gratis'} • No Paywall • Ever
                         </div>
                     </div>
 
@@ -115,12 +117,11 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         <div className="space-y-4 max-w-2xl">
 
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight whitespace-nowrap">
-                                AI Knowledge, <span className="bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">Distilled</span>
+                                {t.articlesPage.title}<span className="bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">{t.articlesPage.highlight}</span>
                             </h1>
 
                             <p className="text-lg text-slate-300 leading-relaxed">
-                                Practical guides, benchmarks, and deep dives. Written by practitioners,
-                                reviewed by experts. <strong>No fluff, just actionable knowledge.</strong>
+                                {t.articlesPage.description}
                             </p>
                         </div>
 
@@ -128,15 +129,15 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         <div className="grid grid-cols-3 gap-4 lg:gap-6">
                             <div className="text-center p-4 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
                                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{articleCounts.all}</div>
-                                <div className="text-xs sm:text-sm text-slate-400">Articles</div>
+                                <div className="text-xs sm:text-sm text-slate-400">{t.articlesPage.stats.articles}</div>
                             </div>
                             <div className="text-center p-4 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
                                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{Math.round(totalReadingTime / 60)}h</div>
-                                <div className="text-xs sm:text-sm text-slate-400">Content</div>
+                                <div className="text-xs sm:text-sm text-slate-400">{t.articlesPage.stats.content}</div>
                             </div>
                             <div className="text-center p-4 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
                                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">3</div>
-                                <div className="text-xs sm:text-sm text-slate-400">Levels</div>
+                                <div className="text-xs sm:text-sm text-slate-400">{t.articlesPage.stats.levels}</div>
                             </div>
                         </div>
                     </div>
@@ -153,7 +154,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         </svg>
                         <input
                             type="text"
-                            placeholder="Search articles..."
+                            placeholder={t.articlesPage.searchPlaceholder}
                             value={searchQuery}
                             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1) }}
                             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
@@ -169,7 +170,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                                 }`}
                         >
-                            All ({articleCounts.all})
+                            {t.articlesPage.all} ({articleCounts.all})
                         </button>
                         {levels.map((level) => {
                             const isSelected = selectedLevel === level.id
@@ -230,7 +231,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                     onClick={() => document.getElementById('contributor-form')?.scrollIntoView({ behavior: 'smooth' })}
                     className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors group"
                 >
-                    <span>✍️ Write for us</span>
+                    <span>{t.articlesPage.writeCTA}</span>
                     <span className="group-hover:translate-x-0.5 transition-transform">→</span>
                 </button>
             </div>
@@ -256,16 +257,16 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         </svg>
                     </div>
                     <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-                        No articles found
+                        {t.articlesPage.noArticles}
                     </h3>
                     <p className="text-slate-600 dark:text-slate-400 mb-6">
-                        {searchQuery ? `No results for "${searchQuery}"` : 'Try selecting a different level or check back soon.'}
+                        {searchQuery ? t.articlesPage.noResults.replace('{query}', searchQuery) : 'Try selecting a different level or check back soon.'}
                     </p>
                     <button
                         onClick={() => { setSearchQuery(''); handleLevelChange(null) }}
                         className="px-5 py-2.5 rounded-xl bg-primary-600 text-white font-medium hover:bg-primary-500 transition-colors"
                     >
-                        Clear filters
+                        {t.articlesPage.clearFilters}
                     </button>
                 </div>
             )}
@@ -281,7 +282,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
-                        Previous
+                        {t.articlesPage.previous}
                     </button>
 
                     <div className="flex items-center gap-1">
@@ -316,7 +317,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         disabled={currentPage === totalPages}
                         className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group"
                     >
-                        Next
+                        {t.articlesPage.next}
                         <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
@@ -335,6 +336,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
  * Sends to /api/contributors/apply which triggers Telegram notification
  */
 function ContributorInlineForm() {
+    const { t } = useLearnLocale()
     const [isExpanded, setIsExpanded] = useState(false)
     const [formData, setFormData] = useState({ name: '', email: '', expertise: '', consent: false })
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -403,22 +405,21 @@ function ContributorInlineForm() {
                                 <span className="text-xl">✍️</span>
                             </div>
                             <h3 className="text-xl font-bold text-white">
-                                Build Your AI Reputation
+                                {t.articlesPage.writingTitle}
                             </h3>
                         </div>
                         <p className="text-slate-300 max-w-xl">
-                            Write for stAItuned and join a growing community of AI practitioners.
-                            <span className="text-white font-medium"> Gain visibility, build your portfolio, and connect with professionals</span> who share your passion.
+                            {t.articlesPage.writingSubtitle}
                         </p>
                         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-400">
                             <span className="flex items-center gap-1.5">
-                                <span className="text-emerald-400">✓</span> 10k+ LinkedIn reach
+                                <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit1}
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <span className="text-emerald-400">✓</span> Editorial support
+                                <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit2}
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <span className="text-emerald-400">✓</span> Portfolio builder
+                                <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit3}
                             </span>
                         </div>
                     </div>
@@ -427,7 +428,7 @@ function ContributorInlineForm() {
                         onClick={() => setIsExpanded(true)}
                         className="flex-shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold shadow-lg hover:shadow-xl transition-all group"
                     >
-                        Start Writing
+                        {t.articlesPage.writingStart}
                         <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
@@ -438,9 +439,9 @@ function ContributorInlineForm() {
                     <div className="flex items-center justify-between mb-2">
                         <div>
                             <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                <span>✍️</span> Start Writing
+                                <span>✍️</span> {t.articlesPage.writingStart}
                             </h3>
-                            <p className="text-xs text-slate-400 mt-1">Just a quick intro – no commitment required</p>
+                            <p className="text-xs text-slate-400 mt-1">{t.articlesPage.writingResponseTime}</p>
                         </div>
                         <button
                             type="button"
@@ -498,24 +499,24 @@ function ContributorInlineForm() {
                             disabled={status === 'loading'}
                         />
                         <span className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">
-                            I agree to the{' '}
+                            {t.articlesPage.privacyNote.split('Privacy Policy')[0]}
                             <a href="/privacy" target="_blank" className="text-primary-400 hover:underline">
                                 Privacy Policy
                             </a>
-                            . We'll only use your data to contact you about contributing.
+                            {t.articlesPage.privacyNote.split('Privacy Policy')[1]}
                         </span>
                     </label>
 
                     <div className="flex items-center justify-between gap-4">
                         <p className="text-xs text-slate-500">
-                            We'll get back to you within 48h
+                            {t.articlesPage.writingResponseTime}
                         </p>
                         <button
                             type="submit"
                             disabled={status === 'loading' || !formData.consent}
                             className="px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-white font-semibold shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                         >
-                            {status === 'loading' ? 'Sending...' : 'Send'}
+                            {status === 'loading' ? t.articlesPage.writingSending : t.articlesPage.writingSend}
                         </button>
                     </div>
 

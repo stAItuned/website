@@ -14,12 +14,7 @@ import { LearnLocaleToggle } from '@/lib/i18n'
 const DISABLE_AUTH = false
 import { UserMenu } from '@/components/auth/UserMenu'
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-  // @ts-ignore
-  if (typeof window === 'undefined' || !window.gtag) return
-  // @ts-ignore
-  window.gtag('event', eventName, params)
-}
+import { trackHeaderCTAClicked } from '@/lib/analytics/trackEvent'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -93,8 +88,13 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">🚀</span>
     },
     {
+      name: 'Role Fit Audit',
+      path: '/role-fit-audit',
+      icon: <span aria-hidden className="text-lg">🔎</span>
+    },
+    {
       name: 'Blog',
-      path: '/',
+      path: '/learn/articles',
       icon: <span aria-hidden className="text-lg">📚</span>
     },
     {
@@ -103,7 +103,7 @@ export function Header() {
       icon: <span aria-hidden className="text-lg">🧑‍🤝‍🧑</span>
     }
   ]
-  const primaryCta = { name: '🎯', path: '/audit' }
+  const primaryCta = { name: '🎯', path: '/role-fit-audit' }
 
   return (
     <>
@@ -176,9 +176,11 @@ export function Header() {
               </div>
             )}
 
-            <div className="hidden lg:flex items-center mr-2">
-              <LearnLocaleToggle />
-            </div>
+            {!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2 ? (
+              <div className="hidden lg:flex items-center mr-2">
+                <LearnLocaleToggle />
+              </div>
+            ) : null}
 
             <ThemeToggle />
 
@@ -211,19 +213,6 @@ export function Header() {
               </svg>
             </button>
 
-            <Link
-              href="/audit"
-              onClick={() => trackGtagEvent('cta_click', { section: 'navbar', label: 'start_audit' })}
-              className="hidden lg:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1.5 text-sm font-bold text-slate-900 shadow-md hover:shadow-lg hover:from-amber-300 hover:to-amber-400 transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 group relative"
-            >
-              <span className="flex items-center gap-1">
-                {primaryCta.name}
-                <span>Start Audit</span>
-              </span>
-              <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
-                Start Audit
-              </span>
-            </Link>
           </nav>
         </div>
       </header>
@@ -275,6 +264,14 @@ export function Header() {
                 </svg>
               </button>
             </div>
+
+            {!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2 ? (
+              <div className="px-5 pt-4 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30 border-b stai-border">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Lingua / Language</span>
+                <LearnLocaleToggle />
+              </div>
+            ) : null}
+
             <div className="flex flex-col pt-5 gap-2.5 px-5 stai-text">
               {navigation.map((item, index) => {
                 const active = pathname === item.path
@@ -296,19 +293,6 @@ export function Header() {
                 )
               })}
 
-              <Link
-                href="/audit"
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-2.5 text-base font-bold text-slate-900 shadow-md hover:shadow-xl hover:from-amber-300 hover:to-amber-400 transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-amber-400 animate-fade-in"
-                onClick={() => {
-                  trackGtagEvent('cta_click', { section: 'navbar_mobile', label: 'start_audit' })
-                  setTimeout(() => setIsMenuOpen(false), 100)
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  <span>{primaryCta.name}</span>
-                  <span>Start Audit</span>
-                </div>
-              </Link>
 
               {/* Mobile Authentication */}
               {!DISABLE_AUTH && !loading && (

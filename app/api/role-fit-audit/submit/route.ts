@@ -1,5 +1,8 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
+import { sendRoleFitAuditReportEmail } from '@/lib/email/roleFitAuditEmail'
 import { db } from '@/lib/firebase/admin'
+import { generateAIAuditResult } from '@/lib/ai/roleFitAuditAI'
+import { QUESTIONS } from '@/app/(public)/role-fit-audit/lib/questions'
 import { NextRequest, NextResponse } from 'next/server'
 
 // =============================================================================
@@ -13,10 +16,17 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // =============================================================================
 
 export async function POST(req: NextRequest) {
+    console.log('[API Route] Key present:', !!process.env.GOOGLE_AI_API_KEY)
     try {
         const body = await req.json()
 
-        const { answers, email, name, linkedinUrl, result } = body || {}
+        const { answers, email, name, linkedinUrl, website } = body || {}
+
+        // Honeypot check - silently accept but don't process bot submissions
+        if (website && typeof website === 'string' && website.trim() !== '') {
+            console.log('[Role Fit Audit] Bot detected via honeypot, ignoring submission')
+            return NextResponse.json({ ok: true, result: null }, { status: 200 })
+        }
 
         // Validate required fields
         if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
@@ -27,11 +37,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Risposte mancanti.' }, { status: 400 })
         }
 
-        if (!result || typeof result !== 'object') {
-            return NextResponse.json({ error: 'Risultato mancante.' }, { status: 400 })
-        }
-
         const normalizedEmail = email.trim().toLowerCase()
+
+        // -------------------------------------------------------------------------
+        // Generate AI Result (with static fallback)
+        // -------------------------------------------------------------------------
+        console.log('[Role Fit Audit] Generating result...')
+        const result = await generateAIAuditResult(answers, name?.trim())
+        console.log(`[Role Fit Audit] Result generated (${result.generatedBy})`)
 
         // -------------------------------------------------------------------------
         // Save to Firestore
@@ -43,7 +56,14 @@ export async function POST(req: NextRequest) {
                 name: name?.trim() || null,
                 linkedinUrl: linkedinUrl?.trim() || null,
                 answers,
+                answersText: Object.entries(answers).reduce((acc, [qId, val]) => {
+                    const q = QUESTIONS.find(q => q.id === qId)
+                    const opt = q?.options.find(o => o.value === val)
+                    if (opt) acc[qId] = opt.label
+                    return acc
+                }, {} as Record<string, string>),
                 result: {
+                    generatedBy: result.generatedBy,
                     scores: result.scores,
                     normalizedScores: result.normalizedScores,
                     archetypeId: result.archetype?.id,
@@ -52,6 +72,8 @@ export async function POST(req: NextRequest) {
                     roleNow: result.roleRecommendation?.now,
                     roleNext: result.roleRecommendation?.next,
                     topGapIds: result.topGaps?.map((g: { id: string }) => g.id) || [],
+                    // AI enhancements if available
+                    aiEnhancements: result.aiEnhancements || null,
                 },
                 userAgent: req.headers.get('user-agent') || null,
                 createdAt: new Date().toISOString(),
@@ -66,7 +88,7 @@ export async function POST(req: NextRequest) {
         // -------------------------------------------------------------------------
         try {
             const telegramMessage = [
-                '🎯 Nuovo Role Fit Audit completato',
+                `🎯 Nuovo Role Fit Audit completato (${result.generatedBy.toUpperCase()})`,
                 '',
                 name ? `👤 Nome: ${name.trim()}` : '',
                 `📧 Email: ${normalizedEmail}`,
@@ -84,6 +106,8 @@ export async function POST(req: NextRequest) {
                 `   GenAI: ${result.normalizedScores?.genai || 0}/100`,
                 '',
                 `🚧 Top Gaps: ${result.topGaps?.map((g: { title: string }) => g.title).join(', ') || 'Nessuno'}`,
+                '',
+                result.aiEnhancements?.coachingNote ? `💬 AI Note: ${result.aiEnhancements.coachingNote.substring(0, 100)}...` : '',
             ]
                 .filter(Boolean)
                 .join('\n')
@@ -101,13 +125,21 @@ export async function POST(req: NextRequest) {
         }
 
         // -------------------------------------------------------------------------
-        // Email Confirmation (placeholder - to be implemented)
+        // Email Report with Resend
         // -------------------------------------------------------------------------
-        // TODO: Implement email sending with Resend or similar
-        // For now, we just log the intent
-        console.log(`[Role Fit Audit] Email confirmation would be sent to: ${normalizedEmail}`)
+        try {
+            await sendRoleFitAuditReportEmail({
+                email: normalizedEmail,
+                name: name?.trim(),
+                result,
+            })
+        } catch (emailError) {
+            console.error('EMAIL ERROR (role-fit-audit):', emailError)
+            // Continue even if email fails
+        }
 
-        return NextResponse.json({ ok: true }, { status: 200 })
+        // Return the result to the frontend
+        return NextResponse.json({ ok: true, result }, { status: 200 })
     } catch (err) {
         console.error('Role Fit Audit submit error:', err)
         return NextResponse.json({ error: 'Server error' }, { status: 500 })

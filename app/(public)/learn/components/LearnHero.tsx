@@ -33,16 +33,13 @@ export function LearnHero({ className = '' }: LearnHeroProps) {
 
             {/* Content - no container, just content */}
             <div className="relative space-y-6 py-6">
-                {/* Language Toggle + Badge in one row */}
-                <div className="flex items-center justify-between px-4">
-                    {/* Floating Badge - left aligned on mobile, can also be centered */}
+                {/* Header Row: Badge */}
+                <div className="flex items-center justify-center px-4">
+                    {/* Floating Badge */}
                     <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-500/10 via-indigo-500/10 to-primary-500/10 border border-primary-500/20 text-xs sm:text-sm font-medium text-primary-600 dark:text-primary-400 backdrop-blur-sm">
                         <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
                         stAItuned Learn
                     </span>
-
-                    {/* Language Toggle - right */}
-                    <LearnLocaleToggle />
                 </div>
 
                 {/* H1 + Subtitle + Slogan */}

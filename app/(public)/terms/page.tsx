@@ -11,7 +11,7 @@ export default function TermsPage() {
             <div className="mx-auto max-w-5xl space-y-10">
                 <header className="space-y-3">
                     <p className="text-sm uppercase tracking-wider text-amber-600">stAItuned</p>
-                    <h1 className="text-3xl font-semibold text-slate-900">Termini e Condizioni di Career OS</h1>
+                    <h1 className="text-3xl font-semibold text-slate-900">Termini e Condizioni dei Servizi stAItuned</h1>
                     <p className="text-base text-slate-600">
                         Il presente contratto regola l'accesso e l'utilizzo di <strong>Career OS</strong>, il percorso formativo avanzato per carriere in ambito AI. Acquistando il servizio o accedendo ai materiali, l'utente accetta integralmente le seguenti condizioni.
                     </p>
@@ -88,7 +88,8 @@ export default function TermsPage() {
                         <li>Forniscono valutazioni indicative basate sulle risposte dell&apos;utente;</li>
                         <li>Non costituiscono consulenza professionale, legale o lavorativa;</li>
                         <li>Offrono suggerimenti generici che devono essere valutati criticamente dall&apos;utente;</li>
-                        <li>Non garantiscono risultati specifici in termini di carriera o occupazione.</li>
+                        <li>Non garantiscono risultati specifici in termini di carriera o occupazione;</li>
+                        <li><strong>Generazione AI:</strong> Alcuni report (es. AI Audit) sono generati tramite modelli di Intelligenza Artificiale. Sebbene curati, potrebbero contenere inesattezze o ",allucinazioni". L'utente è invitato a verificare sempre le informazioni critiche.</li>
                     </ul>
                     <p>
                         Le informazioni raccolte tramite questi strumenti sono trattate secondo la nostra <Link href="/privacy" className="text-amber-600 underline">Privacy Policy</Link>.
