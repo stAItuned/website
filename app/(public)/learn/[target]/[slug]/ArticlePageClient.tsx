@@ -20,6 +20,7 @@ import { ContinueReadingPrompt } from '@/components/ui/ContinueReadingPrompt'
 import { SwipeNavigation } from '@/components/ui/SwipeNavigation'
 import { FloatingSectionIndicator } from '@/components/ui/FloatingSectionIndicator'
 import { useReadingProgress } from '@/lib/hooks/useReadingProgress'
+import { useReadingHistory } from '@/hooks/useReadingHistory'
 import { event } from '@/lib/gtag'
 import {
   trackArticleScrollDepth,
@@ -64,10 +65,24 @@ export default function ArticlePageClient({
     dismissPrompt
   } = useReadingProgress(article.slug)
 
+  // Reading history for PWA shortcuts
+  const { addToHistory } = useReadingHistory()
+
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Track article in reading history for PWA shortcuts
+  useEffect(() => {
+    if (mounted && article.slug && article.title) {
+      addToHistory({
+        slug: article.slug,
+        title: article.title,
+        target: target
+      })
+    }
+  }, [mounted, article.slug, article.title, target, addToHistory])
 
   // Refresh analytics on mount to get fresh data when page is cached
   useEffect(() => {

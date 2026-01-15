@@ -1,8 +1,8 @@
 {
     "name": "stAItuned Learn - AI Education Hub",
     "short_name": "stAItuned",
-    "description": "Curated AI learning paths, tutorials, and articles. Your pocket-sized AI education companion.",
-    "lang": "en",
+    "description": "Scopri percorsi di apprendimento AI curati, tutorial e articoli. Il tuo hub educativo AI tascabile, sempre disponibile offline.",
+    "lang": "it",
     "dir": "ltr",
     "scope": "/",
     "start_url": "/learn/articles?utm_source=pwa&utm_medium=learn_app",
@@ -20,11 +20,27 @@
         "books",
         "news"
     ],
+    "screenshots": [
+        {
+            "src": "/assets/pwa/screenshot-wide.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Homepage stAItuned Learn su desktop"
+        },
+        {
+            "src": "/assets/pwa/screenshot-mobile.png",
+            "sizes": "750x1334",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Lista articoli su mobile"
+        }
+    ],
     "shortcuts": [
         {
-            "name": "All Articles",
-            "short_name": "All",
-            "description": "Browse all AI articles",
+            "name": "Tutti gli Articoli",
+            "short_name": "Articoli",
+            "description": "Sfoglia tutti gli articoli AI",
             "url": "/learn/articles",
             "icons": [
                 {
@@ -35,9 +51,9 @@
             ]
         },
         {
-            "name": "Newbie Articles",
+            "name": "Principianti",
             "short_name": "Newbie",
-            "description": "Start learning AI basics",
+            "description": "Inizia con le basi dell'AI",
             "url": "/learn/articles?level=newbie",
             "icons": [
                 {
@@ -48,9 +64,9 @@
             ]
         },
         {
-            "name": "Midway Articles",
+            "name": "Intermedi",
             "short_name": "Midway",
-            "description": "Level up your AI skills",
+            "description": "Migliora le tue competenze AI",
             "url": "/learn/articles?level=midway",
             "icons": [
                 {
@@ -61,9 +77,9 @@
             ]
         },
         {
-            "name": "Expert Articles",
+            "name": "Esperti",
             "short_name": "Expert",
-            "description": "Advanced AI concepts",
+            "description": "Concetti AI avanzati",
             "url": "/learn/articles?level=expert",
             "icons": [
                 {
@@ -82,7 +98,7 @@
             "purpose": "any"
         },
         {
-            "src": "/icon-192.png",
+            "src": "/icon-192-maskable.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
@@ -94,7 +110,7 @@
             "purpose": "any"
         },
         {
-            "src": "/icon-512.png",
+            "src": "/icon-512-maskable.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
@@ -112,6 +128,15 @@
             "purpose": "any"
         }
     ],
+    "share_target": {
+        "action": "/learn/articles",
+        "method": "GET",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    },
     "prefer_related_applications": false,
     "related_applications": [],
     "handle_links": "preferred",

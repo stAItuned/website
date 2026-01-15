@@ -2,9 +2,11 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { ArticleCard } from '@/components/ArticleCard'
 import { useLearnLocale } from '@/lib/i18n'
+import { OfflineArticlesList } from '@/components/pwa'
+import { usePWADetection } from '@/hooks/usePWADetection'
 
 interface Article {
     title: string
@@ -42,11 +44,14 @@ const PAGE_SIZE = 12
 export function ArticlesPageClient({ articles, levels, articleCounts }: ArticlesPageClientProps) {
     const { t } = useLearnLocale()
     const searchParams = useSearchParams()
+    const router = useRouter()
     const levelFromUrl = searchParams.get('level')
+    const { isPWA } = usePWADetection()
 
     const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [searchQuery, setSearchQuery] = useState('')
+    const [showOfflineSection, setShowOfflineSection] = useState(false)
 
     // Set initial level from URL param
     useEffect(() => {
@@ -54,6 +59,36 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
             setSelectedLevel(levelFromUrl.toLowerCase())
         }
     }, [levelFromUrl])
+
+    // Handle PWA share_target - when content is shared to the app
+    useEffect(() => {
+        const sharedText = searchParams.get('text')
+        const sharedTitle = searchParams.get('title')
+        const sharedUrl = searchParams.get('url')
+
+        // If shared content exists, use it as search query
+        if (sharedText || sharedTitle || sharedUrl) {
+            // Prefer text, then title, extract keywords from URL
+            let query = ''
+            if (sharedText) {
+                query = sharedText
+            } else if (sharedTitle) {
+                query = sharedTitle
+            } else if (sharedUrl) {
+                // Extract article slug from URL if it's a stAItuned URL
+                const urlMatch = sharedUrl.match(/learn\/[^/]+\/([^/]+)\/?$/)
+                if (urlMatch) {
+                    query = urlMatch[1].replace(/-/g, ' ')
+                }
+            }
+
+            if (query) {
+                setSearchQuery(query.substring(0, 100)) // Limit query length
+                // Clean URL params to avoid re-triggering
+                router.replace('/learn/articles', { scroll: false })
+            }
+        }
+    }, [searchParams, router])
 
     // Filter articles by selected level and search
     const filteredArticles = useMemo(() => {
@@ -213,6 +248,36 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                             </button>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Offline Articles Section - Only visible in PWA mode */}
+            {isPWA && (
+                <div className="mb-8 animate-in fade-in duration-300">
+                    <button
+                        onClick={() => setShowOfflineSection(!showOfflineSection)}
+                        className="w-full flex items-center justify-between p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
+                    >
+                        <div className="flex items-center gap-3">
+                            <span className="text-xl">📥</span>
+                            <span className="font-medium text-emerald-800 dark:text-emerald-300">
+                                Articoli Salvati Offline
+                            </span>
+                        </div>
+                        <svg
+                            className={`w-5 h-5 text-emerald-600 dark:text-emerald-400 transition-transform ${showOfflineSection ? 'rotate-180' : ''}`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    {showOfflineSection && (
+                        <div className="mt-2 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-800">
+                            <OfflineArticlesList />
+                        </div>
+                    )}
                 </div>
             )}
 

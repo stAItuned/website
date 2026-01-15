@@ -10,3 +10,10 @@ export { PushNotificationPrompt } from './PushNotificationPrompt'
 export { PWALearnNavigator } from './PWALearnNavigator'
 export { PWAAnalyticsTracker } from './PWAAnalyticsTracker'
 
+// P1 Improvements
+export { PullToRefresh } from './PullToRefresh'
+export { OfflineArticlesList } from './OfflineArticlesList'
+
+// P2 Improvements
+export { PWADynamicShortcuts } from './PWADynamicShortcuts'
+export { PWABadgeTracker, setAppBadge, clearAppBadge, useAppBadge } from './PWABadgeTracker'

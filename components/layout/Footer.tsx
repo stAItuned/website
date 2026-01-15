@@ -212,23 +212,27 @@ export function Footer() {
       <ScrollReveal threshold={0.1} triggerOnce={true}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12 lg:py-14">
 
-          {/* Newsletter Row - separate from nav */}
+          {/* Newsletter Row - separate from nav, mobile optimized */}
           <FadeIn>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-slate-500/30">
-              <div className="flex items-center gap-3">
-                <span className="text-xl">📬</span>
-                <span className="text-sm font-medium text-white">Resta aggiornato</span>
+            <div className="flex flex-col gap-4 pb-8 mb-8 border-b border-slate-500/30">
+              {/* Top row: Label + RSS (hidden on mobile) */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">📬</span>
+                  <span className="text-sm font-medium text-white">Resta aggiornato</span>
+                </div>
+                <Link
+                  href="/rss.xml"
+                  target="_blank"
+                  className="hidden sm:flex text-xs text-slate-400 hover:text-amber-300 transition items-center gap-1"
+                >
+                  <span>📡</span> RSS Feed
+                </Link>
               </div>
-              <div className="flex-1 max-w-md">
+              {/* Newsletter input - full width on mobile */}
+              <div className="w-full sm:max-w-md">
                 <NewsletterSignup source="footer" variant="inline" showHeader={false} />
               </div>
-              <Link
-                href="/rss.xml"
-                target="_blank"
-                className="text-xs text-slate-400 hover:text-amber-300 transition flex items-center gap-1"
-              >
-                <span>📡</span> RSS Feed
-              </Link>
             </div>
           </FadeIn>
 

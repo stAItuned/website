@@ -49,7 +49,7 @@ export function HomeHero({ articleCount, contributorCount }: HomeHeroProps) {
       <HeroAnimatedBackground orbCount={3} showGrid={false} />
 
       {/* Content Container */}
-      <div className="relative z-20 max-w-5xl mx-auto px-6 pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col justify-center min-h-[70vh]">
+      <div className="relative z-20 max-w-5xl mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-24 flex flex-col justify-center min-h-[70vh]">
         <div className="space-y-8 text-center">
 
 
@@ -93,21 +93,21 @@ export function HomeHero({ articleCount, contributorCount }: HomeHeroProps) {
             </Link>
           </div>
 
-          {/* Authority Strip */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10 pt-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
-            <div className="flex items-center gap-2 text-white/70">
-              <span className="text-xl">📚</span>
-              <span className="text-sm font-medium">{displayArticles} {t.hero.stats.articles}</span>
+          {/* Authority Strip - Mobile optimized with pill backgrounds */}
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-10 pt-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
+            <div className="flex items-center gap-2 text-white/80 px-3 py-1.5 sm:px-0 sm:py-0 rounded-full bg-white/10 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
+              <span className="text-lg sm:text-xl">📚</span>
+              <span className="text-xs sm:text-sm font-medium">{displayArticles} {t.hero.stats.articles}</span>
             </div>
             <div className="hidden sm:block w-px h-5 bg-white/30" />
-            <div className="flex items-center gap-2 text-white/70">
-              <span className="text-xl">✍️</span>
-              <span className="text-sm font-medium">{displayContributors} {t.hero.stats.contributors}</span>
+            <div className="flex items-center gap-2 text-white/80 px-3 py-1.5 sm:px-0 sm:py-0 rounded-full bg-white/10 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
+              <span className="text-lg sm:text-xl">✍️</span>
+              <span className="text-xs sm:text-sm font-medium">{displayContributors} {t.hero.stats.contributors}</span>
             </div>
             <div className="hidden sm:block w-px h-5 bg-white/30" />
-            <div className="flex items-center gap-2 text-white/70">
-              <span className="text-xl">🎯</span>
-              <span className="text-sm font-medium">{t.hero.stats.careerFocused}</span>
+            <div className="flex items-center gap-2 text-white/80 px-3 py-1.5 sm:px-0 sm:py-0 rounded-full bg-white/10 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
+              <span className="text-lg sm:text-xl">🎯</span>
+              <span className="text-xs sm:text-sm font-medium">{t.hero.stats.careerFocused}</span>
             </div>
           </div>
 

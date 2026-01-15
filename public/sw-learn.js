@@ -11,7 +11,7 @@
  */
 
 // Cache versioning - increment on major changes
-const SW_VERSION = 'v2.0.0'
+const SW_VERSION = 'v2.1.0'
 const CACHE_PREFIX = 'staituned-learn'
 
 // Cache names with versioning
@@ -31,9 +31,13 @@ const APP_SHELL = [
     '/pwa-app-shell.html',
     '/icon-192.png',
     '/icon-512.png',
+    '/icon-192-maskable.png',
+    '/icon-512-maskable.png',
     '/favicon.ico',
     '/assets/general/logo-text.png',
     '/assets/general/logo-text-dark.png',
+    '/assets/pwa/screenshot-wide.png',
+    '/assets/pwa/screenshot-mobile.png',
 ]
 
 // Static asset patterns to precache

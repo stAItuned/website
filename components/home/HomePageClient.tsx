@@ -129,18 +129,18 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
                                     </div>
                                 </div>
 
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-1 tracking-tight">
+                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 tracking-tight">
                                     {t.articles.midSection.title}
                                 </h3>
 
-                                <p className="text-slate-400 text-sm font-medium leading-relaxed truncate max-w-xl">
+                                <p className="text-slate-400 text-xs sm:text-sm font-medium leading-relaxed line-clamp-2 sm:line-clamp-1">
                                     {t.articles.midSection.subtitle}
                                 </p>
                             </div>
 
                             <button
                                 onClick={() => setIsNewsletterModalOpen(true)}
-                                className="shrink-0 group/btn relative inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-white text-slate-900 font-bold text-sm transition-all hover:bg-amber-50 hover:scale-105 active:scale-95 shadow-lg shadow-amber-900/20"
+                                className="w-full sm:w-auto shrink-0 group/btn relative inline-flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-lg bg-white text-slate-900 font-bold text-sm transition-all hover:bg-amber-50 hover:scale-105 active:scale-95 shadow-lg shadow-amber-900/20"
                             >
                                 <span>{t.articles.midSection.cta}</span>
                                 <svg className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -13,9 +13,9 @@ import FeedbackLoader from '@/components/feedback/FeedbackLoader.client'
 // Temporarily disabled to prevent image optimizer overload
 // import { getArticleCoversForPreload } from '@/lib/preload-covers'
 
+
 // Critical components loaded immediately
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
-import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
 import { SafePageViewTracker } from '@/components/PageViewTracker'
 import { SearchProvider } from '@/components/SearchContext'
 import { SearchModal } from '@/components/SearchModal'
