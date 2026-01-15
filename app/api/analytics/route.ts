@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { allPosts } from '@/lib/contentlayer'
-import { db } from '@/lib/firebase/admin'
+import { dbDefault } from '@/lib/firebase/admin'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
         .replace(/[^a-zA-Z0-9\-_]/g, '')
         .replace(/-+/g, '-')
         .replace(/^-+|-+$/g, '');
-      const docRef = db().collection('articles').doc(sanitizedSlug)
+      const docRef = dbDefault().collection('articles').doc(sanitizedSlug)
       const snap = await docRef.get()
       if (!snap.exists) {
         return NextResponse.json({
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       })
     } else {
       // All articles: read from analytics/daily (or analytics/summaries)
-      const docRef = db().doc('analytics/daily')
+      const docRef = dbDefault().doc('analytics/daily')
       const snap = await docRef.get()
       if (!snap.exists) {
         return NextResponse.json({
@@ -71,6 +71,9 @@ export async function GET(request: NextRequest) {
           articleUrl: `/learn/${target}/${slug}`,
           title: post.title,
           author: post.author,
+          cover: post.cover,
+          date: post.date, // Add publication date
+          language: post.language,
           target,
           topics: post.topics || [],
           readingTime: post.readingTime || 5,

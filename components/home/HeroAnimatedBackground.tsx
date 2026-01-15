@@ -37,14 +37,18 @@ export function HeroAnimatedBackground({
 }: HeroAnimatedBackgroundProps) {
     const containerRef = useRef<HTMLDivElement>(null)
 
-    // Generate random orbs configuration
+    // Generate deterministic orbs configuration (no Math.random to avoid hydration mismatch)
+    // Using a simple seeded pattern based on index for consistent server/client values
+    const orbSizes = [320, 400, 280, 360, 340, 380] // Pre-defined sizes
+    const orbDurations = [18, 22, 16, 20, 19, 24] // Pre-defined durations
+
     const orbs: FloatingOrb[] = Array.from({ length: orbCount }, (_, i) => ({
         id: i,
         x: 15 + (i * 25) % 70, // Distributed across the container
         y: 10 + (i * 20) % 60,
-        size: 200 + Math.random() * 300,
+        size: orbSizes[i % orbSizes.length],
         color: i % 2 === 0 ? 'amber' : 'blue',
-        duration: 15 + Math.random() * 10,
+        duration: orbDurations[i % orbDurations.length],
         delay: i * 2,
     }))
 

@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/firebase/admin";
+import { dbDefault } from "@/lib/firebase/admin";
 import { sanitizeSlug } from '@/lib/sanitizeSlug';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug');
-  
+
   try {
     if (slug) {
       // Sanitize slug to match what's stored in Firestore
-  const sanitizedSlug = sanitizeSlug(slug);
-      
+      const sanitizedSlug = sanitizeSlug(slug);
+
       // Return data for specific article
-  const snap = await db().collection('articles').doc(sanitizedSlug).get();
+      const snap = await dbDefault().collection('articles').doc(sanitizedSlug).get();
       if (snap.exists) {
         const data = snap.data();
         if (!data) {
@@ -29,8 +29,8 @@ export async function GET(request: Request) {
             },
             source: 'not_found',
           }, {
-            headers: { 
-              "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
+            headers: {
+              "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60"
             },
           });
         }
@@ -47,7 +47,7 @@ export async function GET(request: Request) {
           },
           source: 'firestore',
         }, {
-          headers: { 
+          headers: {
             "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=600" // 1h cache
           },
         });
@@ -66,14 +66,14 @@ export async function GET(request: Request) {
           },
           source: 'not_found',
         }, {
-          headers: { 
-            "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
+          headers: {
+            "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60"
           },
         });
       }
     } else {
       // Return overall analytics summary
-      const snap = await db().doc("analytics/daily").get();
+      const snap = await dbDefault().doc("analytics/daily").get();
       if (!snap.exists) {
         return NextResponse.json({
           success: true,
@@ -92,8 +92,8 @@ export async function GET(request: Request) {
           },
           source: 'not_found',
         }, {
-          headers: { 
-            "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
+          headers: {
+            "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60"
           },
         });
       }
@@ -116,8 +116,8 @@ export async function GET(request: Request) {
           },
           source: 'not_found',
         }, {
-          headers: { 
-            "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60" 
+          headers: {
+            "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=60"
           },
         });
       }
@@ -138,7 +138,7 @@ export async function GET(request: Request) {
         },
         source: 'firestore',
       }, {
-        headers: { 
+        headers: {
           "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=600" // 1h cache, 24h stale
         }
       });
@@ -150,10 +150,10 @@ export async function GET(request: Request) {
       error: "Analytics temporarily unavailable",
       data: null,
       source: 'error',
-    }, { 
+    }, {
       status: 503,
-      headers: { 
-        "Cache-Control": "public, max-age=0, s-maxage=30, stale-while-revalidate=60" 
+      headers: {
+        "Cache-Control": "public, max-age=0, s-maxage=30, stale-while-revalidate=60"
       },
     });
   }

@@ -30,15 +30,12 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const shouldSkipAnalytics =
-    process.env.NODE_ENV === 'development' ||
-    (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname))
 
   // Create cache key
   const cacheKey = `fast_analytics_${slug || 'global'}`
-  
+
   const fetchAnalytics = useCallback(async () => {
-    if (!enabled || shouldSkipAnalytics) return
+    if (!enabled) return
 
     // Check local cache first (5 minutes for fast analytics)
     if (typeof window !== 'undefined') {
@@ -49,8 +46,8 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
           // Cache for 5 minutes (data updates hourly anyway)
           if (Date.now() - timestamp < 5 * 60 * 1000) {
             // Normalize cached data structure as well
-            const normalizedCached = cachedData?.totalStats 
-              ? cachedData.totalStats 
+            const normalizedCached = cachedData?.totalStats
+              ? cachedData.totalStats
               : cachedData
             setData(normalizedCached)
             return
@@ -115,10 +112,10 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
 
       if (response.ok && result && result.success && result.data) {
         // Normalize data structure: if we get totalStats, extract it
-        const normalizedData = result.data.totalStats 
-          ? result.data.totalStats 
+        const normalizedData = result.data.totalStats
+          ? result.data.totalStats
           : result.data
-        
+
         setData(normalizedData)
 
         // Cache for 5 minutes
@@ -164,7 +161,7 @@ export function useFastAnalytics(options: UseAnalyticsOptions = {}): UseAnalytic
     } finally {
       setLoading(false)
     }
-  }, [slug, enabled, shouldSkipAnalytics, cacheKey])
+  }, [slug, enabled, cacheKey])
 
   const refetch = useCallback(() => {
     // Clear cache and refetch

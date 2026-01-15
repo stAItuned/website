@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { HomeHero } from './HomeHero'
 import { TickerArticle } from '@/components/ui/ArticleTicker'
 import { NewsletterModal } from '@/components/ui/NewsletterModal'
@@ -23,15 +23,61 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
 
 
     const [articleFilter, setArticleFilter] = useState<ArticleFilter>('recent')
+    const [trendingArticles, setTrendingArticles] = useState<TickerArticle[] | null>(null)
     const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false)
 
     // Limit to 6 articles (3 top, 3 bottom)
     const latestPosts = tickerArticles.slice(0, 6)
 
-    // Sort by date (recent) or keep as-is (trending = already sorted by views from server)
+    // Fetch trending articles on mount
+    useEffect(() => {
+        const fetchTrending = async () => {
+            // Avoid double fetching
+            if (trendingArticles) return
+
+            try {
+                const res = await fetch('/api/analytics')
+                if (!res.ok) return
+                const json = await res.json()
+                if (json.success && Array.isArray(json.data)) {
+                    // Map API data to TickerArticle format
+                    const mapped: TickerArticle[] = json.data.slice(0, 6).map((item: any) => {
+                        // If date is missing, use Epoch to avoid showing "New" badge (which compares with today)
+                        const date = item.date || item.updatedAt || new Date(0).toISOString()
+                        const d = new Date(date)
+                        const now = new Date()
+                        const isToday = d.getDate() === now.getDate() &&
+                            d.getMonth() === now.getMonth() &&
+                            d.getFullYear() === now.getFullYear()
+
+                        return {
+                            title: item.title,
+                            slug: item.articleUrl.split('/').pop(),
+                            cover: item.cover,
+                            author: item.author,
+                            date: date,
+                            readingTime: item.readingTime, // corrected from readTime
+                            target: item.target,
+                            language: item.language,
+                            meta: item.meta,
+                            isNew: isToday
+                        }
+                    })
+                    setTrendingArticles(mapped)
+                }
+            } catch (e) {
+                console.error("Failed to fetch trending articles", e)
+            }
+        }
+
+        fetchTrending()
+    }, [])
+
+    // THIS IS A PLACEHOLDER - I NEED TO FIX API FIRST
+    // Sort by date (recent) or keep as-is (trending = sorted by views from server)
     const displayedPosts = articleFilter === 'recent'
         ? [...latestPosts].sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())
-        : latestPosts
+        : (trendingArticles && trendingArticles.length > 0 ? trendingArticles : latestPosts)
 
     const firstRowPosts = displayedPosts.slice(0, 3)
     const secondRowPosts = displayedPosts.slice(3, 6)

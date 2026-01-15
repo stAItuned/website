@@ -3,6 +3,7 @@ import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 let cachedApp: App | null = null;
 let cachedDb: Firestore | null = null;
+let cachedDbDefault: Firestore | null = null;
 
 function getFirebaseApp(): App {
   if (cachedApp) {
@@ -32,12 +33,15 @@ function getFirebaseApp(): App {
   return cachedApp;
 }
 
+/**
+ * Get the 'role-fit-audit' Firestore database
+ * Used for: role fit audit data, user submissions
+ */
 function getDb(): Firestore {
   if (cachedDb) {
     return cachedDb;
   }
 
-  // User specific database: role-fit-audit
   cachedDb = getFirestore(getFirebaseApp(), 'role-fit-audit');
   try {
     cachedDb.settings({ ignoreUndefinedProperties: true });
@@ -47,7 +51,30 @@ function getDb(): Firestore {
   return cachedDb;
 }
 
-// Export a getter function instead of the instance
+/**
+ * Get the default Firestore database
+ * Used for: analytics, articles, likes, page views
+ */
+function getDbDefault(): Firestore {
+  if (cachedDbDefault) {
+    return cachedDbDefault;
+  }
+
+  cachedDbDefault = getFirestore(getFirebaseApp());
+  try {
+    cachedDbDefault.settings({ ignoreUndefinedProperties: true });
+  } catch (e) {
+    // Ignore "Firestore has already been initialized" error
+  }
+  return cachedDbDefault;
+}
+
+// Export getter functions
 export function db() {
   return getDb();
+}
+
+// Export default database getter for analytics
+export function dbDefault() {
+  return getDbDefault();
 }

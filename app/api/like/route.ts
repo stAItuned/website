@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase/admin';
+import { dbDefault } from '@/lib/firebase/admin';
 import { FieldValue } from 'firebase-admin/firestore';
 import { sanitizeSlug } from '@/lib/sanitizeSlug';
 
@@ -9,8 +9,8 @@ export async function POST(request: Request) {
     if (!slug || !['like', 'unlike'].includes(action)) {
       return NextResponse.json({ success: false, error: 'Invalid request' }, { status: 400 });
     }
-  const sanitizedSlug = sanitizeSlug(slug);
-    const articleRef = db().collection('articles').doc(sanitizedSlug);
+    const sanitizedSlug = sanitizeSlug(slug);
+    const articleRef = dbDefault().collection('articles').doc(sanitizedSlug);
     if (action === 'like') {
       await articleRef.set({ likes: 1 }, { merge: true });
       await articleRef.update({ likes: FieldValue.increment(1) });
