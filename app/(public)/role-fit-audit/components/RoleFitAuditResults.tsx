@@ -2,6 +2,54 @@
 
 import Link from 'next/link'
 import type { AuditResult } from '../lib/scoring'
+import { useRouter } from 'next/navigation'
+import { useCareerOS } from '../../career-os/context/CareerOSContext'
+import { trackRoleFitAuditCTAClicked } from '@/lib/analytics/trackEvent'
+
+// =============================================================================
+// Helpers
+// =============================================================================
+
+/**
+ * Safely render text with **bold** markers without using dangerouslySetInnerHTML
+ * Renders as a span for inline usage
+ */
+function MarkdownText({ text, className }: { text: string; className?: string }) {
+    const parts = text.split(/\*\*(.*?)\*\*/g)
+    return (
+        <span className={className}>
+            {parts.map((part, i) =>
+                i % 2 === 1 ? (
+                    <strong key={i} className="text-[#F59E0B] font-semibold">
+                        {part}
+                    </strong>
+                ) : (
+                    <span key={i}>{part}</span>
+                )
+            )}
+        </span>
+    )
+}
+
+/**
+ * Block-level markdown text (renders as p tag)
+ */
+function MarkdownParagraph({ text, className }: { text: string; className?: string }) {
+    const parts = text.split(/\*\*(.*?)\*\*/g)
+    return (
+        <p className={className}>
+            {parts.map((part, i) =>
+                i % 2 === 1 ? (
+                    <strong key={i} className="text-[#F59E0B] font-semibold">
+                        {part}
+                    </strong>
+                ) : (
+                    <span key={i}>{part}</span>
+                )
+            )}
+        </p>
+    )
+}
 
 // =============================================================================
 // Component
@@ -12,6 +60,19 @@ interface Props {
 }
 
 export default function RoleFitAuditResults({ result }: Props) {
+    const { openAuditModal } = useCareerOS()
+    const router = useRouter()
+
+    const handleApplyClick = () => {
+        trackRoleFitAuditCTAClicked('apply')
+        router.push('/career-os')
+    }
+
+    const handleAuditClick = () => {
+        trackRoleFitAuditCTAClicked('learn_more')
+        openAuditModal()
+    }
+
     const { normalizedScores, archetype, roleRecommendation, topGaps, readinessLabel, oneLineDiagnosis, nextSteps } = result
 
     // Get score bar color based on value
@@ -20,6 +81,8 @@ export default function RoleFitAuditResults({ result }: Props) {
         if (score >= 45) return 'bg-yellow-500'
         return 'bg-red-500'
     }
+
+
 
     return (
         <div className="max-w-3xl mx-auto">
@@ -33,12 +96,20 @@ export default function RoleFitAuditResults({ result }: Props) {
                 </h1>
             </div>
 
-            {/* One-Line Diagnosis */}
-            <div className="bg-gradient-to-r from-[#FFF272]/30 to-[#F59E0B]/20 dark:from-[#FFF272]/10 dark:to-[#F59E0B]/10 rounded-2xl border border-[#F59E0B]/30 p-6 mb-8">
-                <p
+            {/* One-Line Diagnosis - using safe renderer */}
+            <div className="bg-gradient-to-r from-[#FFF272]/30 to-[#F59E0B]/20 dark:from-[#FFF272]/10 dark:to-[#F59E0B]/10 rounded-2xl border border-[#F59E0B]/30 p-6 mb-4">
+                <MarkdownParagraph
+                    text={oneLineDiagnosis}
                     className="text-lg text-slate-800 dark:text-slate-200 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: oneLineDiagnosis.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#F59E0B]">$1</strong>') }}
                 />
+            </div>
+
+            {/* PDF Email Note */}
+            <div className="bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800 p-4 mb-8 flex items-center gap-3">
+                <span className="text-2xl">📧</span>
+                <p className="text-sm text-green-700 dark:text-green-400">
+                    <strong>Controlla la tua email!</strong> Ti abbiamo inviato il report PDF con analisi dettagliate, strategia di carriera e consigli personalizzati.
+                </p>
             </div>
 
             {/* Archetype Card */}
@@ -58,21 +129,33 @@ export default function RoleFitAuditResults({ result }: Props) {
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
                             Superpower
                         </p>
-                        <p className="text-slate-700 dark:text-slate-300">{archetype.superpower}</p>
+                        <p className="text-slate-700 dark:text-slate-300"><MarkdownText text={archetype.superpower} /></p>
                     </div>
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
                             Rischio
                         </p>
-                        <p className="text-slate-700 dark:text-slate-300">{archetype.risk}</p>
+                        <p className="text-slate-700 dark:text-slate-300"><MarkdownText text={archetype.risk} /></p>
                     </div>
                     <div className="md:col-span-2">
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
                             Leva principale
                         </p>
-                        <p className="text-slate-700 dark:text-slate-300">{archetype.lever}</p>
+                        <p className="text-slate-700 dark:text-slate-300"><MarkdownText text={archetype.lever} /></p>
                     </div>
                 </div>
+
+                {/* AI Archetype Rationale */}
+                {result.aiEnhancements?.whyThisArchetype && (
+                    <div className="mt-6 bg-slate-50 dark:bg-[#0F1117] p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                            Perché questo archetipo?
+                        </p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 italic">
+                            "<MarkdownText text={result.aiEnhancements.whyThisArchetype} />"
+                        </p>
+                    </div>
+                )}
             </div>
 
             {/* Score Snapshot */}
@@ -146,12 +229,18 @@ export default function RoleFitAuditResults({ result }: Props) {
                             Perché sei un fit:
                         </p>
                         <ul className="space-y-1">
-                            {roleRecommendation.nowReasons.map((reason, i) => (
-                                <li key={i} className="text-sm text-slate-600 dark:text-slate-400 flex items-start gap-2">
-                                    <span className="text-[#F59E0B]">•</span>
-                                    {reason}
-                                </li>
-                            ))}
+                            {result.aiEnhancements?.nowRationale ? (
+                                <p className="text-sm text-slate-600 dark:text-slate-400 italic leading-relaxed">
+                                    "<MarkdownText text={result.aiEnhancements.nowRationale} />"
+                                </p>
+                            ) : (
+                                roleRecommendation.nowReasons.map((reason, i) => (
+                                    <li key={i} className="text-sm text-slate-600 dark:text-slate-400 flex items-start gap-2">
+                                        <span className="text-[#F59E0B]">•</span>
+                                        {reason}
+                                    </li>
+                                ))
+                            )}
                         </ul>
                     </div>
 
@@ -167,12 +256,18 @@ export default function RoleFitAuditResults({ result }: Props) {
                             Cosa ti serve:
                         </p>
                         <ul className="space-y-1">
-                            {roleRecommendation.requirements.map((req, i) => (
-                                <li key={i} className="text-sm text-slate-600 dark:text-slate-400 flex items-start gap-2">
-                                    <span className="text-[#F59E0B]">•</span>
-                                    {req}
-                                </li>
-                            ))}
+                            {result.aiEnhancements?.nextRationale ? (
+                                <p className="text-sm text-slate-600 dark:text-slate-400 italic leading-relaxed">
+                                    "<MarkdownText text={result.aiEnhancements.nextRationale} />"
+                                </p>
+                            ) : (
+                                roleRecommendation.requirements.map((req, i) => (
+                                    <li key={i} className="text-sm text-slate-600 dark:text-slate-400 flex items-start gap-2">
+                                        <span className="text-[#F59E0B]">•</span>
+                                        {req}
+                                    </li>
+                                ))
+                            )}
                         </ul>
                     </div>
                 </div>
@@ -186,40 +281,77 @@ export default function RoleFitAuditResults({ result }: Props) {
                     </h3>
 
                     <div className="space-y-6">
-                        {topGaps.map((gap, i) => (
-                            <div
-                                key={gap.id}
-                                className="bg-slate-50 dark:bg-[#0F1117] rounded-xl p-6"
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                                        {i + 1}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="font-bold text-slate-900 dark:text-white mb-1">
-                                            {gap.title}
-                                        </p>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-                                            {gap.whyBlocks}
-                                        </p>
-                                        <div className="bg-white dark:bg-[#151925] rounded-lg p-4 border border-slate-200 dark:border-slate-700">
-                                            <p className="text-xs font-semibold uppercase tracking-wider text-[#F59E0B] mb-1">
-                                                Fix in 7 giorni
+                        {topGaps.map((gap, i) => {
+                            // Use AI personalized content if available
+                            const aiGap = result.aiEnhancements?.personalizedGaps?.find(g => g.id === gap.id)
+
+                            return (
+                                <div
+                                    key={gap.id}
+                                    className="bg-slate-50 dark:bg-[#0F1117] rounded-xl p-6"
+                                >
+                                    <div className="flex items-start gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                            {i + 1}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-bold text-slate-900 dark:text-white mb-1">
+                                                {gap.title}
                                             </p>
-                                            <p className="text-sm text-slate-700 dark:text-slate-300">
-                                                {gap.fix7Days}
-                                            </p>
-                                            <p className="text-xs text-slate-500 mt-2">
-                                                <span className="font-medium">Output:</span> {gap.output}
-                                            </p>
+
+                                            {/* AI Personalized Analysis */}
+                                            {aiGap?.personalizedAnalysis ? (
+                                                <div className="mb-3 text-sm text-slate-600 dark:text-slate-400 italic bg-white dark:bg-[#151925] p-3 rounded-lg border-l-2 border-[#F59E0B]">
+                                                    "<MarkdownText text={aiGap.personalizedAnalysis} />"
+                                                </div>
+                                            ) : (
+                                                <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
+                                                    {gap.whyBlocks}
+                                                </p>
+                                            )}
+
+                                            <div className="bg-white dark:bg-[#151925] rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+                                                <p className="text-xs font-semibold uppercase tracking-wider text-[#F59E0B] mb-1">
+                                                    Fix in 7 giorni
+                                                </p>
+                                                <MarkdownParagraph className="text-sm text-slate-700 dark:text-slate-300" text={aiGap?.personalizedFix || gap.fix7Days} />
+                                                {!aiGap && (
+                                                    <p className="text-xs text-slate-500 mt-2">
+                                                        <span className="font-medium">Output:</span> {gap.output}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
-            )}
+            )
+            }
+
+            {/* AI Coaching Note */}
+            {
+                result.aiEnhancements?.coachingNote && (
+                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800 p-8 mb-8 shadow-sm">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="text-2xl">💬</span>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                                Nota del Coach
+                            </h3>
+                        </div>
+                        <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">
+                            "<MarkdownText text={result.aiEnhancements.coachingNote} />"
+                        </p>
+                        {result.generatedBy === 'ai' && (
+                            <p className="text-xs text-slate-400 mt-4 text-right">
+                                Powered by Gemini 3 Pro
+                            </p>
+                        )}
+                    </div>
+                )
+            }
 
             {/* Next Steps */}
             <div className="bg-white dark:bg-[#151925] rounded-2xl border border-slate-200 dark:border-slate-800 p-8 mb-8 shadow-sm">
@@ -233,7 +365,7 @@ export default function RoleFitAuditResults({ result }: Props) {
                             <div className="w-8 h-8 rounded-full bg-[#FFF272]/30 dark:bg-[#FFF272]/10 text-[#F59E0B] flex items-center justify-center font-bold text-sm flex-shrink-0">
                                 {i + 1}
                             </div>
-                            <p className="text-slate-700 dark:text-slate-300 pt-1">{step}</p>
+                            <MarkdownParagraph className="text-slate-700 dark:text-slate-300 pt-1" text={step} />
                         </div>
                     ))}
                 </div>
@@ -242,31 +374,33 @@ export default function RoleFitAuditResults({ result }: Props) {
             {/* CTA */}
             <div className="bg-gradient-to-r from-[#1A1E3B] to-[#2A3050] rounded-2xl p-8 text-center">
                 <h3 className="text-2xl font-bold text-white mb-3">
-                    Vuoi il piano personalizzato?
+                    Vuoi un feedback 1:1 sul report?
                 </h3>
                 <p className="text-slate-300 mb-6 max-w-xl mx-auto">
-                    Con Career OS ottieni una roadmap completa, review 1:1 del tuo profilo, e supporto per arrivare al colloquio.
+                    15 minuti, gratuito. Guardo io il tuo profilo e ti dico se c'è fit per il Career OS.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Link
-                        href="/career-os#candidati"
+                        href="/career-os"
+                        onClick={handleApplyClick}
                         className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold hover:shadow-lg transition"
                     >
-                        Applica al Career OS →
+                        Scopri il Career OS →
                     </Link>
                     <Link
-                        href="/career-os"
+                        href="#"
+                        onClick={handleAuditClick}
                         className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-white/30 text-white font-medium hover:bg-white/10 transition"
                     >
-                        Scopri di più
+                        Prenota sessione strategica (15 min)
                     </Link>
                 </div>
             </div>
 
             {/* Footer Note */}
             <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
-                Ti abbiamo inviato una copia del report via email. Controlla anche lo spam!
+                📬 Ti invieremo una copia via email. Se non arriva entro 2 min, controlla spam/promozioni.
             </p>
-        </div>
+        </div >
     )
 }

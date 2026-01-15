@@ -71,12 +71,55 @@ export type UserJourneyEvent =
     | 'like_added'
     | 'like_removed'
 
-// Combined Event Type
+// Role Fit Audit Events
+export type RoleFitAuditEvent =
+    | 'role_fit_audit_started'
+    | 'role_fit_audit_section_completed'
+    | 'role_fit_audit_completed'
+    | 'role_fit_audit_cta_clicked'
+
+// Career OS Funnel Events
+export type CareerOSEvent =
+    | 'career_os_cta_clicked'
+    | 'pricing_select'
+    | 'faq_expand'
+    | 'journey_expand'
+    | 'audit_modal_open'
+    | 'audit_modal_abandon'
+    | 'audit_modal_submit'
+    | 'form_start'
+    | 'form_step_complete'
+    | 'form_submit'
+    | 'form_abandon'
+    | 'header_cta_clicked'
+    | 'external_link_clicked'
+
+// Modal & Form Events
+export type ModalEvent =
+    | 'audit_modal_open'
+    | 'audit_modal_abandon'
+    | 'audit_modal_submit'
+    | 'form_start'
+    | 'form_step_complete'
+    | 'form_submit'
+    | 'form_abandon'
+
+// Conversion & External Events
+export type ConversionEvent =
+    | 'external_link_clicked'
+
+// combined Event Type
 export type AnalyticsEventName =
     | PWAEvent
     | NotificationEvent
     | ArticleEvent
     | UserJourneyEvent
+    | RoleFitAuditEvent
+    | CareerOSEvent
+    | ModalEvent
+    | ConversionEvent
+    | 'header_cta_clicked'
+    | 'external_link_clicked'
 
 // ============================================================================
 // Event Parameters Interface
@@ -331,6 +374,127 @@ export function trackLikeAdded(articleSlug: string) {
 
 export function trackLikeRemoved(articleSlug: string) {
     trackEvent('like_removed', { category: 'engagement', articleSlug })
+}
+
+// --- Role Fit Audit Events ---
+
+export function trackRoleFitAuditStarted() {
+    trackEvent('role_fit_audit_started', { category: 'conversion', source: 'role_fit_audit' })
+}
+
+export function trackRoleFitAuditSectionCompleted(sectionNumber: number, sectionName: string) {
+    trackEvent('role_fit_audit_section_completed', {
+        category: 'conversion',
+        source: 'role_fit_audit',
+        label: sectionName,
+        value: sectionNumber
+    })
+}
+
+export function trackRoleFitAuditCompleted(archetypeId: string, readinessScore: number) {
+    trackEvent('role_fit_audit_completed', {
+        category: 'conversion',
+        source: 'role_fit_audit',
+        label: archetypeId,
+        value: readinessScore
+    })
+}
+
+export function trackRoleFitAuditCTAClicked(ctaType: 'apply' | 'learn_more') {
+    trackEvent('role_fit_audit_cta_clicked', {
+        category: 'conversion',
+        source: 'role_fit_audit',
+        label: ctaType
+    })
+}
+
+// --- Career OS Events ---
+
+export function trackCareerOSCTAClicked(section: string, label: string) {
+    trackEvent('career_os_cta_clicked', {
+        category: 'engagement',
+        source: section,
+        label: label
+    })
+}
+
+export function trackPricingSelect(tier: string, billing: string) {
+    trackEvent('pricing_select', {
+        category: 'engagement',
+        label: tier,
+        context: billing
+    })
+}
+
+export function trackFAQExpand(question: string) {
+    trackEvent('faq_expand', {
+        category: 'engagement',
+        label: question
+    })
+}
+
+export function trackJourneyExpand(weekTitle: string) {
+    trackEvent('journey_expand', {
+        category: 'engagement',
+        label: weekTitle
+    })
+}
+
+// --- Modal & Form Events ---
+
+export function trackAuditModalOpen(location: string) {
+    trackEvent('audit_modal_open', { category: 'conversion', page: location })
+}
+
+export function trackAuditModalAbandon(reason: string) {
+    trackEvent('audit_modal_abandon', { category: 'conversion', context: reason })
+}
+
+export function trackAuditModalSubmit(location: string) {
+    trackEvent('audit_modal_submit', { category: 'conversion', page: location })
+}
+
+export function trackFormStart(formName: string, source: string) {
+    trackEvent('form_start', {
+        category: 'conversion',
+        label: formName,
+        source: source
+    })
+}
+
+export function trackFormStepComplete(formName: string, step: number, totalSteps: number) {
+    trackEvent('form_step_complete', {
+        category: 'conversion',
+        label: formName,
+        value: step,
+        context: `${step}/${totalSteps}`
+    })
+}
+
+export function trackFormSubmit(formName: string) {
+    trackEvent('form_submit', { category: 'conversion', label: formName })
+}
+
+export function trackFormAbandon(formName: string, lastStep: number) {
+    trackEvent('form_abandon', {
+        category: 'conversion',
+        label: formName,
+        value: lastStep
+    })
+}
+
+// --- Header & Footer Events ---
+
+export function trackHeaderCTAClicked(label: string) {
+    trackEvent('header_cta_clicked', { category: 'engagement', label })
+}
+
+export function trackExternalLinkClicked(platform: 'linkedin' | 'calendly' | 'other', label: string) {
+    trackEvent('external_link_clicked', {
+        category: 'conversion',
+        label: `${platform}:${label}`,
+        platform
+    })
 }
 
 export default trackEvent

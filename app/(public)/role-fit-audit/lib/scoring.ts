@@ -62,6 +62,24 @@ export interface AuditResult {
     readinessLabel: string
     oneLineDiagnosis: string
     nextSteps: string[]
+    generatedBy?: 'ai' | 'static'
+    aiEnhancements?: {
+        whyThisArchetype: string
+        nowRationale: string
+        nextRationale: string
+        personalizedGaps: Array<{
+            id: string
+            personalizedAnalysis: string
+            personalizedFix: string
+        }>
+        coachingNote: string
+        pdfAnalysis?: {
+            executiveSummary: string
+            strengthsAnalysis: string
+            weaknessesAnalysis: string
+            careerStrategy: string
+        }
+    }
 }
 
 // =============================================================================

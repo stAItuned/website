@@ -104,6 +104,36 @@ export interface LearnTranslations {
         cta: string
     }
 
+    // Articles Page
+    articlesPage: {
+        title: string
+        highlight: string
+        description: string
+        stats: {
+            articles: string
+            content: string
+            levels: string
+        }
+        searchPlaceholder: string
+        all: string
+        noArticles: string
+        noResults: string
+        clearFilters: string
+        previous: string
+        next: string
+        writeCTA: string
+        writingTitle: string
+        writingSubtitle: string
+        writingBenefit1: string
+        writingBenefit2: string
+        writingBenefit3: string
+        writingStart: string
+        writingResponseTime: string
+        writingSend: string
+        writingSending: string
+        privacyNote: string
+    }
+
     // Common
     common: {
         exploreArticles: string
@@ -228,6 +258,34 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             exploreArticles: "Explore articles",
             articles: "articles",
             free: "Free"
+        },
+        articlesPage: {
+            title: "AI Knowledge, ",
+            highlight: "Distilled",
+            description: "Practical guides, benchmarks, and deep dives. Written by practitioners, reviewed by experts. No fluff, just actionable knowledge.",
+            stats: {
+                articles: "Articles",
+                content: "Content",
+                levels: "Levels"
+            },
+            searchPlaceholder: "Search articles...",
+            all: "All",
+            noArticles: "No articles found",
+            noResults: 'No results for "{query}"',
+            clearFilters: "Clear filters",
+            previous: "Previous",
+            next: "Next",
+            writeCTA: "✍️ Write for us",
+            writingTitle: "Build Your AI Reputation",
+            writingSubtitle: "Write for stAItuned and join a growing community of AI practitioners. Gain visibility, build your portfolio, and connect with professionals who share your passion.",
+            writingBenefit1: "10k+ LinkedIn reach",
+            writingBenefit2: "Editorial support",
+            writingBenefit3: "Portfolio builder",
+            writingStart: "Start Writing",
+            writingResponseTime: "We'll get back to you within 48h",
+            writingSend: "Send",
+            writingSending: "Sending...",
+            privacyNote: "I agree to the Privacy Policy. We'll only use your data to contact you about contributing."
         }
     },
     it: {
@@ -345,6 +403,34 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             exploreArticles: "Esplora articoli",
             articles: "articoli",
             free: "Gratis"
+        },
+        articlesPage: {
+            title: "Conoscenza AI, ",
+            highlight: "Distillata",
+            description: "Guide pratiche, benchmark e approfondimenti. Scritto da professionisti, revisionato da esperti. Niente fuffa, solo conoscenza pragmatica.",
+            stats: {
+                articles: "Articoli",
+                content: "Contenuti",
+                levels: "Livelli"
+            },
+            searchPlaceholder: "Cerca articoli...",
+            all: "Tutti",
+            noArticles: "Nessun articolo trovato",
+            noResults: 'Nessun risultato per "{query}"',
+            clearFilters: "Rimuovi filtri",
+            previous: "Precedente",
+            next: "Successivo",
+            writeCTA: "✍️ Scrivi per noi",
+            writingTitle: "Costruisci la tua reputazione AI",
+            writingSubtitle: "Scrivi per stAItuned e unisciti a una community in crescita di professionisti AI. Guadagna visibilità, costruisci il tuo portfolio e connettiti con esperti che condividono la tua passione.",
+            writingBenefit1: "10k+ reach su LinkedIn",
+            writingBenefit2: "Supporto editoriale",
+            writingBenefit3: "Portfolio builder",
+            writingStart: "Inizia a scrivere",
+            writingResponseTime: "Ti risponderemo entro 48 ore",
+            writingSend: "Invia",
+            writingSending: "Invio in corso...",
+            privacyNote: "Accetto la Privacy Policy. Useremo i tuoi dati solo per contattarti riguardo alla collaborazione."
         }
     }
 }

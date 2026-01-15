@@ -14,7 +14,7 @@ function getFirebaseApp(): App {
     cachedApp = existingApps[0];
     return cachedApp;
   }
-  
+
   const rawKey = process.env.FB_SERVICE_ACCOUNT_KEY
     || (process.env.FB_SERVICE_ACCOUNT_KEY_B64 ? Buffer.from(process.env.FB_SERVICE_ACCOUNT_KEY_B64, 'base64').toString('utf8') : undefined);
 
@@ -22,10 +22,13 @@ function getFirebaseApp(): App {
     throw new Error('FB_SERVICE_ACCOUNT_KEY env variable is required for Firebase Admin SDK.');
   }
 
+  const creds = JSON.parse(rawKey);
+  console.log('[Firebase Admin] Initializing with project ID:', creds.project_id);
+
   cachedApp = initializeApp({
-    credential: cert(JSON.parse(rawKey)),
+    credential: cert(creds),
   });
-  
+
   return cachedApp;
 }
 
@@ -33,8 +36,14 @@ function getDb(): Firestore {
   if (cachedDb) {
     return cachedDb;
   }
-  
-  cachedDb = getFirestore(getFirebaseApp());
+
+  // User specific database: role-fit-audit
+  cachedDb = getFirestore(getFirebaseApp(), 'role-fit-audit');
+  try {
+    cachedDb.settings({ ignoreUndefinedProperties: true });
+  } catch (e) {
+    // Ignore "Firestore has already been initialized" error
+  }
   return cachedDb;
 }
 

@@ -26,8 +26,10 @@ export interface HomeTranslations {
         pathBeginner: string
         pathExpert: string
         midSection: {
-            text: string
+            title: string
+            subtitle: string
             cta: string
+            socialProof: string
         }
         wantDeeper: string
     }
@@ -45,6 +47,19 @@ export interface HomeTranslations {
         ctaLeadMagnet: string
         dismiss: string
         keepReading: string
+    }
+    newsletter: {
+        title: string
+        description: string
+        placeholder: string
+        button: string
+        loading: string
+        success: string
+        error: string
+        consent: string
+        privacyPolicy: string
+        termsConditions: string
+        benefits: string[]
     }
 }
 
@@ -71,16 +86,18 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pathBeginner: "Percorso Beginner",
             pathExpert: "Percorso Expert",
             midSection: {
-                text: "Ti piace quello che leggi? Iscriviti alla newsletter.",
-                cta: "Resta aggiornato"
+                title: "L'era della GenAI non aspetta.",
+                subtitle: "Ricevi ogni settimana deep-dive tecnici e strategie per scalare la tua carriera nell'AI.",
+                cta: "Unisciti alla Newsletter",
+                socialProof: "Unisciti a +2.000 AI Builder"
             },
             wantDeeper: "Vuoi approfondire un percorso specifico?"
         },
         leadMagnet: {
             title: "Non sai quale ruolo AI fa per te?",
-            description: "ML Engineer? AI Ops? Data Scientist? Scarica la guida gratuita AI Career Role-Fit e trova il tuo percorso.",
-            cta: "Scarica la Guida Gratis",
-            disclaimer: "Zero spam. Solo chiarezza sulla tua direzione AI."
+            description: "Smetti di tirare a indovinare. Fai il **Role Fit Audit**: 15 domande per scoprire il tuo percorso ideale in ambito AI/GenAI",
+            cta: "Fai l'Audit Gratuito",
+            disclaimer: "Riceverai un report PDF personalizzato con il tuo piano d'azione."
         },
         intermezzo: {
             badge: "Cohort #1 — Italia — Posti Limitati",
@@ -90,6 +107,23 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             ctaLeadMagnet: "Scarica CV Rubric Gratis",
             dismiss: "Non ora",
             keepReading: "Continua a leggere"
+        },
+        newsletter: {
+            title: "📬 Resta aggiornato",
+            description: "Nuovi articoli, tool e casi d'uso AI direttamente nella tua inbox.",
+            placeholder: "La tua email",
+            button: "Iscriviti alla newsletter",
+            loading: "Un momento...",
+            success: "🎉 Iscrizione completata!",
+            error: "Errore. Riprova.",
+            consent: "Iscrivendomi accetto i ",
+            privacyPolicy: "Privacy Policy",
+            termsConditions: "Termini e Condizioni",
+            benefits: [
+                "Deep-dive tecnici settimanali",
+                "Strategie di carriera per AI Engineers",
+                "Casi studio reali di implementazione"
+            ]
         }
     },
     en: {
@@ -114,16 +148,18 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pathBeginner: "Beginner Path",
             pathExpert: "Expert Path",
             midSection: {
-                text: "Like what you're reading? Join the newsletter.",
-                cta: "Stay updated"
+                title: "The GenAI era won't wait.",
+                subtitle: "Get weekly technical deep-dives and strategies to scale your AI career.",
+                cta: "Join the Newsletter",
+                socialProof: "Join 2,000+ AI Builders"
             },
             wantDeeper: "Want to go deep on a specific path?"
         },
         leadMagnet: {
             title: "Not sure which AI role fits you?",
-            description: "ML Engineer? AI Ops? Data Scientist? Download the free AI Career Role-Fit Guide and find your path.",
-            cta: "Get the Free Guide",
-            disclaimer: "No spam. Just clarity on your AI career direction."
+            description: "Stop guessing. Take the **Role Fit Audit**: 15 questions to find your ideal path among AI/GenAI roles",
+            cta: "Start Free Audit",
+            disclaimer: "You'll receive a personalized PDF report with your action plan."
         },
         intermezzo: {
             badge: "Cohort #1 — Italy Only — Limited Spots",
@@ -133,6 +169,23 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             ctaLeadMagnet: "Download Free CV Rubric",
             dismiss: "Not now",
             keepReading: "Keep Reading"
+        },
+        newsletter: {
+            title: "📬 Stay updated",
+            description: "New articles, tools, and AI use cases directly in your inbox.",
+            placeholder: "Your email",
+            button: "Subscribe to newsletter",
+            loading: "One moment...",
+            success: "🎉 Subscription complete!",
+            error: "Error. Try again.",
+            consent: "By subscribing I accept the ",
+            privacyPolicy: "Privacy Policy",
+            termsConditions: "Terms and Conditions",
+            benefits: [
+                "Weekly technical deep-dives",
+                "Career strategies for AI Engineers",
+                "Real implementation case studies"
+            ]
         }
     }
 }

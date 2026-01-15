@@ -34,7 +34,7 @@ export async function sendTelegramFeedback(p: FeedbackPayload) {
     return;
   }
 
-  const header = `🆕 Feedback (${p.category || "n/a"})\n\n`;
+  const header = `\n\n🆕 Feedback (${p.category || "n/a"})\n\n`;
   const body =
     `Message: ${p.message}\n\n` +
     `From: ${p.email || "n/a"}\n` +
