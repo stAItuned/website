@@ -11,12 +11,7 @@ import {
     Target
 } from 'lucide-react'
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-    // @ts-ignore
-    if (typeof window === 'undefined' || !window.gtag) return
-    // @ts-ignore
-    window.gtag('event', eventName, params)
-}
+import { trackFAQExpand } from '@/lib/analytics/trackEvent'
 
 // Data Structure
 const FAQ_CATEGORIES = [
@@ -158,10 +153,7 @@ export default function FAQ() {
                                         const nextState = openIndex === i ? null : i
                                         setOpenIndex(nextState)
                                         if (nextState !== null) {
-                                            trackGtagEvent('faq_expand', {
-                                                category: activeTab,
-                                                question: item.q
-                                            })
+                                            trackFAQExpand(item.q)
                                         }
                                     }}
                                     className="w-full flex items-center justify-between p-6 text-left"

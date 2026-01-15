@@ -21,13 +21,8 @@ import {
 import { Tooltip } from '@/components/ui/Tooltip'
 import { HoverCard } from '@/components/ui/HoverCard'
 import { useCareerOS, type ObjectiveType } from '../context/CareerOSContext'
+import { trackJourneyExpand } from '@/lib/analytics/trackEvent'
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-    // @ts-ignore
-    if (typeof window === 'undefined' || !window.gtag) return
-    // @ts-ignore
-    window.gtag('event', eventName, params)
-}
 
 /**
  * Step definitions for the gamified journey
@@ -612,10 +607,7 @@ function WeekNodeCompact({
             onClick={() => {
                 onSelect()
                 if (!isSelected) {
-                    trackGtagEvent('journey_expand', {
-                        week: node.week,
-                        title: node.title
-                    })
+                    trackJourneyExpand(node.title)
                 }
             }}
             className={`

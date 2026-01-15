@@ -6,12 +6,7 @@ import { useCareerOS } from './context/CareerOSContext'
 type PricingMode = 'classe' | '1to1'
 import { CheckCircle2 } from 'lucide-react'
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-    // @ts-ignore
-    if (typeof window === 'undefined' || !window.gtag) return
-    // @ts-ignore
-    window.gtag('event', eventName, params)
-}
+import { trackPricingSelect } from '@/lib/analytics/trackEvent'
 
 const pricingData = {
     classe: {
@@ -268,11 +263,7 @@ export default function PricingSection() {
                             <div className="mt-auto">
                                 <button
                                     onClick={() => {
-                                        trackGtagEvent('pricing_select', {
-                                            tier: tier.name,
-                                            mode: current.label,
-                                            price: tier.price
-                                        })
+                                        trackPricingSelect(tier.name, current.label)
                                         openAppModal({
                                             source: 'pricing_card',
                                             tier: `${tier.name} (${current.label})`

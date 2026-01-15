@@ -74,12 +74,7 @@ const INITIAL_FORM_DATA: FormData = {
     website: '',
 }
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-    // @ts-ignore
-    if (typeof window === 'undefined' || !window.gtag) return
-    // @ts-ignore
-    window.gtag('event', eventName, params)
-}
+import { trackFormStart, trackFormStepComplete, trackFormSubmit, trackFormAbandon } from '@/lib/analytics/trackEvent'
 
 export default function ApplicationModal() {
     const { isAppModalOpen, closeAppModal, appModalData } = useCareerOS()
@@ -104,21 +99,14 @@ export default function ApplicationModal() {
             if (step === 4 && hasSubmitted) {
                 setStep(1)
             }
-            trackGtagEvent('form_start', {
-                event_category: 'engagement',
-                source,
-            })
+            trackFormStart('career_os_app', source)
         }
     }, [isAppModalOpen])
 
     const handleClose = useCallback(() => {
         closeAppModal()
         if (!hasSubmitted) {
-            trackGtagEvent('form_abandon', {
-                event_category: 'engagement',
-                source,
-                last_step: lastStep,
-            })
+            trackFormAbandon('career_os_app', lastStep)
         }
     }, [closeAppModal, hasSubmitted, lastStep])
 
@@ -178,11 +166,7 @@ export default function ApplicationModal() {
 
         setStatus('idle')
         setMessage('')
-        trackGtagEvent('form_step_complete', {
-            event_category: 'engagement',
-            source,
-            step,
-        })
+        trackFormStepComplete('career_os_app', step, 4)
         setLastStep(step)
         setStep(prev => Math.min(prev + 1, 4))
     }
@@ -210,11 +194,7 @@ export default function ApplicationModal() {
         }
 
         if (step === 4) {
-            trackGtagEvent('form_step_complete', {
-                event_category: 'engagement',
-                source,
-                step: 4,
-            })
+            trackFormStepComplete('career_os_app', 4, 4)
             setLastStep(4)
         }
 
@@ -241,13 +221,7 @@ export default function ApplicationModal() {
 
             setStatus('success')
             setHasSubmitted(true)
-            trackGtagEvent('form_submit', {
-                event_category: 'conversion',
-                source,
-                background: formData.background,
-                role_target: formData.roleTarget,
-                urgency: formData.timeline,
-            })
+            trackFormSubmit('career_os_app')
         } catch (err) {
             setStatus('error')
             setMessage(err instanceof Error ? err.message : 'Errore nell’invio. Riprova.')

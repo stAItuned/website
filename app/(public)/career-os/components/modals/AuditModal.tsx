@@ -5,12 +5,7 @@ import { useCareerOS } from '../../context/CareerOSContext'
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error'
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-    // @ts-ignore
-    if (typeof window === 'undefined' || !window.gtag) return
-    // @ts-ignore
-    window.gtag('event', eventName, params)
-}
+import { trackAuditModalOpen, trackAuditModalAbandon, trackAuditModalSubmit } from '@/lib/analytics/trackEvent'
 
 export default function AuditModal() {
     const { isAuditModalOpen, closeAuditModal } = useCareerOS()
@@ -40,7 +35,7 @@ export default function AuditModal() {
             setMessage('')
             setSlots([]) // Reset slots on open
             setCurrentSlot('')
-            trackGtagEvent('audit_open', { location: window.location.pathname })
+            trackAuditModalOpen(window.location.pathname)
             const saved = localStorage.getItem('careeros_audit_form')
             if (saved) {
                 try {
@@ -51,7 +46,7 @@ export default function AuditModal() {
         } else {
             // Track abandon if closed without success
             if (status !== 'success' && status !== 'idle') {
-                trackGtagEvent('audit_abandon', { reason: 'closed_modal' })
+                trackAuditModalAbandon('closed_modal')
             }
         }
     }, [isAuditModalOpen])
@@ -106,7 +101,7 @@ export default function AuditModal() {
             if (!res.ok) throw new Error('Errore durante l\'invio')
 
             setStatus('success')
-            trackGtagEvent('audit_submit', { location: window.location.pathname })
+            trackAuditModalSubmit(window.location.pathname)
         } catch (err) {
             setStatus('error')
             setMessage('Qualcosa è andato storto. Riprova o scrivici direttamente.')
@@ -116,7 +111,7 @@ export default function AuditModal() {
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4" aria-modal="true" role="dialog">
             <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => {
-                if (status !== 'success') trackGtagEvent('audit_abandon', { reason: 'backdrop_click' })
+                if (status !== 'success') trackAuditModalAbandon('backdrop_click')
                 closeAuditModal()
             }} />
             <div className="relative z-10 w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/10 dark:border-slate-800 dark:bg-[#0F1117]">
@@ -136,7 +131,7 @@ export default function AuditModal() {
                     </div>
                     <button
                         onClick={() => {
-                            if (status !== 'success') trackGtagEvent('audit_abandon', { reason: 'close_button' })
+                            if (status !== 'success') trackAuditModalAbandon('close_button')
                             closeAuditModal()
                         }}
                         className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800"

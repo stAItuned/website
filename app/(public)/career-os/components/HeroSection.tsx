@@ -7,12 +7,7 @@ import {
     ArrowRight
 } from 'lucide-react'
 
-function trackGtagEvent(eventName: string, params: Record<string, string | number | undefined>) {
-    // @ts-ignore
-    if (typeof window === 'undefined' || !window.gtag) return
-    // @ts-ignore
-    window.gtag('event', eventName, params)
-}
+import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
 
 /**
  * HeroSection - Career OS landing page hero
@@ -96,7 +91,7 @@ export default function HeroSection() {
                         <div className="flex justify-center lg:justify-start pt-4">
                             <a
                                 href="#social-proof"
-                                onClick={() => trackGtagEvent('cta_click', { section: 'hero', label: 'vedi_cosa_costruirai' })}
+                                onClick={() => trackCareerOSCTAClicked('hero', 'vedi_cosa_costruirai')}
                                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                             >
                                 Vedi cosa costruirai
