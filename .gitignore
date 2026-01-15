@@ -25,7 +25,7 @@ dist/
 !.env.example
 functions/.env
 functions/.env.*
-
+strategy_pack
 # Firebase / Functions build artifacts
 .firebase/
 functions/lib/
