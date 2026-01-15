@@ -89,10 +89,25 @@ export default function TermsPage() {
                         <li>Non costituiscono consulenza professionale, legale o lavorativa;</li>
                         <li>Offrono suggerimenti generici che devono essere valutati criticamente dall&apos;utente;</li>
                         <li>Non garantiscono risultati specifici in termini di carriera o occupazione;</li>
-                        <li><strong>Generazione AI:</strong> Alcuni report (es. AI Audit) sono generati tramite modelli di Intelligenza Artificiale. Sebbene curati, potrebbero contenere inesattezze o ",allucinazioni". L'utente è invitato a verificare sempre le informazioni critiche.</li>
+                        <li><strong>Generazione AI:</strong> Alcuni report (es. AI Audit) sono generati tramite modelli di Intelligenza Artificiale. Sebbene curati, potrebbero contenere inesattezze o "allucinazioni". L'utente è invitato a verificare sempre le informazioni critiche.</li>
                     </ul>
                     <p>
                         Le informazioni raccolte tramite questi strumenti sono trattate secondo la nostra <Link href="/privacy" className="text-amber-600 underline">Privacy Policy</Link>.
+                    </p>
+                </section>
+
+                <section className="space-y-4 text-sm text-slate-600">
+                    <h2 className="text-2xl font-semibold text-slate-900">7. Servizio di Newsletter</h2>
+                    <p>
+                        Iscrivendosi alla newsletter di stAItuned, l'utente accetta di ricevere comunicazioni periodiche via email riguardanti:
+                    </p>
+                    <ul className="list-disc pl-4 space-y-1">
+                        <li>Aggiornamenti sui nuovi articoli e contenuti tecnici del blog;</li>
+                        <li>Approfondimenti su strategie di carriera e trend del mercato AI;</li>
+                        <li>Informazioni su nuovi prodotti, servizi o iniziative di stAItuned.</li>
+                    </ul>
+                    <p>
+                        <strong>Frequenza e Cancellazione:</strong> La frequenza standard è di un invio settimanale. L'utente ha il diritto di disiscriversi in qualsiasi momento cliccando sul link "Unsubscribe" presente in calce a ogni email o contattando l'assistenza.
                     </p>
                 </section>
 

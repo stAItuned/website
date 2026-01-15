@@ -291,17 +291,32 @@ export default function PricingSection() {
                     </p>
                 </div>
 
-                {/* Audit Escape Valve - for users with questions */}
-                <div className="mt-8 text-center">
-                    <p className="text-slate-400 text-sm mb-3">
-                        Hai dubbi? Parliamone.
-                    </p>
-                    <button
-                        onClick={openAuditModal}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white/80 font-medium hover:bg-white/5 hover:text-white transition-all"
-                    >
-                        📞 Richiedi Audit gratuito (15 min)
-                    </button>
+                {/* Audit Escape Valve - Redesigned for impact */}
+                <div className="mt-16 max-w-2xl mx-auto">
+                    <div className="relative p-6 md:p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm overflow-hidden group">
+                        {/* Decorative background glow */}
+                        <div className="absolute top-0 right-0 -transtale-y-1/2 translate-x-1/2 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl group-hover:bg-amber-500/20 transition-colors duration-500"></div>
+                        <div className="absolute bottom-0 left-0 transtale-y-1/2 -translate-x-1/2 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
+
+                        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div className="text-center md:text-left">
+                                <h4 className="text-xl font-bold text-white mb-2">
+                                    Hai ancora dei dubbi? Parliamone.
+                                </h4>
+                                <p className="text-slate-400 text-sm max-w-sm">
+                                    Prenota una video-call gratuita di 15 minuti per capire se Career OS è il percorso giusto per i tuoi obiettivi.
+                                </p>
+                            </div>
+
+                            <button
+                                onClick={openAuditModal}
+                                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-[#1A1E3B] font-bold text-base hover:bg-[#FCD34D] hover:scale-105 transition-all shadow-xl hover:shadow-[#FCD34D]/20 group-hover:-rotate-1"
+                            >
+                                <span className="text-xl">📞</span>
+                                <span>Richiedi Audit gratuito</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

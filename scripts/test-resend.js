@@ -1,7 +1,7 @@
 
 const { Resend } = require('resend');
 
-const apiKey = 're_3kxLqQ1M_9qWQd4AmB2XLqhkDdjKLwLnR'; // From .env
+const apiKey = process.env.RESEND_API_KEY;
 const resend = new Resend(apiKey);
 
 async function test() {

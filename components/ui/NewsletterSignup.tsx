@@ -214,34 +214,53 @@ export function NewsletterSignup({
         <div className={`${className}`}>
             {showHeader && (
                 <p className="text-sm font-semibold text-slate-200 mb-2">
-                    📬 Newsletter
+                    📬 {t.newsletter.title}
                 </p>
             )}
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t.newsletter.placeholder}
-                    required
-                    className="flex-1 min-w-0 px-3 py-2 text-sm rounded-lg border border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none transition"
-                    disabled={status === 'loading'}
-                />
-                {/* Honeypot field */}
-                <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-                <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-slate-900 hover:bg-amber-400 disabled:opacity-60 transition whitespace-nowrap"
-                >
-                    {status === 'loading' ? '...' : 'Iscriviti'}
-                </button>
+            <form onSubmit={handleSubmit} className="space-y-3">
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={t.newsletter.placeholder}
+                        required
+                        className="flex-1 min-w-0 px-3 py-2 text-sm rounded-lg border border-slate-600 bg-slate-800 text-white placeholder:text-slate-400 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none transition"
+                        disabled={status === 'loading'}
+                    />
+                    {/* Honeypot field */}
+                    <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+                    <button
+                        type="submit"
+                        disabled={status === 'loading' || !consent}
+                        className="px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-slate-900 hover:bg-amber-400 disabled:opacity-60 transition whitespace-nowrap"
+                    >
+                        {status === 'loading' ? '...' : t.newsletter.button.split(' ')[0]}
+                    </button>
+                </div>
+
+                <div className="flex items-start gap-2 max-w-xs">
+                    <input
+                        type="checkbox"
+                        id={`consent-footer-${source}`}
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        required
+                        className="mt-1 w-3.5 h-3.5 rounded border-slate-600 bg-slate-800 text-amber-500 focus:ring-amber-500 transition-all cursor-pointer"
+                    />
+                    <label htmlFor={`consent-footer-${source}`} className="text-[10px] leading-tight text-slate-400 cursor-pointer">
+                        {t.newsletter.consent}
+                        <a href="/terms" className="underline hover:text-amber-300 mx-1">{t.newsletter.termsConditions}</a>
+                        e la <a href="/privacy" className="underline hover:text-amber-300">Privacy Policy</a>.
+                    </label>
+                </div>
+
+                {status !== 'idle' && (
+                    <p className={`mt-2 text-xs ${status === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                        {message}
+                    </p>
+                )}
             </form>
-            {status !== 'idle' && (
-                <p className={`mt-2 text-xs ${status === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                    {message}
-                </p>
-            )}
         </div>
     )
 }

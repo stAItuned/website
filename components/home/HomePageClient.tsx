@@ -7,7 +7,7 @@ import { NewsletterModal } from '@/components/ui/NewsletterModal'
 import { ArticleCard } from '@/components/ArticleCard'
 import Link from 'next/link'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
-import { useCTADismiss } from '@/lib/hooks/useCTADismiss'
+
 
 interface HomePageClientProps {
     tickerArticles: TickerArticle[]
@@ -20,7 +20,7 @@ type ArticleFilter = 'recent' | 'trending'
 export function HomePageClient({ tickerArticles, contributorCount, articleCount }: HomePageClientProps) {
     const { locale } = useLearnLocale()
     const t = homeTranslations[locale]
-    const { shouldShow: shouldShowIntermezzo, dismiss: dismissIntermezzo } = useCTADismiss('intermezzo-cta', 30)
+
 
     const [articleFilter, setArticleFilter] = useState<ArticleFilter>('recent')
     const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false)
@@ -107,37 +107,44 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
                     ))}
                 </div>
 
-                {/* Mid-Grid High-Impact CTA */}
-                <div className="w-full my-12 relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-amber-600/5 to-transparent rounded-[2rem] blur-xl group-hover:blur-2xl transition-all duration-500 opacity-70"></div>
-                    <div className="relative overflow-hidden rounded-[2rem] border border-amber-200/50 dark:border-amber-900/30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-8 md:p-12 shadow-xl shadow-amber-900/5">
-                        {/* Decorative elements */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                {/* Mid-Grid Newsletter CTA - High Contrast & Ultra Slim */}
+                <div className="w-full my-6 relative group">
+                    {/* Animated Outer Glow (Subtle) */}
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/50 via-orange-500/50 to-amber-500/50 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div>
 
-                        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
-                            <div className="max-w-2xl text-center lg:text-left">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-bold uppercase tracking-wider mb-4 border border-amber-200/50 dark:border-amber-800/50">
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                                    </span>
-                                    {t.articles.midSection.socialProof}
+                    <div className="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl">
+                        {/* High Contrast Background Effects */}
+                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/20 via-slate-900/0 to-slate-900/0 opacity-100"></div>
+                        <div className="absolute -left-16 -bottom-16 w-64 h-64 bg-amber-600/10 rounded-full blur-3xl"></div>
+
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-5 md:px-8 md:py-6 relative z-10">
+                            <div className="text-center md:text-left flex-1 min-w-0">
+                                <div className="flex items-center justify-center md:justify-start gap-3 mb-1.5">
+                                    <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                                        <span className="relative flex h-1.5 w-1.5">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
+                                        </span>
+                                        {t.articles.midSection.socialProof}
+                                    </div>
                                 </div>
-                                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">
+
+                                <h3 className="text-xl md:text-2xl font-bold text-white mb-1 tracking-tight">
                                     {t.articles.midSection.title}
                                 </h3>
-                                <p className="text-slate-600 dark:text-slate-400 text-lg">
+
+                                <p className="text-slate-400 text-sm font-medium leading-relaxed truncate max-w-xl">
                                     {t.articles.midSection.subtitle}
                                 </p>
                             </div>
 
                             <button
                                 onClick={() => setIsNewsletterModalOpen(true)}
-                                className="group/btn relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-900 font-bold text-lg transition-all hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20 active:scale-95"
+                                className="shrink-0 group/btn relative inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-white text-slate-900 font-bold text-sm transition-all hover:bg-amber-50 hover:scale-105 active:scale-95 shadow-lg shadow-amber-900/20"
                             >
                                 <span>{t.articles.midSection.cta}</span>
-                                <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                <svg className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                 </svg>
                             </button>
                         </div>
@@ -215,66 +222,7 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
                 </div>
             </section >
 
-            {/* 3. Intermezzo: Career OS CTA (with Dismiss) */}
-            {
-                shouldShowIntermezzo && (
-                    <section className="py-24 bg-slate-50 dark:bg-[#151925] border-y border-slate-200 dark:border-slate-800">
-                        <div className="max-w-4xl mx-auto px-6 text-center">
-                            {/* Italy Badge */}
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 mb-8">
-                                <span className="text-lg">🇮🇹</span>
-                                <span className="text-sm font-semibold text-amber-800 dark:text-amber-300">
-                                    {t.intermezzo.badge}
-                                </span>
-                            </div>
 
-                            <h2 className="text-3xl font-bold mb-6 text-[#1A1E3B] dark:text-white">
-                                {t.intermezzo.headline}
-                            </h2>
-                            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
-                                {t.intermezzo.subtext}
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <Link
-                                    href="/career-os"
-                                    className="px-8 py-3 rounded-full bg-[#1A1E3B] text-white font-bold hover:bg-[#383F74] transition-all shadow-lg"
-                                >
-                                    {t.intermezzo.ctaCareerOS}
-                                </Link>
-                                <a
-                                    href="/role-fit-audit"
-                                    className="px-8 py-3 rounded-full border-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
-                                >
-                                    📥 {t.intermezzo.ctaLeadMagnet}
-                                </a>
-                            </div>
-
-                            {/* Dismiss button */}
-                            <button
-                                onClick={dismissIntermezzo}
-                                className="mt-6 text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors underline underline-offset-2"
-                            >
-                                {t.intermezzo.dismiss}
-                            </button>
-                        </div>
-                    </section>
-                )
-            }
-
-            {/* Fallback: Keep Reading link when intermezzo is dismissed */}
-            {
-                !shouldShowIntermezzo && (
-                    <section className="py-12 text-center">
-                        <a
-                            href="#articles"
-                            className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
-                        >
-                            ↑ {t.intermezzo.keepReading}
-                        </a>
-                    </section>
-                )
-            }
             {/* Newsletter Modal */}
             <NewsletterModal
                 isOpen={isNewsletterModalOpen}
