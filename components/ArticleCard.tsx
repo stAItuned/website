@@ -66,10 +66,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
   const getTargetStyle = (target?: string) => {
     const targetStyles = {
-      'Newbie': 'bg-green-500/90 text-white',
-      'Midway': 'bg-yellow-500/90 text-white',
-      'Expert': 'bg-red-500/90 text-white',
-      'General': 'bg-gray-500/90 text-white'
+      'Newbie': 'bg-green-500 text-white',
+      'Midway': 'bg-yellow-500 text-white',
+      'Expert': 'bg-red-500 text-white',
+      'General': 'bg-gray-500 text-white'
     }
     return targetStyles[target as keyof typeof targetStyles] || targetStyles.General
   }
@@ -86,16 +86,16 @@ export function ArticleCard({ article }: ArticleCardProps) {
       className="text-primary-600 hover:cursor-pointer h-full group"
     >
       <div
-        className="relative flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-900 overflow-hidden transition-all duration-500 ease-out hover:shadow-xl hover:-translate-y-1 hover:border-primary-300 dark:hover:border-primary-700"
+        className="relative flex flex-col h-full min-h-[480px] max-h-[480px] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md bg-white dark:bg-gray-800 overflow-hidden transition-all duration-400 ease-out hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-primary-400 dark:hover:border-primary-500"
       >
-        <div className="relative w-full h-40 overflow-hidden shrink-0">
+        <div className="relative w-full h-48 overflow-hidden shrink-0">
           {imageSrc && (
             <Image
               src={imageSrc}
               alt={article.title}
               width={600}
               height={338}
-              className="article-card-image object-cover w-full h-full transform scale-105 transition-transform duration-700 ease-out group-hover:scale-100"
+              className="article-card-image object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-1"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority={false}
               loading="lazy"
@@ -105,80 +105,103 @@ export function ArticleCard({ article }: ArticleCardProps) {
             />
           )}
           {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
-          {/* Top Left Stack: New + Views */}
-          <div className="absolute top-3 left-3 z-20 flex flex-col items-start gap-2">
+          {/* Badges stack (new + views) */}
+          <div className="absolute top-2 left-2 z-20 flex flex-col items-start gap-2">
             {isNewArticle ? (
-              <span className="inline-flex items-center rounded-lg bg-emerald-500/90 text-white px-2 py-1 text-[10px] font-bold uppercase tracking-wide shadow-lg backdrop-blur-md border border-white/10">
+              <span className="inline-flex items-center rounded-full bg-emerald-500/95 text-white px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-wide shadow-lg backdrop-blur-sm">
                 New
               </span>
             ) : (
-              <div className="flex items-center bg-white/90 dark:bg-black/60 text-slate-700 dark:text-slate-200 rounded-lg px-2 py-1 shadow-lg text-[10px] font-semibold gap-1.5 backdrop-blur-md border border-white/20 dark:border-white/10 transition-all duration-300">
-                <svg className="w-3 h-3 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              <div className="flex items-center bg-white/95 dark:bg-gray-800/95 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1.5 shadow-lg text-xs font-semibold gap-1.5 backdrop-blur-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-primary-500 group-hover:text-white">
+                <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M1.5 12s4.5-7.5 10.5-7.5S22.5 12 22.5 12s-4.5 7.5-10.5 7.5S1.5 12 1.5 12z" />
+                  <circle cx="12" cy="12" r="3" />
                 </svg>
                 {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData?.pageViews || 0)}
+                <span className="ml-1">views</span>
               </div>
             )}
           </div>
 
-          {/* Top Right: Target Badge (Glassmorphism) */}
-          {article.target && (
-            <div className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-bold z-20 shadow-lg backdrop-blur-md border border-white/10 transition-transform duration-300 group-hover:scale-105 ${getTargetStyle(article.target)} opacity-90`}>
-              {article.target}
+          {/* Bookmarks Badge */}
+          {analyticsData?.bookmarkCount && analyticsData.bookmarkCount > 0 && (
+            <div className="absolute top-2 right-2 z-20 flex items-center bg-yellow-500/95 text-white rounded-full px-3 py-1.5 shadow-lg text-xs font-semibold gap-1.5 backdrop-blur-sm transition-all duration-300 group-hover:scale-105">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+              {formatAnalyticsNumber(analyticsData.bookmarkCount)}
             </div>
           )}
         </div>
-
-        {/* Post Info */}
-        <div className="flex flex-col flex-1 p-5 bg-white dark:bg-gray-900 transition-colors duration-300">
-
-          {/* Metadata: Date & Time */}
-          <div className="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500 mb-3 font-medium">
-            <span>{formatDate(article.date)}</span>
-            {article.readingTime && (
-              <>
-                <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
-                <span>{article.readingTime} min read</span>
-              </>
-            )}
+        {/* Target Level Overlay */}
+        {article.target && (
+          <div className={`absolute -top-8 sm:-top-1 right-0 px-3 py-1.5 rounded-bl-lg rounded-tr-lg text-xs font-bold z-20 shadow-lg transition-all duration-300 group-hover:scale-110 ${getTargetStyle(article.target)}`}>
+            {article.target}
           </div>
-
-          <h3 className="font-bold text-lg leading-snug mb-2 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
-            {article.title}
-          </h3>
-
-          {/* Description shown if available */}
-          {article.meta && (
-            <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">
-              {article.meta}
-            </p>
-          )}
-
-          {/* Footer: Author & Action */}
-          <div className="mt-auto flex items-center justify-between pt-2">
-            <div className="flex items-center gap-2 group/author">
-              {authorImageSrc && (
-                <Image
-                  src={authorImageSrc}
-                  alt="avatar"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 shadow-sm"
-                  loading="lazy"
-                />
+        )}
+        {/* Post Info fills remaining height */}
+        <div className="relative bg-slate-50 dark:bg-gray-800 rounded-b-2xl p-3 sm:p-4 z-10 flex flex-col flex-1 w-full h-full transition-colors duration-300 group-hover:bg-slate-100 dark:group-hover:bg-gray-700/80 dark:group-hover:ring-1 dark:group-hover:ring-primary-500/30">
+          {/* Date */}
+          <div className="absolute -top-6 sm:-top-10 left-0 w-full px-3 sm:px-4 py-1 flex items-center gap-2 sm:gap-3 font-semibold text-white bg-slate-700/60 dark:bg-gray-900/70 backdrop-blur-sm rounded-lg transition-all duration-300 group-hover:bg-primary-600/80">
+            <svg className="w-4 h-4 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+            </svg>
+            <p className="text-sm sm:text-md m-0">{formatDate(article.date)}</p>
+          </div>
+          {/* Main Info */}
+          <div className="flex flex-col gap-4 sm:gap-6 flex-1">
+            {/* Header */}
+            <div className="flex justify-between items-center">
+              {/* Author */}
+              <div className="flex space-x-2 items-center transition-transform duration-300 group-hover:translate-x-1">
+                {authorImageSrc && (
+                  <Image
+                    src={authorImageSrc}
+                    alt="avatar"
+                    width={32}
+                    height={32}
+                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-transparent transition-all duration-300 group-hover:ring-primary-400 group-hover:scale-110"
+                    loading="lazy"
+                    priority={false}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                  />
+                )}
+                <p className="text-sm sm:text-lg mb-0 font-semibold truncate dark:text-gray-200">{article.author}</p>
+              </div>
+              {/* Reading Time */}
+              {article.readingTime && (
+                <div className="flex space-x-2 items-center transition-all duration-300 group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                  <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-sm sm:text-md mb-0 font-semibold">{article.readingTime} min</p>
+                </div>
               )}
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover/author:text-slate-800 dark:group-hover/author:text-slate-200 transition-colors">
-                {article.author}
-              </span>
             </div>
-
-            <span className="text-xs font-bold text-primary-600 dark:text-primary-400 flex items-center gap-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-              Read
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-            </span>
+            {/* Title & Meta with fixed heights and overflow handling */}
+            <div className="space-y-2">
+              <h1
+                className="font-bold text-base sm:text-lg leading-tight line-clamp-2 overflow-hidden transition-colors duration-300 group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-300"
+                title={article.title}
+              >
+                {article.title}
+              </h1>
+              <p
+                className="text-xs sm:text-sm leading-4 line-clamp-3 overflow-hidden text-gray-600 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-300"
+                title={article.meta || 'No description available'}
+              >
+                {article.meta || 'No description available'}
+              </p>
+            </div>
+            {/* Footer pinned to bottom of the info box */}
+            <div className="px-8 sm:px-16 mt-auto">
+              <button className="py-2 w-full bg-primary-600 text-white rounded-lg font-semibold transition-all duration-300 hover:bg-primary-700 hover:shadow-lg hover:scale-105 active:scale-95 group-hover:bg-primary-500 text-sm sm:text-base">
+                Read more
+                <span className="inline-block ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
