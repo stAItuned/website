@@ -33,6 +33,7 @@ export class PerformanceMonitor {
 
   private config: PerformanceConfig
   private isClient: boolean
+  private observers: PerformanceObserver[] = []
 
   constructor(config: PerformanceConfig) {
     this.config = config
@@ -48,23 +49,27 @@ export class PerformanceMonitor {
 
     try {
       // Track FCP (First Contentful Paint) - When first content appears
-      new PerformanceObserver((list) => {
+      const fcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
         const lastEntry = entries[entries.length - 1]
         this.metrics.FCP = lastEntry.startTime
         this.reportMetric('FCP', lastEntry.startTime)
-      }).observe({ type: 'paint', buffered: true })
+      })
+      fcpObserver.observe({ type: 'paint', buffered: true })
+      this.observers.push(fcpObserver)
 
       // Track LCP (Largest Contentful Paint) - When main content loads
-      new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
         const lastEntry = entries[entries.length - 1]
         this.metrics.LCP = lastEntry.startTime
         this.reportMetric('LCP', lastEntry.startTime)
-      }).observe({ type: 'largest-contentful-paint', buffered: true })
+      })
+      lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true })
+      this.observers.push(lcpObserver)
 
       // Track FID (First Input Delay) - Responsiveness to user input
-      new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const fidEntry = entry as PerformanceEntry & { processingStart?: number }
           if (fidEntry.processingStart) {
@@ -73,11 +78,13 @@ export class PerformanceMonitor {
             this.reportMetric('FID', fidValue)
           }
         }
-      }).observe({ type: 'first-input', buffered: true })
+      })
+      fidObserver.observe({ type: 'first-input', buffered: true })
+      this.observers.push(fidObserver)
 
       // Track CLS (Cumulative Layout Shift) - Visual stability
       let clsValue = 0
-      new PerformanceObserver((list) => {
+      const clsObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const clsEntry = entry as PerformanceEntry & { value?: number; hadRecentInput?: boolean }
           if (clsEntry.value !== undefined && !clsEntry.hadRecentInput) {
@@ -86,10 +93,12 @@ export class PerformanceMonitor {
         }
         this.metrics.CLS = clsValue
         this.reportMetric('CLS', clsValue)
-      }).observe({ type: 'layout-shift', buffered: true })
+      })
+      clsObserver.observe({ type: 'layout-shift', buffered: true })
+      this.observers.push(clsObserver)
 
       // Track TTFB (Time to First Byte) - Server response time
-      new PerformanceObserver((list) => {
+      const ttfbObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const navigationEntry = entry as PerformanceEntry & { 
             responseStart?: number; 
@@ -101,7 +110,9 @@ export class PerformanceMonitor {
             this.reportMetric('TTFB', ttfbValue)
           }
         }
-      }).observe({ type: 'navigation', buffered: true })
+      })
+      ttfbObserver.observe({ type: 'navigation', buffered: true })
+      this.observers.push(ttfbObserver)
 
     } catch (error) {
       console.warn('Performance monitoring setup failed:', error)
@@ -165,6 +176,11 @@ export class PerformanceMonitor {
     }
   }
 
+  public destroy() {
+    this.observers.forEach((observer) => observer.disconnect())
+    this.observers = []
+  }
+
   // Get current metrics snapshot
   public getMetrics(): PerformanceMetrics {
     return { ...this.metrics }
@@ -188,10 +204,16 @@ export class PerformanceMonitor {
 // React hook for easy integration
 export function usePerformanceMonitor(config: PerformanceConfig) {
   const monitorRef = useRef<PerformanceMonitor | null>(null)
+  const configKeyRef = useRef<string>('')
 
   useEffect(() => {
-    if (!monitorRef.current) {
+    const configKey = JSON.stringify(config)
+    const shouldRecreate = configKeyRef.current !== configKey
+
+    if (!monitorRef.current || shouldRecreate) {
+      monitorRef.current?.destroy()
       monitorRef.current = new PerformanceMonitor(config)
+      configKeyRef.current = configKey
     }
 
     // Track bundle size after component mount

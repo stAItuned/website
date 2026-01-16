@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { usePerformanceMonitor } from '@/lib/performance/PerformanceMonitor'
 import { ResourceHints, FontOptimization } from '@/lib/performance/CriticalRendering'
+import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
 interface PerformanceProviderProps {
   children: React.ReactNode
@@ -15,18 +16,26 @@ export function PerformanceProvider({
   enableMonitoring = true,
   sampleRate = 0.1 // 10% of users by default
 }: PerformanceProviderProps) {
+  const { hasConsentedToAnalytics } = useCookieConsent()
+  const shouldMonitor = enableMonitoring && hasConsentedToAnalytics
+
+  const config = useMemo(
+    () => ({
+      enableRUM: shouldMonitor,
+      enableCoreWebVitals: shouldMonitor,
+      enableBundleTracking: shouldMonitor,
+      sampleRate: shouldMonitor ? sampleRate : 0,
+      endpoint: shouldMonitor ? '/api/analytics/performance' : undefined,
+    }),
+    [shouldMonitor, sampleRate]
+  )
+
   // Initialize performance monitoring
-  const monitor = usePerformanceMonitor({
-    enableRUM: enableMonitoring,
-    enableCoreWebVitals: true,
-    enableBundleTracking: true,
-    sampleRate,
-    endpoint: '/api/analytics/performance' // You can create this endpoint
-  })
+  const monitor = usePerformanceMonitor(config)
 
   // Log performance data in development
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development' && monitor) {
+    if (process.env.NODE_ENV === 'development' && shouldMonitor && monitor) {
       const logPerformance = () => {
         const metrics = monitor.getMetrics()
         const grades = monitor.getPerformanceGrade()

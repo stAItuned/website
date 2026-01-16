@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import type { FirebaseOptions } from 'firebase/app'
 import type { User } from 'firebase/auth'
-import { app, analytics } from '@/lib/firebase/client'
+import { app, initFirebaseAnalytics } from '@/lib/firebase/client'
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
+import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
 export default function TestFirebasePage() {
   const [firebaseStatus, setFirebaseStatus] = useState<string>('Checking...')
@@ -12,6 +13,7 @@ export default function TestFirebasePage() {
   const [authStatus, setAuthStatus] = useState<string>('Ready')
   const [config, setConfig] = useState<FirebaseOptions | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  const { hasConsentedToAnalytics } = useCookieConsent()
 
   useEffect(() => {
     try {
@@ -22,18 +24,30 @@ export default function TestFirebasePage() {
       } else {
         setFirebaseStatus('❌ Firebase app failed to initialize')
       }
-
-      // Test Analytics initialization
-      if (analytics) {
-        setAnalyticsStatus('✅ Analytics initialized successfully')
-      } else {
-        setAnalyticsStatus('⚠️ Analytics not initialized (normal in SSR)')
-      }
     } catch (error) {
       setFirebaseStatus(`❌ Error: ${error}`)
       setAnalyticsStatus(`❌ Error: ${error}`)
     }
   }, [])
+
+  useEffect(() => {
+    if (!hasConsentedToAnalytics) {
+      setAnalyticsStatus('⛔ Analytics disabled (no consent)')
+      return
+    }
+
+    initFirebaseAnalytics()
+      .then((instance) => {
+        if (instance) {
+          setAnalyticsStatus('✅ Analytics initialized successfully (consent granted)')
+        } else {
+          setAnalyticsStatus('⚠️ Analytics not initialized')
+        }
+      })
+      .catch((error) => {
+        setAnalyticsStatus(`❌ Error: ${error}`)
+      })
+  }, [hasConsentedToAnalytics])
 
   const handleSignInSuccess = (user: User) => {
     setUser(user)

@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, type FirebaseApp } from "firebase/app";
-import { getAnalytics, type Analytics } from "firebase/analytics";
 import { getAuth, type Auth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
+import type { Analytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,8 +32,45 @@ if (typeof window !== 'undefined') {
 
 // Initialize Analytics (only in browser environment)
 let analytics: Analytics | null = null;
-if (typeof window !== 'undefined') {
-  analytics = getAnalytics(app);
+let analyticsModule:
+  | null
+  | {
+      getAnalytics: (app: FirebaseApp) => Analytics;
+      setAnalyticsCollectionEnabled: (analytics: Analytics, enabled: boolean) => void;
+    } = null;
+
+async function loadAnalyticsModule() {
+  if (analyticsModule) return analyticsModule;
+  const mod = await import("firebase/analytics");
+  analyticsModule = {
+    getAnalytics: mod.getAnalytics,
+    setAnalyticsCollectionEnabled: mod.setAnalyticsCollectionEnabled,
+  };
+  return analyticsModule;
+}
+
+export async function initFirebaseAnalytics(): Promise<Analytics | null> {
+  if (typeof window === "undefined") return null;
+  if (analytics) return analytics;
+  const mod = await loadAnalyticsModule();
+  analytics = mod.getAnalytics(app);
+  return analytics;
+}
+
+export async function setFirebaseAnalyticsEnabled(enabled: boolean): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  if (!enabled) {
+    if (!analytics) return;
+    const mod = await loadAnalyticsModule();
+    mod.setAnalyticsCollectionEnabled(analytics, false);
+    return;
+  }
+
+  const mod = await loadAnalyticsModule();
+  const instance = await initFirebaseAnalytics();
+  if (!instance) return;
+  mod.setAnalyticsCollectionEnabled(instance, true);
 }
 
 // Create Google Auth Provider

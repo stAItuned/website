@@ -26,6 +26,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { ToastProvider } from '@/components/ui/Toast'
 import { TopLoadingBar } from '@/components/ui/PageProgress'
 import { PWALearnNavigator, PWAAnalyticsTracker } from '@/components/pwa'
+import { FirebaseAnalyticsConsent } from '@/components/FirebaseAnalyticsConsent'
 
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -224,6 +225,7 @@ export default function RootLayout({
                     sampleRate={0.1}
                   >
                     <TopLoadingBar />
+                    <FirebaseAnalyticsConsent />
                     <GoogleAnalytics />
                     {/* Main site SW removed - Learn section has its own PWA SW */}
                     {/* Solo i componenti essenziali sono server-side */}

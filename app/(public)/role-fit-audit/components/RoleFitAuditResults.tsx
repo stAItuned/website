@@ -64,12 +64,12 @@ export default function RoleFitAuditResults({ result }: Props) {
     const router = useRouter()
 
     const handleApplyClick = () => {
-        trackRoleFitAuditCTAClicked('apply')
+        trackRoleFitAuditCTAClicked('apply', 'box')
         router.push('/career-os')
     }
 
     const handleAuditClick = () => {
-        trackRoleFitAuditCTAClicked('learn_more')
+        trackRoleFitAuditCTAClicked('learn_more', 'box')
         openAuditModal()
     }
 
