@@ -5,6 +5,10 @@ import { getAuthorData } from '@/lib/authors'
 import { AuthorPageWithPagination } from '@/components/AuthorPageWithPagination'
 import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 
+// SEO Structured Data
+import { JsonLd } from '@/components/seo/JsonLd'
+import { generatePersonSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-schemas'
+
 interface AuthorPageProps {
   params: Promise<{
     slug: string
@@ -13,13 +17,13 @@ interface AuthorPageProps {
 
 export async function generateMetadata({ params }: AuthorPageProps): Promise<Metadata> {
   const { slug } = await params
-  
+
   // Convert slug back to author name
   const authorName = slug.replaceAll('-', ' ')
-  
+
   // Get author data
   const authorData = await getAuthorData(authorName)
-  
+
   if (!authorData) {
     return {
       title: 'Author Not Found - stAItuned',
@@ -58,17 +62,46 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     notFound()
   }
   // Find all articles by this author
-  const authorArticles = allPosts.filter((post) => 
+  const authorArticles = allPosts.filter((post) =>
     post.author === authorName && post.published !== false
   ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
+  // Generate Person schema for E-E-A-T
+  const personSchema = generatePersonSchema({
+    name: authorData.name,
+    jobTitle: authorData.title || undefined,
+    url: `/author/${slug}`,
+    image: authorData.avatar,
+    description: authorData.description || undefined,
+    knowsAbout: ['Artificial Intelligence', 'GenAI', 'Machine Learning', 'AI Engineering'],
+    sameAs: authorData.linkedin ? [authorData.linkedin] : undefined,
+    worksFor: {
+      name: 'stAItuned',
+      url: 'https://staituned.com',
+    },
+  })
+
+  // Breadcrumb schema
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Authors', url: '/author' },
+    { name: authorData.name, url: `/author/${slug}` },
+  ])
+
   // Pagination logic
   return (
-    <AuthorPageWithPagination 
-      authorData={authorData} 
-      authorArticles={authorArticles} 
-      pageSize={PAGINATION_SIZE} 
-      slug={slug} 
-    />
+    <>
+      {/* SEO Structured Data (JSON-LD) */}
+      <JsonLd data={personSchema} />
+      <JsonLd data={breadcrumbSchema} />
+
+      <AuthorPageWithPagination
+        authorData={authorData}
+        authorArticles={authorArticles}
+        pageSize={PAGINATION_SIZE}
+        slug={slug}
+      />
+    </>
   )
 }
+

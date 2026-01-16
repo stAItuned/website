@@ -6,6 +6,10 @@ import { getAuthorData } from '@/lib/authors'
 import { fetchArticleAnalytics } from '@/lib/analytics-server'
 import ArticlePageClient from './ArticlePageClient'
 
+// SEO Structured Data
+import { JsonLd } from '@/components/seo/JsonLd'
+import { generateArticleSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-schemas'
+
 // Force static generation per articoli
 export const dynamic = 'force-static'
 export const revalidate = 43200 // ISR ogni 12 ore (60*60*12) - reduced from 6h to save function calls
@@ -160,16 +164,45 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   // Fetch analytics server-side during SSR/ISR (no client-side API call needed!)
   const analytics = await fetchArticleAnalytics(slug)
 
+  // Generate Article JSON-LD schema for rich snippets
+  const articleSchema = generateArticleSchema({
+    title: article.seoTitle ?? article.title,
+    description: article.seoDescription ?? article.meta ?? article.title,
+    slug: article.slug,
+    author: article.author ?? 'stAItuned',
+    datePublished: article.date,
+    dateModified: article.date,
+    image: coverImage || undefined,
+    section: article.target,
+    keywords: article.topics,
+    readingTime: article.readTime,
+  })
+
+  // Breadcrumb schema
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Learn', url: '/learn' },
+    { name: targetDisplay, url: `/learn/${target}` },
+    { name: article.title, url: `/learn/${target}/${slug}` },
+  ])
+
   return (
-    <ArticlePageClient
-      coverImage={coverImage}
-      article={article}
-      toc={toc}
-      target={target}
-      targetDisplay={targetDisplay}
-      relatedArticles={relatedArticles}
-      authorData={authorData}
-      analytics={analytics}
-    />
+    <>
+      {/* SEO Structured Data (JSON-LD) */}
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
+
+      <ArticlePageClient
+        coverImage={coverImage}
+        article={article}
+        toc={toc}
+        target={target}
+        targetDisplay={targetDisplay}
+        relatedArticles={relatedArticles}
+        authorData={authorData}
+        analytics={analytics}
+      />
+    </>
   )
 }
+
