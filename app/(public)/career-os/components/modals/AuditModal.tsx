@@ -123,10 +123,10 @@ export default function AuditModal() {
                             Parliamone
                         </span>
                         <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
-                            Hai dubbi sul percorso?
+                            Hai ancora dei dubbi? Parliamone.
                         </h3>
                         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            Descrivi il tuo dubbio principale. Ti risponderemo in chat o fisseremo una call rapida.
+                            Prenota una video-call gratuita di 15 minuti per capire se Career OS è il percorso giusto per i tuoi obiettivi.
                         </p>
                     </div>
                     <button
@@ -276,7 +276,7 @@ export default function AuditModal() {
                             disabled={status === 'loading'}
                             className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white hover:bg-slate-800 disabled:opacity-50"
                         >
-                            {status === 'loading' ? 'Invio...' : 'Richiedi Info'}
+                            {status === 'loading' ? 'Invio...' : 'Prenota Call'}
                         </button>
                     </form>
                 )}

@@ -3,12 +3,15 @@
 import { Target, Zap, CheckCircle2, User } from 'lucide-react'
 
 import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
+import { useCareerOS } from '../context/CareerOSContext'
 
 /**
  * AIExpertSection - Differentiator section showing AI Expert Guidance value
  * Includes mentor placeholder for future photo/bio
  */
 export default function AIExpertSection() {
+    const { openAuditModal } = useCareerOS()
+
     return (
         <section id="ai-expert" className="py-24 bg-gradient-to-br from-[#1A1E3B] to-[#383F74] text-white">
             <div className="max-w-5xl mx-auto px-6">
@@ -121,15 +124,24 @@ export default function AIExpertSection() {
                     </div>
                 </div>
 
-                {/* Bridge CTA to Social Proof */}
-                <div className="mt-12 text-center">
+                {/* Bridge CTAs */}
+                <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-4">
                     <a
                         href="#social-proof"
                         onClick={() => trackCareerOSCTAClicked('expert', 'vedi_cosa_costruirai')}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FCD34D] text-[#1A1E3B] font-bold hover:bg-[#F59E0B] transition-colors shadow-lg"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FCD34D] text-[#1A1E3B] font-bold hover:bg-[#F59E0B] transition-colors shadow-lg w-full sm:w-auto justify-center"
                     >
                         Vedi cosa costruirai →
                     </a>
+                    <button
+                        onClick={() => {
+                            trackCareerOSCTAClicked('expert', 'richiedi_audit_gratuito')
+                            openAuditModal()
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-[#FCD34D]/30 text-white font-bold hover:bg-white/10 transition-colors shadow-lg w-full sm:w-auto justify-center"
+                    >
+                        Hai dei dubbi? Parliamone
+                    </button>
                 </div>
             </div>
         </section>

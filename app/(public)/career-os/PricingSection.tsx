@@ -313,7 +313,7 @@ export default function PricingSection() {
                                 className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-[#1A1E3B] font-bold text-base hover:bg-[#FCD34D] hover:scale-105 transition-all shadow-xl hover:shadow-[#FCD34D]/20 group-hover:-rotate-1"
                             >
                                 <span className="text-xl">📞</span>
-                                <span>Richiedi Audit gratuito</span>
+                                <span>Prenota video-call (15 min)</span>
                             </button>
                         </div>
                     </div>

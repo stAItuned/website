@@ -1,8 +1,12 @@
+import { useCareerOS } from '../context/CareerOSContext'
+
 /**
  * FinalCTASection - Final call-to-action with urgency and scarcity
  * Primary: Candidati, Secondary: Audit
  */
 export default function FinalCTASection() {
+    const { openAuditModal } = useCareerOS()
+
     return (
         <section className="py-24 bg-gradient-to-b from-slate-50 to-white dark:from-[#151925] dark:to-[#0F1117] text-center">
             <div className="max-w-2xl mx-auto px-6">
@@ -29,7 +33,7 @@ export default function FinalCTASection() {
 
                 {/* Secondary CTA */}
                 <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
-                    Hai domande? <a href="/audit" className="underline hover:text-slate-700 dark:hover:text-slate-300">Prenota un audit gratuito (15 min)</a>
+                    Hai domande? <button onClick={openAuditModal} className="underline hover:text-slate-700 dark:hover:text-slate-300">Prenota un audit gratuito (15 min)</button>
                 </p>
             </div>
         </section>

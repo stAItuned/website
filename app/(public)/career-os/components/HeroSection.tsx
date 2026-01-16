@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 
 import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
+import { useCareerOS } from '../context/CareerOSContext'
 
 /**
  * HeroSection - Career OS landing page hero
@@ -15,6 +16,8 @@ import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
  * Layout: Message + Hook Stats + CTAs (above fold), Market stats (right on desktop)
  */
 export default function HeroSection() {
+    const { openAuditModal } = useCareerOS()
+
     return (
         <section className="relative pt-24 sm:pt-36 lg:pt-44 pb-10 sm:pb-16 px-4 sm:px-6 overflow-hidden">
             {/* Background */}
@@ -79,16 +82,25 @@ export default function HeroSection() {
                             ))}
                         </div>
 
-                        {/* Single CTA */}
-                        <div className="flex justify-center lg:justify-start pt-2 sm:pt-4">
+                        {/* CTAs */}
+                        <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-2 sm:pt-4">
                             <a
                                 href="#social-proof"
                                 onClick={() => trackCareerOSCTAClicked('hero', 'vedi_cosa_costruirai')}
-                                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-base sm:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-base sm:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto"
                             >
                                 Vedi cosa costruirai
                                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                             </a>
+                            <button
+                                onClick={() => {
+                                    trackCareerOSCTAClicked('hero', 'richiedi_audit_gratuito')
+                                    openAuditModal()
+                                }}
+                                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-white/5 border border-white/20 text-white font-bold text-base sm:text-lg hover:bg-white/10 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+                            >
+                                📞  Richiedi un audit gratuito (15 min)
+                            </button>
                         </div>
                     </div>
 
