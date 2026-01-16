@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
 import { translations, type LearnLocale, type LearnTranslations } from './learn-translations'
 
 // Storage key for locale preference
@@ -74,18 +75,25 @@ interface LearnLocaleProviderProps {
 export function LearnLocaleProvider({ children, defaultLocale = 'en' }: LearnLocaleProviderProps) {
     const [locale, setLocaleState] = useState<LearnLocale>(defaultLocale)
     const [mounted, setMounted] = useState(false)
+    const pathname = usePathname()
 
-    // Initialize locale on mount
+    // Initialize locale on mount and handle path-based defaults
     useEffect(() => {
         const saved = getSavedLocale()
         if (saved) {
             setLocaleState(saved)
         } else {
-            const detected = detectBrowserLocale()
-            setLocaleState(detected)
+            // Priority for first-time users:
+            // 1. If in /learn section, try detecting browser language
+            // 2. Otherwise use the defaultLocale (e.g. 'it')
+            if (pathname?.startsWith('/learn')) {
+                setLocaleState(detectBrowserLocale())
+            } else {
+                setLocaleState(defaultLocale)
+            }
         }
         setMounted(true)
-    }, [])
+    }, [pathname, defaultLocale])
 
     const setLocale = useCallback((newLocale: LearnLocale) => {
         setLocaleState(newLocale)
@@ -166,15 +174,15 @@ export function LearnLocaleToggle({ className = '' }: { className?: string }) {
             aria-label={`Switch language to ${locale === 'en' ? 'Italian' : 'English'}`}
         >
             <span className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 ${locale === 'it'
-                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
-                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
+                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
+                : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
                 }`}>
                 <span>🇮🇹</span>
                 <span>IT</span>
             </span>
             <span className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 ${locale === 'en'
-                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
-                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
+                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
+                : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
                 }`}>
                 <span>🇬🇧</span>
                 <span>EN</span>

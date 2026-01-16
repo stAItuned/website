@@ -23,6 +23,8 @@ export const metadata: Metadata = {
 
 import { CareerOSProvider } from '../career-os/context/CareerOSContext'
 import AuditModal from '../career-os/components/modals/AuditModal'
+import { Suspense } from 'react'
+import AuditLoading from './components/AuditLoading'
 
 export default function RoleFitAuditPage() {
     return (
@@ -99,9 +101,13 @@ export default function RoleFitAuditPage() {
                     </div>
                 </section>
 
+
+
                 {/* Main Content with Promo Code Gate */}
                 <section className="py-12 md:py-16 px-4">
-                    <PromoCodeGate />
+                    <Suspense fallback={<AuditLoading />}>
+                        <PromoCodeGate />
+                    </Suspense>
                 </section>
             </main>
             <AuditModal />

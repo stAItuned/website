@@ -218,7 +218,7 @@ export default function RootLayout({
           <ToastProvider>
             <FirebaseAuthProvider>
               <CookieConsentProvider>
-                <LearnLocaleProvider>
+                <LearnLocaleProvider defaultLocale="it">
                   <PerformanceProvider
                     enableMonitoring={process.env.NODE_ENV === 'production'}
                     sampleRate={0.1}

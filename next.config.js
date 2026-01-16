@@ -23,15 +23,12 @@ const nextConfig = {
   // Add empty turbopack config to silence the warning (Next.js 16+)
   turbopack: {},
   serverExternalPackages: ['googleapis', 'firebase-admin'],
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
+  // eslint configuration removed for Next.js 16 compatibility
   images: {
     formats: ['image/webp'], // Temporarily removed AVIF to reduce CPU load
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [60, 75, 85], // Added supported qualities
     minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
     // Allow all external images as fallback
     remotePatterns: [

@@ -124,16 +124,16 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
     const totalReadingTime = articles.reduce((acc, a) => acc + (a.readingTime || 0), 0)
 
     return (
-        <div className="max-w-7xl mx-auto mt-[100px] mb-24 px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto mt-16 md:mt-[100px] mb-24 px-4 lg:px-8">
             {/* Hero Section with Stats */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 sm:p-12 mb-10">
+            <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-5 sm:p-8 lg:p-12 mb-6 sm:mb-10">
                 {/* Background pattern */}
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
 
                 <div className="relative z-10">
                     {/* Breadcrumb + Free Badge Row */}
-                    <div className="relative flex items-center mb-6">
-                        <nav className="flex items-center gap-2 text-sm text-slate-400">
+                    <div className="relative flex items-center mb-4 sm:mb-6">
+                        <nav className="flex items-center gap-2 text-xs sm:text-sm text-slate-400">
                             <Link href="/" className="hover:text-white transition-colors">Home</Link>
                             <span>/</span>
                             <Link href="/learn" className="hover:text-white transition-colors">Learn</Link>
@@ -148,31 +148,31 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         </div>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-                        <div className="space-y-4 max-w-2xl">
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 sm:gap-8">
+                        <div className="space-y-3 sm:space-y-4 max-w-2xl">
 
-                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight whitespace-nowrap">
+                            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight">
                                 {t.articlesPage.title}<span className="bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">{t.articlesPage.highlight}</span>
                             </h1>
 
-                            <p className="text-lg text-slate-300 leading-relaxed">
+                            <p className="text-sm sm:text-lg text-slate-300 leading-relaxed">
                                 {t.articlesPage.description}
                             </p>
                         </div>
 
                         {/* Stats Grid */}
-                        <div className="grid grid-cols-3 gap-4 lg:gap-6">
-                            <div className="text-center p-4 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
-                                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{articleCounts.all}</div>
-                                <div className="text-xs sm:text-sm text-slate-400">{t.articlesPage.stats.articles}</div>
+                        <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
+                            <div className="text-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur border border-white/10">
+                                <div className="text-xl sm:text-3xl lg:text-4xl font-bold text-white mb-0.5 sm:mb-1">{articleCounts.all}</div>
+                                <div className="text-[10px] sm:text-xs lg:text-sm text-slate-400">{t.articlesPage.stats.articles}</div>
                             </div>
-                            <div className="text-center p-4 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
-                                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{Math.round(totalReadingTime / 60)}h</div>
-                                <div className="text-xs sm:text-sm text-slate-400">{t.articlesPage.stats.content}</div>
+                            <div className="text-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur border border-white/10">
+                                <div className="text-xl sm:text-3xl lg:text-4xl font-bold text-white mb-0.5 sm:mb-1">{Math.round(totalReadingTime / 60)}h</div>
+                                <div className="text-[10px] sm:text-xs lg:text-sm text-slate-400">{t.articlesPage.stats.content}</div>
                             </div>
-                            <div className="text-center p-4 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
-                                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">3</div>
-                                <div className="text-xs sm:text-sm text-slate-400">{t.articlesPage.stats.levels}</div>
+                            <div className="text-center p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur border border-white/10">
+                                <div className="text-xl sm:text-3xl lg:text-4xl font-bold text-white mb-0.5 sm:mb-1">3</div>
+                                <div className="text-[10px] sm:text-xs lg:text-sm text-slate-400">{t.articlesPage.stats.levels}</div>
                             </div>
                         </div>
                     </div>
@@ -180,11 +180,11 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
             </div>
 
             {/* Search + Filter Bar */}
-            <div className="sticky top-20 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg py-4 -mx-4 px-4 lg:-mx-8 lg:px-8 mb-8 border-b border-slate-200/50 dark:border-slate-700/50">
-                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="sticky top-20 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg py-2 sm:py-4 -mx-4 px-4 lg:-mx-8 lg:px-8 mb-6 sm:mb-8 border-b border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center justify-between max-w-full">
                     {/* Search */}
-                    <div className="relative w-full sm:w-80">
-                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="relative w-full sm:w-80 flex-shrink-0">
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         <input
@@ -192,37 +192,39 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                             placeholder={t.articlesPage.searchPlaceholder}
                             value={searchQuery}
                             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1) }}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                            className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                         />
                     </div>
 
                     {/* Level Filter Pills */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-                        <button
-                            onClick={() => handleLevelChange(null)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedLevel === null
-                                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md'
-                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                                }`}
-                        >
-                            {t.articlesPage.all} ({articleCounts.all})
-                        </button>
-                        {levels.map((level) => {
-                            const isSelected = selectedLevel === level.id
-                            const count = articleCounts[level.id as keyof typeof articleCounts]
-                            return (
-                                <button
-                                    key={level.id}
-                                    onClick={() => handleLevelChange(isSelected ? null : level.id)}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${isSelected
-                                        ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-md'
-                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                                        }`}
-                                >
-                                    {level.emoji} {level.name} ({count})
-                                </button>
-                            )
-                        })}
+                    <div className="w-full sm:w-auto overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+                        <div className="flex items-center gap-1.5 sm:gap-2 min-w-max">
+                            <button
+                                onClick={() => handleLevelChange(null)}
+                                className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all min-h-[36px] sm:min-h-[44px] ${selectedLevel === null
+                                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md'
+                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                                    }`}
+                            >
+                                {t.articlesPage.all} ({articleCounts.all})
+                            </button>
+                            {levels.map((level) => {
+                                const isSelected = selectedLevel === level.id
+                                const count = articleCounts[level.id as keyof typeof articleCounts]
+                                return (
+                                    <button
+                                        key={level.id}
+                                        onClick={() => handleLevelChange(isSelected ? null : level.id)}
+                                        className={`px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all min-h-[36px] sm:min-h-[44px] ${isSelected
+                                            ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-md'
+                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                                            }`}
+                                    >
+                                        {level.emoji} {level.name} ({count})
+                                    </button>
+                                )
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -338,11 +340,11 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-4 mt-12">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-12">
                     <button
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group min-w-[44px] min-h-[44px]"
                     >
                         <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
