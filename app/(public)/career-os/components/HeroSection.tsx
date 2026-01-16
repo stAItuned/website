@@ -27,18 +27,18 @@ export default function HeroSection() {
 
             <div className="relative z-10 max-w-6xl mx-auto">
                 {/* Two-column layout: Message + Stats */}
-                <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-8 lg:gap-12 items-center">
+                <div className="grid lg:grid-cols-[1.4fr_0.6fr] gap-8 lg:gap-10 items-center">
                     {/* LEFT: Message + CTAs */}
                     <div className="text-center lg:text-left space-y-4 sm:space-y-6">
                         {/* Headline: 2 lines - Competitive positioning */}
-                        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.15] text-white">
-                            <span>Tutti vogliono ruoli <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF272] to-[#F59E0B]">GenAI</span></span>
+                        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl font-black leading-[1.15] text-white">
+                            <span className="whitespace-nowrap">Tutti vogliono ruoli <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF272] to-[#F59E0B]">GenAI</span></span>
                             <br />
-                            <span>Tu come<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-500"> ti distingui?</span></span>
+                            <span className="whitespace-nowrap">Tu come<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-500"> ti distingui?</span></span>
                         </h1>
 
                         {/* HOOK STATS - Compact on mobile */}
-                        <div className="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-3 sm:gap-5 py-2 sm:py-3">
+                        <div className="flex flex-row flex-wrap justify-center lg:justify-start gap-3 sm:gap-5 py-2 sm:py-3">
                             {/* 6 secondi stat */}
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-rose-500/20 blur-xl rounded-xl sm:rounded-2xl group-hover:bg-rose-500/30 transition-all" />
