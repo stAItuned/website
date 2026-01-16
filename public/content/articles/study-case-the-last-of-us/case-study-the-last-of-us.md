@@ -19,7 +19,7 @@ There is also a DLC that goes deep in the life of *Ellie*, one of the character 
 
 The Last of Us is one of the most renowned game probably that always been published, not only for his story, but also for his gameplay and for the Artificial Intelligence used for the development.
 
-| ![image](./tlou.jpg) |
+| ![The Last of Us game cover art featuring Joel and Ellie](./tlou.jpg) |
 |:--:|
 | <b>Image Credits: HDBlog.it</b>|
 
@@ -28,7 +28,7 @@ Before starting with a more concrete explain of how the different AI character a
 
 The Last of Us is built using **Finite State Machines (FSMs)**. What are FSMs? They are state triggered by an event, so is an event is not happening potentially the character could do the same thing all over again. This is an important introduction for what we are going to see later.
 
-| ![image](./fsms.png) |
+| ![Finite State Machine diagram showing enemy states like Search and Attack](./fsms.png) |
 |:--:|
 | <b>Image Credits: AI and Games</b>|
 
@@ -40,7 +40,7 @@ In few words, the actions seems pretty basilar; yet they give us the idea of how
 
 About the **behaviours**, instead, we are talking about something that every user applies different: a user can do a melee attack or stay distant from the enemy. Behaviours are then *specific concrete actions* that make the enemies understand of we want to approach them.
 
-| ![image](./lastofus2.png) |
+| ![The Last of Us gameplay screenshot showing stealth combat mechanics](./lastofus2.png) |
 |:--:|
 | <b>Image Credits: HDBlog.it</b>|
 
@@ -73,14 +73,14 @@ if skill happened -> attack Joel
 ```
 But how is actually implemented?
 
-| ![image](./cone2.jpg) |
+| ![Enemy vision cone visualization used for detection logic](./cone2.jpg) |
 |:--:|
 | <b>Image Credits: Game Developer</b>|
 
 The Last of Us uses a *cone* that allow the player to be seen by enemies after typically 1 or 2 seconds. Very similar techniques are used in games such as *Splinter Cell and Uncharted*. In addition to that, enemies also scan the near environment, to understand if there is something standing between them and *Joel* (such as Anomaly Detection algorithms). Originally a enemy would have run in Joel's direction without scanning his nearest environment. Eventually, if *Joel* is spotted, the enemy aims to the chest or to the head.
 These are the skills of the hunters:
 
-| ![image](./hunterskills.png) |
+| ![Hunter enemy AI skills and behavior tree diagram](./hunterskills.png) |
 |:--:|
 | <b>Image Credits: Game Developer</b>|
 
@@ -90,7 +90,7 @@ One of the most interesting is the **investigation**, behaviour used when a Hunt
 - **Exposure Map**: sits on top of the navigation map that shows information about what the NPC can see from his current position. This shows to the NPC what is nearby.
 - **Cover Point System**: identifies not only good covers but also specific animation and behaviours. This is called by the NPC to understand where *Joel* could be. 
 
-| ![image](./path.jpg) |
+| ![Combat Coordination System displaying cover points and navigation map](./path.jpg) |
 |:--:|
 | <b>Image Credits: Game Developer</b>|
 
@@ -99,13 +99,13 @@ The enemy can also decide to stand and shoot you, for example, or to approach yo
 
 ### The Infected
 
-| ![image](./infects.jpg) |
+| ![Infected enemy character model from The Last of Us](./infects.jpg) |
 |:--:|
 | <b>Image Credits: Pinterest</b>|
 
 In the case of the infected, they are more likely to do melee attacks. On the other hand, their emphasis on sound in much more efficient than the human one. It is significant to say that there are different types of infected:
 
-| ![image](./inftectedtype.jpg) |
+| ![Types of Infected enemies: Runner, Stalker, Clicker and Bloater](./inftectedtype.jpg) |
 |:--:|
 | <b>Image Credits: Pinterest</b>|
 
@@ -117,7 +117,7 @@ The **Wander** instead is the last skill, in order of priority: they are allowed
 
 Now, let's focus again on the sounds. How do characters such as the **Clicker** and the **Runner** search for the player if they hear something nearby? Infected do not search as hunters. They are less methodical and try to run towards the source of the sound. They stand for some seconds against the source of impact and then start a **search** path.
 
-| ![image](./searchpath.jpg) |
+| ![Pathfinding diagram showing how Infected track sound sources](./searchpath.jpg) |
 |:--:|
 | <b>Image Credits: Game Developer</b>|
 
@@ -125,7 +125,7 @@ The infected provide also a completely different combat experience from the Hunt
 
 ## Ellie
 
-| ![image](./ellie.png) |
+| ![Ellie character close-up from The Last of Us](./ellie.png) |
 |:--:|
 | <b>Image Credits: SpazioGames</b>|
 
@@ -137,7 +137,7 @@ Now, for Ellie the discussion is quite different. She has to follow four guideli
 
 All the work she does, is because of her ability to have a very specific and good positioning. 
 
-| ![image](./elliecovering.jpg) |
+| ![Ellie engaging in cover-based stealth support](./elliecovering.jpg) |
 |:--:|
 | <b>Image Credits: Ellie: Buddy AI in The Last of Us, Max Dyckhoff, Game AI Pro Vol. 2, chapter 35, 2015</b>|
 
@@ -145,7 +145,7 @@ Ellie searches for the better cover position and follows Joel. Now, when Ellie i
 - Following in the cover
 - Protected in cover
 
-| ![image](./pathselliecover.jpg) |
+| ![Diagram of Ellie's cover selection logic and movement paths](./pathselliecover.jpg) |
 |:--:|
 | <b>Image Credits: Ellie: Buddy AI in The Last of Us</b>|
 

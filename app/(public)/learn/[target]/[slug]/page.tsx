@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
     }
   } else {
     // Use dynamic OG image as fallback
-    ogImage = `${base}/learn/${article.target}/${article.slug}/opengraph-image`;
+    ogImage = `${base}/api/og`;
     imageType = 'image/png';
   }
 

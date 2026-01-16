@@ -23,7 +23,7 @@ However, this **rarely happens**, and this is why we need to rely on this “**t
 
 It’s important to find a balance between these two types of error in order to build a good model.
 
-| ![image](./article_1.png) |
+| ![Bias vs Variance Bullseye Diagram showing targets for low/high bias and variance](./article_1.png) |
 |:--:|
 | <b>Image Credits: [illustrated-machine-learning.github.io](https://illustrated-machine-learning.github.io/)</b>|
 
@@ -44,7 +44,7 @@ Obviously, there is no absolute **solution** to solve overfitting, but based on 
 - try linear kernels (if applicable)
 - try reducing layers/units (if applicable)
 
-| ![image](./article_2.png) |
+| ![Overfitting graph: Model fits training data noise resulting in high variance](./article_2.png) |
 |:--:|
 | <b>Image Credits: [illustrated-machine-learning.github.io](https://illustrated-machine-learning.github.io/)</b>|
 
@@ -62,7 +62,7 @@ A few solutions **are**:
 - add more training data (if possible..)
 - reduce regularization
 
-| ![image](./article_3.png) |
+| ![Underfitting graph: Simple model failing to capture data patterns resulting in high bias](./article_3.png) |
 |:--:|
 | <b>Image Credits: [illustrated-machine-learning.github.io](https://illustrated-machine-learning.github.io/)</b>|
 
@@ -74,7 +74,7 @@ The overall goal is to reach the so-called **zone of solution**, an optimal zone
 
 Having the picture below as a reference, if we are on the left side, we should carefully move to the right by increasing the model complexity (reduce bias). On the other hand, if we seek to move leftwards, we have to simplify the model and reduce the variance.
 
-| ![image](./article_4.png) |
+| ![Bias-Variance Tradeoff graph showing the optimal total error zone](./article_4.png) |
 |:--:|
 | <b>Image Credits: [illustrated-machine-learning.github.io](https://illustrated-machine-learning.github.io/)</b>|
 

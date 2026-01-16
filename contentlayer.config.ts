@@ -10,11 +10,14 @@ export const Post = defineDocumentType(() => ({
     date: { type: 'date', required: false },
     topics: { type: 'list', of: { type: 'string' }, required: false },
     meta: { type: 'string', required: false },
+    seoTitle: { type: 'string', required: false },
+    seoDescription: { type: 'string', required: false },
     target: { type: 'string', required: false },
     business: { type: 'boolean', required: false },
     language: { type: 'string', required: false },
     cover: { type: 'string', required: false },
     published: { type: 'boolean', required: false },
+    updatedAt: { type: 'date', required: false },
   },
   computedFields: {
     url: {

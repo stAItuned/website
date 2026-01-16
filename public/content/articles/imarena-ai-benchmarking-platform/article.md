@@ -1,5 +1,7 @@
 ---
 title: "LMArena: How the Web’s Most-Watched LLM Leaderboard Works in 2025"
+seoTitle: "LMArena 2025: How the LLM Leaderboard Works"
+seoDescription: "Scopri come funziona LMArena (ex Chatbot Arena), il sistema di ranking Elo per LLM. Guida pratica per scegliere i modelli AI nel 2025."
 author: Daniele Moltisanti
 topics: [AI, Evaluation, LLM]
 target: Expert
@@ -7,6 +9,7 @@ language: English
 cover: cover.webp
 meta: "LMArena (formerly Chatbot Arena) in 2025: Arena Elo, category leaderboards, new arenas, caveats, and how to pick models with human-preference data."
 date: 2025-08-28
+updatedAt: 2025-01-16
 published: true
 ---
 

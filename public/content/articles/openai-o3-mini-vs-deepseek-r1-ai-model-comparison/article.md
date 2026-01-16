@@ -1,5 +1,7 @@
 ---
 title: "o3-mini vs. DeepSeek R1: Which AI Model Wins in Performance & Cost?"
+seoTitle: "OpenAI o3-mini vs DeepSeek R1: Performance & Cost Comparison"
+seoDescription: "Confronto tra o3-mini di OpenAI e DeepSeek R1. Analisi delle prestazioni in coding, matematica e ragionamento logico."
 author: Daniele Moltisanti
 topics: [AI]
 target: Midway
@@ -7,6 +9,7 @@ language: English
 cover: cover.webp
 meta: "OpenAI’s o3-mini is here! Discover how this powerful AI model compares to DeepSeek R1, what it means for the future of AI, and why it’s a game-changer in reasoning and cost-efficiency. Read more now!"
 date: 2025-02-01
+updatedAt: 2025-01-16
 published: true
 ---
 
@@ -66,7 +69,7 @@ The launch of o3-mini isn't just about competing with DeepSeek—it also marks a
 | **Safety Measures** | Stronger protocols | Higher vulnerability | Secure but less optimized |
 
 <p>
-    <img src="./performance.png" alt="Performance" height="400px" width="auto">
+    <img src="./performance.png" alt="Chart comparing performance metrics of o3-mini vs o1-mini and o1 models" height="400px" width="auto">
 </p>
 
 🔗 **Source:** [OpenAI Blog](https://openai.com/index/openai-o3-mini/?utm_source=chatgpt.com)  
@@ -120,6 +123,32 @@ So, **should you use o3-mini?**
 What’s clear is that AI competition is intensifying, and **users will benefit from more powerful and affordable models in the near future**. Stay tuned—this is just the beginning of a new AI era.  
 
 🔗 **What do you think? Share your thoughts in the comments below!**  
+
+---
+
+---
+
+## FAQ
+
+> **Tip:** Each question below expands to a concise, production-oriented answer.
+
+<details>
+  <summary><strong>Is o3-mini better than DeepSeek R1 for coding?</strong></summary>
+
+For pure coding tasks, benchmarks suggest **o3-mini** often has an edge in structured reasoning and error reduction (39% fewer major errors than o1-mini). However, **DeepSeek R1** remains highly competitive, especially for developers who need an open-weights model or lower API costs in certain high-volume scenarios.
+</details>
+
+<details>
+  <summary><strong>How much does OpenAI o3-mini cost?</strong></summary>
+
+**o3-mini** is currently available for **free** to ChatGPT Free and Plus users (with rate limits). For developers via API, it is positioned as a cost-efficient reasoning model, significantly cheaper than the full o1 or GPT-4 classes, making it attractive for high-frequency agentic workflows.
+</details>
+
+<details>
+  <summary><strong>Can I run DeepSeek R1 locally?</strong></summary>
+
+Yes, unlike o3-mini which is a proprietary API-only model, **DeepSeek R1** has distilled versions available (e.g., ranging from 1.5B to 70B parameters) that can be run locally using tools like **Ollama** or **LM Studio**, offering privacy and zero cloud costs.
+</details>
 
 ---
 

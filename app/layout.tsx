@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     description: 'Prototipi di AI da testare sul campo, prima di investire in progetti lunghi e costosi. Aiutiamo PMI e team digitali a trasformare ipotesi su AI in esperimenti concreti.',
     images: [
       {
-        url: '/assets/general/logo-text.png',
+        url: '/api/og',
         width: 1200,
         height: 630,
         alt: 'stAItuned - AI pratica per PMI',
@@ -100,7 +100,7 @@ export default function RootLayout({
   // const articleCovers = getArticleCoversForPreload()
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="it" suppressHydrationWarning>
       <head>
         {/* SEO Structured Data (JSON-LD) */}
         <JsonLd data={generateOrganizationSchema()} />

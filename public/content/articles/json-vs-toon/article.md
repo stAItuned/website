@@ -1,5 +1,7 @@
 ---
 title: "TOON vs JSON for LLMs: Performance & Accuracy Deep Dive"
+seoTitle: "TOON vs JSON for LLMs: Performance & Accuracy Deep Dive"
+seoDescription: "Perché il formato TOON sta sfidando JSON nella comunicazione AI? Analisi di accuratezza, latenza e token-efficiency."
 author: Daniele Moltisanti
 topics: [GenAI, LLM]
 target: Expert
@@ -8,6 +10,7 @@ language: English
 cover: https://storage.googleapis.com/editorial-planner-images/article-images/9a123e84-a2d9-49e4-a364-ac16356a9b03/cover_20251203_154839.webp
 meta: "Discover why LLMs struggle with JSON and how TOON's schema-aware structure can improve accuracy, reduce hallucinations, and cut token usage in AI workflows."
 date: 2025-12-03
+updatedAt: 2025-01-16
 published: true
 ---
 
@@ -249,6 +252,34 @@ In those cases, JSON remains the pragmatic choice. You can still combine it with
 
 > **Bottom line:**
 > JSON is still the default language of the web. TOON is emerging as a specialised “LLM-first” format: worth adopting where structured accuracy and token efficiency really matter, but not a universal replacement.
+
+---
+
+JSON is still the default language of the web. TOON is emerging as a specialised “LLM-first” format: worth adopting where structured accuracy and token efficiency really matter, but not a universal replacement.
+
+---
+
+## FAQ
+
+> **Tip:** Each question below expands to a concise, production-oriented answer.
+
+<details>
+  <summary><strong>What is TOON format?</strong></summary>
+
+**TOON (Token-Oriented Object Notation)** is a data format designed specifically for LLMs. It mimics JSON's data model but uses a schema-aware, tabular structure to reduce token usage (by 30-50%) and improve the model's ability to generate valid, accurate structured data.
+</details>
+
+<details>
+  <summary><strong>Why use TOON instead of JSON for LLMs?</strong></summary>
+
+LLMs often struggle with strict JSON syntax (brackets, commas) and can hallucinate structure. **TOON** simplifies the syntax and enforces a schema upfront, leading to higher accuracy (fewer hallucinations) and lower latency because the model generates fewer tokens to represent the same data.
+</details>
+
+<details>
+  <summary><strong>Does TOON save tokens?</strong></summary>
+
+Yes, benchmarks consistently show **TOON reduces token usage by 30% to 60%** compared to standard JSON for structured lists (like product catalogs or user logs). This translates directly to lower API costs and faster response times.
+</details>
 
 ---
 
