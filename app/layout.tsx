@@ -38,10 +38,10 @@ const montserrat = Montserrat({ subsets: ['latin'] })
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
   title: {
-    default: 'stAItuned - AI pratica per PMI',
+    default: 'stAItuned | Guide e tutorial su AI e GenAI',
     template: '%s | stAItuned',
   },
-  description: 'Prototipi di AI da testare sul campo, prima di investire in progetti lunghi e costosi. Aiutiamo PMI e team digitali a trasformare ipotesi su AI in esperimenti concreti.',
+  description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
   keywords: ['AI', 'intelligenza artificiale', 'PMI', 'machine learning', 'prototipi AI', 'progetti pilota', 'automazione', 'Italia'],
   authors: [{ name: 'stAItuned' }],
   creator: 'stAItuned',
@@ -61,14 +61,14 @@ export const metadata: Metadata = {
     locale: 'it_IT',
     url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
     siteName: 'stAItuned',
-    title: 'stAItuned - AI pratica per PMI',
-    description: 'Prototipi di AI da testare sul campo, prima di investire in progetti lunghi e costosi. Aiutiamo PMI e team digitali a trasformare ipotesi su AI in esperimenti concreti.',
+    title: 'stAItuned | Guide e tutorial su AI e GenAI',
+    description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
     images: [
       {
         url: '/api/og',
         width: 1200,
         height: 630,
-        alt: 'stAItuned - AI pratica per PMI',
+        alt: 'stAItuned | Guide e tutorial su AI e GenAI',
       },
     ],
   },

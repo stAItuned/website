@@ -77,6 +77,8 @@ export type RoleFitAuditEvent =
     | 'role_fit_audit_section_completed'
     | 'role_fit_audit_completed'
     | 'role_fit_audit_cta_clicked'
+    | 'role_fit_audit_cta_view'
+    | 'role_fit_audit_cta_dismiss'
 
 // Career OS Funnel Events
 export type CareerOSEvent =
@@ -400,11 +402,25 @@ export function trackRoleFitAuditCompleted(archetypeId: string, readinessScore: 
     })
 }
 
-export function trackRoleFitAuditCTAClicked(ctaType: 'apply' | 'learn_more') {
+export function trackRoleFitAuditCTAClicked(ctaType: string, variant: 'box' | 'sticky') {
     trackEvent('role_fit_audit_cta_clicked', {
         category: 'conversion',
-        source: 'role_fit_audit',
+        source: `audit_cta_${variant}`,
         label: ctaType
+    })
+}
+
+export function trackRoleFitAuditCTAView(variant: 'box' | 'sticky') {
+    trackEvent('role_fit_audit_cta_view', {
+        category: 'engagement',
+        source: `audit_cta_${variant}`
+    })
+}
+
+export function trackRoleFitAuditCTADismiss() {
+    trackEvent('role_fit_audit_cta_dismiss', {
+        category: 'engagement',
+        source: 'audit_cta_sticky'
     })
 }
 

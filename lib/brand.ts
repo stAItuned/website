@@ -8,8 +8,8 @@
 export const BRAND = {
     // Brand Identity
     name: 'stAItuned',
-    tagline: 'AI pratica per PMI',
-    description: 'Prototipi di AI da testare sul campo, prima di investire in progetti lunghi e costosi.',
+    tagline: 'Guide e tutorial su AI e GenAI',
+    description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
 
     // Site URLs
     url: 'https://staituned.com',

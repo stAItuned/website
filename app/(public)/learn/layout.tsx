@@ -8,6 +8,7 @@ import {
     PWADynamicShortcuts,
     PWABadgeTracker
 } from '@/components/pwa'
+import { RoleFitAuditCTA } from '@/components/ui/RoleFitAuditCTA'
 
 /**
  * Metadata for the /learn section
@@ -71,6 +72,7 @@ export default function LearnLayout({
             <PWABadgeTracker />
 
             {children}
+            <RoleFitAuditCTA variant="sticky" />
         </>
     )
 }

@@ -52,35 +52,35 @@ interface ArticleSectionProps {
   relevantArticles: Article[]
 }
 
-function ArticleCard({ article, color, pageViews, index }: { 
-  article: Article; 
-  color: string; 
+function ArticleCard({ article, color, pageViews, index }: {
+  article: Article;
+  color: string;
   pageViews?: number;
   index: number;
 }) {
   const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'
-  
+
   const getValidImageSrc = (cover?: string) => {
     if (!cover) return null
-    
+
     // If it's already a valid absolute URL, return as is
     if (cover.startsWith('http://') || cover.startsWith('https://')) {
       return cover
     }
-    
+
     // If it's already an absolute path, return as is
     if (cover.startsWith('/')) {
       return cover
     }
-    
+
     // If it's a relative path, convert to absolute path
     return `/content/articles/${article.slug}/${cover}`
   }
 
   const imageSrc = getValidImageSrc(article.cover)
-  
+
   return (
-    <div 
+    <div
       className="relative w-full md:w-1/2 sm:text-xl font-bold opacity-80 hover:opacity-100 transition group"
       style={{ background: color }}
     >
@@ -131,9 +131,9 @@ function ArticleCard({ article, color, pageViews, index }: {
             )}
           </div>
         </span>
-        
+
         {/* Minimal View count badge */}
-        {pageViews !== undefined && pageViews > 0 && (
+        {pageViews !== undefined && pageViews >= 10 && (
           <div className="absolute top-3 right-3 flex items-center bg-white/80 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full shadow-sm group-hover:bg-white group-hover:text-primary-600 transition-all">
             <svg className="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -160,7 +160,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
     top: []
   })
   const [analyticsLoading, setAnalyticsLoading] = useState(true)
-  
+
   // Fetch analytics data for all articles from Firestore
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -182,7 +182,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
                 const target = article.target?.toLowerCase() || 'midway'
                 const articleUrl = `/learn/${target}/${article.slug}`
                 const pageViews = analyticsMap.get(articleUrl) || 0
-                
+
                 return {
                   ...article,
                   pageViews
@@ -219,7 +219,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
 
     fetchAnalytics()
   }, [recentArticles, relevantArticles])
-  
+
   // Remove the old analytics hook
   // const { data: analyticsData, loading: analyticsLoading } = useMultipleAnalytics({
   //   startDate: '90daysAgo',
@@ -227,7 +227,7 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
   // })
 
   // Remove the old useEffect that merged analytics data
-  
+
   const categories: (Category | 'Top')[] = ['Relevant', 'Recent', 'Top']
   let articles: Article[] = [];
   if (articlesToShow === 'Recent') {
@@ -245,11 +245,10 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
         {categories.map((category) => (
           <div
             key={category}
-            className={`w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition ${
-              articlesToShow === category 
-                ? 'text-secondary-600 dark:text-secondary-400' 
+            className={`w-full text-center bg-primary-600 py-4 uppercase cursor-pointer hover:text-secondary-600 transition ${articlesToShow === category
+                ? 'text-secondary-600 dark:text-secondary-400'
                 : 'text-gray-400 dark:text-gray-300'
-            }`}
+              }`}
             onClick={() => setArticlesToShow(category)}
           >
             <div className="flex items-center justify-center space-x-2">
@@ -278,8 +277,8 @@ export function ArticleSection({ recentArticles, relevantArticles }: ArticleSect
       {/* Analytics note */}
       <div className="bg-primary-600 px-4 py-2">
         <p className="text-xs text-right text-gray-300 dark:text-gray-200">
-          {analyticsLoading 
-            ? 'Loading view counts...' 
+          {analyticsLoading
+            ? 'Loading view counts...'
             : '* View counts from Google Analytics (all time)'
           }
         </p>

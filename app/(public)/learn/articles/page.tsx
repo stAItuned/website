@@ -9,11 +9,13 @@ export const dynamic = 'force-static'
 export const revalidate = 86400 // ISR ogni giorno
 
 export const metadata: Metadata = {
-    title: 'Articles - stAItuned Learn',
-    description: 'Practical AI articles: benchmarks, guides, teardowns and experiments. Filter by experience level: Newbie, Midway, Expert.',
+    title: {
+        absolute: 'Blog stAItuned | AI & GenAI: guide e tutorial'
+    },
+    description: 'Blog su AI e GenAI con guide, tutorial e risorse per capire e applicare l’intelligenza artificiale nel lavoro e nei progetti.',
     openGraph: {
-        title: 'Articles - stAItuned Learn',
-        description: 'Practical AI articles: benchmarks, guides, teardowns and experiments.',
+        title: 'Blog stAItuned | AI & GenAI: guide e tutorial',
+        description: 'Blog su AI e GenAI con guide, tutorial e risorse per capire e applicare l’intelligenza artificiale nel lavoro e nei progetti.',
     }
 }
 

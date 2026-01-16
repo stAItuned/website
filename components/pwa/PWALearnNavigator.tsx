@@ -46,7 +46,7 @@ export function PWALearnNavigator({ className = '' }: PWALearnNavigatorProps) {
     const [isVisible, setIsVisible] = useState(false)
 
     // Check if we're on a learn page
-    const isLearnPage = pathname === '/learn' || pathname.startsWith('/learn/')
+    const isLearnPage = pathname === '/learn' || pathname === '/learn/articles' || pathname.startsWith('/learn/')
 
     useEffect(() => {
         // Check if dismissed from localStorage
@@ -94,7 +94,7 @@ export function PWALearnNavigator({ className = '' }: PWALearnNavigatorProps) {
         >
             {/* Floating pill button */}
             <Link
-                href="/learn"
+                href="/learn/articles"
                 className="
                     group flex items-center gap-2
                     pl-4 pr-3 py-2.5

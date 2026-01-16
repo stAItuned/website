@@ -36,11 +36,11 @@ interface AuthorPageWithPaginationProps {
   slug: string
 }
 
-export function AuthorPageWithPagination({ 
-  authorData, 
-  authorArticles, 
-  pageSize, 
-  slug 
+export function AuthorPageWithPagination({
+  authorData,
+  authorArticles,
+  pageSize,
+  slug
 }: AuthorPageWithPaginationProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const effectivePageSize = pageSize ?? PAGINATION_SIZE
@@ -49,14 +49,14 @@ export function AuthorPageWithPagination({
   const paginatedArticles = authorArticles.slice(startIndex, startIndex + effectivePageSize)
 
   return (
-  <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+    <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
       {/* Breadcrumb */}
       <nav className="flex items-center space-x-2 sm:space-x-4 text-primary-500 mb-4 sm:mb-8 text-xs sm:text-base overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent">
         <Link href="/" className="opacity-50 hover:underline hover:opacity-100 transition">
           Home
         </Link>
         <span>/</span>
-        <Link href="/learn" className="opacity-50 hover:underline hover:opacity-100 transition">
+        <Link href="/learn/articles" className="opacity-50 hover:underline hover:opacity-100 transition">
           Learn
         </Link>
         <span>/</span>
@@ -170,8 +170,8 @@ export function AuthorPageWithPagination({
                       author: article.author,
                       date: article.date,
                       meta: article.meta,
-                      readingTime: typeof article.readingTime === 'string' 
-                        ? parseInt(article.readingTime) || undefined 
+                      readingTime: typeof article.readingTime === 'string'
+                        ? parseInt(article.readingTime) || undefined
                         : article.readingTime,
                       target: article.target,
                       language: article.language

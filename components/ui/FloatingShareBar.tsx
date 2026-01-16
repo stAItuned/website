@@ -324,8 +324,8 @@ export function FloatingShareBar({
       >
         <svg
           className={`w-6 h-6 transition-colors ${isBookmarked
-              ? 'text-yellow-500 fill-yellow-500'
-              : 'text-gray-600 dark:text-gray-300 group-hover:text-yellow-500'
+            ? 'text-yellow-500 fill-yellow-500'
+            : 'text-gray-600 dark:text-gray-300 group-hover:text-yellow-500'
             }`}
           fill={isBookmarked ? 'currentColor' : 'none'}
           stroke="currentColor"
@@ -336,7 +336,7 @@ export function FloatingShareBar({
         </svg>
 
         {/* Bookmark Count Badge */}
-        {bookmarkCount > 0 && (
+        {bookmarkCount >= 1 && (
           <div className="absolute -bottom-1 -right-1 bg-yellow-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white dark:border-slate-900 shadow-sm">
             {formatNumber(bookmarkCount)}
           </div>
@@ -378,79 +378,85 @@ export function FloatingShareBar({
       <div className="w-full h-px bg-gray-200 dark:bg-slate-700 my-1" />
 
       {/* Views Counter */}
-      <div
-        className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
-        title="Total page views"
-      >
-        <svg
-          className="w-5 h-5 text-gray-600 dark:text-gray-300 mb-1"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {views >= 10 && (
+        <div
+          className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
+          title="Total page views"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-          {formatNumber(views)}
-        </span>
-        {/* Tooltip */}
-        <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
-          <div className="font-semibold mb-0.5">Total Views</div>
-          <div className="text-gray-300 dark:text-gray-400">All page visits</div>
-          {/* Arrow */}
-          <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          <svg
+            className="w-5 h-5 text-gray-600 dark:text-gray-300 mb-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+            {formatNumber(views)}
+          </span>
+          {/* Tooltip */}
+          <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+            <div className="font-semibold mb-0.5">Total Views</div>
+            <div className="text-gray-300 dark:text-gray-400">All page visits</div>
+            {/* Arrow */}
+            <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Unique Visitors Counter */}
-      <div
-        className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
-        title="Unique visitors"
-      >
-        <svg
-          className="w-5 h-5 text-blue-600 dark:text-blue-400 mb-1"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {visitors >= 5 && (
+        <div
+          className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
+          title="Unique visitors"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-          {formatNumber(visitors)}
-        </span>
-        {/* Tooltip */}
-        <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
-          <div className="font-semibold mb-0.5">Unique Visitors</div>
-          <div className="text-gray-300 dark:text-gray-400">Individual readers</div>
-          {/* Arrow */}
-          <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          <svg
+            className="w-5 h-5 text-blue-600 dark:text-blue-400 mb-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+            {formatNumber(visitors)}
+          </span>
+          {/* Tooltip */}
+          <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+            <div className="font-semibold mb-0.5">Unique Visitors</div>
+            <div className="text-gray-300 dark:text-gray-400">Individual readers</div>
+            {/* Arrow */}
+            <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Likes Counter */}
-      <div
-        className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
-        title="Total likes"
-      >
-        <svg
-          className="w-5 h-5 text-red-500 mb-1"
-          fill="currentColor"
-          viewBox="0 0 24 24"
+      {likes >= 2 && (
+        <div
+          className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
+          title="Total likes"
         >
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        </svg>
-        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-          {formatNumber(likes)}
-        </span>
-        {/* Tooltip */}
-        <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
-          <div className="font-semibold mb-0.5">Total Likes</div>
-          <div className="text-gray-300 dark:text-gray-400">Reader appreciation</div>
-          {/* Arrow */}
-          <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          <svg
+            className="w-5 h-5 text-red-500 mb-1"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+            {formatNumber(likes)}
+          </span>
+          {/* Tooltip */}
+          <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+            <div className="font-semibold mb-0.5">Total Likes</div>
+            <div className="text-gray-300 dark:text-gray-400">Reader appreciation</div>
+            {/* Arrow */}
+            <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   )
 }

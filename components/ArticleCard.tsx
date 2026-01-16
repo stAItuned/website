@@ -17,11 +17,20 @@ interface ArticleCardProps {
     language?: string
     topics?: string[]
   }
+  pageViews?: number
 }
 
-export function ArticleCard({ article }: ArticleCardProps) {
+export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCardProps) {
   // Fetch analytics for this article (fast endpoint)
-  const { data: analyticsData, loading: analyticsLoading } = useFastAnalytics({ slug: article.slug })
+  const { data: internalAnalytics, loading: analyticsLoading } = useFastAnalytics({
+    slug: article.slug,
+    enabled: initialPageViews === undefined // Only fetch if not provided
+  })
+
+  // Determine which analytics to use
+  const analyticsData = initialPageViews !== undefined
+    ? { pageViews: initialPageViews }
+    : internalAnalytics
   const getValidImageSrc = (cover?: string) => {
     if (!cover) return null
     if (cover.startsWith('http://') || cover.startsWith('https://')) {
@@ -113,13 +122,13 @@ export function ArticleCard({ article }: ArticleCardProps) {
               <span className="inline-flex items-center rounded-lg bg-emerald-500/90 text-white px-2 py-1 text-[10px] font-bold uppercase tracking-wide shadow-lg backdrop-blur-md border border-white/10">
                 New
               </span>
-            ) : (
+            ) : analyticsData && analyticsData.pageViews >= 10 && (
               <div className="flex items-center bg-white/90 dark:bg-black/60 text-slate-700 dark:text-slate-200 rounded-lg px-2 py-1 shadow-lg text-[10px] font-semibold gap-1.5 backdrop-blur-md border border-white/20 dark:border-white/10 transition-all duration-300">
                 <svg className="w-3 h-3 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData?.pageViews || 0)}
+                {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData.pageViews)}
               </div>
             )}
           </div>

@@ -220,7 +220,7 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
           <FadeIn>
             <div className="flex items-center justify-between">
               <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Ultimi articoli dal blog</h3>
-              <Link href="/learn" className="inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600">
+              <Link href="/learn/articles" className="inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:text-amber-600">
                 Vai al blog
                 <span aria-hidden className="text-base">→</span>
               </Link>

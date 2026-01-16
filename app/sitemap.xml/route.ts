@@ -71,20 +71,16 @@ export async function GET() {
     // Core pages - highest priority
     { loc: `${baseUrl}/`, priority: "1.0", lastmod: learnLastmod },
     { loc: `${baseUrl}/learn/`, priority: "0.9", lastmod: learnLastmod },
-    { loc: `${baseUrl}/aziende/`, priority: "0.9", lastmod: buildDate },
-
     // Section/target pages - dynamically updated when new posts added
     { loc: `${baseUrl}/learn/newbie/`, priority: "0.8", lastmod: newbieLastmod },
     { loc: `${baseUrl}/learn/midway/`, priority: "0.8", lastmod: midwayLastmod },
     { loc: `${baseUrl}/learn/expert/`, priority: "0.8", lastmod: expertLastmod },
-    { loc: `${baseUrl}/learn/business/`, priority: "0.8", lastmod: businessLastmod },
 
     // Secondary pages
     { loc: `${baseUrl}/prodotti/`, priority: "0.8", lastmod: buildDate },
-    { loc: `${baseUrl}/lab/`, priority: "0.7", lastmod: buildDate },
+    // { loc: `${baseUrl}/lab/`, priority: "0.7", lastmod: buildDate },
     { loc: `${baseUrl}/meet/`, priority: "0.7", lastmod: buildDate },
     { loc: `${baseUrl}/author/`, priority: "0.6", lastmod: learnLastmod },
-    { loc: `${baseUrl}/business/`, priority: "0.7", lastmod: businessLastmod },
 
     // Legal pages - low priority, rarely updated
     { loc: `${baseUrl}/privacy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },

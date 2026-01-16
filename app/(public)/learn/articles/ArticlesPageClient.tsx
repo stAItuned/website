@@ -136,7 +136,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts }: Articles
                         <nav className="flex items-center gap-2 text-xs sm:text-sm text-slate-400">
                             <Link href="/" className="hover:text-white transition-colors">Home</Link>
                             <span>/</span>
-                            <Link href="/learn" className="hover:text-white transition-colors">Learn</Link>
+                            <Link href="/learn/articles" className="hover:text-white transition-colors">Learn</Link>
                             <span>/</span>
                             <span className="text-white font-medium">Articles</span>
                         </nav>

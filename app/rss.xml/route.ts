@@ -5,8 +5,8 @@ export const runtime = "nodejs";
 export const revalidate = 3600; // Regenerate every hour
 
 const SITE_URL = "https://staituned.com";
-const SITE_TITLE = "stAItuned";
-const SITE_DESCRIPTION = "Artificial intelligence within everyone's reach. AI pratica per PMI e professionisti: articoli, tutorial, webapp demo e progetti pilota.";
+const SITE_TITLE = "stAItuned | Guide e tutorial su AI e GenAI";
+const SITE_DESCRIPTION = "Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.";
 
 /**
  * Escape special XML characters to prevent XML injection

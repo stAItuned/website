@@ -47,22 +47,51 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
     dateRange: 'all',
     languages: []
   })
+  const [viewMode, setViewMode] = useState<'recent' | 'trending'>('recent')
+  const [analyticsData, setAnalyticsData] = useState<Record<string, number>>({})
+  const [analyticsLoading, setAnalyticsLoading] = useState(false)
   const pageSize = PAGINATION_SIZE
+
+  // Fetch analytics data on mount
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        setAnalyticsLoading(true)
+        const response = await fetch('/api/analytics')
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success && result.data && Array.isArray(result.data)) {
+            const stats: Record<string, number> = {}
+            result.data.forEach((item: { articleUrl?: string; pageViews?: number }) => {
+              if (item.articleUrl) stats[item.articleUrl] = item.pageViews || 0
+            })
+            setAnalyticsData(stats)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error)
+      } finally {
+        setAnalyticsLoading(false)
+      }
+    }
+
+    fetchAnalytics()
+  }, [])
 
   // Check if we're on mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    
+
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   // Filter articles by target
-  const targetArticles = allPosts.filter((article: Article) => 
+  const targetArticles = allPosts.filter((article: Article) =>
     article.target?.toLowerCase() === target.toLowerCase()
   )
 
@@ -146,7 +175,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
       filtered = filtered.filter((article: Article) => {
         if (!article.date) return false
         const articleDate = new Date(article.date)
-        
+
         switch (filters.dateRange) {
           case 'last-week': {
             const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
@@ -177,13 +206,19 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
       )
     }
 
-    // Sort articles by date (newest first)
+    // Sort articles
     return filtered.sort((a: Article, b: Article) => {
+      if (viewMode === 'trending') {
+        const viewsA = analyticsData[`/learn/${a.target?.toLowerCase() || 'midway'}/${a.slug}`] || 0
+        const viewsB = analyticsData[`/learn/${b.target?.toLowerCase() || 'midway'}/${b.slug}`] || 0
+        return viewsB - viewsA
+      }
+
       const dateA = new Date(a.date || '1970-01-01')
       const dateB = new Date(b.date || '1970-01-01')
       return dateB.getTime() - dateA.getTime()
     })
-  }, [targetArticles, searchTerm, filters])
+  }, [targetArticles, searchTerm, filters, viewMode, analyticsData])
 
   // Pagination
   const totalPages = Math.ceil(filteredArticles.length / pageSize)
@@ -199,7 +234,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
       const newValues = currentValues.includes(value)
         ? currentValues.filter(v => v !== value)
         : [...currentValues, value]
-      
+
       return { ...prev, [filterType]: newValues }
     })
     setCurrentPage(1)
@@ -222,17 +257,17 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
     setCurrentPage(1)
   }
 
-  const activeFiltersCount = 
-    filters.tags.length + 
-    filters.readingTime.length + 
-    filters.authors.length + 
-    filters.languages.length + 
+  const activeFiltersCount =
+    filters.tags.length +
+    filters.readingTime.length +
+    filters.authors.length +
+    filters.languages.length +
     (filters.dateRange !== 'all' ? 1 : 0)
 
   return (
     <PageTransition>
       <section className="max-w-7xl mx-auto mb-32 px-4 sm:px-6 md:px-8 mt-[120px] sm:mt-[140px] md:mt-[150px] space-y-8 md:space-y-16">
-        
+
         {/* Breadcrumb */}
         <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center gap-4 md:gap-8 lg:gap-16">
           <nav className="flex items-center space-x-2 md:space-x-4 text-primary-500 w-full md:w-auto bg-slate-100 px-4 md:px-8 py-3 md:py-4 rounded-lg font-semibold">
@@ -265,6 +300,37 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
               </svg>
             </div>
           </div>
+        </div>
+
+        {/* View Mode Toggle (Recent vs Trending) */}
+        <div className="flex border-b border-gray-200 dark:border-slate-700">
+          <button
+            onClick={() => setViewMode('recent')}
+            className={`px-6 py-3 text-sm md:text-base font-bold uppercase tracking-wider transition-all relative ${viewMode === 'recent'
+                ? 'text-primary-600 dark:text-primary-400'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600'
+              }`}
+          >
+            Recent
+            {viewMode === 'recent' && (
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary-600 dark:bg-primary-400 rounded-t-full" />
+            )}
+          </button>
+          <button
+            onClick={() => setViewMode('trending')}
+            className={`px-6 py-3 text-sm md:text-base font-bold uppercase tracking-wider transition-all relative flex items-center gap-2 ${viewMode === 'trending'
+                ? 'text-primary-600 dark:text-primary-400'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600'
+              }`}
+          >
+            Trending
+            {analyticsLoading && (
+              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary-600 dark:border-primary-400"></div>
+            )}
+            {viewMode === 'trending' && (
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary-600 dark:bg-primary-400 rounded-t-full" />
+            )}
+          </button>
         </div>
 
         {/* Filter Toggle Button */}
@@ -312,7 +378,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                       </svg>
                     </button>
                   </div>
-                  
+
                   <div className="space-y-6">
                     {/* Mobile Topics Filter */}
                     {filterOptions.tags.length > 0 && (
@@ -323,11 +389,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                             <button
                               key={tag}
                               onClick={() => toggleFilter('tags', tag)}
-                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors text-center ${
-                                filters.tags.includes(tag)
+                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors text-center ${filters.tags.includes(tag)
                                   ? 'bg-primary-600 text-white'
                                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                              }`}
+                                }`}
                             >
                               {tag}
                             </button>
@@ -348,11 +413,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                           <button
                             key={option.value}
                             onClick={() => toggleFilter('readingTime', option.value)}
-                            className={`w-full px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left ${
-                              filters.readingTime.includes(option.value)
+                            className={`w-full px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left ${filters.readingTime.includes(option.value)
                                 ? 'bg-primary-600 text-white'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
+                              }`}
                           >
                             {option.label}
                           </button>
@@ -369,11 +433,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                             <button
                               key={author}
                               onClick={() => toggleFilter('authors', author)}
-                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
-                                filters.authors.includes(author)
+                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${filters.authors.includes(author)
                                   ? 'bg-primary-600 text-white'
                                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                              }`}
+                                }`}
                             >
                               {author}
                             </button>
@@ -396,11 +459,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                           <button
                             key={option.value}
                             onClick={() => setDateFilter(option.value)}
-                            className={`w-full px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left ${
-                              filters.dateRange === option.value
+                            className={`w-full px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left ${filters.dateRange === option.value
                                 ? 'bg-primary-600 text-white'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
+                              }`}
                           >
                             {option.label}
                           </button>
@@ -417,11 +479,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                             <button
                               key={language}
                               onClick={() => toggleFilter('languages', language)}
-                              className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left ${
-                                filters.languages.includes(language)
+                              className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left ${filters.languages.includes(language)
                                   ? 'bg-primary-600 text-white'
                                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                              }`}
+                                }`}
                             >
                               {language}
                             </button>
@@ -445,7 +506,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
             ) : (
               /* Desktop Filter Panel */
               <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-6 shadow-sm">
-                
+
                 {/* Desktop Tags Filter */}
                 {filterOptions.tags.length > 0 && (
                   <div>
@@ -455,11 +516,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                         <button
                           key={tag}
                           onClick={() => toggleFilter('tags', tag)}
-                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                            filters.tags.includes(tag)
+                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${filters.tags.includes(tag)
                               ? 'bg-primary-600 text-white'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
+                            }`}
                         >
                           {tag}
                         </button>
@@ -480,11 +540,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                       <button
                         key={option.value}
                         onClick={() => toggleFilter('readingTime', option.value)}
-                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                          filters.readingTime.includes(option.value)
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${filters.readingTime.includes(option.value)
                             ? 'bg-primary-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
+                          }`}
                       >
                         {option.label}
                       </button>
@@ -501,11 +560,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                         <button
                           key={author}
                           onClick={() => toggleFilter('authors', author)}
-                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                            filters.authors.includes(author)
+                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${filters.authors.includes(author)
                               ? 'bg-primary-600 text-white'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
+                            }`}
                         >
                           {author}
                         </button>
@@ -528,11 +586,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                       <button
                         key={option.value}
                         onClick={() => setDateFilter(option.value)}
-                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                          filters.dateRange === option.value
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${filters.dateRange === option.value
                             ? 'bg-primary-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
+                          }`}
                       >
                         {option.label}
                       </button>
@@ -549,11 +606,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                         <button
                           key={language}
                           onClick={() => toggleFilter('languages', language)}
-                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                            filters.languages.includes(language)
+                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${filters.languages.includes(language)
                               ? 'bg-primary-600 text-white'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
+                            }`}
                         >
                           {language}
                         </button>
@@ -586,7 +642,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 items-stretch">
             {paginatedArticles.map((article: Article) => (
               <div className="h-full" key={article.slug}>
-                <ArticleCard 
+                <ArticleCard
                   article={{
                     title: article.title,
                     slug: article.slug,
@@ -597,7 +653,8 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                     readingTime: article.readingTime,
                     target: article.target,
                     language: article.language
-                  }} 
+                  }}
+                  pageViews={analyticsData[`/learn/${article.target?.toLowerCase() || 'midway'}/${article.slug}`]}
                 />
               </div>
             ))}
@@ -629,20 +686,20 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
               >
                 {isMobile ? 'Prev' : 'Previous'}
               </button>
-              
+
               {/* Page numbers with smart display logic */}
               {(() => {
                 const maxVisiblePages = isMobile ? 3 : 5
                 let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
                 const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
-                
+
                 // Adjust start if we're near the end
                 if (endPage - startPage + 1 < maxVisiblePages) {
                   startPage = Math.max(1, endPage - maxVisiblePages + 1)
                 }
-                
+
                 const pages = []
-                
+
                 // First page and ellipsis
                 if (startPage > 1) {
                   pages.push(
@@ -662,24 +719,23 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                     )
                   }
                 }
-                
+
                 // Visible page range
                 for (let i = startPage; i <= endPage; i++) {
                   pages.push(
                     <button
                       key={i}
                       onClick={() => setCurrentPage(i)}
-                      className={`px-2 sm:px-4 py-2 text-sm sm:text-base border rounded-lg ${
-                        currentPage === i 
-                          ? 'bg-primary-600 text-white border-primary-600' 
+                      className={`px-2 sm:px-4 py-2 text-sm sm:text-base border rounded-lg ${currentPage === i
+                          ? 'bg-primary-600 text-white border-primary-600'
                           : 'border-gray-300 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       {i}
                     </button>
                   )
                 }
-                
+
                 // Last page and ellipsis
                 if (endPage < totalPages) {
                   if (endPage < totalPages - 1) {
@@ -699,10 +755,10 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
                     </button>
                   )
                 }
-                
+
                 return pages
               })()}
-              
+
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}

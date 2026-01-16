@@ -19,6 +19,7 @@ import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
 import { ContinueReadingPrompt } from '@/components/ui/ContinueReadingPrompt'
 import { SwipeNavigation } from '@/components/ui/SwipeNavigation'
 import { FloatingSectionIndicator } from '@/components/ui/FloatingSectionIndicator'
+import { RoleFitAuditCTA } from '@/components/ui/RoleFitAuditCTA'
 import { useReadingProgress } from '@/lib/hooks/useReadingProgress'
 import { useReadingHistory } from '@/hooks/useReadingHistory'
 import { event } from '@/lib/gtag'
@@ -782,33 +783,39 @@ export default function ArticlePageClient({
                     {/* KPI Stats Row */}
                     <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
                       {/* Views */}
-                      <div className="flex items-center gap-1.5" title="Total views">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        <span className="font-medium">{liveAnalytics.pageViews || 0}</span>
-                      </div>
+                      {(liveAnalytics.pageViews || 0) >= 10 && (
+                        <div className="flex items-center gap-1.5" title="Total views">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          <span className="font-medium">{liveAnalytics.pageViews}</span>
+                        </div>
+                      )}
 
-                      <span className="text-gray-300 dark:text-gray-600">|</span>
+                      {(liveAnalytics.pageViews || 0) >= 10 && (liveAnalytics.users || 0) >= 5 && <span className="text-gray-300 dark:text-gray-600">|</span>}
 
                       {/* Visitors */}
-                      <div className="flex items-center gap-1.5" title="Unique visitors">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        <span className="font-medium">{liveAnalytics.users || 0}</span>
-                      </div>
+                      {(liveAnalytics.users || 0) >= 5 && (
+                        <div className="flex items-center gap-1.5" title="Unique visitors">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                          </svg>
+                          <span className="font-medium">{liveAnalytics.users}</span>
+                        </div>
+                      )}
 
-                      <span className="text-gray-300 dark:text-gray-600">|</span>
+                      {((liveAnalytics.pageViews || 0) >= 10 || (liveAnalytics.users || 0) >= 5) && (liveAnalytics.likes || 0) >= 2 && <span className="text-gray-300 dark:text-gray-600">|</span>}
 
                       {/* Likes */}
-                      <div className="flex items-center gap-1.5" title="Total likes">
-                        <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                        <span className="font-medium">{liveAnalytics.likes || 0}</span>
-                      </div>
+                      {(liveAnalytics.likes || 0) >= 2 && (
+                        <div className="flex items-center gap-1.5" title="Total likes">
+                          <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                          </svg>
+                          <span className="font-medium">{liveAnalytics.likes}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   {/* Article Body */}
@@ -864,10 +871,17 @@ export default function ArticlePageClient({
       <div className="max-w-6xl mx-auto px-4">
         <AuthorBioCard author={article.author} authorData={authorData} />
       </div>
-      {/* Contributor CTA */}
-      <div className="max-w-2xl mx-auto px-4 my-8">
-        <ContributorCTA source={`article:${article.slug}`} />
+
+      {/* Role Fit Audit CTA - Primary */}
+      <div className="max-w-3xl mx-auto px-4 mt-12 mb-8">
+        <RoleFitAuditCTA variant="box" />
       </div>
+
+      {/* Contributor CTA - Secondary */}
+      <div className="max-w-2xl mx-auto px-4 mb-8">
+        <ContributorCTA source={`article:${article.slug}`} variant="inline" />
+      </div>
+
       {/* PWA Install CTA - Strategic placement after article, before related content */}
       <div className="max-w-2xl mx-auto px-4 mb-8">
         <PWAInstallInline variant="compact" />
