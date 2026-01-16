@@ -16,6 +16,8 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
   const [customFeedback, setCustomFeedback] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasPrivacyConsent, setHasPrivacyConsent] = useState(false)
+  const [showConsentError, setShowConsentError] = useState(false)
 
   const feedbackOptions = [
     { emoji: '😍', label: 'Loved it!', value: 'loved' },
@@ -25,6 +27,11 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
   ]
 
   const handleQuickFeedback = async (feedbackValue: string) => {
+    if (!hasPrivacyConsent) {
+      setShowConsentError(true)
+      return
+    }
+
     setSelectedFeedback(feedbackValue)
     
     // Track in analytics
@@ -45,7 +52,7 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
           message: `Article: "${articleTitle}"\nFeedback: ${feedbackValue}\nSlug: ${articleSlug}`,
           page: window.location.href,
           userAgent: navigator.userAgent,
-          consent: true,
+          consent: hasPrivacyConsent,
           website: '' // honeypot
         })
       })
@@ -77,11 +84,17 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
       setShowFeedback(false)
       setSubmitted(false)
       setSelectedFeedback(null)
+      setHasPrivacyConsent(false)
+      setShowConsentError(false)
     }, 2000)
   }
 
   const handleCustomFeedback = async () => {
     if (!customFeedback.trim()) return
+    if (!hasPrivacyConsent) {
+      setShowConsentError(true)
+      return
+    }
 
     setIsSubmitting(true)
 
@@ -103,7 +116,7 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
           message: `Article: "${articleTitle}"\nCustom Feedback: ${customFeedback}\nSlug: ${articleSlug}`,
           page: window.location.href,
           userAgent: navigator.userAgent,
-          consent: true,
+          consent: hasPrivacyConsent,
           website: '' // honeypot
         })
       })
@@ -131,6 +144,8 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
         setShowFeedback(false)
         setSubmitted(false)
         setCustomFeedback('')
+        setHasPrivacyConsent(false)
+        setShowConsentError(false)
       }, 2000)
     } catch (error) {
       console.error('Error saving feedback:', error)
@@ -145,7 +160,14 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
       {showFeedback && (
         <div
           className="fixed inset-0 bg-black/50 z-50 backdrop-blur-sm animate-fade-in lg:hidden"
-          onClick={() => !submitted && setShowFeedback(false)}
+          onClick={() => {
+            if (submitted) return
+            setShowFeedback(false)
+            setSelectedFeedback(null)
+            setCustomFeedback('')
+            setHasPrivacyConsent(false)
+            setShowConsentError(false)
+          }}
         >
           <div
             className="absolute bottom-24 left-4 right-4 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 animate-slide-up"
@@ -172,7 +194,13 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
                     How was this article?
                   </h3>
                   <button
-                    onClick={() => setShowFeedback(false)}
+                    onClick={() => {
+                      setShowFeedback(false)
+                      setSelectedFeedback(null)
+                      setCustomFeedback('')
+                      setHasPrivacyConsent(false)
+                      setShowConsentError(false)
+                    }}
                     className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,12 +209,38 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
                   </button>
                 </div>
 
+                {/* Consent */}
+                <div className="mb-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/40 p-3">
+                  <label className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={hasPrivacyConsent}
+                      onChange={(e) => {
+                        setHasPrivacyConsent(e.target.checked)
+                        if (e.target.checked) setShowConsentError(false)
+                      }}
+                      className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span>
+                      Accetto il trattamento dei dati per inviare questo feedback. Leggi la{' '}
+                      <a href="/privacy" target="_blank" rel="noreferrer" className="underline">
+                        Privacy Policy
+                      </a>
+                      .
+                    </span>
+                  </label>
+                  {showConsentError && (
+                    <p className="mt-2 text-xs text-red-600 dark:text-red-400">Seleziona la checkbox per inviare il feedback.</p>
+                  )}
+                </div>
+
                 {/* Quick Feedback Options */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   {feedbackOptions.map((option) => (
                     <button
                       key={option.value}
                       onClick={() => handleQuickFeedback(option.value)}
+                      disabled={!hasPrivacyConsent}
                       className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all hover:scale-105 ${
                         selectedFeedback === option.value
                           ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
@@ -215,7 +269,7 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
                   />
                   <button
                     onClick={handleCustomFeedback}
-                    disabled={!customFeedback.trim() || isSubmitting}
+                    disabled={!hasPrivacyConsent || !customFeedback.trim() || isSubmitting}
                     className="w-full mt-3 px-4 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 text-white font-semibold rounded-xl transition-colors disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? 'Sending...' : 'Send Feedback'}
@@ -229,7 +283,11 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
 
       {/* Floating Feedback Button */}
       <button
-        onClick={() => setShowFeedback(true)}
+        onClick={() => {
+          setHasPrivacyConsent(false)
+          setShowConsentError(false)
+          setShowFeedback(true)
+        }}
         className="fixed bottom-24 right-4 z-40 lg:hidden bg-primary-600 hover:bg-primary-700 text-white rounded-full p-4 shadow-2xl hover:scale-110 transition-transform active:scale-95"
         aria-label="Give feedback"
       >

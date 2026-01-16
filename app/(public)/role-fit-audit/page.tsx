@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Role Fit Audit | Il tuo profilo GenAI è troppo generico',
         description:
-            'Fai il Role Fit Audit (5 min): ruolo consigliato, score su 4 dimensioni, gap e piano 7 giorni. Gratis oggi.',
+            'Fai il Role Fit Audit (5 min): ruolo consigliato, score su 4 dimensioni, gap e piano 7 giorni.',
         type: 'website',
     },
 }

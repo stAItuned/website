@@ -26,13 +26,14 @@ interface FormState {
     linkedinUrl: string
     website: string // honeypot
     acceptedPrivacy: boolean
+    marketingConsent: boolean
 }
 
 // =============================================================================
 // Component
 // =============================================================================
 
-export default function RoleFitAuditForm() {
+export default function RoleFitAuditForm({ paypalOrderId }: { paypalOrderId?: string }) {
     // ---------------------------------------------------------------------------
     // LocalStorage Key
     // ---------------------------------------------------------------------------
@@ -49,6 +50,7 @@ export default function RoleFitAuditForm() {
         linkedinUrl: '',
         website: '', // honeypot
         acceptedPrivacy: false,
+        marketingConsent: false,
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [result, setResult] = useState<AuditResult | null>(null)
@@ -75,6 +77,7 @@ export default function RoleFitAuditForm() {
                         email: parsed.email || '',
                         name: parsed.name || '',
                         linkedinUrl: parsed.linkedinUrl || '',
+                        marketingConsent: Boolean(parsed.marketingConsent),
                     }))
                     if (parsed.currentSection) {
                         // If user was at the end (contact form), reset to start to allow review
@@ -103,12 +106,13 @@ export default function RoleFitAuditForm() {
                 email: formState.email,
                 name: formState.name,
                 linkedinUrl: formState.linkedinUrl,
+                marketingConsent: formState.marketingConsent,
                 currentSection,
             }))
         } catch (e) {
             console.warn('Failed to save progress to localStorage:', e)
         }
-    }, [formState.answers, formState.email, formState.name, formState.linkedinUrl, currentSection])
+    }, [formState.answers, formState.email, formState.name, formState.linkedinUrl, formState.marketingConsent, currentSection])
 
     // ---------------------------------------------------------------------------
     // Track form start on mount
@@ -194,7 +198,7 @@ export default function RoleFitAuditForm() {
             return
         }
         if (!formState.acceptedPrivacy) {
-            setError('Per procedere, accetta di ricevere il report via email.')
+            setError('Per procedere, accetta privacy/termini e l\'invio del report via email.')
             return
         }
 
@@ -218,7 +222,9 @@ export default function RoleFitAuditForm() {
                     email: formState.email,
                     name: formState.name,
                     linkedinUrl: formState.linkedinUrl,
+                    marketingConsent: formState.marketingConsent,
                     website: formState.website, // honeypot
+                    paypalOrderId,
                 }),
             })
 
@@ -388,7 +394,7 @@ export default function RoleFitAuditForm() {
                                 className="mt-1 h-4 w-4 rounded border-slate-300 text-[#F59E0B] focus:ring-[#F59E0B]"
                             />
                             <label htmlFor="privacy" className="text-sm text-slate-600 dark:text-slate-400">
-                                Ok a ricevere il report via email. Leggi{' '}
+                                Acconsento al trattamento dei dati per ricevere il report via email. Leggi{' '}
                                 <Link href="/privacy" className="text-[#F59E0B] hover:underline" target="_blank">
                                     Privacy
                                 </Link>{' '}
@@ -400,9 +406,23 @@ export default function RoleFitAuditForm() {
                             </label>
                         </div>
 
+                        {/* Optional marketing consent */}
+                        <div className="flex items-start gap-3">
+                            <input
+                                type="checkbox"
+                                id="marketing"
+                                checked={formState.marketingConsent}
+                                onChange={(e) => handleInputChange('marketingConsent', e.target.checked)}
+                                className="mt-1 h-4 w-4 rounded border-slate-300 text-[#F59E0B] focus:ring-[#F59E0B]"
+                            />
+                            <label htmlFor="marketing" className="text-sm text-slate-600 dark:text-slate-400">
+                                Voglio ricevere aggiornamenti e offerte su Career OS via email (facoltativo).
+                            </label>
+                        </div>
+
                         {/* Microcopy */}
                         <p className="text-xs text-slate-400 text-center">
-                            Niente spam. Solo 1 email con il tuo report PDF.
+                            Niente spam. 1 email con il tuo report PDF (e solo se vuoi, aggiornamenti occasionali).
                         </p>
 
                         {/* Error */}

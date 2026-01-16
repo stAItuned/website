@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
 
-        const { answers, email, name, linkedinUrl, website } = body || {}
+        const { answers, email, name, linkedinUrl, marketingConsent, website, paypalOrderId } = body || {}
 
         // Honeypot check - silently accept but don't process bot submissions
         if (website && typeof website === 'string' && website.trim() !== '') {
@@ -55,6 +55,8 @@ export async function POST(req: NextRequest) {
                 email: normalizedEmail,
                 name: name?.trim() || null,
                 linkedinUrl: linkedinUrl?.trim() || null,
+                marketingConsent: Boolean(marketingConsent),
+                paypalOrderId: paypalOrderId || null,
                 answers,
                 answersText: Object.entries(answers).reduce((acc, [qId, val]) => {
                     const q = QUESTIONS.find(q => q.id === qId)
@@ -92,7 +94,9 @@ export async function POST(req: NextRequest) {
                 '',
                 name ? `👤 Nome: ${name.trim()}` : '',
                 `📧 Email: ${normalizedEmail}`,
+                paypalOrderId ? `💰 PayPal ID: ${paypalOrderId}` : '',
                 linkedinUrl ? `🔗 LinkedIn: ${linkedinUrl.trim()}` : '',
+                `📣 Marketing: ${Boolean(marketingConsent) ? 'Sì' : 'No'}`,
                 '',
                 `🏷 Archetipo: ${result.archetype?.name || 'N/A'}`,
                 `📊 Readiness: ${result.readinessLabel || 'N/A'}`,

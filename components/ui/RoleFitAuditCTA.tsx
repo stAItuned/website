@@ -65,7 +65,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 
                     <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                         <Link
-                            href="/career-os?audit=true"
+                            href="/role-fit-audit"
                             onClick={handleCTAClick}
                             className="inline-flex items-center justify-center px-6 py-3.5 text-base font-bold text-white rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-500 hover:to-indigo-500 shadow-lg shadow-primary-500/25 transition-all transform hover:scale-[1.02]"
                         >
@@ -118,7 +118,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
                             </div>
 
                             <Link
-                                href="/career-os?audit=true"
+                                href="/role-fit-audit"
                                 onClick={handleCTAClick}
                                 className="shrink-0 px-4 py-2 text-sm font-bold text-white rounded-lg bg-primary-600 hover:bg-primary-500 transition-colors shadow-md shadow-primary-500/20"
                             >

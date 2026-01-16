@@ -79,6 +79,7 @@ export type RoleFitAuditEvent =
     | 'role_fit_audit_cta_clicked'
     | 'role_fit_audit_cta_view'
     | 'role_fit_audit_cta_dismiss'
+    | 'role_fit_audit_purchase'
 
 // Career OS Funnel Events
 export type CareerOSEvent =
@@ -150,6 +151,10 @@ export interface AnalyticsEventParams {
     platform?: string
     /** Code language if copying code */
     codeLanguage?: string
+    /** Transaction/Purchase data */
+    currency?: string
+    /** Transaction ID or Order ID */
+    transactionId?: string
 }
 
 // ============================================================================
@@ -185,6 +190,8 @@ export function trackEvent(
             context: params.context,
             platform: params.platform,
             code_language: params.codeLanguage,
+            currency: params.currency,
+            transaction_id: params.transactionId,
         })
     }
 
@@ -421,6 +428,17 @@ export function trackRoleFitAuditCTADismiss() {
     trackEvent('role_fit_audit_cta_dismiss', {
         category: 'engagement',
         source: 'audit_cta_sticky'
+    })
+}
+
+export function trackRoleFitAuditPurchase(orderId: string, amount: number, currency: string = 'EUR') {
+    trackEvent('role_fit_audit_purchase', {
+        category: 'conversion',
+        source: 'role_fit_audit',
+        label: orderId,
+        value: amount,
+        currency,
+        transactionId: orderId
     })
 }
 
