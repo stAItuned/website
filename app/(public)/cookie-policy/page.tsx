@@ -15,7 +15,7 @@ export default function CookiePolicyPage() {
           <p className="text-base text-slate-600">
             Il banner di consenso gestisce i cookie non essenziali e mantiene attivo solo quanto serve a far funzionare il sito. Qui trovi le informazioni dettagliate su quali cookie usiamo e perché.
           </p>
-          <p className="text-xs text-slate-400">Ultimo aggiornamento: 11 dicembre 2024</p>
+          <p className="text-xs text-slate-400">Ultimo aggiornamento: 16 gennaio 2026</p>
         </header>
 
         <section className="space-y-4 text-sm text-slate-600">
@@ -80,6 +80,12 @@ export default function CookiePolicyPage() {
               </dl>
             </article>
             <article>
+              <h3 className="text-base font-semibold text-slate-900">Misurazione performance (tecnica)</h3>
+              <p className="mt-1">
+                Per migliorare la qualità del sito possiamo raccogliere metriche tecniche di performance (es. Core Web Vitals) e inviarle ai nostri endpoint di monitoraggio. Questo tracciamento è abilitato solo dopo il consenso e non ha finalità pubblicitarie.
+              </p>
+            </article>
+            <article>
               <h3 className="text-base font-semibold text-slate-900">Notifiche push (Firebase Cloud Messaging)</h3>
               <p className="mt-1">
                 Se accetti di ricevere notifiche push, il tuo browser genera un token univoco che ci consente di inviarti avvisi su nuovi articoli o aggiornamenti. Il token è gestito tramite Firebase Cloud Messaging (Google LLC) e non contiene dati personali identificabili. Puoi disattivare le notifiche in qualsiasi momento dalle impostazioni del browser o del dispositivo.
@@ -106,12 +112,18 @@ export default function CookiePolicyPage() {
           <p>
             Puoi anche cliccare sul pulsante “Gestisci i cookie” nel footer per riaprire immediatamente il banner e modificare la tua scelta (Accetta/Rifiuta) senza dover cancellare manualmente il localStorage.
           </p>
+          <p>
+            Oltre al consenso, il sito può usare archiviazione locale per preferenze e funzionalità (es. tema, stato di alcuni form, token notifiche). Alcune chiavi possono includere dati inseriti dall&apos;utente (es. email) finché non li cancelli dalle impostazioni del browser.
+          </p>
         </section>
 
         <section className="space-y-4 text-sm text-slate-600">
           <h2 className="text-2xl font-semibold text-slate-900">Terze parti</h2>
           <p>
             Oltre a Google Analytics, possiamo avvalerci di servizi esterni per la consegna delle newsletter, l&apos;invio di notifiche e l&apos;hosting dei contenuti media (es. Google LLC, Telegram). Questi partner trattano i dati sulla base delle loro policy e, dove previsto, applicano strumenti come le Clausole Contrattuali Standard per i trasferimenti UE/extra UE. Non vendiamo le informazioni e limitiamo gli scambi solo a quanto necessario per offrire il servizio.
+          </p>
+          <p>
+            Il sito può inoltre caricare risorse statiche (es. font) da provider terzi (es. Google Fonts) per migliorare la resa grafica.
           </p>
         </section>
 

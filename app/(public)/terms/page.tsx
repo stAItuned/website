@@ -15,7 +15,7 @@ export default function TermsPage() {
                     <p className="text-base text-slate-600">
                         Il presente contratto regola l'accesso e l'utilizzo di <strong>Career OS</strong>, il percorso formativo avanzato per carriere in ambito AI. Acquistando il servizio o accedendo ai materiali, l'utente accetta integralmente le seguenti condizioni.
                     </p>
-                    <p className="text-xs text-slate-400">Ultimo aggiornamento: 13 gennaio 2026</p>
+                    <p className="text-xs text-slate-400">Ultimo aggiornamento: 16 gennaio 2026</p>
                 </header>
 
                 <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/50 p-6 shadow-sm">
@@ -68,7 +68,13 @@ export default function TermsPage() {
                         L'accesso al corso è garantito a seguito del pagamento della quota prevista.
                     </p>
                     <p>
+                        <strong>Provider di pagamento:</strong> i pagamenti possono essere gestiti tramite fornitori terzi (es. Stripe) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.
+                    </p>
+                    <p>
                         <strong>Garanzia Soddisfatti o Rimborsati (ove applicabile):</strong> Se specificato esplicitamente nell'offerta di acquisto (es. "Garanzia 14 giorni"), l'utente ha diritto al rimborso integrale entro i termini indicati, a condizione che abbia visionato meno del 20% del materiale totale e non abbia scaricato gli asset proprietari. In assenza di specifica menzione, vale il diritto di recesso di legge per i prodotti digitali, che decade al momento dell'inizio del download o streaming del contenuto.
+                    </p>
+                    <p>
+                        Alcuni strumenti o contenuti (es. audit/report) possono essere offerti gratuitamente o a pagamento a seconda delle promozioni disponibili e del canale di acquisto.
                     </p>
                 </section>
 
@@ -80,9 +86,9 @@ export default function TermsPage() {
                 </section>
 
                 <section className="space-y-4 text-sm text-slate-600">
-                    <h2 className="text-2xl font-semibold text-slate-900">6. Contenuti Gratuiti e Lead Magnet</h2>
+                    <h2 className="text-2xl font-semibold text-slate-900">6. Strumenti, Audit e Lead Magnet</h2>
                     <p>
-                        stAItuned offre strumenti gratuiti come il <strong>Role Fit Audit</strong> e altri lead magnet a scopo informativo e orientativo. Questi strumenti:
+                        stAItuned offre strumenti come il <strong>Role Fit Audit</strong> e altri contenuti orientativi, che possono essere offerti gratuitamente o a pagamento a seconda dell&apos;offerta disponibile. Questi strumenti:
                     </p>
                     <ul className="list-disc pl-4 space-y-1">
                         <li>Forniscono valutazioni indicative basate sulle risposte dell&apos;utente;</li>

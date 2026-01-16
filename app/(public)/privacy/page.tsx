@@ -18,7 +18,7 @@ export default function PrivacyPage() {
           <p className="text-sm text-slate-500">
             Il titolare del trattamento è Daniele Moltisanti. Email di contatto: <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
           </p>
-          <p className="text-xs text-slate-400">Ultimo aggiornamento: 11 dicembre 2024</p>
+          <p className="text-xs text-slate-400">Ultimo aggiornamento: 16 gennaio 2026</p>
         </header>
 
         <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/50 p-6 shadow-sm">
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
             <li>i lettori del blog e i membri della community che consumano contenuti pubblici;</li>
             <li>le PMI e i team che richiedono una call o una consulenza personalizzata;</li>
             <li>chi si iscrive alla newsletter o alle comunicazioni di aggiornamento (marketing) con consenso esplicito;</li>
-            <li>chi si candida a collaborare con stAItuned o a entrare nello <strong>stAItuned Lab</strong>.</li>
+            <li>chi si candida a collaborare con stAItuned o propone una partnership.</li>
           </ul>
         </section>
 
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
             <div>
               <h3 className="font-semibold text-slate-900">Visite al blog e alle pagine pubbliche</h3>
               <p className="mt-1">
-                Registriamo solo dati tecnici necessari per mantenere il sito online (es. richieste HTTP, indirizzo IP anonimizzato, informazioni sul browser). I cookie non tecnici, come quelli di Google Analytics, sono attivati solo dopo il tuo consenso. Consulta la <Link href="/cookie-policy" className="text-amber-600 underline">Cookie Policy</Link> per maggiori dettagli.
+                Registriamo solo dati tecnici necessari per mantenere il sito online (es. richieste HTTP, informazioni sul browser). I cookie non tecnici (es. Google Analytics) e le misurazioni di performance lato client (es. Core Web Vitals) sono attivati solo dopo il tuo consenso. Alcune risorse (es. font) possono essere caricate da fornitori terzi per motivi di resa grafica. Consulta la <Link href="/cookie-policy" className="text-amber-600 underline">Cookie Policy</Link> per maggiori dettagli.
               </p>
             </div>
 
@@ -106,9 +106,9 @@ export default function PrivacyPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-slate-900">Candidature per collaborazioni e stAItuned Lab</h3>
+              <h3 className="font-semibold text-slate-900">Candidature per collaborazioni</h3>
               <p className="mt-1">
-                Quando compili il modulo di candidatura al Lab o ci contatti per possibili collaborazioni, raccogliamo i dati necessari a valutare il tuo profilo, ad esempio:
+                Quando compili un modulo di candidatura o ci contatti per possibili collaborazioni, raccogliamo i dati necessari a valutare il tuo profilo, ad esempio:
               </p>
               <ul className="list-disc pl-4 mt-2 space-y-1">
                 <li>nome e cognome;</li>
@@ -135,7 +135,7 @@ export default function PrivacyPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-slate-900">Role Fit Audit (Lead Magnet)</h3>
+              <h3 className="font-semibold text-slate-900">Role Fit Audit</h3>
               <p className="mt-1">
                 Quando compili il questionario &quot;Role Fit Audit&quot; raccogliamo:
               </p>
@@ -152,10 +152,13 @@ export default function PrivacyPage() {
               <ul className="list-disc pl-4 mt-2 space-y-1">
                 <li>generare e inviarti il report personalizzato;</li>
                 <li>analizzare in forma aggregata i profili degli utenti per migliorare il prodotto;</li>
-                <li>contattarti per offerte relative al Career OS (solo se hai dato consenso esplicito).</li>
+                <li>contattarti per offerte relative al Career OS (solo se selezioni la checkbox facoltativa di consenso marketing).</li>
               </ul>
               <p className="mt-3">
                 <strong>Nota AI:</strong> Le risposte fornite vengono elaborate da servizi di Intelligenza Artificiale (Google Gemini) al solo scopo di generare il contenuto del report. Tali dati non vengono utilizzati per l&apos;addestramento dei modelli pubblici.
+              </p>
+              <p className="mt-3">
+                <strong>Nota sul dispositivo:</strong> per evitare che tu perda il progresso, alcune informazioni del questionario possono essere memorizzate localmente nel browser (es. localStorage) finché non le cancelli dalle impostazioni del browser.
               </p>
               <p className="mt-3">
                 La base giuridica è il consenso esplicito (art. 6.1.a GDPR), espresso al momento dell&apos;invio del questionario. I dati vengono conservati in Firebase (Firestore) con crittografia e misure di sicurezza appropriate. Puoi richiedere la cancellazione dei tuoi dati in qualsiasi momento scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
@@ -176,10 +179,14 @@ export default function PrivacyPage() {
             <p className="font-semibold text-slate-900">Possibili destinatari/categorie:</p>
             <ul className="list-disc pl-4">
               <li>fornitori di hosting e infrastruttura (es. Firebase, Firestore);</li>
-              <li>servizi di email e newsletter per gestire iscrizioni e conferme di call;</li>
+              <li>servizi di email e newsletter per gestire iscrizioni e invii (es. Resend);</li>
               <li>servizi di Intelligenza Artificiale (Google Gemini) per la generazione automatica dei report;</li>
               <li>strumenti di analytics (es. Google Analytics), attivati solo previo consenso esplicito;</li>
               <li>Firebase Cloud Messaging (Google LLC) per l&apos;invio di notifiche push;</li>
+              <li>servizi di prenotazione call (es. Calendly) quando decidi di prenotare un appuntamento;</li>
+              <li>provider di pagamento (es. Stripe) quando acquisti servizi tramite checkout/link esterni;</li>
+              <li>strumenti di raccolta e gestione feedback (es. Telegram e, se configurato, Slack) quando invii un feedback;</li>
+              <li>fornitori di risorse statiche (es. Google Fonts) per font e asset.</li>
               <li>strumenti di messaggistica, automazione o task management necessari per coordinare progetti o rispondere alle richieste.</li>
             </ul>
           </div>
@@ -191,7 +198,7 @@ export default function PrivacyPage() {
             Le richieste di contatto vengono archiviate per 12–24 mesi per garantire il follow-up, mentre i dati per newsletter o community sono conservati finché il consenso resta attivo o finché non richiedi la cancellazione. La cronologia dei messaggi viene mantenuta per garantire continuità nei progetti in corso.
           </p>
           <p>
-            Le candidature al <strong>stAItuned Lab</strong> e alle collaborazioni vengono conservate per un periodo massimo di 12–24 mesi dalla loro ricezione, salvo tua richiesta di cancellazione anticipata, per poter valutare il profilo anche in vista di opportunità future. Puoi chiederci in qualsiasi momento di eliminare definitivamente la tua candidatura scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
+            Le candidature e le richieste di collaborazione vengono conservate per un periodo massimo di 12–24 mesi dalla loro ricezione, salvo tua richiesta di cancellazione anticipata, per poter valutare il profilo anche in vista di opportunità future. Puoi chiederci in qualsiasi momento di eliminare definitivamente la tua candidatura scrivendo a <Link href="mailto:info@staituned.com" className="text-amber-600 underline">info@staituned.com</Link>.
           </p>
         </section>
 
