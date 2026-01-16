@@ -16,7 +16,7 @@ import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
  */
 export default function HeroSection() {
     return (
-        <section className="relative pt-36 lg:pt-44 pb-16 px-6 overflow-hidden">
+        <section className="relative pt-24 sm:pt-36 lg:pt-44 pb-10 sm:pb-16 px-4 sm:px-6 overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#1A1E3B] to-slate-900" />
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
@@ -27,60 +27,52 @@ export default function HeroSection() {
 
             <div className="relative z-10 max-w-6xl mx-auto">
                 {/* Two-column layout: Message + Stats */}
-                <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
+                <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-8 lg:gap-12 items-center">
                     {/* LEFT: Message + CTAs */}
-                    <div className="text-center lg:text-left space-y-6">
-                        {/* Pre-headline: Market urgency */}
-                        {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF272]/10 border border-[#FFF272]/30">
-                            <span className="w-2 h-2 rounded-full bg-[#FFF272] animate-pulse" />
-                            <span className="text-sm font-semibold text-[#FFF272]">
-                                +88% domanda GenAI — 21k+ posizioni in Italia
-                            </span>
-                        </div> */}
-
+                    <div className="text-center lg:text-left space-y-4 sm:space-y-6">
                         {/* Headline: 2 lines - Competitive positioning */}
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] text-white">
-                            <span className="whitespace-nowrap">Tutti vogliono ruoli <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF272] to-[#F59E0B]">GenAI</span></span>
+                        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.15] text-white">
+                            <span>Tutti vogliono ruoli <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF272] to-[#F59E0B]">GenAI</span></span>
                             <br />
-                            <span className="whitespace-nowrap">Tu come<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-500"> ti distingui?</span></span>
+                            <span>Tu come<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-500"> ti distingui?</span></span>
                         </h1>
 
-                        {/* HOOK STATS - High impact visual design */}
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-5 py-3">
+                        {/* HOOK STATS - Compact on mobile */}
+                        <div className="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-3 sm:gap-5 py-2 sm:py-3">
                             {/* 6 secondi stat */}
                             <div className="relative group">
-                                <div className="absolute inset-0 bg-rose-500/20 blur-xl rounded-2xl group-hover:bg-rose-500/30 transition-all" />
-                                <div className="relative flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-br from-rose-500/20 to-rose-600/10 border-2 border-rose-500/40 shadow-lg shadow-rose-500/10">
-                                    <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-rose-300 to-rose-500">~6s</span>
-                                    <span className="text-sm text-white leading-tight">
-                                        <strong className="text-rose-300 text-base">È tutto quello che hai, <br />prima di essere cestinato.</strong>
+                                <div className="absolute inset-0 bg-rose-500/20 blur-xl rounded-xl sm:rounded-2xl group-hover:bg-rose-500/30 transition-all" />
+                                <div className="relative flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-500/20 to-rose-600/10 border border-rose-500/40 sm:border-2 shadow-lg shadow-rose-500/10">
+                                    <span className="text-2xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-rose-300 to-rose-500">~6s</span>
+                                    <span className="text-xs sm:text-sm text-white leading-tight">
+                                        <strong className="text-rose-300 text-sm sm:text-base">È tutto quello che hai, <br className="hidden sm:block" />prima di essere cestinato.</strong>
                                     </span>
                                 </div>
                             </div>
-                            {/* <30% stat */}
+                            {/* 70% stat */}
                             <div className="relative group">
-                                <div className="absolute inset-0 bg-rose-500/20 blur-xl rounded-2xl group-hover:bg-rose-500/30 transition-all" />
-                                <div className="relative flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-br from-rose-500/20 to-rose-600/10 border-2 border-rose-500/40 shadow-lg shadow-rose-500/10">
-                                    <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-rose-300 to-rose-500">70%</span>
-                                    <span className="text-sm text-white leading-tight">
-                                        Manda lo stesso CV. <br /><strong className="text-rose-300 text-base">Tu lo personalizzi!</strong>
+                                <div className="absolute inset-0 bg-rose-500/20 blur-xl rounded-xl sm:rounded-2xl group-hover:bg-rose-500/30 transition-all" />
+                                <div className="relative flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-500/20 to-rose-600/10 border border-rose-500/40 sm:border-2 shadow-lg shadow-rose-500/10">
+                                    <span className="text-2xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-rose-300 to-rose-500">70%</span>
+                                    <span className="text-xs sm:text-sm text-white leading-tight">
+                                        Manda lo stesso CV. <br className="hidden sm:block" /><strong className="text-rose-300 text-sm sm:text-base">Tu lo personalizzi!</strong>
                                     </span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Solution teaser - Strong value prop */}
-                        <p className="text-lg md:text-xl text-white/80 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                             In <strong className="text-[#FFF272]">4–8 settimane</strong> costruisci{' '}
                             <strong className="text-white">CV, Prove Concrete e Interview Skills</strong> che ti fanno notare dai recruiter GenAI, guidato da esperti in questo settore.
                         </p>
 
                         {/* Target roles - Specificity */}
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-2 text-sm">
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-1.5 sm:gap-2 text-xs sm:text-sm">
                             {['GenAI Engineer', 'Applied GenAI', 'Agentic AI', 'GenAI Roles'].map((role, i) => (
                                 <span
                                     key={i}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 font-medium"
+                                    className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 font-medium"
                                 >
                                     {role}
                                 </span>
@@ -88,14 +80,14 @@ export default function HeroSection() {
                         </div>
 
                         {/* Single CTA */}
-                        <div className="flex justify-center lg:justify-start pt-4">
+                        <div className="flex justify-center lg:justify-start pt-2 sm:pt-4">
                             <a
                                 href="#social-proof"
                                 onClick={() => trackCareerOSCTAClicked('hero', 'vedi_cosa_costruirai')}
-                                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-base sm:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                             >
                                 Vedi cosa costruirai
-                                <ArrowRight className="w-5 h-5" />
+                                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                             </a>
                         </div>
                     </div>
