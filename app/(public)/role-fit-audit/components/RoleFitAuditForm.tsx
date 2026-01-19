@@ -13,6 +13,7 @@ import {
     trackRoleFitAuditStarted,
     trackRoleFitAuditSectionCompleted,
     trackRoleFitAuditCompleted,
+    trackEvent,
 } from '@/lib/analytics/trackEvent'
 
 // =============================================================================
@@ -242,6 +243,15 @@ export default function RoleFitAuditForm({ paypalOrderId }: { paypalOrderId?: st
                 auditResult.archetype.id,
                 auditResult.normalizedScores.readiness
             )
+
+            // Track standard Lead generation
+            trackEvent('generate_lead', {
+                category: 'conversion',
+                currency: 'EUR',
+                value: 0,
+                source: 'role_fit_audit',
+                label: 'audit_submission'
+            })
 
             // Do NOT clear saved progress so user can retry with same answers
             // localStorage.removeItem(STORAGE_KEY)

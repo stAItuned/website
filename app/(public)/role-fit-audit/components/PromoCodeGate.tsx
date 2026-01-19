@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import RoleFitAuditForm from './RoleFitAuditForm'
-import { trackRoleFitAuditPurchase } from '@/lib/analytics/trackEvent'
+import { trackPurchase, trackRoleFitAuditPurchase } from '@/lib/analytics/trackEvent'
 
 // =============================================================================
 // Configuration
@@ -123,6 +123,24 @@ export default function PromoCodeGate() {
 
     const handleStart = () => {
         if (promoApplied) {
+            // Track free purchase (Use custom ID for deduplication)
+            const transactionId = `FREE_${promoCode}_${Date.now()}`
+            trackPurchase({
+                transactionId,
+                value: 0,
+                currency: 'EUR',
+                coupon: promoCode,
+                items: [
+                    {
+                        item_id: 'audit_genai',
+                        item_name: 'Role Fit Audit',
+                        price: 0,
+                        discount: parseFloat(AUDIT_PRICE.replace(',', '.')),
+                        coupon: promoCode,
+                        quantity: 1
+                    }
+                ]
+            })
             setIsUnlocked(true)
         }
     }
@@ -327,9 +345,26 @@ export default function PromoCodeGate() {
                                                 if (details.status === 'COMPLETED') {
                                                     const orderId = (data.orderID || details.id || 'unknown') as string
                                                     setPaypalOrderId(orderId)
+
+                                                    // Standard purchase event
+                                                    const amount = parseFloat(AUDIT_PRICE.replace(',', '.'))
+                                                    trackPurchase({
+                                                        transactionId: orderId,
+                                                        value: amount,
+                                                        currency: 'EUR',
+                                                        items: [
+                                                            {
+                                                                item_id: 'audit_genai',
+                                                                item_name: 'Role Fit Audit',
+                                                                price: amount,
+                                                                quantity: 1
+                                                            }
+                                                        ]
+                                                    })
+
                                                     trackRoleFitAuditPurchase(
                                                         orderId,
-                                                        parseFloat(AUDIT_PRICE.replace(',', '.')),
+                                                        amount,
                                                         'EUR'
                                                     )
                                                     setIsUnlocked(true)
@@ -371,9 +406,25 @@ export default function PromoCodeGate() {
                                                 if (details.status === 'COMPLETED') {
                                                     const orderId = (data.orderID || details.id || 'unknown') as string
                                                     setPaypalOrderId(orderId)
+                                                    // Standard purchase event
+                                                    const amount = parseFloat(AUDIT_PRICE.replace(',', '.'))
+                                                    trackPurchase({
+                                                        transactionId: orderId,
+                                                        value: amount,
+                                                        currency: 'EUR',
+                                                        items: [
+                                                            {
+                                                                item_id: 'audit_genai',
+                                                                item_name: 'Role Fit Audit',
+                                                                price: amount,
+                                                                quantity: 1
+                                                            }
+                                                        ]
+                                                    })
+
                                                     trackRoleFitAuditPurchase(
                                                         orderId,
-                                                        parseFloat(AUDIT_PRICE.replace(',', '.')),
+                                                        amount,
                                                         'EUR'
                                                     )
                                                     setIsUnlocked(true)

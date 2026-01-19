@@ -22,6 +22,8 @@ export type EventCategory =
     | 'notifications'    // Push notification events
     | 'navigation'       // Navigation events
     | 'conversion'       // Conversion events
+    | 'ecommerce'        // Standard Ecommerce events
+    | 'ecommerce'        // Standard Ecommerce events
 
 // ============================================================================
 // Event Types
@@ -109,7 +111,18 @@ export type ModalEvent =
 
 // Conversion & External Events
 export type ConversionEvent =
+    | 'generate_lead'
     | 'external_link_clicked'
+
+// Standard Interaction Events
+export type InteractionEvent =
+    | 'select_content'
+    | 'select_item'
+
+// Ecommerce Events
+export type EcommerceEvent =
+    | 'purchase'
+    | 'begin_checkout'
 
 // combined Event Type
 export type AnalyticsEventName =
@@ -121,6 +134,8 @@ export type AnalyticsEventName =
     | CareerOSEvent
     | ModalEvent
     | ConversionEvent
+    | EcommerceEvent
+    | InteractionEvent
     | 'header_cta_clicked'
     | 'external_link_clicked'
 
@@ -155,6 +170,37 @@ export interface AnalyticsEventParams {
     currency?: string
     /** Transaction ID or Order ID */
     transactionId?: string
+    /** Coupon code associated with the event */
+    coupon?: string
+    /** Value of the discount */
+    discount?: number
+    /** Tax amount */
+    tax?: number
+    /** Shipping cost */
+    shipping?: number
+    /** Items involved in the event */
+    items?: EcommerceItem[]
+}
+
+export interface EcommerceItem {
+    item_id: string
+    item_name: string
+    affiliation?: string
+    coupon?: string
+    discount?: number
+    index?: number
+    item_brand?: string
+    item_category?: string
+    item_category2?: string
+    item_category3?: string
+    item_category4?: string
+    item_category5?: string
+    item_list_id?: string
+    item_list_name?: string
+    item_variant?: string
+    location_id?: string
+    price?: number
+    quantity?: number
 }
 
 // ============================================================================
@@ -192,6 +238,10 @@ export function trackEvent(
             code_language: params.codeLanguage,
             currency: params.currency,
             transaction_id: params.transactionId,
+            coupon: params.coupon,
+            items: params.items,
+            tax: params.tax,
+            shipping: params.shipping,
         })
     }
 
@@ -220,6 +270,7 @@ function inferCategory(eventName: AnalyticsEventName): EventCategory {
     if (eventName.startsWith('search_')) return 'user_journey'
     if (eventName.startsWith('target_')) return 'user_journey'
     if (eventName.startsWith('like_')) return 'engagement'
+    if (eventName === 'purchase' || eventName === 'begin_checkout') return 'ecommerce'
     return 'engagement'
 }
 
@@ -371,6 +422,14 @@ export function trackNewsletterSubscribe(source: string) {
 
 export function trackNewsletterSubscribeSuccess(source: string) {
     trackEvent('newsletter_subscribe_success', { category: 'conversion', source })
+    // Also track as standard lead
+    trackEvent('generate_lead', {
+        category: 'conversion',
+        currency: 'EUR',
+        value: 0,
+        source: source,
+        label: 'newsletter'
+    })
 }
 
 export function trackNewsletterSubscribeError(source: string) {
@@ -528,6 +587,65 @@ export function trackExternalLinkClicked(platform: 'linkedin' | 'calendly' | 'ot
         category: 'conversion',
         label: `${platform}:${label}`,
         platform
+    })
+}
+
+// --- Ecommerce Events ---
+
+export function trackPurchase(params: {
+    transactionId: string
+    value: number
+    currency: string
+    coupon?: string
+    items: EcommerceItem[]
+    tax?: number
+    shipping?: number
+}) {
+    trackEvent('purchase', {
+        category: 'ecommerce',
+        transactionId: params.transactionId,
+        value: params.value,
+        currency: params.currency,
+        coupon: params.coupon,
+        items: params.items,
+        tax: params.tax,
+        shipping: params.shipping
+    })
+}
+
+export function trackBeginCheckout(params: {
+    value?: number
+    currency?: string
+    coupon?: string
+    items: EcommerceItem[]
+}) {
+    trackEvent('begin_checkout', {
+        category: 'ecommerce',
+        value: params.value,
+        currency: params.currency,
+        coupon: params.coupon,
+        items: params.items
+    })
+}
+
+export function trackSelectContent(contentType: string, itemId: string) {
+    trackEvent('select_content', {
+        category: 'engagement',
+        label: contentType,
+        context: itemId
+    })
+}
+
+export function trackSelectItem(options: {
+    itemListId?: string
+    itemListName?: string
+    items: EcommerceItem[]
+}) {
+    trackEvent('select_item', {
+        category: 'ecommerce',
+        items: options.items,
+        label: options.itemListName,
+        context: options.itemListId
     })
 }
 
