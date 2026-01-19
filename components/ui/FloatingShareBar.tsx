@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { event } from '@/lib/gtag'
-import { trackArticleShare, trackArticleCopyLink, trackBookmarkAdded, trackBookmarkRemoved } from '@/lib/analytics'
+import { trackArticleShare, trackArticleCopyLink, trackBookmarkAdded, trackBookmarkRemoved, trackLikeAdded, trackLikeRemoved } from '@/lib/analytics'
+import { useToast } from '@/components/ui/Toast'
 import { useAuth } from '@/components/auth/AuthContext'
 import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
 import { app } from '@/lib/firebase/client'
@@ -16,22 +17,102 @@ interface FloatingShareBarProps {
   likes?: number
   views?: number
   visitors?: number
+  // Controlled props
+  isLiked?: boolean
+  onLike?: () => void
+  isLikeLoading?: boolean
+  currentLikes?: number
 }
 
-export function FloatingShareBar({
-  title,
-  articleSlug,
-  description = '',
-  imageUrl,
-  likes = 0,
-  views = 0,
-  visitors = 0
-}: FloatingShareBarProps) {
+export function FloatingShareBar(props: FloatingShareBarProps) {
+  const {
+    title,
+    articleSlug,
+    description = '',
+    imageUrl,
+    likes = 0,
+    views = 0,
+    visitors = 0
+  } = props
   const [copied, setCopied] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [bookmarkCount, setBookmarkCount] = useState(0)
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
+
+  // Props for controlled mode
+  const {
+    isLiked: externalIsLiked,
+    onLike: externalOnLike,
+    isLikeLoading: externalIsLikeLoading,
+    currentLikes: externalCurrentLikes
+  } = props as any // Using any to avoid type errors since we haven't updated the interface yet in this block, but we should update the interface first. Ideally should have done interface update in same tool call. I'll do a multi-replace to handle interface too.
+
+  // Internal state
+  const [internalLiked, setInternalLiked] = useState(false)
+  const [internalCurrentLikes, setInternalCurrentLikes] = useState(likes)
+  const [internalLikeLoading, setInternalLikeLoading] = useState(false)
   const { user, loading } = useAuth()
+  const { showToast } = useToast()
+
+  const isControlled = externalIsLiked !== undefined && externalOnLike !== undefined
+
+  const liked = isControlled ? externalIsLiked : internalLiked
+  const currentLikes = externalCurrentLikes !== undefined ? externalCurrentLikes : internalCurrentLikes
+  const likeLoading = externalIsLikeLoading !== undefined ? externalIsLikeLoading : internalLikeLoading
+
+  useEffect(() => {
+    if (!isControlled) {
+      // Check local storage for like status
+      if (typeof window !== 'undefined') {
+        setInternalLiked(localStorage.getItem(`like_${articleSlug}`) === 'true')
+      }
+      // Update local likes count if prop changes
+      if (likes !== internalCurrentLikes && likes > 0) {
+        setInternalCurrentLikes(likes)
+      }
+    }
+  }, [articleSlug, likes, isControlled])
+
+  const handleLike = async () => {
+    if (isControlled && externalOnLike) {
+      externalOnLike()
+      return
+    }
+
+    const newLiked = !internalLiked
+    setInternalLiked(newLiked)
+    setInternalCurrentLikes(prev => newLiked ? prev + 1 : Math.max(0, prev - 1))
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`like_${articleSlug}`, newLiked ? 'true' : 'false')
+    }
+
+    setInternalLikeLoading(true)
+    try {
+      await fetch('/api/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: articleSlug, action: newLiked ? 'like' : 'unlike' })
+      })
+
+      if (newLiked) {
+        trackLikeAdded(articleSlug)
+        showToast('Added to favorites! ❤️', 'success')
+      } else {
+        trackLikeRemoved(articleSlug)
+      }
+    } catch (error) {
+      // Revert on error
+      setInternalLiked(!newLiked)
+      setInternalCurrentLikes(prev => !newLiked ? prev + 1 : Math.max(0, prev - 1))
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`like_${articleSlug}`, (!newLiked) ? 'true' : 'false')
+      }
+      console.error('Failed to update like:', error)
+    } finally {
+      setInternalLikeLoading(false)
+    }
+  }
 
   useEffect(() => {
     // Check if article is bookmarked (only for authenticated users)
@@ -432,31 +513,39 @@ export function FloatingShareBar({
         </div>
       )}
 
-      {/* Likes Counter */}
-      {likes >= 2 && (
-        <div
-          className="relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 cursor-help"
-          title="Total likes"
+      {/* Interactive Like Button */}
+      <button
+        onClick={handleLike}
+        disabled={likeLoading}
+        className={`relative group flex flex-col items-center justify-center w-14 py-3 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-gray-200 dark:border-slate-700 transition-all duration-300 hover:scale-110 active:scale-95 ${liked ? 'border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/20' : ''
+          }`}
+        aria-label={liked ? 'Unlike article' : 'Like article'}
+        title={liked ? 'Unlike' : 'Like'}
+      >
+        <svg
+          className={`w-5 h-5 mb-1 transition-colors duration-300 ${liked ? 'text-red-500 fill-red-500' : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500'
+            }`}
+          fill={liked ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={liked ? 0 : 2}
         >
-          <svg
-            className="w-5 h-5 text-red-500 mb-1"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-            {formatNumber(likes)}
-          </span>
-          {/* Tooltip */}
-          <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
-            <div className="font-semibold mb-0.5">Total Likes</div>
-            <div className="text-gray-300 dark:text-gray-400">Reader appreciation</div>
-            {/* Arrow */}
-            <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+        <span className={`text-xs font-semibold transition-colors duration-300 ${liked ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400'
+          }`}>
+          {formatNumber(currentLikes)}
+        </span>
+
+        {/* Tooltip */}
+        <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 dark:bg-slate-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+          <div className="font-semibold mb-0.5">{liked ? 'Liked!' : 'Like this article'}</div>
+          <div className="text-gray-300 dark:text-gray-400">
+            {liked ? 'Thanks for the support' : 'Show your appreciation'}
           </div>
+          <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-slate-700"></div>
         </div>
-      )}
+      </button>
     </aside>
   )
 }

@@ -1,4 +1,14 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files'
+import { defineDocumentType, defineNestedType, makeSource } from 'contentlayer/source-files'
+
+const FAQItem = defineNestedType(() => ({
+  name: 'FAQItem',
+  fields: {
+    question: { type: 'string', required: true },
+    answer: { type: 'string', required: true },
+    questionEn: { type: 'string', required: false },
+    answerEn: { type: 'string', required: false },
+  }
+}))
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
@@ -8,7 +18,8 @@ export const Post = defineDocumentType(() => ({
     title: { type: 'string', required: true },
     author: { type: 'string', required: false },
     date: { type: 'date', required: false },
-    topics: { type: 'list', of: { type: 'string' }, required: false },
+    primaryTopic: { type: 'string', required: false },
+    topics: { type: 'list', of: { type: 'string' }, required: false }, // These are now secondary TAGS
     meta: { type: 'string', required: false },
     seoTitle: { type: 'string', required: false },
     seoDescription: { type: 'string', required: false },
@@ -18,6 +29,11 @@ export const Post = defineDocumentType(() => ({
     cover: { type: 'string', required: false },
     published: { type: 'boolean', required: false },
     updatedAt: { type: 'date', required: false },
+    faq: {
+      type: 'list',
+      of: FAQItem,
+      required: false
+    },
   },
   computedFields: {
     url: {
@@ -57,9 +73,33 @@ export const Post = defineDocumentType(() => ({
         const slug = pathParts[1] // Get the article directory name
         return `/content/articles/${slug}`
       }
+    },
+
+    structuredData: {
+      type: 'json',
+      resolve: (doc: any) => {
+        // Generate FAQPage schema if FAQs exist
+        if (!doc.faq || !Array.isArray(doc.faq) || doc.faq.length === 0) return null;
+
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          'mainEntity': doc.faq.map((item: any) => ({
+            '@type': 'Question',
+            'name': item.questionEn || item.question, // Default to English for schema optimization as requested
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': item.answerEn || item.answer
+            }
+          }))
+        }
+      }
     }
   },
 }))
+
+
+
 
 export const Team = defineDocumentType(() => ({
   name: 'Team',
@@ -87,9 +127,38 @@ export const Team = defineDocumentType(() => ({
   },
 }))
 
+export const Topic = defineDocumentType(() => ({
+  name: 'Topic',
+  filePathPattern: `topics/**/*.md`,
+  contentType: 'markdown',
+  fields: {
+    title: { type: 'string', required: true },
+    description: { type: 'string', required: true },
+    icon: { type: 'string', required: false },
+    seoTitle: { type: 'string', required: false },
+    seoDescription: { type: 'string', required: false },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => {
+        // Return filename without extension
+        return doc._raw.sourceFileName.replace(/\.md$/, '')
+      }
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => {
+        const slug = doc._raw.sourceFileName.replace(/\.md$/, '')
+        return `/topics/${slug}`
+      }
+    }
+  },
+}))
+
 export default makeSource({
   contentDirPath: 'public/content',
-  documentTypes: [Post, Team],
+  documentTypes: [Post, Team, Topic],
   disableImportAliasWarning: true,
   onUnknownDocuments: 'skip-ignore',
   onExtraFieldData: 'ignore',

@@ -92,6 +92,11 @@ export function Header() {
       path: '/role-fit-audit',
       icon: <span aria-hidden className="text-lg">🔎</span>
     },
+    // {
+    //   name: 'Topics',
+    //   path: '/topics',
+    //   icon: <span aria-hidden className="text-lg">🧭</span>
+    // },
     {
       name: 'Blog',
       path: '/learn/articles',

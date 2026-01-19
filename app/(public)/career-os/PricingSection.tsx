@@ -6,7 +6,7 @@ import { useCareerOS } from './context/CareerOSContext'
 type PricingMode = 'classe' | '1to1'
 import { CheckCircle2 } from 'lucide-react'
 
-import { trackPricingSelect } from '@/lib/analytics/trackEvent'
+import { trackSelectContent, trackSelectItem } from '@/lib/analytics/trackEvent'
 
 const pricingData = {
     classe: {
@@ -168,7 +168,10 @@ export default function PricingSection() {
                 <div className="flex justify-center mb-4">
                     <div className="inline-flex rounded-full bg-white/10 p-1">
                         <button
-                            onClick={() => setMode('1to1')}
+                            onClick={() => {
+                                setMode('1to1')
+                                trackSelectContent('pricing_mode', '1to1')
+                            }}
                             className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${mode === '1to1'
                                 ? 'bg-[#FCD34D] text-[#1A1E3B]'
                                 : 'text-white/70 hover:text-white'
@@ -263,7 +266,16 @@ export default function PricingSection() {
                             <div className="mt-auto">
                                 <button
                                     onClick={() => {
-                                        trackPricingSelect(tier.name, current.label)
+                                        trackSelectItem({
+                                            items: [{
+                                                item_id: tier.name.toLowerCase().replace(/\s+/g, '_'),
+                                                item_name: tier.name,
+                                                price: tier.price,
+                                                item_category: current.label,
+                                            }],
+                                            itemListName: 'career_os_pricing',
+                                            itemListId: 'pricing_table'
+                                        })
                                         openAppModal({
                                             source: 'pricing_card',
                                             tier: `${tier.name} (${current.label})`

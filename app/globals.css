@@ -1320,22 +1320,6 @@ html {
   color: rgb(156, 163, 175);
 }
 
-/* Drop cap for opening letter */
-.prose>p:first-of-type::first-letter {
-  float: left;
-  font-size: 3.75rem;
-  font-weight: 700;
-  margin-right: 0.5rem;
-  margin-top: 0.25rem;
-  line-height: 0.85;
-  color: var(--stai-accent);
-}
-
-@media (min-width: 1024px) {
-  .prose>p:first-of-type::first-letter {
-    font-size: 4.5rem;
-  }
-}
 
 /* Better list styling */
 .prose ul,

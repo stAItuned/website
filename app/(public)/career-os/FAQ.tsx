@@ -11,7 +11,7 @@ import {
     Target
 } from 'lucide-react'
 
-import { trackFAQExpand } from '@/lib/analytics/trackEvent'
+import { trackSelectContent } from '@/lib/analytics/trackEvent'
 
 // Data Structure
 const FAQ_CATEGORIES = [
@@ -153,7 +153,7 @@ export default function FAQ() {
                                         const nextState = openIndex === i ? null : i
                                         setOpenIndex(nextState)
                                         if (nextState !== null) {
-                                            trackFAQExpand(item.q)
+                                            trackSelectContent('faq', item.q)
                                         }
                                     }}
                                     className="w-full flex items-center justify-between p-6 text-left"

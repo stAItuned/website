@@ -7,13 +7,19 @@ import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
 export function GoogleAnalytics() {
   const { hasConsentedToAnalytics } = useCookieConsent()
+  // TEMPORARY: Ensure analytics are always on, even if user declines.
+  // Set to false to respect user consent.
+  const FORCE_ANALYTICS_ENABLED = true
+
+  const shouldTrack = hasConsentedToAnalytics || FORCE_ANALYTICS_ENABLED
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    ;(window as any)[`ga-disable-${GA_MEASUREMENT_ID}`] = !hasConsentedToAnalytics
-  }, [hasConsentedToAnalytics])
+      // If tracking is enabled (forced or consented), disable property should be false.
+      ; (window as any)[`ga-disable-${GA_MEASUREMENT_ID}`] = !shouldTrack
+  }, [shouldTrack])
 
-  if (!hasConsentedToAnalytics) {
+  if (!shouldTrack) {
     return null
   }
 

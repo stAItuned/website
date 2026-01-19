@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { HomeHero } from './HomeHero'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { TickerArticle } from '@/components/ui/ArticleTicker'
 import { NewsletterModal } from '@/components/ui/NewsletterModal'
 import { ArticleCard } from '@/components/ArticleCard'
@@ -104,26 +105,14 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
 
                         {/* Trending/Recent Toggle - Centered */}
                         <div className="flex justify-center">
-                            <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-full p-1 shadow-inner">
-                                <button
-                                    onClick={() => setArticleFilter('trending')}
-                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${articleFilter === 'trending'
-                                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                        }`}
-                                >
-                                    🔥 {t.articles.trending}
-                                </button>
-                                <button
-                                    onClick={() => setArticleFilter('recent')}
-                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${articleFilter === 'recent'
-                                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                        }`}
-                                >
-                                    🆕 {t.articles.recent}
-                                </button>
-                            </div>
+                            <SegmentedControl
+                                options={[
+                                    { value: 'trending', label: `🔥 ${t.articles.trending}` },
+                                    { value: 'recent', label: `🆕 ${t.articles.recent}` }
+                                ]}
+                                value={articleFilter}
+                                onChange={(val) => setArticleFilter(val as ArticleFilter)}
+                            />
                         </div>
 
                         {/* View All Button - Right aligned */}

@@ -28,59 +28,103 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
     if (!enableScrollSpy || !ids.length) return
 
     let animationFrameId: number | null = null
-    let headings: HTMLElement[] = []
+    let headingPositions: { id: string; top: number }[] = []
     let ticking = false
     let waitingLogShown = false
 
-    const getDocumentOffset = (el: HTMLElement) => {
-      const rect = el.getBoundingClientRect()
-      return rect.top + window.scrollY
+    // Calculate document-relative position of an element
+    const calculateHeadingPositions = (headings: HTMLElement[]) => {
+      // Temporarily scroll to top to get accurate positions
+      const currentScroll = window.scrollY
+
+      headingPositions = headings.map(h => ({
+        id: h.id,
+        top: h.getBoundingClientRect().top + currentScroll
+      }))
+
+      console.log(`[TOC] Cached heading positions:`, headingPositions.map((p, i) => `${i}: ${p.id} at ${p.top.toFixed(0)}px`))
     }
 
     const updateActiveFromScroll = () => {
-      if (!headings.length) return
-      const OFFSET = 160
-      const fromTop = window.scrollY + OFFSET
-      let current = headings[0].id
+      if (!headingPositions.length) return
 
-      // Check if we're truly at the bottom of the page (with stricter threshold)
+      const OFFSET = 150 // Distance from top of viewport to consider a heading "active"
       const scrollTop = window.scrollY
+      const triggerPoint = scrollTop + OFFSET
+
+      // Default to first heading
+      let currentId = headingPositions[0].id
+
+      // If we're near the top of the page, use first heading
+      if (scrollTop < 50) {
+        setActive(prev => {
+          if (prev !== currentId) {
+            console.log(`[TOC] Near top of page, active: ${currentId}`)
+            return currentId
+          }
+          return prev
+        })
+        return
+      }
+
+      // Check if we're at the very bottom of the page
       const windowHeight = window.innerHeight
       const documentHeight = document.documentElement.scrollHeight
-      const isAtBottom = scrollTop + windowHeight >= documentHeight - 10
+      const maxScroll = documentHeight - windowHeight
 
-      if (isAtBottom) {
-        // Only set last heading if we're actually at the bottom
-        current = headings[headings.length - 1].id
-      } else {
-        // Normal scroll position logic - find the last heading that's passed the offset
-        for (const heading of headings) {
-          const headingOffset = getDocumentOffset(heading)
-          if (headingOffset <= fromTop) {
-            current = heading.id
-          } else {
-            // Stop once we find a heading that hasn't been reached yet
-            break
+      // Only consider "at bottom" if there's scrollable content and we're near the end
+      if (maxScroll > 200 && scrollTop >= maxScroll - 50) {
+        currentId = headingPositions[headingPositions.length - 1].id
+        setActive(prev => {
+          if (prev !== currentId) {
+            console.log(`[TOC] At bottom of page, active: ${currentId}`)
+            return currentId
           }
+          return prev
+        })
+        return
+      }
+
+      // Find the last heading that has scrolled past the trigger point
+      for (let i = 0; i < headingPositions.length; i++) {
+        const pos = headingPositions[i]
+
+        if (pos.top <= triggerPoint) {
+          currentId = pos.id
+        } else {
+          // This heading hasn't been reached yet, stop here
+          break
         }
       }
 
       setActive(prev => {
-        if (prev !== current) {
-          console.log(`[TOC] Scroll spy updating active heading: ${current} (scrollY: ${scrollTop.toFixed(0)}, fromTop: ${fromTop.toFixed(0)})`)
-          return current
+        if (prev !== currentId) {
+          console.log(`[TOC] Scrolled to: ${currentId} (scrollY: ${scrollTop.toFixed(0)}, trigger: ${triggerPoint.toFixed(0)})`)
+          return currentId
         }
         return prev
       })
     }
 
     const handleScroll = () => {
-      if (!headings.length || ticking) return
+      if (!headingPositions.length || ticking) return
       ticking = true
       requestAnimationFrame(() => {
         updateActiveFromScroll()
         ticking = false
       })
+    }
+
+    const handleResize = () => {
+      // Recalculate positions on resize
+      const root = document.getElementById('article-root')
+      if (root) {
+        const headings = Array.from(root.querySelectorAll<HTMLElement>('h2[id], h3[id]'))
+        if (headings.length) {
+          calculateHeadingPositions(headings)
+        }
+      }
+      handleScroll()
     }
 
     const tryInit = () => {
@@ -94,7 +138,7 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
         return
       }
 
-      headings = Array.from(root.querySelectorAll<HTMLElement>('h2[id], h3[id]'))
+      const headings = Array.from(root.querySelectorAll<HTMLElement>('h2[id], h3[id]'))
 
       if (!headings.length) {
         console.warn('[TOC] No h2/h3 headings found in #article-root')
@@ -103,13 +147,17 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
 
       console.log(`[TOC] Found ${headings.length} headings; initializing scroll spy`)
       console.log(`[TOC] Initial scroll position: ${window.scrollY}px`)
-      console.log(`[TOC] Headings:`, headings.map((h, i) => `${i}: ${h.id} at ${getDocumentOffset(h)}px`))
-      // Initial update - ensure we start with the correct heading based on current scroll position
-      requestAnimationFrame(() => {
+
+      // Calculate and cache heading positions
+      calculateHeadingPositions(headings)
+
+      // Small delay to ensure layout is stable before first activation
+      setTimeout(() => {
         updateActiveFromScroll()
-      })
+      }, 100)
+
       window.addEventListener('scroll', handleScroll, { passive: true })
-      window.addEventListener('resize', handleScroll)
+      window.addEventListener('resize', handleResize)
     }
 
     tryInit()
@@ -119,7 +167,7 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
         cancelAnimationFrame(animationFrameId)
       }
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
+      window.removeEventListener('resize', handleResize)
     }
   }, [ids, enableScrollSpy])
 
@@ -131,19 +179,19 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
       `a[href="#${CSS.escape(active)}"]`
     ) as HTMLElement | null
     if (!el) return
-    
+
     // Only scroll within the TOC container, not the entire page
     const cRect = container.getBoundingClientRect()
     const eRect = el.getBoundingClientRect()
     const padding = 24
     const outOfViewTop = eRect.top < cRect.top + padding
     const outOfViewBottom = eRect.bottom > cRect.bottom - padding
-    
+
     if (outOfViewTop || outOfViewBottom) {
       // Scroll only the TOC container, not the page
       const elementOffsetTop = el.offsetTop
       const targetScrollTop = elementOffsetTop - container.offsetHeight / 2 + el.offsetHeight / 2
-      
+
       container.scrollTo({
         top: targetScrollTop,
         behavior: 'smooth'
@@ -158,7 +206,7 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
 
   const navClasses = clsx(
     'bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-4 border border-gray-100 dark:border-slate-700 text-gray-900 dark:text-white transition-colors duration-200',
-    'max-h-[calc(100vh-3rem)] overflow-y-auto',
+    'max-h-[calc(100vh-8rem)] overflow-y-auto', // Increased offset from 3rem to 8rem to prevent clipping below viewport (assuming top-24 sticky parent)
     sticky ? 'sticky top-8 z-10' : 'w-full',
     'scrollbar-thin scrollbar-thumb-primary-300 dark:scrollbar-thumb-secondary-500 scrollbar-track-gray-100 dark:scrollbar-track-slate-700'
   )
@@ -189,9 +237,8 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
               <a
                 href={`#${item.slug}`}
                 aria-current={isActive ? 'true' : undefined}
-                className={`${linkBaseClasses} ${
-                  isActive ? activeClasses : inactiveClasses
-                }`}
+                className={`${linkBaseClasses} ${isActive ? activeClasses : inactiveClasses
+                  }`}
                 onClick={e => {
                   if (onLinkClick) {
                     e.preventDefault()

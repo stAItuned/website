@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { LearnServiceWorkerRegister } from '@/components/LearnServiceWorkerRegister'
 import {
     PWAInstallBanner,
@@ -9,6 +9,16 @@ import {
     PWABadgeTracker
 } from '@/components/pwa'
 import { RoleFitAuditCTA } from '@/components/ui/RoleFitAuditCTA'
+
+/**
+ * Viewport settings for the /learn section
+ */
+export const viewport: Viewport = {
+    themeColor: [
+        { media: '(prefers-color-scheme: light)', color: '#3b82f6' },
+        { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+    ],
+}
 
 /**
  * Metadata for the /learn section
@@ -24,11 +34,6 @@ export const metadata: Metadata = {
         statusBarStyle: 'black-translucent',
         title: 'stAItuned Learn',
     },
-    // Theme color for learn PWA
-    themeColor: [
-        { media: '(prefers-color-scheme: light)', color: '#3b82f6' },
-        { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
-    ],
 }
 
 /**

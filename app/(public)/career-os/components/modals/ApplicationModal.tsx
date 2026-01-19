@@ -74,7 +74,7 @@ const INITIAL_FORM_DATA: FormData = {
     website: '',
 }
 
-import { trackFormStart, trackFormStepComplete, trackFormSubmit, trackFormAbandon } from '@/lib/analytics/trackEvent'
+import { trackFormStart, trackFormStepComplete, trackFormSubmit, trackFormAbandon, trackEvent } from '@/lib/analytics/trackEvent'
 
 export default function ApplicationModal() {
     const { isAppModalOpen, closeAppModal, appModalData } = useCareerOS()
@@ -222,6 +222,13 @@ export default function ApplicationModal() {
             setStatus('success')
             setHasSubmitted(true)
             trackFormSubmit('career_os_app')
+            trackEvent('generate_lead', {
+                category: 'conversion',
+                value: 50, // Estimated value
+                currency: 'EUR',
+                source: appModalData?.source || source,
+                label: 'career_os_application'
+            })
         } catch (err) {
             setStatus('error')
             setMessage(err instanceof Error ? err.message : 'Errore nell’invio. Riprova.')

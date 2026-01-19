@@ -13,7 +13,9 @@ interface OfflineArticleState {
     removeFromCache: () => Promise<boolean>
 }
 
-const ARTICLES_CACHE_NAME = 'staituned-learn-v1-articles'
+// Cache name prefix must match sw-learn.js CACHE_NAMES.ARTICLES pattern
+// The SW uses: `${CACHE_PREFIX}-articles-${SW_VERSION}` = 'staituned-learn-articles-v2.1.0'
+const ARTICLES_CACHE_PREFIX = 'staituned-learn-articles-'
 
 /**
  * Hook to manage offline article caching
@@ -25,21 +27,45 @@ export function useOfflineArticle(articleSlug: string): OfflineArticleState {
     const [isCached, setIsCached] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const checkCacheStatus = useCallback(async () => {
-        if (typeof window === 'undefined') return
-        if (!('caches' in window)) return
+    /**
+     * Find the active articles cache (matches any version)
+     */
+    const findArticlesCache = useCallback(async (): Promise<Cache | null> => {
+        if (typeof window === 'undefined' || !('caches' in window)) return null
 
         try {
-            const cache = await caches.open(ARTICLES_CACHE_NAME)
-            const keys = await cache.keys()
+            const cacheNames = await caches.keys()
+            const articlesCache = cacheNames.find(name => name.startsWith(ARTICLES_CACHE_PREFIX))
 
+            if (articlesCache) {
+                return await caches.open(articlesCache)
+            }
+            return null
+        } catch (error) {
+            console.error('[useOfflineArticle] Error finding cache:', error)
+            return null
+        }
+    }, [])
+
+    const checkCacheStatus = useCallback(async () => {
+        if (typeof window === 'undefined') return
+
+        try {
+            const cache = await findArticlesCache()
+            if (!cache) {
+                setIsCached(false)
+                return
+            }
+
+            const keys = await cache.keys()
             // Check if any cached URL contains this slug
             const cached = keys.some(req => req.url.includes(articleSlug))
             setIsCached(cached)
         } catch (error) {
             console.error('[useOfflineArticle] Error checking cache:', error)
+            setIsCached(false)
         }
-    }, [articleSlug])
+    }, [articleSlug, findArticlesCache])
 
     // Check if article is already cached on mount
     useEffect(() => {
@@ -48,16 +74,43 @@ export function useOfflineArticle(articleSlug: string): OfflineArticleState {
 
     const saveForOffline = useCallback(async (): Promise<boolean> => {
         if (typeof window === 'undefined') return false
-        if (!('serviceWorker' in navigator)) return false
+        if (!('serviceWorker' in navigator)) {
+            console.warn('[useOfflineArticle] Service workers not supported')
+            return false
+        }
 
         setIsLoading(true)
 
         try {
-            // Get the service worker registration for /learn
+            // Try to get the /learn scope service worker
             const registration = await navigator.serviceWorker.getRegistration('/learn')
 
             if (!registration?.active) {
-                console.warn('[useOfflineArticle] No active service worker')
+                console.warn('[useOfflineArticle] No active service worker for /learn scope')
+
+                // Fallback: Try to cache directly using Cache API
+                try {
+                    const currentUrl = window.location.href
+                    const response = await fetch(currentUrl)
+
+                    if (response.ok) {
+                        // Open or create a cache with current version pattern
+                        const cacheNames = await caches.keys()
+                        const existingCache = cacheNames.find(name => name.startsWith(ARTICLES_CACHE_PREFIX))
+                        const cacheName = existingCache || `${ARTICLES_CACHE_PREFIX}v2.1.0`
+
+                        const cache = await caches.open(cacheName)
+                        await cache.put(currentUrl, response)
+
+                        setIsCached(true)
+                        setIsLoading(false)
+                        console.log('[useOfflineArticle] Cached directly via Cache API:', currentUrl)
+                        return true
+                    }
+                } catch (fallbackError) {
+                    console.error('[useOfflineArticle] Fallback caching failed:', fallbackError)
+                }
+
                 setIsLoading(false)
                 return false
             }
@@ -70,27 +123,32 @@ export function useOfflineArticle(articleSlug: string): OfflineArticleState {
                 url: currentUrl
             })
 
-            // Wait a bit for caching to complete, then verify
-            await new Promise(resolve => setTimeout(resolve, 1500))
+            // Wait for caching to complete, then verify
+            await new Promise(resolve => setTimeout(resolve, 2000))
             await checkCacheStatus()
 
             setIsLoading(false)
-            return true
+            return isCached || true // Optimistically return true since SW doesn't confirm
         } catch (error) {
             console.error('[useOfflineArticle] Error saving for offline:', error)
             setIsLoading(false)
             return false
         }
-    }, [checkCacheStatus])
+    }, [checkCacheStatus, isCached])
 
     const removeFromCache = useCallback(async (): Promise<boolean> => {
         if (typeof window === 'undefined') return false
-        if (!('caches' in window)) return false
 
         setIsLoading(true)
 
         try {
-            const cache = await caches.open(ARTICLES_CACHE_NAME)
+            const cache = await findArticlesCache()
+            if (!cache) {
+                setIsLoading(false)
+                setIsCached(false)
+                return true
+            }
+
             const keys = await cache.keys()
 
             // Remove any cached entries for this article
@@ -108,7 +166,7 @@ export function useOfflineArticle(articleSlug: string): OfflineArticleState {
             setIsLoading(false)
             return false
         }
-    }, [articleSlug])
+    }, [articleSlug, findArticlesCache])
 
     return {
         isCached,
@@ -119,3 +177,4 @@ export function useOfflineArticle(articleSlug: string): OfflineArticleState {
 }
 
 export default useOfflineArticle
+

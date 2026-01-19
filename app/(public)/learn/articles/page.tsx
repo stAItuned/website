@@ -2,8 +2,9 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { PWAInstallBanner } from '@/components/pwa'
-import { allPosts } from '@/lib/contentlayer'
+import { allPosts, allTopics } from '@/lib/contentlayer'
 import { ArticlesPageClient } from './ArticlesPageClient'
+import { topicHubs } from '@/config/topics'
 
 export const dynamic = 'force-static'
 export const revalidate = 86400 // ISR ogni giorno
@@ -59,7 +60,26 @@ export default function ArticlesPage() {
             readingTime: post.readingTime,
             target: post.target,
             language: post.language,
+            primaryTopic: post.primaryTopic,
         }))
+
+    // Calculate count per Primary Topic (Hubs)
+    const topicCounts = allPosts.reduce((acc, post) => {
+        if (!post.published || !post.primaryTopic) return acc
+        const slug = post.primaryTopic
+        acc[slug] = (acc[slug] || 0) + 1
+        return acc
+    }, {} as Record<string, number>)
+
+    // Map Hubs to topTopics format
+    const topTopics = topicHubs.map(hub => ({
+        name: hub.name,
+        slug: hub.slug,
+        count: topicCounts[hub.slug] || 0,
+        description: hub.description,
+        icon: hub.icon
+    })).sort((a, b) => b.count - a.count)
+
 
     // Count articles per level
     const articleCounts = {
@@ -80,6 +100,8 @@ export default function ArticlesPage() {
                         articles={allArticles}
                         levels={levels}
                         articleCounts={articleCounts}
+                        topTopics={topTopics}
+                        topicCount={allTopics.length}
                     />
                 </Suspense>
             </PageTransition>

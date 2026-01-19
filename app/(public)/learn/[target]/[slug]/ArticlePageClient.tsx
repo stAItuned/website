@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { LikeButton } from '@/components/LikeButton'
+import { ArticleRating } from '@/components/ArticleRating'
+import { BookmarkButton } from '@/components/BookmarkButton'
+import { ArticleFAQ } from '@/components/ArticleFAQ'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -32,6 +35,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { ArticleAnalytics } from '@/lib/analytics-server'
 
+import { useArticleLikes } from '@/lib/hooks/useArticleLikes'
+
 export default function ArticlePageClient({
   coverImage,
   article,
@@ -44,6 +49,13 @@ export default function ArticlePageClient({
 }: any & { analytics: ArticleAnalytics }) {
   const isLarge = useScreenSize()
   const [showTocModal, setShowTocModal] = useState(false)
+
+  // Initialize shared like state
+  const { liked, likesCount, loading: likeLoading, handleLike } = useArticleLikes({
+    articleSlug: article.slug,
+    initialLikes: analytics.likes
+  })
+
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
   const [showMobileToc, setShowMobileToc] = useState(true)
@@ -626,9 +638,13 @@ export default function ArticlePageClient({
               articleSlug={article.slug}
               description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
               imageUrl={coverImage}
-              likes={liveAnalytics.likes || 0}
+              likes={likesCount}
               views={liveAnalytics.pageViews || 0}
               visitors={liveAnalytics.users || 0}
+              isLiked={liked}
+              onLike={handleLike}
+              isLikeLoading={likeLoading}
+              currentLikes={likesCount}
             />
             {/* Center: Main Article Content */}
             <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
@@ -662,7 +678,12 @@ export default function ArticlePageClient({
                 <div className="flex-shrink-0 w-full sm:w-auto flex items-center justify-end sm:justify-center gap-2 mt-2 sm:mt-0">
                   <SaveForOfflineButton articleSlug={article.slug} />
                   <div className="w-full sm:w-auto">
-                    <LikeButton articleSlug={article.slug} />
+                    <LikeButton
+                      articleSlug={article.slug}
+                      liked={liked}
+                      onLike={handleLike}
+                      isLoading={likeLoading}
+                    />
                   </div>
                 </div>
               </div>
@@ -678,7 +699,43 @@ export default function ArticlePageClient({
                     </svg>
                     FREE
                   </span>
+
+                  {/* Primary Topic Badge */}
+                  {article.primaryTopic && (
+                    <Link
+                      href={`/topics/${article.primaryTopic}`}
+                      title="Go to Topic Hub"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs font-bold uppercase tracking-wider hover:bg-primary-200 dark:hover:bg-primary-900/60 transition-colors"
+                    >
+                      <span className="text-lg">🧭</span>
+                      {article.primaryTopic.replace(/-/g, ' ')}
+                    </Link>
+                  )}
                 </div>
+                {/* Topics / Hubs Links */}
+                {article.topics && article.topics.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 mb-6">
+                    <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Tags:</span>
+                    {article.topics.map((topic: string) => {
+                      const topicSlug = topic.toLowerCase()
+                        .replace(/\s+/g, '-')
+                        .replace(/[^\w\-]+/g, '')
+                        .replace(/\-\-+/g, '-')
+                        .replace(/^-+/, '')
+                        .replace(/-+$/, '')
+
+                      return (
+                        <Link
+                          key={topic}
+                          href={`/topics/${topicSlug}`}
+                          className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 text-xs font-medium transition-colors border border-slate-200 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-800"
+                        >
+                          {topic}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                )}
                 {/* Share button below title */}
                 {/* <div className="flex justify-start">
                   <ShareOnLinkedIn
@@ -707,6 +764,28 @@ export default function ArticlePageClient({
                   className="prose prose-lg max-w-none"
                   articleSlug={article.slug}
                 />
+              </div>
+
+              {/* End of Article Engagement */}
+              {/* Article FAQs */}
+              <ArticleFAQ faqs={article.faq} />
+
+              {/* End of Article Engagement - Minimalist Redesign */}
+              <div className="not-prose flex flex-col items-center gap-6 my-12 py-8 border-t border-gray-100 dark:border-slate-800/50">
+                <div className="flex flex-col items-center gap-2">
+                  <ArticleRating articleSlug={article.slug} />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <LikeButton
+                    articleSlug={article.slug}
+                    liked={liked}
+                    onLike={handleLike}
+                    isLoading={likeLoading}
+                  />
+                  <div className="w-px h-8 bg-gray-200 dark:bg-slate-700 mx-1" />
+                  <BookmarkButton articleSlug={article.slug} />
+                </div>
               </div>
             </article>
             {/* Right: TOC Sidebar (Desktop only) */}
@@ -780,6 +859,30 @@ export default function ArticlePageClient({
                       </div>
                     </div>
 
+                    {/* Topics / Hubs Links (Mobile) */}
+                    {article.topics && article.topics.length > 0 && (
+                      <div className="flex flex-wrap justify-center gap-2 mt-3 mb-1">
+                        {article.topics.map((topic: string) => {
+                          const topicSlug = topic.toLowerCase()
+                            .replace(/\s+/g, '-')
+                            .replace(/[^\w\-]+/g, '')
+                            .replace(/\-\-+/g, '-')
+                            .replace(/^-+/, '')
+                            .replace(/-+$/, '')
+
+                          return (
+                            <Link
+                              key={topic}
+                              href={`/topics/${topicSlug}`}
+                              className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-medium border border-slate-200 dark:border-slate-700"
+                            >
+                              {topic}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+
                     {/* KPI Stats Row */}
                     <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
                       {/* Views */}
@@ -830,6 +933,20 @@ export default function ArticlePageClient({
                       className="prose max-w-none text-gray-800 dark:text-gray-200"
                       articleSlug={article.slug}
                     />
+                  </div>
+
+                  {/* Article FAQs (Mobile) */}
+                  <div className="not-prose mt-8 border-t border-gray-100 dark:border-slate-800 pt-8">
+                    <ArticleFAQ faqs={article.faq} />
+                  </div>
+
+                  {/* End of Article Engagement (Mobile) */}
+                  <div className="not-prose flex flex-col items-center gap-5 mt-10 mb-8 pt-8 border-t border-gray-100 dark:border-slate-800">
+                    <ArticleRating articleSlug={article.slug} />
+                    <div className="flex items-center gap-3 w-full justify-center">
+                      <LikeButton articleSlug={article.slug} />
+                      <BookmarkButton articleSlug={article.slug} />
+                    </div>
                   </div>
                 </article>
               </div>

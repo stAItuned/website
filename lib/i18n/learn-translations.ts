@@ -114,7 +114,12 @@ export interface LearnTranslations {
             content: string
             levels: string
         }
+        filter: string
         searchPlaceholder: string
+        sort: {
+            trending: string
+            recent: string
+        }
         all: string
         noArticles: string
         noResults: string
@@ -134,11 +139,80 @@ export interface LearnTranslations {
         privacyNote: string
     }
 
-    // Common
     common: {
         exploreArticles: string
         articles: string
         free: string
+    }
+
+    // Topic Hub Section
+    topicHub: {
+        breadcrumbs: {
+            home: string
+            topics: string
+        }
+        stats: {
+            article: string
+            articles: string
+        }
+        sections: {
+            strategies: string
+            pitfalls: string
+            faq: string
+        }
+        deepDives: {
+            title: string
+            sort: {
+                trending: string
+                newest: string
+            }
+        }
+        sidebar: {
+            startHere: string
+            viewAll: string
+        }
+        card: {
+            minRead: string
+            readArticle: string
+            level: {
+                newbie: string
+                midway: string
+                expert: string
+            }
+        }
+    }
+    topicsIndex: {
+        hero: {
+            badge: string
+            titlePrefix: string
+            titleHighlight: string
+            subtitle: string
+            stats: {
+                hubs: string
+                articles: string
+                free: string
+            }
+        }
+        categories: {
+            core: string
+            applications: string
+            career: string
+            operations: string
+        }
+        card: {
+            explore: string
+            article: string
+            articles: string
+        }
+    }
+
+    topicGrid: {
+        browseByTopic: string
+        explore: string
+        allTopics: string
+        viewFullCatalog: string
+        seeAll: string
+        fallbackDescription: string
     }
 }
 
@@ -259,16 +333,56 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             articles: "articles",
             free: "Free"
         },
+        topicHub: {
+            breadcrumbs: {
+                home: "Home",
+                topics: "Topics"
+            },
+            stats: {
+                article: "Article",
+                articles: "Articles"
+            },
+            sections: {
+                strategies: "Strategies",
+                pitfalls: "Risks / Pitfalls",
+                faq: "FAQ"
+            },
+            deepDives: {
+                title: "Deep Dives & Guides",
+                sort: {
+                    trending: "Trending",
+                    newest: "Newest"
+                }
+            },
+            sidebar: {
+                startHere: "Start Here",
+                viewAll: "View all articles"
+            },
+            card: {
+                minRead: "min read",
+                readArticle: "Read article",
+                level: {
+                    newbie: "Newbie",
+                    midway: "Midway",
+                    expert: "Expert"
+                }
+            }
+        },
         articlesPage: {
             title: "AI Knowledge, ",
             highlight: "Distilled",
-            description: "Practical guides, benchmarks, and deep dives. Written by practitioners, reviewed by experts. No fluff, just actionable knowledge.",
+            description: "<strong>Practical guides, benchmarks, and deep dives.</strong> Written by <strong>practitioners</strong>, reviewed by <strong>experts</strong>. No fluff, just <strong>actionable knowledge</strong>.",
             stats: {
                 articles: "Articles",
                 content: "Content",
                 levels: "Levels"
             },
+            filter: "Filter",
             searchPlaceholder: "Search articles...",
+            sort: {
+                trending: "Trending",
+                recent: "Recent"
+            },
             all: "All",
             noArticles: "No articles found",
             noResults: 'No results for "{query}"',
@@ -286,6 +400,38 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             writingSend: "Send",
             writingSending: "Sending...",
             privacyNote: "I agree to the Privacy Policy. We'll only use your data to contact you about contributing."
+        },
+        topicGrid: {
+            browseByTopic: "Browse by Topic",
+            explore: "Explore",
+            allTopics: "All Topics",
+            viewFullCatalog: "Browse the full catalog",
+            seeAll: "See all",
+            fallbackDescription: "Explore articles on this topic."
+        },
+        topicsIndex: {
+            hero: {
+                badge: 'stAItuned Topics',
+                titlePrefix: 'Explore Your',
+                titleHighlight: 'Learning Path',
+                subtitle: 'Structured learning paths and deep dives into the most critical areas of AI Engineering and Research.',
+                stats: {
+                    hubs: 'Topic Hubs',
+                    articles: 'Articles',
+                    free: 'Free & Open'
+                }
+            },
+            categories: {
+                core: 'Core',
+                applications: 'Applications',
+                career: 'Career',
+                operations: 'Operations'
+            },
+            card: {
+                explore: 'Explore Path',
+                article: 'article',
+                articles: 'articles'
+            }
         }
     },
     it: {
@@ -404,16 +550,56 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             articles: "articoli",
             free: "Gratis"
         },
+        topicHub: {
+            breadcrumbs: {
+                home: "Home",
+                topics: "Argomenti"
+            },
+            stats: {
+                article: "Articolo",
+                articles: "Articoli"
+            },
+            sections: {
+                strategies: "Strategie",
+                pitfalls: "Rischi / Errori comuni",
+                faq: "FAQ"
+            },
+            deepDives: {
+                title: "Guide & Approfondimenti",
+                sort: {
+                    trending: "Popolari",
+                    newest: "Recenti"
+                }
+            },
+            sidebar: {
+                startHere: "Inizia Qui",
+                viewAll: "Vedi tutti"
+            },
+            card: {
+                minRead: "min lettura",
+                readArticle: "Leggi articolo",
+                level: {
+                    newbie: "Base",
+                    midway: "Intermedio",
+                    expert: "Avanzato"
+                }
+            }
+        },
         articlesPage: {
             title: "Conoscenza AI, ",
             highlight: "Distillata",
-            description: "Guide pratiche, benchmark e approfondimenti. Scritto da professionisti, revisionato da esperti. Niente fuffa, solo conoscenza pragmatica.",
+            description: "<strong>Guide pratiche, benchmark e approfondimenti.</strong> Scritto da <strong>professionisti</strong>, revisionato da <strong>esperti</strong>. Niente fuffa, solo <strong>conoscenza pragmatica</strong>.",
             stats: {
                 articles: "Articoli",
                 content: "Contenuti",
                 levels: "Livelli"
             },
+            filter: "Filtra",
             searchPlaceholder: "Cerca articoli...",
+            sort: {
+                trending: "Popolari",
+                recent: "Recenti"
+            },
             all: "Tutti",
             noArticles: "Nessun articolo trovato",
             noResults: 'Nessun risultato per "{query}"',
@@ -431,6 +617,38 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             writingSend: "Invia",
             writingSending: "Invio in corso...",
             privacyNote: "Accetto la Privacy Policy. Useremo i tuoi dati solo per contattarti riguardo alla collaborazione."
+        },
+        topicGrid: {
+            browseByTopic: "Esplora per Argomento",
+            explore: "Esplora",
+            allTopics: "Tutti i Topic",
+            viewFullCatalog: "Sfoglia l'intero catalogo",
+            seeAll: "Vedi tutto",
+            fallbackDescription: "Esplora articoli su questo argomento."
+        },
+        topicsIndex: {
+            hero: {
+                badge: 'stAItuned Topics',
+                titlePrefix: 'Esplora il tuo',
+                titleHighlight: 'Percorso di Apprendimento',
+                subtitle: 'Percorsi di apprendimento strutturati e approfondimenti sulle aree più critiche dell\'Ingegneria e Ricerca AI.',
+                stats: {
+                    hubs: 'Topic Hub',
+                    articles: 'Articoli',
+                    free: 'Gratis & Open'
+                }
+            },
+            categories: {
+                core: 'Fondamentali',
+                applications: 'Applicazioni',
+                career: 'Carriera',
+                operations: 'Operazioni'
+            },
+            card: {
+                explore: 'Esplora Percorso',
+                article: 'articolo',
+                articles: 'articoli'
+            }
         }
     }
 }

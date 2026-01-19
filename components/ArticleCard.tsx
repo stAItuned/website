@@ -4,6 +4,8 @@
 import Image from 'next/image'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
 
+import { getTopicHub } from '@/config/topics'
+
 interface ArticleCardProps {
   article: {
     title: string
@@ -16,6 +18,7 @@ interface ArticleCardProps {
     target?: string
     language?: string
     topics?: string[]
+    primaryTopic?: string
   }
   pageViews?: number
 }
@@ -26,6 +29,10 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
     slug: article.slug,
     enabled: initialPageViews === undefined // Only fetch if not provided
   })
+
+  // Get Primary Topic Config
+  const primaryTopicSlug = article.primaryTopic || article.topics?.[0]
+  const topicHub = primaryTopicSlug ? getTopicHub(primaryTopicSlug) : undefined
 
   // Determine which analytics to use
   const analyticsData = initialPageViews !== undefined
@@ -97,7 +104,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
       <div
         className="relative flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-900 overflow-hidden transition-all duration-500 ease-out hover:shadow-xl hover:-translate-y-1 hover:border-primary-300 dark:hover:border-primary-700"
       >
-        <div className="relative w-full h-40 overflow-hidden shrink-0">
+        <div className="relative w-full aspect-video max-h-[200px] overflow-hidden shrink-0">
           {imageSrc && (
             <Image
               src={imageSrc}
@@ -133,19 +140,24 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
             )}
           </div>
 
-          {/* Top Right: Target Badge (Glassmorphism) */}
-          {article.target && (
-            <div className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-bold z-20 shadow-lg backdrop-blur-md border border-white/10 transition-transform duration-300 group-hover:scale-105 ${getTargetStyle(article.target)} opacity-90`}>
-              {article.target}
+          {/* Top Right: Topic Badge (Replaces Target) */}
+          {topicHub && (
+            <div className="absolute top-3 right-3 z-30">
+              <div
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold shadow-lg backdrop-blur-md border border-white/20 bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 group-hover:scale-105 transition-transform duration-300"
+              >
+                <span className="text-base leading-none">{topicHub.icon}</span>
+                <span className="uppercase tracking-wide">{topicHub.name}</span>
+              </div>
             </div>
           )}
         </div>
 
         {/* Post Info */}
-        <div className="flex flex-col flex-1 p-5 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="flex flex-col flex-1 p-4 bg-white dark:bg-gray-900 transition-colors duration-300">
 
-          {/* Metadata: Date & Time */}
-          <div className="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500 mb-3 font-medium">
+          {/* Metadata: Date & Time & Level */}
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 dark:text-slate-500 mb-2 font-medium">
             <span>{formatDate(article.date)}</span>
             {article.readingTime && (
               <>
@@ -153,21 +165,30 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
                 <span>{article.readingTime} min read</span>
               </>
             )}
+            {/* Level Badge in Metadata */}
+            {article.target && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+                <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide ${article.target === 'Newbie' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
+                  article.target === 'Midway' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
+                    article.target === 'Expert' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' :
+                      'bg-slate-100 text-slate-700'
+                  }`}>
+                  {article.target === 'Newbie' && '🌱'}
+                  {article.target === 'Midway' && '⚡'}
+                  {article.target === 'Expert' && '🔬'}
+                  {article.target}
+                </span>
+              </>
+            )}
           </div>
 
-          <h3 className="font-bold text-lg leading-snug mb-2 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
+          <h3 className="font-bold text-xl leading-snug mb-1 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
             {article.title}
           </h3>
 
-          {/* Description shown if available */}
-          {article.meta && (
-            <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">
-              {article.meta}
-            </p>
-          )}
-
           {/* Footer: Author & Action */}
-          <div className="mt-auto flex items-center justify-between pt-2">
+          <div className="mt-auto flex items-center justify-between pt-3">
             <div className="flex items-center gap-2 group/author">
               {authorImageSrc && (
                 <Image
@@ -175,7 +196,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
                   alt="avatar"
                   width={24}
                   height={24}
-                  className="w-6 h-6 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 shadow-sm"
+                  className="w-5 h-5 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 shadow-sm"
                   loading="lazy"
                 />
               )}

@@ -5,7 +5,7 @@ import { useCareerOS } from '../../context/CareerOSContext'
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error'
 
-import { trackAuditModalOpen, trackAuditModalAbandon, trackAuditModalSubmit } from '@/lib/analytics/trackEvent'
+import { trackAuditModalOpen, trackAuditModalAbandon, trackAuditModalSubmit, trackEvent } from '@/lib/analytics/trackEvent'
 
 export default function AuditModal() {
     const { isAuditModalOpen, closeAuditModal } = useCareerOS()
@@ -102,6 +102,13 @@ export default function AuditModal() {
 
             setStatus('success')
             trackAuditModalSubmit(window.location.pathname)
+            trackEvent('generate_lead', {
+                category: 'conversion',
+                value: 20, // Estimated value
+                currency: 'EUR',
+                source: 'audit-modal',
+                label: 'audit_call_booking'
+            })
         } catch (err) {
             setStatus('error')
             setMessage('Qualcosa è andato storto. Riprova o scrivici direttamente.')

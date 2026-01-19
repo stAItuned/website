@@ -1,36 +1,54 @@
-'use client'
-
-
 import { useState, useEffect } from 'react'
-import { LikeIcon } from './icons/LikeIcon'
 import { useToast } from './ui/Toast'
 import { trackLikeAdded, trackLikeRemoved } from '@/lib/analytics'
 
 interface LikeButtonProps {
   articleSlug: string
   initialLikes?: number
+  liked?: boolean
+  onLike?: () => void
+  isLoading?: boolean
 }
 
-export function LikeButton({ articleSlug, initialLikes = 0 }: LikeButtonProps) {
-  const [liked, setLiked] = useState(false)
-  const [loading, setLoading] = useState(false)
+export function LikeButton({
+  articleSlug,
+  initialLikes = 0,
+  liked: externalLiked,
+  onLike: externalOnLike,
+  isLoading: externalIsLoading
+}: LikeButtonProps) {
+  // Internal state for when used independently
+  const [internalLiked, setInternalLiked] = useState(false)
+  const [internalLoading, setInternalLoading] = useState(false)
   const { showToast } = useToast()
 
-  // Optionally: fetch initial like count from Firestore on mount if not provided
+  const isControlled = externalLiked !== undefined && externalOnLike !== undefined
+
+  // Use external or internal state
+  const isLiked = isControlled ? externalLiked : internalLiked
+  const isLoading = externalIsLoading !== undefined ? externalIsLoading : internalLoading
+
+  // Initialize internal state if not controlled
   useEffect(() => {
-    // No need to fetch likes if not displaying them
-    if (typeof window !== 'undefined') {
-      setLiked(localStorage.getItem(`like_${articleSlug}`) === 'true')
+    if (!isControlled && typeof window !== 'undefined') {
+      setInternalLiked(localStorage.getItem(`like_${articleSlug}`) === 'true')
     }
-  }, [articleSlug, initialLikes])
+  }, [articleSlug, isControlled])
 
   const handleLike = async () => {
-    const newLiked = !liked;
-    setLiked(newLiked);
+    // If controlled, just call the handler
+    if (isControlled && externalOnLike) {
+      externalOnLike()
+      return
+    }
+
+    // Internal logic (legacy/standalone mode)
+    const newLiked = !internalLiked;
+    setInternalLiked(newLiked);
     if (typeof window !== 'undefined') {
       localStorage.setItem(`like_${articleSlug}`, newLiked ? 'true' : 'false');
     }
-    setLoading(true);
+    setInternalLoading(true);
     try {
       await fetch('/api/like', {
         method: 'POST',
@@ -52,40 +70,42 @@ export function LikeButton({ articleSlug, initialLikes = 0 }: LikeButtonProps) {
       }
     } catch (error) {
       // Revert on error
-      setLiked(!newLiked);
+      setInternalLiked(!newLiked);
       if (typeof window !== 'undefined') {
         localStorage.setItem(`like_${articleSlug}`, (!newLiked) ? 'true' : 'false');
       }
       showToast('Failed to update. Please try again.', 'error')
     } finally {
-      setLoading(false);
+      setInternalLoading(false);
     }
   }
 
   return (
     <button
       className={`
-        flex items-center gap-2 px-3 py-1 rounded-full 
-        border shadow-sm text-sm font-semibold 
-        transition-all duration-300
-        ${liked
-          ? 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600'
-          : 'bg-primary-100 dark:bg-primary-900/40 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/60'
+        flex items-center gap-2 px-4 py-2 rounded-full 
+        border transition-all duration-300
+        ${isLiked
+          ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900'
+          : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500 hover:text-red-500'
         }
-        ${loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+        ${isLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
       `}
       onClick={handleLike}
-      disabled={loading}
-      aria-pressed={liked}
-      aria-label={liked ? 'Unlike' : 'Like'}
+      disabled={isLoading}
+      aria-pressed={isLiked}
+      aria-label={isLiked ? 'Unlike' : 'Like'}
       type="button"
     >
-      <LikeIcon
-        className={`w-5 h-5 transition-all duration-300 ${liked
-            ? 'text-white scale-110'
-            : 'text-primary-600 dark:text-primary-400'
-          }`}
-      />
+      <svg
+        className={`w-5 h-5 transition-colors ${isLiked ? 'fill-current' : 'fill-none stroke-current stroke-2'}`}
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+      <span className="text-sm font-medium">
+        {isLiked ? 'Liked' : 'Like'}
+      </span>
     </button>
   )
 }

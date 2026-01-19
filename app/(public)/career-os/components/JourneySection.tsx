@@ -21,7 +21,7 @@ import {
 import { Tooltip } from '@/components/ui/Tooltip'
 import { HoverCard } from '@/components/ui/HoverCard'
 import { useCareerOS, type ObjectiveType } from '../context/CareerOSContext'
-import { trackJourneyExpand } from '@/lib/analytics/trackEvent'
+import { trackSelectContent } from '@/lib/analytics/trackEvent'
 
 
 /**
@@ -607,7 +607,7 @@ function WeekNodeCompact({
             onClick={() => {
                 onSelect()
                 if (!isSelected) {
-                    trackJourneyExpand(node.title)
+                    trackSelectContent('journey_week', node.title)
                 }
             }}
             className={`
