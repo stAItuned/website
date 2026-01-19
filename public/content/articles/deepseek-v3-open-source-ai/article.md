@@ -1,16 +1,18 @@
 ---
-title: "DeepSeek Model: A New Frontier in Open-Source AI"
+title: 'DeepSeek Model: A New Frontier in Open-Source AI'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Discover DeepSeek V3, an open-source AI model excelling in coding, reasoning, and NLP tasks. Learn about its advanced architecture, performance benchmarks, and real-world applications."
-date: 2025-01-30
+meta: >-
+  Discover DeepSeek V3, an open-source AI model excelling in coding, reasoning,
+  and NLP tasks. Learn about its advanced architecture, performance benchmarks,
+  and real-world applications.
+date: 2025-01-30T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
-
-
 
 ## DeepSeek Model: A New Frontier in Open-Source AI
 

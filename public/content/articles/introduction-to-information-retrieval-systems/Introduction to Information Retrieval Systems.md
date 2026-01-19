@@ -1,16 +1,17 @@
 ---
 author: Marcello Politi
-cover: https://miro.medium.com/0*3V7-GLaANRZW7yVX
+cover: 'https://miro.medium.com/0*3V7-GLaANRZW7yVX'
 date: null
 language: English
 meta: A brief introduction about Information Retrieval Systems
 target: Newbie
 title: Introduction to Information Retrieval Systems
 topics:
-- Machine Learning
-- Deep Learning
-- Data Science
-- Python
+  - Machine Learning
+  - Deep Learning
+  - Data Science
+  - Python
+primaryTopic: rag
 ---
 
 ### Essential data structures underlying IR systems

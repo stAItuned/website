@@ -1,13 +1,17 @@
 ---
-title: "Your Data Science Learning Path: A Guide to Becoming a Data Scientist"
+title: 'Your Data Science Learning Path: A Guide to Becoming a Data Scientist'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Newbie
 language: English
 cover: cover.webp
-meta: "Discover the path to becoming a data scientist. Learn what data scientists do, prerequisites, essential skills, and practical project ideas to kickstart your data science career"
-date: 2024-10-10
+meta: >-
+  Discover the path to becoming a data scientist. Learn what data scientists do,
+  prerequisites, essential skills, and practical project ideas to kickstart your
+  data science career
+date: 2024-10-10T00:00:00.000Z
 published: true
+primaryTopic: ai-career
 ---
 
 

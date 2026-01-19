@@ -1,13 +1,17 @@
 ---
 title: Generative Adversarial Networks GAN
 author: Daniele Moltisanti
-date: 
-topics: [Finance]
-meta: Learn cross-validation techniques for financial time series forecasting, including k-fold, time-series split, and expanding window methods.
+date: null
+topics:
+  - Business
+meta: >-
+  Learn cross-validation techniques for financial time series forecasting,
+  including k-fold, time-series split, and expanding window methods.
 target: Midway
 language: English
 cover: cover.webp
-published: 
+published: null
+primaryTopic: business
 ---
 
 

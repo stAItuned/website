@@ -1,13 +1,17 @@
 ---
-title: "Genesis: Redefining Physics Simulations and AI Development"
+title: 'Genesis: Redefining Physics Simulations and AI Development'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Discover Genesis, the groundbreaking physics simulation platform redefining AI and robotics with unparalleled speed, generative 4D environments, and user-friendly design. Explore its features and applications today!"
-date: 2024-11-22
+meta: >-
+  Discover Genesis, the groundbreaking physics simulation platform redefining AI
+  and robotics with unparalleled speed, generative 4D environments, and
+  user-friendly design. Explore its features and applications today!
+date: 2024-11-22T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

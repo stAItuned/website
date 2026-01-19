@@ -1,13 +1,17 @@
 ---
-title: "The Power of Synthetic Data Enhancing AI Model"
+title: The Power of Synthetic Data Enhancing AI Model
 author: Daniele Moltisanti
-topics: [Generative AI]
+topics:
+  - GenAI
 target: Expert
 language: English
 cover: cover.webp
-meta: Unlock AI's potential with synthetic data. Explore GANs, VAEs, and Diffusion Models, code examples, and quality checks. Elevate your AI's performance!
-date: 2023-09-12
+meta: >-
+  Unlock AI's potential with synthetic data. Explore GANs, VAEs, and Diffusion
+  Models, code examples, and quality checks. Elevate your AI's performance!
+date: 2023-09-12T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

@@ -1,13 +1,17 @@
 ---
-title: "AI Research Assistants Go Next-Level: How OpenAI’s Deep Research Works"
+title: 'AI Research Assistants Go Next-Level: How OpenAI’s Deep Research Works'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Discover how OpenAI’s Deep Research is revolutionizing AI research assistants, delivering expert-level insights with citations in minutes. Explore its impact on knowledge work today!"
-date: 2025-02-07
+meta: >-
+  Discover how OpenAI’s Deep Research is revolutionizing AI research assistants,
+  delivering expert-level insights with citations in minutes. Explore its impact
+  on knowledge work today!
+date: 2025-02-07T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

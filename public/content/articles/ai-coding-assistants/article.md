@@ -1,14 +1,20 @@
 ---
-title: "AI Coding Assistants: Speed vs. Verifiable Trust for Enterprise"
+title: 'AI Coding Assistants: Speed vs. Verifiable Trust for Enterprise'
 author: Daniele Moltisanti
-topics: [GenAI, Tech]
+topics:
+  - GenAI
 target: Midway
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/5aed70bf-9b9d-4347-a370-11945ba3e4a4/cover_20251125_143918.webp
-meta: "Stop chasing speed. Discover how verifiable trust and artifact-based verification are redefining AI coding assistants for enterprise security and compliance. Explore Google Antigravity's approach."
-date: 2025-11-26
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/5aed70bf-9b9d-4347-a370-11945ba3e4a4/cover_20251125_143918.webp
+meta: >-
+  Stop chasing speed. Discover how verifiable trust and artifact-based
+  verification are redefining AI coding assistants for enterprise security and
+  compliance. Explore Google Antigravity's approach.
+date: 2025-11-26T00:00:00.000Z
 published: true
 business: true
+primaryTopic: ai-coding
 ---
 
 Are you still chasing marginal gains in code generation speed, unaware that the real battle for AI coding assistant dominance has already pivoted? The future isn't just about writing code faster; it's about verifying its integrity at an unprecedented scale, making current benchmarks obsolete.

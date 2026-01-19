@@ -1,13 +1,16 @@
 ---
-meta: The Last of Us is one of the most famous videogames developed for PlayStation, today we are going to learn something about the AI of the game...
-date: 2022-11-28
-target: Newbie 
-topics: [Artificial Intelligence] 
-cover:  cover.jpg
-title:  Case Study - The Last of Us
+meta: >-
+  The Last of Us is one of the most famous videogames developed for PlayStation,
+  today we are going to learn something about the AI of the game...
+date: 2022-11-28T00:00:00.000Z
+target: Newbie
+topics: []
+cover: cover.jpg
+title: Case Study - The Last of Us
 language: English
 author: Francesco Di Gangi
 published: true
+primaryTopic: business
 ---
 
 ## The Last of Us

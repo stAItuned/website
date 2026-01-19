@@ -1,13 +1,18 @@
 ---
 title: Elevate Your Time Series Analytics with Temporal Fusion Transformer
 author: Daniele Moltisanti
-topics: [Deep Learning, Research]
+topics:
+  - Deep Learning
+  - Research
 target: Expert
 language: English
 cover: cover.webp
-meta: Time series analysis made easy with Temporal Fusion Transformer. Discover its versatility and improve your decision-making process
-date: 2023-04-12
+meta: >-
+  Time series analysis made easy with Temporal Fusion Transformer. Discover its
+  versatility and improve your decision-making process
+date: 2023-04-12T00:00:00.000Z
 published: true
+primaryTopic: ai-career
 ---
 
 

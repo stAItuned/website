@@ -1,13 +1,17 @@
 ---
-title: "Understanding Generative Adversarial Networks (GANs): A Student’s Guide"
+title: 'Understanding Generative Adversarial Networks (GANs): A Student’s Guide'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Learn about Generative Adversarial Networks (GANs) in simple terms. Discover how GANs work, practical examples like image generation, and code to start your journey in machine learning"
-date: 2024-10-20
+meta: >-
+  Learn about Generative Adversarial Networks (GANs) in simple terms. Discover
+  how GANs work, practical examples like image generation, and code to start
+  your journey in machine learning
+date: 2024-10-20T00:00:00.000Z
 published: true
+primaryTopic: model-architecture
 ---
 
 

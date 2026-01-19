@@ -1,14 +1,20 @@
 ---
-title: "Modern AI Code Assistants: Beyond LLMs to Autonomous Collaboration"
+title: 'Modern AI Code Assistants: Beyond LLMs to Autonomous Collaboration'
 author: Daniele Moltisanti
-topics: [GenAI]
+topics:
+  - GenAI
 target: Midway
 language: English
 business: false
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/1d5f271e-abcd-47e4-9a3e-39d63cf3b9b5/cover_20251128_150356.webp
-meta: "Discover how modern AI code assistants truly work beyond basic LLMs. Explore the architectures enabling autonomous collaboration, context management, and workflow orchestration."
-date: 2025-11-28
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/1d5f271e-abcd-47e4-9a3e-39d63cf3b9b5/cover_20251128_150356.webp
+meta: >-
+  Discover how modern AI code assistants truly work beyond basic LLMs. Explore
+  the architectures enabling autonomous collaboration, context management, and
+  workflow orchestration.
+date: 2025-11-28T00:00:00.000Z
 published: true
+primaryTopic: ai-coding
 ---
 
 Gartner projects **75%** of engineers will use AI assistants by 2028, but a critical oversight could undermine this revolution: focusing solely on the underlying LLM instead of the intelligent system architecture that truly drives performance.

@@ -1,17 +1,17 @@
 ---
 title: 30 Days of Machine Learning Engineering
 author: Francesco Di Salvo
-date: 2022-12-05
-topics: [Machine Learning]
+date: 2022-12-05T00:00:00.000Z
+topics:
+  - Machine Learning
 meta: 30 Days of Machine Learning Engineering
 target: Expert
 language: English
 cover: ./cover.jpeg
 published: true
 layout: guide
+primaryTopic: ai-career
 ---
-
-
 
 ## Day 00 - What is this challenge about?
 

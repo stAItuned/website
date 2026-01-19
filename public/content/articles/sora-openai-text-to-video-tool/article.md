@@ -1,13 +1,17 @@
 ---
-title: "Unlocking Creativity with Sora: OpenAI’s Text-to-Video"
+title: 'Unlocking Creativity with Sora: OpenAI’s Text-to-Video'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Discover Sora, OpenAI's revolutionary text-to-video tool that transforms words into stunning videos. Learn how it works, its benefits, and how to get started today!"
-date: 2024-12-20
+meta: >-
+  Discover Sora, OpenAI's revolutionary text-to-video tool that transforms words
+  into stunning videos. Learn how it works, its benefits, and how to get started
+  today!
+date: 2024-12-20T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

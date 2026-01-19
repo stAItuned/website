@@ -1,13 +1,19 @@
 ---
-title: "Microsoft Open-Sources BitNet: A 1-Bit LLM Framework Revolutionizing AI Efficiency"
+title: >-
+  Microsoft Open-Sources BitNet: A 1-Bit LLM Framework Revolutionizing AI
+  Efficiency
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Microsoft open-sources BitNet, a 1-bit LLM framework that optimizes AI efficiency by reducing memory and energy demands. Learn how BitNet is transforming large language models"
-date: 2024-09-20
+meta: >-
+  Microsoft open-sources BitNet, a 1-bit LLM framework that optimizes AI
+  efficiency by reducing memory and energy demands. Learn how BitNet is
+  transforming large language models
+date: 2024-09-20T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 

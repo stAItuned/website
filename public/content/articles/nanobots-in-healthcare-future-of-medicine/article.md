@@ -1,13 +1,17 @@
 ---
-title: "Nanobots in Healthcare: Revolutionizing Medicine at the Nanoscale"
+title: 'Nanobots in Healthcare: Revolutionizing Medicine at the Nanoscale'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Newbie
 language: English
 cover: cover_.webp
-meta: "Explore the future of healthcare with nanobots! Learn how these tiny robots are revolutionizing medicine through targeted drug delivery, early disease detection, and micro-surgeries"
-date: 2024-11-18
+meta: >-
+  Explore the future of healthcare with nanobots! Learn how these tiny robots
+  are revolutionizing medicine through targeted drug delivery, early disease
+  detection, and micro-surgeries
+date: 2024-11-18T00:00:00.000Z
 published: true
+primaryTopic: business
 ---
 
 

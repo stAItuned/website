@@ -1,12 +1,14 @@
 ---
 title: Machine Learning Theory course
 author: Francesco Di Salvo
-date: 
-topics: [Machine Learning]
-meta: Machine Learning course, starting from the basics. 
+date: null
+topics:
+  - Machine Learning
+meta: 'Machine Learning course, starting from the basics.'
 target: Expert
 language: English
 cover: ML-bg.png
+primaryTopic: ai-career
 ---
 
 

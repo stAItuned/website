@@ -1,13 +1,17 @@
 ---
-meta: Una breve introduzione al machine learning e alle sue applicazioni. Come funziona e come un computer impara dai dati forniti.
-date: 2022-11-03
-target: Newbie 
-topics: [Machine Learning] 
-cover:  cover.jpg
-title:  Machine Learning - introduzione e primi passi
+meta: >-
+  Una breve introduzione al machine learning e alle sue applicazioni. Come
+  funziona e come un computer impara dai dati forniti.
+date: 2022-11-03T00:00:00.000Z
+target: Newbie
+topics:
+  - Machine Learning
+cover: cover.jpg
+title: Machine Learning - introduzione e primi passi
 language: Italian
 author: Francesco Di Gangi
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 Il Machine Learning definisce modelli capaci di catturare le proprietà dei dati e di effettuare decisioni sulle proprietà nella quali si è interessati. Essi, tuttavia, non dovrebbero seguire specifiche istruzioni date dal programmatore, ma devono essere capaci di apprendere dai dati forniti. Questa fase è anche detta **learning stage.**

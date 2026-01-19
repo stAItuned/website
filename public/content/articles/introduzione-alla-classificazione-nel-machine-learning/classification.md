@@ -1,12 +1,16 @@
 ---
-meta: La classificazione consiste nell’identificare a quale categoria appartiene un elemento in input, sulla base di un modello di classificazione applicato.
-date: 
-target: Newbie 
-topics: [Machine Learning, Classification, Classificazione] 
-cover:  cover.jpg
-title:  Introduzione alla classificazione nel Machine Learning
+meta: >-
+  La classificazione consiste nell’identificare a quale categoria appartiene un
+  elemento in input, sulla base di un modello di classificazione applicato.
+date: null
+target: Newbie
+topics:
+  - Machine Learning
+cover: cover.jpg
+title: Introduzione alla classificazione nel Machine Learning
 language: Italian
 author: Francesco Di Gangi
+primaryTopic: ai-career
 ---
 
 La **classificazione** ha l’obiettivo di andare a identificare (e quindi *classificare)* a quale categoria appartiene un elemento che viene dato in input, tutto ciò tramite un algoritmo (o ***modello***) di classificazione che riesce a capire, in maniera automatica, l’appartenenza alla categoria dell’elemento interessato.

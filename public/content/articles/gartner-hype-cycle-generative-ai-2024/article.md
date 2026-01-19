@@ -1,13 +1,17 @@
 ---
-title: "The 2024 Gartner Hype Cycle for Generative AI: A Roadmap for Innovation"
+title: 'The 2024 Gartner Hype Cycle for Generative AI: A Roadmap for Innovation'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Explore Gartner's 2024 Hype Cycle for Generative AI, highlighting emerging trends, key technologies, and predictions for the future of GenAI. Learn how businesses can leverage these insights to drive innovation and growth"
-date: 2024-12-15
+meta: >-
+  Explore Gartner's 2024 Hype Cycle for Generative AI, highlighting emerging
+  trends, key technologies, and predictions for the future of GenAI. Learn how
+  businesses can leverage these insights to drive innovation and growth
+date: 2024-12-15T00:00:00.000Z
 published: true
+primaryTopic: business
 ---
 
 

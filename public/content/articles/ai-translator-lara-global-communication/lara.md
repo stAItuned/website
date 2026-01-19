@@ -1,13 +1,16 @@
 ---
-title: "Meet Lara: The AI Translator Revolutionizing Global Communication"
+title: 'Meet Lara: The AI Translator Revolutionizing Global Communication'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover_lara.webp
-meta: "Lara is the cutting-edge AI-powered translator designed to rival professional human translations with contextual accuracy and style flexibility. Learn more!"
-date: 2024-11-18
+meta: >-
+  Lara is the cutting-edge AI-powered translator designed to rival professional
+  human translations with contextual accuracy and style flexibility. Learn more!
+date: 2024-11-18T00:00:00.000Z
 published: true
+primaryTopic: ai-coding
 ---
 
 

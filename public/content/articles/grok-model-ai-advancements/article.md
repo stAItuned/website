@@ -1,13 +1,17 @@
 ---
-title: "Grok Model: Redefining AI Capabilities and Performance Benchmarks"
+title: 'Grok Model: Redefining AI Capabilities and Performance Benchmarks'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Discover xAI's Grok model and its evolution to Grok 2. Learn about groundbreaking AI advancements, benchmarks, and real-world applications reshaping industries."
-date: 2024-12-24
+meta: >-
+  Discover xAI's Grok model and its evolution to Grok 2. Learn about
+  groundbreaking AI advancements, benchmarks, and real-world applications
+  reshaping industries.
+date: 2024-12-24T00:00:00.000Z
 published: true
+primaryTopic: llm-evaluation
 ---
 
 

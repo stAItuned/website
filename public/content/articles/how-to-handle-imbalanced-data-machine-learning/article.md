@@ -1,13 +1,18 @@
 ---
-title: "How to Optimally Sample Imbalanced Data Practical Guide"
+title: How to Optimally Sample Imbalanced Data Practical Guide
 author: Daniele Moltisanti
-topics: [Training AI]
+topics:
+  - Machine Learning
 target: Expert
 language: English
 cover: cover.webp
-meta: "Learn how to handle imbalanced data in machine learning with a step-by-step guide. Discover optimal sampling techniques, pilot models, and unbiased likelihood correction for better model performance"
-date: 2024-10-30
+meta: >-
+  Learn how to handle imbalanced data in machine learning with a step-by-step
+  guide. Discover optimal sampling techniques, pilot models, and unbiased
+  likelihood correction for better model performance
+date: 2024-10-30T00:00:00.000Z
 published: true
+primaryTopic: ai-career
 ---
 
 

@@ -1,12 +1,16 @@
 ---
 title: Reti neurali artificiali
 author: Roberta Ghidini
-date: 
-topics: [Deep Learning]
-meta: Le reti neurali artificiali sono modelli di calcolo che utilizzano neuroni artificiali, prendendo spunto dal comportamento del cervello umano.
+date: null
+topics:
+  - Deep Learning
+meta: >-
+  Le reti neurali artificiali sono modelli di calcolo che utilizzano neuroni
+  artificiali, prendendo spunto dal comportamento del cervello umano.
 target: Newbie
 language: Italian
 cover: solution-now-reti-neurali.jpg
+primaryTopic: model-architecture
 ---
 
 

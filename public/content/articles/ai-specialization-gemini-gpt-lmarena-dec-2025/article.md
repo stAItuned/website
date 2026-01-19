@@ -1,14 +1,20 @@
 ---
-title: "Gemini 3 Pro vs GPT-5.2: AI Specialization in Dec 2025 LMArena"
+title: 'Gemini 3 Pro vs GPT-5.2: AI Specialization in Dec 2025 LMArena'
 author: Daniele Moltisanti
-topics: [GenAI, LLM]
+topics:
+  - GenAI
 target: Expert
 business: false
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/cover_20251214_142802.webp
-meta: "December 2025 LMArena updates show AI specializing: Gemini 3 Pro leads in creative tasks, while GPT-5.2 dominates WebDev. Discover the implications for AI users."
-date: 2025-12-16
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/cover_20251214_142802.webp
+meta: >-
+  December 2025 LMArena updates show AI specializing: Gemini 3 Pro leads in
+  creative tasks, while GPT-5.2 dominates WebDev. Discover the implications for
+  AI users.
+date: 2025-12-16T00:00:00.000Z
 published: true
+primaryTopic: llm-evaluation
 ---
 
 The AI landscape shifted dramatically in December 2025, revealing a surprising new hierarchy on LMArena's leaderboards. This article is for general tech enthusiasts and professionals keen to understand the latest developments in AI model performance and strategic positioning.

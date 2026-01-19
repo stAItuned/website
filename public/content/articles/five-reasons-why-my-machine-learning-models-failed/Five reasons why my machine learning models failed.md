@@ -1,13 +1,15 @@
 ---
 title: Five reasons why my Machine Learning models failed
 author: Francesco Di Salvo
-date: 2022-10-31
-topics: [Machine Learning]
-meta: Five reasons why my Machine Learning models failed and how to avoid them. 
+date: 2022-10-31T00:00:00.000Z
+topics:
+  - Machine Learning
+meta: Five reasons why my Machine Learning models failed and how to avoid them.
 target: Expert
 language: English
 cover: cover.jpg
 published: true
+primaryTopic: ai-career
 ---
 
 

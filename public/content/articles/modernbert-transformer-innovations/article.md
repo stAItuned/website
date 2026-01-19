@@ -1,13 +1,17 @@
 ---
-title: "ModernBERT: Redefining Encoder-Only Transformer Models"
+title: 'ModernBERT: Redefining Encoder-Only Transformer Models'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Explore ModernBERT, a state-of-the-art evolution of BERT with extended context handling, architectural enhancements, and applications in NLP and code understanding. Discover its benchmarks and practical use cases."
-date: 2024-12-19
+meta: >-
+  Explore ModernBERT, a state-of-the-art evolution of BERT with extended context
+  handling, architectural enhancements, and applications in NLP and code
+  understanding. Discover its benchmarks and practical use cases.
+date: 2024-12-19T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

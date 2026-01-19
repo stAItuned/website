@@ -1,14 +1,21 @@
 ---
-title: "Boost Your Career: Master Learning Velocity for 2025-2030 Skills"
+title: 'Boost Your Career: Master Learning Velocity for 2025-2030 Skills'
 author: Daniele Moltisanti
-topics: [GenAI, AI, Business]
+topics:
+  - Business
+  - GenAI
 target: Midway
 business: true
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/a4430318-1b67-4388-9bc1-7b6e6048d5c3/cover_20251207_223842.webp
-meta: "Unlock success in 2025-2030 by mastering Learning Velocity. Discover core skills and strategies to future-proof your career and team amidst rapid professional change."
-date: 2025-12-08
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/a4430318-1b67-4388-9bc1-7b6e6048d5c3/cover_20251207_223842.webp
+meta: >-
+  Unlock success in 2025-2030 by mastering Learning Velocity. Discover core
+  skills and strategies to future-proof your career and team amidst rapid
+  professional change.
+date: 2025-12-08T00:00:00.000Z
 published: true
+primaryTopic: ai-career
 ---
 
 The future of work isn't just about what your team knows now, but how fast they can learn what's next. As 2025 rapidly approaches and 2030 looms, the traditional focus on static skillsets is becoming a strategic liability, not an asset.

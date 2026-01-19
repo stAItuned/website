@@ -1,12 +1,16 @@
 ---
 title: Natural Language Processing course
 author: Francesco Di Salvo
-date: 
-topics: [NLP]
-meta: Comprehensive guide to Natural Language Processing, from the basic topics to some of the most difficult and interesting ones. 
+date: null
+topics:
+  - NLP
+meta: >-
+  Comprehensive guide to Natural Language Processing, from the basic topics to
+  some of the most difficult and interesting ones.
 target: Expert
 language: English
 cover: bg.png
+primaryTopic: ai-career
 ---
 
 

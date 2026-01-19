@@ -1,13 +1,17 @@
 ---
-title: "Stable Diffusion: Creare Immagini a partire dal Testo"
+title: 'Stable Diffusion: Creare Immagini a partire dal Testo'
 author: Daniele Moltisanti
-date: 2023-01-31
-topics: [AI, Theory, Ricerca]
-meta: "Esplora Stable Diffusion: Trasforma testo in immagini realistiche. Scopri usi in intrattenimento, contenuti digitali e istruzione."
+date: 2023-01-31T00:00:00.000Z
+topics:
+  - Research
+meta: >-
+  Esplora Stable Diffusion: Trasforma testo in immagini realistiche. Scopri usi
+  in intrattenimento, contenuti digitali e istruzione.
 target: Newbie
 language: Italian
 cover: cover.webp
 published: true
+primaryTopic: ai-research
 ---
 
 

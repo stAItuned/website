@@ -1,13 +1,17 @@
 ---
-title: "Why Conditional Data Permutations Are Essential for Accurate XAI Analysis"
+title: Why Conditional Data Permutations Are Essential for Accurate XAI Analysis
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Learn why conditional data permutations are essential for accurate XAI. Discover how they solve the problem of correlation breakdown and improve variable importance and PDP analyses"
-date: 2024-11-29
+meta: >-
+  Learn why conditional data permutations are essential for accurate XAI.
+  Discover how they solve the problem of correlation breakdown and improve
+  variable importance and PDP analyses
+date: 2024-11-29T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 

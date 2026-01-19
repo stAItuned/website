@@ -1,16 +1,22 @@
 ---
-title: "o3-mini vs. DeepSeek R1: Which AI Model Wins in Performance & Cost?"
-seoTitle: "OpenAI o3-mini vs DeepSeek R1: Performance & Cost Comparison"
-seoDescription: "Confronto tra o3-mini di OpenAI e DeepSeek R1. Analisi delle prestazioni in coding, matematica e ragionamento logico."
+title: 'o3-mini vs. DeepSeek R1: Which AI Model Wins in Performance & Cost?'
+seoTitle: 'OpenAI o3-mini vs DeepSeek R1: Performance & Cost Comparison'
+seoDescription: >-
+  Confronto tra o3-mini di OpenAI e DeepSeek R1. Analisi delle prestazioni in
+  coding, matematica e ragionamento logico.
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "OpenAI’s o3-mini is here! Discover how this powerful AI model compares to DeepSeek R1, what it means for the future of AI, and why it’s a game-changer in reasoning and cost-efficiency. Read more now!"
-date: 2025-02-01
-updatedAt: 2025-01-16
+meta: >-
+  OpenAI’s o3-mini is here! Discover how this powerful AI model compares to
+  DeepSeek R1, what it means for the future of AI, and why it’s a game-changer
+  in reasoning and cost-efficiency. Read more now!
+date: 2025-02-01T00:00:00.000Z
+updatedAt: 2025-01-16T00:00:00.000Z
 published: true
+primaryTopic: llm-evaluation
 ---
 
 

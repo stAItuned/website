@@ -1,13 +1,16 @@
 ---
-title: "OpenAI's o3 Model: A Leap Forward in AI Reasoning and Performance"
+title: 'OpenAI''s o3 Model: A Leap Forward in AI Reasoning and Performance'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Discover OpenAI’s o3 model, its advancements in AI reasoning, and record-breaking performance on ARC-AGI"
-date: 2024-12-23
+meta: >-
+  Discover OpenAI’s o3 model, its advancements in AI reasoning, and
+  record-breaking performance on ARC-AGI
+date: 2024-12-23T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

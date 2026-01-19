@@ -1,12 +1,16 @@
 ---
 title: Reti neurali ricorrenti
 author: Roberta Ghidini
-date: 
-topics: [Deep Learning]
-meta: e reti neurali ricorrenti sono una tipologia di reti neurali collegate in un ciclo che permette un'interconnessione tra i differenti livelli.
+date: null
+topics:
+  - Deep Learning
+meta: >-
+  e reti neurali ricorrenti sono una tipologia di reti neurali collegate in un
+  ciclo che permette un'interconnessione tra i differenti livelli.
 target: Newbie
 language: Italian
 cover: cover.png
+primaryTopic: model-architecture
 ---
 
 

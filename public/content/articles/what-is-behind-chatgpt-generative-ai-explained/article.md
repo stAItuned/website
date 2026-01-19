@@ -1,13 +1,17 @@
 ---
-title: "What is Behind ChatGPT? Exploring the Technology Behind Generative AI Tools"
+title: What is Behind ChatGPT? Exploring the Technology Behind Generative AI Tools
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Newbie
 language: English
 cover: cover.webp
-meta: "Discover what powers ChatGPT! Learn about the technology behind this revolutionary AI tool, including Transformers, LLMs, and real-world applications, explained simply for everyone"
-date: 2024-11-27
+meta: >-
+  Discover what powers ChatGPT! Learn about the technology behind this
+  revolutionary AI tool, including Transformers, LLMs, and real-world
+  applications, explained simply for everyone
+date: 2024-11-27T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 

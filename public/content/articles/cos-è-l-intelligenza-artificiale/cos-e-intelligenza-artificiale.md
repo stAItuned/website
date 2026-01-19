@@ -1,13 +1,16 @@
 ---
-title: "Cos’è l’Intelligenza Artificiale?"
+title: Cos’è l’Intelligenza Artificiale?
 author: Daniele Moltisanti
-date: 2022-10-10
-published: True
-topics: [Basic]
-meta: Continui a sentire parlare di Intelligenza Artificiale ma nessuno ti ha ancora spiegato bene che cos’è? Per questo ci siamo noi!
+date: 2022-10-10T00:00:00.000Z
+published: true
+topics: []
+meta: >-
+  Continui a sentire parlare di Intelligenza Artificiale ma nessuno ti ha ancora
+  spiegato bene che cos’è? Per questo ci siamo noi!
 target: Newbie
 language: Italian
 cover: Intelligenza_Artificiale.jpg
+primaryTopic: llm-fundamentals
 ---
 
 

@@ -1,13 +1,20 @@
 ---
-meta: "Discover the power of ELMo, the state-of-the-art deep-learning model that generates contextualized word representations for improved natural language processing tasks."
-target: Expert 
-topics: [Deep Learning, Machine Learning, Natural Language Processing] 
-cover: elmo2.jpeg 
-title:  "Contextualized Embeddings with ELMo"
+meta: >-
+  Discover the power of ELMo, the state-of-the-art deep-learning model that
+  generates contextualized word representations for improved natural language
+  processing tasks.
+target: Expert
+topics:
+  - Deep Learning
+  - Machine Learning
+  - NLP
+cover: elmo2.jpeg
+title: Contextualized Embeddings with ELMo
 language: English
 author: Francesco Di Salvo
-date: 2023-03-15
+date: 2023-03-15T00:00:00.000Z
 published: true
+primaryTopic: ai-career
 ---
 
 

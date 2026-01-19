@@ -1,13 +1,17 @@
 ---
-title: "Search GPT vs. Google Search: A Comprehensive Comparison"
+title: 'Search GPT vs. Google Search: A Comprehensive Comparison'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Newbie
 language: English
 cover: cover.webp
-meta: "Explore the differences between Search GPT and Google Search. Compare their pros and cons, and discover the unique potentialities of each for smarter information retrieval"
-date: 2024-11-04
+meta: >-
+  Explore the differences between Search GPT and Google Search. Compare their
+  pros and cons, and discover the unique potentialities of each for smarter
+  information retrieval
+date: 2024-11-04T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

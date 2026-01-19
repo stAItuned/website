@@ -1,14 +1,26 @@
 ---
-title: "FunctionGemma: Lightweight On-Device AI Agents by Google"
+title: 'FunctionGemma: Lightweight On-Device AI Agents by Google'
 author: Salvatore Arancio Febbo
-topics: [GenAI, AI, Cloud, Security, DevOps, Machine Learning, Data Engineering, Founders, Research, Opinion]
+topics:
+  - Business
+  - Data Science
+  - GenAI
+  - Machine Learning
+  - Research
+  - Security
+  - Software Engineering
 target: Expert
 business: true
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/852b8c49-3841-477e-b730-14a0aed37355/cover_20251220_190708.webp
-meta: "Discover FunctionGemma, Google's lightweight function-calling model revolutionizing on-device AI agents. Learn how it enables smart, private, and efficient edge applications."
-date: 2025-12-21
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/852b8c49-3841-477e-b730-14a0aed37355/cover_20251220_190708.webp
+meta: >-
+  Discover FunctionGemma, Google's lightweight function-calling model
+  revolutionizing on-device AI agents. Learn how it enables smart, private, and
+  efficient edge applications.
+date: 2025-12-21T00:00:00.000Z
 published: true
+primaryTopic: agents
 ---
 
 Are you ready for AI assistants that live on your devices, not just in the cloud? Google's FunctionGemma is here to turn that sci-fi dream into a practical reality. This article is for general tech enthusiasts and developers curious about the next frontier of on-device AI.

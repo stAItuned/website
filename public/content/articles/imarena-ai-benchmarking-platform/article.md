@@ -1,18 +1,24 @@
 ---
-title: "LMArena: How the Web’s Most-Watched LLM Leaderboard Works in 2025"
-seoTitle: "LMArena 2025: How the LLM Leaderboard Works"
-seoDescription: "Scopri come funziona LMArena (ex Chatbot Arena), il sistema di ranking Elo per LLM. Guida pratica per scegliere i modelli AI nel 2025."
+title: 'LMArena: How the Web’s Most-Watched LLM Leaderboard Works in 2025'
+seoTitle: 'LMArena 2025: How the LLM Leaderboard Works'
+seoDescription: >-
+  Scopri come funziona LMArena (ex Chatbot Arena), il sistema di ranking Elo per
+  LLM. Guida pratica per scegliere i modelli AI nel 2025.
 author: Daniele Moltisanti
-topics: [AI, Evaluation, LLM]
+topics:
+  - GenAI
+  - Research
 target: Expert
 language: English
 cover: cover.webp
-meta: "LMArena (formerly Chatbot Arena) in 2025: Arena Elo, category leaderboards, new arenas, caveats, and how to pick models with human-preference data."
-date: 2025-08-28
-updatedAt: 2025-01-16
+meta: >-
+  LMArena (formerly Chatbot Arena) in 2025: Arena Elo, category leaderboards,
+  new arenas, caveats, and how to pick models with human-preference data.
+date: 2025-08-28T00:00:00.000Z
+updatedAt: 2025-01-16T00:00:00.000Z
 published: true
+primaryTopic: llm-evaluation
 ---
-
 
 > **It’s 6:40 p.m. and your release train leaves tomorrow.**
 > Two models are neck-and-neck—but one crushes long prompts while the other shines on code diffs. You open **LMArena**, run 20 real prompts across **Overall → Coding → Longer Query**, then try your repo in **RepoChat**. By **7:15 p.m.**, the pattern is obvious: **route by task**, note the trade-offs, and ship with confidence.

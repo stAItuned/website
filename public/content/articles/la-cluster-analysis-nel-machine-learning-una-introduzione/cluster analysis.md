@@ -3,14 +3,16 @@ author: Francesco Di Gangi
 cover: cover.jpg
 date: null
 language: Italian
-meta: La Cluster Analysis, o clustering, consiste in un insieme di tecniche che vanno
-  a raggruppare (in cluster, o contenitori) un insieme di dati omogenei.
+meta: >-
+  La Cluster Analysis, o clustering, consiste in un insieme di tecniche che
+  vanno a raggruppare (in cluster, o contenitori) un insieme di dati omogenei.
 target: Newbie
 title: La Cluster Analysis nel Machine Learning - Introduzione
 topics:
-- Machine Learning
-- Cluster Analysis
-- Clustering
+  - Machine Learning
+  - Cluster Analysis
+  - Clustering
+primaryTopic: ai-career
 ---
 
 

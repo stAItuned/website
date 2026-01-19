@@ -1,13 +1,17 @@
 ---
-title: "The bias-variance tradeoff: an illustrated guide"
+title: 'The bias-variance tradeoff: an illustrated guide'
 author: Francesco Di Salvo
-date: 2023-01-09
-topics: [AI, Machine Learning]
-meta: The bias-variance tradeof helps you understand the balance between simplicity and complexity.
+date: 2023-01-09T00:00:00.000Z
+topics:
+  - Machine Learning
+meta: >-
+  The bias-variance tradeof helps you understand the balance between simplicity
+  and complexity.
 target: Expert
 language: English
 cover: cover.jpg
 published: true
+primaryTopic: model-architecture
 ---
 
 This article clarifies the idea behind the very well-known **bias-variance tradeoff**. Even though you have probably heard it many times and in different contexts, it may cause still some confusion.

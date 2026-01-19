@@ -1,14 +1,20 @@
 ---
-title: "DeepSeek-V3.2: Gold-Medal AI & Efficient Daily Driver LLM"
+title: 'DeepSeek-V3.2: Gold-Medal AI & Efficient Daily Driver LLM'
 author: Daniele Moltisanti
-topics: [GenAI, LLM]
+topics:
+  - GenAI
 target: Midway
 business: false
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/90e331c9-1da9-4cfa-a8a6-ee853186e70e/cover_20251207_011400.webp
-meta: "Explore DeepSeek-V3.2: the new generalist LLM for daily tasks & the specialized V3.2-Speciale for gold-medal AI competition performance. Discover its architecture, efficiency & power."
-date: 2025-12-08
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/90e331c9-1da9-4cfa-a8a6-ee853186e70e/cover_20251207_011400.webp
+meta: >-
+  Explore DeepSeek-V3.2: the new generalist LLM for daily tasks & the
+  specialized V3.2-Speciale for gold-medal AI competition performance. Discover
+  its architecture, efficiency & power.
+date: 2025-12-08T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

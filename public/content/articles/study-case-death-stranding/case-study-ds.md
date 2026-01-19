@@ -1,13 +1,16 @@
 ---
-meta: Today we are going to explore the Artificial Intelligence used in Death Stranding! 
-date: 2022-12-20
-target: Newbie 
-topics: [Artificial Intelligence] 
-cover:  cover.jpg
-title:  Case Study - Death Strading
+meta: >-
+  Today we are going to explore the Artificial Intelligence used in Death
+  Stranding!
+date: 2022-12-20T00:00:00.000Z
+target: Newbie
+topics: []
+cover: cover.jpg
+title: Case Study - Death Strading
 language: English
 author: Francesco Di Gangi
 published: true
+primaryTopic: business
 ---
 
 ## **Death Stranding**

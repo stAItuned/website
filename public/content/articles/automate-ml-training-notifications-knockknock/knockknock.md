@@ -1,13 +1,17 @@
 ---
-title: "KnockKnock: Automate Your Machine Learning Notifications with Ease"
+title: 'KnockKnock: Automate Your Machine Learning Notifications with Ease'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Automate machine learning notifications with KnockKnock, a Python library that integrates with Desktop, Telegram, Email, and Slack. Save time and monitor your training scripts efficiently"
-date: 2024-10-11
+meta: >-
+  Automate machine learning notifications with KnockKnock, a Python library that
+  integrates with Desktop, Telegram, Email, and Slack. Save time and monitor
+  your training scripts efficiently
+date: 2024-10-11T00:00:00.000Z
 published: true
+primaryTopic: production
 ---
 
 

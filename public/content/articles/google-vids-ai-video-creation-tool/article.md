@@ -1,13 +1,16 @@
 ---
-title: "Google Vids: Revolutionizing Video Creation with AI-Powered Tools"
+title: 'Google Vids: Revolutionizing Video Creation with AI-Powered Tools'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Newbie
 language: English
 cover: cover.webp
-meta: "Discover Google Vids, the AI-powered video creation tool by Google Workspace, designed to simplify and enhance your video production process"
-date: 2024-11-10
+meta: >-
+  Discover Google Vids, the AI-powered video creation tool by Google Workspace,
+  designed to simplify and enhance your video production process
+date: 2024-11-10T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 

@@ -1,17 +1,24 @@
 ---
-title: "Google AI Studio: Transforming Machine Learning Workflows"
-seoTitle: "Google AI Studio 2025: Complete Guide to Gemini Tools"
-seoDescription: "Cos'è Google AI Studio e come usarlo per creare prompt, fare fine-tuning e testare i modelli Gemini gratuitamente."
+title: 'Google AI Studio: Transforming Machine Learning Workflows'
+seoTitle: 'Google AI Studio 2025: Complete Guide to Gemini Tools'
+seoDescription: >-
+  Cos'è Google AI Studio e come usarlo per creare prompt, fare fine-tuning e
+  testare i modelli Gemini gratuitamente.
 author: Daniele Moltisanti
-topics: [AI, Business]
+topics:
+  - Business
 target: Midway
 business: true
 language: English
 cover: cover.webp
-meta: "Explore Google AI Studio, a platform simplifying AI development with prompt creation, model fine-tuning, and integration with Google services. Learn how it empowers developers using advanced tools like Gemini Pro"
-date: 2024-11-05
-updatedAt: 2025-01-16
+meta: >-
+  Explore Google AI Studio, a platform simplifying AI development with prompt
+  creation, model fine-tuning, and integration with Google services. Learn how
+  it empowers developers using advanced tools like Gemini Pro
+date: 2024-11-05T00:00:00.000Z
+updatedAt: 2025-01-16T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

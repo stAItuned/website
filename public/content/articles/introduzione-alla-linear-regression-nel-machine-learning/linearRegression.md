@@ -1,12 +1,16 @@
 ---
-meta: La Linear Regression si occupa di studiare e formalizzare una relazione fra fenomeni, con una funzione che esprime tale relazione.
-date: 
-target: Newbie 
-topics: [Machine Learning, Regressione Lineare, Linear Regression] 
-cover:  lr.jpeg
-title:  Introduzione alla Linear Regression 
+meta: >-
+  La Linear Regression si occupa di studiare e formalizzare una relazione fra
+  fenomeni, con una funzione che esprime tale relazione.
+date: null
+target: Newbie
+topics:
+  - Machine Learning
+cover: lr.jpeg
+title: Introduzione alla Linear Regression
 language: Italian
 author: Francesco Di Gangi
+primaryTopic: ai-career
 ---
 
 La regressione lineare studia la relazione fra fenomeni, cercando una funzione che esprima tale relazione. In particolare, studia la relazione della variabile dipendente y, con la variabile indipendente x. Nel caso discusso, parliamo di una regressione **lineare,** ovvero studiamo la relazione attraverso una retta; detta appunto retta di regressione.

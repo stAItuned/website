@@ -1,13 +1,18 @@
 ---
 author: Marcello Politi
 cover: cover.jpeg
-date: 2022-11-15
+date: 2022-11-15T00:00:00.000Z
 language: English
 meta: A brief survey about compression techniques based on pruning
 target: Expert
 title: Iterative Pruning Methods in Julia
-topics: [Machine Learning, Deep Learning, Data Science, Julia]
+topics:
+  - Data Science
+  - Deep Learning
+  - Machine Learning
+  - Software Engineering
 published: true
+primaryTopic: ai-career
 ---
 
 ### [Thoughts and Theory](https://towardsdatascience.com/tagged/thoughts-and-theory)

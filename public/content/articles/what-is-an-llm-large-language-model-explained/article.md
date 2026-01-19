@@ -1,13 +1,17 @@
 ---
-title: "What is an LLM (Large Language Model)? A Simple Explanation"
+title: What is an LLM (Large Language Model)? A Simple Explanation
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Newbie
 language: English
 cover: cover.webp
-meta: "Learn what an LLM (Large Language Model) is in simple terms. Discover how these AI tools work, their real-life examples, and why they’re transforming technology"
-date: 2024-09-05
+meta: >-
+  Learn what an LLM (Large Language Model) is in simple terms. Discover how
+  these AI tools work, their real-life examples, and why they’re transforming
+  technology
+date: 2024-09-05T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 

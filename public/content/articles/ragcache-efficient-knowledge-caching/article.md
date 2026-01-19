@@ -1,13 +1,16 @@
 ---
-title: "RAGCache: Enhancing Efficiency in Retrieval-Augmented Generation"
+title: 'RAGCache: Enhancing Efficiency in Retrieval-Augmented Generation'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Discover how RAGCache optimizes Retrieval-Augmented Generation by reducing latency and improving throughput, enabling more efficient AI applications"
-date: 2024-11-30
+meta: >-
+  Discover how RAGCache optimizes Retrieval-Augmented Generation by reducing
+  latency and improving throughput, enabling more efficient AI applications
+date: 2024-11-30T00:00:00.000Z
 published: true
+primaryTopic: production
 ---
 
 

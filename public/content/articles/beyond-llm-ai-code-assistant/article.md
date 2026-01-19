@@ -1,14 +1,20 @@
 ---
-title: "Beyond the LLM: How Modern AI Code Assistants Really Work"
+title: 'Beyond the LLM: How Modern AI Code Assistants Really Work'
 author: Daniele Moltisanti
-topics: [GenAI, Code Assistant]
+topics:
+  - GenAI
 target: Midway
 business: true
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/1d5f271e-abcd-47e4-9a3e-39d63cf3b9b5/cover_20251128_141358.webp
-meta: "Explore the true architecture of modern AI code assistants beyond basic LLMs. Understand RAG, context engines, and tool integrations powering advanced code generation and the rise of autonomous AI collaborators."
-date: 2025-11-30
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/1d5f271e-abcd-47e4-9a3e-39d63cf3b9b5/cover_20251128_141358.webp
+meta: >-
+  Explore the true architecture of modern AI code assistants beyond basic LLMs.
+  Understand RAG, context engines, and tool integrations powering advanced code
+  generation and the rise of autonomous AI collaborators.
+date: 2025-11-30T00:00:00.000Z
 published: true
+primaryTopic: ai-coding
 ---
 
 

@@ -1,13 +1,17 @@
 ---
-title: "The Power of Prompt Engineering Unlocking AI Potential"
+title: The Power of Prompt Engineering Unlocking AI Potential
 author: Daniele Moltisanti
-topics: [Generative AI]
+topics:
+  - GenAI
 target: Midway
 language: English
 cover: cover.webp
-meta: Unlock the potential of AI with effective prompt engineering. Learn how to craft prompts that shape AI behavior and maximize its potential
-date: 2023-08-16
+meta: >-
+  Unlock the potential of AI with effective prompt engineering. Learn how to
+  craft prompts that shape AI behavior and maximize its potential
+date: 2023-08-16T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 

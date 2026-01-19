@@ -1,17 +1,24 @@
 ---
-title: "TOON vs JSON for LLMs: Performance & Accuracy Deep Dive"
-seoTitle: "TOON vs JSON for LLMs: Performance & Accuracy Deep Dive"
-seoDescription: "Perché il formato TOON sta sfidando JSON nella comunicazione AI? Analisi di accuratezza, latenza e token-efficiency."
+title: 'TOON vs JSON for LLMs: Performance & Accuracy Deep Dive'
+seoTitle: 'TOON vs JSON for LLMs: Performance & Accuracy Deep Dive'
+seoDescription: >-
+  Perché il formato TOON sta sfidando JSON nella comunicazione AI? Analisi di
+  accuratezza, latenza e token-efficiency.
 author: Daniele Moltisanti
-topics: [GenAI, LLM]
+topics:
+  - GenAI
 target: Expert
 business: false
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/9a123e84-a2d9-49e4-a364-ac16356a9b03/cover_20251203_154839.webp
-meta: "Discover why LLMs struggle with JSON and how TOON's schema-aware structure can improve accuracy, reduce hallucinations, and cut token usage in AI workflows."
-date: 2025-12-03
-updatedAt: 2025-01-16
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/9a123e84-a2d9-49e4-a364-ac16356a9b03/cover_20251203_154839.webp
+meta: >-
+  Discover why LLMs struggle with JSON and how TOON's schema-aware structure can
+  improve accuracy, reduce hallucinations, and cut token usage in AI workflows.
+date: 2025-12-03T00:00:00.000Z
+updatedAt: 2025-01-16T00:00:00.000Z
 published: true
+primaryTopic: llm-fundamentals
 ---
 
 While many laud TOON for its token savings, treating it as “cheaper JSON” for LLMs misses the point.  

@@ -1,14 +1,19 @@
 ---
-title: "Perplexity AI vs ChatGPT: Understanding Their Differences and Use Cases"
+title: 'Perplexity AI vs ChatGPT: Understanding Their Differences and Use Cases'
 author: Daniele Moltisanti
-topics: [AI, Business]
+topics:
+  - Business
 target: Midway
 business: true
 language: English
 cover: cover.webp
-meta: "Discover the differences between Perplexity AI and ChatGPT. Learn what they are, how they work, their use cases, and practical examples to choose the right AI tool for your needs."
-date: 2024-11-25
+meta: >-
+  Discover the differences between Perplexity AI and ChatGPT. Learn what they
+  are, how they work, their use cases, and practical examples to choose the
+  right AI tool for your needs.
+date: 2024-11-25T00:00:00.000Z
 published: true
+primaryTopic: ai-research
 ---
 
 

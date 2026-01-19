@@ -2,12 +2,17 @@
 title: Measure the distance between documents with cosine similarity
 author: Matteo Villosio
 cover: cover.jpg
-date: 2023-01-24
-topics: [NLP, Machine Learning, embedding, cosine similarity]
-meta: "Discover Cosine Similarity in NLP: Outperforms Euclidean, ideal for sparse data. Learn about its computation, benefits, and use in document comparison"
+date: 2023-01-24T00:00:00.000Z
+topics:
+  - Machine Learning
+  - NLP
+meta: >-
+  Discover Cosine Similarity in NLP: Outperforms Euclidean, ideal for sparse
+  data. Learn about its computation, benefits, and use in document comparison
 target: Expert
 language: English
 published: true
+primaryTopic: rag
 ---
 
 

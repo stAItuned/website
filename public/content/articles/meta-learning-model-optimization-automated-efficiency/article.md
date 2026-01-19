@@ -1,13 +1,17 @@
 ---
-title: "Meta Learning for Model Optimization: A Comprehensive Guide"
+title: 'Meta Learning for Model Optimization: A Comprehensive Guide'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Discover how meta-learning revolutionizes model optimization with a 3-step approach: featurizing meta-data, training a meta-learner, and searching for optimal models. Learn how this method automates AI efficiency"
-date: 2024-11-20
+meta: >-
+  Discover how meta-learning revolutionizes model optimization with a 3-step
+  approach: featurizing meta-data, training a meta-learner, and searching for
+  optimal models. Learn how this method automates AI efficiency
+date: 2024-11-20T00:00:00.000Z
 published: true
+primaryTopic: model-architecture
 ---
 
 

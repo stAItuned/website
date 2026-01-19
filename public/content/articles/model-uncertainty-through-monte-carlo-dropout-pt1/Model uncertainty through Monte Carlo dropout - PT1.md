@@ -1,13 +1,18 @@
 ---
 title: Model uncertainty through Monte Carlo dropout - PT1
 author: Francesco Di Salvo
-date: 2022-11-21
-topics: [Deep Learning, Uncertainty]
-meta: Model uncertainty is typically handled via Bayesian Deep Learning, but this comes with a prohibitive cost. A solution is given by the MC Dropout.
+date: 2022-11-21T00:00:00.000Z
+topics:
+  - Deep Learning
+  - Machine Learning
+meta: >-
+  Model uncertainty is typically handled via Bayesian Deep Learning, but this
+  comes with a prohibitive cost. A solution is given by the MC Dropout.
 target: Expert
 language: English
-cover: cover.jpg 
+cover: cover.jpg
 published: true
+primaryTopic: model-architecture
 ---
 
 This small series of blog-posts aims to explain and illustrate the Monte Carlo Dropout for evaluating the model uncertainty. The first one will investigate the model uncertainty in Deep Learning and how it can be hadled, inspecting pros and cons of different approaches. Then, the **second part** explains, step by step, the pipeline of a practical project (with [code](https://github.com/francescodisalvo05/uncertainty-monte-carlo-dropout)). I hope you'll enjoy them!

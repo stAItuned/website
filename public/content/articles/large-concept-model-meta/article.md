@@ -1,13 +1,17 @@
 ---
-title: "Large Concept Models: Meta’s Next Frontier in AI"
+title: 'Large Concept Models: Meta’s Next Frontier in AI'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Explore Meta's revolutionary Large Concept Models (LCMs), their high-level abstraction, SONAR embedding space, and performance benchmarks. Discover how LCMs redefine AI capabilities with multilingual and multimodal support."
-date: 2024-12-25
+meta: >-
+  Explore Meta's revolutionary Large Concept Models (LCMs), their high-level
+  abstraction, SONAR embedding space, and performance benchmarks. Discover how
+  LCMs redefine AI capabilities with multilingual and multimodal support.
+date: 2024-12-25T00:00:00.000Z
 published: true
+primaryTopic: model-architecture
 ---
 
 

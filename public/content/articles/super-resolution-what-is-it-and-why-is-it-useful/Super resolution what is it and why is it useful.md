@@ -1,13 +1,20 @@
 ---
-meta: Of the various computer vision techniques, super-resolution tasks are among the least known but at the same time they could become more changing in the future.
-date: 2022-11-09
-target: Newbie 
-topics: [Deep Learning, Computer Vision, Earth Observation] 
-cover: cover.png 
-title:  "Super Resolution: what is it and why is it useful?"
+meta: >-
+  Of the various computer vision techniques, super-resolution tasks are among
+  the least known but at the same time they could become more changing in the
+  future.
+date: 2022-11-09T00:00:00.000Z
+target: Newbie
+topics:
+  - Deep Learning
+  - Computer Vision
+  - Earth Observation
+cover: cover.png
+title: 'Super Resolution: what is it and why is it useful?'
 language: English
 author: Gabriele Inzerillo
 published: true
+primaryTopic: ai-career
 ---
 
 

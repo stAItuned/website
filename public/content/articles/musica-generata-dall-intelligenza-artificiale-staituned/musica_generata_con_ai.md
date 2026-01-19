@@ -1,13 +1,16 @@
 ---
 title: Musica generata dall’Intelligenza Artificiale
 author: Roberta Ghidini
-date: 2023-04-01
-topics: [Application]
-meta: "Oggi chiunque può scrivere musica grazie all’aiuto dell’Intelligenza Artificiale, grazie ad applicazioni come Boomy, Google Magenta e AIVA."
+date: 2023-04-01T00:00:00.000Z
+topics: []
+meta: >-
+  Oggi chiunque può scrivere musica grazie all’aiuto dell’Intelligenza
+  Artificiale, grazie ad applicazioni come Boomy, Google Magenta e AIVA.
 target: Newbie
 language: Italian
 cover: Musica_generata_dallIntelligenza_Artificiale.webp
 published: true
+primaryTopic: ai-research
 ---
 
 

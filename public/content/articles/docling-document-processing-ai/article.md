@@ -1,13 +1,17 @@
 ---
-title: "Docling: Streamlining Document Processing for Generative AI Applications"
+title: 'Docling: Streamlining Document Processing for Generative AI Applications'
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Discover how Docling simplifies document processing for AI applications. Learn about its features, installation, usage, and practical benefits in AI model training"
-date: 2024-11-28
+meta: >-
+  Discover how Docling simplifies document processing for AI applications. Learn
+  about its features, installation, usage, and practical benefits in AI model
+  training
+date: 2024-11-28T00:00:00.000Z
 published: true
+primaryTopic: rag
 ---
 
 

@@ -1,13 +1,18 @@
 ---
 author: Daniele Moltisanti
 cover: cover.jpg
-date: 2023-01-06
+date: 2023-01-06T00:00:00.000Z
 language: English
-meta: The Fractional Differentiation is the data transformation for financial time series data that permit more powerful forecasting of your model.
+meta: >-
+  The Fractional Differentiation is the data transformation for financial time
+  series data that permit more powerful forecasting of your model.
 target: Expert
 title: Fractional Differentiation in time series
-topics: [Finance, Machine Learning]
+topics:
+  - Business
+  - Machine Learning
 published: true
+primaryTopic: business
 ---
 
 

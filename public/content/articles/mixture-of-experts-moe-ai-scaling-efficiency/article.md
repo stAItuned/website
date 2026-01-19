@@ -1,13 +1,17 @@
 ---
-title: "What is Mixture of Experts (MoE)? The Secret Behind Efficient AI Models"
+title: What is Mixture of Experts (MoE)? The Secret Behind Efficient AI Models
 author: Daniele Moltisanti
-topics: [AI]
+topics: []
 target: Expert
 language: English
 cover: cover.webp
-meta: "Discover how Mixture of Experts (MoE) enables AI models to scale efficiently without massive computational costs. Learn how MoE works, its advantages, and real-world implementations in LLMs"
-date: 2025-01-30
+meta: >-
+  Discover how Mixture of Experts (MoE) enables AI models to scale efficiently
+  without massive computational costs. Learn how MoE works, its advantages, and
+  real-world implementations in LLMs
+date: 2025-01-30T00:00:00.000Z
 published: true
+primaryTopic: model-architecture
 ---
 
 

@@ -1,14 +1,21 @@
 ---
-title: "ML vs DL vs GenAI: Building a Strong AI Career Foundation"
+title: 'ML vs DL vs GenAI: Building a Strong AI Career Foundation'
 author: Daniele Moltisanti
-topics: [AI, ML, GenAI]
+topics:
+  - GenAI
+  - Machine Learning
 target: Newbie
 business: false
 language: English
-cover: https://storage.googleapis.com/editorial-planner-images/article-images/3fdc0f56-d2fb-4e74-bfbc-29cc23844b7f/cover_20251211_172136.webp
-meta: "Don't build your AI career on sand. Understand the core differences between Machine Learning, Deep Learning, and Generative AI to master essential fundamentals."
-date: 2025-12-13
+cover: >-
+  https://storage.googleapis.com/editorial-planner-images/article-images/3fdc0f56-d2fb-4e74-bfbc-29cc23844b7f/cover_20251211_172136.webp
+meta: >-
+  Don't build your AI career on sand. Understand the core differences between
+  Machine Learning, Deep Learning, and Generative AI to master essential
+  fundamentals.
+date: 2025-12-13T00:00:00.000Z
 published: true
+primaryTopic: ai-career
 ---
 
 Generative AI can feel like a shortcut: type a prompt, get a polished answer, ship a demo. But real projects don’t reward “cool outputs”. They reward **reliable systems**.

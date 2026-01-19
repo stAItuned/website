@@ -1,15 +1,18 @@
 ---
-title: "Agentic AI vs. Traditional AI: Key Differences, Benefits, and Risks"
+title: 'Agentic AI vs. Traditional AI: Key Differences, Benefits, and Risks'
 author: Salvatore Arancio Febbo
-topics: [AI]
+topics: []
 target: Midway
 language: English
 cover: cover.webp
-meta: "Explore the differences between Agentic AI and Traditional AI through real-world examples. Learn about their benefits, risks, and how Agentic AI is transforming industries like traffic management and healthcare."
-date: 2025-11-25
+meta: >-
+  Explore the differences between Agentic AI and Traditional AI through
+  real-world examples. Learn about their benefits, risks, and how Agentic AI is
+  transforming industries like traffic management and healthcare.
+date: 2025-11-25T00:00:00.000Z
 published: true
+primaryTopic: agents
 ---
-
 
 ## Agentic AI vs. Traditional AI: Key Differences, Benefits, and Risks
 
