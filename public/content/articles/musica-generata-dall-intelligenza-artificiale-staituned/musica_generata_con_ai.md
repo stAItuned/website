@@ -2,7 +2,6 @@
 title: Musica generata dall’Intelligenza Artificiale
 author: Roberta Ghidini
 date: 2023-04-01T00:00:00.000Z
-topics: []
 meta: >-
   Oggi chiunque può scrivere musica grazie all’aiuto dell’Intelligenza
   Artificiale, grazie ad applicazioni come Boomy, Google Magenta e AIVA.
@@ -11,6 +10,9 @@ language: Italian
 cover: Musica_generata_dallIntelligenza_Artificiale.webp
 published: true
 primaryTopic: ai-research
+topics:
+  - model-architecture
+  - business
 ---
 
 
@@ -19,7 +21,7 @@ primaryTopic: ai-research
 Lo sapevi che più del **10%** della **musica** prodotta a livello globale è stata realizzata mediante **[Intelligenza Artificiale](https://www.notion.so/Cos-l-Intelligenza-Artificiale-stAI-tuned-b80b54571aae4eb98d71b5a9ebadf0b5)**? E secondo te come potrebbe esserci utile questa nuova tecnologia?
 
 
-## **Come l’Intelligenza Artificiale genera brani musicali**
+## Come l’Intelligenza Artificiale genera brani musicali
 
 Negli ultimi anni l’Intelligenza Artificiale è stata inserita in modo consistente anche all’interno del **settore musicale**, ma qual’è stata la modalità che ci ha più sbalordito? Ovviamente la *creazione di nuovi brani musicali.*
 

@@ -1,7 +1,6 @@
 ---
 title: 'ModernBERT: Redefining Encoder-Only Transformer Models'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -11,7 +10,10 @@ meta: >-
   understanding. Discover its benchmarks and practical use cases.
 date: 2024-12-19T00:00:00.000Z
 published: true
-primaryTopic: ai-research
+primaryTopic: model-architecture
+topics:
+  - ai-research
+  - llm-evaluation
 ---
 
 

@@ -1,7 +1,6 @@
 ---
 title: 'Large Concept Models: Meta’s Next Frontier in AI'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2024-12-25T00:00:00.000Z
 published: true
 primaryTopic: model-architecture
+topics:
+  - ai-research
+  - llm-evaluation
 ---
 
 

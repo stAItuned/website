@@ -4,13 +4,13 @@ meta: >-
   videogames when we don't even notice...
 date: 2022-11-14T00:00:00.000Z
 target: Newbie
-topics: []
 cover: cover.jpg
 title: Artificial Intelligence in videogames
 language: English
 author: Francesco Di Gangi
 published: true
 primaryTopic: business
+topics: ["ai-research"]
 ---
 
 ## What is Aritificial Intelligence in videogames?

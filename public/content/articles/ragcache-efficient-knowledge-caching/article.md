@@ -1,7 +1,6 @@
 ---
 title: 'RAGCache: Enhancing Efficiency in Retrieval-Augmented Generation'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -11,6 +10,9 @@ meta: >-
 date: 2024-11-30T00:00:00.000Z
 published: true
 primaryTopic: production
+topics:
+  - rag
+  - ai-research
 ---
 
 

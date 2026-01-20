@@ -1,8 +1,6 @@
 ---
 title: 'Explainability in AI: Enhancing Trust and Transparency in ML/DL Models'
 author: Daniele Moltisanti
-topics:
-  - Machine Learning
 target: Midway
 language: English
 cover: cover.webp
@@ -11,7 +9,10 @@ meta: >-
   AI's 'black box', ethics, and GDPR's impact.
 date: 2023-11-10T00:00:00.000Z
 published: true
-primaryTopic: llm-evaluation
+primaryTopic: ai-research
+topics:
+  - business
+  - model-architecture
 ---
 
 

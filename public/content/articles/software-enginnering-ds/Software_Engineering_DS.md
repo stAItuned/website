@@ -4,9 +4,6 @@ meta: >-
   helps to ensure the development of high-quality, scalable, and maintainable
   systems
 target: Expert
-topics:
-  - Data Science
-  - Software Engineering
 title: Why Software Engineering is important in Data Science
 language: English
 author: Gabriele Cola
@@ -14,6 +11,9 @@ cover: cover.jpg
 date: 2023-02-13T00:00:00.000Z
 published: true
 primaryTopic: ai-career
+topics:
+  - production
+  - ai-coding
 ---
 
 

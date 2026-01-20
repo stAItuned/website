@@ -6,13 +6,9 @@ language: English
 meta: A brief survey about compression techniques based on pruning
 target: Expert
 title: Iterative Pruning Methods in Julia
-topics:
-  - Data Science
-  - Deep Learning
-  - Machine Learning
-  - Software Engineering
 published: true
 primaryTopic: ai-career
+topics: ["ai-coding", "model-architecture", "ai-research"]
 ---
 
 ### [Thoughts and Theory](https://towardsdatascience.com/tagged/thoughts-and-theory)

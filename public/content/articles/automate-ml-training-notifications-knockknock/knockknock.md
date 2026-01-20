@@ -1,7 +1,6 @@
 ---
 title: 'KnockKnock: Automate Your Machine Learning Notifications with Ease'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -12,6 +11,7 @@ meta: >-
 date: 2024-10-11T00:00:00.000Z
 published: true
 primaryTopic: production
+topics: ["ai-coding", "model-architecture", "ai-career"]
 ---
 
 

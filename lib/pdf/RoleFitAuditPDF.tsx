@@ -775,10 +775,9 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                 {/* CTA */}
                 <View style={styles.ctaSection}>
-                    <Text style={styles.ctaTitle}>Vuoi un feedback 1:1 sul report?</Text>
+                    <Text style={styles.ctaTitle}>Prenota il tuo 1:1 per avere un feedback personalizzato sul tuo Role Fit Audit</Text>
                     <Text style={styles.ctaText}>
-                        15 minuti, gratuito. Guardo il tuo profilo e ti dico se c'è fit per il
-                        Career OS.
+                        Una call <strong>gratuita</strong> di 15 minuti, in cui i nostri esperti AI saranno a <strong>tua completa disposizione</strong> per darti feedback, chiarire dubbi, darti consigli.
                     </Text>
                     <Link src="https://staituned.com/career-os#candidati" style={styles.ctaButton}>
                         <Text style={styles.ctaButtonText}>Candidati al Career OS →</Text>

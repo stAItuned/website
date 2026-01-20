@@ -3,7 +3,6 @@ title: >-
   Microsoft Open-Sources BitNet: A 1-Bit LLM Framework Revolutionizing AI
   Efficiency
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -13,7 +12,8 @@ meta: >-
   transforming large language models
 date: 2024-09-20T00:00:00.000Z
 published: true
-primaryTopic: llm-fundamentals
+primaryTopic: model-architecture
+topics: ["ai-research"]
 ---
 
 

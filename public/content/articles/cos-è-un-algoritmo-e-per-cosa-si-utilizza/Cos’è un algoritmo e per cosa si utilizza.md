@@ -3,14 +3,16 @@ title: Cos’è un algoritmo?
 author: Roberta Ghidini
 date: 2022-09-28T00:00:00.000Z
 published: true
-topics: []
 meta: >-
   Un algoritmo è una serie di istruzioni e regole che vengono fornite ad un
   computer per svolgere e completare delle attività.
 target: Newbie
 language: Italian
 cover: cover.png
-primaryTopic: llm-fundamentals
+primaryTopic: ai-fundamentals
+topics:
+  - ai-career
+  - ai-research
 ---
 
 
@@ -23,7 +25,7 @@ Quindi più semplicemente un **algoritmo** è una serie di **istruzioni** e **re
 
 Un esempio pratico possono essere tutte quelle informazioni divise per step che ci vengono proposte quando dobbiamo prenotare un *volo*, raggiungere un luogo che non conosciamo, realizzare un *origami*, una *ricetta* o un *lavoro a maglia*.
 
-## **Come funzionano gli algoritmi?**
+## Come funzionano gli algoritmi?
 
 Per svolgere qualsiasi di queste attività appena citate sono necessari degli **strumenti iniziali**, che verranno impiegati per svolgere il **processo guidato** che porterà infine ad un **risultato finale**.
 
@@ -33,7 +35,7 @@ La loro rappresentazione grafica iniziale può essere la seguente, ossia attrave
 
 In seguito queste informazioni devono essere trasformate in un **linguaggio** adatto ai computer, per permettergli di comprendere i compiti da svolgere. Questo modo di rappresentare l’**algoritmo** si chiama **programma** e viene scritto tramite **linguaggi di programmazione** appunto.
 
-## **Quali sono le applicazioni degli algoritmi?**
+## Quali sono le applicazioni degli algoritmi?
 
 Innanzitutto gli algoritmi consentono di processare una grande quantità di **dati**, altrimenti impossibile, li possono *manipolare*, *analizzare* ed effettuare dei *calcoli*.
 

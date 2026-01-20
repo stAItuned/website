@@ -2,9 +2,6 @@
 title: 'Simplifying Machine Learning for Business: The Role of Blogs'
 author: Filippo Mazza
 date: 2023-02-27T00:00:00.000Z
-topics:
-  - Business
-  - Machine Learning
 meta: >-
   Explore how ML blogs demystify tech concepts, making machine learning
   accessible, fostering expert community, and boosting business world adoption.
@@ -14,6 +11,9 @@ language: English
 cover: cover.webp
 published: true
 primaryTopic: business
+topics:
+  - ai-career
+  - ai-fundamentals
 ---
 
 

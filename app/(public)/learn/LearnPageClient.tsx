@@ -90,7 +90,7 @@ function FinalCTA() {
           </h2>
 
           <p className="text-lg text-slate-300 max-w-xl mx-auto">
-            Whether you want to learn from curated content or build real projects with feedback — your path starts here.
+            Whether you want to learn from curated content or build real projects with feedback, your path starts here.
           </p>
 
           {/* CTA Buttons */}

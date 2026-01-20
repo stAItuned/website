@@ -168,7 +168,7 @@ export function LearnContributorSection({ className = '' }: LearnContributorSect
                             &ldquo;{content.testimonial.quote}&rdquo;
                         </p>
                         <p className="text-white/60 text-sm text-center font-medium">
-                            — {content.testimonial.author}
+                            , {content.testimonial.author}
                         </p>
                     </div>
                 </div>

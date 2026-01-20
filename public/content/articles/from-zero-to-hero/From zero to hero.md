@@ -3,9 +3,6 @@ meta: >-
   A brief study plan for mastering deep Learning and machine Learning from
   scratch.
 target: Newbie
-topics:
-  - Deep Learning
-  - Machine Learning
 cover: cover.jpg
 title: 'From zero to hero: a brief study plan for mastering ML and DL from scratch!'
 language: English
@@ -13,6 +10,8 @@ author: Gabriele Inzerillo
 date: 2023-03-08T00:00:00.000Z
 published: true
 primaryTopic: ai-career
+topics:
+  - ai-fundamentals
 ---
 
 
@@ -33,7 +32,7 @@ Luckily, there are plenty of resources, both printed and virtual, on the above t
 
 Additionally, some libraries and frameworks, such as *TensorFlow*, *numpy* and *scikit-learn*, provide many of the mathematical functions as pre-built libraries, so you may not need to implement them from scratch in your code (good news: you will probably never implement them from scratch).
 
-## Learn Python 
+## Learn Python
 
 It is important to have a good grasp of the Python programming language, as it is the most widely used language for machine learning and deep learning. Resources such as Codecademy or Coursera can help you to learn the basics of the language. Additionally, it is important to be comfortable with the usage of libraries such as *numpy* and *pandas* for data manipulation, *matplotlib* for data visualization and, last but not least, *jupyter*. 
 If you are already a computer science or engineering student, you will have no problem learning python (if you are not already using it).

@@ -5,9 +5,6 @@ seoDescription: >-
   Scopri come funziona LMArena (ex Chatbot Arena), il sistema di ranking Elo per
   LLM. Guida pratica per scegliere i modelli AI nel 2025.
 author: Daniele Moltisanti
-topics:
-  - GenAI
-  - Research
 target: Expert
 language: English
 cover: cover.webp
@@ -18,6 +15,7 @@ date: 2025-08-28T00:00:00.000Z
 updatedAt: 2025-01-16T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
+topics: ["business", "production", "rag"]
 ---
 
 > **It’s 6:40 p.m. and your release train leaves tomorrow.**

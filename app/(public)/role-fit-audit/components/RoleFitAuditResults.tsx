@@ -374,10 +374,10 @@ export default function RoleFitAuditResults({ result }: Props) {
             {/* CTA */}
             <div className="bg-gradient-to-r from-[#1A1E3B] to-[#2A3050] rounded-2xl p-8 text-center">
                 <h3 className="text-2xl font-bold text-white mb-3">
-                    Vuoi un feedback 1:1 sul report?
+                    Prenota il tuo 1:1 per avere un feedback personalizzato sul tuo Role Fit Audit
                 </h3>
                 <p className="text-slate-300 mb-6 max-w-xl mx-auto">
-                    15 minuti, gratuito. Guardo io il tuo profilo e ti dico se c'è fit per il Career OS.
+                    Una call <strong>gratuita</strong> di 15 minuti, in cui i nostri esperti AI saranno a <strong>tua completa disposizione</strong> per darti feedback, chiarire dubbi, darti consigli.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Link

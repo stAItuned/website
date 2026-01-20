@@ -5,16 +5,15 @@ meta: >-
   future.
 date: 2022-11-09T00:00:00.000Z
 target: Newbie
-topics:
-  - Deep Learning
-  - Computer Vision
-  - Earth Observation
 cover: cover.png
 title: 'Super Resolution: what is it and why is it useful?'
 language: English
 author: Gabriele Inzerillo
 published: true
-primaryTopic: ai-career
+primaryTopic: model-architecture
+topics:
+  - ai-research
+  - llm-evaluation
 ---
 
 

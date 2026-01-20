@@ -2,15 +2,16 @@
 title: Natural Language Processing course
 author: Francesco Di Salvo
 date: null
-topics:
-  - NLP
 meta: >-
   Comprehensive guide to Natural Language Processing, from the basic topics to
   some of the most difficult and interesting ones.
 target: Expert
 language: English
 cover: bg.png
-primaryTopic: ai-career
+primaryTopic: genai-fundamentals
+topics:
+  - model-architecture
+  - ai-career
 ---
 
 
@@ -60,7 +61,7 @@ Unfortunately, our machines are not able to understand like humans, but we need 
 
 ![One Hot Encoding example](./image10.png)
 
-### **Term Frequency - Inverse Document Frequency**
+### Term Frequency - Inverse Document Frequency
 
 **Term Frequency - Inverse Document Frequency (TF-IDF)** takes into account the actual frequencies rather than a mere binary representation. The tokens that will receive an higher weight will be the ones that will be highly present in the current document and not so present in the other documents, therefore it is suitable for heterogeneous documents (documents about different topics). The formula will be:
 
@@ -75,7 +76,7 @@ where $n_{ij}$ is the number of occurrences of word $i$ in document $j$, $|d_j|$
 > Notice that thanks to sklearn’s hyperparameters for TfIdfVectorizer, we cut the tokens that are present across all documents (that are likely to be not informative) and to apply case normalization (lowercase in this case). Finally, TfIdfVectorizer also scales the final values between 0 and 1
 
 
-### **Term Frequency - Document Frequency (TF-DF)**
+### Term Frequency - Document Frequency (TF-DF)
 
 **Term Frequency - Document Frequency (TF-DF) :** it is the opposite as before, therefore the tokens that will receive an higher weight will be the ones that will be highly present across all the documents. Therefore this metric would be useful for homogeneous documents (documents about similar topics, or the same). The formula will be:
 

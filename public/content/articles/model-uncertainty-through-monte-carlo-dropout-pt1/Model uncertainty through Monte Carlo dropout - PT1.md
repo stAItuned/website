@@ -2,9 +2,6 @@
 title: Model uncertainty through Monte Carlo dropout - PT1
 author: Francesco Di Salvo
 date: 2022-11-21T00:00:00.000Z
-topics:
-  - Deep Learning
-  - Machine Learning
 meta: >-
   Model uncertainty is typically handled via Bayesian Deep Learning, but this
   comes with a prohibitive cost. A solution is given by the MC Dropout.
@@ -13,6 +10,7 @@ language: English
 cover: cover.jpg
 published: true
 primaryTopic: model-architecture
+topics: ["business", "llm-evaluation", "ai-research"]
 ---
 
 This small series of blog-posts aims to explain and illustrate the Monte Carlo Dropout for evaluating the model uncertainty. The first one will investigate the model uncertainty in Deep Learning and how it can be hadled, inspecting pros and cons of different approaches. Then, the **second part** explains, step by step, the pipeline of a practical project (with [code](https://github.com/francescodisalvo05/uncertainty-monte-carlo-dropout)). I hope you'll enjoy them!
@@ -21,7 +19,7 @@ This small series of blog-posts aims to explain and illustrate the Monte Carlo D
 ## Model uncertainty
 Artificial intelligence algorithms typically provide predictions without taking into account their **certainty** or **uncertainty**. However, while dealing with **delicate outcomes** like benign or malignant tumors, it is important to provide only certain outcomes. Modern algorithms achieved great results on medical imaging applications, but again, this is not strictly correlated with a lower model uncertainty. Ideally, we aim to have an AI that achieves great performances but at the same time it should be able to seek for a human supervision whenever it is **not confident enough**.
 
-## Uncertainty in Deep Learning 
+## Uncertainty in Deep Learning
 Uncertainty in Deep Learning represents one of the major **obstacles** during the development. The uncertainty may arise from the observations and they may be reflected on the subsequent model predictions. Fields like biology, physics or healthcare have a very little **tolerance**, therefore there is a special need for dealing with uncertain predictions.
 
 Starting from the definition, we may first distinguish two kinds of uncertainty: aleatoric and epistemic [1]. The intrinsic stochasticity of the data is referred to as the **aleatoric uncertainty**, and it is obvious that it cannot be minimized. On the other side, the inappropriateness of the training observations is referred to as **epistemic uncertainty**. Simply put, the lack of data and understanding is reflected in the epistemic uncertainty, which may be reduced by including additional training examples. A visual representation of both uncertainty measures are reported in figure below. The epistemic uncertainty also accounts for the model uncertainty, because this is a type of uncertainty that can be explained if we have enough data.
@@ -88,7 +86,7 @@ The following example is taken from my Master Thesis [5] and it represents a Mon
 </p>
 
 
-## Conclusions 
+## Conclusions
 To conclude, it should be clear that Bayesian Deep Learning is prohibitive for all those modern netwrorks which have billions of parameters. Several approximation of the Bayesian inference were proposed over the years and one the most popular is the Monte Carlo Dropout, that we covered on this first article. 
 
 The **second part** of this small series aims to propose a practical example (with [code](https://github.com/francescodisalvo05/uncertainty-monte-carlo-dropout)), let's have a look! 

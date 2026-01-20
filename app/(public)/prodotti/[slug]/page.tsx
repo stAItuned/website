@@ -71,7 +71,7 @@ export default async function ProductDetailPage({
 
   // Language-specific labels
   const lang = product.language || 'it'
-  
+
   const labels = {
     en: {
       statusLabels: {
@@ -223,7 +223,7 @@ export default async function ProductDetailPage({
                     {product.subtitle}
                   </p>
                   <div className="text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed prose prose-slate dark:prose-invert max-w-none">
-                    <MarkdownContent content={product.longDescription || ''} />
+                    <MarkdownContent content={product.longDescription || ''} className="prose prose-slate dark:prose-invert max-w-none" />
                   </div>
                 </div>
 
@@ -298,107 +298,107 @@ export default async function ProductDetailPage({
             </div>
           ) : (
             // Portrait Video or Image Layout: Two columns
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            {/* Left: Content */}
-            <div className="space-y-4 md:space-y-6 order-2 lg:order-1">
-              <div className="space-y-3 md:space-y-4">
-                <div className={`inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold border-2 ${statusColors[product.status]}`}>
-                  {statusLabels[product.status]}
-                </div>
-                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight">
-                  {product.title}
-                </h1>
-                <p className="text-lg md:text-xl lg:text-2xl text-slate-700 dark:text-slate-300 font-medium">
-                  {product.subtitle}
-                </p>
-                <div className="text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed prose prose-slate dark:prose-invert max-w-none">
-                  <MarkdownContent content={product.longDescription || ''} />
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {product.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-amber-100 text-amber-700 text-xs md:text-sm font-semibold dark:bg-amber-900/30 dark:text-amber-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 pt-2 md:pt-4">
-                {product.status === 'live' && product.demoUrl && (
-                  <Link
-                    href={product.demoUrl}
-                    className="inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-full bg-amber-500 hover:bg-amber-400 text-white font-bold text-base md:text-lg transition-all shadow-lg hover:scale-105"
-                  >
-                    <span>{t.sections.tryDemo}</span>
-                    <span>→</span>
-                  </Link>
-                )}
-                <Link
-                  href={product.ctaUrl || '/aziende#prenota-call'}
-                  className="inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-full bg-white border-2 border-slate-300 hover:border-amber-400 text-slate-700 font-bold text-base md:text-lg transition-all shadow-sm hover:shadow-md dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:border-amber-500"
-                >
-                  <span>{product.ctaText || t.sections.contact}</span>
-                </Link>
-              </div>
-
-              {/* Tech Stack */}
-              {product.techStack && (
-                <div className="pt-4 md:pt-6 border-t border-slate-200 dark:border-slate-800">
-                  <p className="text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2 md:mb-3">
-                    {t.sections.techStack}
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+              {/* Left: Content */}
+              <div className="space-y-4 md:space-y-6 order-2 lg:order-1">
+                <div className="space-y-3 md:space-y-4">
+                  <div className={`inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold border-2 ${statusColors[product.status]}`}>
+                    {statusLabels[product.status]}
+                  </div>
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight">
+                    {product.title}
+                  </h1>
+                  <p className="text-lg md:text-xl lg:text-2xl text-slate-700 dark:text-slate-300 font-medium">
+                    {product.subtitle}
                   </p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2">
-                    {product.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 md:px-3 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium dark:bg-slate-800 dark:text-slate-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                  <div className="text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed prose prose-slate dark:prose-invert max-w-none">
+                    <MarkdownContent content={product.longDescription || ''} className="prose prose-slate dark:prose-invert max-w-none" />
                   </div>
                 </div>
-              )}
-            </div>
 
-            {/* Right: Media Container */}
-            <div className="relative w-full order-1 lg:order-2 flex items-center justify-center">
-              {(product.coverImage || product.image)?.endsWith('.mp4') ? (
-                // Video Container - adapts to orientation
-                <div className="relative w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border-2 md:border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-900 group">
-                  <VideoPlayer
-                    src={product.coverImage || product.image || '/placeholder.jpg'}
-                    className="w-full h-auto object-contain"
-                    showFullscreenHint={true}
-                    isPortrait={product.videoOrientation === 'portrait'}
-                  />
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {product.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-amber-100 text-amber-700 text-xs md:text-sm font-semibold dark:bg-amber-900/30 dark:text-amber-300"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-              ) : (
-                // Image Container
-                <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border-2 md:border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
-                  <div className="relative w-full aspect-[16/9] md:aspect-[4/3]">
-                    <Image
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 pt-2 md:pt-4">
+                  {product.status === 'live' && product.demoUrl && (
+                    <Link
+                      href={product.demoUrl}
+                      className="inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-full bg-amber-500 hover:bg-amber-400 text-white font-bold text-base md:text-lg transition-all shadow-lg hover:scale-105"
+                    >
+                      <span>{t.sections.tryDemo}</span>
+                      <span>→</span>
+                    </Link>
+                  )}
+                  <Link
+                    href={product.ctaUrl || '/aziende#prenota-call'}
+                    className="inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-full bg-white border-2 border-slate-300 hover:border-amber-400 text-slate-700 font-bold text-base md:text-lg transition-all shadow-sm hover:shadow-md dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:border-amber-500"
+                  >
+                    <span>{product.ctaText || t.sections.contact}</span>
+                  </Link>
+                </div>
+
+                {/* Tech Stack */}
+                {product.techStack && (
+                  <div className="pt-4 md:pt-6 border-t border-slate-200 dark:border-slate-800">
+                    <p className="text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2 md:mb-3">
+                      {t.sections.techStack}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 md:gap-2">
+                      {product.techStack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2 md:px-3 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium dark:bg-slate-800 dark:text-slate-300"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Right: Media Container */}
+              <div className="relative w-full order-1 lg:order-2 flex items-center justify-center">
+                {(product.coverImage || product.image)?.endsWith('.mp4') ? (
+                  // Video Container - adapts to orientation
+                  <div className="relative w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border-2 md:border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-900 group">
+                    <VideoPlayer
                       src={product.coverImage || product.image || '/placeholder.jpg'}
-                      alt={product.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
-                      className="object-cover"
-                      priority
+                      className="w-full h-auto object-contain"
+                      showFullscreenHint={true}
+                      isPortrait={product.videoOrientation === 'portrait'}
                     />
                   </div>
-                </div>
-              )}
-              {/* Decorative elements - hidden on mobile */}
-              <div className="hidden md:block absolute -z-10 -top-8 -right-8 w-48 h-48 lg:w-64 lg:h-64 bg-amber-200/30 dark:bg-amber-500/20 rounded-full blur-3xl" />
-              <div className="hidden md:block absolute -z-10 -bottom-8 -left-8 w-48 h-48 lg:w-64 lg:h-64 bg-blue-200/30 dark:bg-blue-500/20 rounded-full blur-3xl" />
+                ) : (
+                  // Image Container
+                  <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border-2 md:border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+                    <div className="relative w-full aspect-[16/9] md:aspect-[4/3]">
+                      <Image
+                        src={product.coverImage || product.image || '/placeholder.jpg'}
+                        alt={product.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
+                  </div>
+                )}
+                {/* Decorative elements - hidden on mobile */}
+                <div className="hidden md:block absolute -z-10 -top-8 -right-8 w-48 h-48 lg:w-64 lg:h-64 bg-amber-200/30 dark:bg-amber-500/20 rounded-full blur-3xl" />
+                <div className="hidden md:block absolute -z-10 -bottom-8 -left-8 w-48 h-48 lg:w-64 lg:h-64 bg-blue-200/30 dark:bg-blue-500/20 rounded-full blur-3xl" />
+              </div>
             </div>
-          </div>
           )}
         </section>
 
@@ -415,7 +415,7 @@ export default async function ProductDetailPage({
                   {t.sections.problemHeading}
                 </h2>
                 <div className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed prose prose-lg prose-slate dark:prose-invert max-w-none">
-                  <MarkdownContent content={product.problem || ''} />
+                  <MarkdownContent content={product.problem || ''} className="prose prose-lg prose-slate dark:prose-invert max-w-none" />
                 </div>
               </div>
 
@@ -428,7 +428,7 @@ export default async function ProductDetailPage({
                   {t.sections.solutionHeading}
                 </h2>
                 <div className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed prose prose-lg prose-slate dark:prose-invert max-w-none">
-                  <MarkdownContent content={product.solution || ''} />
+                  <MarkdownContent content={product.solution || ''} className="prose prose-lg prose-slate dark:prose-invert max-w-none" />
                 </div>
               </div>
             </div>
@@ -559,8 +559,8 @@ export default async function ProductDetailPage({
 
             <div className="relative space-y-6 text-center">
               <h2 className="text-4xl font-bold">
-                {product.status === 'live' 
-                  ? t.cta.live.heading 
+                {product.status === 'live'
+                  ? t.cta.live.heading
                   : t.cta.beta.heading}
               </h2>
               <p className="text-xl text-slate-200 max-w-2xl mx-auto leading-relaxed">

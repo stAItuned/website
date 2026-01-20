@@ -2,7 +2,6 @@
 title: Model deployment
 author: Gianluca La Malfa
 date: 2022-12-01T00:00:00.000Z
-topics: []
 meta: >-
   How many times did you build up a great machine learning model that never seen
   the light? This is the right article for you!
@@ -11,6 +10,7 @@ language: English
 cover: background.jpg
 published: true
 primaryTopic: production
+topics: ["ai-coding", "model-architecture", "ai-career"]
 ---
 
 

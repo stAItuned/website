@@ -17,6 +17,46 @@ export interface HomeTranslations {
             careerFocused: string
         }
     }
+    whoWeAre: {
+        badge: string
+        title: string
+        subtitle: string
+        pillars: {
+            learn: {
+                title: string
+                description: string
+                cta: string
+            }
+            careerOS: {
+                title: string
+                description: string
+                cta: string
+            }
+            practitionerLed: {
+                title: string
+                description: string
+                cta: string
+            }
+        }
+    }
+    differentiators: {
+        badge: string
+        title: string
+        items: {
+            practitioner: {
+                title: string
+                description: string
+            }
+            noHype: {
+                title: string
+                description: string
+            }
+            practical: {
+                title: string
+                description: string
+            }
+        }
+    }
     articles: {
         title: string
         subtitle: string
@@ -61,25 +101,112 @@ export interface HomeTranslations {
         termsConditions: string
         benefits: string[]
     }
+    meet: {
+        hero: {
+            badge: string
+            headline: string
+            description: string
+        }
+        story: {
+            badge: string
+            title: string
+            p1: string
+            p2: string
+            quote: string
+            quoteLabel: string
+        }
+        mission: {
+            badge: string
+            title: string
+            description: string
+        }
+        values: {
+            badge: string
+            title: string
+            items: Array<{
+                title: string
+                description: string
+            }>
+        }
+        contributors: {
+            badge: string
+            title: string
+            description: string
+            cta: string
+            stats: string
+        }
+        join: {
+            badge: string
+            title: string
+            description: string
+            ctaProgram: string
+            ctaArticles: string
+        }
+        footer: {
+            text: string
+            ctaArticles: string
+            ctaCareer: string
+        }
+    }
 }
 
 export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
     it: {
         hero: {
-            headline: "Il futuro succede mentre leggi.",
-            pain: "L'AI sta plasmando il **mondo reale**. Non restare indietro: trasformiamo il rumore in **Vantaggio Competitivo**. Un articolo alla volta.",
-            mission: "Non restare a guardare.",
-            ctaArticles: "Aggiornati con gli articoli",
-            ctaCareerOS: "Scopri Career OS",
+            headline: "Dove l'AI diventa pratica",
+            pain: "Contenuti pratici scritti da chi lavora con l'AI ogni giorno. **Zero hype**, solo ciò che funziona davvero",
+            mission: "Impara. Applica. Cresci.",
+            ctaArticles: "Inizia a leggere",
+            ctaCareerOS: "Lancia la tua carriera",
             stats: {
-                articles: "Articoli Tecnici",
-                contributors: "Esperti AI",
-                careerFocused: "Focus Engineer"
+                articles: "Articoli",
+                contributors: "Contributors",
+                careerFocused: "Practitioner-led"
+            }
+        },
+        whoWeAre: {
+            badge: "L'ecosistema stAItuned",
+            title: "Tutto ciò che ti serve per capire e usare l'AI",
+            subtitle: "Non siamo un corso online. Siamo una community di professionisti che condivide ciò che funziona davvero.",
+            pillars: {
+                learn: {
+                    title: "📚 stAI tuned Learn",
+                    description: "Non ti serve l'ennesimo corso teorico. Ti serve **sapere cosa fare**. Oltre 85 articoli per passare dalla teoria alla *produzione*.",
+                    cta: "Inizia a leggere"
+                },
+                careerOS: {
+                    title: "🚀 Lancia la tua carriera con Career OS",
+                    description: "Smetti di inviare CV nel vuoto. Un percorso di **mentoring pratico** per costruire la tua carriera nell'AI in *8 settimane*, con **prove concrete** da aggiungere al tuo portfolio.",
+                    cta: "Lancia la tua carriera"
+                },
+                practitionerLed: {
+                    title: "✍️ Practitioner-led",
+                    description: "Basta fuffa. Qui scrive solo **chi si sporca le mani** con il codice ogni giorno. Esperienza reale, *zero hype*.",
+                    cta: "Conosci stAI tuned"
+                }
+            }
+        },
+        differentiators: {
+            badge: "Cosa ci rende diversi",
+            title: "Perché stAI tuned?",
+            items: {
+                practitioner: {
+                    title: "Practitioner-led",
+                    description: "Chi scrive e insegna lavora con l'AI ogni giorno. Non ricicliamo teoria, condividiamo esperienza."
+                },
+                noHype: {
+                    title: "Zero hype",
+                    description: "Diciamo cosa funziona e cosa no. Niente promesse esagerate, solo onestà e trasparenza."
+                },
+                practical: {
+                    title: "Praticità first",
+                    description: "Se non puoi applicarlo domani, non lo pubblichiamo. Ogni contenuto ha un obiettivo concreto."
+                }
             }
         },
         articles: {
             title: "Ultimi Approfondimenti",
-            subtitle: "Deep-dive tecnici e strategie di carriera per AI Engineers.",
+            subtitle: "Guide pratiche e deep-dive scritti da professionisti AI.",
             viewAll: "Scopri tutti gli articoli",
             trending: "Popolari",
             recent: "Recenti",
@@ -87,7 +214,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pathExpert: "Percorso Expert",
             midSection: {
                 title: "L'era della GenAI non aspetta.",
-                subtitle: "Ricevi ogni settimana deep-dive tecnici e strategie per scalare la tua carriera nell'AI.",
+                subtitle: "Ricevi contenuti pratici su AI e GenAI, scritti da chi lavora nel settore.",
                 cta: "Unisciti alla Newsletter",
                 socialProof: "Unisciti a +2.000 AI Builder"
             },
@@ -100,7 +227,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             disclaimer: "Riceverai un report PDF personalizzato con il tuo piano d'azione."
         },
         intermezzo: {
-            badge: "Cohort #1 — Italia — Posti Limitati",
+            badge: "Cohort #1, Italia, Posti Limitati",
             headline: "Stai cercando lavoro nell'AI ma nessuno risponde?",
             subtext: "Le aziende non assumono 'appassionati di AI'. Assumono builder con proof. Career OS ti aiuta a costruirlo in 8 settimane.",
             ctaCareerOS: "Scopri Career OS",
@@ -124,24 +251,125 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 "Strategie di carriera per AI Engineers",
                 "Casi studio reali di implementazione"
             ]
+        },
+        meet: {
+            hero: {
+                badge: "Chi siamo",
+                headline: "Dove l'AI diventa **pratica**",
+                description: "**stAItuned** nasce per chi vuole capire l'AI senza perdersi nell'hype. Contenuti *pratici*, scritti da chi lavora con l'AI *ogni giorno*."
+            },
+            story: {
+                badge: "La nostra storia",
+                title: "Da **junior frustrati** a practitioner che condividono",
+                p1: "Prima di creare stAItuned, eravamo junior confusi. L'AI esplodeva, ma le risorse erano frammentate, piene di **hype**, scritte da chi non lavorava davvero nel campo.",
+                p2: "Ci siamo chiesti: *cosa succederebbe se i practitioner condividessero ciò che sanno?*",
+                quote: "Se chi lavora nell'AI ogni giorno condividesse ciò che sa, quante persone potrebbero crescere più velocemente?",
+                quoteLabel: "L'idea che ha dato vita a stAItuned"
+            },
+            mission: {
+                badge: "La nostra mission",
+                title: "Portare la **cultura AI a tutti**, con contenuti **pratici** e senza hype, per accelerare l'innovazione.",
+                description: "Crediamo che quando più persone capiscono l'AI, le aziende innovano più velocemente, i professionisti crescono più rapidamente, e la società ne beneficia."
+            },
+            values: {
+                badge: "I nostri valori",
+                title: "I principi che ci guidano",
+                items: [
+                    {
+                        title: "Praticità prima di tutto",
+                        description: "Se non puoi applicarlo domani, non lo pubblichiamo. Ogni contenuto ha un **obiettivo concreto**."
+                    },
+                    {
+                        title: "Zero hype",
+                        description: "Diciamo cosa funziona e cosa no. **Niente promesse esagerate**, solo onestà e trasparenza."
+                    },
+                    {
+                        title: "Chiarezza senza semplificazioni",
+                        description: "Spieghiamo il complesso in modo semplice, **senza banalizzarlo**. Profondità accessibile."
+                    },
+                    {
+                        title: "Qualità non negoziabile",
+                        description: "**Meglio meno, ma meglio**. Non pubblichiamo per fare numero, pubblichiamo per fare la differenza."
+                    }
+                ]
+            },
+            contributors: {
+                badge: "I nostri contributor",
+                title: "Chi scrive su stAItuned",
+                description: "Professionisti che lavorano con l'AI **ogni giorno** e condividono la loro esperienza.",
+                cta: "Scopri tutti i contributor",
+                stats: "articol" // singular/plural handled logic in client
+            },
+            join: {
+                badge: "Contributor Program",
+                title: "Vuoi scrivere su AI?",
+                description: "I contenuti di stAItuned sono scritti da professionisti che lavorano con l'AI. Se hai **esperienza pratica** da condividere, potresti diventare contributor.",
+                ctaProgram: "Scopri il Contributor Program →",
+                ctaArticles: "Esplora gli articoli"
+            },
+            footer: {
+                text: "Pronto a iniziare?",
+                ctaArticles: "Esplora gli articoli",
+                ctaCareer: "Scopri Career OS"
+            }
         }
     },
     en: {
         hero: {
-            headline: "The future happens while you read.",
-            pain: "AI is shaping the **real world**. Don't get left behind: we turn noise into **Competitive Advantage**. One article at a time.",
-            mission: "Don't just watch.",
-            ctaArticles: "Get updated with articles",
-            ctaCareerOS: "Discover Career OS",
+            headline: "Where AI Gets Practical.",
+            pain: "Practical content written by AI practitioners. **Zero hype**, only what actually works.",
+            mission: "Learn. Apply. Grow.",
+            ctaArticles: "Start Reading",
+            ctaCareerOS: "Launch Your Career",
             stats: {
-                articles: "Technical Articles",
-                contributors: "AI Experts",
-                careerFocused: "Engineer Focus"
+                articles: "Articles",
+                contributors: "Contributors",
+                careerFocused: "Practitioner-led"
+            }
+        },
+        whoWeAre: {
+            badge: "The stAItuned Ecosystem",
+            title: "Everything you need to understand and use AI",
+            subtitle: "We're not an online course. We're a community of practitioners sharing what actually works.",
+            pillars: {
+                learn: {
+                    title: "📚 stAI tuned Learn",
+                    description: "You don't need another theory course. You need to **know what to do**. 85+ practical guides to go from theory to *production*.",
+                    cta: "Start Reading"
+                },
+                careerOS: {
+                    title: "🚀 Career OS",
+                    description: "Stop sending CVs into the void. A **practical mentoring** path to build your AI career in *8 weeks*.",
+                    cta: "Launch Your Career"
+                },
+                practitionerLed: {
+                    title: "✍️ Practitioner-led",
+                    description: "No fluff. Written only by those who **get their hands dirty** with code every day. Real experience, *zero hype*.",
+                    cta: "Meet the Team"
+                }
+            }
+        },
+        differentiators: {
+            badge: "What makes us different",
+            title: "Why stAI tuned?",
+            items: {
+                practitioner: {
+                    title: "Practitioner-led",
+                    description: "Those who write and teach work with AI every day. We don't recycle theory, we share experience."
+                },
+                noHype: {
+                    title: "Zero hype",
+                    description: "We say what works and what doesn't. No exaggerated promises, just honesty and transparency."
+                },
+                practical: {
+                    title: "Practical first",
+                    description: "If you can't apply it tomorrow, we don't publish it. Every piece of content has a concrete goal."
+                }
             }
         },
         articles: {
             title: "Latest Insights",
-            subtitle: "Technical deep-dives and career strategy for AI Engineers.",
+            subtitle: "Practical guides and deep-dives written by AI practitioners.",
             viewAll: "Discover all articles",
             trending: "Trending",
             recent: "Recent",
@@ -149,7 +377,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pathExpert: "Expert Path",
             midSection: {
                 title: "The GenAI era won't wait.",
-                subtitle: "Get weekly technical deep-dives and strategies to scale your AI career.",
+                subtitle: "Get practical AI and GenAI content, written by industry practitioners.",
                 cta: "Join the Newsletter",
                 socialProof: "Join 2,000+ AI Builders"
             },
@@ -162,7 +390,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             disclaimer: "You'll receive a personalized PDF report with your action plan."
         },
         intermezzo: {
-            badge: "Cohort #1 — Italy Only — Limited Spots",
+            badge: "Cohort #1, Italy Only, Limited Spots",
             headline: "Looking for an AI job but getting no responses?",
             subtext: "Companies don't hire 'AI enthusiasts'. They hire builders with proof. Career OS helps you build it in 8 weeks.",
             ctaCareerOS: "Discover Career OS",
@@ -186,6 +414,67 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 "Career strategies for AI Engineers",
                 "Real implementation case studies"
             ]
+        },
+        meet: {
+            hero: {
+                badge: "Who We Are",
+                headline: "Where AI Gets **Practical**",
+                description: "**stAItuned** is for those who want to understand AI without getting lost in result. *Practical* content, written by those who work with AI *every day*."
+            },
+            story: {
+                badge: "Our Story",
+                title: "From **Frustrated Juniors** to Practitioners Who Share",
+                p1: "Before founding stAItuned, we were confused juniors. AI was exploding, but resources were fragmented, full of **hype**, written by people who didn't really work in the field.",
+                p2: "We asked ourselves: *what would happen if practitioners shared what they know?*",
+                quote: "If those who work in AI every day shared what they know, how many people could grow faster?",
+                quoteLabel: "The idea that sparked stAItuned"
+            },
+            mission: {
+                badge: "Our Mission",
+                title: "Bringing **AI culture to everyone**, with **practical** content and no hype, to accelerate innovation.",
+                description: "We believe that when more people understand AI, companies innovate faster, professionals grow more quickly, and society benefits."
+            },
+            values: {
+                badge: "Our Values",
+                title: "Principles That Guide Us",
+                items: [
+                    {
+                        title: "Practicality First",
+                        description: "If you can't apply it tomorrow, we don't publish it. Every piece of content has a **concrete goal**."
+                    },
+                    {
+                        title: "Zero Hype",
+                        description: "We say what works and what doesn't. **No exaggerated promises**, just honesty and transparency."
+                    },
+                    {
+                        title: "Clarity Without Simplification",
+                        description: "We explain the complex simply, **without trivializing it**. Accessible depth."
+                    },
+                    {
+                        title: "Non-Negotiable Quality",
+                        description: "**Better less, but better**. We don't publish to hit numbers, we publish to make a difference."
+                    }
+                ]
+            },
+            contributors: {
+                badge: "Our Contributors",
+                title: "Who Writes on stAItuned",
+                description: "Professionals who work with AI **every day** and share their experience.",
+                cta: "Discover all contributors",
+                stats: "article"
+            },
+            join: {
+                badge: "Contributor Program",
+                title: "Want to Write About AI?",
+                description: "stAItuned content is written by professionals working with AI. If you have **practical experience** to share, you could become a contributor.",
+                ctaProgram: "Discover Contributor Program →",
+                ctaArticles: "Explore Articles"
+            },
+            footer: {
+                text: "Ready to Start?",
+                ctaArticles: "Explore Articles",
+                ctaCareer: "Discover Career OS"
+            }
         }
     }
 }

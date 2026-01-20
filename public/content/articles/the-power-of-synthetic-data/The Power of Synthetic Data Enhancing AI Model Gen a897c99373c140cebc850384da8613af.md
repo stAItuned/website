@@ -1,8 +1,6 @@
 ---
 title: The Power of Synthetic Data Enhancing AI Model
 author: Daniele Moltisanti
-topics:
-  - GenAI
 target: Expert
 language: English
 cover: cover.webp
@@ -11,7 +9,10 @@ meta: >-
   Models, code examples, and quality checks. Elevate your AI's performance!
 date: 2023-09-12T00:00:00.000Z
 published: true
-primaryTopic: ai-research
+primaryTopic: model-architecture
+topics:
+  - ai-research
+  - llm-evaluation
 ---
 
 
@@ -560,7 +561,7 @@ To evaluate the privacy of synthetic data, you can use the `sdv.metrics.tabular`
 ```python
 from sdv.metrics.tabular import NumericalLR
 
-# Replace missing values in real_data
+# Replace missing values in realdata
 real_data = real_data.fillna(0)
 
 # Compute the NumericalLR metric

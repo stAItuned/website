@@ -63,18 +63,19 @@ export async function GET(request: NextRequest) {
       // Merge with CMS data for full article info
       const publishedPosts = allPosts.filter(post => post.published !== false)
       const articles = publishedPosts.map(post => {
-        const target = post.target?.toLowerCase() || 'midway'
+        const rawTarget = post.target || 'Midway'
+        const urlTarget = rawTarget.toLowerCase()
         const slug = post.slug
         const stats = daily.articlesStats?.[slug] || {}
         // Ensure all values are JSON-serializable (convert Date to ISO string)
         return {
-          articleUrl: `/learn/${target}/${slug}`,
+          articleUrl: `/learn/${urlTarget}/${slug}`,
           title: post.title,
           author: post.author,
           cover: post.cover,
           date: post.date, // Add publication date
           language: post.language,
-          target,
+          target: rawTarget,
           topics: post.topics || [],
           readingTime: post.readingTime || 5,
           published: post.published !== false,

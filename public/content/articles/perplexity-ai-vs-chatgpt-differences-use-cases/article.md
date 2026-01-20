@@ -1,8 +1,6 @@
 ---
 title: 'Perplexity AI vs ChatGPT: Understanding Their Differences and Use Cases'
 author: Daniele Moltisanti
-topics:
-  - Business
 target: Midway
 business: true
 language: English
@@ -14,6 +12,9 @@ meta: >-
 date: 2024-11-25T00:00:00.000Z
 published: true
 primaryTopic: ai-research
+topics:
+  - rag
+  - business
 ---
 
 

@@ -1,7 +1,6 @@
 ---
 title: Why Conditional Data Permutations Are Essential for Accurate XAI Analysis
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -11,7 +10,10 @@ meta: >-
   variable importance and PDP analyses
 date: 2024-11-29T00:00:00.000Z
 published: true
-primaryTopic: llm-fundamentals
+primaryTopic: ai-research
+topics:
+  - llm-evaluation
+  - model-architecture
 ---
 
 

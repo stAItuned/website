@@ -1,7 +1,6 @@
 ---
 title: What is an LLM (Large Language Model)? A Simple Explanation
 author: Daniele Moltisanti
-topics: []
 target: Newbie
 language: English
 cover: cover.webp
@@ -11,7 +10,9 @@ meta: >-
   technology
 date: 2024-09-05T00:00:00.000Z
 published: true
-primaryTopic: llm-fundamentals
+primaryTopic: genai-fundamentals
+topics:
+  - ai-career
 ---
 
 

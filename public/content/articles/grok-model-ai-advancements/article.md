@@ -1,7 +1,6 @@
 ---
 title: 'Grok Model: Redefining AI Capabilities and Performance Benchmarks'
 author: Daniele Moltisanti
-topics: []
 target: Midway
 language: English
 cover: cover.webp
@@ -12,6 +11,7 @@ meta: >-
 date: 2024-12-24T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
+topics: ["model-architecture", "production", "ai-research"]
 ---
 
 

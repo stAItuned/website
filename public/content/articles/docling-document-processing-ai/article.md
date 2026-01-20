@@ -1,7 +1,6 @@
 ---
 title: 'Docling: Streamlining Document Processing for Generative AI Applications'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -12,6 +11,7 @@ meta: >-
 date: 2024-11-28T00:00:00.000Z
 published: true
 primaryTopic: rag
+topics: ["ai-coding", "model-architecture", "ai-research"]
 ---
 
 

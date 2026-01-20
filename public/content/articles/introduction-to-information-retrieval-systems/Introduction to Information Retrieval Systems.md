@@ -6,12 +6,10 @@ language: English
 meta: A brief introduction about Information Retrieval Systems
 target: Newbie
 title: Introduction to Information Retrieval Systems
-topics:
-  - Machine Learning
-  - Deep Learning
-  - Data Science
-  - Python
 primaryTopic: rag
+topics:
+  - ai-fundamentals
+  - business
 ---
 
 ### Essential data structures underlying IR systems

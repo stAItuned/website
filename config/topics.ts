@@ -21,12 +21,21 @@ export type TopicHub = {
 export const topicHubs: TopicHub[] = [
     // === CORE AI ===
     {
-        slug: 'llm-fundamentals',
-        name: 'LLM Fundamentals',
-        description: 'Core concepts of Large Language Models, from architecture to tokenization.',
+        slug: 'ai-fundamentals',
+        name: 'AI & Data Science Fundamentals',
+        description: 'Foundational concepts of AI, Data Science, Machine Learning, and algorithms.',
         icon: '🧠',
         colorFrom: '#6366f1', // indigo-500
-        colorTo: '#9333ea',   // purple-600
+        colorTo: '#8b5cf6',   // violet-500
+        category: 'core'
+    },
+    {
+        slug: 'genai-fundamentals',
+        name: 'GenAI & LLM Fundamentals',
+        description: 'Core concepts of Generative AI and Large Language Models.',
+        icon: '✨',
+        colorFrom: '#a855f7', // purple-500
+        colorTo: '#d946ef',   // fuchsia-500
         category: 'core'
     },
     {

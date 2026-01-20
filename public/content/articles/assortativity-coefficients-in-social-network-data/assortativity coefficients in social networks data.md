@@ -2,8 +2,6 @@
 title: Assortativity Coefficients in social networks data
 author: Gabriele Albini
 date: 2022-11-18T00:00:00.000Z
-topics:
-  - Data Science
 meta: >-
   Assortativity helps analysing pattern of connections in networks. Let’s use it
   to confirm if people tend to connect to similar people.
@@ -11,7 +9,8 @@ target: Expert
 language: English
 cover: 03_Network_Img.png
 published: true
-primaryTopic: llm-fundamentals
+primaryTopic: ai-research
+topics: ["model-architecture"]
 ---
 
 
@@ -111,7 +110,7 @@ for n_ in filenames_id:
 
 With the nx library, we can assign attributes to nodes in the following way:
 ``` python
-# Assign nodes attribute to the network created above : G_fb
+# Assign nodes attribute to the network created above : Gfb
 nx.set_node_attributes(G_fb, node_feats)
 ```
 

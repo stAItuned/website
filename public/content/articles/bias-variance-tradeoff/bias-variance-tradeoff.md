@@ -2,8 +2,6 @@
 title: 'The bias-variance tradeoff: an illustrated guide'
 author: Francesco Di Salvo
 date: 2023-01-09T00:00:00.000Z
-topics:
-  - Machine Learning
 meta: >-
   The bias-variance tradeof helps you understand the balance between simplicity
   and complexity.
@@ -11,7 +9,10 @@ target: Expert
 language: English
 cover: cover.jpg
 published: true
-primaryTopic: model-architecture
+primaryTopic: ai-fundamentals
+topics:
+  - model-architecture
+  - llm-evaluation
 ---
 
 This article clarifies the idea behind the very well-known **bias-variance tradeoff**. Even though you have probably heard it many times and in different contexts, it may cause still some confusion.
@@ -66,7 +67,7 @@ A few solutions **are**:
 - add more training data (if possible..)
 - reduce regularization
 
-| ![Underfitting graph: Simple model failing to capture data patterns resulting in high bias](./article_3.png) |
+| ![Underfitting](./article_3.png) |
 |:--:|
 | <b>Image Credits: [illustrated-machine-learning.github.io](https://illustrated-machine-learning.github.io/)</b>|
 

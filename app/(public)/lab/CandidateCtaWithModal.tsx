@@ -61,7 +61,7 @@ export function CandidateCtaWithModal() {
     }
 
     if (ok) {
-      alert('Candidatura inviata — ti contatteremo via email se c’è interesse.')
+      alert('Candidatura inviata, ti contatteremo via email se c’è interesse.')
     } else {
       alert('Si è verificato un problema nell’invio della candidatura. Riprova più tardi.')
     }

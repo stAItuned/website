@@ -1,7 +1,6 @@
 ---
 title: 'Understanding Generative Adversarial Networks (GANs): A Student’s Guide'
 author: Daniele Moltisanti
-topics: []
 target: Midway
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2024-10-20T00:00:00.000Z
 published: true
 primaryTopic: model-architecture
+topics:
+  - llm-evaluation
+  - business
 ---
 
 

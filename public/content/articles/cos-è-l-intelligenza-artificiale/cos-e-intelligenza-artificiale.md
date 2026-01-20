@@ -3,24 +3,24 @@ title: Cos’è l’Intelligenza Artificiale?
 author: Daniele Moltisanti
 date: 2022-10-10T00:00:00.000Z
 published: true
-topics: []
 meta: >-
   Continui a sentire parlare di Intelligenza Artificiale ma nessuno ti ha ancora
   spiegato bene che cos’è? Per questo ci siamo noi!
 target: Newbie
 language: Italian
 cover: Intelligenza_Artificiale.jpg
-primaryTopic: llm-fundamentals
+primaryTopic: ai-career
+topics: ["business"]
 ---
 
 
 
 
-## **Facciamo chiarezza, diamo una definizione di Intelligenza Artificiale**
+## Facciamo chiarezza, diamo una definizione di Intelligenza Artificiale
 
 L’**Intelligenza Artificiale** è una branca moderna dell’*Ingegneria Informatica* e si occupa di studiare la teoria, i metodi e le tecniche di creazione di **macchine** in grado di agire e comportarsi come il **cervello umano**. L’obiettivo ultimo è quello di riuscire a processare grandi quantità di **dati** per un successivo studio, anche per questo l’Intelligenza Artificiale viene definita la *“Scienza dei Dati”.*
 
-## **Dai calcolatori agli algoritmi di Intelligenza Artificiale**
+## Dai calcolatori agli algoritmi di Intelligenza Artificiale
 
 Più nello specifico, le macchine di cui stiamo parlando sono i **[calcolatori](./../cos-è-un-computer/Cos'è%20un%20computer.md),** ossia delle macchine di calcolo in grado di risolvere *calcoli matematici* sostituendosi interamente all’uomo e in grado di risolverne addirittura alcuni per lui impossibili.
 

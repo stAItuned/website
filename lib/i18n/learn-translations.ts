@@ -220,7 +220,7 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
     en: {
         hero: {
             title: "AI is everywhere. Execution is rare.",
-            subtitle: "Read what works. Then write or build with review — until it ships.",
+            subtitle: "Read what works. Then write or build with review, until it ships.",
             slogan: "Less hype. More shipped work.",
             ctaContributor: "✍️ Become a Contributor",
             ctaLab: "🚀 Join the Lab",
@@ -437,7 +437,7 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
     it: {
         hero: {
             title: "L’AI è ovunque. I risultati no.",
-            subtitle: "Leggi cosa funziona davvero. Poi scrivi o costruisci con review — fino al deploy.",
+            subtitle: "Leggi cosa funziona davvero. Poi scrivi o costruisci con review, fino al deploy.",
             slogan: "Meno hype. Più lavoro che va live.",
             ctaContributor: "✍️ Diventa Contributor",
             ctaLab: "🚀 Entra nel Lab",

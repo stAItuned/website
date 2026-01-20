@@ -1,14 +1,14 @@
 ---
-title: "Fondamenti LLM"
-description: "Concetti fondamentali dei Large Language Models, dall'architettura alla tokenizzazione."
-seoTitle: "Fondamenti LLM - Guida Completa & Risorse"
-seoDescription: "Guida completa ai Fondamenti LLM. Impara i concetti chiave, le best practices e le tecniche avanzate."
-icon: "📚"
+title: "Fondamenti GenAI & LLM"
+description: "Concetti fondamentali della Generative AI e dei Large Language Models, dall'architettura alla tokenizzazione."
+seoTitle: "Fondamenti GenAI & LLM - Guida Completa & Risorse"
+seoDescription: "Guida completa ai Fondamenti GenAI & LLM. Impara i concetti chiave, le best practices e le tecniche avanzate."
+icon: "✨"
 ---
 
-## What is LLM Fundamentals?
+## What is GenAI & LLM Fundamentals?
 
-Questo argomento copre i meccanismi fondamentali dei **Large Language Models**. Esplora l'**architettura Transformer** (meccanismi di Attention), la **Tokenizzazione** (come il testo diventa numeri) e la pipeline di addestramento (Pre-training vs. Fine-tuning vs. RLHF). Comprendere queste basi è fondamentale per il debugging del perché i modelli si comportano in quel modo.
+Questo argomento copre i meccanismi fondamentali della **Generative AI** e dei **Large Language Models**. Esplora l'**architettura Transformer** (meccanismi di Attention), la **Tokenizzazione** (come il testo diventa numeri) e la pipeline di addestramento (Pre-training vs. Fine-tuning vs. RLHF). Comprendere queste basi è fondamentale per il debugging del perché i modelli si comportano in quel modo.
 
 ## When to focus on this
 
@@ -31,5 +31,5 @@ Un token è l'unità base di testo che un LLM elabora. Può essere una parola, p
 
 <details>
 <summary>Cos'è la Finestra di Contesto?</summary>
-La quantità massima di testo (prompt + risposta) che un LLM può considerare in una volta. Una volta superata, il modello "dimentica" le parti più vecchie della conversazione.
+La quantità massima di testo (prompt + risposta) che un LLM può considerare in una volta. Una volta superata, il modello "forgets" le parti più vecchie della conversazione.
 </details>

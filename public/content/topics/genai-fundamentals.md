@@ -1,14 +1,14 @@
 ---
-title: "LLM Fundamentals"
-description: "Core concepts of Large Language Models, from architecture to tokenization."
-seoTitle: "LLM Fundamentals - Complete Guide & Resources"
-seoDescription: "Comprehensive guide to LLM Fundamentals. Learn key concepts, best practices, and advanced techniques."
-icon: "📚"
+title: "GenAI & LLM Fundamentals"
+description: "Core concepts of Generative AI and Large Language Models, from architecture to tokenization."
+seoTitle: "GenAI & LLM Fundamentals - Complete Guide & Resources"
+seoDescription: "Comprehensive guide to GenAI & LLM Fundamentals. Learn key concepts, best practices, and advanced techniques."
+icon: "✨"
 ---
 
-## What is LLM Fundamentals?
+## What is GenAI & LLM Fundamentals?
 
-This topic covers the foundational mechanics of **Large Language Models**. It explores the **Transformer architecture** (Attention mechanisms), **Tokenization** (how text becomes numbers), and the training pipeline (Pre-training vs. Fine-tuning vs. RLHF). Understanding these basics is critical for debugging why models behave the way they do.
+This topic covers the foundational mechanics of **Generative AI** and **Large Language Models**. It explores the **Transformer architecture** (Attention mechanisms), **Tokenization** (how text becomes numbers), and the training pipeline (Pre-training vs. Fine-tuning vs. RLHF). Understanding these basics is critical for debugging why models behave the way they do.
 
 ## When to focus on this
 

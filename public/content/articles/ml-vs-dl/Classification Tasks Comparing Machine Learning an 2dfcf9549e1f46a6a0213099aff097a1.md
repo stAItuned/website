@@ -1,7 +1,6 @@
 ---
 title: Machine Learning vs Deep Learning in Classification
 author: Daniele Moltisanti
-topics: []
 target: Midway
 language: English
 cover: cover.webp
@@ -11,6 +10,7 @@ meta: >-
 date: 2023-12-10T00:00:00.000Z
 published: true
 primaryTopic: ai-career
+topics: ["model-architecture", "llm-evaluation", "business"]
 ---
 
 

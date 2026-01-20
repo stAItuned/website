@@ -1,7 +1,6 @@
 ---
 title: 'OpenAI''s o3 Model: A Leap Forward in AI Reasoning and Performance'
 author: Daniele Moltisanti
-topics: []
 target: Midway
 language: English
 cover: cover.webp
@@ -11,6 +10,9 @@ meta: >-
 date: 2024-12-23T00:00:00.000Z
 published: true
 primaryTopic: ai-research
+topics:
+  - model-architecture
+  - llm-evaluation
 ---
 
 

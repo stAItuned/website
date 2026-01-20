@@ -57,7 +57,20 @@ export function TopicDeepDives({ articles, accentColor }: TopicDeepDivesProps) {
     }, [articles, sortBy, analyticsData])
 
     return (
-        <section>
+        <section className="pt-8">
+            {/* Visual Separator */}
+            <div className="flex items-center gap-4 mb-8">
+                <div
+                    className="flex-1 h-px"
+                    style={{ background: `linear-gradient(90deg, transparent, ${accentColor}30, transparent)` }}
+                />
+                <span className="text-2xl">📖</span>
+                <div
+                    className="flex-1 h-px"
+                    style={{ background: `linear-gradient(90deg, transparent, ${accentColor}30, transparent)` }}
+                />
+            </div>
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <h2 className="text-2xl font-bold flex items-center gap-3 text-slate-900 dark:text-white">
                     <span

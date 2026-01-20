@@ -2,9 +2,6 @@
 title: Advanced Data Normalization Techniques for Financial Data Analysis
 author: Daniele Moltisanti
 date: 2023-01-16T00:00:00.000Z
-topics:
-  - Business
-  - Data Science
 meta: >-
   In the financial industry, data normalization is an essential step in ensuring
   accurate and meaningful analysis of financial data.
@@ -12,7 +9,10 @@ target: Expert
 language: English
 cover: cover_image.webp
 published: true
-primaryTopic: business
+primaryTopic: model-architecture
+topics:
+  - business
+  - production
 ---
 
 

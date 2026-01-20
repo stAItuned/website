@@ -1,7 +1,6 @@
 ---
 title: 'Meet Lara: The AI Translator Revolutionizing Global Communication'
 author: Daniele Moltisanti
-topics: []
 target: Midway
 language: English
 cover: cover_lara.webp
@@ -11,6 +10,7 @@ meta: >-
 date: 2024-11-18T00:00:00.000Z
 published: true
 primaryTopic: ai-coding
+topics: ["model-architecture", "llm-evaluation", "business"]
 ---
 
 

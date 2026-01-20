@@ -34,6 +34,7 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import type { ArticleAnalytics } from '@/lib/analytics-server'
+import { getTopicHub } from '@/config/topics'
 
 import { useArticleLikes } from '@/lib/hooks/useArticleLikes'
 
@@ -700,42 +701,66 @@ export default function ArticlePageClient({
                     FREE
                   </span>
 
-                  {/* Primary Topic Badge */}
+
+                </div>
+                {/* Explicit Topic Hierarchy */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 pb-6 border-b border-gray-100 dark:border-slate-800">
+                  {/* MAIN TOPIC */}
                   {article.primaryTopic && (
-                    <Link
-                      href={`/topics/${article.primaryTopic}`}
-                      title="Go to Topic Hub"
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs font-bold uppercase tracking-wider hover:bg-primary-200 dark:hover:bg-primary-900/60 transition-colors"
-                    >
-                      <span className="text-lg">🧭</span>
-                      {article.primaryTopic.replace(/-/g, ' ')}
-                    </Link>
+                    <div className="flex flex-col gap-1.5 min-w-[200px]">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 pl-1">
+                        Main Topic
+                      </span>
+                      <Link
+                        href={`/topics/${article.primaryTopic}`}
+                        className="group flex items-center gap-3 p-2 pr-4 -ml-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                      >
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-xl group-hover:scale-110 group-hover:border-primary-200 dark:group-hover:border-primary-800 transition-all">
+                          {getTopicHub(article.primaryTopic)?.icon || '🧭'}
+                        </div>
+                        <span className="font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                          {getTopicHub(article.primaryTopic)?.name || article.primaryTopic.replace(/-/g, ' ')}
+                        </span>
+                      </Link>
+                    </div>
+                  )}
+
+                  {/* Vertical Divider (Desktop) */}
+                  <div className="hidden sm:block w-px h-12 bg-gray-100 dark:bg-slate-800" />
+
+                  {/* RELATED CONCEPTS */}
+                  {article.topics && article.topics.length > 0 && (
+                    <div className="flex flex-col gap-2 flex-1">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 pl-1">
+                        Related Concepts
+                      </span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {article.topics.map((topic: string) => {
+                          const hub = getTopicHub(topic)
+                          const topicSlug = hub ? hub.slug : topic.toLowerCase()
+                            .replace(/\s+/g, '-')
+                            .replace(/[^\w\-]+/g, '')
+                            .replace(/\-\-+/g, '-')
+                            .replace(/^-+/, '')
+                            .replace(/-+$/, '')
+
+                          const displayName = hub ? hub.name : topic.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+                          return (
+                            <Link
+                              key={topic}
+                              href={`/topics/${topicSlug}`}
+                              className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-slate-800 shadow-sm border border-slate-200/50 dark:border-slate-700/50 hover:border-primary-200 dark:hover:border-primary-800 transition-all"
+                            >
+                              <span className="opacity-50 mr-1.5 text-slate-400">#</span>
+                              {displayName}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    </div>
                   )}
                 </div>
-                {/* Topics / Hubs Links */}
-                {article.topics && article.topics.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2 mb-6">
-                    <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Tags:</span>
-                    {article.topics.map((topic: string) => {
-                      const topicSlug = topic.toLowerCase()
-                        .replace(/\s+/g, '-')
-                        .replace(/[^\w\-]+/g, '')
-                        .replace(/\-\-+/g, '-')
-                        .replace(/^-+/, '')
-                        .replace(/-+$/, '')
-
-                      return (
-                        <Link
-                          key={topic}
-                          href={`/topics/${topicSlug}`}
-                          className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 text-xs font-medium transition-colors border border-slate-200 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-800"
-                        >
-                          {topic}
-                        </Link>
-                      )
-                    })}
-                  </div>
-                )}
                 {/* Share button below title */}
                 {/* <div className="flex justify-start">
                   <ShareOnLinkedIn

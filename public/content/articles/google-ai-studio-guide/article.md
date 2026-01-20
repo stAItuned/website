@@ -5,8 +5,6 @@ seoDescription: >-
   Cos'è Google AI Studio e come usarlo per creare prompt, fare fine-tuning e
   testare i modelli Gemini gratuitamente.
 author: Daniele Moltisanti
-topics:
-  - Business
 target: Midway
 business: true
 language: English
@@ -19,6 +17,7 @@ date: 2024-11-05T00:00:00.000Z
 updatedAt: 2025-01-16T00:00:00.000Z
 published: true
 primaryTopic: ai-research
+topics: ["model-architecture", "llm-evaluation", "business"]
 ---
 
 

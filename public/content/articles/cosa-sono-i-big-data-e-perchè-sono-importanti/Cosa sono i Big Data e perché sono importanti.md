@@ -2,8 +2,6 @@
 title: Big Data
 author: Roberta Ghidini
 date: 2022-10-26T00:00:00.000Z
-topics:
-  - Machine Learning
 meta: >-
   Big Data, una quantità di dati impossibile da elaborare attraverso i software
   tradizionali, vengono utilizzate dunque tecniche di Machine Learning
@@ -12,6 +10,7 @@ language: Italian
 cover: big-data.jpg
 published: true
 primaryTopic: business
+topics: ["ai-career", "production"]
 ---
 
 

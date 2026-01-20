@@ -2,8 +2,6 @@
 title: 30 Days of Machine Learning Engineering
 author: Francesco Di Salvo
 date: 2022-12-05T00:00:00.000Z
-topics:
-  - Machine Learning
 meta: 30 Days of Machine Learning Engineering
 target: Expert
 language: English
@@ -11,6 +9,7 @@ cover: ./cover.jpeg
 published: true
 layout: guide
 primaryTopic: ai-career
+topics: ["ai-coding", "production"]
 ---
 
 ## Day 00 - What is this challenge about?
@@ -85,7 +84,7 @@ Estimating the **complexity** of a ML project is everything but easy. To do so, 
 - **Compare human performances**: this can help in order to evaluate a human benchmark in terms of time and performances.
 - **Benchmark on simpler scenarios**: try to simplify the problem and check whether if it is solvable. If so, you can start to make the model more complex in order to answer to broader requirements.
 
-## Day 05 - **Why Machine Learning Projects Fail**
+## Day 05 - Why Machine Learning Projects Fail
 
 Today we went through the second chapter of the “Machine Learning Engineering” book by Andriy Burkov. 
 
@@ -105,7 +104,7 @@ Reference:
 
 - [https://arxiv.org/pdf/2108.02497.pdf](https://arxiv.org/pdf/2108.02497.pdf)
 
-## **Day 06 - Questions about the data**
+## Day 06 - Questions about the data
 
 Today we went through the third chapter of the “Machine Learning Engineering” book by Andriy Burkov. 
 

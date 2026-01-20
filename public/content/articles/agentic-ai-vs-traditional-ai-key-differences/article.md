@@ -1,7 +1,6 @@
 ---
 title: 'Agentic AI vs. Traditional AI: Key Differences, Benefits, and Risks'
 author: Salvatore Arancio Febbo
-topics: []
 target: Midway
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2025-11-25T00:00:00.000Z
 published: true
 primaryTopic: agents
+topics:
+  - ai-fundamentals
+  - business
 ---
 
 ## Agentic AI vs. Traditional AI: Key Differences, Benefits, and Risks

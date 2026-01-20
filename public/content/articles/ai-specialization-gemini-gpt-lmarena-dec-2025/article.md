@@ -1,8 +1,6 @@
 ---
 title: 'Gemini 3 Pro vs GPT-5.2: AI Specialization in Dec 2025 LMArena'
 author: Daniele Moltisanti
-topics:
-  - GenAI
 target: Expert
 business: false
 language: English
@@ -15,6 +13,7 @@ meta: >-
 date: 2025-12-16T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
+topics: ["model-architecture", "business", "production"]
 ---
 
 The AI landscape shifted dramatically in December 2025, revealing a surprising new hierarchy on LMArena's leaderboards. This article is for general tech enthusiasts and professionals keen to understand the latest developments in AI model performance and strategic positioning.
@@ -32,7 +31,7 @@ On the other side, OpenAI's newly released **GPT-5.2** is making a different kin
 
 ## How is Gemini 3 Pro Dominating the LMArena Text and Vision Categories?
 
-![Infographic for: How is Gemini 3 Pro Dominating the LMArena Text and Vision Categories?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_infographic_1_20251214_142750.webp)
+![How is Gemini 3 Pro Dominating the LMArena Text and Vision Categories?](https://storage.googleapis.com/editorial-planner-images/article-images/ecabaf0f-6d91-4062-907e-83dbad7e96dc/section_infographic_1_20251214_142750.webp)
 
 Gemini 3 Pro’s performance on LMArena isn't just a win; it's a statement. Users are gravitating towards Gemini 3 Pro for its intuitive outputs and broad utility, as it has firmly established itself as the default choice for the vast majority of creative and general-purpose AI tasks, effectively cornering the mainstream market and forcing competitors into specialized niches.
 

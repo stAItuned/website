@@ -2,8 +2,6 @@
 title: Reti neurali ricorrenti
 author: Roberta Ghidini
 date: null
-topics:
-  - Deep Learning
 meta: >-
   e reti neurali ricorrenti sono una tipologia di reti neurali collegate in un
   ciclo che permette un'interconnessione tra i differenti livelli.
@@ -11,12 +9,15 @@ target: Newbie
 language: Italian
 cover: cover.png
 primaryTopic: model-architecture
+topics:
+  - ai-fundamentals
+  - ai-coding
 ---
 
 
 Le **reti neurali ricorrenti** (o *RNN* dall’inglese *Recurrent Neural Networks*) sono una tipologia di reti neurali collegate in un **ciclo** che permette loro di essere interconnesse anche con i livelli differenti dal proprio.
 
-## **Reti neurali ricorrenti**
+## Reti neurali ricorrenti
 
 Le **reti neurali ricorrenti (RNN)** sono un tipo di **[rete neurale](./../cosa-sono-le-reti-neurali-artificiali/Cosa%20sono%20le%20reti%20neurali%20artificiali.md)** avente **neuroni** divisi in livelli, o layer, e collegati in un **ciclo** che fa sì che i valori in uscita di un livello superiore vengano impiegati come ingresso per un livello inferiore, prima di raggiungere il livello di output. Quindi si ritrovano ad elaborare informazioni già elaborate da un altro livello, da qui il nome **ricorrenti**.
 
@@ -25,7 +26,7 @@ Questa caratteristica consente loro di creare al loro interno una sorta di **mem
 ![Rete neurale ricorrente](https://i1.wp.com/dataaspirant.com/wp-content/uploads/2020/11/3-Recurrent-Neural-Network.png?resize=626%2C463&ssl=1)
 
 
-### **Applicazioni delle Reti Neurali Ricorrenti**
+### Applicazioni delle Reti Neurali Ricorrenti
 
 Le **reti neurali ricorrenti(RNN)** sono molto utili nel momento in cui si vuole analizzare un comportamento di una persona all’interno di un **video**, quindi una situazione **mutevole** nel tempo, che dipende da una sequenza di dati, in questo caso immagini. Questo tipo di reti ci consente di analizzare **istante per istante** le azioni compiute dall’individuo e di tenere in memoria quelle precedenti, in modo tale da estrapolare quali siano quelle esplicative.
 

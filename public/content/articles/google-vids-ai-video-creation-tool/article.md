@@ -1,7 +1,6 @@
 ---
 title: 'Google Vids: Revolutionizing Video Creation with AI-Powered Tools'
 author: Daniele Moltisanti
-topics: []
 target: Newbie
 language: English
 cover: cover.webp
@@ -10,7 +9,9 @@ meta: >-
   designed to simplify and enhance your video production process
 date: 2024-11-10T00:00:00.000Z
 published: true
-primaryTopic: llm-fundamentals
+primaryTopic: business
+topics:
+  - ai-research
 ---
 
 

@@ -2,9 +2,6 @@
 title: Curse of dimensionality
 author: Francesco Di Salvo
 date: null
-topics:
-  - Deep Learning
-  - Machine Learning
 meta: >-
   Curse of dimensionality is referred to the dimensionality of the problem and
   the relative generalization ability of the solution.
@@ -12,6 +9,7 @@ target: Expert
 language: English
 cover: cover.jpeg
 primaryTopic: model-architecture
+topics: ["ai-coding", "ai-career", "llm-evaluation"]
 ---
 
 ## Introduction

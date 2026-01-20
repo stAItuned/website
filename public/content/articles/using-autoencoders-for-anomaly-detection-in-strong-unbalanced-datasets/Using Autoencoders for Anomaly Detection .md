@@ -2,9 +2,6 @@
 title: Using Autoencoders for Anomaly Detection in Strong Unbalanced Datasets
 author: Daniele Moltisanti
 date: 2023-02-02T00:00:00.000Z
-topics:
-  - Deep Learning
-  - Machine Learning
 meta: >-
   Anomaly detection is a critical task in various domains such as fraud
   detection, network intrusion detection, and medical diagnosis. One of the main
@@ -16,6 +13,9 @@ language: English
 cover: cover.webp
 published: true
 primaryTopic: model-architecture
+topics:
+  - business
+  - production
 ---
 
 

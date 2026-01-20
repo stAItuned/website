@@ -2,17 +2,15 @@
 meta: TensorFlow CNN for Multilabel Image Classification Task
 date: 2023-03-24T00:00:00.000Z
 target: Expert
-topics:
-  - Data Science
-  - Deep Learning
-  - Machine Learning
-  - Software Engineering
 cover: cover.jpg
 title: TensorFlow CNN for Multilabel Image Classification Task
 language: English
 author: Marcello Politi
 published: true
 primaryTopic: model-architecture
+topics:
+  - ai-coding
+  - llm-evaluation
 ---
 
 
@@ -81,7 +79,7 @@ Marcello Politi
 
 ---
 
-## Cover 
+## Cover
 * [@pietrozj](https://unsplash.com/@pietrozj?utm_source=medium&utm_medium=referral)
 
 ## Bibliography

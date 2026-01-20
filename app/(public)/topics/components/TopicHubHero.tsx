@@ -64,9 +64,9 @@ export function TopicHubHero({ topic, articleCount }: TopicHubHeroProps) {
                     <span className="text-slate-900 dark:text-white font-medium">{topic.title}</span>
                 </nav>
 
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                    {/* Left: Icon + Title + Description */}
-                    <div className="flex-1 text-center sm:text-left">
+                <div className="flex flex-col items-center sm:items-start gap-6">
+                    {/* Icon + Title + Description */}
+                    <div className="text-center sm:text-left w-full">
                         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-5">
                             {/* Icon with Animated Glow */}
                             <div className="relative group">
@@ -76,50 +76,61 @@ export function TopicHubHero({ topic, articleCount }: TopicHubHeroProps) {
                                     style={{ background: `linear-gradient(135deg, ${colorFrom}, ${colorTo})` }}
                                 />
                                 <div
-                                    className="relative flex items-center justify-center w-20 h-20 rounded-2xl text-4xl bg-white/50 dark:bg-white/10 backdrop-blur-sm border border-slate-200 dark:border-white/20 shadow-2xl"
+                                    className="relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl text-3xl sm:text-4xl bg-white/50 dark:bg-white/10 backdrop-blur-sm border border-slate-200 dark:border-white/20 shadow-2xl"
                                     style={{ boxShadow: `0 0 40px -10px ${colorFrom}60` }}
                                 >
                                     {icon}
                                 </div>
                             </div>
 
-                            <div className="text-center sm:text-left">
-                                <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-3 leading-tight tracking-tight">
+                            <div className="text-center sm:text-left flex-1">
+                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2 leading-tight tracking-tight">
                                     {topic.title}
                                 </h1>
-                                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
+                                <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
                                     {topic.description}
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Right: Stats Badge with Gradient Border */}
-                    <div className="flex-shrink-0 flex justify-center sm:justify-start">
-                        <div className="group relative">
-                            {/* Gradient border glow */}
+                    {/* Stats Row - Inline badges */}
+                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                        {/* Articles Count Badge */}
+                        <div
+                            className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm"
+                        >
                             <div
-                                className="absolute -inset-[1px] rounded-2xl opacity-50 group-hover:opacity-80 transition-opacity"
-                                style={{ background: `linear-gradient(135deg, ${colorFrom}, ${colorTo})` }}
-                            />
-                            <div className="relative flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/80 dark:bg-slate-900/90 backdrop-blur-sm border border-slate-200 dark:border-transparent">
-                                <div
-                                    className="flex items-center justify-center w-12 h-12 rounded-xl"
-                                    style={{ background: `linear-gradient(135deg, ${colorFrom}30, ${colorTo}20)` }}
-                                >
-                                    <svg className="w-6 h-6 text-slate-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-                                    </svg>
+                                className="flex items-center justify-center w-8 h-8 rounded-lg"
+                                style={{ background: `linear-gradient(135deg, ${colorFrom}25, ${colorTo}15)` }}
+                            >
+                                <svg className="w-4 h-4 text-slate-700 dark:text-slate-200" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="text-left">
+                                <div className="text-xl font-bold text-slate-900 dark:text-white leading-none">
+                                    {articleCount}
                                 </div>
-                                <div className="text-left">
-                                    <div className="text-3xl font-bold text-slate-900 dark:text-white leading-none mb-1">
-                                        {articleCount}
-                                    </div>
-                                    <div className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
-                                        {articleCount === 1 ? t.topicHub.stats.article : t.topicHub.stats.articles}
-                                    </div>
+                                <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
+                                    {articleCount === 1 ? t.topicHub.stats.article : t.topicHub.stats.articles}
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Visual separator */}
+                        <div className="hidden sm:block w-px h-8 bg-slate-200 dark:bg-slate-700" />
+
+                        {/* Topic badge with color */}
+                        <div
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border"
+                            style={{
+                                background: `linear-gradient(135deg, ${colorFrom}10, ${colorTo}05)`,
+                                borderColor: `${colorFrom}30`
+                            }}
+                        >
+                            <span className="text-lg">{icon}</span>
+                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Topic Hub</span>
                         </div>
                     </div>
                 </div>

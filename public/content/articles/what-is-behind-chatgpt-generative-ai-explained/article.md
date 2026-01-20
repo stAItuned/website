@@ -1,7 +1,6 @@
 ---
 title: What is Behind ChatGPT? Exploring the Technology Behind Generative AI Tools
 author: Daniele Moltisanti
-topics: []
 target: Newbie
 language: English
 cover: cover.webp
@@ -11,7 +10,10 @@ meta: >-
   applications, explained simply for everyone
 date: 2024-11-27T00:00:00.000Z
 published: true
-primaryTopic: llm-fundamentals
+primaryTopic: genai-fundamentals
+topics:
+  - model-architecture
+  - business
 ---
 
 

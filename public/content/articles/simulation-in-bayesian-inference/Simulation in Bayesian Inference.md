@@ -4,15 +4,15 @@ meta: >-
   hence being able to mimic real random phenomena.
 date: 2022-11-10T00:00:00.000Z
 target: Expert
-topics:
-  - Machine Learning
-  - Research
 cover: cover.png
 title: Simulation in Bayesian Inference
 language: English
 author: Gabriele Cola
 published: true
-primaryTopic: ai-career
+primaryTopic: ai-research
+topics:
+  - model-architecture
+  - ai-coding
 ---
 
 

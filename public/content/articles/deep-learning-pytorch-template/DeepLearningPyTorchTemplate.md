@@ -1,8 +1,6 @@
 ---
 title: Increase your productivity with your own PyTorch template
 author: Francesco Di Salvo
-topics:
-  - Deep Learning
 target: Expert
 language: English
 cover: productivity.webp
@@ -12,6 +10,7 @@ meta: >-
 date: 2023-02-21T00:00:00.000Z
 published: true
 primaryTopic: ai-career
+topics: ["ai-coding", "model-architecture", "llm-evaluation"]
 ---
 
 

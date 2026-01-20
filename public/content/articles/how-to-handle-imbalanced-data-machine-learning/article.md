@@ -1,8 +1,6 @@
 ---
 title: How to Optimally Sample Imbalanced Data Practical Guide
 author: Daniele Moltisanti
-topics:
-  - Machine Learning
 target: Expert
 language: English
 cover: cover.webp
@@ -13,6 +11,7 @@ meta: >-
 date: 2024-10-30T00:00:00.000Z
 published: true
 primaryTopic: ai-career
+topics: ["ai-coding", "model-architecture", "llm-evaluation"]
 ---
 
 

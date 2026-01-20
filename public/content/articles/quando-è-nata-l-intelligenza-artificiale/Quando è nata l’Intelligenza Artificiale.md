@@ -3,8 +3,6 @@ title: Storia dell’Intelligenza Artificiale
 author: Roberta Ghidini
 date: 2022-10-17T00:00:00.000Z
 published: true
-topics:
-  - Machine Learning
 meta: >-
   1956 data ufficiale della nascita dell’Intelligenza Artificiale, ma bisogna
   considerare il lungo percorso e le scoperte che ci hanno portato a quella
@@ -12,13 +10,16 @@ meta: >-
 target: Newbie
 language: Italian
 cover: Storia_dellIntelligenza_Artificiale.jpg
-primaryTopic: llm-fundamentals
+primaryTopic: ai-fundamentals
+topics:
+  - ai-career
+  - ai-research
 ---
 
 
 Il **1956** è l’anno ufficiale in cui nasce l’**[Intelligenza Artificiale](./../cos'è-l-intelligenza-artificiale/Cos'è%20l'Intelligenza%20Artificiale.md),** ma dobbiamo tenere in considerazione quale sia stato il percorso che ci ha portato a quella data, quali sono state le scoperte pregresse che hanno consentito agli scienziati di quel periodo di poter dare inizio ad una nuova Era.
 
-## **Le basi che hanno portato alla nascita dell’Intelligenza Artificiale**
+## Le basi che hanno portato alla nascita dell’Intelligenza Artificiale
 
 Nell’immaginario comune l’**Intelligenza Artificiale** non è che una novità, una disciplina appena scoperta e in grado di stupirci, ma in realtà ha radici molto lontane che si fondano nel periodo in cui la scoperta di tecnologie innovative poteva fare la differenza, la **Seconda Guerra Mondiale**.
 
@@ -31,7 +32,7 @@ La *macchina di Turing* non era altro che una macchina ideale in grado di elab
 
 Da questo momento in avanti, le sperimentazioni proseguono e la curiosità di riuscire ad automatizzare dei processi si fa sempre più viva; una delle prime applicazioni che vengono sperimentate è una banale **partita di scacchi**, tra una persona e un computer. E anche in questo caso è proprio **[Alan Turing](https://www.storicang.it/a/alan-turing-larma-segreta-degli-alleati_15245)** che tenta, attraverso l’*”imitation game”,* di porre una regola per stabilire se un computer abbia un comportamento più o meno intelligente. Questo grande contributo rimarrà fino ai giorni nostri e utilizzato nelle applicazioni teoriche.
 
-## **Origine dell’Intelligenza Artificiale**
+## Origine dell’Intelligenza Artificiale
 
 **31 agosto 1955,** primo utilizzo del termine **Intelligenza Artificiale,** quando vengono richiesti dei fondi per uno studio proprio riguardante questo ambito. Era infatti appena stato dimostrato dal neuropsicologo **Donald Hebb** che i **neuroni** fossero in grado di comunicare tra di loro mediante lo scambio di *scariche elettriche* e che questa caratteristica fosse alla base del processo di *memorizzazione* e *apprendimento*.
 
@@ -41,7 +42,7 @@ Nel **1956**, data ufficiale della nascita dell’Intelligenza Artificiale, vie
 
 
 
-### **Il primo neurone artificiale: il percettrone**
+### Il primo neurone artificiale: il percettrone
 
 Qualche anno più tardi, uno psicologo statunitense, **Frank Rosenblatt** ha sviluppato il ***“percettrone”.*** 
 

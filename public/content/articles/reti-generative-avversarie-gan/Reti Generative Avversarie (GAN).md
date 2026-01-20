@@ -2,13 +2,14 @@
 title: Reti generative avversarie (GAN)
 author: Roberta Ghidini
 date: null
-topics:
-  - Deep Learning
 meta: "Le\_GAN (Reti Generative Avversarie)\_sono due\_reti neurali artificiali in grado di generare nuovi elementi a partire da contenuti esistenti."
 target: Newbie
 language: Italian
 cover: Reti_neurali.jpg
 primaryTopic: model-architecture
+topics:
+  - ai-research
+  - business
 ---
 
 

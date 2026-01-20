@@ -1,7 +1,6 @@
 ---
 title: 'The 2024 Gartner Hype Cycle for Generative AI: A Roadmap for Innovation'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2024-12-15T00:00:00.000Z
 published: true
 primaryTopic: business
+topics:
+  - ai-research
+  - llm-evaluation
 ---
 
 

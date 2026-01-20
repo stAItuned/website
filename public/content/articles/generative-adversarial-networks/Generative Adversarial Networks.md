@@ -2,8 +2,6 @@
 title: Generative Adversarial Networks GAN
 author: Gianluca La Malfa
 date: 2022-10-24T00:00:00.000Z
-topics:
-  - Deep Learning
 meta: >-
   GANs represent a huge innovation for generative models, they automatically
   learn patterns in data inputs, generating outputs based on the original
@@ -13,6 +11,7 @@ language: English
 cover: cover.jpg
 published: true
 primaryTopic: model-architecture
+topics: ["ai-research", "rag", "ai-coding"]
 ---
 
 

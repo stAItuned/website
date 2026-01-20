@@ -2,8 +2,6 @@
 title: Generative Adversarial Networks GAN
 author: Daniele Moltisanti
 date: null
-topics:
-  - Business
 meta: >-
   Learn cross-validation techniques for financial time series forecasting,
   including k-fold, time-series split, and expanding window methods.
@@ -12,6 +10,7 @@ language: English
 cover: cover.webp
 published: null
 primaryTopic: business
+topics: ["model-architecture", "llm-evaluation", "ai-research"]
 ---
 
 
@@ -27,7 +26,7 @@ Let’s deep dive into some cross-validation techniques.
 
 This technique involves dividing the data into **k folds** and training the model **k** times, each time using a different fold as the test set. It's a **common method**, simple to implement and useful for large datasets. 
 
-![source: [https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html)](./k-fold.png)
+![K-Fold Cross-Validation](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html)](./k-fold.png)
 
 source: [https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html)
 
@@ -57,7 +56,7 @@ This approach is not so suitable for time-series data. Some drawbacks:
 
 This technique is specifically designed for time series data and involves dividing the data into train and test sets based on a fixed time period. This method takes into account the **temporal dependencies** of the data and is useful for financial time series forecasting.
 
-![source: [https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html)](./timeseries-split.png)
+![Time-Series Split Cross-Validation](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html)](./timeseries-split.png)
 
 source: [https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html)
 
@@ -84,7 +83,7 @@ It's useful when working with **very large datasets** or when there is a **tempo
 
 In **financial time series analysis**, this approach is often used to evaluate the performance of **trading strategies** over time. For example, suppose you have a trading strategy that involves making predictions about the future direction of a stock price based on past price data and other relevant features. You could use Expanding Window Cross-Validation to evaluate how well the trading strategy performs over time, by training the model on past data and testing it on future data.
 
-![source: [https://www.researchgate.net/figure/Expanding-window-5-split-time-series-cross-validation_fig1_350005681](https://www.researchgate.net/figure/Expanding-window-5-split-time-series-cross-validation_fig1_350005681)](./window_expansion.png)
+![Expanding Window Cross-Validation](https://www.researchgate.net/figure/Expanding-window-5-split-time-series-cross-validation_fig1_350005681)](./window_expansion.png)
 
 source: [https://www.researchgate.net/figure/Expanding-window-5-split-time-series-cross-validation_fig1_350005681](https://www.researchgate.net/figure/Expanding-window-5-split-time-series-cross-validation_fig1_350005681)
 

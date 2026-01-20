@@ -1,7 +1,6 @@
 ---
 title: 'Search GPT vs. Google Search: A Comprehensive Comparison'
 author: Daniele Moltisanti
-topics: []
 target: Newbie
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2024-11-04T00:00:00.000Z
 published: true
 primaryTopic: ai-research
+topics:
+  - rag
+  - business
 ---
 
 

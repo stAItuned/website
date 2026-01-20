@@ -5,7 +5,7 @@ import { getTopicHub } from '@/config/topics'
 import { TopicHubHero } from '../components/TopicHubHero'
 import { TopicOverview } from '../components/TopicOverview'
 import { TopicDeepDives } from '../components/TopicDeepDives'
-import { TopicSidebar } from '../components/TopicSidebar'
+import { StartHereSection } from '../components/StartHereSection'
 import fs from 'fs'
 import path from 'path'
 
@@ -77,64 +77,58 @@ export default async function TopicHubPage(props: { params: Promise<{ slug: stri
     const deepDives = topicArticles
 
     return (
-        <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-12">
+        <div className="max-w-5xl mx-auto px-4 pt-8 md:pt-12 pb-20">
             {/* Hero Section */}
             <TopicHubHero
                 topic={topic}
                 articleCount={topicArticles.length}
             />
 
-            {/* Main content grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 lg:gap-10 pb-20">
-                {/* Main Content */}
-                <div className="order-2 lg:order-1 space-y-12">
-                    {/* Editorial Content - Dashboard View */}
-                    <TopicOverview
-                        rawContentEn={topic.body.raw}
-                        rawContentIt={rawContentIt}
+            {/* Start Here Section - Prominent Learning Path */}
+            {startHere.length > 0 && (
+                <StartHereSection
+                    articles={validStartHere}
+                    accentColor={accentColor}
+                />
+            )}
+
+            {/* Main Content */}
+            <div className="space-y-10">
+                {/* Editorial Content - Dashboard View */}
+                <TopicOverview
+                    rawContentEn={topic.body.raw}
+                    rawContentIt={rawContentIt}
+                    accentColor={accentColor}
+                />
+
+                {/* Deep Dives Section */}
+                {deepDives.length > 0 && (
+                    <TopicDeepDives
+                        articles={deepDives}
                         accentColor={accentColor}
                     />
+                )}
 
-                    {/* Deep Dives Section (Client Component for Sorting) */}
-                    {deepDives.length > 0 && (
-                        <TopicDeepDives
-                            articles={deepDives}
-                            accentColor={accentColor}
-                        />
-                    )}
-
-                    {/* Empty state if no articles */}
-                    {topicArticles.length === 0 && (
-                        <div
-                            className="text-center py-16 px-8 rounded-2xl border border-dashed"
-                            style={{
-                                borderColor: `${accentColor}30`,
-                                background: `linear-gradient(135deg, ${accentColor}05, transparent)`
-                            }}
-                        >
-                            <div className="text-5xl mb-5">📝</div>
-                            <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
-                                Coming Soon
-                            </h3>
-                            <p className="text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-                                We're working on new articles for this topic. Check back soon for in-depth guides and tutorials!
-                            </p>
-                        </div>
-                    )}
-                </div>
-
-                {/* Sidebar / Start Here - Glassmorphism */}
-                <aside className="order-1 lg:order-2">
-                    {startHere.length > 0 && (
-                        <div className="sticky top-24">
-                            <TopicSidebar
-                                startHereArticles={validStartHere}
-                                accentColor={accentColor}
-                            />
-                        </div>
-                    )}
-                </aside>
+                {/* Empty state if no articles */}
+                {topicArticles.length === 0 && (
+                    <div
+                        className="text-center py-16 px-8 rounded-2xl border border-dashed"
+                        style={{
+                            borderColor: `${accentColor}30`,
+                            background: `linear-gradient(135deg, ${accentColor}05, transparent)`
+                        }}
+                    >
+                        <div className="text-5xl mb-5">📝</div>
+                        <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
+                            Coming Soon
+                        </h3>
+                        <p className="text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+                            We're working on new articles for this topic. Check back soon for in-depth guides and tutorials!
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     )
 }
+

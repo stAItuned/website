@@ -8,11 +8,8 @@ meta: >-
   vanno a raggruppare (in cluster, o contenitori) un insieme di dati omogenei.
 target: Newbie
 title: La Cluster Analysis nel Machine Learning - Introduzione
-topics:
-  - Machine Learning
-  - Cluster Analysis
-  - Clustering
 primaryTopic: ai-career
+topics: ["rag", "business", "production"]
 ---
 
 

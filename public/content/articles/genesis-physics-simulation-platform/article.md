@@ -1,7 +1,6 @@
 ---
 title: 'Genesis: Redefining Physics Simulations and AI Development'
 author: Daniele Moltisanti
-topics: []
 target: Expert
 language: English
 cover: cover.webp
@@ -12,6 +11,7 @@ meta: >-
 date: 2024-11-22T00:00:00.000Z
 published: true
 primaryTopic: ai-research
+topics: ["model-architecture", "llm-evaluation", "production"]
 ---
 
 

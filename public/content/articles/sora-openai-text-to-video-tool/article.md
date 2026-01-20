@@ -1,7 +1,6 @@
 ---
 title: 'Unlocking Creativity with Sora: OpenAI’s Text-to-Video'
 author: Daniele Moltisanti
-topics: []
 target: Midway
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2024-12-20T00:00:00.000Z
 published: true
 primaryTopic: ai-research
+topics:
+  - business
+  - model-architecture
 ---
 
 

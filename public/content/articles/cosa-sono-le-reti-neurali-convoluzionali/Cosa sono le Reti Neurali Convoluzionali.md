@@ -2,8 +2,6 @@
 title: Reti neurali Convoluzionali e le loro applicazioni
 author: Roberta Ghidini
 date: null
-topics:
-  - Deep Learning
 meta: >-
   LLe reti neurali convoluzionali, sottoinsieme delle reti feed forward, sono
   uno degli algoritmi più impiegati tra le tecniche del Deep Learning.
@@ -11,21 +9,24 @@ target: Newbie
 language: Italian
 cover: cover.jpeg
 primaryTopic: model-architecture
+topics:
+  - business
+  - production
 ---
 
 
-# **Reti neurali Convoluzionali e le loro applicazioni**
+# Reti neurali Convoluzionali e le loro applicazioni
 
 Le **reti neurali convoluzionali** (o *CNN* dall’inglese *Convolutional Neural Networks*) sono un sottoinsieme delle **[Reti Feed Forward](./../cosa-sono-le-reti-neurali-artificiali/Cosa%20sono%20le%20reti%20neurali%20artificiali.md)** e attualmente uno degli algoritmi più impiegati tra le tecniche del **[Deep Learning](../introduzione-e-primi-passi-sul-deep-learning/Introduzione%20e%20primi%20passi%20nel%20Deep%20Learning.md)**, e vengono utilizzate per analizzare le immagini.
 
 
-## **Reti neurali convoluzionali**
+## Reti neurali convoluzionali
 
 Ricordiamo che le **[Reti Feed Forward](./../cosa-sono-le-reti-neurali-artificiali/Cosa%20sono%20le%20reti%20neurali%20artificiali.md)** sono modelli di calcolo che utilizzano **neuroni artificiali**, prendendo spunto dal comportamento e dalla composizione del cervello umano, con l’obiettivo di riprodurre le reti neurali biologiche.
 
 Una **rete neurale convoluzionale** è una tipologia di rete neurale che si ispira alla **corteccia visiva**, infatti, proprio come quest’ultima, è costituita da più stadi che hanno diversi compiti da svolgere. È costituita da una serie di livelli: **neuroni di input**, da **livelli di neuroni nascosti o interni,** che grazie alle funzioni di attivazione effettuano i calcoli, e infine da quelli di **output**.
 
-### Q**ual’è la differenza tra le reti convoluzionali e le altre reti?**
+### Qual’è la differenza tra le reti convoluzionali e le altre reti?
 
 I **livelli di convoluzioni o layer convoluzionali,** non sono altro che un’operazione matematica che consiste nel prendere l’elemento che si sta analizzando, in questo caso un’immagine, e, attraverso dei **filtri**, cercare di recepire tutte le **caratteristiche (pattern)** che la contraddistinguono. Ogni livello di neuroni ha ricevuto specifiche **istruzioni** riguardo a quali caratteristiche deve ricercare nel momento del filtraggio, per esempio alcuni livelli estrapolano le linee della silhouette orizzontali, altri quelle diagonali e così via.
 

@@ -1,4 +1,4 @@
-import { allPosts, allTeams } from '@/lib/contentlayer'
+import { allPosts } from '@/lib/contentlayer'
 import { HomePageClient } from '@/components/home/HomePageClient'
 import { PageTransition } from '@/components/ui/PageTransition'
 
@@ -9,16 +9,14 @@ export const revalidate = 86400 // ISR ogni giorno
 export default async function HomePage() {
   const publishedPosts = allPosts.filter(post => post.published !== false)
 
-  // Calculate unique contributors from both Team members and Article authors
-  const teamNames = new Set(allTeams.map(t => t.name?.toLowerCase()))
-  const postAuthors = new Set(publishedPosts.map(p => p.author?.trim()).filter(Boolean))
-
-  // Combine sets to get unique count
-  // Note: This is an approximation. Ideally authors in posts should match team names.
-  // If a post author is not in teamNames (e.g. guest), it adds to the count.
-  const uniqueContributors = new Set([...Array.from(teamNames), ...Array.from(postAuthors).map(a => a?.toLowerCase())])
-  const contributorCount = uniqueContributors.size
-  // const contributorCount = allTeams.length
+  // Calculate unique contributors: only count authors with published articles
+  // This matches the Meet page logic for consistency
+  const uniqueAuthors = new Set(
+    publishedPosts
+      .filter(post => post.author)
+      .map(post => post.author!.trim())
+  )
+  const contributorCount = uniqueAuthors.size
 
   // Get the latest 20 articles for the ticker, sorted by date
   const sevenDaysAgo = new Date()

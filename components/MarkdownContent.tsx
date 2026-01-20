@@ -66,12 +66,12 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
     if (!contentRef.current) return
 
     const tableWrappers = contentRef.current.querySelectorAll('.table-wrapper')
-    
+
     const handleScroll = (wrapper: Element) => {
       const scrollLeft = wrapper.scrollLeft
       const scrollWidth = wrapper.scrollWidth
       const clientWidth = wrapper.clientWidth
-      
+
       // Check if scrolled to the end
       if (scrollLeft + clientWidth >= scrollWidth - 5) {
         wrapper.classList.add('scrolled-end')
@@ -100,7 +100,7 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
   return (
     <div
       ref={contentRef}
-      className={`prose prose-lg max-w-none stai-markdown dark:prose-invert
+      className={`${className} stai-markdown
         prose-table:border-collapse
         prose-th:border
         prose-th:border-[color:var(--stai-border)]
@@ -113,8 +113,7 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
         prose-img:rounded-lg
         prose-img:shadow-lg
         prose-img:w-full
-        prose-img:h-auto
-        ${className}`}
+        prose-img:h-auto`}
       dangerouslySetInnerHTML={{ __html: processedContent }}
     />
   )

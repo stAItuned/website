@@ -1,7 +1,6 @@
 ---
 title: 'Your Data Science Learning Path: A Guide to Becoming a Data Scientist'
 author: Daniele Moltisanti
-topics: []
 target: Newbie
 language: English
 cover: cover.webp
@@ -12,6 +11,9 @@ meta: >-
 date: 2024-10-10T00:00:00.000Z
 published: true
 primaryTopic: ai-career
+topics:
+  - ai-fundamentals
+  - business
 ---
 
 

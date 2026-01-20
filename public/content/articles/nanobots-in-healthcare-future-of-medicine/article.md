@@ -1,7 +1,6 @@
 ---
 title: 'Nanobots in Healthcare: Revolutionizing Medicine at the Nanoscale'
 author: Daniele Moltisanti
-topics: []
 target: Newbie
 language: English
 cover: cover_.webp
@@ -11,7 +10,10 @@ meta: >-
   detection, and micro-surgeries
 date: 2024-11-18T00:00:00.000Z
 published: true
-primaryTopic: business
+primaryTopic: ai-research
+topics:
+  - business
+  - ai-career
 ---
 
 

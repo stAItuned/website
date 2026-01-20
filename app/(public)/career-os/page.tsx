@@ -32,7 +32,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
 const OG_IMAGE = '/assets/career-os/career_os_original.png'
 
 export const metadata: Metadata = {
-    title: 'Career OS — Il Percorso per Diventare GenAI Engineer | stAItuned',
+    title: 'Career OS, Il Percorso per Diventare GenAI Engineer | stAItuned',
     description: 'Smetti di mandare CV a vuoto. Career OS ti prepara per ruoli Applied GenAI in 4-8 settimane: Role-fit, CV ottimizzato, Proof pubblica, Interview prep. Da chi assume, non da career coach.',
     keywords: [
         'GenAI Engineer',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
         locale: 'it_IT',
         url: `${SITE_URL}/career-os`,
         siteName: 'stAItuned',
-        title: 'Career OS — Diventa GenAI Engineer in 4-8 Settimane',
+        title: 'Career OS, Diventa GenAI Engineer in 4-8 Settimane',
         description: 'Il percorso pratico per entrare nel mondo GenAI. Non un corso: un sistema operativo per la tua carriera AI. Costruisci CV, Proof GitHub e Interview Skills.',
         images: [
             {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Career OS — Diventa GenAI Engineer',
+        title: 'Career OS, Diventa GenAI Engineer',
         description: 'Il percorso pratico per ruoli Applied GenAI in Italia. 4-8 settimane per trasformare la tua carriera.',
         images: [OG_IMAGE],
     },
