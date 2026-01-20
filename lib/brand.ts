@@ -8,7 +8,7 @@
 export const BRAND = {
     // Brand Identity
     name: 'stAItuned',
-    tagline: 'Guide e tutorial su AI e GenAI',
+    tagline: 'AI e GenAI concreta per tutti',
     description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
 
     // Site URLs

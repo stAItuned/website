@@ -39,11 +39,11 @@ const montserrat = Montserrat({ subsets: ['latin'] })
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
   title: {
-    default: 'stAItuned | Guide e tutorial su AI e GenAI',
+    default: 'stAItuned | AI e GenAI concreta per tutti',
     template: '%s | stAItuned',
   },
   description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
-  keywords: ['AI', 'intelligenza artificiale', 'PMI', 'machine learning', 'prototipi AI', 'progetti pilota', 'automazione', 'Italia'],
+  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia'],
   authors: [{ name: 'stAItuned' }],
   creator: 'stAItuned',
   publisher: 'stAItuned',
@@ -62,14 +62,14 @@ export const metadata: Metadata = {
     locale: 'it_IT',
     url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
     siteName: 'stAItuned',
-    title: 'stAItuned | Guide e tutorial su AI e GenAI',
+    title: 'stAItuned | AI e GenAI concreta per tutti',
     description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
     images: [
       {
         url: '/api/og',
         width: 1200,
         height: 630,
-        alt: 'stAItuned | Guide e tutorial su AI e GenAI',
+        alt: 'stAItuned | AI e GenAI concreta per tutti',
       },
     ],
   },
