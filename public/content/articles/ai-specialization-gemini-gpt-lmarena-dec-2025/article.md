@@ -13,7 +13,9 @@ meta: >-
 date: 2025-12-16T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
-topics: ["model-architecture", "business", "production"]
+topics:
+  - model-architecture
+  - production
 ---
 
 The AI landscape shifted dramatically in December 2025, revealing a surprising new hierarchy on LMArena's leaderboards. This article is for general tech enthusiasts and professionals keen to understand the latest developments in AI model performance and strategic positioning.

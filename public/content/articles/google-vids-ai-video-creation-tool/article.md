@@ -9,7 +9,7 @@ meta: >-
   designed to simplify and enhance your video production process
 date: 2024-11-10T00:00:00.000Z
 published: true
-primaryTopic: business
+primaryTopic: ai-fundamentals
 topics:
   - ai-research
 ---

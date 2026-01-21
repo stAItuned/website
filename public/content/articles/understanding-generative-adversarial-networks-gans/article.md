@@ -13,7 +13,6 @@ published: true
 primaryTopic: model-architecture
 topics:
   - llm-evaluation
-  - business
 ---
 
 

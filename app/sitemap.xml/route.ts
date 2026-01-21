@@ -63,7 +63,7 @@ export async function GET() {
   const newbieLastmod = getMostRecentPostDate(posts, "newbie");
   const midwayLastmod = getMostRecentPostDate(posts, "midway");
   const expertLastmod = getMostRecentPostDate(posts, "expert");
-  const businessLastmod = getMostRecentPostDate(posts, "business");
+
 
   // Static pages with priority and lastmod
   // Note: changefreq removed as Google ignores it, preferring lastmod
@@ -78,7 +78,6 @@ export async function GET() {
 
     // Secondary pages
     { loc: `${baseUrl}/prodotti/`, priority: "0.8", lastmod: buildDate },
-    // { loc: `${baseUrl}/lab/`, priority: "0.7", lastmod: buildDate },
     { loc: `${baseUrl}/meet/`, priority: "0.7", lastmod: buildDate },
     { loc: `${baseUrl}/author/`, priority: "0.6", lastmod: learnLastmod },
 

@@ -10,7 +10,7 @@ target: Newbie
 language: Italian
 cover: Intelligenza_Artificiale.jpg
 primaryTopic: ai-career
-topics: ["business"]
+topics: []
 ---
 
 

@@ -11,7 +11,6 @@ cover: cover_image.webp
 published: true
 primaryTopic: model-architecture
 topics:
-  - business
   - production
 ---
 

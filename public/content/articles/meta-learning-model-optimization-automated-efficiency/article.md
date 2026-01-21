@@ -11,7 +11,9 @@ meta: >-
 date: 2024-11-20T00:00:00.000Z
 published: true
 primaryTopic: model-architecture
-topics: ["business", "llm-evaluation", "ai-research"]
+topics:
+  - llm-evaluation
+  - ai-research
 ---
 
 

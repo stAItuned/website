@@ -9,8 +9,9 @@ title: Artificial Intelligence in videogames
 language: English
 author: Francesco Di Gangi
 published: true
-primaryTopic: business
-topics: ["ai-research"]
+primaryTopic: ai-fundamentals
+topics:
+  - ai-research
 ---
 
 ## What is Aritificial Intelligence in videogames?

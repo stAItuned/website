@@ -13,7 +13,6 @@ published: true
 primaryTopic: ai-research
 topics:
   - rag
-  - business
 ---
 
 

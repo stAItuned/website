@@ -9,7 +9,9 @@ title: Introduzione alla Linear Regression
 language: Italian
 author: Francesco Di Gangi
 primaryTopic: ai-career
-topics: ["ai-coding", "business", "production"]
+topics:
+  - ai-coding
+  - production
 ---
 
 La regressione lineare studia la relazione fra fenomeni, cercando una funzione che esprima tale relazione. In particolare, studia la relazione della variabile dipendente y, con la variabile indipendente x. Nel caso discusso, parliamo di una regressione **lineare,** ovvero studiamo la relazione attraverso una retta; detta appunto retta di regressione.

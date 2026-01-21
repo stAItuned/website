@@ -11,7 +11,6 @@ author: Francesco Di Gangi
 primaryTopic: ai-fundamentals
 topics:
   - ai-career
-  - business
 ---
 
 La **classificazione** ha l’obiettivo di andare a identificare (e quindi *classificare)* a quale categoria appartiene un elemento che viene dato in input, tutto ciò tramite un algoritmo (o ***modello***) di classificazione che riesce a capire, in maniera automatica, l’appartenenza alla categoria dell’elemento interessato.

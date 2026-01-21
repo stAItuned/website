@@ -11,7 +11,6 @@ language: English
 cover: U-net_architecture.png
 primaryTopic: model-architecture
 topics:
-  - business
   - llm-evaluation
 ---
 

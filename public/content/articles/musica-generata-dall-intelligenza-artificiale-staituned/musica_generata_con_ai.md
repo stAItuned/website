@@ -12,7 +12,6 @@ published: true
 primaryTopic: ai-research
 topics:
   - model-architecture
-  - business
 ---
 
 

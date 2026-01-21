@@ -9,8 +9,11 @@ target: Midway
 language: English
 cover: cover.webp
 published: null
-primaryTopic: business
-topics: ["model-architecture", "llm-evaluation", "ai-research"]
+primaryTopic: ai-fundamentals
+topics:
+  - model-architecture
+  - llm-evaluation
+  - ai-research
 ---
 
 

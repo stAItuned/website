@@ -9,8 +9,11 @@ title: Case Study - The Last of Us
 language: English
 author: Francesco Di Gangi
 published: true
-primaryTopic: business
-topics: ["ai-coding", "model-architecture", "ai-career"]
+primaryTopic: ai-fundamentals
+topics:
+  - ai-coding
+  - model-architecture
+  - ai-career
 ---
 
 ## The Last of Us

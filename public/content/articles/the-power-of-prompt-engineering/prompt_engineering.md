@@ -12,7 +12,6 @@ published: true
 primaryTopic: genai-fundamentals
 topics:
   - model-architecture
-  - business
 ---
 
 

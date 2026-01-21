@@ -9,7 +9,6 @@ cover: cover.jpg
 published: true
 primaryTopic: ai-career
 topics:
-  - business
   - production
 ---
 

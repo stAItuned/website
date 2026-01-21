@@ -9,8 +9,11 @@ title: Case Study - Death Strading
 language: English
 author: Francesco Di Gangi
 published: true
-primaryTopic: business
-topics: ["ai-coding", "model-architecture", "ai-career"]
+primaryTopic: ai-fundamentals
+topics:
+  - ai-coding
+  - model-architecture
+  - ai-career
 ---
 
 ## Death Stranding

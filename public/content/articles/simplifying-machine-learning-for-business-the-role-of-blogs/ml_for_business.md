@@ -10,7 +10,7 @@ target: Midway
 language: English
 cover: cover.webp
 published: true
-primaryTopic: business
+primaryTopic: ai-fundamentals
 topics:
   - ai-career
   - ai-fundamentals

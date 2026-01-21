@@ -12,7 +12,6 @@ cover: cover.jpeg
 published: true
 primaryTopic: ai-fundamentals
 topics:
-  - business
   - ai-research
 ---
 

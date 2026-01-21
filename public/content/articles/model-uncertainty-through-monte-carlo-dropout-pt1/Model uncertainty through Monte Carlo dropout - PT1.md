@@ -10,7 +10,9 @@ language: English
 cover: cover.jpg
 published: true
 primaryTopic: model-architecture
-topics: ["business", "llm-evaluation", "ai-research"]
+topics:
+  - llm-evaluation
+  - ai-research
 ---
 
 This small series of blog-posts aims to explain and illustrate the Monte Carlo Dropout for evaluating the model uncertainty. The first one will investigate the model uncertainty in Deep Learning and how it can be hadled, inspecting pros and cons of different approaches. Then, the **second part** explains, step by step, the pipeline of a practical project (with [code](https://github.com/francescodisalvo05/uncertainty-monte-carlo-dropout)). I hope you'll enjoy them!

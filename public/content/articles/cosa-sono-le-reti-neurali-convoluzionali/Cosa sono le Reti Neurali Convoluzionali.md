@@ -10,7 +10,6 @@ language: Italian
 cover: cover.jpeg
 primaryTopic: model-architecture
 topics:
-  - business
   - production
 ---
 

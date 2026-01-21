@@ -9,8 +9,10 @@ target: Newbie
 language: Italian
 cover: big-data.jpg
 published: true
-primaryTopic: business
-topics: ["ai-career", "production"]
+primaryTopic: ai-fundamentals
+topics:
+  - ai-career
+  - production
 ---
 
 

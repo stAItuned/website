@@ -10,7 +10,9 @@ meta: >-
 date: 2024-11-18T00:00:00.000Z
 published: true
 primaryTopic: ai-coding
-topics: ["model-architecture", "llm-evaluation", "business"]
+topics:
+  - model-architecture
+  - llm-evaluation
 ---
 
 

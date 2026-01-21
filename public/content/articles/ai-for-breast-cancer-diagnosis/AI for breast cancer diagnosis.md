@@ -7,7 +7,7 @@ target: Newbie
 language: English
 cover: cover.webp
 published: true
-primaryTopic: business
+primaryTopic: ai-fundamentals
 topics:
   - ai-research
   - model-architecture

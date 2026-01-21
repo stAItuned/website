@@ -9,7 +9,6 @@ cover: Reti_neurali.jpg
 primaryTopic: model-architecture
 topics:
   - ai-research
-  - business
 ---
 
 

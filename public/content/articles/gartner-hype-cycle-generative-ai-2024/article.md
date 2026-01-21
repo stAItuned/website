@@ -10,7 +10,7 @@ meta: >-
   businesses can leverage these insights to drive innovation and growth
 date: 2024-12-15T00:00:00.000Z
 published: true
-primaryTopic: business
+primaryTopic: ai-fundamentals
 topics:
   - ai-research
   - llm-evaluation

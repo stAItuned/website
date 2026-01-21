@@ -15,7 +15,6 @@ published: true
 primaryTopic: ai-career
 topics:
   - ai-fundamentals
-  - business
 ---
 
 Generative AI can feel like a shortcut: type a prompt, get a polished answer, ship a demo. But real projects don’t reward “cool outputs”. They reward **reliable systems**.

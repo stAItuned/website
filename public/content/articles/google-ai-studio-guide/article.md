@@ -17,7 +17,9 @@ date: 2024-11-05T00:00:00.000Z
 updatedAt: 2025-01-16T00:00:00.000Z
 published: true
 primaryTopic: ai-research
-topics: ["model-architecture", "llm-evaluation", "business"]
+topics:
+  - model-architecture
+  - llm-evaluation
 ---
 
 

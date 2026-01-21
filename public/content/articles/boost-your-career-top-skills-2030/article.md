@@ -13,7 +13,9 @@ meta: >-
 date: 2025-12-08T00:00:00.000Z
 published: true
 primaryTopic: ai-career
-topics: ["model-architecture", "business", "llm-evaluation"]
+topics:
+  - model-architecture
+  - llm-evaluation
 ---
 
 The future of work isn't just about what your team knows now, but how fast they can learn what's next. As 2025 rapidly approaches and 2030 looms, the traditional focus on static skillsets is becoming a strategic liability, not an asset.

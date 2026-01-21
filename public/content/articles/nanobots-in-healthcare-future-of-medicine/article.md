@@ -12,7 +12,6 @@ date: 2024-11-18T00:00:00.000Z
 published: true
 primaryTopic: ai-research
 topics:
-  - business
   - ai-career
 ---
 

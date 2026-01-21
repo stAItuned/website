@@ -9,7 +9,6 @@ title: Introduction to Information Retrieval Systems
 primaryTopic: rag
 topics:
   - ai-fundamentals
-  - business
 ---
 
 ### Essential data structures underlying IR systems

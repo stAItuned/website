@@ -11,7 +11,6 @@ cover: cover.webp
 published: true
 primaryTopic: ai-fundamentals
 topics:
-  - business
   - ai-career
 ---
 

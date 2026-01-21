@@ -11,7 +11,6 @@ cover: solution-now-reti-neurali.jpg
 primaryTopic: ai-fundamentals
 topics:
   - model-architecture
-  - business
 ---
 
 

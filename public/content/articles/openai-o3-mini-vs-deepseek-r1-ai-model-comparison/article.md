@@ -18,7 +18,6 @@ published: true
 primaryTopic: llm-evaluation
 topics:
   - model-architecture
-  - business
 ---
 
 

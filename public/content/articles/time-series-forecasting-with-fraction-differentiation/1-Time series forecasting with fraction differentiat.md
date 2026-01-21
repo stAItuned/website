@@ -9,8 +9,11 @@ meta: >-
 target: Expert
 title: Fractional Differentiation in time series
 published: true
-primaryTopic: business
-topics: ["ai-coding", "model-architecture", "ai-career"]
+primaryTopic: ai-fundamentals
+topics:
+  - ai-coding
+  - model-architecture
+  - ai-career
 ---
 
 

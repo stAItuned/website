@@ -15,7 +15,9 @@ date: 2025-08-28T00:00:00.000Z
 updatedAt: 2025-01-16T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
-topics: ["business", "production", "rag"]
+topics:
+  - production
+  - rag
 ---
 
 > **It’s 6:40 p.m. and your release train leaves tomorrow.**

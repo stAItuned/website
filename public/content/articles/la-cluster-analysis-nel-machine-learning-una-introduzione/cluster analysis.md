@@ -9,7 +9,9 @@ meta: >-
 target: Newbie
 title: La Cluster Analysis nel Machine Learning - Introduzione
 primaryTopic: ai-career
-topics: ["rag", "business", "production"]
+topics:
+  - rag
+  - production
 ---
 
 

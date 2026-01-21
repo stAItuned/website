@@ -13,7 +13,6 @@ published: true
 primaryTopic: agents
 topics:
   - ai-fundamentals
-  - business
 ---
 
 ## Agentic AI vs. Traditional AI: Key Differences, Benefits, and Risks

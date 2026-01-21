@@ -11,7 +11,6 @@ date: 2023-04-12T00:00:00.000Z
 published: true
 primaryTopic: model-architecture
 topics:
-  - business
   - production
 ---
 

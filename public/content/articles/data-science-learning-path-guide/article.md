@@ -13,7 +13,6 @@ published: true
 primaryTopic: ai-career
 topics:
   - ai-fundamentals
-  - business
 ---
 
 
