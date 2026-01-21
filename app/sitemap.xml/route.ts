@@ -125,8 +125,12 @@ export async function GET() {
         : null;
 
       // hreflang for multilingual content
+      // Note: Our IT/EN articles are separate content (not translations), 
+      // so each article only declares its own language + x-default
+      const langCode = post.language === "Italian" ? "it" : "en";
       const hreflang = post.language
-        ? `<xhtml:link rel="alternate" hreflang="${post.language === "Italian" ? "it" : "en"}" href="${escapeXml(url)}" />`
+        ? `<xhtml:link rel="alternate" hreflang="${langCode}" href="${escapeXml(url)}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(url)}" />`
         : "";
 
       const image = coverUrl

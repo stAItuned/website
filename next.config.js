@@ -149,6 +149,73 @@ const nextConfig = {
   // Add cache headers for API routes and static assets
   async headers() {
     return [
+      // SEO: Fallback noindex for URLs with internal RSC parameters
+      // This is a safety net in case the middleware redirect fails
+      {
+        source: '/:path*',
+        has: [{ type: 'query', key: '_rsc' }],
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, follow' },
+        ],
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'query', key: '_rsc_d' }],
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, follow' },
+        ],
+      },
+      // SEO: noindex for private/auth pages
+      {
+        source: '/signin',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/bookmarks',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/account/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/profile',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      // SEO: noindex for dev/debug pages (should not be accessible in production)
+      {
+        source: '/debug',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/test-firebase',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/article-creator',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      // SEO: noindex for demo pages (internal showcases)
+      {
+        source: '/demo/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
       {
         source: '/api/analytics',
         headers: [

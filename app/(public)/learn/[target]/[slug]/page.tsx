@@ -78,15 +78,21 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
 
   console.log(`[generateMetadata] Article: ${article.slug}, OG Image: ${ogImage}, Type: ${imageType}`);
 
+  // Determine locale based on article language
+  const ogLocale = article.language === 'Italian' ? 'it_IT' : 'en_US';
+
   return {
     title: article.seoTitle ?? article.title,
     description: article.seoDescription ?? article.meta ?? article.title,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      // Note: hreflang not needed since IT/EN articles are separate content, not translations
+    },
     openGraph: {
       url,
       type: 'article',
       siteName: 'stAItuned',
-      locale: 'en_US',
+      locale: ogLocale,
       title: article.seoTitle ?? article.title,
       description: article.seoDescription ?? article.meta ?? article.title,
       publishedTime: article.date,
