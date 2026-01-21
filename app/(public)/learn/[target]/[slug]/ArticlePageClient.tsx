@@ -18,7 +18,7 @@ import { ContributorCTA } from '@/components/ui/ContributorCTA'
 import { PWAInstallInline, SaveForOfflineButton } from '@/components/pwa'
 import { MobileActionBar } from '@/components/ui/MobileActionBar'
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
-import { QuickFeedbackButton } from '@/components/ui/QuickFeedbackButton'
+
 import { ContinueReadingPrompt } from '@/components/ui/ContinueReadingPrompt'
 import { SwipeNavigation } from '@/components/ui/SwipeNavigation'
 import { FloatingSectionIndicator } from '@/components/ui/FloatingSectionIndicator'
@@ -541,14 +541,14 @@ export default function ArticlePageClient({
         {/* Mobile TOC Modal - Slide up from bottom */}
         {mounted && !isLarge && (
           <div
-            className={`fixed inset-0 z-50 flex items-end justify-center transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/50 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+            className={`fixed inset-0 z-[60] flex items-end justify-center transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/50 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
             onClick={() => setShowTocModal(false)}
+            onTouchStart={handleTocTouchStart}
+            onTouchMove={handleTocTouchMove}
           >
             <div
               className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-6 overflow-y-auto transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
               onClick={e => e.stopPropagation()}
-              onTouchStart={handleTocTouchStart}
-              onTouchMove={handleTocTouchMove}
             >
               {/* Handle bar */}
               <div className="flex justify-center mb-4">
@@ -978,10 +978,7 @@ export default function ArticlePageClient({
             </SwipeNavigation>
 
             {/* Quick Feedback Button - Outside SwipeNavigation to preserve fixed positioning */}
-            <QuickFeedbackButton
-              articleSlug={article.slug}
-              articleTitle={article.title}
-            />
+
 
             {/* Continue Reading Prompt */}
             <ContinueReadingPrompt

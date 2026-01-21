@@ -169,7 +169,7 @@ export default function PromoCodeGate() {
         return (
             <>
                 {/* Compact Success Banner */}
-                <div className="max-w-xl mx-auto -mt-8 mb-10 relative z-10">
+                <div className="max-w-xl mx-auto mb-10 relative z-10">
                     <div className="bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800 p-4 text-center">
                         <div className="inline-flex items-center gap-2 text-green-700 dark:text-green-400 font-medium">
                             <span>✓</span>
@@ -193,7 +193,7 @@ export default function PromoCodeGate() {
             currency: 'EUR',
             intent: 'capture'
         }}>
-            <div className="max-w-2xl mx-auto -mt-10 relative z-10">
+            <div className="max-w-2xl mx-auto relative z-10">
                 {/* Main Card */}
                 <div className="bg-white dark:bg-[#151925] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
 
@@ -447,35 +447,6 @@ export default function PromoCodeGate() {
                     </div>
                 </div>
 
-                {/* How It Works */}
-                <div className="mt-10 text-center">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-6">
-                        Come funziona
-                    </p>
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 text-lg">
-                                1️⃣
-                            </div>
-                            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Rispondi</p>
-                            <p className="text-xs text-slate-400">20 domande · 5 min</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 text-lg">
-                                2️⃣
-                            </div>
-                            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Ottieni</p>
-                            <p className="text-xs text-slate-400">Score + archetype</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 text-lg">
-                                3️⃣
-                            </div>
-                            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Agisci</p>
-                            <p className="text-xs text-slate-400">Piano 7 giorni</p>
-                        </div>
-                    </div>
-                </div>
 
                 {/* What You Get */}
                 <div className="mt-10 p-6 bg-white dark:bg-[#151925] rounded-xl border border-slate-200 dark:border-slate-800">

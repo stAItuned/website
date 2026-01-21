@@ -62,7 +62,7 @@ export default function AuditLoading() {
                             {LOADING_STEPS[currentStep].text}
                         </h3>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Stiamo usando Gemini 3 Pro per analizzare il tuo profilo.
+                            Stiamo costruendo il tuo piano su misura unendo l'esperienza dei nostri Manager AI alla potenza di Gemini 3 Pro.
                             <br />
                             Manca poco...
                         </p>

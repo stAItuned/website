@@ -113,7 +113,6 @@ export function MobileActionBar({
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
-  const [showTextSizeMenu, setShowTextSizeMenu] = useState(false)
   const { user, loading } = useAuth()
   const haptics = useHaptics()
 
@@ -246,19 +245,7 @@ export function MobileActionBar({
     setShowShareMenu(false)
   }
 
-  const handleTextSizeChange = (size: 'small' | 'normal' | 'large') => {
-    haptics.light()
-    if (onTextSizeChange) {
-      onTextSizeChange(size)
-      event({
-        action: 'mobile_text_size_change',
-        category: 'accessibility',
-        label: size,
-        value: size === 'small' ? 1 : size === 'normal' ? 2 : 3
-      })
-    }
-    setShowTextSizeMenu(false)
-  }
+
 
   const handleFontFamilyChange = (font: 'sans' | 'serif') => {
     haptics.light()
@@ -288,86 +275,10 @@ export function MobileActionBar({
 
   return (
     <>
-      {/* Text Size Menu */}
-      {showTextSizeMenu && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm animate-fade-in"
-          onClick={() => setShowTextSizeMenu(false)}
-        >
-          <div
-            className="absolute bottom-20 left-4 right-4 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 animate-slide-up"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Text Size</h3>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={() => handleTextSizeChange('small')}
-                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${currentTextSize === 'small'
-                  ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                  : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
-                  }`}
-              >
-                <span className="text-sm font-medium">A-</span>
-                <span className="text-sm">Small</span>
-              </button>
-
-              <button
-                onClick={() => handleTextSizeChange('normal')}
-                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${currentTextSize === 'normal'
-                  ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                  : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
-                  }`}
-              >
-                <span className="text-base font-medium">A</span>
-                <span className="text-sm">Normal</span>
-              </button>
-
-              <button
-                onClick={() => handleTextSizeChange('large')}
-                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${currentTextSize === 'large'
-                  ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                  : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
-                  }`}
-              >
-                <span className="text-lg font-medium">A+</span>
-                <span className="text-sm">Large</span>
-              </button>
-            </div>
-
-            {/* Font Family Toggle */}
-            {onFontFamilyChange && (
-              <>
-                <h3 className="font-semibold text-gray-900 dark:text-white mt-4 mb-3">Font Style</h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleFontFamilyChange('sans')}
-                    className={`flex-1 p-3 rounded-xl transition-colors font-sans ${currentFontFamily === 'sans'
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                      : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
-                      }`}
-                  >
-                    <span className="text-sm font-medium">Sans-serif</span>
-                  </button>
-                  <button
-                    onClick={() => handleFontFamilyChange('serif')}
-                    className={`flex-1 p-3 rounded-xl transition-colors font-serif ${currentFontFamily === 'serif'
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                      : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600'
-                      }`}
-                  >
-                    <span className="text-sm font-medium">Serif</span>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Share Menu Overlay */}
       {showShareMenu && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm animate-fade-in"
           onClick={() => setShowShareMenu(false)}
         >
           <div
@@ -416,21 +327,22 @@ export function MobileActionBar({
                 )}
               </button>
             </div>
+
           </div>
         </div>
       )}
 
       {/* Mobile Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
         {/* Auth Required Prompt */}
         {showAuthPrompt && !user && (
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 px-4 py-3 bg-primary-600 text-white text-sm rounded-lg shadow-2xl z-50 whitespace-nowrap animate-slide-up">
+          <div className="absolute bottom-full left-4 right-4 mx-auto max-w-xs mb-4 px-4 py-3 bg-primary-600 text-white text-sm rounded-lg shadow-2xl z-50 text-center animate-slide-up">
             <div className="font-semibold mb-1">Sign in required</div>
             <div className="text-primary-100 text-xs">Please sign in to bookmark articles</div>
           </div>
         )}
 
-        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-slate-700 shadow-2xl">
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-slate-700 shadow-2xl pb-[env(safe-area-inset-bottom)]">
           {/* Progress Bar */}
           <div className="h-1 bg-gray-200 dark:bg-slate-700">
             <div
@@ -503,25 +415,6 @@ export function MobileActionBar({
               </svg>
               <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Share</span>
             </button>
-
-            {/* Text Size Button */}
-            {onTextSizeChange && (
-              <button
-                onClick={() => setShowTextSizeMenu(!showTextSizeMenu)}
-                className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                aria-label="Change text size"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-700 dark:text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h8m-8 6h16" />
-                </svg>
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Size</span>
-              </button>
-            )}
 
             {/* Focus Mode Button */}
             {onFocusModeToggle && (

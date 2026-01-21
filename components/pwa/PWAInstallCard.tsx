@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePWADetection } from '@/hooks/usePWADetection'
 import { usePWAInstall, dismissPWAInstall, isFirstLearnVisit } from '@/hooks/usePWAInstall'
+import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // Inline SVG Icons
 const XIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
@@ -50,6 +51,9 @@ interface PWAInstallCardProps {
 export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardProps) {
     const { isInBrowser } = usePWADetection()
     const { isPromptReady, promptInstall, isInstalled } = usePWAInstall()
+    const { locale } = useLearnLocale()
+    const t = homeTranslations[locale].pwa
+
     const [isVisible, setIsVisible] = useState(false)
     const [isFirstVisit, setIsFirstVisit] = useState(false)
     const [isAnimating, setIsAnimating] = useState(false)
@@ -87,9 +91,9 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
     if (!isAnimating) return null
 
     const benefits = [
-        { Icon: WifiIcon, text: 'Leggi articoli offline' },
-        { Icon: ZapIcon, text: 'Caricamento istantaneo' },
-        { Icon: HomeIcon, text: 'Accesso dalla home' },
+        { Icon: WifiIcon, text: t.offline },
+        { Icon: ZapIcon, text: t.fast },
+        { Icon: HomeIcon, text: t.home },
     ]
 
     return (
@@ -136,8 +140,8 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
                                 <SmartphoneIcon className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-white text-lg">stAItuned Learn</h3>
-                                <p className="text-blue-100 text-sm">La tua app per imparare l'AI</p>
+                                <h3 className="font-bold text-white text-lg">{t.title}</h3>
+                                <p className="text-blue-100 text-sm">{t.subtitle}</p>
                             </div>
                         </div>
                     </div>
@@ -167,7 +171,7 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
                 transition-colors
               "
                         >
-                            Forse dopo
+                            {t.dismiss}
                         </button>
                         <button
                             onClick={handleInstall}
@@ -179,7 +183,7 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
                 transition-all shadow-md hover:shadow-lg
               "
                         >
-                            Installa ora
+                            {t.install}
                         </button>
                     </div>
                 </div>

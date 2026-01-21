@@ -131,7 +131,7 @@ export function Header() {
             />
           </Link>
 
-          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-2 lg:gap-3 rounded-full px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur transition-all duration-400">
+          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-1 sm:gap-2 lg:gap-3 rounded-full px-1.5 sm:px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur transition-all duration-400">
             <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
               <ul className="flex items-center space-x-2">
                 {navigation.map((item) => {

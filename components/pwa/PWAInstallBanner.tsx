@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePWADetection } from '@/hooks/usePWADetection'
 import { usePWAInstall, dismissPWAInstall } from '@/hooks/usePWAInstall'
+import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // Inline SVG Icons
 const XIcon = () => (
@@ -27,6 +28,9 @@ interface PWAInstallBannerProps {
 export function PWAInstallBanner({ className = '' }: PWAInstallBannerProps) {
     const { isInBrowser } = usePWADetection()
     const { isPromptReady, promptInstall, wasDismissed, isInstalled } = usePWAInstall()
+    const { locale } = useLearnLocale()
+    const t = homeTranslations[locale].pwa
+
     const [isDismissed, setIsDismissed] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
 
@@ -69,9 +73,9 @@ export function PWAInstallBanner({ className = '' }: PWAInstallBannerProps) {
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                     <span className="text-xl" role="img" aria-label="smartphone">📱</span>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0">
-                        <span className="font-semibold text-sm whitespace-nowrap">Installa l'App</span>
+                        <span className="font-semibold text-sm whitespace-nowrap">{t.title}</span>
                         <span className="text-xs sm:text-sm opacity-90 truncate hidden sm:inline">
-                            Leggi offline • Più veloce • Esperienza nativa
+                            {t.subtitle}
                         </span>
                     </div>
                 </div>
@@ -86,7 +90,7 @@ export function PWAInstallBanner({ className = '' }: PWAInstallBannerProps) {
               whitespace-nowrap
             "
                     >
-                        Installa
+                        {t.install}
                     </button>
 
                     <button

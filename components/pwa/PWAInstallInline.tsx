@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { usePWADetection } from '@/hooks/usePWADetection'
 import { usePWAInstall } from '@/hooks/usePWAInstall'
+import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // Inline SVG Icons
 const SmartphoneIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
@@ -50,6 +51,9 @@ interface PWAInstallInlineProps {
 export function PWAInstallInline({ className = '', variant = 'default' }: PWAInstallInlineProps) {
     const { isInBrowser } = usePWADetection()
     const { isPromptReady, promptInstall, isInstalled } = usePWAInstall()
+    const { locale } = useLearnLocale()
+    const t = homeTranslations[locale].pwa
+
     const [isHidden, setIsHidden] = useState(false)
 
     // Don't render if already installed, in PWA mode, or hidden
@@ -63,9 +67,9 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
     }
 
     const benefits = [
-        { Icon: WifiOffIcon, label: 'Read Offline', description: 'Access articles without internet' },
-        { Icon: ZapIcon, label: 'Lightning Fast', description: 'Instant loading experience' },
-        { Icon: BookOpenIcon, label: 'Native Feel', description: 'Just like a real app' },
+        { Icon: WifiOffIcon, label: t.offline, description: t.offline_desc },
+        { Icon: ZapIcon, label: t.fast, description: t.fast_desc },
+        { Icon: BookOpenIcon, label: t.native, description: t.native_desc },
     ]
 
     // Compact variant - for sidebars or smaller spaces
@@ -86,10 +90,10 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                     </div>
                     <div>
                         <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
-                            Take stAI tuned on mobile
+                            {t.title}
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
-                            Install for offline reading
+                            {t.subtitle}
                         </p>
                     </div>
                 </div>
@@ -104,7 +108,7 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                             : 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 cursor-default'}
             `}
                 >
-                    Install
+                    {t.install}
                 </button>
             </div>
         )
@@ -139,14 +143,14 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/30">
-                                        Free App
+                                        {t.free_app}
                                     </span>
                                 </div>
                                 <h3 className="text-2xl lg:text-3xl font-bold text-white">
                                     stAItuned Learn
                                 </h3>
                                 <p className="text-blue-200 text-sm lg:text-base mt-1">
-                                    Your pocket AI learning companion
+                                    {t.app_label}
                                 </p>
                             </div>
                         </div>
@@ -164,7 +168,7 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                 "
                             >
                                 <DownloadIcon className="w-5 h-5 group-hover:animate-bounce" />
-                                Add to Home Screen
+                                {t.install}
                             </button>
                         )}
                     </div>
@@ -197,7 +201,7 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
 
                     {!isPromptReady && (
                         <p className="text-center text-xs text-blue-200/60 mt-6">
-                            Open in Chrome or Safari to install the app
+                            {t.browser_hint}
                         </p>
                     )}
                 </div>
@@ -221,10 +225,10 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                 </div>
                 <div>
                     <h3 className="font-bold text-slate-800 dark:text-white text-lg mb-1">
-                        Take your learning mobile
+                        {t.title}
                     </h3>
                     <p className="text-slate-600 dark:text-slate-400 text-sm">
-                        Install stAItuned Learn and access content anywhere, even offline.
+                        {t.subtitle}
                     </p>
                 </div>
             </div>
@@ -254,13 +258,13 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
             transition-all shadow-md hover:shadow-lg
           "
                 >
-                    Install Free App
+                    {t.install}
                 </button>
             )}
 
             {!isPromptReady && (
                 <p className="text-center text-xs text-slate-500 dark:text-slate-400">
-                    Open in Chrome or Safari to install the app
+                    {t.browser_hint}
                 </p>
             )}
         </div>

@@ -101,6 +101,22 @@ export interface HomeTranslations {
         termsConditions: string
         benefits: string[]
     }
+    pwa: {
+        title: string
+        subtitle: string
+        install: string
+        dismiss: string
+        offline: string
+        offline_desc: string
+        fast: string
+        fast_desc: string
+        home: string
+        native: string
+        native_desc: string
+        app_label: string
+        free_app: string
+        browser_hint: string
+    }
     meet: {
         hero: {
             badge: string
@@ -221,9 +237,9 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             wantDeeper: "Vuoi approfondire un percorso specifico?"
         },
         leadMagnet: {
-            title: "Non sai quale ruolo AI fa per te?",
-            description: "Smetti di tirare a indovinare. Fai il **Role Fit Audit**: 15 domande per scoprire il tuo percorso ideale in ambito AI/GenAI",
-            cta: "Fai l'Audit Gratuito",
+            title: "Qual è il mio fit GenAI?",
+            description: "Smetti di tirare a indovinare. In 5 minuti ottieni il tuo **Score 0-100**, i **gap chiari** e il tuo **piano d'azione di 7 giorni**.",
+            cta: "Scopri il mio fit",
             disclaimer: "Riceverai un report PDF personalizzato con il tuo piano d'azione."
         },
         intermezzo: {
@@ -251,6 +267,22 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 "Strategie di carriera per AI Engineers",
                 "Casi studio reali di implementazione"
             ]
+        },
+        pwa: {
+            title: "Porta stAI tuned su mobile",
+            subtitle: "Installa l'app per leggere offline",
+            install: "Installa",
+            dismiss: "Forse dopo",
+            offline: "Leggi offline",
+            offline_desc: "Accedi agli articoli senza internet",
+            fast: "Velocità estrema",
+            fast_desc: "Caricamento istantaneo",
+            home: "Accesso dalla home",
+            native: "Esperienza Nativa",
+            native_desc: "Proprio come un'app reale",
+            app_label: "La tua app per imparare l'AI",
+            free_app: "App Gratuita",
+            browser_hint: "Apri in Chrome o Safari per installare l'app"
         },
         meet: {
             hero: {
@@ -384,9 +416,9 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             wantDeeper: "Want to go deep on a specific path?"
         },
         leadMagnet: {
-            title: "Not sure which AI role fits you?",
-            description: "Stop guessing. Take the **Role Fit Audit**: 15 questions to find your ideal path among AI/GenAI roles",
-            cta: "Start Free Audit",
+            title: "What's your GenAI fit?",
+            description: "Stop guessing. In 5 minutes get your **0-100 Score**, clear **skills gaps**, and your **7-day action plan**.",
+            cta: "Discover my fit",
             disclaimer: "You'll receive a personalized PDF report with your action plan."
         },
         intermezzo: {
@@ -414,6 +446,22 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 "Career strategies for AI Engineers",
                 "Real implementation case studies"
             ]
+        },
+        pwa: {
+            title: "Take stAI tuned on mobile",
+            subtitle: "Install for offline reading",
+            install: "Install",
+            dismiss: "Maybe later",
+            offline: "Read Offline",
+            offline_desc: "Access articles without internet",
+            fast: "Lightning Fast",
+            fast_desc: "Instant loading experience",
+            home: "Home screen access",
+            native: "Native Feel",
+            native_desc: "Just like a real app",
+            app_label: "Your pocket AI learning companion",
+            free_app: "Free App",
+            browser_hint: "Open in Chrome or Safari to install the app"
         },
         meet: {
             hero: {

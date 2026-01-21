@@ -5,15 +5,46 @@ import PromoCodeGate from './components/PromoCodeGate'
 // Metadata
 // =============================================================================
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
+
 export const metadata: Metadata = {
-    title: 'Role Fit Audit | Il tuo profilo GenAI è troppo generico | stAItuned',
+    title: 'Role Fit Audit | Scopri il tuo ruolo GenAI ideale | stAItuned',
     description:
-        'Il tuo profilo GenAI è indistinguibile. Fai il Role Fit Audit (5 min): ruolo consigliato, score su 4 dimensioni, gap analysis e piano 7 giorni.',
+        'PwC 2025: le skill AI specializzate valgono un +56% di salario. Fai l\'audit (5 min) per scoprire il tuo ranking e colmare i gap tecnici.',
+    keywords: [
+        'Role Fit Audit',
+        'test carriera AI',
+        'profilo GenAI',
+        'assessment AI Italia',
+        'carriera intelligenza artificiale',
+        'ruolo AI',
+        'GenAI Engineer Italia',
+        'cv AI',
+        'lavoro AI Italia',
+    ],
     openGraph: {
-        title: 'Role Fit Audit | Il tuo profilo GenAI è troppo generico',
-        description:
-            'Fai il Role Fit Audit (5 min): ruolo consigliato, score su 4 dimensioni, gap e piano 7 giorni.',
         type: 'website',
+        locale: 'it_IT',
+        url: `${SITE_URL}/role-fit-audit`,
+        siteName: 'stAItuned',
+        title: 'Role Fit Audit | Scopri il tuo ruolo GenAI ideale',
+        description:
+            'PwC 2025: +56% di salario per skill AI specializzate. Scopri il tuo ranking e colma i gap in 5 minuti.',
+        images: [
+            {
+                url: '/assets/role-fit-audit/role-fit-audit-logo.png',
+                width: 1200,
+                height: 630,
+                alt: 'Role Fit Audit - Scopri il tuo ruolo GenAI ideale',
+            },
+        ],
+    },
+    alternates: {
+        canonical: `${SITE_URL}/role-fit-audit`,
+    },
+    robots: {
+        index: true,
+        follow: true,
     },
 }
 
@@ -25,6 +56,10 @@ import { CareerOSProvider } from '../career-os/context/CareerOSContext'
 import AuditModal from '../career-os/components/modals/AuditModal'
 import { Suspense } from 'react'
 import AuditLoading from './components/AuditLoading'
+
+import { RoleFitHowItWorks } from './_components/RoleFitHowItWorks'
+import { RoleFitMiniFAQ } from './_components/RoleFitMiniFAQ'
+import { MarketEvidence } from './_components/MarketEvidence'
 
 export default function RoleFitAuditPage() {
     return (
@@ -59,57 +94,53 @@ export default function RoleFitAuditPage() {
                         </h1>
 
                         {/* Solution Promise */}
-                        <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-8">
-                            Fai il <strong className="text-white">Role Fit Audit</strong> (5 min):
-                            ruolo consigliato + score su 4 dimensioni + gap + piano 7 giorni.
+                        <p className="text-lg md:text-xl text-slate-300 mx-auto mb-8" style={{ maxWidth: '45rem' }}>
+                            Non è solo una tua impressione: il mercato è diventato <strong className="text-white">iperselettivo</strong>.
+                            <br className="hidden md:block" />
+                            Smetti di essere generico.
+                            <br></br> Scopri il tuo <strong className="text-white">Vero Ranking</strong> e ottieni il piano per colmare i gap.
                         </p>
 
-                        {/* Outcome Bullets */}
-                        <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 text-left max-w-2xl mx-auto mb-8">
-                            <div className="flex items-start gap-3">
-                                <span className="text-[#FFF272] text-lg mt-0.5">✓</span>
-                                <span className="text-slate-200">
-                                    <strong className="text-white">Capisci</strong> che ruolo GenAI è realistico per te ora
-                                </span>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <span className="text-[#FFF272] text-lg mt-0.5">✓</span>
-                                <span className="text-slate-200">
-                                    <strong className="text-white">Sai</strong> cosa ti manca (gap chiari, non teoria)
-                                </span>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <span className="text-[#FFF272] text-lg mt-0.5">✓</span>
-                                <span className="text-slate-200">
-                                    <strong className="text-white">Hai</strong> un piano pratico per i primi colloqui
-                                </span>
-                            </div>
+                        {/* Market Evidence "Triangle of Truth" */}
+                        <MarketEvidence />
+
+                        {/* CTA */}
+                        <div className="flex justify-center mb-10">
+                            <a
+                                href="#start-audit"
+                                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-red-500 to-rose-600 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:from-red-400 hover:to-rose-500 active:scale-95 ring-4 ring-red-500/20"
+                            >
+                                Qual è il mio fit GenAI? →
+                            </a>
                         </div>
 
-                        {/* Trust Signals with enhanced styling */}
-                        <div className="flex flex-wrap justify-center gap-6 text-xs text-slate-400 border-t border-slate-700/50 pt-6 max-w-xl mx-auto">
+                        {/* Trust Signals - aligned with CTA promise */}
+                        <div className="flex flex-wrap justify-center gap-4 text-xs text-slate-400 border-t border-slate-700/50 pt-6 max-w-2xl mx-auto">
                             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                                <span>⏱</span> 5 minuti
+                                <span>🎯</span> Score da 0-100
                             </span>
                             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                                <span>🔒</span> Nessun spam
+                                <span>�</span> Gap chiari
                             </span>
                             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                                <span>💡</span> AI-Powered Analysis
+                                <span>�</span> Piano 7 giorni
+                            </span>
+                            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                                <span>⏱</span> Solo 5 min
                             </span>
                         </div>
                     </div>
                 </section>
 
-
+                <RoleFitHowItWorks />
 
                 {/* Main Content with Promo Code Gate */}
-                <section className="py-12 md:py-16 px-4">
+                <section id="start-audit" className="py-12 md:py-16 px-4">
                     <Suspense fallback={<AuditLoading />}>
                         <PromoCodeGate />
                     </Suspense>
-                </section>
-            </main>
+                    <RoleFitMiniFAQ />
+                </section>            </main>
             <AuditModal />
         </CareerOSProvider>
     )
