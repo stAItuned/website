@@ -10,7 +10,7 @@ meta: >-
   detection, and micro-surgeries
 date: 2024-11-18T00:00:00.000Z
 published: true
-primaryTopic: ai-research
+primaryTopic: case-studies
 topics:
   - ai-career
 ---

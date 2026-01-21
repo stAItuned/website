@@ -9,7 +9,7 @@ meta: >-
 target: Expert
 language: English
 cover: U-net_architecture.png
-primaryTopic: model-architecture
+primaryTopic: case-studies
 topics:
   - llm-evaluation
 ---

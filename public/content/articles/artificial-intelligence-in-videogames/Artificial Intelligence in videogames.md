@@ -9,7 +9,7 @@ title: Artificial Intelligence in videogames
 language: English
 author: Francesco Di Gangi
 published: true
-primaryTopic: ai-fundamentals
+primaryTopic: case-studies
 topics:
   - ai-research
 ---

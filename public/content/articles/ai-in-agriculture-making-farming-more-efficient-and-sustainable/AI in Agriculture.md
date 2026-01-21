@@ -10,7 +10,7 @@ target: Newbie
 language: English
 cover: cover.webp
 published: null
-primaryTopic: ai-fundamentals
+primaryTopic: case-studies
 topics:
   - ai-research
   - production

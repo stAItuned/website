@@ -9,7 +9,7 @@ title: Case Study - Death Strading
 language: English
 author: Francesco Di Gangi
 published: true
-primaryTopic: ai-fundamentals
+primaryTopic: case-studies
 topics:
   - ai-coding
   - model-architecture

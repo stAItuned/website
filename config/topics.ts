@@ -97,13 +97,13 @@ export const topicHubs: TopicHub[] = [
         category: 'career'
     },
     {
-        slug: 'business',
-        name: 'AI for Business',
-        description: 'Strategic application of AI for companies and decision makers.',
-        icon: '💼',
-        colorFrom: '#64748b', // slate-500
-        colorTo: '#52525b',   // zinc-600
-        category: 'career'
+        slug: 'case-studies',
+        name: 'Case Studies & Industry',
+        description: 'Real-world applications of AI: from healthcare to gaming, finance, and beyond.',
+        icon: '🌍',
+        colorFrom: '#0ea5e9', // sky-500
+        colorTo: '#0284c7',   // sky-600
+        category: 'applications'
     },
 
     // === OPERATIONS ===

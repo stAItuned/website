@@ -9,7 +9,7 @@ target: Newbie
 language: Italian
 cover: Musica_generata_dallIntelligenza_Artificiale.webp
 published: true
-primaryTopic: ai-research
+primaryTopic: case-studies
 topics:
   - model-architecture
 ---

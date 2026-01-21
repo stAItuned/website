@@ -9,7 +9,7 @@ meta: >-
   human translations with contextual accuracy and style flexibility. Learn more!
 date: 2024-11-18T00:00:00.000Z
 published: true
-primaryTopic: ai-coding
+primaryTopic: case-studies
 topics:
   - model-architecture
   - llm-evaluation
