@@ -1,4 +1,28 @@
 User-agent: *
 Allow: /
 
+# Block private/auth pages (user-specific content)
+Disallow: /signin
+Disallow: /bookmarks
+Disallow: /account/
+Disallow: /profile
+
+# Block dev/debug pages (should not be in production, but safety first)
+Disallow: /debug
+Disallow: /test-firebase
+Disallow: /article-creator
+
+# Block demo/internal pages
+Disallow: /demo/
+
+# SEO Fix for RSC URL Duplication (Phase 1 - Index Cleanup)
+# The URLs with ?_rsc= are protected by:
+#   1. Middleware redirect 308 (primary)
+#   2. X-Robots-Tag: noindex, follow (fallback)
+#
+# Phase 2 TODO: Once Search Console shows no more _rsc URLs indexed,
+# uncomment these lines to reduce crawl waste:
+# Disallow: /*?_rsc=
+# Disallow: /*?*_rsc=
+
 Sitemap: https://staituned.com/sitemap.xml
