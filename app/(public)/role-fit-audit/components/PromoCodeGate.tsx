@@ -6,6 +6,8 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import RoleFitAuditForm from './RoleFitAuditForm'
 import { trackPurchase, trackRoleFitAuditPurchase } from '@/lib/analytics/trackEvent'
 
+import { AUDIT_CONFIG } from '../auditConfig'
+
 // =============================================================================
 // Configuration
 // =============================================================================
@@ -15,12 +17,6 @@ import { trackPurchase, trackRoleFitAuditPurchase } from '@/lib/analytics/trackE
  * All codes are case-insensitive
  */
 const VALID_PROMO_CODES = ['GENAIAUDIT', 'GENAI0', 'GENAI2026', 'STAITUNED', 'FREE100']
-
-/**
- * Default price for the audit (in EUR)
- */
-const AUDIT_PRICE = '2,99'
-const AUDIT_ORIGINAL_PRICE = '19,90'
 
 /**
  * PayPal Client ID
@@ -122,21 +118,22 @@ export default function PromoCodeGate() {
     }
 
     const handleStart = () => {
-        if (promoApplied) {
+        // Allow start if promo applied OR if price is free (0)
+        if (promoApplied || AUDIT_CONFIG.price === 0) {
             // Track free purchase (Use custom ID for deduplication)
-            const transactionId = `FREE_${promoCode}_${Date.now()}`
+            const transactionId = `FREE_${promoCode || 'NO_CODE'}_${Date.now()}`
             trackPurchase({
                 transactionId,
                 value: 0,
-                currency: 'EUR',
-                coupon: promoCode,
+                currency: AUDIT_CONFIG.currency,
+                coupon: promoCode || 'FREE_OFFER',
                 items: [
                     {
                         item_id: 'audit_genai',
                         item_name: 'Role Fit Audit',
                         price: 0,
-                        discount: parseFloat(AUDIT_PRICE.replace(',', '.')),
-                        coupon: promoCode,
+                        discount: AUDIT_CONFIG.originalPrice,
+                        coupon: promoCode || 'FREE_OFFER',
                         quantity: 1
                     }
                 ]
@@ -152,8 +149,8 @@ export default function PromoCodeGate() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     event,
-                    amount: AUDIT_PRICE,
-                    currency: 'EUR',
+                    amount: AUDIT_CONFIG.price.toFixed(2),
+                    currency: AUDIT_CONFIG.currency,
                     ...data
                 })
             })
@@ -198,12 +195,18 @@ export default function PromoCodeGate() {
                 <div className="bg-white dark:bg-[#151925] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
 
                     {/* Price Header */}
-                    <div className={`text-white p-6 text-center ${promoApplied ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-slate-700 to-slate-800'}`}>
+                    <div className={`text-white p-6 text-center ${promoApplied || AUDIT_CONFIG.price === 0 ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-slate-700 to-slate-800'}`}>
                         <div className="flex items-center justify-center gap-3 mb-2">
-                            <span className="text-5xl font-bold">€{AUDIT_PRICE}</span>
+                            <span className="text-5xl font-bold">
+                                {AUDIT_CONFIG.price === 0 ? 'Gratis' : `€${AUDIT_CONFIG.price.toFixed(2).replace('.', ',')}`}
+                            </span>
                             <div className="text-left">
-                                <span className={`block line-through text-lg ${promoApplied ? 'text-green-200' : 'text-slate-400'}`}>€{AUDIT_ORIGINAL_PRICE}</span>
-                                <span className={`text-xs ${promoApplied ? 'text-green-100' : 'text-slate-300'}`}>{promoApplied ? 'accesso' : 'una tantum'}</span>
+                                <span className={`block line-through text-lg ${promoApplied || AUDIT_CONFIG.price === 0 ? 'text-green-200' : 'text-slate-400'}`}>
+                                    €{AUDIT_CONFIG.originalPrice.toFixed(2).replace('.', ',')}
+                                </span>
+                                <span className={`text-xs ${promoApplied || AUDIT_CONFIG.price === 0 ? 'text-green-100' : 'text-slate-300'}`}>
+                                    {promoApplied ? 'accesso' : (AUDIT_CONFIG.price === 0 ? 'per ora' : 'una tantum')}
+                                </span>
                             </div>
                         </div>
                         {promoApplied && (
@@ -212,7 +215,7 @@ export default function PromoCodeGate() {
                                 <span>Codice applicato: <strong>{promoCode}</strong></span>
                             </div>
                         )}
-                        {!promoApplied && !showPromoInput && (
+                        {!promoApplied && !showPromoInput && AUDIT_CONFIG.price > 0 && (
                             <button
                                 onClick={() => setShowPromoInput(true)}
                                 className="text-sm text-slate-300 hover:text-white underline underline-offset-2"
@@ -307,12 +310,12 @@ export default function PromoCodeGate() {
 
                     {/* CTA */}
                     <div className="p-6 pt-0">
-                        {promoApplied ? (
+                        {promoApplied || AUDIT_CONFIG.price === 0 ? (
                             <button
                                 onClick={handleStart}
                                 className="w-full py-4 rounded-xl bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-lg hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
                             >
-                                Continua →
+                                {AUDIT_CONFIG.price === 0 ? 'Inizia Audit Gratis →' : 'Continua →'}
                             </button>
                         ) : (
                             <div className="space-y-4">
@@ -334,7 +337,7 @@ export default function PromoCodeGate() {
                                                     description: 'Role Fit Audit - stAItuned',
                                                     amount: {
                                                         currency_code: 'EUR',
-                                                        value: AUDIT_PRICE.replace(',', '.')
+                                                        value: AUDIT_CONFIG.price.toFixed(2)
                                                     }
                                                 }]
                                             })
@@ -347,7 +350,7 @@ export default function PromoCodeGate() {
                                                     setPaypalOrderId(orderId)
 
                                                     // Standard purchase event
-                                                    const amount = parseFloat(AUDIT_PRICE.replace(',', '.'))
+                                                    const amount = AUDIT_CONFIG.price
                                                     trackPurchase({
                                                         transactionId: orderId,
                                                         value: amount,
@@ -395,7 +398,7 @@ export default function PromoCodeGate() {
                                                     description: 'Role Fit Audit - stAItuned',
                                                     amount: {
                                                         currency_code: 'EUR',
-                                                        value: AUDIT_PRICE.replace(',', '.')
+                                                        value: AUDIT_CONFIG.price.toFixed(2)
                                                     }
                                                 }]
                                             })
@@ -407,7 +410,7 @@ export default function PromoCodeGate() {
                                                     const orderId = (data.orderID || details.id || 'unknown') as string
                                                     setPaypalOrderId(orderId)
                                                     // Standard purchase event
-                                                    const amount = parseFloat(AUDIT_PRICE.replace(',', '.'))
+                                                    const amount = AUDIT_CONFIG.price
                                                     trackPurchase({
                                                         transactionId: orderId,
                                                         value: amount,
