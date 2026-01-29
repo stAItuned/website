@@ -171,7 +171,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
         hero: {
             headline: "Dove l'AI diventa pratica",
             pain: "Contenuti pratici scritti da chi lavora con l'AI ogni giorno. **Zero hype**, solo ciò che funziona davvero",
-            mission: "Impara. Applica. Cresci.",
+            mission: "Aggiornati. Specializzati. Costruisci.",
             ctaArticles: "Inizia a leggere",
             ctaCareerOS: "Lancia la tua carriera",
             stats: {
@@ -350,7 +350,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
         hero: {
             headline: "Where AI Gets Practical.",
             pain: "Practical content written by AI practitioners. **Zero hype**, only what actually works.",
-            mission: "Learn. Apply. Grow.",
+            mission: "Stay Updated. Specialize. Build.",
             ctaArticles: "Start Reading",
             ctaCareerOS: "Launch Your Career",
             stats: {
