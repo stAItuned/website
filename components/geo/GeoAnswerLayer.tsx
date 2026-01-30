@@ -65,11 +65,11 @@ export function GeoAnswerLayer({
 
     return (
         <div className={`not-prose mb-10 ${className}`}>
-            <div className="space-y-4">
+            <div className="flex flex-row md:flex-col overflow-x-auto md:overflow-visible snap-x snap-mandatory gap-4 pb-4 md:pb-0 scrollbar-none -mx-4 px-4 md:mx-0 md:px-0 items-start md:items-stretch">
 
                 {/* 1. Audience (Glass Dossier Style) */}
                 {geo.audience && (
-                    <div className="group relative rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:border-blue-500/20">
+                    <div className="min-w-[85vw] md:min-w-0 snap-center group relative rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:border-blue-500/20">
                         <button
                             onClick={() => setIsTargetExpanded(!isTargetExpanded)}
                             className="w-full flex items-center justify-between p-3.5 text-left"
@@ -102,7 +102,7 @@ export function GeoAnswerLayer({
 
                 {/* 2. Definition (Glass Dossier Style) */}
                 {geo.definition && (
-                    <div className="group relative rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)] hover:border-purple-500/20">
+                    <div className="min-w-[85vw] md:min-w-0 snap-center group relative rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)] hover:border-purple-500/20">
                         <button
                             onClick={() => setIsDefinitionExpanded(!isDefinitionExpanded)}
                             className="w-full flex items-center justify-between p-3.5 text-left"
@@ -139,7 +139,7 @@ export function GeoAnswerLayer({
                 {geo.quickAnswer && (
                     <div
                         onClick={() => setIsTakeawaysExpanded(!isTakeawaysExpanded)}
-                        className="group cursor-pointer relative rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/90 dark:bg-slate-900/60 backdrop-blur-md overflow-hidden shadow-sm hover:shadow-[0_0_30px_rgba(245,158,11,0.1)] hover:border-amber-500/30 transition-all duration-300"
+                        className="min-w-[85vw] md:min-w-0 snap-center group cursor-pointer relative rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/90 dark:bg-slate-900/60 backdrop-blur-md overflow-hidden shadow-sm hover:shadow-[0_0_30px_rgba(245,158,11,0.1)] hover:border-amber-500/30 transition-all duration-300"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100/80 dark:border-slate-800/50 bg-gradient-to-r from-slate-50/80 via-transparent to-transparent dark:from-slate-900/80 transition-colors group-hover:from-amber-50/30 dark:group-hover:from-amber-900/10">

@@ -109,20 +109,17 @@ export function GeoPlaybookBottomSheet({
                     )}
                     {activeTab === 'checklist' && geo.checklist && (
                         <ActionChecklist
-                            title={geo.checklist.title}
                             items={geo.checklist.items}
                             articleSlug={articleSlug}
                         />
                     )}
                     {activeTab === 'timeline' && geo.timeline && (
                         <TimelineStepper
-                            title={geo.timeline.title}
                             steps={geo.timeline.steps}
                         />
                     )}
                     {activeTab === 'pitfalls' && geo.pitfalls && (
                         <Pitfalls
-                            title="Common Pitfalls" // Could be dynamic
                             pitfalls={geo.pitfalls}
                         />
                     )}

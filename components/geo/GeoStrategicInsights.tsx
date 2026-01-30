@@ -45,7 +45,7 @@ export function GeoStrategicInsights({
                     <div className="flex flex-col">
                         <button
                             onClick={() => setAlignmentOpen(!isAlignmentOpen)}
-                            className="group relative flex items-center justify-between py-2.5 px-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/90 dark:bg-slate-900/40 backdrop-blur-md shadow-sm hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300"
+                            className="group relative flex items-center justify-between py-3 px-4 md:py-2.5 md:px-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/95 dark:bg-slate-900/60 backdrop-blur-md shadow-sm mobile-ring hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300 ring-1 ring-blue-500/10 dark:ring-blue-400/10 md:ring-0"
                         >
                             {/* Glass Accent */}
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-50/50 to-transparent dark:from-slate-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
@@ -55,7 +55,7 @@ export function GeoStrategicInsights({
                                     <Share2 className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="flex items-baseline gap-2.5">
-                                    <h3 className="text-xs font-black text-slate-700 dark:text-slate-200 tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors !mt-1 !mb-1">Strategic Execution</h3>
+                                    <h3 className="text-sm md:text-xs font-black text-slate-700 dark:text-slate-200 tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors !mt-1 !mb-1">Strategic Execution</h3>
                                     <span className="text-[13px] text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-80 whitespace-nowrap">
                                         Decision Framework & Risk Solutions
                                     </span>

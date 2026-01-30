@@ -337,124 +337,78 @@ export function MobileActionBar({
       )}
 
       {/* Mobile Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-        {/* Auth Required Prompt */}
-        {showAuthPrompt && !user && (
-          <div className="absolute bottom-full left-4 right-4 mx-auto max-w-xs mb-4 px-4 py-3 bg-primary-600 text-white text-sm rounded-lg shadow-2xl z-50 text-center animate-slide-up">
-            <div className="font-semibold mb-1">Sign in required</div>
-            <div className="text-primary-100 text-xs">Please sign in to bookmark articles</div>
-          </div>
-        )}
-
-        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-slate-700 shadow-2xl pb-[env(safe-area-inset-bottom)]">
-          {/* Progress Bar */}
-          <div className="h-1 bg-gray-200 dark:bg-slate-700">
-            <div
-              className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300"
-              style={{ width: `${scrollPercent}%` }}
-            />
-          </div>
-
-          {/* Reading Stats */}
-          <div className="flex items-center justify-center gap-4 px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-slate-700">
-            <TimeRemainingIndicator
-              readingTime={readingTime}
-              scrollPercent={scrollPercent}
-              className="text-xs"
-            />
-            <span>•</span>
-            <div className="flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
-              <span>{Math.round(scrollPercent)}% completed</span>
+      <div className="fixed bottom-0 sm:bottom-6 left-0 right-0 z-50 lg:hidden flex justify-center pointer-events-none">
+        <div className="w-full max-w-2xl px-4 pointer-events-auto">
+          {/* Auth Required Prompt */}
+          {showAuthPrompt && !user && (
+            <div className="absolute bottom-full left-4 right-4 mx-auto max-w-xs mb-4 px-4 py-3 bg-primary-600 text-white text-sm rounded-lg shadow-2xl z-50 text-center animate-slide-up">
+              <div className="font-semibold mb-1">Sign in required</div>
+              <div className="text-primary-100 text-xs">Please sign in to bookmark articles</div>
             </div>
-          </div>
+          )}
 
-          <div className="flex items-center justify-around px-2 py-3 max-w-md mx-auto">
-            {/* Like Button */}
-            <div className="flex-1 flex justify-center">
-              <LikeButton articleSlug={articleSlug} />
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-gray-200 dark:border-slate-700 shadow-2xl rounded-2xl overflow-hidden pb-[env(safe-area-inset-bottom)] sm:pb-1">
+            {/* Progress Bar */}
+            <div className="h-1 bg-gray-200 dark:bg-slate-700">
+              <div
+                className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300"
+                style={{ width: `${scrollPercent}%` }}
+              />
             </div>
 
-            {/* Bookmark Button */}
-            <button
-              onClick={handleBookmark}
-              className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-              aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
-            >
-              <svg
-                className={`w-6 h-6 transition-colors ${isBookmarked
-                  ? 'text-yellow-500 fill-yellow-500'
-                  : 'text-gray-700 dark:text-gray-300'
-                  }`}
-                fill={isBookmarked ? 'currentColor' : 'none'}
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={isBookmarked ? 0 : 2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-              </svg>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                {isBookmarked ? 'Saved' : 'Bookmark'}
-              </span>
-            </button>
+            {/* Reading Stats */}
+            <div className="flex items-center justify-center gap-4 px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-slate-700">
+              <TimeRemainingIndicator
+                readingTime={readingTime}
+                scrollPercent={scrollPercent}
+                className="text-xs"
+              />
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                <span>{Math.round(scrollPercent)}% completed</span>
+              </div>
+            </div>
 
-            {/* Offline Save Button */}
-            <OfflineSaveButton articleSlug={articleSlug} />
+            <div className="flex items-center justify-between gap-1 px-1 sm:px-3 py-3 w-full">
+              {/* Like Button */}
+              <div className="flex-1 flex justify-center">
+                <LikeButton articleSlug={articleSlug} />
+              </div>
 
-            {/* Share Button */}
-            <button
-              onClick={() => setShowShareMenu(!showShareMenu)}
-              className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-              aria-label="Share article"
-            >
-              <svg
-                className="w-6 h-6 text-gray-700 dark:text-gray-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Share</span>
-            </button>
-
-            {/* Focus Mode Button */}
-            {onFocusModeToggle && (
+              {/* Bookmark Button */}
               <button
-                onClick={handleFocusModeToggle}
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors active:scale-95 ${isFocusMode
-                  ? 'bg-primary-100 dark:bg-primary-900'
-                  : 'hover:bg-gray-100 dark:hover:bg-slate-800'
-                  }`}
-                aria-label={isFocusMode ? 'Exit focus mode' : 'Enter focus mode'}
+                onClick={handleBookmark}
+                className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
+                aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
               >
                 <svg
-                  className={`w-6 h-6 ${isFocusMode
-                    ? 'text-primary-600 dark:text-primary-400'
+                  className={`w-6 h-6 transition-colors ${isBookmarked
+                    ? 'text-yellow-500 fill-yellow-500'
                     : 'text-gray-700 dark:text-gray-300'
                     }`}
-                  fill="none"
+                  fill={isBookmarked ? 'currentColor' : 'none'}
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  strokeWidth={isBookmarked ? 0 : 2}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                 </svg>
-                <span className={`text-xs font-medium ${isFocusMode
-                  ? 'text-primary-600 dark:text-primary-400'
-                  : 'text-gray-700 dark:text-gray-300'
-                  }`}>Focus</span>
+                <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300">
+                  {isBookmarked ? 'Saved' : 'Bookmark'}
+                </span>
               </button>
-            )}
 
-            {/* TOC Button */}
-            {showToc && (
+              {/* Offline Save Button */}
+              <OfflineSaveButton articleSlug={articleSlug} />
+
+              {/* Share Button */}
               <button
-                onClick={onTocClick}
+                onClick={() => setShowShareMenu(!showShareMenu)}
                 className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                aria-label="Table of contents"
+                aria-label="Share article"
               >
                 <svg
                   className="w-6 h-6 text-gray-700 dark:text-gray-300"
@@ -462,24 +416,72 @@ export function MobileActionBar({
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                 </svg>
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Contents</span>
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Share</span>
               </button>
-            )}
-            {/* Playbook Button */}
-            {hasPlaybook && onPlaybookClick && (
-              <button
-                onClick={onPlaybookClick}
-                className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                aria-label="Open Playbook"
-              >
-                <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-                <span className="text-xs font-bold text-primary-600 dark:text-primary-400">Playbook</span>
-              </button>
-            )}
+
+              {/* Focus Mode Button */}
+              {onFocusModeToggle && (
+                <button
+                  onClick={handleFocusModeToggle}
+                  className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors active:scale-95 ${isFocusMode
+                    ? 'bg-primary-100 dark:bg-primary-900'
+                    : 'hover:bg-gray-100 dark:hover:bg-slate-800'
+                    }`}
+                  aria-label={isFocusMode ? 'Exit focus mode' : 'Enter focus mode'}
+                >
+                  <svg
+                    className={`w-6 h-6 ${isFocusMode
+                      ? 'text-primary-600 dark:text-primary-400'
+                      : 'text-gray-700 dark:text-gray-300'
+                      }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <span className={`text-xs font-medium ${isFocusMode
+                    ? 'text-primary-600 dark:text-primary-400'
+                    : 'text-gray-700 dark:text-gray-300'
+                    }`}>Focus</span>
+                </button>
+              )}
+
+              {/* TOC Button */}
+              {showToc && (
+                <button
+                  onClick={onTocClick}
+                  className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
+                  aria-label="Table of contents"
+                >
+                  <svg
+                    className="w-6 h-6 text-gray-700 dark:text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Contents</span>
+                </button>
+              )}
+              {/* Playbook Button */}
+              {hasPlaybook && onPlaybookClick && (
+                <button
+                  onClick={onPlaybookClick}
+                  className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
+                  aria-label="Open Playbook"
+                >
+                  <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                  <span className="text-xs font-bold text-primary-600 dark:text-primary-400">Playbook</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

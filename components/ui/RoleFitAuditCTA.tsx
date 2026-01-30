@@ -212,90 +212,92 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 						animate={{ y: 0, opacity: 1 }}
 						exit={{ y: 100, opacity: 0 }}
 						transition={{ type: "spring", stiffness: 300, damping: 30 }}
-						className={`fixed bottom-4 left-4 right-4 z-40 mx-auto max-w-2xl ${className}`}
+						className={`fixed bottom-4 left-0 right-0 z-40 flex justify-center pointer-events-none lg:hidden ${className}`}
 					>
-						<div className="relative overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 ring-1 ring-white/10">
-							<div className="absolute inset-0 opacity-20"
-								style={{
-									backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-									backgroundSize: '20px 20px'
-								}}
-							/>
-							<div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-amber-500/20 blur-3xl" />
-							<div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
-
-							<div className="relative p-4">
-								{/* Mobile: entire CTA tappable (save space) */}
-								<Link
-									href="/role-fit-audit"
-									onClick={handleCTAClick}
-									className="absolute inset-0 z-10 sm:hidden"
-								>
-									<span className="sr-only">Apri Role Fit Audit</span>
-								</Link>
-
-								<button
-									type="button"
-									onClick={(e) => {
-										e.preventDefault()
-										e.stopPropagation()
-										handleDismiss()
+						<div className="w-full max-w-2xl px-4 pointer-events-auto">
+							<div className="relative overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 ring-1 ring-white/10">
+								<div className="absolute inset-0 opacity-20"
+									style={{
+										backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)`,
+										backgroundSize: '20px 20px'
 									}}
-									className="absolute right-3 top-3 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-slate-300 hover:text-white hover:bg-white/20 transition-colors focus:outline-none"
-									aria-label="Chiudi"
-								>
-									<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-									</svg>
-								</button>
+								/>
+								<div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-amber-500/20 blur-3xl" />
+								<div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
 
-								<div className="flex items-center gap-3 pr-8 sm:pr-12">
-									<div className="hidden sm:flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/30">
-										<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+								<div className="relative p-4">
+									{/* Mobile: entire CTA tappable (save space) */}
+									<Link
+										href="/role-fit-audit"
+										onClick={handleCTAClick}
+										className="absolute inset-0 z-10 sm:hidden"
+									>
+										<span className="sr-only">Apri Role Fit Audit</span>
+									</Link>
+
+									<button
+										type="button"
+										onClick={(e) => {
+											e.preventDefault()
+											e.stopPropagation()
+											handleDismiss()
+										}}
+										className="absolute right-3 top-3 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-slate-300 hover:text-white hover:bg-white/20 transition-colors focus:outline-none"
+										aria-label="Chiudi"
+									>
+										<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 										</svg>
-									</div>
+									</button>
 
-									<div className="min-w-0 flex-1">
-										<div className="flex items-center gap-2 mb-0.5 sm:mb-0">
-											<p className="text-sm font-bold text-white leading-tight truncate">
-												Qual è il mio fit GenAI?
-											</p>
+									<div className="flex items-center gap-3 pr-8 sm:pr-12">
+										<div className="hidden sm:flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/30">
+											<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+											</svg>
 										</div>
-										{/* Mobile Text */}
-										<p className="block sm:hidden text-xs text-slate-300 mt-0 truncate">
-											Score 0-100 • Gap • Piano 7gg
-										</p>
-										{/* Desktop Text */}
-										<p className="hidden sm:block text-xs text-slate-300 mt-0.5">
-											🎯 Score 0-100 • 🔍 Gap chiari • 📅 Piano 7 giorni
-										</p>
-										{/* <div className="mt-2 hidden sm:flex flex-wrap gap-1.5">
+
+										<div className="min-w-0 flex-1">
+											<div className="flex items-center gap-2 mb-0.5 sm:mb-0">
+												<p className="text-sm font-bold text-white leading-tight truncate">
+													Qual è il mio fit GenAI?
+												</p>
+											</div>
+											{/* Mobile Text */}
+											<p className="block sm:hidden text-xs text-slate-300 mt-0 truncate">
+												Score 0-100 • Gap • Piano 7gg
+											</p>
+											{/* Desktop Text */}
+											<p className="hidden sm:block text-xs text-slate-300 mt-0.5">
+												🎯 Score 0-100 • 🔍 Gap chiari • 📅 Piano 7 giorni
+											</p>
+											{/* <div className="mt-2 hidden sm:flex flex-wrap gap-1.5">
 											<span className="rounded-full bg-slate-900/5 dark:bg-white/10 px-2 py-0.5 text-[11px] text-slate-700 dark:text-slate-200">5 min</span>
 											<span className="rounded-full bg-slate-900/5 dark:bg-white/10 px-2 py-0.5 text-[11px] text-slate-700 dark:text-slate-200">PDF</span>
 											<span className="rounded-full bg-slate-900/5 dark:bg-white/10 px-2 py-0.5 text-[11px] text-slate-700 dark:text-slate-200">Piano 7 giorni</span>
 										</div> */}
-									</div>
+										</div>
 
-									<svg
-										className="ml-2 h-5 w-5 shrink-0 text-slate-400 sm:hidden"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-									</svg>
-
-									<Link
-										href="/role-fit-audit"
-										onClick={handleCTAClick}
-										className="hidden sm:inline-flex shrink-0 items-center gap-2 px-4 py-2 text-sm font-bold text-slate-900 rounded-xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 transition-colors shadow-md shadow-amber-500/20"
-									>
-										<span>Scopri il mio fit</span>
-										<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+										<svg
+											className="ml-2 h-5 w-5 shrink-0 text-slate-400 sm:hidden"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 										</svg>
-									</Link>
+
+										<Link
+											href="/role-fit-audit"
+											onClick={handleCTAClick}
+											className="hidden sm:inline-flex shrink-0 items-center gap-2 px-4 py-2 text-sm font-bold text-slate-900 rounded-xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 transition-colors shadow-md shadow-amber-500/20"
+										>
+											<span>Scopri il mio fit</span>
+											<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+											</svg>
+										</Link>
+									</div>
 								</div>
 							</div>
 						</div>

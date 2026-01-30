@@ -977,6 +977,15 @@ export default function ArticlePageClient({
                     </div>
                   </div>
                   {/* Article Body */}
+                  <div className="not-prose mb-6">
+                    {article.geo && (
+                      <GeoAnswerLayer
+                        geo={article.geo}
+                        articleSlug={article.slug}
+                      />
+                    )}
+                  </div>
+
                   <div
                     id="article-root"
                     className="article-mobile-markdown"

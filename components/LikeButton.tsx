@@ -83,7 +83,7 @@ export function LikeButton({
   return (
     <button
       className={`
-        flex items-center gap-2 px-4 py-2 rounded-full 
+        flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-full 
         border transition-all duration-300
         ${isLiked
           ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900'

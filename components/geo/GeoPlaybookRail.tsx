@@ -44,7 +44,6 @@ export function GeoPlaybookRail({
                     </div>
                     <div className="p-2">
                         <ActionChecklist
-                            title={geo.checklist.title}
                             items={geo.checklist.items}
                             articleSlug={articleSlug}
                             className="border-none shadow-none"
