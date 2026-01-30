@@ -17,7 +17,8 @@ export interface AuthorData {
 export async function getAuthorData(authorName: string): Promise<AuthorData | null> {
   try {
     // Convert author name to slug format (replace spaces with hyphens)
-    const authorSlug = authorName.replaceAll(' ', '-')
+    // Use trim() to avoid issues with trailing/leading spaces in markdown frontmatter
+    const authorSlug = authorName.trim().replaceAll(' ', '-')
 
     // Try both possible locations for the metadata file
     const possiblePaths = [
@@ -25,6 +26,7 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
       path.join(process.cwd(), 'content', 'team', authorSlug, 'meta.md'),
       path.join(process.cwd(), 'public', 'content', 'team', authorSlug, 'meta.md'),
     ]
+
 
     let metadataText = null
     for (const metadataPath of possiblePaths) {
@@ -48,12 +50,12 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
     // Simple YAML parsing for the author metadata
     const frontmatter = match[1]
     const lines = frontmatter.split(/[\r\n]+/)
-  const metadata: Record<string, any> = {}
+    const metadata: Record<string, any> = {}
 
     for (const line of lines) {
       if (line.includes(':')) {
         const [key, ...valueParts] = line.split(':')
-  const value = valueParts.join(':').trim()
+        const value = valueParts.join(':').trim()
 
         // Handle arrays (team field)
         if (value.startsWith('[') && value.endsWith(']')) {

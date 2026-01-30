@@ -167,7 +167,7 @@ export function generateArticleSchema(options: ArticleSchemaOptions) {
         // Speakable specification for voice search / Google Assistant
         'speakable': {
             '@type': 'SpeakableSpecification',
-            'cssSelector': ['article h1', 'article h2', '.article-summary', 'article p:first-of-type'],
+            'cssSelector': ['#geo-quick-answer', '#geo-definition', 'article h1', 'article h2', '.article-summary', 'article p:first-of-type'],
         },
     }
 }

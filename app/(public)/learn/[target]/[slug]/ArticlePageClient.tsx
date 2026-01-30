@@ -37,6 +37,10 @@ import type { ArticleAnalytics } from '@/lib/analytics-server'
 import { getTopicHub } from '@/config/topics'
 
 import { useArticleLikes } from '@/lib/hooks/useArticleLikes'
+import { GeoPlaybookRail } from '@/components/geo/GeoPlaybookRail'
+import { GeoPlaybookBottomSheet } from '@/components/geo/GeoPlaybookBottomSheet'
+import { GeoAnswerLayer } from '@/components/geo/GeoAnswerLayer'
+import { GeoStrategicInsights } from '@/components/geo/GeoStrategicInsights'
 
 export default function ArticlePageClient({
   coverImage,
@@ -66,6 +70,7 @@ export default function ArticlePageClient({
   const [scrollPercent, setScrollPercent] = useState(0)
   const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('small')
   const [fontFamily, setFontFamily] = useState<'sans' | 'serif'>('sans')
+  const [showPlaybookSheet, setShowPlaybookSheet] = useState(false)
 
   // Live analytics state - starts with SSR/ISR cached values, refreshes on mount
   const [liveAnalytics, setLiveAnalytics] = useState<ArticleAnalytics>(analytics)
@@ -784,12 +789,28 @@ export default function ArticlePageClient({
               </div>
               {/* Article Body */}
               <div id="article-root">
+                {/* GEO Answer Layer - Above the Fold */}
+                {article.geo && (
+                  <GeoAnswerLayer
+                    geo={article.geo}
+                    articleSlug={article.slug}
+                  />
+                )}
+
                 <MarkdownContent
                   content={article.body.raw}
                   className="prose prose-lg max-w-none"
                   articleSlug={article.slug}
                 />
               </div>
+
+              {/* GEO Strategic Insights - End of Article Action Plan */}
+              {article.geo && (
+                <GeoStrategicInsights
+                  geo={article.geo}
+                  articleSlug={article.slug}
+                />
+              )}
 
               {/* End of Article Engagement */}
               {/* Article FAQs */}
@@ -816,14 +837,23 @@ export default function ArticlePageClient({
             {/* Right: TOC Sidebar (Desktop only) */}
             <aside className="self-stretch">
               <div className="sticky top-24">
-                <div className="table-of-contents">
-                  <ArticleTOC
+                {article.geo ? (
+                  <GeoPlaybookRail
+                    geo={article.geo}
+                    articleSlug={article.slug}
                     toc={toc}
-                    enableScrollSpy={true}
-                    onLinkClick={handleTOCClick}
-                    sticky={false}
+                    onTOCClick={handleTOCClick}
                   />
-                </div>
+                ) : (
+                  <div className="table-of-contents">
+                    <ArticleTOC
+                      toc={toc}
+                      enableScrollSpy={true}
+                      onLinkClick={handleTOCClick}
+                      sticky={false}
+                    />
+                  </div>
+                )}
               </div>
             </aside>
           </div>
@@ -960,6 +990,14 @@ export default function ArticlePageClient({
                     />
                   </div>
 
+                  {/* GEO Strategic Insights - End of Article Action Plan (Mobile) */}
+                  {article.geo && (
+                    <GeoStrategicInsights
+                      geo={article.geo}
+                      articleSlug={article.slug}
+                    />
+                  )}
+
                   {/* Article FAQs (Mobile) */}
                   <div className="not-prose mt-8 border-t border-gray-100 dark:border-slate-800 pt-8">
                     <ArticleFAQ faqs={article.faq} />
@@ -1002,6 +1040,8 @@ export default function ArticlePageClient({
               currentTextSize={textSize}
               onFontFamilyChange={setFontFamily}
               currentFontFamily={fontFamily}
+              onPlaybookClick={() => setShowPlaybookSheet(true)}
+              hasPlaybook={!!article.geo}
             />
           </>
         )}
@@ -1041,6 +1081,13 @@ export default function ArticlePageClient({
           topics: post.topics
         }))} />
       </div>
+
+      <GeoPlaybookBottomSheet
+        geo={article.geo}
+        articleSlug={article.slug}
+        isOpen={showPlaybookSheet}
+        onClose={() => setShowPlaybookSheet(false)}
+      />
     </PageTransition>
   )
 }

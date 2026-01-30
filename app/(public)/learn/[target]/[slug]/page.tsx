@@ -197,6 +197,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
       {/* SEO Structured Data (JSON-LD) */}
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
+      {article.structuredData && <JsonLd data={article.structuredData} />}
 
       <ArticlePageClient
         coverImage={coverImage}

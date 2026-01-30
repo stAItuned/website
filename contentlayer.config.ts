@@ -10,6 +10,97 @@ const FAQItem = defineNestedType(() => ({
   }
 }))
 
+const QuickAnswer = defineNestedType(() => ({
+  name: 'QuickAnswer',
+  fields: {
+    title: { type: 'string', required: false },
+    bullets: { type: 'list', of: { type: 'string' }, required: true },
+    oneThing: { type: 'string', required: false },
+  }
+}))
+
+const Audience = defineNestedType(() => ({
+  name: 'Audience',
+  fields: {
+    title: { type: 'string', required: false },
+    description: { type: 'string', required: true },
+  }
+}))
+
+const Definition = defineNestedType(() => ({
+  name: 'Definition',
+  fields: {
+    term: { type: 'string', required: true },
+    definition: { type: 'string', required: true },
+  }
+}))
+
+const DecisionRule = defineNestedType(() => ({
+  name: 'DecisionRule',
+  fields: {
+    if: { type: 'string', required: true },
+    then: { type: 'string', required: true },
+    example: { type: 'string', required: false },
+  }
+}))
+
+const Pitfall = defineNestedType(() => ({
+  name: 'Pitfall',
+  fields: {
+    pitfall: { type: 'string', required: true },
+    cause: { type: 'string', required: true },
+    mitigation: { type: 'string', required: true },
+    isCommon: { type: 'boolean', required: false },
+  }
+}))
+
+const TimelineStep = defineNestedType(() => ({
+  name: 'TimelineStep',
+  fields: {
+    title: { type: 'string', required: true },
+    description: { type: 'string', required: true },
+    period: { type: 'string', required: false },
+  }
+}))
+
+const GeoChecklist = defineNestedType(() => ({
+  name: 'GeoChecklist',
+  fields: {
+    title: { type: 'string', required: false },
+    items: { type: 'list', of: { type: 'string' }, required: true },
+  }
+}))
+
+const GeoTimeline = defineNestedType(() => ({
+  name: 'GeoTimeline',
+  fields: {
+    title: { type: 'string', required: false },
+    steps: { type: 'list', of: TimelineStep, required: true },
+  }
+}))
+
+const GeoDecisionRules = defineNestedType(() => ({
+  name: 'GeoDecisionRules',
+  fields: {
+    title: { type: 'string', required: false },
+    rules: { type: 'list', of: DecisionRule, required: true },
+  }
+}))
+
+const Geo = defineNestedType(() => ({
+  name: 'Geo',
+  fields: {
+    quickAnswer: { type: 'nested', of: QuickAnswer, required: false },
+    audience: { type: 'nested', of: Audience, required: false },
+    definition: { type: 'nested', of: Definition, required: false },
+    decisionRules: { type: 'nested', of: GeoDecisionRules, required: false },
+    pitfalls: { type: 'list', of: Pitfall, required: false },
+    checklist: { type: 'nested', of: GeoChecklist, required: false },
+    timeline: { type: 'nested', of: GeoTimeline, required: false },
+    primaryTopic: { type: 'string', required: false }, // For topic cluster mapping
+  }
+}))
+
 export const Post = defineDocumentType(() => ({
   name: 'Post',
   filePathPattern: `articles/**/*.md`,
@@ -34,6 +125,7 @@ export const Post = defineDocumentType(() => ({
       of: FAQItem,
       required: false
     },
+    geo: { type: 'nested', of: Geo, required: false },
   },
   computedFields: {
     url: {
