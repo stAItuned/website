@@ -45,14 +45,14 @@ export function DecisionRules({
 
                 <div className="w-full flex transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1)" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
                     {rules.map((rule, idx) => (
-                        <div key={idx} className="w-full flex-shrink-0 flex flex-col sm:flex-row items-stretch sm:min-h-[60px]">
+                        <div key={idx} className="w-full flex-shrink-0 flex flex-col sm:flex-row items-stretch sm:min-h-[60px] min-w-0">
                             {/* IF SIDE (Condition) */}
                             <div className="flex-1 px-5 py-3.5 flex flex-col justify-center bg-slate-50/50 dark:bg-slate-900/50 border-b sm:border-b-0 sm:border-r border-slate-100 dark:border-slate-800/50">
                                 <span className="text-[9px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1.5 flex items-center gap-1.5">
                                     <div className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
                                     If This Happens
                                 </span>
-                                <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed break-words">
                                     {rule.if}
                                 </p>
                             </div>
@@ -70,7 +70,7 @@ export function DecisionRules({
                                     <div className="w-1 h-1 rounded-full bg-blue-500" />
                                     Do This
                                 </span>
-                                <p className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-relaxed">
+                                <p className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-relaxed break-words">
                                     {rule.then}
                                 </p>
                             </div>

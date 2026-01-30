@@ -42,6 +42,9 @@ import { GeoPlaybookBottomSheet } from '@/components/geo/GeoPlaybookBottomSheet'
 import { GeoAnswerLayer } from '@/components/geo/GeoAnswerLayer'
 import { GeoStrategicInsights } from '@/components/geo/GeoStrategicInsights'
 
+/**
+ * Client-side article page renderer with responsive desktop/mobile layouts.
+ */
 export default function ArticlePageClient({
   coverImage,
   article,
@@ -154,18 +157,17 @@ export default function ArticlePageClient({
   }, [mounted, isLarge, lastScrollY, saveProgress])
 
   // Gesture handlers for TOC modal
-  const handleTocTouchStart = (e: React.TouchEvent) => {
+  const handleTocTouchStart = (e: React.TouchEvent<HTMLElement>) => {
     setTouchStartY(e.touches[0].clientY)
-    const modal = e.currentTarget as HTMLElement
-    setModalScrollTop(modal.scrollTop)
+    setModalScrollTop(e.currentTarget.scrollTop)
   }
 
-  const handleTocTouchMove = (e: React.TouchEvent) => {
+  const handleTocTouchMove = (e: React.TouchEvent<HTMLElement>) => {
     const touchY = e.touches[0].clientY
     const diff = touchY - touchStartY
 
     // Close modal if swiping down from top
-    if (diff > 50 && modalScrollTop === 0) {
+    if (diff > 50 && modalScrollTop === 0 && e.currentTarget.scrollTop === 0) {
       setShowTocModal(false)
     }
   }
@@ -548,12 +550,12 @@ export default function ArticlePageClient({
           <div
             className={`fixed inset-0 z-[60] flex items-end justify-center transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/50 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
             onClick={() => setShowTocModal(false)}
-            onTouchStart={handleTocTouchStart}
-            onTouchMove={handleTocTouchMove}
           >
             <div
-              className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-6 overflow-y-auto transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
+              className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-4 sm:p-6 overflow-y-auto overscroll-contain touch-pan-y transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
               onClick={e => e.stopPropagation()}
+              onTouchStart={handleTocTouchStart}
+              onTouchMove={handleTocTouchMove}
             >
               {/* Handle bar */}
               <div className="flex justify-center mb-4">
@@ -612,8 +614,8 @@ export default function ArticlePageClient({
           </div>
         )}
         {/* Breadcrumb */}
-        <div className="lg:absolute lg:top-96 top-32 p-4 z-10">
-          <nav className="flex items-center space-x-2 sm:space-x-4 text-gray-900 dark:text-white w-full md:w-fit bg-white/90 dark:bg-slate-950/75 backdrop-blur-3xl shadow-xl dark:shadow-black/60 px-4 sm:px-8 py-3 rounded-2xl font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 dark:scrollbar-thumb-secondary-400 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base border border-white/60 dark:border-slate-800/70">
+        <div className="lg:absolute lg:top-96 top-32 px-4 z-10 w-full flex justify-center">
+          <nav className="flex items-center space-x-2 sm:space-x-4 text-gray-900 dark:text-white w-full max-w-3xl md:w-auto bg-white/90 dark:bg-slate-950/75 backdrop-blur-3xl shadow-xl dark:shadow-black/60 px-4 sm:px-8 py-3 rounded-2xl font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 dark:scrollbar-thumb-secondary-400 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base border border-white/60 dark:border-slate-800/70">
             <Link href="/" className="opacity-80 hover:text-primary-600 transition text-current">
               Home
             </Link>
@@ -809,6 +811,7 @@ export default function ArticlePageClient({
                 <GeoStrategicInsights
                   geo={article.geo}
                   articleSlug={article.slug}
+                  className="max-w-4xl"
                 />
               )}
 
@@ -871,7 +874,7 @@ export default function ArticlePageClient({
                 target: relatedArticles[1].target?.toLowerCase()
               } : null}
             >
-              <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-24">
+              <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-32 sm:pb-24">
                 {/* Floating Section Indicator */}
                 <FloatingSectionIndicator toc={toc} />
 
@@ -879,7 +882,7 @@ export default function ArticlePageClient({
                   {/* Article Header */}
                   <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
                     {/* Article Title */}
-                    <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight">
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight break-words">
                       {article.title}
                     </h1>
                     {/* FREE Badge */}
@@ -1004,6 +1007,7 @@ export default function ArticlePageClient({
                     <GeoStrategicInsights
                       geo={article.geo}
                       articleSlug={article.slug}
+                      className="max-w-2xl mx-auto"
                     />
                   )}
 

@@ -337,8 +337,8 @@ export function MobileActionBar({
       )}
 
       {/* Mobile Action Bar */}
-      <div className="fixed bottom-0 sm:bottom-6 left-0 right-0 z-50 lg:hidden flex justify-center pointer-events-none">
-        <div className="w-full max-w-2xl px-4 pointer-events-auto">
+      <div className="fixed bottom-0 sm:bottom-6 left-0 right-0 z-50 lg:hidden flex justify-center pointer-events-none px-2">
+        <div className="w-full max-w-3xl px-3 sm:px-4 mx-auto pointer-events-auto">
           {/* Auth Required Prompt */}
           {showAuthPrompt && !user && (
             <div className="absolute bottom-full left-4 right-4 mx-auto max-w-xs mb-4 px-4 py-3 bg-primary-600 text-white text-sm rounded-lg shadow-2xl z-50 text-center animate-slide-up">

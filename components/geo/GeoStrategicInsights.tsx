@@ -50,13 +50,15 @@ export function GeoStrategicInsights({
                             {/* Glass Accent */}
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-50/50 to-transparent dark:from-slate-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
 
-                            <div className="flex items-center gap-3 relative z-10">
-                                <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-500 transition-all duration-300">
+                            <div className="flex items-start gap-3 relative z-10">
+                                <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-500 transition-all duration-300 shrink-0">
                                     <Share2 className="w-3.5 h-3.5" />
                                 </div>
-                                <div className="flex items-baseline gap-2.5">
-                                    <h3 className="text-sm md:text-xs font-black text-slate-700 dark:text-slate-200 tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors !mt-1 !mb-1">Strategic Execution</h3>
-                                    <span className="text-[13px] text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-80 whitespace-nowrap">
+                                <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2.5 min-w-0">
+                                    <h3 className="text-sm md:text-xs font-black text-slate-700 dark:text-slate-200 tracking-wide group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug break-words">
+                                        Strategic Execution
+                                    </h3>
+                                    <span className="text-[13px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] opacity-80 leading-tight break-words">
                                         Decision Framework & Risk Solutions
                                     </span>
                                 </div>
