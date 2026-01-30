@@ -148,7 +148,7 @@ export function GeoAnswerLayer({
                                     <Zap className="w-4 h-4" />
                                 </div>
                                 <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors ">
-                                    Strategic Briefing
+                                    Key Takeaways
                                 </span>
                             </div>
                             <div className={`w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300 ${isTakeawaysExpanded ? 'bg-amber-100/50 dark:bg-amber-900/30 rotate-180' : 'bg-transparent group-hover:bg-slate-100 dark:group-hover:bg-slate-800'}`}>

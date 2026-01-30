@@ -607,8 +607,10 @@ export default function ArticlePageClient({
               src={coverImage}
               alt="Article cover"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 1024px"
+              priority
+              className="object-cover object-center lg:object-[50%_30%]"
+              style={{ objectPosition: '50% 30%' }}
+              sizes="100vw"
               unoptimized={coverImage.startsWith('http')}
             />
           </div>
@@ -662,7 +664,7 @@ export default function ArticlePageClient({
                   {/* Author */}
                   <div className="flex items-center gap-2">
                     {article.author && (
-                      <AuthorAvatar author={article.author} authorData={authorData} />
+                      <AuthorAvatar author={article.author} authorData={authorData} imageFit="contain" />
                     )}
                   </div>
                   {/* Meta Info Group */}
@@ -895,7 +897,7 @@ export default function ArticlePageClient({
                     {/* Author */}
                     <div className="flex flex-col items-center gap-2">
                       {article.author && (
-                        <AuthorAvatar author={article.author} authorData={authorData} />
+                        <AuthorAvatar author={article.author} authorData={authorData} imageFit="contain" />
                       )}
                     </div>
                     {/* Meta Info Group */}
