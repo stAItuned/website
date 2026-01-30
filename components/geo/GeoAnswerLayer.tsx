@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { AudienceFit } from './AudienceFit'
-import { Users, BookOpen, Sparkles, ChevronLeft, ChevronRight, Zap, Clock } from 'lucide-react'
+import { Users, BookOpen, Sparkles, ChevronLeft, ChevronRight, Zap, Clock, ChevronDown } from 'lucide-react'
 
 interface GeoData {
     quickAnswer?: {
@@ -31,19 +31,9 @@ export function GeoAnswerLayer({
     articleSlug,
     className = ""
 }: GeoAnswerLayerProps) {
-    const [takeawayIndex, setTakeawayIndex] = useState(0)
-
-    const nextTakeaway = () => {
-        if (geo.quickAnswer?.bullets) {
-            setTakeawayIndex((prev) => (prev + 1) % geo.quickAnswer!.bullets.length)
-        }
-    }
-
-    const prevTakeaway = () => {
-        if (geo.quickAnswer?.bullets) {
-            setTakeawayIndex((prev) => (prev - 1 + geo.quickAnswer!.bullets.length) % geo.quickAnswer!.bullets.length)
-        }
-    }
+    const [isTargetExpanded, setIsTargetExpanded] = useState(false)
+    const [isDefinitionExpanded, setIsDefinitionExpanded] = useState(false)
+    const [isTakeawaysExpanded, setIsTakeawaysExpanded] = useState(false)
 
     if (!geo) return null
 
@@ -62,68 +52,105 @@ export function GeoAnswerLayer({
     }
 
     return (
-        <div className={`not-prose mb-12 ${className}`}>
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-primary-950 border-2 border-primary-100 dark:border-primary-500/20 shadow-2xl">
-                {/* 1. Context Ribbon (Top) */}
-                {/* 1. Context Ribbon - REMOVED for minimal look */}
+        <div className={`not-prose mb-8 ${className}`}>
+            {/* Mobile-optimized Container - Clean & Native feel */}
+            <div className="space-y-4">
 
-                {/* 2. Main Executive Summary Body */}
-                <div className="p-6 sm:p-8 flex flex-col md:flex-row gap-8 items-stretch">
-                    {/* Left: One Thing / Title */}
-                    <div className="flex-1 flex flex-col justify-center gap-4">
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="p-1.5 rounded-lg bg-secondary-500 text-primary-900 shadow-sm">
-                                <Zap className="w-4 h-4 fill-primary-900" />
+                {/* 1. Collapsible Audience (Who is for) */}
+                {geo.audience && (
+                    <div className="bg-primary-50 dark:bg-primary-900/10 rounded-xl border border-primary-100 dark:border-primary-800/30 overflow-hidden">
+                        <button
+                            onClick={() => setIsTargetExpanded(!isTargetExpanded)}
+                            className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-primary-100/30 dark:hover:bg-primary-800/20"
+                        >
+                            <div className="flex items-center gap-2">
+                                <Users className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                <span className="text-xs font-bold text-primary-700 dark:text-primary-300 uppercase tracking-wider">Who is this for?</span>
                             </div>
-                            <h3 className="text-[11px] font-black text-primary-600 dark:text-primary-400 uppercase tracking-[0.25em]">Key Takeaways</h3>
-                        </div>
+                            <ChevronDown className={`w-4 h-4 text-primary-400 transition-transform duration-300 ${isTargetExpanded ? 'rotate-180' : ''}`} />
+                        </button>
 
-                        {geo.quickAnswer?.oneThing && (
-                            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
-                                {renderMarkdown(geo.quickAnswer.oneThing)}
+                        <div className={`transition-all duration-300 ease-in-out ${isTargetExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                            <div className="px-4 pb-4">
+                                <p className="text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed">
+                                    {geo.audience.description}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 2. Collapsible Definition */}
+                {geo.definition && (
+                    <div className="bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                        <button
+                            onClick={() => setIsDefinitionExpanded(!isDefinitionExpanded)}
+                            className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-slate-200/50 dark:hover:bg-slate-700/50"
+                        >
+                            <div className="flex items-center gap-2">
+                                <BookOpen className="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
+                                <span className="text-xs font-bold text-secondary-700 dark:text-secondary-400 uppercase tracking-wider">Definition: {geo.definition.term}</span>
+                            </div>
+                            <ChevronDown className={`w-4 h-4 text-secondary-400 transition-transform duration-300 ${isDefinitionExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <div className={`transition-all duration-300 ease-in-out ${isDefinitionExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                            <div className="px-4 pb-4">
+                                <p className="text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed">
+                                    {geo.definition.definition}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 3. Collapsible Key Takeaways */}
+                {geo.quickAnswer && (
+                    <div className="space-y-4">
+
+                        {/* Always visible One Thing - High Impact */}
+                        {geo.quickAnswer.oneThing && (
+                            <div className="py-2">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="p-1 rounded bg-secondary-100 dark:bg-secondary-900/30">
+                                        <Zap className="w-3.5 h-3.5 text-secondary-600 dark:text-secondary-400" />
+                                    </div>
+                                    <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Key Takeaways</h3>
+                                </div>
+                                <div className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
+                                    {renderMarkdown(geo.quickAnswer.oneThing)}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Collapsible details/bullets */}
+                        <button
+                            onClick={() => setIsTakeawaysExpanded(!isTakeawaysExpanded)}
+                            className="w-full flex items-center justify-between py-2 border-t border-slate-100 dark:border-slate-800 text-slate-500"
+                        >
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                                {isTakeawaysExpanded ? 'Hide Key Breakdown' : 'Show Key Breakdown'}
+                            </span>
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isTakeawaysExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Bullets - Collapsible part */}
+                        {geo.quickAnswer.bullets && geo.quickAnswer.bullets.length > 0 && (
+                            <div className={`transition-all duration-300 ease-in-out ${isTakeawaysExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                                <div className="space-y-3 pl-1 pb-2">
+                                    {geo.quickAnswer.bullets.map((bullet, idx) => (
+                                        <div key={idx} className="flex gap-3 items-start group">
+                                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary-400/60 dark:bg-primary-500/60 shrink-0 group-hover:bg-secondary-500 transition-colors" />
+                                            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                                                {renderMarkdown(bullet)}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
-
-                    {/* Right: Takeaways Carousel */}
-                    {geo.quickAnswer?.bullets && geo.quickAnswer.bullets.length > 0 && (
-                        <div className="flex-1 flex flex-col bg-slate-50/50 dark:bg-primary-900/20 rounded-3xl p-6 border border-slate-100 dark:border-primary-500/10 min-h-[160px] relative group/carousel">
-                            <div className="flex-1 flex items-center justify-center text-center">
-                                <div className="text-[15px] sm:text-lg text-slate-700 dark:text-slate-200 leading-relaxed font-bold animate-in fade-in slide-in-from-right-4 duration-500" key={takeawayIndex}>
-                                    {renderMarkdown(geo.quickAnswer.bullets[takeawayIndex])}
-                                </div>
-                            </div>
-
-                            {/* Carousel Controls */}
-                            {geo.quickAnswer.bullets.length > 1 && (
-                                <div className="mt-4 flex items-center justify-between">
-                                    <div className="flex gap-1.5">
-                                        {geo.quickAnswer.bullets.map((_, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`h-1.5 rounded-full transition-all duration-300 ${takeawayIndex === idx ? 'w-6 bg-secondary-500' : 'w-1.5 bg-primary-200 dark:bg-primary-800'}`}
-                                            />
-                                        ))}
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={prevTakeaway}
-                                            className="p-1.5 rounded-full bg-white dark:bg-primary-800 border border-primary-100 dark:border-primary-700 shadow-sm hover:scale-110 active:scale-95 transition-all"
-                                        >
-                                            <ChevronLeft className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                                        </button>
-                                        <button
-                                            onClick={nextTakeaway}
-                                            className="p-1.5 rounded-full bg-white dark:bg-primary-800 border border-primary-100 dark:border-primary-700 shadow-sm hover:scale-110 active:scale-95 transition-all"
-                                        >
-                                            <ChevronRight className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                )}
             </div>
         </div>
     )
