@@ -38,6 +38,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 	const [isVisible, setIsVisible] = useState(variant === 'box')
 	const [isMounted, setIsMounted] = useState(false)
 	const [isBanned, setIsBanned] = useState(false)
+	const [hasSessionDismissed, setHasSessionDismissed] = useState(false)
 	const [bottomOffset, setBottomOffset] = useState(16)
 	const pathname = usePathname()
 	const scrollProgress = useScrollProgress()
@@ -92,7 +93,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 	}, [variant, isBanned])
 
 	useEffect(() => {
-		if (variant !== 'sticky' || isBanned || isVisible) return
+		if (variant !== 'sticky' || isBanned || isVisible || hasSessionDismissed) return
 
 		if (timeConditionMet && scrollProgress > SCROLL_TRIGGER_PERCENT) {
 			// Double check ban status just in case
@@ -108,7 +109,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 				trackRoleFitAuditCTAView(variant)
 			}
 		}
-	}, [timeConditionMet, scrollProgress, variant, isBanned, isVisible])
+	}, [timeConditionMet, scrollProgress, variant, isBanned, isVisible, hasSessionDismissed])
 
 	// Keep CTA above any mobile bottom bars (e.g., MobileActionBar)
 	useEffect(() => {
@@ -148,6 +149,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 
 	const handleDismiss = () => {
 		setIsVisible(false)
+		setHasSessionDismissed(true)
 		trackRoleFitAuditCTADismiss()
 
 		if (variant === 'sticky') {
