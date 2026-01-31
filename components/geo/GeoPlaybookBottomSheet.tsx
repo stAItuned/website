@@ -1,29 +1,47 @@
 "use client"
 
-import { useState } from 'react'
-import { QuickAnswerCard } from './QuickAnswerCard'
-import { ActionChecklist } from './ActionChecklist'
-import { TimelineStepper } from './TimelineStepper'
+import { useEffect, useMemo, useState } from 'react'
 import { Pitfalls } from './Pitfalls'
-import { AudienceFit } from './AudienceFit'
-import { X, ListTodo, Zap, Calendar, AlertTriangle } from 'lucide-react'
+import { DecisionRules, DecisionRule } from './DecisionRules'
+import { X, AlertTriangle, Sparkles } from 'lucide-react'
+
+interface GeoData {
+    pitfalls?: { title: string; description: string }[]
+    decisionRules?: { rules: DecisionRule[] }
+}
 
 interface GeoPlaybookBottomSheetProps {
-    geo: any
+    geo?: GeoData
     articleSlug: string
     isOpen: boolean
     onClose: () => void
 }
 
+/**
+ * Mobile-first playbook drawer opened from the action bar.
+ * Focused on strategic execution: decision rules + pitfalls.
+ * Discovery content (audience/definition/takeaways) lives above the article.
+ */
 export function GeoPlaybookBottomSheet({
     geo,
     articleSlug,
     isOpen,
     onClose
 }: GeoPlaybookBottomSheetProps) {
-    const [activeTab, setActiveTab] = useState<'answer' | 'checklist' | 'timeline' | 'pitfalls'>('answer')
+    const tabs = useMemo(() => ([
+        geo?.decisionRules?.rules?.length ? 'framework' : null,
+        geo?.pitfalls?.length ? 'pitfalls' : null
+    ].filter(Boolean) as Array<'framework' | 'pitfalls'>), [geo])
 
-    if (!geo) return null
+    const [activeTab, setActiveTab] = useState<'framework' | 'pitfalls'>(tabs[0] ?? 'framework')
+
+    useEffect(() => {
+        if (tabs.length && !tabs.includes(activeTab)) {
+            setActiveTab(tabs[0])
+        }
+    }, [tabs, activeTab])
+
+    if (!geo || tabs.length === 0) return null
 
     return (
         <>
@@ -41,49 +59,34 @@ export function GeoPlaybookBottomSheet({
                     <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mb-1" />
                 </div>
 
-                {/* Header with Tabs */}
-                <div className="px-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
-                    <div className="flex items-center justify-between py-2">
-                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">Key Resources</h2>
-                        <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
-                            <X className="w-6 h-6" />
-                        </button>
+            {/* Header with Tabs */}
+            <div className="px-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+                <div className="flex items-center justify-between py-2">
+                    <div className="flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-primary-500" />
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">Strategic Execution</h2>
                     </div>
+                    <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                        <X className="w-6 h-6" />
+                    </button>
+                </div>
 
-                    <div className="flex items-center gap-4 overflow-x-auto pb-0 -mb-px scrollbar-none">
-                        {geo.quickAnswer && (
-                            <button
-                                onClick={() => setActiveTab('answer')}
-                                className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'answer' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
-                            >
-                                <Zap className="w-4 h-4" />
-                                Quick Answer
-                            </button>
-                        )}
-                        {geo.checklist && (
-                            <button
-                                onClick={() => setActiveTab('checklist')}
-                                className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'checklist' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
-                            >
-                                <ListTodo className="w-4 h-4" />
-                                Checklist
-                            </button>
-                        )}
-                        {geo.timeline && (
-                            <button
-                                onClick={() => setActiveTab('timeline')}
-                                className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'timeline' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
-                            >
-                                <Calendar className="w-4 h-4" />
-                                Timeline
-                            </button>
-                        )}
-                        {geo.pitfalls && (
-                            <button
-                                onClick={() => setActiveTab('pitfalls')}
-                                className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'pitfalls' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
-                            >
-                                <AlertTriangle className="w-4 h-4" />
+                <div className="flex items-center gap-4 overflow-x-auto pb-0 -mb-px scrollbar-none">
+                    {tabs.includes('framework') && (
+                        <button
+                            onClick={() => setActiveTab('framework')}
+                            className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'framework' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            Framework
+                        </button>
+                    )}
+                    {tabs.includes('pitfalls') && (
+                        <button
+                            onClick={() => setActiveTab('pitfalls')}
+                            className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'pitfalls' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
+                        >
+                            <AlertTriangle className="w-4 h-4" />
                                 Pitfalls
                             </button>
                         )}
@@ -92,37 +95,15 @@ export function GeoPlaybookBottomSheet({
 
                 {/* Content Area */}
                 <div className="overflow-y-auto p-4 pb-8 flex-1">
-                    {activeTab === 'answer' && geo.quickAnswer && (
-                        <div className="flex flex-col gap-6">
-                            {geo.audience && (
-                                <AudienceFit
-                                    title={geo.audience.title}
-                                    description={geo.audience.description}
-                                />
-                            )}
-                            <QuickAnswerCard
-                                title={geo.quickAnswer.title}
-                                bullets={geo.quickAnswer.bullets}
-                                oneThing={geo.quickAnswer.oneThing}
-                            />
-                        </div>
-                    )}
-                    {activeTab === 'checklist' && geo.checklist && (
-                        <ActionChecklist
-                            items={geo.checklist.items}
-                            articleSlug={articleSlug}
-                        />
-                    )}
-                    {activeTab === 'timeline' && geo.timeline && (
-                        <TimelineStepper
-                            steps={geo.timeline.steps}
-                        />
-                    )}
-                    {activeTab === 'pitfalls' && geo.pitfalls && (
+                    {activeTab === 'framework' && geo.decisionRules?.rules?.length ? (
+                        <DecisionRules rules={geo.decisionRules.rules} />
+                    ) : null}
+
+                    {activeTab === 'pitfalls' && geo.pitfalls?.length ? (
                         <Pitfalls
                             pitfalls={geo.pitfalls}
                         />
-                    )}
+                    ) : null}
                 </div>
             </div>
         </>

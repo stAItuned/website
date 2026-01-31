@@ -38,6 +38,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 	const [isVisible, setIsVisible] = useState(variant === 'box')
 	const [isMounted, setIsMounted] = useState(false)
 	const [isBanned, setIsBanned] = useState(false)
+	const [bottomOffset, setBottomOffset] = useState(16)
 	const pathname = usePathname()
 	const scrollProgress = useScrollProgress()
 
@@ -109,6 +110,35 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 		}
 	}, [timeConditionMet, scrollProgress, variant, isBanned, isVisible])
 
+	// Keep CTA above any mobile bottom bars (e.g., MobileActionBar)
+	useEffect(() => {
+		if (variant !== 'sticky') return
+
+		const updateOffset = () => {
+			const bar = document.querySelector('[data-mobile-action-bar]')
+			if (bar) {
+				const { height } = bar.getBoundingClientRect()
+				setBottomOffset(Math.round(height + 12))
+				return
+			}
+			setBottomOffset(16)
+		}
+
+		updateOffset()
+
+		const observer = typeof ResizeObserver !== 'undefined'
+			? new ResizeObserver(updateOffset)
+			: null
+		const bar = document.querySelector('[data-mobile-action-bar]')
+		if (bar && observer) observer.observe(bar)
+
+		window.addEventListener('resize', updateOffset)
+
+		return () => {
+			observer?.disconnect()
+			window.removeEventListener('resize', updateOffset)
+		}
+	}, [variant])
 
 	if (!isMounted) return null
 
@@ -212,7 +242,8 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 						animate={{ y: 0, opacity: 1 }}
 						exit={{ y: 100, opacity: 0 }}
 						transition={{ type: "spring", stiffness: 300, damping: 30 }}
-						className={`fixed bottom-4 left-0 right-0 z-40 flex justify-center pointer-events-none lg:hidden ${className}`}
+						className={`fixed left-0 right-0 z-[70] flex justify-center pointer-events-none lg:hidden ${className}`}
+						style={{ bottom: `calc(${bottomOffset}px + env(safe-area-inset-bottom))` }}
 					>
 						<div className="w-full max-w-2xl px-4 pointer-events-auto">
 							<div className="relative overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 ring-1 ring-white/10">

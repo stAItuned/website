@@ -8,14 +8,19 @@ interface LikeButtonProps {
   liked?: boolean
   onLike?: () => void
   isLoading?: boolean
+  variant?: 'pill' | 'icon'
 }
 
+/**
+ * Like toggle button. Use `variant="icon"` for compact icon-only usage on tight layouts.
+ */
 export function LikeButton({
   articleSlug,
   initialLikes = 0,
   liked: externalLiked,
   onLike: externalOnLike,
-  isLoading: externalIsLoading
+  isLoading: externalIsLoading,
+  variant = 'pill'
 }: LikeButtonProps) {
   // Internal state for when used independently
   const [internalLiked, setInternalLiked] = useState(false)
@@ -83,7 +88,8 @@ export function LikeButton({
   return (
     <button
       className={`
-        flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-full 
+        inline-flex items-center justify-center gap-1 sm:gap-2
+        ${variant === 'icon' ? 'h-11 w-11 sm:h-12 sm:w-12 rounded-full' : 'px-2.5 sm:px-4 py-2 rounded-full'}
         border transition-all duration-300
         ${isLiked
           ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900'
@@ -103,9 +109,11 @@ export function LikeButton({
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
       </svg>
-      <span className="text-sm font-medium">
-        {isLiked ? 'Liked' : 'Like'}
-      </span>
+      {variant === 'pill' && (
+        <span className="text-sm font-medium">
+          {isLiked ? 'Liked' : 'Like'}
+        </span>
+      )}
     </button>
   )
 }

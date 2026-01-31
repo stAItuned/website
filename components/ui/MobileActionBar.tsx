@@ -46,7 +46,7 @@ function OfflineSaveButton({ articleSlug }: { articleSlug: string }) {
     <button
       onClick={handleClick}
       disabled={isLoading || isCached}
-      className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors active:scale-95 ${isCached
+      className={`flex flex-col items-center gap-1 px-3 py-2 min-w-[64px] rounded-xl transition-colors active:scale-95 ${isCached
         ? 'bg-emerald-50 dark:bg-emerald-900/30'
         : 'hover:bg-gray-100 dark:hover:bg-slate-800'
         }`}
@@ -66,12 +66,10 @@ function OfflineSaveButton({ articleSlug }: { articleSlug: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
         </svg>
       )}
-      <span className={`text-xs font-medium ${isCached
+      <span className={`text-[10px] leading-tight font-medium ${isCached
         ? 'text-emerald-600 dark:text-emerald-400'
         : 'text-gray-700 dark:text-gray-300'
-        }`}>
-        Offline
-      </span>
+        }`}>Offline</span>
     </button>
   )
 }
@@ -95,6 +93,9 @@ interface MobileActionBarProps {
   hasPlaybook?: boolean
 }
 
+/**
+ * Compact bottom navigation for article pages on mobile, exposing key engagement controls without overflowing narrow viewports.
+ */
 export function MobileActionBar({
   articleSlug,
   title,
@@ -337,7 +338,10 @@ export function MobileActionBar({
       )}
 
       {/* Mobile Action Bar */}
-      <div className="fixed bottom-0 sm:bottom-6 left-0 right-0 z-50 lg:hidden flex justify-center pointer-events-none px-2">
+      <div
+        data-mobile-action-bar
+        className="fixed bottom-0 sm:bottom-6 left-0 right-0 z-50 lg:hidden flex justify-center pointer-events-none px-2"
+      >
         <div className="w-full max-w-3xl px-3 sm:px-4 mx-auto pointer-events-auto">
           {/* Auth Required Prompt */}
           {showAuthPrompt && !user && (
@@ -372,90 +376,49 @@ export function MobileActionBar({
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-1 px-1 sm:px-3 py-3 w-full">
+            <div className="grid grid-flow-col auto-cols-fr items-center gap-1 px-2 sm:px-3 py-2 w-full overflow-hidden">
               {/* Like Button */}
-              <div className="flex-1 flex justify-center">
-                <LikeButton articleSlug={articleSlug} />
+              <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
+                <LikeButton articleSlug={articleSlug} variant="icon" />
+                <span className="text-[10px] leading-tight font-medium text-gray-700 dark:text-gray-300">Like</span>
               </div>
 
               {/* Bookmark Button */}
-              <button
-                onClick={handleBookmark}
-                className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
-              >
-                <svg
-                  className={`w-6 h-6 transition-colors ${isBookmarked
-                    ? 'text-yellow-500 fill-yellow-500'
-                    : 'text-gray-700 dark:text-gray-300'
-                    }`}
-                  fill={isBookmarked ? 'currentColor' : 'none'}
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={isBookmarked ? 0 : 2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-                <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300">
-                  {isBookmarked ? 'Saved' : 'Bookmark'}
-                </span>
-              </button>
-
-              {/* Offline Save Button */}
-              <OfflineSaveButton articleSlug={articleSlug} />
-
-              {/* Share Button */}
-              <button
-                onClick={() => setShowShareMenu(!showShareMenu)}
-                className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                aria-label="Share article"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-700 dark:text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                </svg>
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Share</span>
-              </button>
-
-              {/* Focus Mode Button */}
-              {onFocusModeToggle && (
+              <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
                 <button
-                  onClick={handleFocusModeToggle}
-                  className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors active:scale-95 ${isFocusMode
-                    ? 'bg-primary-100 dark:bg-primary-900'
-                    : 'hover:bg-gray-100 dark:hover:bg-slate-800'
-                    }`}
-                  aria-label={isFocusMode ? 'Exit focus mode' : 'Enter focus mode'}
+                  onClick={handleBookmark}
+                  className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95 w-full"
+                  aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
                 >
                   <svg
-                    className={`w-6 h-6 ${isFocusMode
-                      ? 'text-primary-600 dark:text-primary-400'
+                    className={`w-6 h-6 transition-colors ${isBookmarked
+                      ? 'text-yellow-500 fill-yellow-500'
                       : 'text-gray-700 dark:text-gray-300'
                       }`}
-                    fill="none"
+                    fill={isBookmarked ? 'currentColor' : 'none'}
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    strokeWidth={isBookmarked ? 0 : 2}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                   </svg>
-                  <span className={`text-xs font-medium ${isFocusMode
-                    ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-gray-700 dark:text-gray-300'
-                    }`}>Focus</span>
+                  <span className="text-[10px] leading-tight font-medium text-gray-700 dark:text-gray-300">
+                    {isBookmarked ? 'Saved' : 'Save'}
+                  </span>
                 </button>
-              )}
+              </div>
 
-              {/* TOC Button */}
-              {showToc && (
+              {/* Offline Save Button */}
+              <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
+                <OfflineSaveButton articleSlug={articleSlug} />
+              </div>
+
+              {/* Share Button */}
+              <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
                 <button
-                  onClick={onTocClick}
-                  className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                  aria-label="Table of contents"
+                  onClick={() => setShowShareMenu(!showShareMenu)}
+                  className="flex flex-col items-center px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95 w-full"
+                  aria-label="Share article"
                 >
                   <svg
                     className="w-6 h-6 text-gray-700 dark:text-gray-300"
@@ -463,23 +426,74 @@ export function MobileActionBar({
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                   </svg>
-                  <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Contents</span>
+                  <span className="text-[10px] leading-tight font-medium text-gray-700 dark:text-gray-300">Share</span>
                 </button>
+              </div>
+
+              {/* Focus Mode Button */}
+              {onFocusModeToggle && (
+                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
+                  <button
+                    onClick={handleFocusModeToggle}
+                    className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors active:scale-95 w-full ${isFocusMode
+                      ? 'bg-primary-100 dark:bg-primary-900'
+                      : 'hover:bg-gray-100 dark:hover:bg-slate-800'
+                      }`}
+                    aria-label={isFocusMode ? 'Exit focus mode' : 'Enter focus mode'}
+                  >
+                    <svg
+                      className={`w-6 h-6 ${isFocusMode
+                        ? 'text-primary-600 dark:text-primary-400'
+                        : 'text-gray-700 dark:text-gray-300'
+                        }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                    <span className="text-[10px] leading-tight font-medium text-gray-700 dark:text-gray-300">{isFocusMode ? 'Focused' : 'Focus'}</span>
+                  </button>
+                </div>
+              )}
+
+              {/* TOC Button */}
+              {showToc && (
+                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
+                  <button
+                    onClick={onTocClick}
+                    className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95 w-full"
+                    aria-label="Table of contents"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-700 dark:text-gray-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                    <span className="text-[10px] leading-tight font-medium text-gray-700 dark:text-gray-300">Contents</span>
+                  </button>
+                </div>
               )}
               {/* Playbook Button */}
               {hasPlaybook && onPlaybookClick && (
-                <button
-                  onClick={onPlaybookClick}
-                  className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
-                  aria-label="Open Playbook"
-                >
-                  <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                  </svg>
-                  <span className="text-xs font-bold text-primary-600 dark:text-primary-400">Playbook</span>
-                </button>
+                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
+                  <button
+                    onClick={onPlaybookClick}
+                    className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors active:scale-95 w-full"
+                    aria-label="Open Playbook"
+                  >
+                    <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                    <span className="text-[10px] leading-tight font-medium text-primary-600 dark:text-primary-400">Playbook</span>
+                  </button>
+                </div>
               )}
             </div>
           </div>

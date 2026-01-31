@@ -1,6 +1,6 @@
 "use client"
 import { useScreenSize } from '@/lib/hooks/useScreenSize'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { LikeButton } from '@/components/LikeButton'
@@ -74,6 +74,16 @@ export default function ArticlePageClient({
   const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('small')
   const [fontFamily, setFontFamily] = useState<'sans' | 'serif'>('sans')
   const [showPlaybookSheet, setShowPlaybookSheet] = useState(false)
+  const hasStrategicPlaybook = useMemo(
+    () => Boolean(
+      article.geo &&
+      (
+        (article.geo.decisionRules?.rules?.length ?? 0) > 0 ||
+        (article.geo.pitfalls?.length ?? 0) > 0
+      )
+    ),
+    [article.geo]
+  )
 
   // Live analytics state - starts with SSR/ISR cached values, refreshes on mount
   const [liveAnalytics, setLiveAnalytics] = useState<ArticleAnalytics>(analytics)
@@ -664,7 +674,7 @@ export default function ArticlePageClient({
                   {/* Author */}
                   <div className="flex items-center gap-2">
                     {article.author && (
-                      <AuthorAvatar author={article.author} authorData={authorData} imageFit="contain" />
+                    <AuthorAvatar author={article.author} authorData={authorData} />
                     )}
                   </div>
                   {/* Meta Info Group */}
@@ -895,9 +905,9 @@ export default function ArticlePageClient({
                       FREE
                     </span>
                     {/* Author */}
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2 border-radius 0">
                       {article.author && (
-                        <AuthorAvatar author={article.author} authorData={authorData} imageFit="contain" />
+                        <AuthorAvatar author={article.author} authorData={authorData} />
                       )}
                     </div>
                     {/* Meta Info Group */}
@@ -1056,7 +1066,7 @@ export default function ArticlePageClient({
               onFontFamilyChange={setFontFamily}
               currentFontFamily={fontFamily}
               onPlaybookClick={() => setShowPlaybookSheet(true)}
-              hasPlaybook={!!article.geo}
+              hasPlaybook={hasStrategicPlaybook}
             />
           </>
         )}
@@ -1100,7 +1110,7 @@ export default function ArticlePageClient({
       <GeoPlaybookBottomSheet
         geo={article.geo}
         articleSlug={article.slug}
-        isOpen={showPlaybookSheet}
+        isOpen={showPlaybookSheet && hasStrategicPlaybook}
         onClose={() => setShowPlaybookSheet(false)}
       />
     </PageTransition>
