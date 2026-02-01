@@ -42,6 +42,13 @@ import { GeoPlaybookBottomSheet } from '@/components/geo/GeoPlaybookBottomSheet'
 import { GeoAnswerLayer } from '@/components/geo/GeoAnswerLayer'
 import { GeoStrategicInsights } from '@/components/geo/GeoStrategicInsights'
 
+type ReferenceMeta = {
+  id: string
+  href: string
+  title: string
+  context: string
+}
+
 /**
  * Client-side article page renderer with responsive desktop/mobile layouts.
  */
@@ -87,6 +94,7 @@ export default function ArticlePageClient({
 
   // Live analytics state - starts with SSR/ISR cached values, refreshes on mount
   const [liveAnalytics, setLiveAnalytics] = useState<ArticleAnalytics>(analytics)
+  const primaryTopicHub = article.primaryTopic ? getTopicHub(article.primaryTopic) : null
 
   // Reading progress persistence
   const {
@@ -99,6 +107,18 @@ export default function ArticlePageClient({
 
   // Reading history for PWA shortcuts
   const { addToHistory } = useReadingHistory()
+
+  // Inline reference handling
+  const [references, setReferences] = useState<Record<string, ReferenceMeta>>({})
+  const [activeReferenceId, setActiveReferenceId] = useState<string | null>(null)
+  const [referenceAnchorRect, setReferenceAnchorRect] = useState<DOMRect | null>(null)
+  const [isReferencePinned, setIsReferencePinned] = useState(false)
+  const referenceCardRef = useRef<HTMLDivElement | null>(null)
+  const activeReferenceAnchorElRef = useRef<HTMLAnchorElement | null>(null)
+  const [articleRootNode, setArticleRootNode] = useState<HTMLDivElement | null>(null)
+  const setArticleRootRef = useCallback((node: HTMLDivElement | null) => {
+    setArticleRootNode(node)
+  }, [])
 
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
@@ -550,6 +570,275 @@ export default function ArticlePageClient({
     }
   }, [article.slug])
 
+  const buildReferenceMeta = useCallback((root: ParentNode | null, id: string, inlineRef?: HTMLAnchorElement) => {
+    const definitionAnchor = root?.querySelector<HTMLAnchorElement>(`a[id="${id}"]`)
+    if (!definitionAnchor) return null
+
+    const listItem = definitionAnchor.closest('li')
+    const linkEl = listItem?.querySelector<HTMLAnchorElement>('a[href^="http"]')
+    const title = linkEl?.textContent?.trim() ?? 'External source'
+    const href = linkEl?.href ?? ''
+
+    const inlineAnchor = inlineRef ?? root?.querySelector<HTMLAnchorElement>(`a[href="#${id}"]`)
+    const contextSource = inlineAnchor?.closest('p, li, blockquote')?.textContent ?? listItem?.textContent ?? ''
+    const cleanedContext = contextSource.replace(/\s+/g, ' ').replace(/\[\d+\]/g, '').trim()
+    const context = cleanedContext.length > 160 ? `${cleanedContext.slice(0, 157)}...` : (cleanedContext || "Reference cited in the article")
+
+    return { id, href, title, context }
+  }, [])
+
+  const resolveReferenceMeta = useCallback((id: string, inlineRef?: HTMLAnchorElement) => {
+    if (typeof document === 'undefined') return null
+    const definitionAnchor = document.getElementById(id) as HTMLAnchorElement | null
+    if (!definitionAnchor) return null
+
+    const listItem = definitionAnchor.closest('li')
+    const linkEl = listItem?.querySelector<HTMLAnchorElement>('a[href^="http"]')
+    const title = linkEl?.textContent?.trim() ?? 'External source'
+    const href = linkEl?.href ?? ''
+
+    const inlineAnchor = inlineRef ?? document.querySelector<HTMLAnchorElement>(`a[href="#${id}"]`)
+    const contextSource = inlineAnchor?.closest('p, li, blockquote')?.textContent ?? listItem?.textContent ?? ''
+    const cleanedContext = contextSource.replace(/\s+/g, ' ').replace(/\[\d+\]/g, '').trim()
+    const context = cleanedContext.length > 160 ? `${cleanedContext.slice(0, 157)}...` : (cleanedContext || "Reference cited in the article")
+
+    return { id, href, title, context }
+  }, [])
+
+  // Build reference map from rendered markdown content
+  useEffect(() => {
+    if (!mounted || !articleRootNode) return
+
+    const collectReferences = () => {
+      if (!articleRootNode) return
+      const newReferences: Record<string, ReferenceMeta> = {}
+      const definitionAnchors = articleRootNode.querySelectorAll<HTMLAnchorElement>('a[id^="ref-"]')
+
+      definitionAnchors.forEach(anchor => {
+        const meta = buildReferenceMeta(articleRootNode, anchor.id) ?? resolveReferenceMeta(anchor.id)
+        if (meta) {
+          newReferences[anchor.id] = meta
+        }
+      })
+
+      setReferences(newReferences)
+    }
+
+    collectReferences()
+  }, [articleRootNode, buildReferenceMeta, mounted, article.body.raw, resolveReferenceMeta])
+
+  const closeReference = useCallback(() => {
+    setActiveReferenceId(null)
+    setReferenceAnchorRect(null)
+    setIsReferencePinned(false)
+    activeReferenceAnchorElRef.current = null
+  }, [])
+
+  useEffect(() => {
+    if (!mounted || !articleRootNode) return
+
+    const handleInlineReferenceClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null
+      const anchor = target?.closest<HTMLAnchorElement>('a[href^="#ref-"]')
+      if (!anchor) return
+
+      const withinArticle = anchor.closest('.stai-markdown, .article-mobile-markdown, #article-root')
+      if (!withinArticle) return
+
+      const hash = anchor.getAttribute('href')?.replace('#', '')
+      if (!hash) return
+
+      event.preventDefault()
+      event.stopPropagation()
+
+      const meta = references[hash]
+        ?? buildReferenceMeta(articleRootNode, hash, anchor)
+        ?? resolveReferenceMeta(hash, anchor)
+      if (!meta) {
+        const definitionNode = document.getElementById(hash)
+        if (definitionNode) {
+          definitionNode.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+        return
+      }
+      if (!references[hash]) {
+        setReferences(prev => ({ ...prev, [hash]: meta }))
+      }
+      activeReferenceAnchorElRef.current = anchor
+      setActiveReferenceId(hash)
+      setReferenceAnchorRect(anchor.getBoundingClientRect())
+      setIsReferencePinned(true)
+    }
+
+    articleRootNode.addEventListener('click', handleInlineReferenceClick, true)
+
+    return () => articleRootNode.removeEventListener('click', handleInlineReferenceClick, true)
+  }, [articleRootNode, buildReferenceMeta, mounted, references, resolveReferenceMeta])
+
+  // Desktop hover/focus tooltip for inline references (keeps users in context)
+  useEffect(() => {
+    if (!mounted || !articleRootNode) return
+    if (typeof window === 'undefined') return
+
+    const canHover = window.matchMedia?.('(hover: hover) and (pointer: fine)')?.matches ?? false
+    if (!canHover) return
+    if (new URLSearchParams(window.location.search).has('noRefTooltip')) return
+
+    const resolveInlineRef = (anchor: HTMLAnchorElement) => {
+      const hash = anchor.getAttribute('href')?.replace('#', '')
+      if (!hash) return null
+
+      if (
+        activeReferenceAnchorElRef.current === anchor &&
+        activeReferenceId === hash &&
+        !isReferencePinned
+      ) {
+        return references[hash] ?? null
+      }
+
+      const meta = references[hash]
+        ?? buildReferenceMeta(articleRootNode, hash, anchor)
+        ?? resolveReferenceMeta(hash, anchor)
+      if (!meta) return null
+
+      if (!references[hash]) {
+        setReferences(prev => ({ ...prev, [hash]: meta }))
+      }
+
+      activeReferenceAnchorElRef.current = anchor
+      setActiveReferenceId(hash)
+      setReferenceAnchorRect(anchor.getBoundingClientRect())
+      setIsReferencePinned(false)
+      return meta
+    }
+
+    const handlePointerOver = (event: PointerEvent) => {
+      if (isReferencePinned) return
+      if (event.pointerType && event.pointerType !== 'mouse') return
+
+      const target = event.target as HTMLElement | null
+      const anchor = target?.closest<HTMLAnchorElement>('a[href^="#ref-"]')
+      if (!anchor) return
+
+      const withinArticle = anchor.closest('.stai-markdown, .article-mobile-markdown, #article-root')
+      if (!withinArticle) return
+
+      resolveInlineRef(anchor)
+    }
+
+    const handlePointerOut = (event: PointerEvent) => {
+      if (isReferencePinned) return
+      if (event.pointerType && event.pointerType !== 'mouse') return
+
+      const target = event.target as HTMLElement | null
+      const anchor = target?.closest<HTMLAnchorElement>('a[href^="#ref-"]')
+      if (!anchor) return
+
+      const related = event.relatedTarget as Node | null
+      if (related && anchor.contains(related)) return
+      if (related && referenceCardRef.current?.contains(related)) return
+
+      closeReference()
+    }
+
+    const handleFocusIn = (event: FocusEvent) => {
+      if (isReferencePinned) return
+      const target = event.target as HTMLElement | null
+      const anchor = target?.closest<HTMLAnchorElement>('a[href^="#ref-"]')
+      if (!anchor) return
+
+      const withinArticle = anchor.closest('.stai-markdown, .article-mobile-markdown, #article-root')
+      if (!withinArticle) return
+
+      resolveInlineRef(anchor)
+    }
+
+    const handleFocusOut = (event: FocusEvent) => {
+      if (isReferencePinned) return
+      const target = event.target as HTMLElement | null
+      const anchor = target?.closest<HTMLAnchorElement>('a[href^="#ref-"]')
+      if (!anchor) return
+
+      const related = event.relatedTarget as Node | null
+      if (related && referenceCardRef.current?.contains(related)) return
+
+      closeReference()
+    }
+
+    articleRootNode.addEventListener('pointerover', handlePointerOver, true)
+    articleRootNode.addEventListener('pointerout', handlePointerOut, true)
+    articleRootNode.addEventListener('focusin', handleFocusIn, true)
+    articleRootNode.addEventListener('focusout', handleFocusOut, true)
+
+    return () => {
+      articleRootNode.removeEventListener('pointerover', handlePointerOver, true)
+      articleRootNode.removeEventListener('pointerout', handlePointerOut, true)
+      articleRootNode.removeEventListener('focusin', handleFocusIn, true)
+      articleRootNode.removeEventListener('focusout', handleFocusOut, true)
+    }
+  }, [activeReferenceId, articleRootNode, buildReferenceMeta, closeReference, isReferencePinned, mounted, references, resolveReferenceMeta])
+
+  // Close active reference on escape or outside click
+  useEffect(() => {
+    if (!activeReferenceId) return
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeReference()
+      }
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!referenceCardRef.current) return
+      if (!referenceCardRef.current.contains(event.target as Node)) {
+        closeReference()
+      }
+    }
+
+    document.addEventListener('keydown', handleKey)
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('keydown', handleKey)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [activeReferenceId, closeReference])
+
+  const handleOpenSource = useCallback((meta?: ReferenceMeta) => {
+    if (!meta?.href) return
+    window.open(meta.href, '_blank', 'noopener,noreferrer')
+    event({
+      action: 'reference_open_source',
+      category: 'engagement',
+      label: meta.id,
+      value: 1
+    })
+    closeReference()
+  }, [closeReference])
+
+  const handleViewAllReferences = useCallback(() => {
+    if (activeReferenceId) {
+      event({
+        action: 'reference_view_all',
+        category: 'engagement',
+        label: activeReferenceId,
+        value: 1
+      })
+    }
+    const firstRef = articleRootNode?.querySelector<HTMLElement>('a[id^="ref-"]')
+      ?? document.querySelector<HTMLElement>('a[id^="ref-"]')
+    if (firstRef) {
+      firstRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    closeReference()
+  }, [activeReferenceId, articleRootNode, closeReference])
+
+  const activeReference = activeReferenceId
+    ? references[activeReferenceId]
+      ?? (articleRootNode ? buildReferenceMeta(articleRootNode, activeReferenceId) : null)
+      ?? resolveReferenceMeta(activeReferenceId)
+    : null
+
   return (
     <PageTransition>
       <ReadingProgress />
@@ -802,7 +1091,7 @@ export default function ArticlePageClient({
                 </div> */}
               </div>
               {/* Article Body */}
-              <div id="article-root">
+              <div id="article-root" ref={setArticleRootRef}>
                 {/* GEO Answer Layer - Above the Fold */}
                 {article.geo && (
                   <GeoAnswerLayer
@@ -910,6 +1199,19 @@ export default function ArticlePageClient({
                         <AuthorAvatar author={article.author} authorData={authorData} />
                       )}
                     </div>
+                    {article.primaryTopic && (
+                      <Link
+                        href={`/topics/${article.primaryTopic}`}
+                        className="flex flex-col items-center gap-1 mt-2 text-center"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                          Main topic
+                        </span>
+                        <span className="text-sm font-semibold text-primary-600 dark:text-primary-300">
+                          {primaryTopicHub?.name ?? article.primaryTopic.replace(/-/g, ' ')}
+                        </span>
+                      </Link>
+                    )}
                     {/* Meta Info Group */}
                     <div className="flex flex-row flex-wrap items-center justify-center gap-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                       {/* Date */}
@@ -1006,6 +1308,7 @@ export default function ArticlePageClient({
                     className="article-mobile-markdown"
                     data-text-size={textSize}
                     data-font-family={fontFamily}
+                    ref={setArticleRootRef}
                   >
                     <MarkdownContent
                       content={article.body.raw}
@@ -1106,6 +1409,126 @@ export default function ArticlePageClient({
           topics: post.topics
         }))} />
       </div>
+
+      {/* Inline Reference UX */}
+      {activeReference && isLarge && (
+        <div className="fixed inset-0 z-[80] pointer-events-none">
+          <div
+            ref={referenceCardRef}
+            className="pointer-events-auto absolute w-[320px] max-w-[90vw] rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-900/40 backdrop-blur-xl transition-all duration-200 animate-slide-up"
+            onPointerLeave={() => {
+              if (!isReferencePinned) closeReference()
+            }}
+            onBlurCapture={(e) => {
+              if (isReferencePinned) return
+              const related = e.relatedTarget as Node | null
+              if (related && e.currentTarget.contains(related)) return
+              closeReference()
+            }}
+            style={{
+              top: referenceAnchorRect && typeof window !== 'undefined'
+                ? Math.min(referenceAnchorRect.bottom + 12, window.innerHeight - 220)
+                : 140,
+              left: referenceAnchorRect && typeof window !== 'undefined'
+                ? Math.min(
+                  Math.max(referenceAnchorRect.left + (referenceAnchorRect.width / 2) - 160, 16),
+                  window.innerWidth - 340
+                )
+                : 24
+            }}
+          >
+            <div className="flex items-start gap-3 p-4">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-200 shadow-inner">
+                <span className="text-sm font-bold">{activeReference.id.replace('ref-', '')}</span>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white leading-snug">
+                  {activeReference.title}
+                </p>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-snug">
+                  {activeReference.context}
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <button
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-600 text-white text-xs font-semibold shadow-md hover:bg-primary-700 transition-colors"
+                    onClick={() => handleOpenSource(activeReference)}
+                  >
+                    Open source
+                  </button>
+                  <button
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-gray-800 dark:bg-slate-800 dark:text-gray-100 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    onClick={handleViewAllReferences}
+                  >
+                    View all references
+                  </button>
+                  <button
+                    className="ml-auto text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition-colors"
+                    onClick={closeReference}
+                    aria-label="Close reference"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!isLarge && (
+        <div
+          className={`fixed inset-0 z-[80] ${activeReference ? 'pointer-events-auto' : 'pointer-events-none'}`}
+          aria-hidden={!activeReference}
+        >
+          <div
+            className={`absolute inset-0 bg-black/50 transition-opacity duration-200 ${activeReference ? 'opacity-100' : 'opacity-0'}`}
+            onClick={closeReference}
+          />
+          <div
+            className={`absolute inset-x-0 bottom-0 max-h-[70vh] rounded-t-3xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-900/40 backdrop-blur-xl transition-transform duration-300 ease-out ${activeReference ? 'translate-y-0' : 'translate-y-full'}`}
+          >
+            <div className="flex items-center justify-between px-5 pt-4">
+              <div className="flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-200 shadow-inner">
+                  <span className="text-sm font-bold">{activeReference?.id.replace('ref-', '')}</span>
+                </div>
+                <span className="text-sm font-semibold text-gray-900 dark:text-white">Reference</span>
+              </div>
+            <button
+              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-300 transition-colors"
+              onClick={closeReference}
+              aria-label="Close reference panel"
+            >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-5 pb-5 space-y-3">
+              <p className="text-base font-semibold text-gray-900 dark:text-white leading-snug">
+                {activeReference?.title}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-snug">
+                {activeReference?.context}
+              </p>
+              <div className="grid grid-cols-2 gap-3 pt-1">
+              <button
+                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-primary-600 text-white text-sm font-semibold shadow-lg hover:bg-primary-700 transition-colors"
+                onClick={() => handleOpenSource(activeReference || undefined)}
+              >
+                Open source
+              </button>
+              <button
+                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-slate-100 text-gray-800 dark:bg-slate-800 dark:text-gray-100 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                onClick={handleViewAllReferences}
+              >
+                View all references
+              </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <GeoPlaybookBottomSheet
         geo={article.geo}

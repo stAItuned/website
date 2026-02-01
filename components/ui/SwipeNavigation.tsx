@@ -13,6 +13,7 @@ interface SwipeNavigationProps {
 
 const SWIPE_THRESHOLD = 80 // Minimum distance to trigger navigation
 const SWIPE_VELOCITY_THRESHOLD = 0.3 // Minimum velocity (px/ms)
+const EDGE_SWIPE_ZONE_PX = 24 // Avoid interfering with text selection/links in the content
 
 /**
  * SwipeNavigation - Enables swipe left/right to navigate between articles
@@ -32,8 +33,20 @@ export function SwipeNavigation({
     const [isNavigating, setIsNavigating] = useState(false)
 
     const handleTouchStart = useCallback((e: React.TouchEvent) => {
-        // Only track horizontal swipes that start near edges or with clear horizontal intent
+        const target = e.target as HTMLElement | null
+        // Do not hijack interactions in the content (links, buttons, form fields, etc.)
+        if (target?.closest('a, button, input, textarea, select, [role="button"], [data-no-swipe]')) {
+            return
+        }
+
         const touch = e.touches[0]
+        // Start tracking only when the gesture begins near the screen edges, to preserve native text selection.
+        const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 0
+        const isNearEdge = touch.clientX <= EDGE_SWIPE_ZONE_PX || touch.clientX >= viewportWidth - EDGE_SWIPE_ZONE_PX
+        if (!isNearEdge) {
+            return
+        }
+
         setTouchStart({ x: touch.clientX, y: touch.clientY, time: Date.now() })
         setSwipeOffset(0)
         setSwipeDirection(null)

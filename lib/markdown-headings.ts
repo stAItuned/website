@@ -20,8 +20,10 @@ export function processMarkdownWithTOC(markdown: string) {
       toc.push({ level, text, slug });
     }
     
-    // Return HTML with ID for all heading levels
-    return `<h${level} id="${slug}">${text}</h${level}>`;
+    // Return HTML with ID for all heading levels.
+    // IMPORTANT: In CommonMark, block-level HTML can "eat" following markdown until a blank line.
+    // Add an extra newline so the content after headings is still parsed as markdown.
+    return `<h${level} id="${slug}">${text}</h${level}>\n`;
   });
   
   return { processedMarkdown, toc };

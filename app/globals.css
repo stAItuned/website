@@ -544,6 +544,15 @@ html {
   color: var(--stai-accent-strong);
 }
 
+.stai-markdown a[href^="#ref-"] {
+  cursor: help;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* Override Tailwind Typography's lead paragraph - prevents first paragraph auto-sizing */
 /* Using .prose.prose-sm increases specificity to (0,3,1) to beat Tailwind's (0,2,1) media query rule */
 .prose.prose-sm>p:first-of-type {
