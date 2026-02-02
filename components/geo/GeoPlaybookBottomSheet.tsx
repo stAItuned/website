@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useMemo, useState } from 'react'
-import { Pitfalls } from './Pitfalls'
+import { Pitfalls, Pitfall } from './Pitfalls'
 import { DecisionRules, DecisionRule } from './DecisionRules'
 import { X, AlertTriangle, Sparkles } from 'lucide-react'
 
 interface GeoData {
-    pitfalls?: { title: string; description: string }[]
+    pitfalls?: Pitfall[]
     decisionRules?: { rules: DecisionRule[] }
 }
 
@@ -59,34 +59,34 @@ export function GeoPlaybookBottomSheet({
                     <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mb-1" />
                 </div>
 
-            {/* Header with Tabs */}
-            <div className="px-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
-                <div className="flex items-center justify-between py-2">
-                    <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-primary-500" />
-                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">Strategic Execution</h2>
-                    </div>
-                    <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
-
-                <div className="flex items-center gap-4 overflow-x-auto pb-0 -mb-px scrollbar-none">
-                    {tabs.includes('framework') && (
-                        <button
-                            onClick={() => setActiveTab('framework')}
-                            className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'framework' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
-                        >
-                            <Sparkles className="w-4 h-4" />
-                            Framework
+                {/* Header with Tabs */}
+                <div className="px-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+                    <div className="flex items-center justify-between py-2">
+                        <div className="flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-primary-500" />
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Strategic Execution</h2>
+                        </div>
+                        <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                            <X className="w-6 h-6" />
                         </button>
-                    )}
-                    {tabs.includes('pitfalls') && (
-                        <button
-                            onClick={() => setActiveTab('pitfalls')}
-                            className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'pitfalls' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
-                        >
-                            <AlertTriangle className="w-4 h-4" />
+                    </div>
+
+                    <div className="flex items-center gap-4 overflow-x-auto pb-0 -mb-px scrollbar-none">
+                        {tabs.includes('framework') && (
+                            <button
+                                onClick={() => setActiveTab('framework')}
+                                className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'framework' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                Framework
+                            </button>
+                        )}
+                        {tabs.includes('pitfalls') && (
+                            <button
+                                onClick={() => setActiveTab('pitfalls')}
+                                className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'pitfalls' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-slate-500 dark:text-slate-400'}`}
+                            >
+                                <AlertTriangle className="w-4 h-4" />
                                 Pitfalls
                             </button>
                         )}
