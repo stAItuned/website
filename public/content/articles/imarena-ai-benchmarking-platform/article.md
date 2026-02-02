@@ -72,14 +72,14 @@ If you need a fast, **human-preference** signal to shortlist LLMs, use **LMArena
 
 * **Anonymous battles:** two models answer the same prompt; you vote *before* names reveal.
 * **Arena Elo:** votes update ratings; leaderboard also shows **MT-Bench** and **MMLU** panels to triangulate quality.
-* **Only anonymous battles move Elo:** **Side-by-Side** is for labeled comparison; it doesn’t affect scores (see: [How it works](https://lmarena.ai/how-it-works), [Battle Mode help](https://help.lmarena.ai/articles/4489017547-how-to-use-battle-mode), and the official [FAQ](https://lmarena.ai/faq)).
+* **Only anonymous battles move Elo:** **Side-by-Side** is for labeled comparison; it doesn’t affect scores (see: [[1](#ref-1)], [[2](#ref-2)], and the official [[3](#ref-3)]).
 
 ---
 
 ## Snapshot (as observed on Jan 29–Feb 1, 2026)
 
-> Rankings drift. Treat tables as snapshots, and re-check the live leaderboards before you ship: [Text](https://lmarena.ai/leaderboard/text), [Code](https://lmarena.ai/leaderboard/code), [WebDev](https://dev.lmarena.ai/leaderboard).
-> If you want to track changes without re-reading this guide, follow the official changelog: [Leaderboard Changelog](https://lmarena.ai/blog/leaderboard-changelog/).
+> Rankings drift. Treat tables as snapshots, and re-check the live leaderboards before you ship: [[4](#ref-4)], [[5](#ref-5)], [[6](#ref-6)].
+> If you want to track changes without re-reading this guide, follow the official changelog: [[7](#ref-7)].
 
 ### Text Arena — Last updated Jan 29, 2026
 
@@ -128,7 +128,7 @@ LMArena evolves fast: new models enter, arenas change, and methodology updates g
 2) the Leaderboard Changelog (methodology + additions),
 3) periodic re-checks on your prompt set.
 
-Notable recent examples include new model additions to the Code leaderboard and broader evaluation updates logged in the official changelog: [Leaderboard Changelog](https://lmarena.ai/blog/leaderboard-changelog/). For product experiments that can affect how people use the Arena, see: [Auto-Modality](https://help.lmarena.ai/articles/1350607902-lmarena-experiments-auto-modality).
+Notable recent examples include new model additions to the Code leaderboard and broader evaluation updates logged in the official changelog: [[7](#ref-7)]. For product experiments that can affect how people use the Arena, see: [[8](#ref-8)].
 
 ---
 
@@ -242,7 +242,7 @@ Pick two finalists (e.g., `gemini-2.5-pro` vs `claude-opus-4.1-20250805-thinking
 
 ## Curiosity bites
 
-* **Side-by-Side ≠ Elo:** SxS is labeled for audits; only **anonymous battles** change ratings (see: [Battle Mode help](https://help.lmarena.ai/articles/4489017547-how-to-use-battle-mode), plus the official [FAQ](https://lmarena.ai/faq)).
+* **Side-by-Side ≠ Elo:** SxS is labeled for audits; only **anonymous battles** change ratings (see: [[2](#ref-2)], plus the official [[3](#ref-3)]).
 * **Repo-aware surprises:** average overall models can **win** in **RepoChat** on your codebase.
 * **Latency matters:** ask raters to flag when answers are “**too slow to be useful**.”
 
@@ -357,8 +357,20 @@ Follow **FastChat**’s *How to add a new model* (host your own/3rd-party API or
 
 Yes—LMArena/LMSYS periodically releases open datasets. Starting points:
 
-* **Chatbot Arena Conversations (33k):** [Hugging Face dataset](https://huggingface.co/datasets/lmsys/chatbot_arena_conversations).
-* **Arena Human Preference (≈140k):** [Hugging Face dataset](https://huggingface.co/datasets/lmarena-ai/arena-human-preference-140k).
-* **LMSYS-Chat-1M (1M):** [Hugging Face dataset](https://huggingface.co/datasets/lmsys/lmsys-chat-1m).
+* **Chatbot Arena Conversations (33k):** [[9](#ref-9)].
+* **Arena Human Preference (≈140k):** [[10](#ref-10)].
+* **LMSYS-Chat-1M (1M):** [[11](#ref-11)].
 
 </details>
+
+1. <a id="ref-1"></a>[**How it works**](https://lmarena.ai/how-it-works)
+2. <a id="ref-2"></a>[**Battle Mode help**](https://help.lmarena.ai/articles/4489017547-how-to-use-battle-mode)
+3. <a id="ref-3"></a>[**FAQ**](https://lmarena.ai/faq)
+4. <a id="ref-4"></a>[**LMArena Text Leaderboard**](https://lmarena.ai/leaderboard/text)
+5. <a id="ref-5"></a>[**LMArena Code Leaderboard**](https://lmarena.ai/leaderboard/code)
+6. <a id="ref-6"></a>[**LMArena WebDev Leaderboard**](https://dev.lmarena.ai/leaderboard)
+7. <a id="ref-7"></a>[**Leaderboard Changelog**](https://lmarena.ai/blog/leaderboard-changelog/)
+8. <a id="ref-8"></a>[**Auto-Modality Experiments**](https://help.lmarena.ai/articles/1350607902-lmarena-experiments-auto-modality)
+9. <a id="ref-9"></a>[**Chatbot Arena Conversations (33k) | Hugging Face**](https://huggingface.co/datasets/lmsys/chatbot_arena_conversations)
+10. <a id="ref-10"></a>[**Arena Human Preference (≈140k) | Hugging Face**](https://huggingface.co/datasets/lmarena-ai/arena-human-preference-140k)
+11. <a id="ref-11"></a>[**LMSYS-Chat-1M (1M) | Hugging Face**](https://huggingface.co/datasets/lmsys/lmsys-chat-1m)

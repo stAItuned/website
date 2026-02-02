@@ -1,195 +1,490 @@
 ---
-title: 'Google AI Studio: Transforming Machine Learning Workflows'
-seoTitle: 'Google AI Studio 2025: Complete Guide to Gemini Tools'
+title: "Google AI Studio: A Practical Guide to Prototyping with the Gemini API"
+seoTitle: "Google AI Studio 2026: Prompting, Tools, Safety, Pricing, Vertex AI"
 seoDescription: >-
-  Cos'è Google AI Studio e come usarlo per creare prompt, fare fine-tuning e
-  testare i modelli Gemini gratuitamente.
+  A practical guide to Google AI Studio in 2026: how to prototype with Gemini,
+  use tools (Structured Output, Function Calling, Search grounding, Code Execution),
+  understand safety & pricing, and decide when to move to Vertex AI.
 author: Daniele Moltisanti
 target: Midway
 business: true
 language: English
 cover: cover.webp
 meta: >-
-  Explore Google AI Studio, a platform simplifying AI development with prompt
-  creation, model fine-tuning, and integration with Google services. Learn how
-  it empowers developers using advanced tools like Gemini Pro
+  Learn Google AI Studio by doing: prompt workflows, built-in tools, safety settings,
+  pricing & rate limits, and a production checklist—plus when to use Vertex AI.
 date: 2024-11-05T00:00:00.000Z
-updatedAt: 2025-01-16T00:00:00.000Z
+updatedAt: 2026-02-02T00:00:00.000Z
 published: true
-primaryTopic: ai-research
-topics:
-  - model-architecture
-  - llm-evaluation
+primaryTopic: llm-evaluation
+topics: [production]
+asOf: 2026-02-02
+geo:
+  quickAnswer:
+    title: "How to use Google AI Studio (without wasting time)"
+    bullets:
+      - "Use AI Studio to prototype prompts fast, then click 'Get code' to ship via the Gemini API."
+      - "Turn on Tools for reliability: Structured Output (JSON Schema), Function Calling, and Search grounding."
+      - "Treat the free tier as experimental: rate limits change and free-tier data may be used to improve products."
+      - "Move to Vertex AI for enterprise controls (IAM, VPC, compliance, SLAs) and for supervised fine-tuning."
+    oneThing: "AI Studio is a prototyping cockpit—production readiness comes from tools + guardrails, and (often) Vertex AI."
+  audience:
+    title: "Who is this for"
+    description: "Developers and product teams who want a hands-on, production-aware way to build with Gemini—fast prototyping in AI Studio, then a clear path to shipping and scaling."
+  definition:
+    term: "Google AI Studio"
+    definition: "A web-based playground to test Gemini models, prompts, safety settings, and tools—then export code to use the Gemini Developer API."
+  decisionRules:
+    title: "Decision Rules"
+    rules:
+      - if: "You’re exploring prompts or building a prototype"
+        then: "Use AI Studio + Gemini Developer API for speed."
+      - if: "You need enterprise security/compliance, private networking, or SLAs"
+        then: "Use Vertex AI Gemini API."
+      - if: "You need fine-tuning"
+        then: "Use Vertex AI supervised tuning (Gemini API fine-tuning isn’t available right now)."
+  checklist:
+    title: "Production checklist"
+    items:
+      - "Use Structured Output (JSON Schema) for machine-readable responses."
+      - "Use Search grounding for freshness + citations when accuracy matters."
+      - "Add tool/function calling for real actions; log tool calls and failures."
+      - "Lock down safety settings; test jailbreaks and prompt injections."
+      - "Avoid sensitive data in AI Studio; use Vertex AI for regulated workloads."
 ---
 
+# Google AI Studio: A Practical Guide to Prototyping with the Gemini API
 
-
-
-<p >
-    <img src="./home.png" alt="Google AI Studio Interface Homepage showing project options" height="300px" width="auto">
+<p>
+  <img src="./home.png" alt="Google AI Studio home screen showing prompt and project entry points" height="320px" width="auto">
 </p>
 
-### Introduction
+## Answer in 30 seconds
 
-Google AI Studio, accessible at [aistudio.google.com](https://aistudio.google.com/), is a transformative platform designed to simplify AI model development, fine-tuning, and deployment. With its user-friendly interface, seamless integration with Google services, and access to advanced AI models, Google AI Studio empowers developers across skill levels to create impactful AI solutions. This article explores the features, capabilities, and real-world applications of Google AI Studio.
+**Google AI Studio** is the fastest way to **prototype with Gemini**: you try prompts, tweak run + safety settings, enable built-in **tools** (Structured Output / Function Calling / Search grounding / Code Execution), then click **“Get code”** to ship via the Gemini Developer API. [[1](#ref-1)]
+
+If you’re building anything serious for an organization (IAM, VPC, compliance, SLAs, tuning), the clean path is: **prototype in AI Studio → move to Vertex AI**. [[2](#ref-2)]
 
 ---
 
-### Key Features of Google AI Studio
+## What Google AI Studio is (and what it isn’t)
 
-#### Compare Models
-Google AI Studio includes a robust comparison feature that enables users to evaluate different models side by side. This feature provides detailed metrics such as:
-- **Accuracy**: Evaluate how well each model performs across various benchmarks.
-- **Processing Speed**: Compare latency and throughput for real-time or batch processing tasks.
-- **Specialization**: Identify which models excel in specific domains, such as vision, text, or multimodal tasks.
+### What it is
 
-For instance, developers can compare Gemini Pro and Gemma to determine which model delivers better conversational AI outcomes, or assess Gemini Flash against LearnML for speed in educational applications. This capability empowers informed decision-making, ensuring that users deploy the most suitable model for their requirements.
+A web-based **prototyping cockpit** where you:
 
-<p >
-    <img src="./compare.png" alt="Model Comparison View side-by-side in Google AI Studio" height="300px" width="auto">
+* test prompts quickly,
+* configure generation + **safety settings**, [[3](#ref-3)]
+* enable tools like **Structured Output**, **Function Calling**, **Search grounding**, and **Code Execution** (Gemini 3 supports combining these). [[4](#ref-4)]
+* export code to integrate with the **Gemini API** (“Get code”). [[1](#ref-1)]
+
+### What it isn’t
+
+* Not a full MLOps/deployment platform with enterprise networking and governance baked in.
+* Not where you should assume HIPAA/SOC2-style enterprise compliance out of the box (that’s a Vertex AI concern). [[2](#ref-2)]
+
+---
+
+## AI Studio vs Vertex AI in one decision table
+
+| If you need…                              | Use AI Studio + Gemini Developer API | Use Vertex AI Gemini API            |
+| ----------------------------------------- | ------------------------------------ | ----------------------------------- |
+| Fast prototyping + “Get code”             | ✅                                    | ✅                                   |
+| IAM auth, org controls, service accounts  | ❌                                    | ✅ [[2](#ref-2)] |
+| VPC / private endpoints                   | ❌                                    | ✅ [[5](#ref-5)] |
+| Compliance controls + governance features | ❌                                    | ✅ [[2](#ref-2)] |
+| SLA for online inference                  | ❌                                    | ✅ [[6](#ref-6)]               |
+| Supervised fine-tuning                    | ❌                                    | ✅ [[7](#ref-7)] |
+
+If you’re a solo dev or early-stage team, **start in AI Studio**. When the app becomes “real” (users, privacy, incidents, compliance), **graduate to Vertex AI**. [[8](#ref-8)]
+
+---
+
+## The 4 features that make AI Studio “production-aware”
+
+### 1) Structured Output (JSON Schema): stop parsing text with regex
+
+<p>
+  <img src="./prompt.png" alt="Prompt editor showing run settings and tool toggles in Google AI Studio" height="320px" width="auto">
 </p>
 
+If your app needs **reliable JSON**, use **Structured Output** with a JSON Schema. This forces the model to return something you can validate with Pydantic/Zod instead of guessing. [[4](#ref-4)]
 
-#### Prompt Creation
+**Best for:**
 
-Google AI Studio excels in enabling developers to experiment with various prompt types. These include chat-based prompts for conversational AI and structured queries for formal tasks. For example, developers can design a chatbot prompt to handle customer service inquiries or create a structured prompt for summarizing large documents. This feature reduces development time and fosters innovation by simplifying testing and iteration ([lablab.ai](https://lablab.ai/t/google-ai-studio)).
+* extraction (names, dates, entities),
+* classification into fixed labels,
+* tool-routing in agentic flows. [[4](#ref-4)]
 
-<p >
-    <img src="./prompt.png" alt="Prompt Creation Interface with parameter settings" height="300px" width="auto">
-</p>
+### 2) Function Calling: connect Gemini to real actions
 
-#### Model Fine-Tuning
+Function calling lets the model **return structured arguments** to call your tools/APIs (CRM lookup, pricing, database queries, ticket creation). [[9](#ref-9)]
 
-The platform provides tools for model fine-tuning, allowing developers to adapt pretrained models to specific datasets. For example, a retailer could fine-tune a model to better understand customer purchase patterns, while a healthcare provider might tailor a vision model to analyze medical imagery. This customization enhances model accuracy and relevance, ensuring it aligns with industry-specific needs ([lablab.ai](https://lablab.ai/t/google-ai-studio)).
+**Why it matters:** it turns a “chat demo” into an app that can **do stuff** while staying auditable.
 
-#### Integration with Google Services
+### 3) Grounding with Google Search: freshness + citations
 
-Seamlessly integrating with tools like Google Drive, Google AI Studio enables efficient management of experiments, datasets, and models. For instance, a developer can save and organize different versions of their AI projects in Google Drive, ensuring easy collaboration and version control. This integration reduces friction in workflows, allowing teams to focus on innovation rather than logistics ([lablab.ai](https://lablab.ai/t/google-ai-studio)).
+If your use case includes “recent changes” (policies, news, docs), Search grounding improves factuality and can provide **citations**. [[10](#ref-10)]
 
-#### Access to Advanced AI Models
-Google AI Studio provides a comprehensive suite of advanced models to cater to diverse AI needs. These include:
+**Rule of thumb:** if your user could ask “is this up to date?”, grounding should be in your toolbox.
 
-- **Gemini Pro**: Focused on text generation, ideal for creating dynamic content such as customer support responses or blog drafts.
-- **Gemini Pro Vision**: Designed for image-related tasks, such as analyzing product images or detecting objects in surveillance footage.
-- **Gemma**: Tailored for conversational AI, excelling in interactive chatbot applications and natural language understanding.
-- **Gemini Flash**: Optimized for high-speed text processing, suitable for real-time applications like live translations or quick document summaries.
-- **LearnML**: A flexible model for educational applications, including adaptive learning platforms and content generation for e-learning modules.
+> **Pricing note:** Search grounding availability and quotas differ by tier and model; in the official pricing table, several grounding options are **not available on the Free Tier**. [[12](#ref-12)]
 
-Each of these models is available in various configurations to suit different scales and performance requirements, ensuring developers can select the best fit for their specific use case...
+### 4) Safety settings: prototype guardrails early
+
+AI Studio makes it easy to adjust safety thresholds while prototyping. Don’t leave it to “later”: safety settings affect user experience (false positives) and risk profile (false negatives). [[3](#ref-3)]
 
 ---
 
-### Pricing Structure
+## 3 production-ready templates for AI Studio
 
-Google AI Studio operates on a flexible pricing model designed to accommodate users of varying needs:
+Below are three “ready-to-ship” templates for common use cases: reliable extraction, grounded answers, and tool-based routing.
 
-- **Free Tier**: Provides basic access to the platform, including limited use of prompt creation and pretrained models. Suitable for small-scale projects or learning purposes.
-- **Pay-As-You-Go**: Charges based on usage, including the number of API calls, storage, and compute resources. This model ensures scalability for growing projects.
-- **Enterprise Plans**: Custom pricing for large organizations requiring advanced features, higher limits, and dedicated support ([techchilli.com](https://techchilli.com/artificial-intelligence/google-ai-studio-features-how-it-is-used-pricing-and-related-tutorials)).
+### Template 1 — Reliable Extractor with JSON Schema
+
+**When to use:** Parsing tickets, emails, or CRM notes into validatable output (no regex required).
+
+**In AI Studio (recommended toggles):**
+
+* **Structured Output**: ON (JSON Schema) [[4](#ref-4)]
+* **Temperature**: 0–0.3 (low creativity)
+* **Max output tokens**: Low/Medium (since we only need JSON)
+
+**System prompt:**
+
+```text
+You are a strict information extraction engine.
+Rules:
+- Output MUST be valid JSON that matches the provided schema.
+- Do not include extra keys.
+- If a field is not present in the input, set it to null.
+- Never guess. Never fabricate.
+- Keep strings short and factual.
+```
+
+**User prompt:**
+
+```text
+Extract the following information from the text.
+
+TEXT:
+"""
+{{PASTE_RAW_TEXT_HERE}}
+"""
+
+Return JSON only.
+```
+
+**JSON Schema (Starter):**
+
+> **Note:** Structured Output (JSON Schema) is supported by multiple Gemini models (including Gemini 2.5).
+> **Preview note:** combining Structured Output with built-in tools (Search grounding / URL context / Code Execution / File Search) is currently available only on **Gemini 3 preview models**.
+
+```json
+{
+  "type": "object",
+  "required": ["customer_name", "request_type", "urgency", "summary", "action_items"],
+  "properties": {
+    "customer_name": { "type": ["string", "null"] },
+    "request_type": { "type": ["string", "null"], "enum": ["bug", "billing", "feature_request", "account", "other", null] },
+    "urgency": { "type": ["string", "null"], "enum": ["low", "medium", "high", "critical", null] },
+    "summary": { "type": ["string", "null"], "maxLength": 240 },
+    "action_items": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 120 },
+      "maxItems": 8
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+**Why it works:** Structured Output guarantees output that you can **validate** or fail deterministically, preventing the need for fragile string parsing.
+
+**Mini-eval (suggested):**
+Test with 10 real inputs (no sensitive data) and measure: `% Valid JSON`, `% Correct Fields`, `False Positives`, and `Latency`.
 
 ---
 
-### Real-World Applications
+### Template 2 — “Answer with Sources” (Search Grounding)
 
-#### Healthcare
+**When to use:** Tasks requiring fresh info, policy lookups, or “what changed” answers with citations.
 
-In healthcare, Google AI Studio is utilized for:
+**In AI Studio:**
 
-- Predicting patient outcomes using custom-trained models.
-- Analyzing medical images with pretrained vision models, aiding in diagnostics.
+* **Grounding with Google Search**: ON (for freshness + citations) [[10](#ref-10)]
+* **Structured Output**: Optional (ON only if using compatible preview models)
 
-#### Finance
+**System prompt:**
 
-The platform supports:
+```text
+You are a production assistant.
+Rules:
+- Prefer grounded facts over memorized knowledge.
+- If you cannot find grounded evidence, say: "Not enough grounded evidence."
+- Keep the final answer short, then provide evidence bullets.
+- Include citations when grounding is enabled.
+```
 
-- Fraud detection through pattern recognition in transaction data.
-- Risk assessment models that leverage structured data.
+**User prompt:**
 
-#### Retail
+```text
+Question:
+{{USER_QUESTION}}
 
-Retailers leverage Google AI Studio to:
+Deliver:
+1) Final answer (max 8 sentences)
+2) Evidence bullets (3–6 bullets)
+3) If there are trade-offs or uncertainty, add "Caveats" (max 3 bullets)
+```
 
-- Develop recommendation systems for personalized shopping experiences.
-- Optimize inventory management using predictive analytics.
+**If you need machine-readable output (Gemini 3 Preview / Compatible models):**
 
-#### Manufacturing
+```json
+{
+  "type": "object",
+  "required": ["final_answer", "evidence", "caveats"],
+  "properties": {
+    "final_answer": { "type": "string", "maxLength": 1200 },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 200 },
+      "minItems": 2,
+      "maxItems": 8
+    },
+    "caveats": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 180 },
+      "maxItems": 5
+    }
+  },
+  "additionalProperties": false
+}
+```
 
-In manufacturing, Google AI Studio enables:
-
-- Predictive maintenance by analyzing sensor data to identify potential equipment failures.
-- Optimization of production processes through real-time data insights.
+**Evergreen Note:** Grounding with Search is explicitly designed for **real-time content** and to provide **verifiable citations**—essential for trust.
 
 ---
 
-### Why Google AI Studio Matters
+### Template 3 — Ticket Router (Function Calling)
 
-#### Accessibility for All Developers
+**When to use:** Routing requests, creating tickets, fetching customer context, or building agentic workflows.
 
-Google AI Studio’s intuitive design ensures that both novice and experienced developers can build AI solutions effectively. The platform’s simplicity reduces barriers to entry, democratizing AI development ([lablab.ai](https://lablab.ai/t/google-ai-studio)).
+**In AI Studio:**
 
-#### Comprehensive Toolset
+* **Function calling**: ON [[9](#ref-9)]
+* **Structured Output**: ON (often useful for the “final response schema” on the last turn)
 
-With features spanning from data preparation to deployment, Google AI Studio provides a unified platform for end-to-end AI development. This eliminates the need for multiple tools, streamlining workflows.
+**Tool Declarations:**
 
-#### Scalable and Reliable Infrastructure
+> **Concept:** Use **Function Calling** when the model needs to _call external systems_, and **Structured Output** when you just want the _final result_ to follow a specific shape.
 
-Built on Google’s robust infrastructure, AI Studio supports projects of any scale, ensuring reliability and performance even for enterprise-level applications.
+```json
+[
+  {
+    "name": "fetch_customer_context",
+    "description": "Retrieve customer context from CRM.",
+    "parameters": {
+      "type": "object",
+      "required": ["customer_id"],
+      "properties": {
+        "customer_id": { "type": "string" }
+      }
+    }
+  },
+  {
+    "name": "create_ticket",
+    "description": "Create a support ticket in the ticketing system.",
+    "parameters": {
+      "type": "object",
+      "required": ["team", "priority", "subject", "summary", "tags"],
+      "properties": {
+        "team": { "type": "string", "enum": ["billing", "support", "engineering", "security"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "subject": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string", "maxLength": 500 },
+        "customer_id": { "type": ["string", "null"] },
+        "tags": { "type": "array", "items": { "type": "string", "maxLength": 30 }, "maxItems": 8 }
+      }
+    }
+  }
+]
+```
+
+**System prompt:**
+
+```text
+You are a routing assistant for a product team.
+Rules:
+- Use tools when needed to complete the task.
+- Never invent customer context or ticket IDs.
+- Ask one clarifying question only if missing critical info.
+- After tool calls, produce a short final response for the user + a structured routing summary.
+```
+
+**User prompt (example):**
+
+```text
+Customer says:
+"My invoices doubled this month. Also, the API started returning 429 errors since yesterday.
+Customer ID: C-18402"
+
+Task:
+1) Route to the right team(s)
+2) Create a ticket with an actionable summary
+3) Return what you did
+```
+
+**Why it is production-ready:** The official flow is well-defined: define function declarations → call model → execute function with args → return result to model. [[9](#ref-9)]
 
 ---
 
-### Getting Started with Google AI Studio
+### Cheat Sheet: Structured Output vs Function Calling
 
-#### Step 1: Access the Platform
+| Feature | Best For... |
+| :--- | :--- |
+| **Structured Output** [[4](#ref-4)] | Getting the **final response** in a specific schema (e.g., for UI rendering, parsing, automation). |
+| **Function Calling** [[9](#ref-9)] | Letting the model take an **intermediate step** to interact with external tools/APIs (e.g., database lookup, API action). |
 
-Visit [aistudio.google.com](https://aistudio.google.com/) and sign in with your Google account. Once logged in, enable the required services such as storage and compute resources to set up your environment. Ensure you have access to tools like Google Drive and BigQuery for seamless integration.
+## Pricing, free tier, and the two gotchas people miss
 
-#### Step 2: Explore Tutorials
+### 1) “AI Studio is free” ≠ “your app is free”
 
-Navigate to the tutorial section within the platform. These tutorials cover a wide range of use cases, from setting up your first project to advanced techniques in model fine-tuning. For example, start with a "Quick Start Guide" to build and deploy a sample AI model in less than 30 minutes.
+Google says **AI Studio usage remains free** even if you set up billing. [[11](#ref-11)]
+But your production costs are still driven by:
 
-#### Step 3: Build and Fine-Tune Models
+* Gemini API pricing tiers,
+* token usage,
+* features like grounding. [[12](#ref-12)]
 
-1. **Select a Model**: Choose from pretrained models like Gemini Pro or upload your dataset for a custom training session.
-2. **Set Parameters**: Use the intuitive interface to configure training settings, such as batch size, learning rate, and model architecture.
-3. **Test and Iterate**: Leverage built-in testing environments to evaluate model accuracy and make necessary adjustments before finalizing.
+### 2) Free-tier data usage policy differs from paid
 
-#### Step 4: Deploy and Manage Models
+The official pricing page distinguishes data usage:
 
-1. **Deployment**: Deploy your trained model with a single click, either to a cloud endpoint or an on-premise server.
-2. **Monitoring**: Use integrated tools like Cloud Monitoring to track performance metrics such as latency, accuracy, and error rates.
-3. **Version Control**: Save multiple iterations of your model using Google Drive integration, enabling rollback or updates based on feedback from real-world deployment scenarios.
+* Free tier: “Used to improve our products: **Yes**”
+* Paid tier: “Used to improve our products: **No**” [[12](#ref-12)]
 
-#### Step 5: Collaborate and Share
+**Practical takeaway:** free tier is great for experimentation, but treat it as **not suitable for sensitive prompts**.
 
-Google AI Studio allows you to share your projects with team members. Use permissions to control access levels, ensuring secure collaboration on sensitive datasets or models.
+### Rate limits change—check inside AI Studio
 
+Rate limits depend on tier and account status and can be viewed directly in AI Studio. [[13](#ref-13)]
 
+---
 
-### Conclusion
+## AI Studio → Vertex AI migration path
 
-Google AI Studio is a powerful platform that revolutionizes AI development by combining accessibility, advanced tools, and seamless integration with Google’s infrastructure. Its applications span industries, offering developers the tools they need to build, fine-tune, and deploy impactful AI solutions. Whether you’re an experienced developer or just starting your AI journey, Google AI Studio provides everything you need to succeed in the AI-driven future.
+This is the path for scaling from prototype to enterprise application. Knowing *when* to switch is as important as knowing how.
+
+### Step 0 — Prototype in AI Studio
+
+*   Test prompts, tune settings, and validate ideas.
+*   Click **“Get code”** to export snippets and integrate via the Gemini API. [[1](#ref-1)]
+*   **Privacy check:** Keep sensitive production data out of Free Tier prompts.
+
+### Step 1 — Ship via Gemini Developer API (Baseline Production)
+
+*   Integrate the exported code into your repo.
+*   Add prompt versioning, a test set, logging, and retry/backoff logic.
+*   Monitor your **rate limits** directly in AI Studio. [[13](#ref-13)]
+
+### Step 2 — Pricing & Privacy Gate
+
+*   The pricing page makes a critical distinction:
+    *   **Free Tier**: "Content used to improve our products: **Yes**"
+    *   **Paid Tier**: "Content used to improve our products: **No**" [[12](#ref-12)]
+*   To enable the privacy guarantees of the Paid Tier, use the official **“Set up billing”** flow in AI Studio. [[11](#ref-11)]
+
+### Step 3 — Decide when to move to Vertex AI
+
+Move to Vertex AI when you need:
+
+1.  **Enterprise Controls:** IAM, service accounts, organization-level governance. [[8](#ref-8)]
+2.  **Private Connectivity:** VPC, Private Endpoints, or Private Service Connect. [[5](#ref-5)]
+3.  **SLAs:** Guaranteed uptime (e.g., for online inference). [[6](#ref-6)]
+4.  **Advanced Tuning:** Supervised fine-tuning via Vertex AI. [[7](#ref-7)]
+
+### Step 4 — Migration Mechanics (Zero Drama)
+
+Migration is simplified by the unified **Google GenAI SDK**:
+1.  **Prototype** fast in AI Studio.
+2.  **Ship** using the unified SDK.
+3.  **Switch backend** to Vertex AI by changing initialization usage (from API key to Vertex AI auth) when you need enterprise controls. [[8](#ref-8)]
+
+---
+
+## Production checklist (the “boring” part that saves launches)
+
+1. **Make outputs machine-checkable**
+   Use Structured Output for any response your code consumes. [[4](#ref-4)]
+
+2. **Plan for freshness and citations**
+   If correctness matters, use grounding and show sources. [[10](#ref-10)]
+
+3. **Log tool calls and failure modes**
+   When you use function calling, log:
+
+* tool name,
+* arguments,
+* tool result,
+* model retry decisions.
+
+4. **Threat model prompt injection**
+   If you’re doing RAG / web / docs:
+
+* treat retrieved text as untrusted,
+* separate “data” from “instructions” in your system design.
+
+5. **Graduate to Vertex AI when risk rises**
+   If you need enterprise controls (IAM, VPC, compliance, SLAs), Vertex AI is the right surface. [[2](#ref-2)]
 
 ---
 
 ## FAQ
 
-> **Tip:** Each question below expands to a concise, production-oriented answer.
-
 <details>
   <summary><strong>Is Google AI Studio free?</strong></summary>
 
-Yes, Google AI Studio offers a generous **Free Tier** that allows developers to prototype with models like Gemini Pro and Gemini Flash at no cost, subject to rate limits (e.g., 60 RPM for Gemini 1.5 Flash). This makes it ideal for learning and testing before scaling.
+AI Studio usage is free, even if you set up billing, according to Google’s billing FAQ. [[11](#ref-11)]
+However, Gemini API usage and features depend on tier and pricing. [[12](#ref-12)]
+
 </details>
 
 <details>
-  <summary><strong>What is the difference between Google AI Studio and Vertex AI?</strong></summary>
+  <summary><strong>Can I fine-tune Gemini in Google AI Studio?</strong></summary>
 
-**Google AI Studio** is a rapid prototyping environment designed for individual developers and startups to get started quickly. **Vertex AI** is Google Cloud's enterprise-grade platform for end-to-end ML lifecycle management, offering advanced features like MLOps, private endpoints, and guaranteed SLAs for large-scale production deployments.
+Not via the Gemini API right now: Google states there’s currently no model available for fine-tuning in the Gemini API (after a May 2025 deprecation). [[14](#ref-14)]
+Fine-tuning is supported in Vertex AI via supervised tuning. [[7](#ref-7)]
+
 </details>
 
 <details>
-  <summary><strong>Can I use Gemini Pro in Google AI Studio?</strong></summary>
+  <summary><strong>What’s the difference between AI Studio and Vertex AI?</strong></summary>
 
-Yes, **Gemini Pro** (including the 1.5 Pro and Flash variants) is fully available in Google AI Studio. You can use it for text generation, code completion, and multimodal tasks (vision/video analysis) directly within the prompt interface or via API.
+AI Studio is the fastest way to prototype with Gemini and export code. [[1](#ref-1)]
+Vertex AI adds enterprise controls (IAM, VPC/private endpoints, compliance/governance, SLAs) and supports tuning. [[2](#ref-2)]
+
 </details>
 
+<details>
+  <summary><strong>Where do I see my rate limits?</strong></summary>
+
+Google’s rate-limit docs say limits vary by tier/account status and can be viewed in Google AI Studio. [[13](#ref-13)]
+
+</details>
+
+1. <a id="ref-1"></a>[**Google AI Studio quickstart | Gemini API**](https://ai.google.dev/gemini-api/docs/ai-studio-quickstart)
+2. <a id="ref-2"></a>[**Migrate from Google AI Studio to Vertex AI**](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/migrate/migrate-google-ai)
+3. <a id="ref-3"></a>[**Safety settings | Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/safety-settings)
+4. <a id="ref-4"></a>[**Structured outputs | Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/structured-output)
+5. <a id="ref-5"></a>[**Use private services access endpoints for online inference**](https://docs.cloud.google.com/vertex-ai/docs/predictions/using-private-endpoints)
+6. <a id="ref-6"></a>[**Gemini On Vertex Service Level Agreement Sla**](https://cloud.google.com/vertex-ai/generative-ai/sla)
+7. <a id="ref-7"></a>[**Tune Gemini models by using supervised fine-tuning**](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini-use-supervised-tuning)
+8. <a id="ref-8"></a>[**Gemini Developer API v.s. Vertex AI**](https://ai.google.dev/gemini-api/docs/migrate-to-cloud)
+9. <a id="ref-9"></a>[**Function calling with the Gemini API | Google AI for Developers**](https://ai.google.dev/gemini-api/docs/function-calling)
+10. <a id="ref-10"></a>[**Grounding with Google Search | Gemini API**](https://ai.google.dev/gemini-api/docs/google-search)
+11. <a id="ref-11"></a>[**Billing | Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/billing)
+12. <a id="ref-12"></a>[**Gemini Developer API pricing**](https://ai.google.dev/gemini-api/docs/pricing)
+13. <a id="ref-13"></a>[**Rate limits | Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/rate-limits)
+14. <a id="ref-14"></a>[**Fine-tuning with the Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/model-tuning)
+15. <a id="ref-15"></a>[**Using Tools & Agents with Gemini API**](https://ai.google.dev/gemini-api/docs/tools)
