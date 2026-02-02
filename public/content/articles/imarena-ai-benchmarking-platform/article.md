@@ -275,30 +275,30 @@ Run **10–20 arena battles per task type**, compare **Overall + Category Elo** 
 ## Mini-template: 20-minute LMArena eval (copy/paste)
 
 ```md
-## Goal
+Goal
 - Task(s):
 - Constraints (latency, format, citations, tools):
 
-## Prompt set (6–8)
+Prompt set (6–8)
 1.
 2.
 3.
 
-## Shortlist
+Shortlist
 - Model A:
 - Model B:
 - Model C:
 
-## Battles (10–20)
+Battles (10–20)
 - Prompt #1: winner, why (notes)
 - Prompt #2: winner, why (notes)
 
-## Operational notes
+Operational notes
 - Latency: (p50/p95 impressions)
 - Formatting issues:
 - Failure modes observed:
 
-## Ship decision
+Ship decision
 - Winner per task:
 - Router rules (if any):
 - Recheck date:
