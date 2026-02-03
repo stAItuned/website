@@ -47,19 +47,20 @@ service cloud.firestore {
       allow write: if false; // Only backend can write
     }
     
-    // Articles - full access (you may want to restrict this later)
+    // Articles - Public read, write restricted to Admin SDK (backend)
     match /articles/{articleId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if false; // Only backend can write
     }
     
-    // Backlog items - full access (you may want to restrict this later)
+    // Backlog items - Internal use, require authentication
     match /backlog/{itemId} {
-      allow read, write: if true;
+      allow read, write: if request.auth != null;
     }
     
-    // User preferences - full access
+    // User preferences - Owner only access
     match /preferences/{userId} {
-      allow read, write: if true;
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
     // Default: deny all

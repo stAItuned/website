@@ -25,6 +25,7 @@ const footerNavigation = {
     title: 'Esplora',
     links: [
       { name: 'Blog', href: '/learn/articles' },
+      { name: 'Diventa Contributor', href: '/contribute' },
       { name: 'Career OS', href: '/career-os' },
       { name: 'Chi siamo', href: '/meet' },
     ]

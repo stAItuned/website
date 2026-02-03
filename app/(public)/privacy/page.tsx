@@ -135,6 +135,43 @@ export default function PrivacyPage() {
             </div>
 
             <div>
+              <h3 className="font-semibold text-slate-900">Dati dei Contributor (Programma Editoriale)</h3>
+              <p className="mt-1">
+                Quando partecipi al Contributor Program di stAItuned per scrivere o proporre articoli, raccogliamo e trattiamo:
+              </p>
+              <ul className="list-disc pl-4 mt-2 space-y-1">
+                <li>Informazioni account (nome, email, foto profilo via OAuth);</li>
+                <li>I tuoi contributi editoriali (bozze, idee, outline generate);</li>
+                <li>Le risposte alle interviste (chat) utilizzate per generare i contenuti;</li>
+                <li>Preferenze di pubblicazione e stato delle submission.</li>
+              </ul>
+              <p className="mt-3">
+                <strong>Finalità:</strong>
+              </p>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                <li>Facilitare la creazione, revisione e pubblicazione degli articoli;</li>
+                <li>Comunicare con te in merito allo stato dei tuoi contributi;</li>
+                <li>Attribuire correttamente la paternità (byline) degli articoli pubblicati.</li>
+              </ul>
+              <p className="mt-3">
+                <strong>Conservazione:</strong>
+              </p>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                <li>Bozze non pubblicate: conservate fino a 90 giorni di inattività, poi archiviate;</li>
+                <li>Articoli pubblicati: conservati a tempo indeterminato con la tua firma;</li>
+                <li>Dati account: conservati fino alla richiesta di cancellazione.</li>
+              </ul>
+              <p className="mt-3">
+                <strong>I tuoi diritti spefici:</strong>
+              </p>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                <li>Richiedere la cancellazione delle bozze non pubblicate in qualsiasi momento;</li>
+                <li>Rimuovere il tuo nome dagli articoli pubblicati (il contenuto resta all&apos;editore come da accordo);</li>
+                <li>Esportare la cronologia dei tuoi contributi.</li>
+              </ul>
+            </div>
+
+            <div>
               <h3 className="font-semibold text-slate-900">Role Fit Audit</h3>
               <p className="mt-1">
                 Quando compili il questionario &quot;Role Fit Audit&quot; raccogliamo:

@@ -37,7 +37,8 @@ function getClient(): GoogleGenerativeAI {
 function getModel(): GenerativeModel {
     if (!model) {
         model = getClient().getGenerativeModel({
-            model: 'gemini-3-pro-preview',
+            // model: 'gemini-3-pro-preview',
+            model: 'gemini-2.5-pro',
             generationConfig: {
                 temperature: 0.4, // Slightly higher for more creative detailed reports
                 topP: 0.8,

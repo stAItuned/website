@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "@/components/auth/AuthContext"
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton"
 import { User } from "firebase/auth"
@@ -11,12 +11,15 @@ import Link from "next/link"
 export default function SignInPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectParam = searchParams.get('redirect')
 
   // Redirect if already signed in
   useEffect(() => {
     if (!loading && user) {
-      // Check if there's a redirect URL stored
-      const redirectUrl = localStorage.getItem('redirectAfterLogin')
+      // Check if there's a redirect query param or stored URL
+      const redirectUrl = redirectParam || localStorage.getItem('redirectAfterLogin')
+
       if (redirectUrl) {
         localStorage.removeItem('redirectAfterLogin')
         router.push(redirectUrl)
@@ -24,13 +27,14 @@ export default function SignInPage() {
         router.push('/')
       }
     }
-  }, [user, loading, router])
+  }, [user, loading, router, redirectParam])
 
   const handleSignInSuccess = (user: User) => {
     console.log('Sign in successful:', user.email)
-    
-    // Check if there's a redirect URL stored
-    const redirectUrl = localStorage.getItem('redirectAfterLogin')
+
+    // Check if there's a redirect query param or stored URL
+    const redirectUrl = redirectParam || localStorage.getItem('redirectAfterLogin')
+
     if (redirectUrl) {
       localStorage.removeItem('redirectAfterLogin')
       router.push(redirectUrl)
@@ -138,7 +142,7 @@ export default function SignInPage() {
                   We collect your email and profile info to provide personalized features like bookmarks and recommendations.
                 </p>
               </div>
-              
+
               <p className="text-xs text-center text-gray-500 dark:text-gray-400">
                 By signing in, you agree to our{' '}
                 <Link href="/privacy" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline font-medium">
@@ -155,7 +159,7 @@ export default function SignInPage() {
 
         {/* Back to Home Link */}
         <div className="mt-6 text-center">
-          <Link 
+          <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
           >
