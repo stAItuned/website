@@ -3,6 +3,30 @@ export type ContributorFormat = 'tutorial' | 'deep_dive' | 'case_study' | 'trend
 export type ContributionStatus = 'pitch' | 'interview' | 'outline' | 'draft' | 'review' | 'scheduled' | 'published';
 export type ContributionPath = 'autonomy' | 'guided' | 'interview';
 
+// Assistance types
+export type AssistanceType = 'examples' | 'claims' | 'sources' | 'definition' | 'drafting';
+
+export interface AssistanceSuggestion {
+    id: string;
+    type: AssistanceType;
+    text: string;                  // The actual suggestion (e.g., "Netflix uses AI to...")
+    source?: string;               // Optional URL
+    sourceTitle?: string;          // Optional source name
+    authorityScore?: number;       // 0-100 score of source authority
+    context?: string;              // Why this is useful
+}
+
+export interface AssistanceResponse {
+    suggestions: AssistanceSuggestion[];
+    query: string;
+    assistanceType: AssistanceType;
+}
+
+/**
+ * Default maximum number of interview questions
+ */
+export const DEFAULT_MAX_QUESTIONS = 5;
+
 export interface ContributorBrief {
     topic: string;
     target: ContributorTarget;
@@ -17,17 +41,20 @@ export interface InterviewQnA {
     questionId: string;
     question: string;
     answer: string;
-    dataPoint: 'key_points' | 'examples' | 'claims' | 'thesis';
+    dataPoint: 'key_points' | 'examples' | 'claims' | 'thesis' | 'thesis_depth' | 'context_relevance' | 'author_expertise' | 'key_mechanisms' | 'evidence';
     answeredAt?: string; // ISO date
 }
 
 export interface GeneratedQuestion {
     id: string;
     text: string;
-    dataPoint: 'key_points' | 'examples' | 'claims' | 'thesis';
+    dataPoint: 'key_points' | 'examples' | 'claims' | 'thesis' | 'thesis_depth' | 'context_relevance' | 'author_expertise' | 'key_mechanisms' | 'evidence';
     helperText?: string;
     motivation?: string; // Why this helps authority
     exampleAnswer?: string;
+    needsAssistance?: boolean;              // Flag indicating this question may need help
+    assistanceType?: AssistanceType;        // Type of assistance to offer
+    assistancePrompt?: string;              // What to search for if user clicks help
 }
 
 /**
@@ -51,16 +78,20 @@ export interface GenerateQuestionsResponse {
     maxQuestions?: number;                            // Cap (default 5)
 }
 
+export interface GeneratedSectionSource {
+    claim: string;
+    sourceUrl: string;
+    sourceTitle: string;
+    context?: string;
+}
+
 export interface GeneratedSection {
     heading: string;
     type: 'intro' | 'context' | 'core' | 'evidence' | 'takeaways';
     suggestedWords: number;
     prompts: string[];
-    suggestedSources: Array<{
-        claim: string;
-        sourceUrl: string;
-        sourceTitle: string;
-    }>;
+    suggestedSources: GeneratedSectionSource[];
+    integratedSources?: GeneratedSectionSource[];
 }
 
 export interface GeneratedOutline {
@@ -107,10 +138,16 @@ export interface Contribution {
     language: 'it' | 'en';
 
     // Progress
-    currentStep: 'pitch' | 'agreement' | 'interview' | 'coverage_review' | 'source_discovery' | 'outline' | 'review';
+    currentStep: 'path_intro' | 'pitch' | 'agreement' | 'interview' | 'coverage_review' | 'source_discovery' | 'outline' | 'draft_submission' | 'review';
 
     // Data
     brief: ContributorBrief;
+    /**
+     * Last generated interview question not yet answered.
+     * Optional so legacy records don't break.
+     */
+    currentQuestion?: GeneratedQuestion | null;
+    draftContent?: string;
     interviewHistory: InterviewQnA[];
     sourceDiscovery?: SourceDiscoveryData;
     generatedOutline?: GeneratedOutline;

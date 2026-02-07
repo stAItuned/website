@@ -108,9 +108,16 @@ const pricingData = {
     },
 }
 
+/** Career OS pricing section with dynamic deadline label. */
 export default function PricingSection() {
     const { mode, setMode, objective, openAppModal, openAuditModal } = useCareerOS()
     const current = pricingData[mode]
+
+    const deadlineLabel = (() => {
+        const month = new Intl.DateTimeFormat('it-IT', { month: 'long' }).format(new Date())
+        const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1)
+        return `Fine ${capitalizedMonth}`
+    })()
 
     // Selected tier state - default based on objective or 'Pro'
     const getDefaultTier = () => {
@@ -244,7 +251,7 @@ export default function PricingSection() {
                                     €{tier.price}
                                 </div>
                                 <p className={`text-[10px] uppercase tracking-wide font-bold mt-1 ${tier.isSelected ? 'text-rose-700 animate-pulse' : 'text-rose-400'}`}>
-                                    🔥 Scadenza: Fine Gennaio
+                                    🔥 Scadenza: {deadlineLabel}
                                 </p>
                             </div>
 

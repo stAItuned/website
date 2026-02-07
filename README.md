@@ -75,7 +75,8 @@
 
 ## Server APIs
 
-_There is no Server APIs at the moment._
+- `/api/feedbacks` accepts `POST` requests and forwards feedback to Telegram (and optional Slack webhook).
+- Required env vars for Telegram delivery: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`.
 
 ## Database Structure
 

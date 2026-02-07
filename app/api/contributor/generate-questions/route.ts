@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/firebase/server-auth';
-import { generateNextQuestions, DEFAULT_MAX_QUESTIONS } from '@/lib/ai/contributor-engine';
+import { generateNextQuestions } from '@/lib/ai/contributor-engine';
 import { checkAndConsume } from '@/lib/ai/rate-limiter';
-import { ContributorBrief, InterviewQnA } from '@/lib/types/contributor';
+import { ContributorBrief, InterviewQnA, DEFAULT_MAX_QUESTIONS } from '@/lib/types/contributor';
 
 export async function POST(request: NextRequest) {
     try {
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 3. Rate Limit Check
-        const limitCheck = await checkAndConsume(user.uid, 'gemini', 'questionGeneration');
+        const limitCheck = await checkAndConsume(user.uid, 'gemini', 'questionGeneration', user.email);
         if (!limitCheck.allowed) {
             return NextResponse.json(
                 {
@@ -53,6 +53,11 @@ export async function POST(request: NextRequest) {
             {
                 forceComplete,
                 maxQuestions: maxQuestions ?? DEFAULT_MAX_QUESTIONS
+            },
+            {
+                userId: user.uid,
+                userEmail: user.email,
+                endpoint: 'generate-questions'
             }
         );
 

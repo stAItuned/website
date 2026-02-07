@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
 
         // 3. Rate Limit Check
-        const limitCheck = await checkAndConsume(user.uid, 'perplexity', 'sourceDiscovery');
+        const limitCheck = await checkAndConsume(user.uid, 'perplexity', 'sourceDiscovery', user.email);
         if (!limitCheck.allowed) {
             return NextResponse.json(
                 {
@@ -57,7 +57,12 @@ export async function POST(request: NextRequest) {
         const sources = await discoverSources(
             brief,
             interviewHistory || [],
-            language || 'it'
+            language || 'it',
+            {
+                userId: user.uid,
+                userEmail: user.email,
+                endpoint: 'discover-sources'
+            }
         );
 
         const discoveryData: SourceDiscoveryData = {

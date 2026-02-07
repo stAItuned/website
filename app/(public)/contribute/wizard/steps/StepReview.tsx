@@ -25,7 +25,7 @@ export function StepReview({
     const t = translations
 
     // All trackable data points
-    const allDataPoints = ['thesis', 'key_points', 'examples', 'sources', 'claims'] as const
+    const allDataPoints = ['thesis_depth', 'context_relevance', 'author_expertise', 'key_mechanisms', 'evidence'] as const
 
     // Get score color based on recommendation
     const getScoreColor = (recommendation: string) => {
@@ -96,7 +96,7 @@ export function StepReview({
                 <div className="mt-4 text-center">
                     <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-sm text-slate-600 dark:text-slate-300">
                         <span className="font-medium">{interviewHistory.length}</span>
-                        <span>risposte raccolte</span>
+                        <span>{t.responsesCollected}</span>
                     </span>
                 </div>
             </div>
@@ -112,10 +112,10 @@ export function StepReview({
                             <div
                                 key={point}
                                 className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isCovered
-                                        ? 'bg-emerald-50 dark:bg-emerald-900/20'
-                                        : isMissing
-                                            ? 'bg-amber-50 dark:bg-amber-900/20'
-                                            : 'bg-slate-50 dark:bg-slate-700/50'
+                                    ? 'bg-emerald-50 dark:bg-emerald-900/20'
+                                    : isMissing
+                                        ? 'bg-amber-50 dark:bg-amber-900/20'
+                                        : 'bg-slate-50 dark:bg-slate-700/50'
                                     }`}
                             >
                                 {/* Icon */}
@@ -125,16 +125,16 @@ export function StepReview({
 
                                 {/* Label */}
                                 <span className={`font-medium ${isCovered
-                                        ? 'text-emerald-700 dark:text-emerald-300'
-                                        : 'text-amber-700 dark:text-amber-300'
+                                    ? 'text-emerald-700 dark:text-emerald-300'
+                                    : 'text-amber-700 dark:text-amber-300'
                                     }`}>
                                     {t.dataPoints[point] || point}
                                 </span>
 
                                 {/* Status Badge */}
                                 <span className={`ml-auto text-xs font-medium px-2 py-0.5 rounded-full ${isCovered
-                                        ? 'bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 dark:text-emerald-400'
-                                        : 'bg-amber-100 dark:bg-amber-800/50 text-amber-600 dark:text-amber-400'
+                                    ? 'bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 dark:text-emerald-400'
+                                    : 'bg-amber-100 dark:bg-amber-800/50 text-amber-600 dark:text-amber-400'
                                     }`}>
                                     {isCovered ? t.covered : t.missing}
                                 </span>

@@ -8,9 +8,10 @@ import { Contribution, GeneratedOutline, InterviewQnA } from '@/lib/types/contri
 
 interface StepFinalProps {
     contribution: Contribution
+    onBackToSelection?: () => void
 }
 
-export function StepFinal({ contribution }: StepFinalProps) {
+export function StepFinal({ contribution, onBackToSelection }: StepFinalProps) {
     const { user } = useAuth()
     const [activeTab, setActiveTab] = useState<'outline' | 'qna'>('outline')
     const [outline, setOutline] = useState<GeneratedOutline | null>(contribution.generatedOutline || null)
@@ -57,23 +58,34 @@ export function StepFinal({ contribution }: StepFinalProps) {
     return (
         <div className="max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-4">
-                <div className="w-24 h-24 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-12 h-12 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <div className="w-24 h-24 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-amber-500/10 border border-amber-100 dark:border-amber-900/30">
+                    <svg className="w-12 h-12 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                     Ottimo lavoro! Contributo Salvato.
                 </h1>
-                <p className="text-slate-600 dark:text-slate-300">
+                <p className="text-slate-600 dark:text-slate-300 font-medium max-w-md mx-auto leading-relaxed">
                     Il tuo contributo è stato salvato correttamente. Da qui puoi rivedere la struttura generata e le tue risposte.
                 </p>
-                <Link
-                    href="/contributor-dashboard"
-                    className="inline-block px-6 py-2 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-500 transition"
-                >
-                    Torna alla Dashboard
-                </Link>
+                <div className="pt-4">
+                    {onBackToSelection ? (
+                        <button
+                            onClick={onBackToSelection}
+                            className="inline-block px-10 py-3 stai-btn-gradient rounded-xl transition"
+                        >
+                            Torna alla Dashboard
+                        </button>
+                    ) : (
+                        <Link
+                            href="/contributor-dashboard"
+                            className="inline-block px-10 py-3 stai-btn-gradient rounded-xl transition"
+                        >
+                            Torna alla Dashboard
+                        </Link>
+                    )}
+                </div>
             </div>
 
             {/* Tabs */}

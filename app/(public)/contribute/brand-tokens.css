@@ -1,0 +1,65 @@
+/* stAItuned Contributor Flow Brand Tokens */
+
+:root {
+    /* stAItuned Primary Palette */
+    --stai-primary-300: #4d84d4;
+    --stai-primary-400: #566096;
+    --stai-primary-500: #383F74;
+    --stai-primary-600: #1A1E3B;
+
+    /* stAItuned Accent Palette (CTA) */
+    --stai-accent-400: #FBBF24;
+    --stai-accent-500: #F59E0B;
+    --stai-accent-600: #D97706;
+
+    /* stAItuned Secondary (Highlight) */
+    --stai-secondary-400: #FFF7A8;
+    --stai-secondary-500: #FFF272;
+    --stai-secondary-600: #FFE700;
+
+    /* Brand Gradients - matching Home page exactly */
+    --stai-gradient-brand: linear-gradient(to right, #f59e0b, #fbbf24, #f59e0b);
+    --stai-gradient-subtle: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+    --stai-gradient-text: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+
+    /* Glass/Glow effects */
+    --stai-glow-amber: 0 0 60px -12px rgba(245, 158, 11, 0.3);
+    --stai-glass-bg: rgba(255, 255, 255, 0.8);
+    --stai-glass-border: rgba(255, 255, 255, 0.2);
+}
+
+.dark {
+    --stai-glass-bg: rgba(30, 35, 65, 0.8);
+    --stai-glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Helper classes for the contributor flow - matching Home page CTA */
+.stai-btn-gradient {
+    background: var(--stai-gradient-brand);
+    color: #0f172a !important;
+    /* slate-900 like Home page */
+    font-weight: 700;
+    transition: all 0.2s ease;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.stai-btn-gradient:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.stai-btn-gradient:active {
+    transform: translateY(0);
+}
+
+.stai-glass-card {
+    background: var(--stai-glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--stai-glass-border);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+}
+
+.dark .stai-glass-card {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+}

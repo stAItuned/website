@@ -15,6 +15,10 @@ export const AI_LIMITS = {
             daily: 3,
             displayName: 'Source Discovery'
         },
+        findAssistance: {
+            daily: 10,
+            displayName: 'Answer Assistance'
+        },
     },
 } as const;
 

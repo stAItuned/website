@@ -9,29 +9,33 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const [loading, setLoading] = useState(true) // Start with loading=true to initialize auth
   const [initialized, setInitialized] = useState(false)
 
-  // Initialize auth on mount
+  // Initialize auth on mount with a delay to unblock main thread
   useEffect(() => {
     if (initialized) return
 
-    const initializeAuth = async () => {
-      try {
-        // Dynamic import Firebase only when needed
-        const { onAuthStateChange } = await import('@/lib/firebase/auth')
-        
-        const unsubscribe = onAuthStateChange((user) => {
-          setUser(user)
+    const timer = setTimeout(() => {
+      const initializeAuth = async () => {
+        try {
+          // Dynamic import Firebase only when needed
+          const { onAuthStateChange } = await import('@/lib/firebase/auth')
+
+          const unsubscribe = onAuthStateChange((user) => {
+            setUser(user)
+            setLoading(false)
+          })
+
+          setInitialized(true)
+          return unsubscribe
+        } catch (error) {
+          console.error('Failed to initialize Firebase Auth:', error)
           setLoading(false)
-        })
-
-        setInitialized(true)
-        return unsubscribe
-      } catch (error) {
-        console.error('Failed to initialize Firebase Auth:', error)
-        setLoading(false)
+        }
       }
-    }
 
-    initializeAuth()
+      initializeAuth()
+    }, 2000)
+
+    return () => clearTimeout(timer)
   }, [initialized])
 
   const signIn = async () => {
@@ -45,9 +49,9 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   }
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
+    <AuthContext.Provider value={{
+      user,
+      loading,
       signIn: async () => { await signIn() },
       signOut: async () => { await signOut() }
     }}>

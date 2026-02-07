@@ -12,9 +12,10 @@ interface StepAgreementProps {
     onNext: (contribution: Contribution) => void
     translations: any
     language: 'it' | 'en'
+    id?: string
 }
 
-export function StepAgreement({ brief, path, onNext, translations, language }: StepAgreementProps) {
+export function StepAgreement({ brief, path, onNext, translations, language, id: existingId }: StepAgreementProps) {
     const { user, loading } = useAuth()
     const [agreementText, setAgreementText] = useState<string>('')
     const [legalName, setLegalName] = useState('')
@@ -108,6 +109,7 @@ export function StepAgreement({ brief, path, onNext, translations, language }: S
                     'Authorization': `Bearer ${await user.getIdToken()}`
                 },
                 body: JSON.stringify({
+                    contributionId: existingId,
                     data: {
                         brief,
                         language,
@@ -204,12 +206,12 @@ export function StepAgreement({ brief, path, onNext, translations, language }: S
             </div>
 
             {/* Compact Action Bar - Floating at Bottom */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-5xl px-6 z-50">
-                <div className="bg-white/95 dark:bg-slate-950/90 backdrop-blur-2xl p-4 md:py-4 md:px-8 rounded-3xl border border-slate-200/50 dark:border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] space-y-3">
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-5xl px-6 z-50">
+                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl p-6 md:py-6 md:px-10 rounded-[2.5rem] border border-white/20 dark:border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] space-y-4 ring-1 ring-slate-900/5 dark:ring-white/5">
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
                         {/* Legal Name Input */}
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 ml-1">
                                 {translations.legalName}
                             </label>
@@ -217,13 +219,13 @@ export function StepAgreement({ brief, path, onNext, translations, language }: S
                                 type="text"
                                 value={legalName}
                                 onChange={(e) => setLegalName(e.target.value)}
-                                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition text-sm font-bold"
+                                className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-sm font-bold text-slate-900 dark:text-white"
                                 placeholder="Nome Cognome"
                             />
                         </div>
 
                         {/* Fiscal Code Input */}
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 ml-1">
                                 {translations.fiscalCode}
                             </label>
@@ -231,40 +233,40 @@ export function StepAgreement({ brief, path, onNext, translations, language }: S
                                 type="text"
                                 value={fiscalCode}
                                 onChange={(e) => setFiscalCode(e.target.value.toUpperCase())}
-                                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition text-sm font-bold uppercase"
+                                className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-sm font-bold uppercase text-slate-900 dark:text-white"
                                 placeholder={language === 'it' ? "Codice Fiscale" : "Tax ID"}
                             />
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-slate-100 dark:border-white/5">
-                        <label className="flex items-center gap-3 cursor-pointer group/label">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 border-t border-slate-100 dark:border-white/5">
+                        <label className="flex items-center gap-4 cursor-pointer group/label">
                             <div className="relative flex items-center justify-center">
                                 <input
                                     type="checkbox"
                                     checked={agreed}
                                     onChange={(e) => setAgreed(e.target.checked)}
-                                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-slate-300 dark:border-slate-700 checked:bg-primary-600 checked:border-primary-600 transition-all"
+                                    className="peer h-6 w-6 cursor-pointer appearance-none rounded-lg border-2 border-slate-200 dark:border-slate-800 checked:bg-amber-500 checked:border-amber-500 transition-all"
                                 />
-                                <svg className="absolute h-3.5 w-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                                <svg className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
-                            <span className="text-sm font-bold text-slate-700 dark:text-slate-200 select-none group-hover/label:text-primary-600 transition-colors">
+                            <span className="text-sm font-bold text-slate-600 dark:text-slate-300 select-none group-hover/label:text-amber-600 transition-colors leading-tight">
                                 {translations.checkbox}
                             </span>
                         </label>
 
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-6">
                             {error && (
-                                <p className="text-[10px] text-red-500 font-extrabold uppercase tracking-tight max-w-[150px] leading-tight text-right">
+                                <p className="text-[10px] text-red-500 font-black uppercase tracking-tight max-w-[150px] leading-tight text-right">
                                     {error}
                                 </p>
                             )}
                             <button
                                 onClick={handleAgreeAndContinue}
                                 disabled={!agreed || !legalName.trim() || isSaving}
-                                className="px-10 py-3 rounded-xl bg-primary-600 text-white font-black text-xs uppercase tracking-widest hover:bg-primary-500 shadow-lg shadow-primary-500/20 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed whitespace-nowrap"
+                                className="px-12 py-4 rounded-2xl stai-btn-gradient text-sm shadow-xl shadow-amber-500/20 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed whitespace-nowrap min-w-[180px]"
                             >
                                 {isSaving ? 'Salvataggio...' : translations.cta}
                             </button>

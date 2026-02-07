@@ -7,6 +7,7 @@ import { trackExternalLinkClicked } from '@/lib/analytics/trackEvent'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 import { ScrollReveal, StaggerContainer, FadeIn } from '@/components/ui/Animations'
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup'
+import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // =============================================================================
 // Configuration
@@ -87,7 +88,7 @@ interface NavColumnProps {
   showCookieButton?: boolean
 }
 
-function NavColumn({ title, links, onCookieClick, showCookieButton }: NavColumnProps) {
+function NavColumn({ title, links, onCookieClick, showCookieButton, manageCookiesLabel }: NavColumnProps & { manageCookiesLabel?: string }) {
   return (
     <div>
       <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
@@ -121,7 +122,7 @@ function NavColumn({ title, links, onCookieClick, showCookieButton }: NavColumnP
               className="text-amber-300 hover:text-amber-200 transition-colors duration-200 text-sm font-medium flex items-center gap-1 group"
             >
               <span className="group-hover:translate-x-1 transition-transform duration-200">
-                Gestisci cookie
+                {manageCookiesLabel || 'Gestisci cookie'}
               </span>
             </button>
           </li>
@@ -134,7 +135,7 @@ function NavColumn({ title, links, onCookieClick, showCookieButton }: NavColumnP
 /**
  * Social links row
  */
-function SocialLinks() {
+function SocialLinks({ locale }: { locale: 'en' | 'it' }) {
   return (
     <div className="flex items-center gap-4">
       {socialLinks.map((social) => {
@@ -145,7 +146,7 @@ function SocialLinks() {
             href={social.url}
             target="_blank"
             rel="noreferrer"
-            aria-label={`Seguici su ${social.name}`}
+            aria-label={locale === 'it' ? `Seguici su ${social.name}` : `Follow us on ${social.name}`}
             onClick={() => trackExternalLinkClicked('linkedin', social.name)}
             className="group flex items-center gap-2 text-slate-300 hover:text-amber-300 transition-all duration-300"
           >
@@ -165,7 +166,7 @@ function SocialLinks() {
 /**
  * Bottom bar with logo, copyright, and disclaimer
  */
-function BottomBar() {
+function BottomBar({ t, locale }: { t: any, locale: 'en' | 'it' }) {
   const currentYear = new Date().getFullYear()
 
   return (
@@ -188,14 +189,12 @@ function BottomBar() {
         </div>
 
         {/* Social links */}
-        <SocialLinks />
+        <SocialLinks locale={locale} />
       </div>
 
       {/* Disclaimer */}
       <p className="text-[11px] text-slate-500 leading-relaxed mt-6 text-center md:text-left max-w-4xl">
-        stAItuned è un progetto indipendente di formazione e sperimentazione su AI.
-        Le attività vengono svolte al di fuori dell&apos;orario di lavoro dipendente e senza
-        utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.
+        {t.disclaimer}
       </p>
     </div>
   )
@@ -207,6 +206,35 @@ function BottomBar() {
 
 export function Footer() {
   const { openPreferences } = useCookieConsent()
+  const { locale } = useLearnLocale()
+  const t = homeTranslations[locale].footer
+
+  const localizedNavigation = {
+    explore: {
+      title: t.explore,
+      links: [
+        { name: t.blog, href: '/learn/articles' },
+        { name: t.contribute, href: '/contribute' },
+        { name: t.careeros, href: '/career-os' },
+        { name: t.meet, href: '/meet' },
+      ]
+    },
+    resources: {
+      title: t.resources,
+      links: [
+        { name: t.audit, href: '/role-fit-audit' },
+        { name: t.rss, href: '/rss.xml', external: true },
+      ]
+    },
+    legal: {
+      title: t.legal,
+      links: [
+        { name: t.privacyPolicy, href: '/privacy' },
+        { name: t.termsConditions, href: '/terms' },
+        { name: t.cookiePolicy, href: '/cookie-policy' },
+      ]
+    }
+  }
 
   return (
     <footer className="bg-primary-600 text-slate-200">
@@ -220,20 +248,23 @@ export function Footer() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span className="text-xl">📬</span>
-                  <span className="text-sm font-medium text-white">Resta aggiornato</span>
+                  <span className="text-sm font-medium text-white">{t.stayUpdated}</span>
                 </div>
                 <Link
                   href="/rss.xml"
                   target="_blank"
                   className="hidden sm:flex text-xs text-slate-400 hover:text-amber-300 transition items-center gap-1"
                 >
-                  <span>📡</span> RSS Feed
+                  <span>📡</span> {t.rss}
                 </Link>
               </div>
               {/* Newsletter input - full width on mobile */}
               <div className="w-full sm:max-w-md">
                 <NewsletterSignup source="footer" variant="inline" showHeader={false} />
               </div>
+              <p className="text-[10px] text-slate-400">
+                {t.noSpam}
+              </p>
             </div>
           </FadeIn>
 
@@ -243,24 +274,25 @@ export function Footer() {
 
               <FadeIn>
                 <NavColumn
-                  title={footerNavigation.explore.title}
-                  links={footerNavigation.explore.links}
+                  title={localizedNavigation.explore.title}
+                  links={localizedNavigation.explore.links}
                 />
               </FadeIn>
 
               <FadeIn delay={100}>
                 <NavColumn
-                  title={footerNavigation.resources.title}
-                  links={footerNavigation.resources.links}
+                  title={localizedNavigation.resources.title}
+                  links={localizedNavigation.resources.links}
                 />
               </FadeIn>
 
               <FadeIn delay={200}>
                 <NavColumn
-                  title={footerNavigation.legal.title}
-                  links={footerNavigation.legal.links}
+                  title={localizedNavigation.legal.title}
+                  links={localizedNavigation.legal.links}
                   onCookieClick={openPreferences}
                   showCookieButton={true}
+                  manageCookiesLabel={t.manageCookies}
                 />
               </FadeIn>
 
@@ -269,7 +301,7 @@ export function Footer() {
 
           {/* Bottom bar */}
           <FadeIn delay={300}>
-            <BottomBar />
+            <BottomBar t={t} locale={locale} />
           </FadeIn>
 
         </div>

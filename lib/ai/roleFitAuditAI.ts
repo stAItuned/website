@@ -6,6 +6,7 @@
  */
 
 import { generateJSON, isGeminiAvailable } from './gemini'
+import { UsageLogContext } from './usage-logger'
 import { QUESTIONS, SECTIONS, ROLE_OPTIONS } from '@/app/(public)/role-fit-audit/lib/questions'
 import { calculateAuditResult, type AuditResult, type Archetype, type Gap, type RoleRecommendation, type Scores } from '@/app/(public)/role-fit-audit/lib/scoring'
 import { db } from '@/lib/firebase/admin'
@@ -362,7 +363,8 @@ const ARCHETYPE_STATIC_DATA: Record<string, Omit<Archetype, 'id'>> = {
  */
 export async function generateAIAuditResult(
     answers: Record<string, number>,
-    userName?: string
+    userName?: string,
+    context?: UsageLogContext
 ): Promise<AIAuditResult> {
     // -------------------------------------------------------------------------
     // 1. Check Cache
@@ -402,7 +404,7 @@ export async function generateAIAuditResult(
         console.log('[RoleFitAudit AI] 🚀 Starting Gemini generation...')
         const prompt = buildPrompt(answers, userName)
 
-        const response = await generateJSON<GeminiAuditResponse>(prompt)
+        const response = await generateJSON<GeminiAuditResponse>(prompt, context)
 
         if (!response.success || !response.data) {
             console.error('[RoleFitAudit AI] ❌ Gemini generation failed. Reason:', response.error)

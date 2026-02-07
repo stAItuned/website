@@ -116,6 +116,7 @@ export interface HomeTranslations {
         app_label: string
         free_app: string
         browser_hint: string
+        title_desktop: string
     }
     meet: {
         hero: {
@@ -163,6 +164,24 @@ export interface HomeTranslations {
             ctaArticles: string
             ctaCareer: string
         }
+    }
+    footer: {
+        explore: string
+        resources: string
+        legal: string
+        blog: string
+        contribute: string
+        careeros: string
+        meet: string
+        audit: string
+        rss: string
+        manageCookies: string
+        disclaimer: string
+        stayUpdated: string
+        noSpam: string
+        privacyPolicy: string
+        termsConditions: string
+        cookiePolicy: string
     }
 }
 
@@ -282,7 +301,8 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             native_desc: "Proprio come un'app reale",
             app_label: "La tua app per imparare l'AI",
             free_app: "App Gratuita",
-            browser_hint: "Apri in Chrome o Safari per installare l'app"
+            browser_hint: "Apri in Chrome o Safari per installare l'app",
+            title_desktop: "Installa l'app desktop"
         },
         meet: {
             hero: {
@@ -328,7 +348,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             contributors: {
                 badge: "I nostri contributor",
                 title: "Chi scrive su stAItuned",
-                description: "Professionisti che lavorano con l'AI **ogni giorno** e condividono la loro esperienza.",
+                description: "Professionals che lavorano con l'AI **ogni giorno** e condividono la loro esperienza.",
                 cta: "Scopri tutti i contributor",
                 stats: "articol" // singular/plural handled logic in client
             },
@@ -344,6 +364,24 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 ctaArticles: "Esplora gli articoli",
                 ctaCareer: "Scopri Career OS"
             }
+        },
+        footer: {
+            explore: "Esplora",
+            resources: "Risorse",
+            legal: "Legale",
+            blog: "Blog",
+            contribute: "Diventa Contributor",
+            careeros: "Career OS",
+            meet: "Chi siamo",
+            audit: "Role Fit Audit",
+            rss: "RSS Feed",
+            manageCookies: "Gestisci cookie",
+            disclaimer: "stAItuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell'orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.",
+            stayUpdated: "Resta aggiornato",
+            noSpam: "Niente spam · Disiscriviti quando vuoi",
+            privacyPolicy: "Privacy Policy",
+            termsConditions: "Termini e Condizioni",
+            cookiePolicy: "Cookie Policy"
         }
     },
     en: {
@@ -461,7 +499,8 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             native_desc: "Just like a real app",
             app_label: "Your pocket AI learning companion",
             free_app: "Free App",
-            browser_hint: "Open in Chrome or Safari to install the app"
+            browser_hint: "Open in Chrome or Safari to install the app",
+            title_desktop: "Install desktop app"
         },
         meet: {
             hero: {
@@ -523,6 +562,24 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 ctaArticles: "Explore Articles",
                 ctaCareer: "Discover Career OS"
             }
+        },
+        footer: {
+            explore: "Explore",
+            resources: "Resources",
+            legal: "Legal",
+            blog: "Blog",
+            contribute: "Become a Contributor",
+            careeros: "Career OS",
+            meet: "About Us",
+            audit: "Role Fit Audit",
+            rss: "RSS Feed",
+            manageCookies: "Manage Cookies",
+            disclaimer: "stAItuned is an independent project for training and experimentation on AI. Activities are carried out outside of employee working hours and without the use of confidential information or internal projects of other employers.",
+            stayUpdated: "Stay Updated",
+            noSpam: "No spam · Unsubscribe anytime",
+            privacyPolicy: "Privacy Policy",
+            termsConditions: "Terms and Conditions",
+            cookiePolicy: "Cookie Policy"
         }
     }
 }

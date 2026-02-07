@@ -151,13 +151,15 @@ export function StepSourceDiscovery({ contribution, onNext, translations, langua
             ) : (!discoveryData && (limitReached || getRemaining('perplexity', 'sourceDiscovery') === 0)) ? (
                 <div className="bg-amber-50 dark:bg-amber-900/20 p-10 rounded-xl border border-amber-200 dark:border-amber-800 text-center space-y-4 my-10">
                     <span className="text-4xl block mb-2">⏳</span>
-                    <h3 className="text-xl font-bold text-amber-900 dark:text-amber-100">Limite Giornaliero Raggiunto</h3>
-                    <p className="text-amber-800 dark:text-amber-200">
-                        Hai raggiunto il limite di ricerche fonti per oggi. <br />
-                        Riprova alle {getResetTime('perplexity', 'sourceDiscovery')}.
-                    </p>
+                    <h3 className="text-xl font-bold text-amber-900 dark:text-amber-100">{translations.rateLimitTitle || 'Limite Giornaliero Raggiunto'}</h3>
+                    <p className="text-amber-800 dark:text-amber-200"
+                        dangerouslySetInnerHTML={{
+                            __html: (translations.rateLimitDesc || 'Hai raggiunto il limite di ricerche fonti per oggi. <br />Riprova alle {resetTime}.')
+                                .replace('{resetTime}', getResetTime('perplexity', 'sourceDiscovery'))
+                        }}
+                    />
                     <button onClick={() => onNext({ sources: [], discoveredAt: new Date().toISOString(), searchQuery: 'SKIPPED_LIMIT_REACHED' })} className="text-sm underline text-amber-900 dark:text-amber-100 mt-4 block mx-auto">
-                        Salta questo passaggio
+                        {translations.skipSource || 'Salta questo passaggio'}
                     </button>
                 </div>
             ) : discoveryData ? (

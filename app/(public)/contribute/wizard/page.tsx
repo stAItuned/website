@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import WizardClient from './WizardClient'
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 }
 
 export default function WizardPage() {
-    return <WizardClient />
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-slate-50 dark:bg-slate-900 animate-pulse" />}>
+            <WizardClient />
+        </Suspense>
+    )
 }

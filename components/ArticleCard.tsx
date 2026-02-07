@@ -112,7 +112,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
               width={600}
               height={338}
               className="article-card-image object-cover w-full h-full transform scale-105 transition-transform duration-700 ease-out group-hover:scale-100"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
               priority={false}
               loading="lazy"
               quality={60}

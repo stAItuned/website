@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/firebase/server-auth';
-import { createContribution, updateContribution } from '@/lib/firebase/contributor-db';
+import { createContribution, updateContribution, getContribution } from '@/lib/firebase/contributor-db';
 import { Contribution } from '@/lib/types/contributor';
 
 export async function POST(request: NextRequest) {
@@ -39,8 +39,15 @@ export async function POST(request: NextRequest) {
             id = await createContribution(newContribution);
         } else {
             // Update Existing
-            // TODO: Verify ownership (userId == contribution.contributorId)
-            // For MVP we assume client sends correct ID. DB layer update doesn't check owner yet.
+            // Verify ownership before updating
+            const existing = await getContribution(id);
+            if (!existing) {
+                return NextResponse.json({ success: false, error: 'Contribution not found' }, { status: 404 });
+            }
+
+            if (existing.contributorId !== user.uid) {
+                return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+            }
 
             await updateContribution(id, {
                 ...data,

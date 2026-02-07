@@ -6,14 +6,37 @@ import { addHeadingIdsToMarkdown } from '@/lib/markdown-headings'
 
 interface MarkdownContentProps {
   content: string
+  htmlContent?: string // Optional pre-rendered HTML
   className?: string
   articleSlug?: string // Add article slug to resolve image paths
 }
 
-export function MarkdownContent({ content, className = '', articleSlug }: MarkdownContentProps) {
+export function MarkdownContent({ content, htmlContent, className = '', articleSlug }: MarkdownContentProps) {
   const contentRef = useRef<HTMLDivElement>(null)
 
   const processedContent = useMemo(() => {
+    // If HTML is already provided (SSR), use it directly
+    if (htmlContent) {
+      let finalHtml = htmlContent
+
+      // Process image paths if articleSlug is provided (reusing same logic)
+      if (articleSlug) {
+        finalHtml = finalHtml.replace(
+          /<img([^>]*)\ssrc=["']([^"']+)["']([^>]*)>/g,
+          (match: string, before: string, src: string, after: string) => {
+            if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')) {
+              return match
+            }
+            const cleanSrc = src.replace(/^\.\//, '')
+            const absoluteSrc = `/content/articles/${articleSlug}/${cleanSrc}`
+            return `<img${before} src="${absoluteSrc}"${after}>`
+          }
+        )
+      }
+      return finalHtml
+    }
+
+    // Client-side fallback (legacy behavior)
     // Configure marked with table support and better options
     marked.setOptions({
       gfm: true, // GitHub flavored markdown (includes tables)
@@ -24,12 +47,12 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
     const contentWithIds = addHeadingIdsToMarkdown(content)
 
     // Convert markdown (with heading IDs) to HTML
-    let htmlContent = marked(contentWithIds) as string
+    let renderedHtml = marked(contentWithIds) as string
 
     // Process image paths if articleSlug is provided
     if (articleSlug) {
       // Replace relative image paths with absolute paths
-      htmlContent = htmlContent.replace(
+      renderedHtml = renderedHtml.replace(
         /<img([^>]*)\ssrc=["']([^"']+)["']([^>]*)>/g,
         (match: string, before: string, src: string, after: string) => {
           // Skip if it's already an absolute URL
@@ -49,17 +72,17 @@ export function MarkdownContent({ content, className = '', articleSlug }: Markdo
     }
 
     // Wrap tables in a responsive container
-    htmlContent = htmlContent.replace(
+    renderedHtml = renderedHtml.replace(
       /<table>/g,
       '<div class="table-wrapper"><table>'
     )
-    htmlContent = htmlContent.replace(
+    renderedHtml = renderedHtml.replace(
       /<\/table>/g,
       '</table></div>'
     )
 
-    return htmlContent
-  }, [content, articleSlug])
+    return renderedHtml
+  }, [content, htmlContent, articleSlug])
 
   // Add scroll detection for table wrappers to hide the scroll indicator
   useEffect(() => {

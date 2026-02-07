@@ -1,7 +1,7 @@
 'use client'
 
 import Script from 'next/script'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { GA_MEASUREMENT_ID } from '@/lib/gtag'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
@@ -12,6 +12,7 @@ export function GoogleAnalytics() {
   const FORCE_ANALYTICS_ENABLED = true
 
   const shouldTrack = hasConsentedToAnalytics || FORCE_ANALYTICS_ENABLED
+  const [delayed, setDelayed] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -19,7 +20,12 @@ export function GoogleAnalytics() {
       ; (window as any)[`ga-disable-${GA_MEASUREMENT_ID}`] = !shouldTrack
   }, [shouldTrack])
 
-  if (!shouldTrack) {
+  useEffect(() => {
+    const timer = setTimeout(() => setDelayed(true), 4000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!shouldTrack || !delayed) {
     return null
   }
 
@@ -27,9 +33,9 @@ export function GoogleAnalytics() {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}

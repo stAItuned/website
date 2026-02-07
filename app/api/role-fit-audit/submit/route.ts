@@ -43,7 +43,14 @@ export async function POST(req: NextRequest) {
         // Generate AI Result (with static fallback)
         // -------------------------------------------------------------------------
         console.log('[Role Fit Audit] Generating result...')
-        const result = await generateAIAuditResult(answers, name?.trim())
+        const result = await generateAIAuditResult(
+            answers,
+            name?.trim(),
+            {
+                userEmail: normalizedEmail,
+                endpoint: 'role-fit-audit'
+            }
+        )
         console.log(`[Role Fit Audit] Result generated (${result.generatedBy})`)
 
         // -------------------------------------------------------------------------

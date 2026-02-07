@@ -1,5 +1,6 @@
 import { getAdminDb } from './server-auth';
 import { Contribution } from '../types/contributor';
+import { sanitizeFirestoreDate } from './utils';
 
 const COLLECTION = 'contributions';
 
@@ -45,17 +46,12 @@ export async function getUserContributions(userId: string): Promise<Contribution
         const contributions = snapshot.docs.map(doc => {
             const data = doc.data();
             // Convert Firestore Timestamps to ISO strings if needed
-            const sanitizeDate = (val: any) => {
-                if (val && typeof val.toDate === 'function') return val.toDate().toISOString();
-                return val;
-            };
-
             return {
                 ...data,
                 id: doc.id,
-                createdAt: sanitizeDate(data.createdAt),
-                updatedAt: sanitizeDate(data.updatedAt),
-                lastSavedAt: sanitizeDate(data.lastSavedAt),
+                createdAt: sanitizeFirestoreDate(data.createdAt),
+                updatedAt: sanitizeFirestoreDate(data.updatedAt),
+                lastSavedAt: sanitizeFirestoreDate(data.lastSavedAt),
             } as Contribution;
         });
 
@@ -81,16 +77,12 @@ export async function getAllContributions(status?: string): Promise<Contribution
     const snapshot = await query.get();
     const contributions = snapshot.docs.map(doc => {
         const data = doc.data();
-        const sanitizeDate = (val: any) => {
-            if (val && typeof val.toDate === 'function') return val.toDate().toISOString();
-            return val;
-        };
         return {
             ...data,
             id: doc.id,
-            createdAt: sanitizeDate(data.createdAt),
-            updatedAt: sanitizeDate(data.updatedAt),
-            lastSavedAt: sanitizeDate(data.lastSavedAt),
+            createdAt: sanitizeFirestoreDate(data.createdAt),
+            updatedAt: sanitizeFirestoreDate(data.updatedAt),
+            lastSavedAt: sanitizeFirestoreDate(data.lastSavedAt),
         } as Contribution;
     });
 

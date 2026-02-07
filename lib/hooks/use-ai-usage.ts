@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@/components/auth/AuthContext';
 
 export interface UsageStats {
     used: number;
@@ -18,14 +19,25 @@ export interface UserAIUsage {
 }
 
 export function useAIUsage() {
+    const { user } = useAuth();
     const [usage, setUsage] = useState<UserAIUsage | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const fetchUsage = useCallback(async () => {
+        if (!user) {
+            setLoading(false);
+            return;
+        }
+
         try {
+            const token = await user.getIdToken();
             setLoading(true);
-            const res = await fetch('/api/contributor/get-usage');
+            const res = await fetch('/api/contributor/get-usage', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data = await res.json();
 
             if (data.success) {
@@ -39,7 +51,7 @@ export function useAIUsage() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         fetchUsage();

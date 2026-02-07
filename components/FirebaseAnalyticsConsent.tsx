@@ -2,13 +2,16 @@
 
 import { useEffect } from 'react'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
-import { setFirebaseAnalyticsEnabled } from '@/lib/firebase/client'
 
 export function FirebaseAnalyticsConsent() {
   const { hasConsentedToAnalytics } = useCookieConsent()
 
   useEffect(() => {
-    void setFirebaseAnalyticsEnabled(hasConsentedToAnalytics)
+    const updateAnalytics = async () => {
+      const { setFirebaseAnalyticsEnabled } = await import('@/lib/firebase/client')
+      void setFirebaseAnalyticsEnabled(hasConsentedToAnalytics)
+    }
+    updateAnalytics()
   }, [hasConsentedToAnalytics])
 
   return null

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/firebase/server-auth';
 import { getContribution } from '@/lib/firebase/contributor-db';
+import { sanitizeFirestoreDate } from '@/lib/firebase/utils';
 
 export async function GET(request: NextRequest) {
     try {
@@ -28,16 +29,11 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
         }
 
-        const sanitizeDate = (val: any) => {
-            if (val && typeof val.toDate === 'function') return val.toDate().toISOString();
-            return val;
-        };
-
         const sanitized = {
             ...contribution,
-            createdAt: sanitizeDate(contribution.createdAt),
-            updatedAt: sanitizeDate(contribution.updatedAt),
-            lastSavedAt: sanitizeDate(contribution.lastSavedAt),
+            createdAt: sanitizeFirestoreDate(contribution.createdAt),
+            updatedAt: sanitizeFirestoreDate(contribution.updatedAt),
+            lastSavedAt: sanitizeFirestoreDate(contribution.lastSavedAt),
         };
 
         return NextResponse.json({ success: true, contribution: sanitized });

@@ -51,9 +51,24 @@ function isExpired(resetAt: string): boolean {
 export async function checkAndConsume(
     userId: string,
     service: AIService,
-    action: string // Generic string to allow flexibility, but typed in overloads
+    action: string, // Generic string to allow flexibility, but typed in overloads
+    userEmail?: string | null
 ): Promise<LimitCheckResult> {
     const db = getAdminDb();
+
+    // 0. Skip for Admins
+    if (userEmail) {
+        const { isAdmin } = await import('../firebase/admin-emails');
+        if (isAdmin(userEmail)) {
+            return {
+                allowed: true,
+                remaining: 999,
+                resetAt: new Date(Date.now() + 86400000).toISOString(),
+                limit: 999
+            };
+        }
+    }
+
     const docRef = db.collection(COLLECTION).doc(userId);
     const now = new Date();
     const nextReset = getNextResetTime();

@@ -5,6 +5,7 @@ import { extractTOC } from '@/lib/markdown-headings'
 import { getAuthorData } from '@/lib/authors'
 import { fetchArticleAnalytics } from '@/lib/analytics-server'
 import ArticlePageClient from './ArticlePageClient'
+import { renderMarkdownToHtml } from '@/lib/markdown-server'
 
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -165,6 +166,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   const coverImage = getValidImageSrc(article.cover)
   // Extract TOC from markdown using shared function
   const toc = extractTOC(article.body.raw)
+
+  // Render markdown to HTML on the server
+  const htmlContent = renderMarkdownToHtml(article.body.raw)
+
   const authorData = article.author ? await getAuthorData(article.author) : null
 
   // Fetch analytics server-side during SSR/ISR (no client-side API call needed!)
@@ -208,6 +213,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
         relatedArticles={relatedArticles}
         authorData={authorData}
         analytics={analytics}
+        htmlContent={htmlContent}
       />
     </>
   )

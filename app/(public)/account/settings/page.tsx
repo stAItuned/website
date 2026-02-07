@@ -7,6 +7,9 @@ import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'
 import { app } from '@/lib/firebase/client'
 import Link from 'next/link'
 import { MyArticles } from '@/components/account/MyArticles'
+import { CostMonitoringDashboard } from '@/components/admin/CostMonitoringDashboard'
+import { isAdmin } from '@/lib/firebase/admin-emails'
+import { AgreementModal } from '@/components/account/AgreementModal'
 
 export default function AccountSettingsPage() {
   const { user, loading: authLoading } = useAuth()
@@ -18,6 +21,7 @@ export default function AccountSettingsPage() {
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
+  const [showAgreement, setShowAgreement] = useState(false)
 
   useEffect(() => {
     // Redirect to signin if not authenticated
@@ -197,6 +201,13 @@ export default function AccountSettingsPage() {
         {/* My Articles (Only shows if user is an author) */}
         {user?.email && <MyArticles userEmail={user.email} />}
 
+        {/* Cost Monitoring (Admin Only) */}
+        {user?.email && isAdmin(user.email) && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
+            <CostMonitoringDashboard />
+          </div>
+        )}
+
         {/* Your Data */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -240,6 +251,30 @@ export default function AccountSettingsPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Legal & Agreements */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Legal & Agreements
+          </h2>
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
+            <div>
+              <p className="font-semibold text-gray-900 dark:text-white">Contributor Agreement</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                View the terms for submitting articles to stAItuned.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowAgreement(true)}
+              className="px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors border border-primary-200 dark:border-primary-800 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20"
+            >
+              Read Agreement
+            </button>
           </div>
         </div>
 
@@ -367,6 +402,15 @@ export default function AccountSettingsPage() {
           </div>
         )}
       </div>
-    </main>
+
+      <AgreementModal
+        isOpen={showAgreement}
+        onClose={() => setShowAgreement(false)}
+      />
+    </main >
   )
+}
+
+function AgreementSection({ onOpen }: { onOpen: () => void }) {
+  return null; // Inline above instead
 }

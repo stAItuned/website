@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { usePWADetection } from '@/hooks/usePWADetection'
 import { usePWAInstall } from '@/hooks/usePWAInstall'
+import { useScreenSize } from '@/lib/hooks/useScreenSize'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // Inline SVG Icons
@@ -49,6 +50,7 @@ interface PWAInstallInlineProps {
  * Multiple variants for different contexts.
  */
 export function PWAInstallInline({ className = '', variant = 'default' }: PWAInstallInlineProps) {
+    const isLarge = useScreenSize()
     const { isInBrowser } = usePWADetection()
     const { isPromptReady, promptInstall, isInstalled } = usePWAInstall()
     const { locale } = useLearnLocale()
@@ -56,8 +58,8 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
 
     const [isHidden, setIsHidden] = useState(false)
 
-    // Don't render if already installed, in PWA mode, or hidden
-    if (!isInBrowser || isInstalled || isHidden) return null
+    // Don't render if already installed, in PWA mode, hidden, or prompt not ready (e.g. Safari/Firefox)
+    if (!isInBrowser || isInstalled || isHidden || !isPromptReady) return null
 
     const handleInstall = async () => {
         const success = await promptInstall()
@@ -90,7 +92,7 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                     </div>
                     <div>
                         <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
-                            {t.title}
+                            {isLarge ? t.title_desktop : t.title}
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
                             {t.subtitle}
@@ -225,7 +227,7 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                 </div>
                 <div>
                     <h3 className="font-bold text-slate-800 dark:text-white text-lg mb-1">
-                        {t.title}
+                        {isLarge ? t.title_desktop : t.title}
                     </h3>
                     <p className="text-slate-600 dark:text-slate-400 text-sm">
                         {t.subtitle}

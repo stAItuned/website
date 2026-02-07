@@ -34,19 +34,22 @@ function getClient(): GoogleGenerativeAI {
     return genAI
 }
 
-function getModel(): GenerativeModel {
-    if (!model) {
-        model = getClient().getGenerativeModel({
-            // model: 'gemini-3-pro-preview',
-            model: 'gemini-2.5-pro',
-            generationConfig: {
-                temperature: 0.4, // Slightly higher for more creative detailed reports
-                topP: 0.8,
-                maxOutputTokens: 8192, // Increased for detailed PDF content
-            },
-        })
-    }
-    return model
+function getModel(modelName?: string): GenerativeModel {
+    // If we have a cached model AND it matches the requested name (or default if not requested), return it.
+    // However, the google sdk client is lightweight, so re-creating the model instance object is cheap.
+    // The heavyweight part is `genAI` client which is cached.
+
+    // Default model if none specified
+    const targetModel = modelName || 'gemini-2.5-flash';
+
+    return getClient().getGenerativeModel({
+        model: targetModel,
+        generationConfig: {
+            temperature: 0.4,
+            topP: 0.8,
+            maxOutputTokens: 8192,
+        },
+    })
 }
 
 // =============================================================================
@@ -64,17 +67,32 @@ export interface GeminiResponse<T> {
 // JSON Generation Helper
 // =============================================================================
 
+import { logUsage, UsageLogContext } from './usage-logger';
+
 /**
  * Generate a JSON response from Gemini
  * Parses the response and extracts JSON from markdown code blocks if needed
  */
-export async function generateJSON<T>(prompt: string): Promise<GeminiResponse<T>> {
+export async function generateJSON<T>(prompt: string, context?: UsageLogContext, modelName?: string): Promise<GeminiResponse<T>> {
     try {
-        const geminiModel = getModel()
+        const geminiModel = getModel(modelName)
 
         const result = await geminiModel.generateContent(prompt)
         const response = result.response
         const text = response.text()
+
+        // Log usage if available
+        if (result.response.usageMetadata) {
+            const { promptTokenCount, candidatesTokenCount } = result.response.usageMetadata;
+            // Run asynchronously to not block response
+            logUsage(
+                'gemini',
+                geminiModel.model,
+                promptTokenCount || 0,
+                candidatesTokenCount || 0,
+                context
+            ).catch(err => console.error('[Gemini] Failed to log usage:', err));
+        }
 
         // Try to parse JSON from response
         // Gemini might wrap it in ```json ... ``` blocks

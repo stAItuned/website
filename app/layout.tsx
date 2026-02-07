@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/Footer'
 import { TickerSpacer } from '@/components/layout/TickerSpacer'
 import { CRITICAL_CSS } from '@/lib/performance/criticalStyles'
 
-import FeedbackLoader from '@/components/feedback/FeedbackLoader.client'
+import { ContributeFeedbackWidget } from '@/components/feedback/ContributeFeedbackWidget'
 
 // Temporarily disabled to prevent image optimizer overload
 // import { getArticleCoversForPreload } from '@/lib/preload-covers'
@@ -203,6 +203,12 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        {/* Preconnect to Firebase for auth iframe */}
+        <link rel="preconnect" href="https://staituned-production-163f4.firebaseapp.com" />
+        <link rel="dns-prefetch" href="https://staituned-production-163f4.firebaseapp.com" />
+        <link rel="preconnect" href="https://apis.google.com" />
+        <link rel="preconnect" href="https://www.googleapis.com" />
+
         {/* Preload Google Fonts CSS to improve font fetch priority */}
         <link
           rel="preload"
@@ -218,8 +224,8 @@ export default function RootLayout({
         <ThemeProvider>
           <ToastProvider>
             <FirebaseAuthProvider>
-              <CookieConsentProvider>
-                <LearnLocaleProvider defaultLocale="it">
+              <LearnLocaleProvider defaultLocale="it">
+                <CookieConsentProvider>
                   <PerformanceProvider
                     enableMonitoring={process.env.NODE_ENV === 'production'}
                     sampleRate={0.1}
@@ -246,11 +252,11 @@ export default function RootLayout({
                       <PWAAnalyticsTracker />
                     </SearchProvider>
                     <Suspense fallback={null}>
-                      <FeedbackLoader />
+                      <ContributeFeedbackWidget />
                     </Suspense>
                   </PerformanceProvider>
-                </LearnLocaleProvider>
-              </CookieConsentProvider>
+                </CookieConsentProvider>
+              </LearnLocaleProvider>
             </FirebaseAuthProvider>
           </ToastProvider>
         </ThemeProvider>
