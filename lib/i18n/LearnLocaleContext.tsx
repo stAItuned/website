@@ -178,14 +178,14 @@ export function LearnLocaleToggle({ className = '' }: { className?: string }) {
                 : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
                 }`}>
                 <span>🇮🇹</span>
-                <span>IT</span>
+                <span className="hidden sm:inline">IT</span>
             </span>
             <span className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 ${locale === 'en'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'
                 : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400'
                 }`}>
                 <span>🇬🇧</span>
-                <span>EN</span>
+                <span className="hidden sm:inline">EN</span>
             </span>
         </button>
     )

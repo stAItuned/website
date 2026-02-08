@@ -119,22 +119,29 @@ export function Header() {
     <>
       <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-500 ease-out ${isScrolled ? 'py-1 sm:py-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-lg' : 'py-1.5 sm:py-3 bg-white/85 dark:bg-slate-900/85 backdrop-blur-lg shadow-sm'}`}>
         <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
-          <Link href="/" onClick={() => setIsMenuOpen(false)} className="transition-transform duration-300 hover:scale-105">
-            <Image
-              src={logoSrc}
-              alt="stAItuned logo"
-              width={360}
-              height={80}
-              className={`h-auto hover:cursor-pointer transition-all duration-500 ease-out ${isScrolled ? 'w-24 sm:w-28 md:w-32 lg:w-36' : 'w-28 sm:w-32 md:w-36 lg:w-44'}`}
-              sizes="(max-width: 640px) 5rem,
+          <div className="flex items-center gap-2">
+            <Link href="/" onClick={() => setIsMenuOpen(false)} className="transition-transform duration-300 hover:scale-105">
+              <Image
+                src={logoSrc}
+                alt="stAItuned logo"
+                width={360}
+                height={80}
+                className={`h-auto hover:cursor-pointer transition-all duration-500 ease-out ${isScrolled ? 'w-24 sm:w-28 md:w-32 lg:w-36' : 'w-28 sm:w-32 md:w-36 lg:w-44'}`}
+                sizes="(max-width: 640px) 5rem,
                      (max-width: 768px) 7rem,
                      (max-width: 1024px) 9rem,
                      (max-width: 1280px) 11rem,
                      13rem"
-              priority={isHomepage}
-              loading={isHomepage ? "eager" : "lazy"}
-            />
-          </Link>
+                priority={isHomepage}
+                loading={isHomepage ? "eager" : "lazy"}
+              />
+            </Link>
+            {!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2 ? (
+              <div className="flex items-center">
+                <LearnLocaleToggle />
+              </div>
+            ) : null}
+          </div>
 
           <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-1 sm:gap-2 lg:gap-3 rounded-full px-1.5 sm:px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur transition-all duration-400">
             <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
@@ -190,12 +197,6 @@ export function Header() {
                 )}
               </div>
             )}
-
-            {!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2 ? (
-              <div className="hidden lg:flex items-center mr-2">
-                <LearnLocaleToggle />
-              </div>
-            ) : null}
 
             <ThemeToggle />
 
@@ -279,13 +280,6 @@ export function Header() {
                 </svg>
               </button>
             </div>
-
-            {!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2 ? (
-              <div className="px-5 pt-4 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30 border-b stai-border">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Lingua / Language</span>
-                <LearnLocaleToggle />
-              </div>
-            ) : null}
 
             <div className="flex flex-col pt-5 gap-2.5 px-5 stai-text">
               {navigation.map((item, index) => {

@@ -146,29 +146,29 @@ export function ContributeFeedbackWidget() {
     }
 
     return (
-        <div className="fixed bottom-4 right-4 z-[60] xs:bottom-6 xs:right-6">
+        <div className="fixed bottom-20 left-4 z-[40] sm:z-[60] sm:bottom-6 sm:left-auto sm:right-6">
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="group inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/80 px-4 py-2 text-sm font-semibold text-primary-600 shadow-lg shadow-primary-600/10 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
+                className="group inline-flex items-center gap-2 rounded-full p-0 text-sm font-semibold text-primary-600 transition-all duration-300 hover:-translate-y-0.5 sm:border sm:border-white/50 sm:bg-white/80 sm:px-4 sm:py-2 sm:shadow-lg sm:shadow-primary-600/10 sm:backdrop-blur sm:hover:bg-white"
                 aria-label={t.cta}
             >
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-white shadow-md shadow-primary-600/30 transition-all duration-300 group-hover:scale-105">
-                    <MessageCircle className="h-4 w-4" aria-hidden />
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white shadow-md shadow-primary-600/30 transition-all duration-300 group-hover:scale-105 sm:h-8 sm:w-8">
+                    <MessageCircle className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden />
                 </span>
-                {t.cta}
+                <span className="hidden sm:inline">{t.cta}</span>
             </button>
 
             {open ? (
-                <div className="fixed inset-0 z-[70]">
+                <div className="fixed inset-0 z-[45] sm:z-[70]">
                     <button
                         type="button"
                         className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm animate-fade-in"
                         aria-label={t.closeLabel}
                         onClick={() => setOpen(false)}
                     />
-                    <div className="fixed bottom-20 right-4 w-[calc(100%-2rem)] max-w-md animate-slide-up xs:bottom-24 xs:right-6">
-                        <div className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-2xl shadow-slate-900/10 backdrop-blur">
+                    <div className="fixed inset-x-0 bottom-0 w-full animate-slide-up xs:bottom-24 xs:right-6 xs:inset-x-auto xs:w-[calc(100%-3rem)] xs:max-w-md">
+                        <div className="max-h-[85dvh] overflow-y-auto rounded-t-3xl border border-white/70 bg-white/95 p-5 shadow-2xl shadow-slate-900/10 backdrop-blur xs:max-h-[80vh] xs:rounded-3xl xs:p-6">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-400">

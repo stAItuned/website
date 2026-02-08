@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     template: '%s | stAItuned',
   },
   description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
-  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia'],
+  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia', 'stAItuned', 'stay tuned AI', 'staituned'],
   authors: [{ name: 'stAItuned' }],
   creator: 'stAItuned',
   publisher: 'stAItuned',
