@@ -103,9 +103,7 @@ For an AI Builder, this is the "Golden Ratio" of opportunity: A massive market d
 
 > **Key Stat (Savings):** Fully digitizing the Bill of Lading could save the industry **$6.5 Billion annually** at full adoption/at scale [[1](#ref-1)].
 
-:::tip[Regulatory Tailwinds]
-Legal recognition of electronic trade documents is advancing rapidly. The UK's **Electronic Trade Documents Bill** received Royal Assent in **July 2023** [[3](#ref-3)], a landmark move reducing the legal friction for eBL adoption globally.
-:::
+> **Regulatory Tailwinds:** Legal recognition of electronic trade documents is advancing rapidly. The UK's **Electronic Trade Documents Act 2023** received Royal Assent in **July 2023** [[3](#ref-3)], a landmark move reducing the legal friction for eBL adoption globally.
 
 ## From PDF to ERP: The Architecture of Agentic IDP
 
@@ -186,9 +184,7 @@ To move beyond the pilot phase, you must track the metrics that CTOs care about:
 | **System Integrator** | Complex legacy ERP ecosystem | Deep TMS/ERP hooks, custom HITL UI | High upfront CAPEX, vendor lock-in |
 | **Build In-house** | Logistics is your core competency | Total control over pipeline & data | Highest R&D cost, requires AI talent |
 
-:::warning[Risk & Compliance]
-Enterprise AI agents require strict governance. Avoid passing sensitive shipper data into generic prompts without mapping specific PII/PHI rules. Ensure your pipeline defines clear data retention policies and RBAC (Role-Based Access Control) for the Human-in-the-Loop interface.
-:::
+> **Risk & Compliance:** Enterprise AI agents require strict governance. Avoid passing sensitive shipper data into generic prompts without mapping specific PII/PHI rules. Ensure your pipeline defines clear data retention policies and RBAC (Role-Based Access Control) for the Human-in-the-Loop interface.
 
 ## The "Long Tail" Trap and Other Pitfalls
 
@@ -237,7 +233,7 @@ Integrate the pipeline into the TMS or ERP. Shift the human staff from data entr
 
 1. <a id="ref-1"></a>[**DCSA (2023). Member carriers commit to a fully standardised electronic Bill of Lading by 2030.**](https://dcsa.org/newsroom/resources/dcsas-member-carriers-commit-to-a-fully-standardised-electronic-bill-of-lading-by-2030/)
 2. <a id="ref-2"></a>[**McKinsey & Company (2023). The economic potential of generative AI: The next productivity frontier.**](https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier)
-3. <a id="ref-3"></a>[**DCSA (2023). The electronic trade documents bill received royal assent in the UK.**](https://dcsa.org/newsroom/the-electronic-trade-documents-bill-received-royal-assent-in-the-uk)
+3. <a id="ref-3"></a>[**DCSA (2023). The electronic trade documents act received royal assent in the UK.**](https://dcsa.org/newsroom/the-electronic-trade-documents-bill-received-royal-assent-in-the-uk)
 
 ### Further reading
 - [Beyond LLM: AI Code Assistants](https://staituned.com/learn/midway/beyond-llm-ai-code-assistant)
