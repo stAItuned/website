@@ -62,6 +62,14 @@ export type ArticleEvent =
     | 'article_bookmark_added'
     | 'article_bookmark_removed'
 
+// Qualified View KPI Events
+export type QualifiedViewEvent =
+    | 'stai_qualified_view'
+
+export type QualifiedViewReason =
+    | 'scroll60'
+    | 'time30'
+
 // User Journey Events
 export type UserJourneyEvent =
     | 'target_level_selected'
@@ -129,6 +137,7 @@ export type AnalyticsEventName =
     | PWAEvent
     | NotificationEvent
     | ArticleEvent
+    | QualifiedViewEvent
     | UserJourneyEvent
     | RoleFitAuditEvent
     | CareerOSEvent
@@ -152,6 +161,10 @@ export interface AnalyticsEventParams {
     value?: number
     /** Current page path */
     page?: string
+    /** Current page path (explicit for GA4 reporting) */
+    pagePath?: string
+    /** Current page title (explicit for GA4 reporting) */
+    pageTitle?: string
     /** Article slug if applicable */
     articleSlug?: string
     /** Target audience level */
@@ -162,6 +175,8 @@ export interface AnalyticsEventParams {
     searchQuery?: string
     /** Additional context */
     context?: string
+    /** Qualified view reason (time or scroll) */
+    qvReason?: QualifiedViewReason
     /** Share platform */
     platform?: string
     /** Code language if copying code */
@@ -229,11 +244,14 @@ export function trackEvent(
             event_label: params.label || params.source || 'default',
             value: params.value,
             page_location: params.page || window.location.href,
+            page_path: params.pagePath,
+            page_title: params.pageTitle,
             article_slug: params.articleSlug,
             target_level: params.targetLevel,
             source: params.source,
             search_query: params.searchQuery,
             context: params.context,
+            qv_reason: params.qvReason,
             platform: params.platform,
             code_language: params.codeLanguage,
             currency: params.currency,
@@ -356,6 +374,21 @@ export function trackArticleTimeOnPage(articleSlug: string, timeSpentSeconds: nu
         category: 'article',
         articleSlug,
         value: timeSpentSeconds
+    })
+}
+
+/**
+ * Track a qualified view (KPI): first time a user reaches 30s or 60% scroll.
+ */
+export function trackQualifiedView(articleSlug: string, reason: QualifiedViewReason) {
+    if (typeof window === 'undefined') return
+    trackEvent('stai_qualified_view', {
+        category: 'article',
+        articleSlug,
+        label: reason,
+        qvReason: reason,
+        pagePath: window.location.pathname,
+        pageTitle: document.title
     })
 }
 

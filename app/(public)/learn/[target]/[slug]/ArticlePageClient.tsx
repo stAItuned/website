@@ -29,8 +29,10 @@ import { event } from '@/lib/gtag'
 import {
   trackArticleScrollDepth,
   trackArticleReadComplete,
-  trackArticleTimeOnPage
+  trackArticleTimeOnPage,
+  trackQualifiedView
 } from '@/lib/analytics'
+import type { QualifiedViewReason } from '@/lib/analytics'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { ArticleAnalytics } from '@/lib/analytics-server'
@@ -119,6 +121,9 @@ export default function ArticlePageClient({
   const setArticleRootRef = useCallback((node: HTMLDivElement | null) => {
     setArticleRootNode(node)
   }, [])
+
+  const qualifiedViewTrackedRef = useRef(false)
+  const qualifiedViewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
@@ -223,6 +228,28 @@ export default function ArticlePageClient({
     readingSpeeds: [] as number[]
   })
 
+  const getQualifiedViewKey = useCallback(() => {
+    return `stai_qv_${window.location.pathname}`
+  }, [])
+
+  const trackQualifiedViewOnce = useCallback((reason: QualifiedViewReason) => {
+    if (qualifiedViewTrackedRef.current) return
+
+    try {
+      const key = getQualifiedViewKey()
+      if (sessionStorage.getItem(key)) {
+        qualifiedViewTrackedRef.current = true
+        return
+      }
+      sessionStorage.setItem(key, '1')
+    } catch (error) {
+      // If sessionStorage is unavailable, still track once per mount.
+    }
+
+    qualifiedViewTrackedRef.current = true
+    trackQualifiedView(article.slug, reason)
+  }, [article.slug, getQualifiedViewKey])
+
   // Track scroll depth
   const trackScrollDepth = useCallback(() => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
@@ -231,6 +258,10 @@ export default function ArticlePageClient({
     const now = Date.now()
 
     const tracking = scrollTrackingRef.current
+
+    if (scrollPercent >= 60) {
+      trackQualifiedViewOnce('scroll60')
+    }
 
     // Calculate scroll speed and direction
     const scrollDelta = scrollTop - tracking.lastScrollPosition
@@ -334,7 +365,32 @@ export default function ArticlePageClient({
         })
       }
     }
-  }, [article.slug])
+  }, [article.slug, trackQualifiedViewOnce])
+
+  useEffect(() => {
+    if (!mounted) return
+
+    try {
+      const key = getQualifiedViewKey()
+      if (sessionStorage.getItem(key)) {
+        qualifiedViewTrackedRef.current = true
+        return
+      }
+    } catch (error) {
+      // No-op: sessionStorage may be unavailable in strict privacy contexts.
+    }
+
+    qualifiedViewTimerRef.current = setTimeout(() => {
+      trackQualifiedViewOnce('time30')
+    }, 30000)
+
+    return () => {
+      if (qualifiedViewTimerRef.current) {
+        clearTimeout(qualifiedViewTimerRef.current)
+        qualifiedViewTimerRef.current = null
+      }
+    }
+  }, [getQualifiedViewKey, mounted, trackQualifiedViewOnce])
 
   // Track link clicks
   const trackLinkClick = useCallback((clickEvent: Event) => {
