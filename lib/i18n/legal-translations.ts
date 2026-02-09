@@ -197,6 +197,16 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                             content: 'La frequenza standard è di un invio settimanale. L\'utente ha il diritto di disiscriversi in qualsiasi momento cliccando sul link "Unsubscribe" presente in calce a ogni email o contattando l\'assistenza.'
                         }
                     ]
+                },
+                {
+                    title: '8. Accesso Amministrativo e Trattamento Dati',
+                    content: 'Utilizzando i servizi di stAItuned, l\'utente prende atto e accetta che il team amministrativo abbia accesso ai dati sottomessi per garantire la qualità del servizio:',
+                    items: [
+                        'Dati di autenticazione: email, nome, foto profilo e identificativi tecnici;',
+                        'Dati Role Fit Audit: risposte al questionario, risultati, archetipo e suggerimenti di carriera generati;',
+                        'Dati Contributor Path: pitch, bozze, interviste, outline e accordo legale firmato (nome legale, codice fiscale, data di firma);',
+                        'Questi dati sono utilizzati esclusivamente per migliorare il servizio, fornire supporto e gestire le funzionalità della piattaforma.'
+                    ]
                 }
             ],
             footerTitle: 'Assistenza e Supporto',
@@ -259,11 +269,20 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Dati dei Contributor (Programma Editoriale)',
-                        content: 'Raccogliamo informazioni account, contributi editoriali, risposte alle interviste e preferenze di pubblicazione per gestire il ciclo di vita dell\'articolo.'
+                        content: 'Raccogliamo informazioni account, contributi editoriali, risposte alle interviste e preferenze di pubblicazione per gestire il ciclo di vita dell\'articolo. I tuoi contributi, le risposte alle interviste e lo stato dell\'accordo legale sono visibili al team amministrativo di stAItuned per garantire la qualità editoriale e gestire correttamente il processo di pubblicazione.'
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato.'
+                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate.'
+                    },
+                    {
+                        title: 'Accesso Amministrativo ai Dati',
+                        content: 'Per garantire la qualità del servizio e gestire efficacemente le funzionalità della piattaforma, il team amministrativo di stAItuned ha accesso ai seguenti dati:',
+                        items: [
+                            'Dati di autenticazione: email, nome, foto profilo e User ID associati al tuo account;',
+                            'Dati Role Fit Audit: risposte al questionario, risultati dell\'analisi, archetipo assegnato e suggerimenti di carriera;',
+                            'Dati Contributor Path: pitch, bozze, risposte alle interviste, outline generati e stato dell\'accordo legale firmato (nome legale, codice fiscale, data di firma).'
+                        ]
                     }
                 ]
             },
@@ -436,6 +455,16 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                             content: 'Standard frequency is once a week. The user has the right to unsubscribe at any time via the "Unsubscribe" link or by contacting support.'
                         }
                     ]
+                },
+                {
+                    title: '8. Administrative Access and Data Processing',
+                    content: 'By using stAItuned services, the user acknowledges and agrees that the administrative team has access to submitted data to ensure service quality:',
+                    items: [
+                        'Authentication data: email, name, profile picture, and technical identifiers;',
+                        'Role Fit Audit data: questionnaire responses, results, archetype, and generated career suggestions;',
+                        'Contributor Path data: pitches, drafts, interviews, outlines, and signed legal agreement (legal name, tax ID, signing date);',
+                        'This data is used exclusively to improve the service, provide support, and manage platform features.'
+                    ]
                 }
             ],
             footerTitle: 'Assistance and Support',
@@ -498,11 +527,20 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Contributor Data (Editorial Program)',
-                        content: 'We collect account info, editorial contributions, interview responses, and publishing preferences to manage the article lifecycle.'
+                        content: 'We collect account info, editorial contributions, interview responses, and publishing preferences to manage the article lifecycle. Your contributions, interview responses, and agreement status are visible to the stAItuned administrative team to ensure editorial quality and properly manage the publication process.'
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report.'
+                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends.'
+                    },
+                    {
+                        title: 'Administrative Access to Data',
+                        content: 'To ensure service quality and effectively manage platform features, the stAItuned administrative team has access to the following data:',
+                        items: [
+                            'Authentication data: email, name, profile picture, and User ID associated with your account;',
+                            'Role Fit Audit data: questionnaire responses, analysis results, assigned archetype, and career suggestions;',
+                            'Contributor Path data: pitches, drafts, interview responses, generated outlines, and signed legal agreement status (legal name, tax ID, signing date).'
+                        ]
                     }
                 ]
             },

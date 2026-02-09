@@ -3,6 +3,10 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { getAuthorData } from '@/lib/authors'
+import { getAuthorBadges } from '@/lib/firebase/badge-service'
+import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
+import { BadgeIcon } from '@/components/badges/BadgeIcon'
+import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { PageTransition } from '@/components/ui/PageTransition'
 
 // Force static generation
@@ -31,15 +35,20 @@ export default async function AuthorsPage() {
   const authorsWithData = await Promise.all(
     uniqueAuthors.map(async (authorName) => {
       const authorData = await getAuthorData(authorName)
+      const slug = authorName.replaceAll(' ', '-')
+
       const articleCount = allPosts.filter(
         post => post.author === authorName && post.published !== false
       ).length
-      
+
+      const earnedBadges = await getAuthorBadges(slug)
+
       return {
         name: authorName,
-        slug: authorName.replaceAll(' ', '-'),
+        slug,
         data: authorData,
-        articleCount
+        articleCount,
+        earnedBadges
       }
     })
   )
@@ -76,60 +85,90 @@ export default async function AuthorsPage() {
 
         {/* Authors Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {authorsWithData.map((author) => (
-            <Link
-              key={author.slug}
-              href={`/author/${author.slug}`}
-              className="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <Image
-                  src={`/content/team/${author.slug}/propic.jpg`}
-                  alt={author.name}
-                  width={64}
-                  height={64}
-                  className="rounded-full object-cover"
-                />
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-                    {author.data?.name || author.name}
-                  </h3>
-                  {author.data?.title && (
-                    <p className="text-sm text-primary-600">
-                      {author.data.title}
-                    </p>
+          {authorsWithData.map((author) => {
+            const topBadges = (author.earnedBadges || [])
+              .map(eb => {
+                const def = BADGE_DEFINITIONS.find(d => d.id === eb.badgeId)
+                return def ? { def, earned: eb } : null
+              })
+              .filter(Boolean) as { def: any, earned: any }[]
+
+            topBadges.sort((a, b) => {
+              const tierOrder = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 }
+              // @ts-ignore
+              return (tierOrder[b.def.tier] || 0) - (tierOrder[a.def.tier] || 0)
+            })
+
+            const displayBadges = topBadges.slice(0, 3)
+
+            return (
+              <Link
+                key={author.slug}
+                href={`/author/${author.slug}`}
+                className="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative">
+                    <Image
+                      src={`/content/team/${author.slug}/propic.jpg`}
+                      alt={author.name}
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover ring-2 ring-gray-100 group-hover:ring-primary-200 transition-all"
+                    />
+                    {displayBadges.length > 0 && (
+                      <div className="absolute -bottom-1 -right-2 flex -space-x-1 filter drop-shadow-sm">
+                        {displayBadges.map(({ def, earned }) => (
+                          <div key={def.id} className="transition-transform hover:z-10 hover:scale-110">
+                            <BadgeTooltip badge={def} earnedBadge={earned}>
+                              <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
+                            </BadgeTooltip>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
+                      {author.data?.name || author.name}
+                    </h3>
+                    {author.data?.title && (
+                      <p className="text-sm text-primary-600">
+                        {author.data.title}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {author.data?.description && (
+                  <p className="text-sm text-gray-600 mb-4 overflow-hidden">
+                    <span className="block truncate">
+                      {author.data.description}
+                    </span>
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">
+                    {author.articleCount} article{author.articleCount !== 1 ? 's' : ''}
+                  </span>
+
+                  {author.data?.team && author.data.team.length > 0 && (
+                    <div className="flex gap-1">
+                      {author.data.team.map((team: string) => (
+                        <span
+                          key={team}
+                          className="inline-block bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded"
+                        >
+                          {team}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
-              </div>
-              
-              {author.data?.description && (
-                <p className="text-sm text-gray-600 mb-4 overflow-hidden">
-                  <span className="block truncate">
-                    {author.data.description}
-                  </span>
-                </p>
-              )}
-              
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">
-                  {author.articleCount} article{author.articleCount !== 1 ? 's' : ''}
-                </span>
-                
-                {author.data?.team && author.data.team.length > 0 && (
-                  <div className="flex gap-1">
-                    {author.data.team.map((team: string) => (
-                      <span
-                        key={team}
-                        className="inline-block bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded"
-                      >
-                        {team}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
 
         {authorsWithData.length === 0 && (

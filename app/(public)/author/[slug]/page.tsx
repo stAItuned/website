@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { getAuthorData } from '@/lib/authors'
+import { getAuthorBadges } from '@/lib/firebase/badge-service'
 import { AuthorPageWithPagination } from '@/components/AuthorPageWithPagination'
+import { AdminBadgeControls } from '@/components/admin/AdminBadgeControls'
 import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 
 // SEO Structured Data
@@ -61,6 +63,11 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   if (!authorData) {
     notFound()
   }
+
+  // Fetch author badges from Firestore
+  const badges = await getAuthorBadges(slug)
+  authorData.badges = badges
+
   // Find all articles by this author
   const authorArticles = allPosts.filter((post) =>
     post.author === authorName && post.published !== false
@@ -101,7 +108,11 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
         pageSize={PAGINATION_SIZE}
         slug={slug}
       />
+
+      {/* Admin Controls (Calculated for current author) */}
+      <div className="max-w-6xl mx-auto px-4 pb-8">
+        <AdminBadgeControls authorSlug={slug} />
+      </div>
     </>
   )
 }
-

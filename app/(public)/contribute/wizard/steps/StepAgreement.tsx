@@ -252,9 +252,16 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
-                            <span className="text-sm font-bold text-slate-600 dark:text-slate-300 select-none group-hover/label:text-amber-600 transition-colors leading-tight">
-                                {translations.checkbox}
-                            </span>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-sm font-bold text-slate-600 dark:text-slate-300 select-none group-hover/label:text-amber-600 transition-colors leading-tight">
+                                    {translations.checkbox}
+                                </span>
+                                {translations.adminDisclaimer && (
+                                    <span className="text-xs text-slate-400 dark:text-slate-500 leading-tight">
+                                        {translations.adminDisclaimer}
+                                    </span>
+                                )}
+                            </div>
                         </label>
 
                         <div className="flex items-center gap-6">

@@ -63,6 +63,24 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
+    // Author badges - public read (for profiles), only backend can write
+    match /badges/{authorId}/earned/{badgeId} {
+      allow read: if true;
+      allow write: if false; // Backend only
+    }
+
+    // Badge verification - public read for credential verification pages
+    match /credentials/{credentialId} {
+      allow read: if true;
+      allow write: if false; // Backend only
+    }
+
+    // Badge evidence - internal use
+    match /badge_evidence/{evidenceId} {
+      allow read: if request.auth != null; // Authors can see their evidence? Or just backend
+      allow write: if false; // Backend only
+    }
+
     // Config collection - Used for AI settings etc.
     // In prod, restrict write to admin emails or claims
     match /config/{configId} {

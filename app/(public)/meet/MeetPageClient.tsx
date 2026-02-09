@@ -2,9 +2,14 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState, useMemo } from 'react'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 import { HeroAnimatedBackground } from '@/components/home/HeroAnimatedBackground'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
+import { BadgeIcon } from '@/components/badges/BadgeIcon'
+import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
+import { Badge, AuthorBadge } from '@/lib/types/badge'
 
 interface AuthorData {
     name: string
@@ -17,10 +22,6 @@ interface MeetPageClientProps {
     topContributors: AuthorData[]
 }
 
-/**
- * TextParser component to handle bold (**) and italic (*) markdown syntax
- * and apply specific styling classes.
- */
 const TextParser = ({
     text,
     className = "",
@@ -33,18 +34,13 @@ const TextParser = ({
     italicClassName?: string
 }) => {
     if (!text) return null;
-
-    // Split by bold markers first
     const parts = text.split(/(\*\*.*?\*\*|\*.*?\*)/g);
-
     return (
         <span className={className}>
             {parts.map((part, index) => {
                 if (part.startsWith('**') && part.endsWith('**')) {
-                    // Bold: apply color styling instead of font-weight (user request)
                     return <span key={index} className={boldClassName}>{part.slice(2, -2)}</span>;
                 } else if (part.startsWith('*') && part.endsWith('*')) {
-                    // Italic: apply emphasis styling
                     return <span key={index} className={italicClassName}>{part.slice(1, -1)}</span>;
                 }
                 return part;
@@ -56,6 +52,28 @@ const TextParser = ({
 export default function MeetPageClient({ topContributors }: MeetPageClientProps) {
     const { locale } = useLearnLocale()
     const t = homeTranslations[locale].meet
+
+    const [activeFilter, setActiveFilter] = useState<'all' | 'quality' | 'impact' | 'contribution'>('all')
+    const [sortBy, setSortBy] = useState<'articles' | 'badges'>('articles')
+
+    const filteredContributors = useMemo(() => {
+        let list = [...topContributors]
+        if (activeFilter !== 'all') {
+            list = list.filter(author =>
+                (author.data?.badges || []).some((b: AuthorBadge) => {
+                    const def = BADGE_DEFINITIONS.find(d => d.id === b.badgeId)
+                    return def?.category === activeFilter
+                })
+            )
+        }
+        list.sort((a, b) => {
+            if (sortBy === 'badges') {
+                return (b.data?.badges?.length || 0) - (a.data?.badges?.length || 0)
+            }
+            return b.articleCount - a.articleCount
+        })
+        return list
+    }, [topContributors, activeFilter, sortBy])
 
     const values = [
         {
@@ -94,22 +112,13 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
 
     return (
         <PageTransition>
-            {/* 
-        HERO SECTION 
-        Aligned with Home/CareerOS style:
-        - Dark background by default (or deep slate)
-        - Animated background elements
-        - Centered high-impact text
-      */}
             <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden bg-slate-900 text-white">
-                {/* Animated Background */}
                 <div className="absolute inset-0 z-0">
                     <HeroAnimatedBackground orbCount={2} showGrid={true} />
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-900/90" />
                 </div>
 
                 <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center space-y-8">
-                    {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20 backdrop-blur-sm mx-auto animate-fade-in">
                         <span className="flex h-2 w-2 rounded-full bg-amber-500"></span>
                         <span className="text-xs font-semibold uppercase tracking-wider text-white/90">
@@ -117,7 +126,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                         </span>
                     </div>
 
-                    {/* Headline */}
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] animate-fade-in-up">
                         <TextParser
                             text={t.hero.headline}
@@ -125,7 +133,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                         />
                     </h1>
 
-                    {/* Description */}
                     <p className="text-lg md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                         <TextParser
                             text={t.hero.description}
@@ -137,8 +144,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
             </section>
 
             <div className="max-w-5xl mx-auto mb-32 mt-20 px-4 lg:px-6 space-y-20 text-slate-900 dark:text-slate-100">
-
-                {/* La nostra storia */}
                 <section className="space-y-8">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-100 dark:bg-primary-900/40 rounded-full">
                         <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary-700 dark:text-primary-300">
@@ -169,7 +174,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                     </div>
                 </section>
 
-                {/* Mission */}
                 <section className="relative rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 lg:p-12 text-white overflow-hidden dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/20 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl"></div>
@@ -192,7 +196,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                     </div>
                 </section>
 
-                {/* I nostri valori */}
                 <section className="space-y-8">
                     <div className="space-y-2">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-100 dark:to-slate-200 rounded-full shadow-lg">
@@ -232,7 +235,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                     </div>
                 </section>
 
-                {/* I nostri Contributors */}
                 <section className="space-y-8">
                     <div className="space-y-2">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-100 dark:bg-primary-900/40 rounded-full">
@@ -248,45 +250,120 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                         </p>
                     </div>
 
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                        {topContributors.map((author) => (
-                            <Link
-                                key={author.slug}
-                                href={`/author/${author.slug}`}
-                                className="group relative rounded-2xl bg-white p-5 border-2 border-slate-100 shadow-md hover:shadow-xl hover:border-primary-200 transition-all duration-300 dark:bg-slate-900 dark:border-slate-800 dark:hover:border-primary-700"
-                            >
-                                <div className="flex flex-col items-center text-center space-y-3">
-                                    <div className="relative">
-                                        <Image
-                                            src={`/content/team/${author.slug}/propic.jpg`}
-                                            alt={author.name}
-                                            width={80}
-                                            height={80}
-                                            className="rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-primary-300 transition-all dark:ring-slate-700 dark:group-hover:ring-primary-600"
-                                        />
-                                    </div>
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-2 border-b border-slate-100 dark:border-slate-800">
+                        <div className="flex flex-wrap gap-2">
+                            {[
+                                { id: 'all', label: locale === 'it' ? 'Tutti' : 'All' },
+                                { id: 'quality', label: locale === 'it' ? 'Qualità' : 'Quality' },
+                                { id: 'impact', label: locale === 'it' ? 'Impatto' : 'Impact' },
+                                { id: 'contribution', label: locale === 'it' ? 'Attività' : 'Activity' }
+                            ].map(filter => (
+                                <button
+                                    key={filter.id}
+                                    onClick={() => setActiveFilter(filter.id as any)}
+                                    className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeFilter === filter.id
+                                        ? 'bg-primary-600 text-white shadow-md'
+                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
+                                        }`}
+                                >
+                                    {filter.label}
+                                </button>
+                            ))}
+                        </div>
 
-                                    <div className="space-y-1">
-                                        <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-snug">
-                                            {author.data?.name || author.name}
-                                        </h3>
-                                        {author.data?.title && (
-                                            <p className="text-xs text-primary-600 dark:text-primary-400 line-clamp-1">
-                                                {author.data.title}
-                                            </p>
-                                        )}
-                                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                                            {author.articleCount} {t.contributors.stats}
-                                            {author.articleCount !== 1 && locale === 'it' ? 'i' : ''}
-                                            {author.articleCount !== 1 && locale === 'en' ? 's' : ''}
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
+                        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                            <button
+                                onClick={() => setSortBy('articles')}
+                                className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'articles'
+                                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                                    : 'text-slate-400'
+                                    }`}
+                            >
+                                {locale === 'it' ? 'Articoli' : 'Articles'}
+                            </button>
+                            <button
+                                onClick={() => setSortBy('badges')}
+                                className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'badges'
+                                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                                    : 'text-slate-400'
+                                    }`}
+                            >
+                                {locale === 'it' ? 'Badge' : 'Badges'}
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Link to all authors */}
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                        {filteredContributors.map((author) => {
+                            const earnedBadges = author.data?.badges || [];
+                            const badgesToDisplay = earnedBadges
+                                .map((eb: AuthorBadge) => {
+                                    const def = BADGE_DEFINITIONS.find(d => d.id === eb.badgeId);
+                                    return def ? { def, earned: eb } : null;
+                                })
+                                .filter(Boolean) as { def: Badge, earned: AuthorBadge }[];
+
+                            const tierOrder = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 };
+                            badgesToDisplay.sort((a, b) => (tierOrder[b.def.tier] || 0) - (tierOrder[a.def.tier] || 0));
+
+                            const topBadges = badgesToDisplay.slice(0, 3);
+
+                            return (
+                                <Link
+                                    key={author.slug}
+                                    href={`/author/${author.slug}`}
+                                    className="group relative rounded-2xl bg-white p-5 border-2 border-slate-100 shadow-md hover:shadow-xl hover:border-primary-200 transition-all duration-300 dark:bg-slate-900 dark:border-slate-800 dark:hover:border-primary-700"
+                                >
+                                    <div className="flex flex-col items-center text-center space-y-3">
+                                        <div className="relative">
+                                            <Image
+                                                src={`/content/team/${author.slug}/propic.jpg`}
+                                                alt={author.name}
+                                                width={80}
+                                                height={80}
+                                                className="rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-primary-300 transition-all dark:ring-slate-700 dark:group-hover:ring-primary-600"
+                                            />
+
+                                            {topBadges.length > 0 && (
+                                                <div className="absolute -bottom-2 -right-4 flex -space-x-2 filter drop-shadow-md">
+                                                    {topBadges.map(({ def, earned }) => (
+                                                        <div key={def.id} className="transition-transform hover:z-10 hover:scale-110">
+                                                            <BadgeTooltip badge={def} earnedBadge={earned}>
+                                                                <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
+                                                            </BadgeTooltip>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-snug">
+                                                {author.data?.name || author.name}
+                                            </h3>
+                                            {author.data?.title && (
+                                                <p className="text-xs text-primary-600 dark:text-primary-400 line-clamp-1">
+                                                    {author.data.title}
+                                                </p>
+                                            )}
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                                {author.articleCount} {t.contributors.stats}
+                                                {author.articleCount !== 1 && locale === 'it' ? 'i' : ''}
+                                                {author.articleCount !== 1 && locale === 'en' ? 's' : ''}
+                                            </p>
+                                        </div>
+
+                                        <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary-600 dark:text-primary-400">
+                                                {locale === 'it' ? 'Vedi Profilo' : 'View Profile'} &rarr;
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            )
+                        })}
+                    </div>
+
                     <div className="text-center pt-2">
                         <Link
                             href="/author"
@@ -300,7 +377,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                     </div>
                 </section>
 
-                {/* Vuoi contribuire? */}
                 <section className="relative rounded-3xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-50 p-8 lg:p-10 space-y-6 overflow-hidden dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
                     <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl"></div>
 
@@ -333,7 +409,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                     </div>
                 </section>
 
-                {/* CTA finale */}
                 <section className="text-center space-y-6">
                     <p className="text-lg text-slate-500 dark:text-slate-400">
                         {t.footer.text}
@@ -353,7 +428,6 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                         </Link>
                     </div>
                 </section>
-
             </div>
         </PageTransition>
     )

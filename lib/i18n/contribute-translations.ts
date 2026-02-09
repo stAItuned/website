@@ -237,6 +237,7 @@ export const contributeTranslations = {
                 legalName: 'Nome e Cognome Legale (Firma Digitale)',
                 fiscalCode: 'Codice Fiscale (o P.IVA)',
                 checkbox: 'Ho letto e accetto l\'accordo di collaborazione',
+                adminDisclaimer: 'I tuoi dati (contributi, interviste, accordo firmato) saranno visibili al team amministrativo di stAItuned per garantire la qualità editoriale.',
                 cta: 'Accetta e Continua'
             },
             guidelines: {
@@ -712,6 +713,7 @@ export const contributeTranslations = {
                 legalName: 'Legal Full Name (Digital Signature)',
                 fiscalCode: 'Tax ID / National ID',
                 checkbox: 'I have read and accept the contributor agreement',
+                adminDisclaimer: 'Your data (contributions, interviews, signed agreement) will be visible to the stAItuned administrative team to ensure editorial quality.',
                 cta: 'Accept & Continue'
             },
             guidelines: {

@@ -12,6 +12,7 @@ export interface AuthorData {
   description: string
   speaker?: boolean
   avatar?: string
+  badges?: import('@/lib/types/badge').AuthorBadge[] // Optional: populated at runtime via firestore
 }
 
 export async function getAuthorData(authorName: string): Promise<AuthorData | null> {

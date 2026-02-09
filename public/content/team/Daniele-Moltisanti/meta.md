@@ -6,7 +6,7 @@ linkedin: https://www.linkedin.com/in/daniele-moltisanti/
 email: danielemoltisanti@gmail.com
 website: https://daniele21.github.io
 description: Leading the DS technical strategy with a particular focus on GenAI & NLP. I design tailored solutions to real business problems, involve stakeholders early, explain trade-offs in plain language, and supervise delivery from PoC to production.
-speaker: true
+speaker: false
 ---
 
 I am passionate about taking advantage of data to improve the everyday tasks of real life. I’m a **data scientist** with an **engineering mindset**, open to innovation in each field, specialized in **deep learning** techniques. Critical with me and always looking for feedback to learn how to deal with complex or ineffective situations. **Winner of the Nova List 111 Italy**, as the **top 10** professional under 35 in Italy about *Media, Communication and Entertainment*.

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { getAuthorData } from '@/lib/authors'
+import { getAuthorBadges } from '@/lib/firebase/badge-service'
 import MeetPageClient from './MeetPageClient'
 
 // Force static generation
@@ -31,13 +32,21 @@ export default async function MeetPage() {
   const authorsWithData = await Promise.all(
     uniqueAuthors.map(async (authorName) => {
       const authorData = await getAuthorData(authorName)
+      const slug = authorName.replaceAll(' ', '-')
+
+      // Fetch badges if author data exists
+      if (authorData) {
+        const badges = await getAuthorBadges(slug)
+        authorData.badges = badges
+      }
+
       const articleCount = allPosts.filter(
         post => post.author === authorName && post.published !== false
       ).length
 
       return {
         name: authorName,
-        slug: authorName.replaceAll(' ', '-'),
+        slug,
         data: authorData,
         articleCount
       }

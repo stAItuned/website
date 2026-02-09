@@ -404,7 +404,8 @@ export default function RoleFitAuditForm({ paypalOrderId }: { paypalOrderId?: st
                                 className="mt-1 h-4 w-4 rounded border-slate-300 text-[#F59E0B] focus:ring-[#F59E0B]"
                             />
                             <label htmlFor="privacy" className="text-sm text-slate-600 dark:text-slate-400">
-                                Acconsento al trattamento dei dati per ricevere il report via email. Leggi{' '}
+                                Acconsento al trattamento dei dati per ricevere il report via email.
+                                I dati delle risposte e i risultati saranno visibili al team stAItuned per migliorare il servizio. Leggi{' '}
                                 <Link href="/privacy" className="text-[#F59E0B] hover:underline" target="_blank">
                                     Privacy
                                 </Link>{' '}

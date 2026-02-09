@@ -5,6 +5,9 @@ import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArticleCard } from '@/components/ArticleCard'
+import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
+import { BadgeGrid } from '@/components/badges/BadgeGrid'
+import type { AuthorBadge, Badge } from '@/lib/types/badge'
 
 interface AuthorData {
   name: string
@@ -14,6 +17,7 @@ interface AuthorData {
   email?: string
   website?: string
   speaker?: boolean
+  badges?: AuthorBadge[]
 }
 
 interface Article {
@@ -143,6 +147,18 @@ export function AuthorPageWithPagination({
                   Website
                 </a>
               )}
+            </div>
+
+            {/* Author Badges Section */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                Badges & Credentials
+              </h3>
+              <BadgeGrid
+                badges={BADGE_DEFINITIONS}
+                earnedBadges={authorData.badges || []}
+                className="grid-cols-3 sm:grid-cols-4 md:grid-cols-5"
+              />
             </div>
           </div>
         </div>

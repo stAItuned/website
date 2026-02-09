@@ -10,6 +10,9 @@ import { MyArticles } from '@/components/account/MyArticles'
 import { CostMonitoringDashboard } from '@/components/admin/CostMonitoringDashboard'
 import { isAdmin } from '@/lib/firebase/admin-emails'
 import { AgreementModal } from '@/components/account/AgreementModal'
+import { AdminBadgeControls } from '@/components/admin/AdminBadgeControls'
+import { AdminContributions } from '@/components/admin/AdminContributions'
+import { AdminRoleFitSubmissions } from '@/components/admin/AdminRoleFitSubmissions'
 
 export default function AccountSettingsPage() {
   const { user, loading: authLoading } = useAuth()
@@ -22,6 +25,7 @@ export default function AccountSettingsPage() {
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
   const [showAgreement, setShowAgreement] = useState(false)
+  const [activeAdminTab, setActiveAdminTab] = useState<'contributions' | 'role_fit'>('contributions')
 
   useEffect(() => {
     // Redirect to signin if not authenticated
@@ -205,6 +209,32 @@ export default function AccountSettingsPage() {
         {user?.email && isAdmin(user.email) && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
             <CostMonitoringDashboard />
+            <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
+              <div className="flex gap-4 border-b border-gray-200 dark:border-slate-700 mb-6">
+                <button
+                  onClick={() => setActiveAdminTab('contributions')}
+                  className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${activeAdminTab === 'contributions'
+                      ? 'border-primary-600 text-primary-600 dark:text-primary-400'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                    }`}
+                >
+                  Contributor Path
+                </button>
+                <button
+                  onClick={() => setActiveAdminTab('role_fit')}
+                  className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${activeAdminTab === 'role_fit'
+                      ? 'border-primary-600 text-primary-600 dark:text-primary-400'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                    }`}
+                >
+                  Role Fit Audit
+                </button>
+              </div>
+              {activeAdminTab === 'contributions' ? <AdminContributions /> : <AdminRoleFitSubmissions />}
+            </div>
+            <div className="mt-8">
+              <AdminBadgeControls />
+            </div>
           </div>
         )}
 
