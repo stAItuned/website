@@ -236,7 +236,11 @@ export default async function CredentialPage({ params }: PageProps) {
                     {/* Footer */}
                     <div className="bg-slate-50 dark:bg-slate-800/50 p-6 text-center border-t border-slate-200 dark:border-slate-800">
                         <div className="mb-6">
-                            <BadgeShareControls credentialId={badge.credentialId} title={badgeDef.name.en} />
+                                <BadgeShareControls
+                                    credentialId={badge.credentialId}
+                                    title={badgeDef.name.en}
+                                    authorSlug={badge.authorId}
+                                />
                         </div>
                         <Link href={`/author/${badge.authorId}`} className="text-sm text-primary-600 hover:text-primary-700 font-medium hover:underline underline-offset-4">
                             View Author Profile &rarr;

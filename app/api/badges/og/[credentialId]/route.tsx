@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'fs/promises'
+import path from 'path'
 import { verifyCredential } from '@/lib/firebase/badge-service'
 import { getAuthorData } from '@/lib/authors'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
@@ -6,6 +8,9 @@ import { getBadgeImageSource } from '@/lib/badges/badge-utils'
 
 export const runtime = 'nodejs' // firebase-admin requires nodejs
 
+/**
+ * Generates the Open Graph image for a verified badge credential.
+ */
 export async function GET(request: Request, { params }: { params: Promise<{ credentialId: string }> }) {
     const { credentialId } = await params
     const badge = await verifyCredential(credentialId)
@@ -40,7 +45,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ cred
     const date = new Date(badge.earnedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
     const baseUrl = new URL(request.url).origin
-    const badgeImageUrl = new URL(getBadgeImageSource(badgeDef.icon), baseUrl).toString()
+    const badgeImageSource = getBadgeImageSource(badgeDef.icon)
+    const badgeImageUrl = new URL(badgeImageSource, baseUrl).toString()
+    let badgeImageDataUrl = badgeImageUrl
+
+    try {
+        const badgeImagePath = path.join(process.cwd(), 'public', badgeImageSource.replace(/^\//, ''))
+        const badgeImageBuffer = await readFile(badgeImagePath)
+        badgeImageDataUrl = `data:image/png;base64,${badgeImageBuffer.toString('base64')}`
+    } catch (error) {
+        console.warn('[OG] Failed to read badge image locally, falling back to URL:', error)
+    }
 
     const response = new ImageResponse(
         (
@@ -102,7 +117,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ cred
                         }}
                     >
                         <img
-                            src={badgeImageUrl}
+                            src={badgeImageDataUrl}
                             width={380}
                             height={418}
                             style={{

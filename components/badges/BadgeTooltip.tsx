@@ -66,6 +66,9 @@ export function BadgeTooltip({ badge, earnedBadge, children, className }: BadgeT
             content={tooltipContent}
             contentClassName="!p-0 !bg-transparent !border-none !shadow-none !rounded-none"
             delayDuration={0}
+            side="top"
+            maxWidth={320}
+            interactive={true}
         >
             <div className={cn("cursor-pointer transition-transform hover:scale-105 inline-block", className)}>
                 {children}
