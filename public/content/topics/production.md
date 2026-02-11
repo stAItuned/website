@@ -8,7 +8,7 @@ icon: "⚙️"
 
 ## What is Production & Reliability?
 
-This topic covers the **LLMOps** (LLM Operations) discipline. It bridges the gap between a working prototype in a notebook and a resilient, scalable application serving users. Key areas include **Guardrails** (preventing bad outputs), **Observability** (tracing chains and costs), **Caching**, and latency optimization.
+This topic covers the **LLMOps** (LLM Operations) discipline. It bridges the gap between a working prototype in a notebook and a resilient, scalable application serving users. Key areas include **Guardrails** (preventing bad outputs), **Observability** (tracing chains and costs), **Caching**, and latency optimization. For a deep dive into risk management, see our dedicated [AI Security & Governance](/learn/topics/llm-security) section.
 
 ## When to focus on this
 

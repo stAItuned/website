@@ -214,6 +214,27 @@ export interface LearnTranslations {
         seeAll: string
         fallbackDescription: string
     }
+
+    // Sign In Page
+    signIn: {
+        title: string
+        subtitle: string
+        benefits: {
+            save: string
+            sync: string
+            contribute: string
+        }
+        form: {
+            welcome: string
+            subtitle: string
+            secure: string
+            terms: string
+            privacy: string
+            agreement: string
+            and: string
+            googleDisclaimer: string
+        }
+    }
 }
 
 export const translations: Record<LearnLocale, LearnTranslations> = {
@@ -432,6 +453,25 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 article: 'article',
                 articles: 'articles'
             }
+        },
+        signIn: {
+            title: "Unlock Your Potential in the Age of AI",
+            subtitle: "Join thousands of professionals mastering Generative AI. Access exclusive playbooks, career tools, and a community of innovators.",
+            benefits: {
+                save: "Save your favorite articles",
+                sync: "Sync preferences across devices",
+                contribute: "Contribute with your own insights"
+            },
+            form: {
+                welcome: "Welcome back",
+                subtitle: "Sign in to your account to continue",
+                secure: "Secure authentication",
+                agreement: "By signing in, you agree to our",
+                terms: "Terms of Service",
+                and: "and",
+                privacy: "Privacy Policy",
+                googleDisclaimer: "We use Google Sign-In to create your account. We store your email and profile info (name and picture) to enable features like bookmarks and contributions."
+            }
         }
     },
     it: {
@@ -648,6 +688,25 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 explore: 'Esplora Percorso',
                 article: 'articolo',
                 articles: 'articoli'
+            }
+        },
+        signIn: {
+            title: "Sblocca il tuo potenziale nell'era dell'AI",
+            subtitle: "Unisciti a migliaia di professionisti che padroneggiano la Generative AI. Accedi a playbook esclusivi, strumenti di carriera e una community di innovatori.",
+            benefits: {
+                save: "Salva i tuoi articoli preferiti",
+                sync: "Sincronizza le preferenze tra dispositivi",
+                contribute: "Contribuisci anche tu con il tuo contenuto"
+            },
+            form: {
+                welcome: "Bentornato",
+                subtitle: "Accedi al tuo account per continuare",
+                secure: "Autenticazione sicura",
+                agreement: "Accedendo, accetti i nostri",
+                terms: "Termini di Servizio",
+                and: "e",
+                privacy: "Privacy Policy",
+                googleDisclaimer: "Usiamo Google Sign-In per creare il tuo account. Conserviamo email e informazioni di profilo (nome e immagine) per abilitare funzionalità come bookmark e contributi."
             }
         }
     }

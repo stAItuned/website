@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og'
 import { verifyCredential } from '@/lib/firebase/badge-service'
 import { getAuthorData } from '@/lib/authors'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
+import { getBadgeImageSource } from '@/lib/badges/badge-utils'
 
 export const runtime = 'nodejs' // firebase-admin requires nodejs
 
@@ -38,32 +39,25 @@ export async function GET(request: Request, { params }: { params: Promise<{ cred
     const authorName = authorData?.name || badge.authorId
     const date = new Date(badge.earnedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
-    // Gradient definitions based on tier (simplified from keyframe/tailwind)
-    const gradients: Record<string, string> = {
-        contributor: 'linear-gradient(to bottom right, #1e3a8a, #0f172a)',
-        bronze: 'linear-gradient(to bottom right, #78350f, #291d18)',
-        silver: 'linear-gradient(to bottom right, #475569, #0f172a)',
-        gold: 'linear-gradient(to bottom right, #b45309, #451a03)',
-        special: 'linear-gradient(to bottom right, #0369a1, #1e1b4b)',
-    }
+    const baseUrl = new URL(request.url).origin
+    const badgeImageUrl = new URL(getBadgeImageSource(badgeDef.icon), baseUrl).toString()
 
-    const bgGradient = gradients[badgeDef.tier] || gradients.contributor
-    const borderColor = badgeDef.tier === 'gold' ? '#fbbf24' : badgeDef.tier === 'silver' ? '#e2e8f0' : '#3b82f6'
-
-    return new ImageResponse(
+    const response = new ImageResponse(
         (
             <div
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                     width: '100%',
                     height: '100%',
-                    background: bgGradient,
+                    background: 'linear-gradient(135deg, #020617 0%, #0f172a 55%, #020617 100%)',
                     color: 'white',
                     fontFamily: 'sans-serif',
                     position: 'relative',
+                    paddingTop: 40,
+                    paddingLeft: 52,
+                    paddingRight: 52,
+                    paddingBottom: 44,
                 }}
             >
                 {/* Background Pattern */}
@@ -76,75 +70,130 @@ export async function GET(request: Request, { params }: { params: Promise<{ cred
                         bottom: 0,
                         backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.1) 2%, transparent 0%)',
                         backgroundSize: '50px 50px',
+                        opacity: 0.9,
                     }}
                 />
 
-                {/* Border Frame */}
+                {/* Main */}
                 <div
                     style={{
-                        position: 'absolute',
-                        top: 20,
-                        left: 20,
-                        right: 20,
-                        bottom: 20,
-                        border: `2px solid rgba(255,255,255,0.1)`,
-                        borderRadius: 20,
+                        display: 'flex',
+                        flex: 1,
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        paddingBottom: 28,
                     }}
-                />
-
-                {/* Logo */}
-                <div style={{ position: 'absolute', top: 60, display: 'flex', fontSize: 24, fontWeight: 'bold', color: 'rgba(255,255,255,0.8)' }}>
-                    st<span style={{ color: borderColor }}>AI</span>tuned.com
-                </div>
-
-                {/* Main Content */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 20 }}>
-
-                    {/* Badge Icon Mockup (Text based for simplicity in OG, effectively a big badge) */}
+                >
+                    {/* Card (badge + credential ID, like zoom) */}
                     <div
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            width: 200,
-                            height: 220,
-                            background: 'rgba(255,255,255,0.05)',
-                            border: `3px solid ${borderColor}`,
-                            borderRadius: '20px', // simplified shape
-                            marginBottom: 40,
-                            boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                            width: 820,
+                            padding: 18,
+                            borderRadius: 48,
+                            background: 'linear-gradient(180deg, rgba(30,41,59,0.94) 0%, rgba(15,23,42,0.94) 100%)',
+                            boxShadow: '0 28px 80px rgba(0,0,0,0.65)',
+                            border: '1px solid rgba(255,255,255,0.10)',
                         }}
                     >
-                        <div style={{ fontSize: 80 }}>
-                            {badgeDef.icon === 'contributor' ? '✍️' :
-                                badgeDef.icon.includes('impact') ? '🚀' :
-                                    badgeDef.icon.includes('writer') ? '📝' : '⭐'}
+                        <img
+                            src={badgeImageUrl}
+                            width={380}
+                            height={418}
+                            style={{
+                                display: 'flex',
+                                objectFit: 'contain',
+                                filter: 'drop-shadow(0 28px 44px rgba(0,0,0,0.65))',
+                            }}
+                        />
+
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginTop: 12,
+                                padding: '7px 16px',
+                                borderRadius: 9999,
+                                background: 'rgba(2,6,23,0.88)',
+                                border: '1px solid rgba(148,163,184,0.35)',
+                                color: 'rgba(148,163,184,1)',
+                                fontFamily: 'monospace',
+                                fontSize: 16,
+                                letterSpacing: 1.1,
+                                fontWeight: 800,
+                            }}
+                        >
+                            {`ID ${badge.credentialId}`}
                         </div>
                     </div>
 
-                    <div style={{ fontSize: 60, fontWeight: 900, textAlign: 'center', marginBottom: 10, textShadow: '0 4px 8px rgba(0,0,0,0.3)' }}>
-                        {badgeDef.name.en}
-                    </div>
-
-                    <div style={{ fontSize: 32, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>
-                        Awarded to {authorName}
+                    {/* Text below card */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginTop: 14,
+                            textAlign: 'center',
+                            maxWidth: 980,
+                        }}
+                    >
+                        <div
+                            style={{
+                                fontSize: 14,
+                                color: 'rgba(147,197,253,0.92)',
+                                fontWeight: 800,
+                                letterSpacing: 3,
+                                textTransform: 'uppercase',
+                                marginBottom: 8,
+                            }}
+                        >
+                            {`Awarded to ${authorName}`}
+                        </div>
+                        <div
+                            style={{
+                                fontSize: 40,
+                                fontWeight: 900,
+                                textShadow: '0 6px 14px rgba(0,0,0,0.35)',
+                                lineHeight: 1.05,
+                            }}
+                        >
+                            {badgeDef.name.en}
+                        </div>
+                        <div
+                            style={{
+                                marginTop: 8,
+                                fontSize: 15,
+                                color: 'rgba(148,163,184,0.95)',
+                                lineHeight: 1.35,
+                            }}
+                        >
+                            {badgeDef.description.en}
+                        </div>
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div style={{
-                    position: 'absolute',
-                    bottom: 50,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    padding: '0 100px',
-                    fontSize: 24,
-                    color: 'rgba(255,255,255,0.5)'
-                }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        fontSize: 18,
+                        color: 'rgba(255,255,255,0.55)',
+                        position: 'relative',
+                        paddingTop: 8,
+                    }}
+                >
                     <div>{date}</div>
-                    <div style={{ fontFamily: 'monospace' }}>{badge.credentialId}</div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#10b981', marginRight: 10 }} />
                         Verified
@@ -157,4 +206,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ cred
             height: 630,
         }
     )
+
+    response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400')
+    return response
 }

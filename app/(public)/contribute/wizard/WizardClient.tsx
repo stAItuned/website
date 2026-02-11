@@ -1,9 +1,12 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { contributeTranslations } from '@/lib/i18n/contribute-translations'
 import { Contribution, InterviewQnA } from '@/lib/types/contributor'
+import { useAuth } from '@/components/auth/AuthContext' // Added useAuth
 
 // Steps
 import { StepPitch } from './steps/StepPitch'
@@ -17,6 +20,7 @@ import { StepDraftSubmission } from './steps/StepDraftSubmission'
 import { StepResumeSelection } from './steps/StepResumeSelection'
 import { StepPathIntro } from './steps/StepPathIntro'
 import { StepGuidelines } from './steps/StepGuidelines'
+import { StepBecomeWriter } from './steps/StepBecomeWriter'
 
 // Hooks
 import { useWizardState } from './hooks/useWizardState'
@@ -30,6 +34,8 @@ import { useWizardNavigation } from './hooks/useWizardNavigation'
  * - useWizardNavigation: Step handlers and navigation logic
  */
 export default function WizardClient() {
+    const router = useRouter()
+    const { user, loading: authLoading } = useAuth() // Get auth state directly
     const state = useWizardState()
     const navigation = useWizardNavigation({
         step: state.step,
@@ -42,6 +48,37 @@ export default function WizardClient() {
         searchParams: state.searchParams
     })
 
+    // Writer Check
+    const { isWriter, hasAgreement, checkWriterStatus, isLoadingContribution } = state
+
+    // 1. Auth & Writer Protection
+    useEffect(() => {
+        if (authLoading) return
+
+        // Case A: Not Logged In -> Redirect to Login
+        if (!user) {
+            router.replace('/signin?redirect=/contribute/wizard') // Redirect to login
+            return
+        }
+
+        // Case B: Logged In but Writer Status Unknown -> Check it
+        if (isWriter === null) {
+            checkWriterStatus()
+            return
+        }
+
+        // Case C: Logged In but Not Writer -> Redirect to Become Writer
+        // We only check this if we are not already on the "become_writer" step (although that step is deprecated in favor of the page)
+        if (isWriter === false) {
+            const next = `/contribute/wizard${typeof window !== 'undefined' ? window.location.search : ''}`
+            router.replace(`/contribute/become-writer?next=${encodeURIComponent(next)}`)
+        }
+
+    }, [user, authLoading, isWriter, checkWriterStatus, router])
+
+
+    // Autonomy path now stays in wizard to collect the brief first.
+
     const t = contributeTranslations[state.lang].wizard
     const { currentStepIndex, totalSteps, getStepsForPath } = navigation
     const currentPathSteps = getStepsForPath(state.data.path || 'guided')
@@ -49,6 +86,11 @@ export default function WizardClient() {
     // Render Step
     const renderStep = () => {
         switch (state.step) {
+            case 'become_writer':
+                // This case should ideally not be reached anymore due to redirect,
+                // but keeping it for safety or redirecting manually here
+                router.push('/contribute/become-writer')
+                return null
             case 'resume_selection':
                 return <StepResumeSelection
                     contributions={state.existingContributions}
@@ -73,7 +115,11 @@ export default function WizardClient() {
                     brief={state.data.brief}
                     path={state.data.path as any}
                     language={state.lang}
-                    onNext={navigation.handleAgreementComplete}
+                    onNext={(c) => {
+                        navigation.handleAgreementComplete(c)
+                        // Critical: Refresh writer status immediately so we don't trigger the stale-state cleanup
+                        checkWriterStatus()
+                    }}
                     translations={t.agreement}
                     id={state.data.id}
                 />
@@ -117,7 +163,7 @@ export default function WizardClient() {
                     language={state.lang}
                 />
             case 'draft_submission':
-                if (!state.data.id) return <div>Error: Missing Contribution ID</div>
+                if (!state.data.id) return <div className="p-10 text-center"><p>Valutazione in corso...</p></div>
                 return <StepDraftSubmission
                     contribution={state.data as Contribution}
                     onNext={navigation.handleDraftSubmissionComplete}
@@ -137,7 +183,26 @@ export default function WizardClient() {
         }
     }
 
-    if (!state.isMounted) return <div className="min-h-screen bg-slate-50 dark:bg-slate-900" />
+    if (!state.isMounted || authLoading) return <div className="min-h-screen bg-slate-50 dark:bg-slate-900" />
+
+    // Protected Steps Logic: preventing rendering of sensitive steps until writer status is confirmed
+    // This prevents "flashing" the interview question before the redirect happens
+    const protectedSteps = [
+        'interview', 'guidelines', 'coverage_review',
+        'source_discovery', 'outline', 'draft_submission', 'review'
+    ]
+
+    // If we are not logged in or not a writer (and done loading), we shouldn't render the wizard at all
+    // If we are in a protected step, we STRICTLY wait for writer confirmation (isWriter === true)
+    // If step is public (Pitch, Agreement), we allow rendering and rely on the useEffect redirect if verification fails
+    // ALSO: if we are loading the contribution from network (isLoadingContribution), we wait.
+    const isProtectedStep = protectedSteps.includes(state.step as any)
+
+    if (!user || (isProtectedStep && (isWriter !== true || hasAgreement !== true)) || (isWriter === false) || isLoadingContribution) {
+        return <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        </div>
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-500">
@@ -160,7 +225,7 @@ export default function WizardClient() {
                                 </button>
                             )}
                         </div>
-                        {state.step !== 'resume_selection' && (
+                        {state.step !== 'resume_selection' && state.step !== 'become_writer' && (
                             <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">
                                 Step {currentStepIndex} / {totalSteps}
                             </div>
@@ -168,7 +233,7 @@ export default function WizardClient() {
                     </div>
 
                     {/* Progress Track */}
-                    {state.step !== 'resume_selection' && (
+                    {state.step !== 'resume_selection' && state.step !== 'become_writer' && (
                         <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex">
                             {currentPathSteps.map((s, idx) => {
                                 const isCompleted = currentStepIndex > (idx + 1)

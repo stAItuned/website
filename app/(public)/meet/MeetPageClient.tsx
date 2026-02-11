@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 import { HeroAnimatedBackground } from '@/components/home/HeroAnimatedBackground'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -53,27 +53,11 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
     const { locale } = useLearnLocale()
     const t = homeTranslations[locale].meet
 
-    const [activeFilter, setActiveFilter] = useState<'all' | 'quality' | 'impact' | 'contribution'>('all')
-    const [sortBy, setSortBy] = useState<'articles' | 'badges'>('articles')
-
     const filteredContributors = useMemo(() => {
         let list = [...topContributors]
-        if (activeFilter !== 'all') {
-            list = list.filter(author =>
-                (author.data?.badges || []).some((b: AuthorBadge) => {
-                    const def = BADGE_DEFINITIONS.find(d => d.id === b.badgeId)
-                    return def?.category === activeFilter
-                })
-            )
-        }
-        list.sort((a, b) => {
-            if (sortBy === 'badges') {
-                return (b.data?.badges?.length || 0) - (a.data?.badges?.length || 0)
-            }
-            return b.articleCount - a.articleCount
-        })
+        list.sort((a, b) => b.articleCount - a.articleCount)
         return list
-    }, [topContributors, activeFilter, sortBy])
+    }, [topContributors])
 
     const values = [
         {
@@ -250,50 +234,8 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                         </p>
                     </div>
 
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-2 border-b border-slate-100 dark:border-slate-800">
-                        <div className="flex flex-wrap gap-2">
-                            {[
-                                { id: 'all', label: locale === 'it' ? 'Tutti' : 'All' },
-                                { id: 'quality', label: locale === 'it' ? 'Qualità' : 'Quality' },
-                                { id: 'impact', label: locale === 'it' ? 'Impatto' : 'Impact' },
-                                { id: 'contribution', label: locale === 'it' ? 'Attività' : 'Activity' }
-                            ].map(filter => (
-                                <button
-                                    key={filter.id}
-                                    onClick={() => setActiveFilter(filter.id as any)}
-                                    className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeFilter === filter.id
-                                        ? 'bg-primary-600 text-white shadow-md'
-                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
-                                        }`}
-                                >
-                                    {filter.label}
-                                </button>
-                            ))}
-                        </div>
 
-                        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
-                            <button
-                                onClick={() => setSortBy('articles')}
-                                className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'articles'
-                                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                                    : 'text-slate-400'
-                                    }`}
-                            >
-                                {locale === 'it' ? 'Articoli' : 'Articles'}
-                            </button>
-                            <button
-                                onClick={() => setSortBy('badges')}
-                                className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'badges'
-                                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                                    : 'text-slate-400'
-                                    }`}
-                            >
-                                {locale === 'it' ? 'Badge' : 'Badges'}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                         {filteredContributors.map((author) => {
                             const earnedBadges = author.data?.badges || [];
                             const badgesToDisplay = earnedBadges
@@ -301,10 +243,10 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                     const def = BADGE_DEFINITIONS.find(d => d.id === eb.badgeId);
                                     return def ? { def, earned: eb } : null;
                                 })
-                                .filter(Boolean) as { def: Badge, earned: AuthorBadge }[];
+                                .filter((b: { def: Badge, earned: AuthorBadge } | null): b is { def: Badge, earned: AuthorBadge } => Boolean(b && b.def.id !== 'contributor'));
 
-                            const tierOrder = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 };
-                            badgesToDisplay.sort((a, b) => (tierOrder[b.def.tier] || 0) - (tierOrder[a.def.tier] || 0));
+                            const tierOrder: Record<string, number> = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 };
+                            badgesToDisplay.sort((a: { def: Badge, earned: AuthorBadge }, b: { def: Badge, earned: AuthorBadge }) => (tierOrder[b.def.tier] || 0) - (tierOrder[a.def.tier] || 0));
 
                             const topBadges = badgesToDisplay.slice(0, 3);
 
@@ -312,46 +254,50 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                 <Link
                                     key={author.slug}
                                     href={`/author/${author.slug}`}
-                                    className="group relative rounded-2xl bg-white p-5 border-2 border-slate-100 shadow-md hover:shadow-xl hover:border-primary-200 transition-all duration-300 dark:bg-slate-900 dark:border-slate-800 dark:hover:border-primary-700"
+                                    className="group relative rounded-2xl bg-white p-5 border-2 border-slate-100 shadow-md hover:shadow-xl hover:border-primary-200 transition-all duration-300 dark:bg-slate-900 dark:border-slate-800 dark:hover:border-primary-700 hover:z-20"
                                 >
                                     <div className="flex flex-col items-center text-center space-y-3">
-                                        <div className="relative">
-                                            <Image
-                                                src={`/content/team/${author.slug}/propic.jpg`}
-                                                alt={author.name}
-                                                width={80}
-                                                height={80}
-                                                className="rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-primary-300 transition-all dark:ring-slate-700 dark:group-hover:ring-primary-600"
-                                            />
-
-                                            {topBadges.length > 0 && (
-                                                <div className="absolute -bottom-2 -right-4 flex -space-x-2 filter drop-shadow-md">
-                                                    {topBadges.map(({ def, earned }) => (
-                                                        <div key={def.id} className="transition-transform hover:z-10 hover:scale-110">
-                                                            <BadgeTooltip badge={def} earnedBadge={earned}>
-                                                                <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
-                                                            </BadgeTooltip>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
+                                        <Image
+                                            src={`/content/team/${author.slug}/propic.jpg`}
+                                            alt={author.name}
+                                            width={80}
+                                            height={80}
+                                            className="rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-primary-300 transition-all dark:ring-slate-700 dark:group-hover:ring-primary-600"
+                                        />
 
                                         <div className="space-y-1">
                                             <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-snug">
                                                 {author.data?.name || author.name}
                                             </h3>
                                             {author.data?.title && (
-                                                <p className="text-xs text-primary-600 dark:text-primary-400 line-clamp-1">
+                                                <p className="text-sm font-medium text-primary-600 dark:text-primary-400 line-clamp-2">
                                                     {author.data.title}
                                                 </p>
                                             )}
-                                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                            {author.data?.description && (
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 pt-1">
+                                                    {author.data.description}
+                                                </p>
+                                            )}
+                                            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 pt-1">
                                                 {author.articleCount} {t.contributors.stats}
                                                 {author.articleCount !== 1 && locale === 'it' ? 'i' : ''}
                                                 {author.articleCount !== 1 && locale === 'en' ? 's' : ''}
                                             </p>
                                         </div>
+
+                                        {/* Badges row */}
+                                        {topBadges.length > 0 && (
+                                            <div className="flex flex-wrap justify-center gap-1.5">
+                                                {topBadges.map(({ def, earned }: { def: Badge, earned: AuthorBadge }) => (
+                                                    <div key={def.id} className="transition-transform hover:scale-110">
+                                                        <BadgeTooltip badge={def} earnedBadge={earned}>
+                                                            <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
+                                                        </BadgeTooltip>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
 
                                         <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary-600 dark:text-primary-400">
@@ -394,7 +340,7 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                         </p>
                         <div className="flex flex-wrap gap-4 pt-2">
                             <Link
-                                href="/contributor-program"
+                                href="/contribute"
                                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 text-sm font-bold text-white hover:from-emerald-400 hover:to-teal-400 transition-all duration-300 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:scale-105"
                             >
                                 {t.join.ctaProgram}

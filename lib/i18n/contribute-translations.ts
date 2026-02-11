@@ -36,11 +36,11 @@ export const contributeTranslations = {
                     cta: 'Genera Outline'
                 },
                 interview: {
-                    title: 'Intervista',
-                    description: '**Parla, noi scriviamo.** Una conversazione di 20 minuti diventa un articolo professionale firmato da te.',
-                    bestFor: ['Esperti con poco tempo', 'Preferisci parlare che scrivere', 'Argomenti molto tecnici'],
-                    time: '20 minuti',
-                    cta: 'Avvia Intervista'
+                    title: 'Executive Interview',
+                    description: '**Solo su invito/selezione.** Trasforma la tua esperienza sul campo in leadership di pensiero. Riservato a chi ha già dimostrato valore.',
+                    bestFor: ['C-Level & VP', 'Industry Leaders', 'Architects con case study reali'],
+                    time: '30 min (su selezione)',
+                    cta: 'Candidati'
                 }
             },
             quickSelector: {
@@ -513,11 +513,11 @@ export const contributeTranslations = {
                     cta: 'Generate Outline'
                 },
                 interview: {
-                    title: 'Interview',
-                    description: '**Talk, we write.** A 20-minute conversation becomes a professional signed article.',
-                    bestFor: ['Experts short on time', 'Prefer talking over writing', 'Highly technical topics'],
-                    time: '20 mins',
-                    cta: 'Start Interview'
+                    title: 'Executive Interview',
+                    description: '**Invitation/Selection only.** Turn your field experience into thought leadership. Reserved for those who have already proven value.',
+                    bestFor: ['C-Level & VP', 'Industry Leaders', 'Architects with real case studies'],
+                    time: '30 min (qualification required)',
+                    cta: 'Apply'
                 }
             },
             quickSelector: {

@@ -1,6 +1,7 @@
 "use client"
 import { useScreenSize } from '@/lib/hooks/useScreenSize'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
+import { PreviewBanner } from '@/components/ui/PreviewBanner'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
 import { LikeButton } from '@/components/LikeButton'
@@ -62,8 +63,10 @@ export default function ArticlePageClient({
   targetDisplay,
   relatedArticles,
   authorData,
-  analytics
-}: any & { analytics: ArticleAnalytics }) {
+
+  analytics,
+  isPreview = false
+}: any & { analytics: ArticleAnalytics, isPreview?: boolean }) {
   const isLarge = useScreenSize()
   const [showTocModal, setShowTocModal] = useState(false)
 
@@ -891,242 +894,244 @@ export default function ArticlePageClient({
 
   const activeReference = activeReferenceId
     ? references[activeReferenceId]
-      ?? (articleRootNode ? buildReferenceMeta(articleRootNode, activeReferenceId) : null)
-      ?? resolveReferenceMeta(activeReferenceId)
+    ?? (articleRootNode ? buildReferenceMeta(articleRootNode, activeReferenceId) : null)
+    ?? resolveReferenceMeta(activeReferenceId)
     : null
 
   return (
-    <PageTransition>
-      <ReadingProgress />
-      <ReadingProgressBar />
-      <section className="relative">
-        {/* Mobile TOC Modal - Slide up from bottom */}
-        {mounted && !isLarge && (
-          <div
-            className={`fixed inset-0 z-[60] flex items-end justify-center transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/50 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
-            onClick={() => setShowTocModal(false)}
-          >
+    <>
+      {isPreview && <PreviewBanner />}
+      <PageTransition>
+        <ReadingProgress />
+        <ReadingProgressBar />
+        <section className="relative">
+          {/* Mobile TOC Modal - Slide up from bottom */}
+          {mounted && !isLarge && (
             <div
-              className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-4 sm:p-6 overflow-y-auto overscroll-contain touch-pan-y transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
-              onClick={e => e.stopPropagation()}
-              onTouchStart={handleTocTouchStart}
-              onTouchMove={handleTocTouchMove}
+              className={`fixed inset-0 z-[60] flex items-end justify-center transition-all duration-300 ${showTocModal ? 'pointer-events-auto bg-black/50 backdrop-blur-sm' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+              onClick={() => setShowTocModal(false)}
             >
-              {/* Handle bar */}
-              <div className="flex justify-center mb-4">
-                <div className="w-12 h-1.5 bg-gray-300 dark:bg-slate-600 rounded-full"></div>
-              </div>
+              <div
+                className={`w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 shadow-2xl rounded-t-3xl p-4 sm:p-6 overflow-y-auto overscroll-contain touch-pan-y transform transition-all duration-300 ease-out ${showTocModal ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
+                onClick={e => e.stopPropagation()}
+                onTouchStart={handleTocTouchStart}
+                onTouchMove={handleTocTouchMove}
+              >
+                {/* Handle bar */}
+                <div className="flex justify-center mb-4">
+                  <div className="w-12 h-1.5 bg-gray-300 dark:bg-slate-600 rounded-full"></div>
+                </div>
 
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
-                  </svg>
-                  Table of Contents
-                </h2>
-                <button
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 transition-colors"
-                  aria-label="Close"
-                  onClick={() => setShowTocModal(false)}
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                    Table of Contents
+                  </h2>
+                  <button
+                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 transition-colors"
+                    aria-label="Close"
+                    onClick={() => setShowTocModal(false)}
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
 
-              {/* TOC Content */}
-              <div className="table-of-contents">
-                <ArticleTOC
-                  toc={toc}
-                  enableScrollSpy={false}
-                  highlightSlug={modalActiveSlug || undefined}
-                  onLinkClick={slug => {
-                    setModalActiveSlug(slug);
-                    setShowTocModal(false);
-                    setTimeout(() => {
-                      handleTOCClick(slug);
-                    }, 100);
-                  }}
-                  sticky={false}
-                />
+                {/* TOC Content */}
+                <div className="table-of-contents">
+                  <ArticleTOC
+                    toc={toc}
+                    enableScrollSpy={false}
+                    highlightSlug={modalActiveSlug || undefined}
+                    onLinkClick={slug => {
+                      setModalActiveSlug(slug);
+                      setShowTocModal(false);
+                      setTimeout(() => {
+                        handleTOCClick(slug);
+                      }, 100);
+                    }}
+                    sticky={false}
+                  />
+                </div>
               </div>
             </div>
+          )}
+          {/* Cover Image */}
+          {coverImage && (
+            <div className="relative w-full aspect-[16/9] lg:h-[30rem] overflow-hidden">
+              <Image
+                src={coverImage}
+                alt="Article cover"
+                fill
+                priority
+                className="object-cover object-center lg:object-[50%_30%]"
+                style={{ objectPosition: '50% 30%' }}
+                sizes="100vw"
+                unoptimized={coverImage.startsWith('http')}
+              />
+            </div>
+          )}
+          {/* Breadcrumb */}
+          <div className="lg:absolute lg:top-96 top-32 px-4 z-10 w-full flex justify-center">
+            <nav className="flex items-center space-x-2 sm:space-x-4 text-gray-900 dark:text-white w-full max-w-3xl md:w-auto bg-white/90 dark:bg-slate-950/75 backdrop-blur-3xl shadow-xl dark:shadow-black/60 px-4 sm:px-8 py-3 rounded-2xl font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 dark:scrollbar-thumb-secondary-400 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base border border-white/60 dark:border-slate-800/70">
+              <Link href="/" className="opacity-80 hover:text-primary-600 transition text-current">
+                Home
+              </Link>
+              <span className="text-gray-500 dark:text-gray-400">/</span>
+              <Link href="/learn" className="opacity-80 hover:text-primary-600 transition text-current">
+                Learn
+              </Link>
+              <span className="text-gray-500 dark:text-gray-400">/</span>
+              <Link href={`/learn/${target}`} className="opacity-80 hover:text-primary-600 transition text-current">
+                {targetDisplay}
+              </Link>
+              <span className="text-gray-500 dark:text-gray-400">/</span>
+              <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom text-current" title={article.title}>{article.title}</span>
+            </nav>
           </div>
-        )}
-        {/* Cover Image */}
-        {coverImage && (
-          <div className="relative w-full aspect-[16/9] lg:h-[30rem] overflow-hidden">
-            <Image
-              src={coverImage}
-              alt="Article cover"
-              fill
-              priority
-              className="object-cover object-center lg:object-[50%_30%]"
-              style={{ objectPosition: '50% 30%' }}
-              sizes="100vw"
-              unoptimized={coverImage.startsWith('http')}
-            />
+          {/* PWA Install CTA - Top placement, same as bottom */}
+          <div className="max-w-2xl mx-auto px-4 my-6">
+            <PWAInstallInline variant="compact" />
           </div>
-        )}
-        {/* Breadcrumb */}
-        <div className="lg:absolute lg:top-96 top-32 px-4 z-10 w-full flex justify-center">
-          <nav className="flex items-center space-x-2 sm:space-x-4 text-gray-900 dark:text-white w-full max-w-3xl md:w-auto bg-white/90 dark:bg-slate-950/75 backdrop-blur-3xl shadow-xl dark:shadow-black/60 px-4 sm:px-8 py-3 rounded-2xl font-semibold overflow-x-auto scrollbar-thin scrollbar-thumb-primary-200 dark:scrollbar-thumb-secondary-400 scrollbar-track-transparent whitespace-nowrap text-xs sm:text-sm lg:text-base border border-white/60 dark:border-slate-800/70">
-            <Link href="/" className="opacity-80 hover:text-primary-600 transition text-current">
-              Home
-            </Link>
-            <span className="text-gray-500 dark:text-gray-400">/</span>
-            <Link href="/learn" className="opacity-80 hover:text-primary-600 transition text-current">
-              Learn
-            </Link>
-            <span className="text-gray-500 dark:text-gray-400">/</span>
-            <Link href={`/learn/${target}`} className="opacity-80 hover:text-primary-600 transition text-current">
-              {targetDisplay}
-            </Link>
-            <span className="text-gray-500 dark:text-gray-400">/</span>
-            <span className="truncate max-w-[8rem] sm:max-w-xs md:max-w-md lg:max-w-lg inline-block align-bottom text-current" title={article.title}>{article.title}</span>
-          </nav>
-        </div>
-        {/* PWA Install CTA - Top placement, same as bottom */}
-        <div className="max-w-2xl mx-auto px-4 my-6">
-          <PWAInstallInline variant="compact" />
-        </div>
-        {/* Responsive: Only render one article version at a time */}
-        {/* Render desktop by default for SSR, then switch after mount */}
-        {/* Use opacity to prevent flash of broken layout during hydration */}
-        {!mounted || isLarge ? (
-          <div className={`grid grid-cols-[5rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start transition-opacity duration-200 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
-            {/* Left: Floating Share Bar (Desktop only) */}
-            <FloatingShareBar
-              title={article.title}
-              articleSlug={article.slug}
-              description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
-              imageUrl={coverImage}
-              likes={likesCount}
-              views={liveAnalytics.pageViews || 0}
-              visitors={liveAnalytics.users || 0}
-              isLiked={liked}
-              onLike={handleLike}
-              isLikeLoading={likeLoading}
-              currentLikes={likesCount}
-            />
-            {/* Center: Main Article Content */}
-            <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
-              {/* Article Header */}
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4">
-                <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto gap-2 sm:gap-8">
-                  {/* Author */}
-                  <div className="flex items-center gap-2">
-                    {article.author && (
-                    <AuthorAvatar author={article.author} authorData={authorData} />
-                    )}
-                  </div>
-                  {/* Meta Info Group */}
-                  <div className="flex flex-row flex-wrap items-center gap-2 sm:gap-4 text-gray-600 dark:text-gray-300 text-sm divide-x divide-gray-300 dark:divide-slate-700">
-                    {/* Date */}
-                    <div className="flex items-center gap-1 px-2 first:pl-0">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
-                      </svg>
-                      <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          {/* Responsive: Only render one article version at a time */}
+          {/* Render desktop by default for SSR, then switch after mount */}
+          {/* Use opacity to prevent flash of broken layout during hydration */}
+          {!mounted || isLarge ? (
+            <div className={`grid grid-cols-[5rem_1fr_20rem] gap-8 max-w-8xl mx-auto my-8 px-4 items-start transition-opacity duration-200 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+              {/* Left: Floating Share Bar (Desktop only) */}
+              <FloatingShareBar
+                title={article.title}
+                articleSlug={article.slug}
+                description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                imageUrl={coverImage}
+                likes={likesCount}
+                views={liveAnalytics.pageViews || 0}
+                visitors={liveAnalytics.users || 0}
+                isLiked={liked}
+                onLike={handleLike}
+                isLikeLoading={likeLoading}
+                currentLikes={likesCount}
+              />
+              {/* Center: Main Article Content */}
+              <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
+                {/* Article Header */}
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto gap-2 sm:gap-8">
+                    {/* Author */}
+                    <div className="flex items-center gap-2">
+                      {article.author && (
+                        <AuthorAvatar author={article.author} authorData={authorData} />
+                      )}
                     </div>
-                    {/* Reading time */}
-                    <div className="flex items-center gap-1 px-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span>{article.readingTime}m</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex-shrink-0 w-full sm:w-auto flex items-center justify-end sm:justify-center gap-2 mt-2 sm:mt-0">
-                  <SaveForOfflineButton articleSlug={article.slug} />
-                  <div className="w-full sm:w-auto">
-                    <LikeButton
-                      articleSlug={article.slug}
-                      liked={liked}
-                      onLike={handleLike}
-                      isLoading={likeLoading}
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* Article Title (desktop) */}
-              <div className="mb-6">
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-300">
-                    {article.title}
-                  </h1>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                    </svg>
-                    FREE
-                  </span>
-
-
-                </div>
-                {/* Explicit Topic Hierarchy */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 pb-6 border-b border-gray-100 dark:border-slate-800">
-                  {/* MAIN TOPIC */}
-                  {article.primaryTopic && (
-                    <div className="flex flex-col gap-1.5 min-w-[200px]">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 pl-1">
-                        Main Topic
-                      </span>
-                      <Link
-                        href={`/topics/${article.primaryTopic}`}
-                        className="group flex items-center gap-3 p-2 pr-4 -ml-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
-                      >
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-xl group-hover:scale-110 group-hover:border-primary-200 dark:group-hover:border-primary-800 transition-all">
-                          {getTopicHub(article.primaryTopic)?.icon || '🧭'}
-                        </div>
-                        <span className="font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                          {getTopicHub(article.primaryTopic)?.name || article.primaryTopic.replace(/-/g, ' ')}
-                        </span>
-                      </Link>
-                    </div>
-                  )}
-
-                  {/* Vertical Divider (Desktop) */}
-                  <div className="hidden sm:block w-px h-12 bg-gray-100 dark:bg-slate-800" />
-
-                  {/* RELATED CONCEPTS */}
-                  {article.topics && article.topics.length > 0 && (
-                    <div className="flex flex-col gap-2 flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 pl-1">
-                        Related Concepts
-                      </span>
-                      <div className="flex flex-wrap items-center gap-2">
-                        {article.topics.map((topic: string) => {
-                          const hub = getTopicHub(topic)
-                          const topicSlug = hub ? hub.slug : topic.toLowerCase()
-                            .replace(/\s+/g, '-')
-                            .replace(/[^\w\-]+/g, '')
-                            .replace(/\-\-+/g, '-')
-                            .replace(/^-+/, '')
-                            .replace(/-+$/, '')
-
-                          const displayName = hub ? hub.name : topic.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-
-                          return (
-                            <Link
-                              key={topic}
-                              href={`/topics/${topicSlug}`}
-                              className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-slate-800 shadow-sm border border-slate-200/50 dark:border-slate-700/50 hover:border-primary-200 dark:hover:border-primary-800 transition-all"
-                            >
-                              <span className="opacity-50 mr-1.5 text-slate-400">#</span>
-                              {displayName}
-                            </Link>
-                          )
-                        })}
+                    {/* Meta Info Group */}
+                    <div className="flex flex-row flex-wrap items-center gap-2 sm:gap-4 text-gray-600 dark:text-gray-300 text-sm divide-x divide-gray-300 dark:divide-slate-700">
+                      {/* Date */}
+                      <div className="flex items-center gap-1 px-2 first:pl-0">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+                        </svg>
+                        <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      </div>
+                      {/* Reading time */}
+                      <div className="flex items-center gap-1 px-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{article.readingTime}m</span>
                       </div>
                     </div>
-                  )}
+                  </div>
+                  <div className="flex-shrink-0 w-full sm:w-auto flex items-center justify-end sm:justify-center gap-2 mt-2 sm:mt-0">
+                    <SaveForOfflineButton articleSlug={article.slug} />
+                    <div className="w-full sm:w-auto">
+                      <LikeButton
+                        articleSlug={article.slug}
+                        liked={liked}
+                        onLike={handleLike}
+                        isLoading={likeLoading}
+                      />
+                    </div>
+                  </div>
                 </div>
-                {/* Share button below title */}
-                {/* <div className="flex justify-start">
+                {/* Article Title (desktop) */}
+                <div className="mb-6">
+                  <div className="flex flex-wrap items-center gap-3 mb-3">
+                    <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-300">
+                      {article.title}
+                    </h1>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                      </svg>
+                      FREE
+                    </span>
+
+
+                  </div>
+                  {/* Explicit Topic Hierarchy */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 pb-6 border-b border-gray-100 dark:border-slate-800">
+                    {/* MAIN TOPIC */}
+                    {article.primaryTopic && (
+                      <div className="flex flex-col gap-1.5 min-w-[200px]">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 pl-1">
+                          Main Topic
+                        </span>
+                        <Link
+                          href={`/topics/${article.primaryTopic}`}
+                          className="group flex items-center gap-3 p-2 pr-4 -ml-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                        >
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-xl group-hover:scale-110 group-hover:border-primary-200 dark:group-hover:border-primary-800 transition-all">
+                            {getTopicHub(article.primaryTopic)?.icon || '🧭'}
+                          </div>
+                          <span className="font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                            {getTopicHub(article.primaryTopic)?.name || article.primaryTopic.replace(/-/g, ' ')}
+                          </span>
+                        </Link>
+                      </div>
+                    )}
+
+                    {/* Vertical Divider (Desktop) */}
+                    <div className="hidden sm:block w-px h-12 bg-gray-100 dark:bg-slate-800" />
+
+                    {/* RELATED CONCEPTS */}
+                    {article.topics && article.topics.length > 0 && (
+                      <div className="flex flex-col gap-2 flex-1">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 pl-1">
+                          Related Concepts
+                        </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {article.topics.map((topic: string) => {
+                            const hub = getTopicHub(topic)
+                            const topicSlug = hub ? hub.slug : topic.toLowerCase()
+                              .replace(/\s+/g, '-')
+                              .replace(/[^\w\-]+/g, '')
+                              .replace(/\-\-+/g, '-')
+                              .replace(/^-+/, '')
+                              .replace(/-+$/, '')
+
+                            const displayName = hub ? hub.name : topic.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+                            return (
+                              <Link
+                                key={topic}
+                                href={`/topics/${topicSlug}`}
+                                className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-slate-800 shadow-sm border border-slate-200/50 dark:border-slate-700/50 hover:border-primary-200 dark:hover:border-primary-800 transition-all"
+                              >
+                                <span className="opacity-50 mr-1.5 text-slate-400">#</span>
+                                {displayName}
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {/* Share button below title */}
+                  {/* <div className="flex justify-start">
                   <ShareOnLinkedIn
                     title={article.title}
                     description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
@@ -1145,453 +1150,454 @@ export default function ArticlePageClient({
                     })}
                   />
                 </div> */}
-              </div>
-              {/* Article Body */}
-              <div id="article-root" ref={setArticleRootRef}>
-                {/* GEO Answer Layer - Above the Fold */}
-                {article.geo && (
-                  <GeoAnswerLayer
-                    geo={article.geo}
-                    articleSlug={article.slug}
-                  />
-                )}
-
-                <MarkdownContent
-                  content={article.body.raw}
-                  className="prose prose-lg max-w-none"
-                  articleSlug={article.slug}
-                />
-              </div>
-
-              {/* GEO Strategic Insights - End of Article Action Plan */}
-              {article.geo && (
-                <GeoStrategicInsights
-                  geo={article.geo}
-                  articleSlug={article.slug}
-                  className="max-w-4xl"
-                />
-              )}
-
-              {/* End of Article Engagement */}
-              {/* Article FAQs */}
-              <ArticleFAQ faqs={article.faq} />
-
-              {/* End of Article Engagement - Minimalist Redesign */}
-              <div className="not-prose flex flex-col items-center gap-6 my-12 py-8 border-t border-gray-100 dark:border-slate-800/50">
-                <div className="flex flex-col items-center gap-2">
-                  <ArticleRating articleSlug={article.slug} />
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <LikeButton
-                    articleSlug={article.slug}
-                    liked={liked}
-                    onLike={handleLike}
-                    isLoading={likeLoading}
-                  />
-                  <div className="w-px h-8 bg-gray-200 dark:bg-slate-700 mx-1" />
-                  <BookmarkButton articleSlug={article.slug} />
-                </div>
-              </div>
-            </article>
-            {/* Right: TOC Sidebar (Desktop only) */}
-            <aside className="self-stretch">
-              <div className="sticky top-24">
-                {article.geo ? (
-                  <GeoPlaybookRail
-                    geo={article.geo}
-                    articleSlug={article.slug}
-                    toc={toc}
-                    onTOCClick={handleTOCClick}
-                  />
-                ) : (
-                  <div className="table-of-contents">
-                    <ArticleTOC
-                      toc={toc}
-                      enableScrollSpy={true}
-                      onLinkClick={handleTOCClick}
-                      sticky={false}
-                    />
-                  </div>
-                )}
-              </div>
-            </aside>
-          </div>
-        ) : (
-          <>
-            <SwipeNavigation
-              prevArticle={relatedArticles[0] ? {
-                slug: relatedArticles[0].slug,
-                title: relatedArticles[0].title,
-                target: relatedArticles[0].target?.toLowerCase()
-              } : null}
-              nextArticle={relatedArticles[1] ? {
-                slug: relatedArticles[1].slug,
-                title: relatedArticles[1].title,
-                target: relatedArticles[1].target?.toLowerCase()
-              } : null}
-            >
-              <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-32 sm:pb-24">
-                {/* Floating Section Indicator */}
-                <FloatingSectionIndicator toc={toc} />
-
-                <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
-                  {/* Article Header */}
-                  <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
-                    {/* Article Title */}
-                    <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight break-words">
-                      {article.title}
-                    </h1>
-                    {/* FREE Badge */}
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                      </svg>
-                      FREE
-                    </span>
-                    {/* Author */}
-                    <div className="flex flex-col items-center gap-2 border-radius 0">
-                      {article.author && (
-                        <AuthorAvatar author={article.author} authorData={authorData} />
-                      )}
-                    </div>
-                    {article.primaryTopic && (
-                      <Link
-                        href={`/topics/${article.primaryTopic}`}
-                        className="flex flex-col items-center gap-1 mt-2 text-center"
-                      >
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                          Main topic
-                        </span>
-                        <span className="text-sm font-semibold text-primary-600 dark:text-primary-300">
-                          {primaryTopicHub?.name ?? article.primaryTopic.replace(/-/g, ' ')}
-                        </span>
-                      </Link>
-                    )}
-                    {/* Meta Info Group */}
-                    <div className="flex flex-row flex-wrap items-center justify-center gap-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
-                      {/* Date */}
-                      <div className="flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
-                        </svg>
-                        <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                      </div>
-                      <span className="text-gray-400 dark:text-gray-500">•</span>
-                      {/* Reading time */}
-                      <div className="flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{article.readingTime} min read</span>
-                      </div>
-                    </div>
-
-                    {/* Topics / Hubs Links (Mobile) */}
-                    {article.topics && article.topics.length > 0 && (
-                      <div className="flex flex-wrap justify-center gap-2 mt-3 mb-1">
-                        {article.topics.map((topic: string) => {
-                          const topicSlug = topic.toLowerCase()
-                            .replace(/\s+/g, '-')
-                            .replace(/[^\w\-]+/g, '')
-                            .replace(/\-\-+/g, '-')
-                            .replace(/^-+/, '')
-                            .replace(/-+$/, '')
-
-                          return (
-                            <Link
-                              key={topic}
-                              href={`/topics/${topicSlug}`}
-                              className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-medium border border-slate-200 dark:border-slate-700"
-                            >
-                              {topic}
-                            </Link>
-                          )
-                        })}
-                      </div>
-                    )}
-
-                    {/* KPI Stats Row */}
-                    <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
-                      {/* Views */}
-                      {(liveAnalytics.pageViews || 0) >= 10 && (
-                        <div className="flex items-center gap-1.5" title="Total views">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                          <span className="font-medium">{liveAnalytics.pageViews}</span>
-                        </div>
-                      )}
-
-                      {(liveAnalytics.pageViews || 0) >= 10 && (liveAnalytics.users || 0) >= 5 && <span className="text-gray-300 dark:text-gray-600">|</span>}
-
-                      {/* Visitors */}
-                      {(liveAnalytics.users || 0) >= 5 && (
-                        <div className="flex items-center gap-1.5" title="Unique visitors">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                          </svg>
-                          <span className="font-medium">{liveAnalytics.users}</span>
-                        </div>
-                      )}
-
-                      {((liveAnalytics.pageViews || 0) >= 10 || (liveAnalytics.users || 0) >= 5) && (liveAnalytics.likes || 0) >= 2 && <span className="text-gray-300 dark:text-gray-600">|</span>}
-
-                      {/* Likes */}
-                      {(liveAnalytics.likes || 0) >= 2 && (
-                        <div className="flex items-center gap-1.5" title="Total likes">
-                          <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                          </svg>
-                          <span className="font-medium">{liveAnalytics.likes}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {/* Article Body */}
-                  <div className="not-prose mb-6">
-                    {article.geo && (
-                      <GeoAnswerLayer
-                        geo={article.geo}
-                        articleSlug={article.slug}
-                      />
-                    )}
-                  </div>
-
-                  <div
-                    id="article-root"
-                    className="article-mobile-markdown"
-                    data-text-size={textSize}
-                    data-font-family={fontFamily}
-                    ref={setArticleRootRef}
-                  >
-                    <MarkdownContent
-                      content={article.body.raw}
-                      className="prose max-w-none text-gray-800 dark:text-gray-200"
-                      articleSlug={article.slug}
-                    />
-                  </div>
-
-                  {/* GEO Strategic Insights - End of Article Action Plan (Mobile) */}
+                {/* Article Body */}
+                <div id="article-root" ref={setArticleRootRef}>
+                  {/* GEO Answer Layer - Above the Fold */}
                   {article.geo && (
-                    <GeoStrategicInsights
+                    <GeoAnswerLayer
                       geo={article.geo}
                       articleSlug={article.slug}
-                      className="max-w-2xl mx-auto"
                     />
                   )}
 
-                  {/* Article FAQs (Mobile) */}
-                  <div className="not-prose mt-8 border-t border-gray-100 dark:border-slate-800 pt-8">
-                    <ArticleFAQ faqs={article.faq} />
-                  </div>
+                  <MarkdownContent
+                    content={article.body.raw}
+                    className="prose prose-lg max-w-none"
+                    articleSlug={article.slug}
+                  />
+                </div>
 
-                  {/* End of Article Engagement (Mobile) */}
-                  <div className="not-prose flex flex-col items-center gap-5 mt-10 mb-8 pt-8 border-t border-gray-100 dark:border-slate-800">
+                {/* GEO Strategic Insights - End of Article Action Plan */}
+                {article.geo && (
+                  <GeoStrategicInsights
+                    geo={article.geo}
+                    articleSlug={article.slug}
+                    className="max-w-4xl"
+                  />
+                )}
+
+                {/* End of Article Engagement */}
+                {/* Article FAQs */}
+                <ArticleFAQ faqs={article.faq} />
+
+                {/* End of Article Engagement - Minimalist Redesign */}
+                <div className="not-prose flex flex-col items-center gap-6 my-12 py-8 border-t border-gray-100 dark:border-slate-800/50">
+                  <div className="flex flex-col items-center gap-2">
                     <ArticleRating articleSlug={article.slug} />
-                    <div className="flex items-center gap-3 w-full justify-center">
-                      <LikeButton articleSlug={article.slug} />
-                      <BookmarkButton articleSlug={article.slug} />
-                    </div>
                   </div>
-                </article>
+
+                  <div className="flex items-center gap-3">
+                    <LikeButton
+                      articleSlug={article.slug}
+                      liked={liked}
+                      onLike={handleLike}
+                      isLoading={likeLoading}
+                    />
+                    <div className="w-px h-8 bg-gray-200 dark:bg-slate-700 mx-1" />
+                    <BookmarkButton articleSlug={article.slug} />
+                  </div>
+                </div>
+              </article>
+              {/* Right: TOC Sidebar (Desktop only) */}
+              <aside className="self-stretch">
+                <div className="sticky top-24">
+                  {article.geo ? (
+                    <GeoPlaybookRail
+                      geo={article.geo}
+                      articleSlug={article.slug}
+                      toc={toc}
+                      onTOCClick={handleTOCClick}
+                    />
+                  ) : (
+                    <div className="table-of-contents">
+                      <ArticleTOC
+                        toc={toc}
+                        enableScrollSpy={true}
+                        onLinkClick={handleTOCClick}
+                        sticky={false}
+                      />
+                    </div>
+                  )}
+                </div>
+              </aside>
+            </div>
+          ) : (
+            <>
+              <SwipeNavigation
+                prevArticle={relatedArticles[0] ? {
+                  slug: relatedArticles[0].slug,
+                  title: relatedArticles[0].title,
+                  target: relatedArticles[0].target?.toLowerCase()
+                } : null}
+                nextArticle={relatedArticles[1] ? {
+                  slug: relatedArticles[1].slug,
+                  title: relatedArticles[1].title,
+                  target: relatedArticles[1].target?.toLowerCase()
+                } : null}
+              >
+                <div className="flex flex-col gap-6 max-w-2xl mx-auto my-6 px-4 sm:px-6 pb-32 sm:pb-24">
+                  {/* Floating Section Indicator */}
+                  <FloatingSectionIndicator toc={toc} />
+
+                  <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
+                    {/* Article Header */}
+                    <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
+                      {/* Article Title */}
+                      <h1 className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-300 mb-1 leading-tight break-words">
+                        {article.title}
+                      </h1>
+                      {/* FREE Badge */}
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                        </svg>
+                        FREE
+                      </span>
+                      {/* Author */}
+                      <div className="flex flex-col items-center gap-2 border-radius 0">
+                        {article.author && (
+                          <AuthorAvatar author={article.author} authorData={authorData} />
+                        )}
+                      </div>
+                      {article.primaryTopic && (
+                        <Link
+                          href={`/topics/${article.primaryTopic}`}
+                          className="flex flex-col items-center gap-1 mt-2 text-center"
+                        >
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                            Main topic
+                          </span>
+                          <span className="text-sm font-semibold text-primary-600 dark:text-primary-300">
+                            {primaryTopicHub?.name ?? article.primaryTopic.replace(/-/g, ' ')}
+                          </span>
+                        </Link>
+                      )}
+                      {/* Meta Info Group */}
+                      <div className="flex flex-row flex-wrap items-center justify-center gap-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+                        {/* Date */}
+                        <div className="flex items-center gap-1.5">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+                          </svg>
+                          <span>{new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                        </div>
+                        <span className="text-gray-400 dark:text-gray-500">•</span>
+                        {/* Reading time */}
+                        <div className="flex items-center gap-1.5">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span>{article.readingTime} min read</span>
+                        </div>
+                      </div>
+
+                      {/* Topics / Hubs Links (Mobile) */}
+                      {article.topics && article.topics.length > 0 && (
+                        <div className="flex flex-wrap justify-center gap-2 mt-3 mb-1">
+                          {article.topics.map((topic: string) => {
+                            const topicSlug = topic.toLowerCase()
+                              .replace(/\s+/g, '-')
+                              .replace(/[^\w\-]+/g, '')
+                              .replace(/\-\-+/g, '-')
+                              .replace(/^-+/, '')
+                              .replace(/-+$/, '')
+
+                            return (
+                              <Link
+                                key={topic}
+                                href={`/topics/${topicSlug}`}
+                                className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-medium border border-slate-200 dark:border-slate-700"
+                              >
+                                {topic}
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      )}
+
+                      {/* KPI Stats Row */}
+                      <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-600 dark:text-gray-400">
+                        {/* Views */}
+                        {(liveAnalytics.pageViews || 0) >= 10 && (
+                          <div className="flex items-center gap-1.5" title="Total views">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span className="font-medium">{liveAnalytics.pageViews}</span>
+                          </div>
+                        )}
+
+                        {(liveAnalytics.pageViews || 0) >= 10 && (liveAnalytics.users || 0) >= 5 && <span className="text-gray-300 dark:text-gray-600">|</span>}
+
+                        {/* Visitors */}
+                        {(liveAnalytics.users || 0) >= 5 && (
+                          <div className="flex items-center gap-1.5" title="Unique visitors">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span className="font-medium">{liveAnalytics.users}</span>
+                          </div>
+                        )}
+
+                        {((liveAnalytics.pageViews || 0) >= 10 || (liveAnalytics.users || 0) >= 5) && (liveAnalytics.likes || 0) >= 2 && <span className="text-gray-300 dark:text-gray-600">|</span>}
+
+                        {/* Likes */}
+                        {(liveAnalytics.likes || 0) >= 2 && (
+                          <div className="flex items-center gap-1.5" title="Total likes">
+                            <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24">
+                              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                            <span className="font-medium">{liveAnalytics.likes}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {/* Article Body */}
+                    <div className="not-prose mb-6">
+                      {article.geo && (
+                        <GeoAnswerLayer
+                          geo={article.geo}
+                          articleSlug={article.slug}
+                        />
+                      )}
+                    </div>
+
+                    <div
+                      id="article-root"
+                      className="article-mobile-markdown"
+                      data-text-size={textSize}
+                      data-font-family={fontFamily}
+                      ref={setArticleRootRef}
+                    >
+                      <MarkdownContent
+                        content={article.body.raw}
+                        className="prose max-w-none text-gray-800 dark:text-gray-200"
+                        articleSlug={article.slug}
+                      />
+                    </div>
+
+                    {/* GEO Strategic Insights - End of Article Action Plan (Mobile) */}
+                    {article.geo && (
+                      <GeoStrategicInsights
+                        geo={article.geo}
+                        articleSlug={article.slug}
+                        className="max-w-2xl mx-auto"
+                      />
+                    )}
+
+                    {/* Article FAQs (Mobile) */}
+                    <div className="not-prose mt-8 border-t border-gray-100 dark:border-slate-800 pt-8">
+                      <ArticleFAQ faqs={article.faq} />
+                    </div>
+
+                    {/* End of Article Engagement (Mobile) */}
+                    <div className="not-prose flex flex-col items-center gap-5 mt-10 mb-8 pt-8 border-t border-gray-100 dark:border-slate-800">
+                      <ArticleRating articleSlug={article.slug} />
+                      <div className="flex items-center gap-3 w-full justify-center">
+                        <LikeButton articleSlug={article.slug} />
+                        <BookmarkButton articleSlug={article.slug} />
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </SwipeNavigation>
+
+              {/* Quick Feedback Button - Outside SwipeNavigation to preserve fixed positioning */}
+
+
+              {/* Continue Reading Prompt */}
+              <ContinueReadingPrompt
+                show={showContinuePrompt}
+                scrollPercent={savedProgress?.scrollPercent || 0}
+                onContinue={restorePosition}
+                onDismiss={dismissPrompt}
+              />
+
+              {/* Mobile Action Bar - Outside SwipeNavigation to preserve fixed positioning */}
+              <MobileActionBar
+                articleSlug={article.slug}
+                title={article.title}
+                description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                imageUrl={coverImage}
+                onTocClick={() => setShowTocModal(true)}
+                showToc={toc.length > 0}
+                readingTime={article.readingTime}
+                scrollPercent={scrollPercent}
+                onTextSizeChange={setTextSize}
+                currentTextSize={textSize}
+                onFontFamilyChange={setFontFamily}
+                currentFontFamily={fontFamily}
+                onPlaybookClick={() => setShowPlaybookSheet(true)}
+                hasPlaybook={hasStrategicPlaybook}
+              />
+            </>
+          )}
+        </section>
+        {/* Author Bio Card */}
+        <div className="max-w-6xl mx-auto px-4">
+          <AuthorBioCard author={article.author} authorData={authorData} />
+        </div>
+
+        {/* Role Fit Audit CTA - Primary */}
+        <div className="max-w-3xl mx-auto px-4 mt-12 mb-8">
+          <RoleFitAuditCTA variant="box" />
+        </div>
+
+        {/* Contributor CTA - Secondary */}
+        <div className="max-w-2xl mx-auto px-4 mb-8">
+          <ContributorCTA source={`article:${article.slug}`} variant="inline" />
+        </div>
+
+        {/* PWA Install CTA - Strategic placement after article, before related content */}
+        <div className="max-w-2xl mx-auto px-4 mb-8">
+          <PWAInstallInline variant="compact" />
+        </div>
+        {/* Back to Top Button (client component) - Hidden on mobile to avoid overlap with action bar */}
+        <BackToTopButton />
+        {/* Related Articles */}
+        <div data-related-articles>
+          <RelatedArticles relatedArticles={relatedArticles.map((post: any) => ({
+            title: post.title,
+            slug: post.slug,
+            cover: post.cover,
+            author: post.author,
+            date: post.date,
+            meta: post.meta,
+            readingTime: post.readingTime,
+            target: post.target,
+            topics: post.topics
+          }))} />
+        </div>
+
+        {/* Inline Reference UX */}
+        {activeReference && isLarge && (
+          <div className="fixed inset-0 z-[80] pointer-events-none">
+            <div
+              ref={referenceCardRef}
+              className="pointer-events-auto absolute w-[320px] max-w-[90vw] rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-900/40 backdrop-blur-xl transition-all duration-200 animate-slide-up"
+              onPointerLeave={() => {
+                if (!isReferencePinned) closeReference()
+              }}
+              onBlurCapture={(e) => {
+                if (isReferencePinned) return
+                const related = e.relatedTarget as Node | null
+                if (related && e.currentTarget.contains(related)) return
+                closeReference()
+              }}
+              style={{
+                top: referenceAnchorRect && typeof window !== 'undefined'
+                  ? Math.min(referenceAnchorRect.bottom + 12, window.innerHeight - 220)
+                  : 140,
+                left: referenceAnchorRect && typeof window !== 'undefined'
+                  ? Math.min(
+                    Math.max(referenceAnchorRect.left + (referenceAnchorRect.width / 2) - 160, 16),
+                    window.innerWidth - 340
+                  )
+                  : 24
+              }}
+            >
+              <div className="flex items-start gap-3 p-4">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-200 shadow-inner">
+                  <span className="text-sm font-bold">{activeReference.id.replace('ref-', '')}</span>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white leading-snug">
+                    {activeReference.title}
+                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 leading-snug">
+                    {activeReference.context}
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <button
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-600 text-white text-xs font-semibold shadow-md hover:bg-primary-700 transition-colors"
+                      onClick={() => handleOpenSource(activeReference)}
+                    >
+                      Open source
+                    </button>
+                    <button
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-gray-800 dark:bg-slate-800 dark:text-gray-100 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                      onClick={handleViewAllReferences}
+                    >
+                      View all references
+                    </button>
+                    <button
+                      className="ml-auto text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition-colors"
+                      onClick={closeReference}
+                      aria-label="Close reference"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
               </div>
-            </SwipeNavigation>
-
-            {/* Quick Feedback Button - Outside SwipeNavigation to preserve fixed positioning */}
-
-
-            {/* Continue Reading Prompt */}
-            <ContinueReadingPrompt
-              show={showContinuePrompt}
-              scrollPercent={savedProgress?.scrollPercent || 0}
-              onContinue={restorePosition}
-              onDismiss={dismissPrompt}
-            />
-
-            {/* Mobile Action Bar - Outside SwipeNavigation to preserve fixed positioning */}
-            <MobileActionBar
-              articleSlug={article.slug}
-              title={article.title}
-              description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
-              imageUrl={coverImage}
-              onTocClick={() => setShowTocModal(true)}
-              showToc={toc.length > 0}
-              readingTime={article.readingTime}
-              scrollPercent={scrollPercent}
-              onTextSizeChange={setTextSize}
-              currentTextSize={textSize}
-              onFontFamilyChange={setFontFamily}
-              currentFontFamily={fontFamily}
-              onPlaybookClick={() => setShowPlaybookSheet(true)}
-              hasPlaybook={hasStrategicPlaybook}
-            />
-          </>
+            </div>
+          </div>
         )}
-      </section>
-      {/* Author Bio Card */}
-      <div className="max-w-6xl mx-auto px-4">
-        <AuthorBioCard author={article.author} authorData={authorData} />
-      </div>
 
-      {/* Role Fit Audit CTA - Primary */}
-      <div className="max-w-3xl mx-auto px-4 mt-12 mb-8">
-        <RoleFitAuditCTA variant="box" />
-      </div>
-
-      {/* Contributor CTA - Secondary */}
-      <div className="max-w-2xl mx-auto px-4 mb-8">
-        <ContributorCTA source={`article:${article.slug}`} variant="inline" />
-      </div>
-
-      {/* PWA Install CTA - Strategic placement after article, before related content */}
-      <div className="max-w-2xl mx-auto px-4 mb-8">
-        <PWAInstallInline variant="compact" />
-      </div>
-      {/* Back to Top Button (client component) - Hidden on mobile to avoid overlap with action bar */}
-      <BackToTopButton />
-      {/* Related Articles */}
-      <div data-related-articles>
-        <RelatedArticles relatedArticles={relatedArticles.map((post: any) => ({
-          title: post.title,
-          slug: post.slug,
-          cover: post.cover,
-          author: post.author,
-          date: post.date,
-          meta: post.meta,
-          readingTime: post.readingTime,
-          target: post.target,
-          topics: post.topics
-        }))} />
-      </div>
-
-      {/* Inline Reference UX */}
-      {activeReference && isLarge && (
-        <div className="fixed inset-0 z-[80] pointer-events-none">
+        {!isLarge && (
           <div
-            ref={referenceCardRef}
-            className="pointer-events-auto absolute w-[320px] max-w-[90vw] rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-900/40 backdrop-blur-xl transition-all duration-200 animate-slide-up"
-            onPointerLeave={() => {
-              if (!isReferencePinned) closeReference()
-            }}
-            onBlurCapture={(e) => {
-              if (isReferencePinned) return
-              const related = e.relatedTarget as Node | null
-              if (related && e.currentTarget.contains(related)) return
-              closeReference()
-            }}
-            style={{
-              top: referenceAnchorRect && typeof window !== 'undefined'
-                ? Math.min(referenceAnchorRect.bottom + 12, window.innerHeight - 220)
-                : 140,
-              left: referenceAnchorRect && typeof window !== 'undefined'
-                ? Math.min(
-                  Math.max(referenceAnchorRect.left + (referenceAnchorRect.width / 2) - 160, 16),
-                  window.innerWidth - 340
-                )
-                : 24
-            }}
+            className={`fixed inset-0 z-[80] ${activeReference ? 'pointer-events-auto' : 'pointer-events-none'}`}
+            aria-hidden={!activeReference}
           >
-            <div className="flex items-start gap-3 p-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-200 shadow-inner">
-                <span className="text-sm font-bold">{activeReference.id.replace('ref-', '')}</span>
+            <div
+              className={`absolute inset-0 bg-black/50 transition-opacity duration-200 ${activeReference ? 'opacity-100' : 'opacity-0'}`}
+              onClick={closeReference}
+            />
+            <div
+              className={`absolute inset-x-0 bottom-0 max-h-[70vh] rounded-t-3xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-900/40 backdrop-blur-xl transition-transform duration-300 ease-out ${activeReference ? 'translate-y-0' : 'translate-y-full'}`}
+            >
+              <div className="flex items-center justify-between px-5 pt-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-200 shadow-inner">
+                    <span className="text-sm font-bold">{activeReference?.id.replace('ref-', '')}</span>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">Reference</span>
+                </div>
+                <button
+                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-300 transition-colors"
+                  onClick={closeReference}
+                  aria-label="Close reference panel"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white leading-snug">
-                  {activeReference.title}
+              <div className="px-5 pb-5 space-y-3">
+                <p className="text-base font-semibold text-gray-900 dark:text-white leading-snug">
+                  {activeReference?.title}
                 </p>
-                <p className="text-xs text-gray-600 dark:text-gray-300 leading-snug">
-                  {activeReference.context}
+                <p className="text-sm text-gray-600 dark:text-gray-300 leading-snug">
+                  {activeReference?.context}
                 </p>
-                <div className="flex flex-wrap gap-2 pt-1">
+                <div className="grid grid-cols-2 gap-3 pt-1">
                   <button
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-600 text-white text-xs font-semibold shadow-md hover:bg-primary-700 transition-colors"
-                    onClick={() => handleOpenSource(activeReference)}
+                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-primary-600 text-white text-sm font-semibold shadow-lg hover:bg-primary-700 transition-colors"
+                    onClick={() => handleOpenSource(activeReference || undefined)}
                   >
                     Open source
                   </button>
                   <button
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-gray-800 dark:bg-slate-800 dark:text-gray-100 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-slate-100 text-gray-800 dark:bg-slate-800 dark:text-gray-100 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                     onClick={handleViewAllReferences}
                   >
                     View all references
                   </button>
-                  <button
-                    className="ml-auto text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition-colors"
-                    onClick={closeReference}
-                    aria-label="Close reference"
-                  >
-                    Close
-                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {!isLarge && (
-        <div
-          className={`fixed inset-0 z-[80] ${activeReference ? 'pointer-events-auto' : 'pointer-events-none'}`}
-          aria-hidden={!activeReference}
-        >
-          <div
-            className={`absolute inset-0 bg-black/50 transition-opacity duration-200 ${activeReference ? 'opacity-100' : 'opacity-0'}`}
-            onClick={closeReference}
-          />
-          <div
-            className={`absolute inset-x-0 bottom-0 max-h-[70vh] rounded-t-3xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-primary-100/60 dark:ring-primary-900/40 backdrop-blur-xl transition-transform duration-300 ease-out ${activeReference ? 'translate-y-0' : 'translate-y-full'}`}
-          >
-            <div className="flex items-center justify-between px-5 pt-4">
-              <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-200 shadow-inner">
-                  <span className="text-sm font-bold">{activeReference?.id.replace('ref-', '')}</span>
-                </div>
-                <span className="text-sm font-semibold text-gray-900 dark:text-white">Reference</span>
-              </div>
-            <button
-              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-300 transition-colors"
-              onClick={closeReference}
-              aria-label="Close reference panel"
-            >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="px-5 pb-5 space-y-3">
-              <p className="text-base font-semibold text-gray-900 dark:text-white leading-snug">
-                {activeReference?.title}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-300 leading-snug">
-                {activeReference?.context}
-              </p>
-              <div className="grid grid-cols-2 gap-3 pt-1">
-              <button
-                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-primary-600 text-white text-sm font-semibold shadow-lg hover:bg-primary-700 transition-colors"
-                onClick={() => handleOpenSource(activeReference || undefined)}
-              >
-                Open source
-              </button>
-              <button
-                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-slate-100 text-gray-800 dark:bg-slate-800 dark:text-gray-100 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                onClick={handleViewAllReferences}
-              >
-                View all references
-              </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <GeoPlaybookBottomSheet
-        geo={article.geo}
-        articleSlug={article.slug}
-        isOpen={showPlaybookSheet && hasStrategicPlaybook}
-        onClose={() => setShowPlaybookSheet(false)}
-      />
-    </PageTransition>
+        <GeoPlaybookBottomSheet
+          geo={article.geo}
+          articleSlug={article.slug}
+          isOpen={showPlaybookSheet && hasStrategicPlaybook}
+          onClose={() => setShowPlaybookSheet(false)}
+        />
+      </PageTransition>
+    </>
   )
 }

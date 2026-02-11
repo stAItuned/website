@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
 html {
   scroll-behavior: smooth;
 }
@@ -24,7 +22,6 @@ html.urgency-bar-visible header {
 /* Custom styles */
 
 body {
-  font-family: 'Montserrat', sans-serif;
   color: var(--stai-text);
   @apply transition-colors duration-300;
 }
@@ -1329,7 +1326,7 @@ html {
 .prose>p:first-of-type {
   font-size: 1.25rem;
   font-weight: 400;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
   color: rgb(75, 85, 99);
 }
@@ -1373,10 +1370,10 @@ html {
   border-left-width: 4px;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   border-radius: 0 0.5rem 0.5rem 0;
   border-color: var(--stai-accent);
   background: rgba(var(--stai-surface-rgb), 0.5);

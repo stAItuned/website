@@ -76,6 +76,7 @@ function ProofCard({ item }: { item: ProcessProofItem }) {
                         alt={item.mediaAlt}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 )}
                 {item.mediaType === 'video' && (
@@ -197,4 +198,3 @@ export default function SocialProofSection() {
         </section>
     )
 }
-

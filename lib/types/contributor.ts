@@ -152,11 +152,46 @@ export interface Contribution {
     sourceDiscovery?: SourceDiscoveryData;
     generatedOutline?: GeneratedOutline;
     agreement?: {
-        agreed: boolean;
-        agreedAt: string;
-        legalName: string;
-        fiscalCode?: string;
-        version: string;
+        // Core status
+        checkbox_general: boolean;
+        checkbox_1341: boolean;
+        accepted_at: string; // ISO date
+        agreement_version: string;
+
+        // Identity
+        author_name: string;
+        author_email: string;
+        fiscal_code?: string;
+
+        // Audit Trail
+        ip: string;
+        user_agent: string;
+        agreement_hash_sha256: string;
+        agreement_view_url?: string;
+
+        // Legacy/compatibility fields (optional)
+        agreed?: boolean;
+        agreedAt?: string;
+        legalName?: string;
+        version?: string;
+        hash?: string;
+    };
+
+    /**
+     * Admin review metadata.
+     */
+    review?: {
+        status: 'approved' | 'rejected' | 'changes_requested';
+        note?: string;
+        updatedAt: string;
+        reviewerEmail: string;
+        annotations?: {
+            start: number;
+            end: number;
+            note: string;
+            createdAt: string;
+            authorEmail: string;
+        }[];
     };
 
     // Metadata

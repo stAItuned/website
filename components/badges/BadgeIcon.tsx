@@ -50,6 +50,7 @@ export function BadgeIcon({
                     className="drop-shadow-lg"
                     style={{
                         maxWidth: '100%',
+                        width: 'auto',
                         height: 'auto',
                     }}
                     // Add error handling placeholder if needed
@@ -71,4 +72,3 @@ export function BadgeIcon({
         </div>
     )
 }
-

@@ -158,6 +158,7 @@ export function AuthorPageWithPagination({
                 badges={BADGE_DEFINITIONS}
                 earnedBadges={authorData.badges || []}
                 className="grid-cols-3 sm:grid-cols-4 md:grid-cols-5"
+                showLocked={false}
               />
             </div>
           </div>

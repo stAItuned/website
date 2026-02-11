@@ -46,7 +46,10 @@ export function ContributeFeedbackWidget() {
         website: '',
     })
 
+    const [isMounted, setIsMounted] = useState(false)
+
     useEffect(() => {
+        setIsMounted(true)
         if (typeof window === 'undefined') return
         setPage(window.location.href)
         setUserAgent(navigator.userAgent)
@@ -143,6 +146,26 @@ export function ContributeFeedbackWidget() {
             setError(message)
             setStatus('idle')
         }
+    }
+
+    if (!isMounted) {
+        // Render a basic version that matches SSR (default it)
+        const tSsr = contributeTranslations.it.landing.feedbackWidget
+        return (
+            <div className="fixed bottom-20 left-4 z-[40] sm:z-[60] sm:bottom-6 sm:left-auto sm:right-6">
+                <button
+                    type="button"
+                    className="group inline-flex items-center gap-2 rounded-full p-0 text-sm font-semibold text-primary-600 transition-all duration-300 hover:-translate-y-0.5 sm:border sm:border-white/50 sm:bg-white/80 sm:px-4 sm:py-2 sm:shadow-lg sm:shadow-primary-600/10 sm:backdrop-blur sm:hover:bg-white"
+                    aria-label={tSsr.cta}
+                    onClick={() => setOpen(true)}
+                >
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white shadow-md shadow-primary-600/30 transition-all duration-300 group-hover:scale-105 sm:h-8 sm:w-8">
+                        <MessageCircle className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden />
+                    </span>
+                    <span className="hidden sm:inline">{tSsr.cta}</span>
+                </button>
+            </div>
+        )
     }
 
     return (

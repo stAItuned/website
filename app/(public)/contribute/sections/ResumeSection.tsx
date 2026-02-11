@@ -46,7 +46,7 @@ export function ResumeSection({ drafts, lang }: ResumeSectionProps) {
                             {drafts.map(draft => (
                                 <Link
                                     key={draft.id}
-                                    href={`/contribute/wizard?id=${draft.id}`}
+                                    href={draft.path === 'autonomy' ? `/contribute/draft?id=${draft.id}` : `/contribute/wizard?id=${draft.id}`}
                                     className="group block relative bg-white/40 dark:bg-slate-900/40 p-5 rounded-2xl border border-slate-200/60 dark:border-white/5 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300"
                                 >
                                     <div className="flex flex-col h-full">
@@ -62,6 +62,12 @@ export function ResumeSection({ drafts, lang }: ResumeSectionProps) {
                                         <p className="font-bold text-slate-800 dark:text-slate-100 line-clamp-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mb-5 flex-grow leading-snug">
                                             {draft.brief?.topic || draft.brief?.thesis || (lang === 'it' ? 'Bozza senza titolo' : 'Untitled Draft')}
                                         </p>
+
+                                        {draft.review?.status === 'changes_requested' && draft.review.note ? (
+                                            <div className="mb-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 px-3 py-2 text-[11px] text-amber-800 dark:text-amber-200 line-clamp-3">
+                                                {draft.review.note}
+                                            </div>
+                                        ) : null}
 
                                         <div className="flex items-center text-xs font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0">
                                             {lang === 'it' ? 'Continua' : 'Resume'}

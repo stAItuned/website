@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useRef, useCallback, ReactNode, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 /**
  * Tooltip Component
  * 
  * A lightweight tooltip that shows on hover (desktop) or click (mobile).
- * Supports configurable delay and positioning.
+ * Uses React Portal to ensure it's never clipped by parent containers.
  */
 
 interface TooltipProps {
@@ -34,86 +35,109 @@ export function Tooltip({
     contentClassName = '',
 }: TooltipProps) {
     const [isOpen, setIsOpen] = useState(false)
+    const [coords, setCoords] = useState({ top: 0, left: 0 })
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
     const triggerRef = useRef<HTMLDivElement>(null)
+    const [mounted, setMounted] = useState(false)
 
-    // Clean up timeout on unmount
     useEffect(() => {
+        setMounted(true)
         return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current)
-            }
+            if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        }
+    }, [])
+
+    const updateCoords = useCallback(() => {
+        if (triggerRef.current) {
+            const rect = triggerRef.current.getBoundingClientRect()
+            setCoords({
+                top: rect.top + window.scrollY,
+                left: rect.left + window.scrollX,
+            })
         }
     }, [])
 
     const handleMouseEnter = useCallback(() => {
+        updateCoords()
         timeoutRef.current = setTimeout(() => {
             setIsOpen(true)
         }, delayDuration)
-    }, [delayDuration])
+    }, [delayDuration, updateCoords])
 
     const handleMouseLeave = useCallback(() => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
-        }
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
         setIsOpen(false)
     }, [])
 
-    // Mobile: toggle on click
     const handleClick = useCallback(() => {
-        // Only toggle on touch devices
         if ('ontouchstart' in window) {
+            updateCoords()
             setIsOpen(prev => !prev)
         }
-    }, [])
+    }, [updateCoords])
 
-    // Position classes based on side and align
-    const getPositionClasses = () => {
-        const positions: Record<string, string> = {
-            'top-start': 'bottom-full left-0 mb-2',
-            'top-center': 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-            'top-end': 'bottom-full right-0 mb-2',
-            'bottom-start': 'top-full left-0 mt-2',
-            'bottom-center': 'top-full left-1/2 -translate-x-1/2 mt-2',
-            'bottom-end': 'top-full right-0 mt-2',
-            'left-start': 'right-full top-0 mr-2',
-            'left-center': 'right-full top-1/2 -translate-y-1/2 mr-2',
-            'left-end': 'right-full bottom-0 mr-2',
-            'right-start': 'left-full top-0 ml-2',
-            'right-center': 'left-full top-1/2 -translate-y-1/2 ml-2',
-            'right-end': 'left-full bottom-0 ml-2',
+    // Positioning logic simplified for Portal
+    const getTooltipStyle = () => {
+        if (!triggerRef.current) return {}
+        const rect = triggerRef.current.getBoundingClientRect()
+
+        let top = coords.top
+        let left = coords.left
+
+        // Adjust based on side
+        if (side === 'top') {
+            top -= 8 // Gap
+            left += rect.width / 2
+        } else if (side === 'bottom') {
+            top += rect.height + 8
+            left += rect.width / 2
+        } else if (side === 'left') {
+            top += rect.height / 2
+            left -= 8
+        } else if (side === 'right') {
+            top += rect.height / 2
+            left += rect.width + 8
         }
-        return positions[`${side}-${align}`] || positions['top-center']
+
+        return {
+            position: 'absolute' as const,
+            top: `${top}px`,
+            left: `${left}px`,
+            maxWidth: `${maxWidth}px`,
+            transform: side === 'top' || side === 'bottom' ? 'translateX(-50%)' : 'translateY(-50%)',
+            zIndex: 9999,
+        }
     }
 
     if (!content) return <>{children}</>
 
     return (
-        <div
-            ref={triggerRef}
-            className="relative inline-block"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={handleClick}
-        >
-            {children}
+        <>
+            <div
+                ref={triggerRef}
+                className="inline-block"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleClick}
+            >
+                {children}
+            </div>
 
-            {isOpen && (
+            {mounted && isOpen && createPortal(
                 <div
                     role="tooltip"
+                    style={getTooltipStyle()}
                     className={`
-                        absolute z-50 ${getPositionClasses()}
+                        pointer-events-none animate-fadeIn
                         px-3 py-2 text-xs rounded-lg
                         bg-slate-900 dark:bg-slate-100
                         text-white dark:text-slate-900
-                        shadow-lg animate-fadeIn
-                        pointer-events-none
+                        shadow-2xl
                         ${contentClassName}
                     `}
-                    style={{ maxWidth }}
                 >
                     {content}
-                    {/* Arrow indicator */}
+                    {/* Simplified arrow for portal version */}
                     <div
                         className={`
                             absolute w-2 h-2 rotate-45
@@ -124,9 +148,10 @@ export function Tooltip({
                             ${side === 'right' ? 'right-full -mr-1 top-1/2 -translate-y-1/2' : ''}
                         `}
                     />
-                </div>
+                </div>,
+                document.body
             )}
-        </div>
+        </>
     )
 }
 

@@ -52,6 +52,7 @@ export function AuthorBioCard({ author, authorData }: AuthorBioCardProps) {
                     fill
                     className="object-cover"
                     unoptimized
+                    sizes="(max-width: 768px) 64px, 80px"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-400 flex items-center justify-center">

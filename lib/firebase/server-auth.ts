@@ -42,5 +42,11 @@ export async function verifyAuth(request: NextRequest) {
 
 export function getAdminDb() {
     const app = getFirebaseAdmin();
-    return getFirestore(app);
+    const db = getFirestore(app);
+    try {
+        db.settings({ ignoreUndefinedProperties: true });
+    } catch (e) {
+        // Ignore setting already set error if called multiple times on same instance
+    }
+    return db;
 }

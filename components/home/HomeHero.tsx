@@ -83,9 +83,9 @@ export function HomeHero({ articleCount, contributorCount }: HomeHeroProps) {
               <span className="group-hover:translate-y-1 transition-transform">↓</span>
             </a>
 
-            {/* Secondary CTA - Career OS */}
+            {/* Secondary CTA - Contribute */}
             <Link
-              href="/career-os"
+              href="/contribute"
               className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full border-2 border-white/30 text-white font-bold text-base hover:bg-white/10 hover:-translate-y-1 hover:border-white/50 transition-all"
             >
               <span>{t.hero.ctaCareerOS}</span>

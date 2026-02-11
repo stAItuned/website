@@ -38,6 +38,8 @@ export function PathCardsSection({
     suggestedPath,
     onPathSelected
 }: PathCardsSectionProps) {
+    const autonomyHref = `/contribute/wizard?path=autonomy&lang=${lang}`
+
     return (
         <section id="paths-section" className="py-24 px-6 relative">
             <div className="max-w-4xl mx-auto text-center mb-12 space-y-4">
@@ -56,6 +58,7 @@ export function PathCardsSection({
                         paths={paths.reduce((acc, p) => ({ ...acc, [p.key]: { title: p.title, cta: p.cta } }), {})}
                         lang={lang}
                         onPathSelected={onPathSelected}
+                        autonomyHref={autonomyHref}
                     />
                 </div>
             )}
@@ -121,7 +124,7 @@ export function PathCardsSection({
                             </div>
 
                             <Link
-                                href={`/contribute/wizard?path=${path.key}&lang=${lang}`}
+                                href={path.key === 'autonomy' ? autonomyHref : `/contribute/wizard?path=${path.key}&lang=${lang}`}
                                 className="w-full py-4 rounded-2xl stai-btn-gradient text-center shadow-lg hover:shadow-amber-500/30 active:scale-[0.97]"
                             >
                                 {path.cta}

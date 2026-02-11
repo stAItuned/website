@@ -11,6 +11,7 @@ import { useTheme } from '@/components/ThemeProvider'
 import { LearnLocaleToggle } from '@/lib/i18n'
 
 
+
 const DISABLE_AUTH = false
 import { UserMenu } from '@/components/auth/UserMenu'
 
@@ -117,7 +118,7 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-500 ease-out ${isScrolled ? 'py-1 sm:py-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-lg' : 'py-1.5 sm:py-3 bg-white/85 dark:bg-slate-900/85 backdrop-blur-lg shadow-sm'}`}>
+      <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-500 ease-out ${isScrolled ? 'py-1 sm:py-1.5 bg-white dark:bg-slate-900 shadow-lg' : 'py-1.5 sm:py-3 bg-white dark:bg-slate-900 shadow-sm'}`}>
         <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Link href="/" onClick={() => setIsMenuOpen(false)} className="transition-transform duration-300 hover:scale-105">
@@ -143,7 +144,7 @@ export function Header() {
             ) : null}
           </div>
 
-          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-1 sm:gap-2 lg:gap-3 rounded-full px-1.5 sm:px-2 py-1.5 font-semibold text-sm border border-slate-200/70 dark:border-slate-800/70 bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 backdrop-blur transition-all duration-400">
+          <nav className="stai-glass-panel stai-nav relative z-10 ml-auto flex items-center gap-1 sm:gap-2 lg:gap-3 rounded-full px-1.5 sm:px-2 py-1.5 font-semibold text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg shadow-slate-900/5 transition-all duration-400">
             <div className="hidden lg:block pr-2 border-r border-slate-200/60 dark:border-slate-700/60">
               <ul className="flex items-center space-x-2">
                 {navigation.map((item) => {
@@ -179,20 +180,15 @@ export function Header() {
                   <Link
                     href="/signin"
                     aria-label="Sign In"
-                    className="group relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ease-out text-slate-800 dark:text-slate-100 hover:bg-gradient-to-br hover:from-primary-500 hover:to-secondary-500 hover:text-white hover:scale-110 hover:shadow-lg"
+                    className="group relative flex items-center justify-center gap-2 px-4 h-10 rounded-full transition-all duration-300 ease-out text-slate-800 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium text-sm hover:scale-105"
                     onClick={() => {
                       if (typeof window !== 'undefined') {
                         localStorage.setItem('redirectAfterLogin', window.location.pathname + window.location.search)
                       }
                     }}
                   >
-                    <svg className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                    </svg>
-                    <span className="sr-only">Sign In</span>
-                    <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1.5 rounded-full bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 shadow-md transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 dark:bg-white dark:text-slate-900 whitespace-nowrap">
-                      Sign In
-                    </span>
+                    <span className="text-lg">👤</span>
+                    <span>Log in</span>
                   </Link>
                 )}
               </div>
@@ -371,9 +367,7 @@ export function Header() {
                         }
                       }}
                     >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                      </svg>
+                      <span className="text-xl mr-2">👤</span>
                       Sign In
                     </Link>
                   )}

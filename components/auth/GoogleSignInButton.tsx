@@ -67,6 +67,13 @@ export default function GoogleSignInButton({
     initAuth()
   }, [useRedirect, onSignInSuccess, onSignInError, DISABLE_AUTH])
 
+  const getRedirectFromQuery = () => {
+    if (typeof window === 'undefined') return null
+    const param = new URLSearchParams(window.location.search).get('redirect')
+    if (!param) return null
+    return param.startsWith('/') ? param : null
+  }
+
   const handleSignIn = async () => {
     setLoading(true)
     
@@ -75,13 +82,19 @@ export default function GoogleSignInButton({
       const result = await signInWithGooglePopup()
       
       if (result.success && result.user) {
-        // Check if there's a stored redirect URL
-        const redirectUrl = localStorage.getItem('redirectAfterLogin')
-        if (redirectUrl) {
+        const redirectFromQuery = getRedirectFromQuery()
+        const redirectFromStorage = localStorage.getItem('redirectAfterLogin')
+        const redirectUrl = redirectFromQuery || redirectFromStorage
+
+        if (redirectFromStorage) {
           localStorage.removeItem('redirectAfterLogin')
-          // Use window.location for immediate redirect
-          window.location.href = redirectUrl
         }
+
+        if (redirectUrl) {
+          window.location.href = redirectUrl
+          return
+        }
+
         onSignInSuccess?.(result.user)
       } else if (!result.success && result.error) {
         onSignInError?.(result.error)

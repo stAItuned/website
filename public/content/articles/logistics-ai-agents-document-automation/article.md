@@ -9,7 +9,8 @@ meta: >-
 date: 2026-02-02T12:00:00.000Z
 published: true
 primaryTopic: case-studies
-topics: []
+topics:
+  - llm-security
 geo:
   quickAnswer:
     title: "Logistics AI: The $6.5 Billion Opportunity"

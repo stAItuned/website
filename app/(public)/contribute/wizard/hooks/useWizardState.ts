@@ -5,9 +5,10 @@ import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { useLearnLocale } from '@/lib/i18n'
 import { ContributeLanguage } from '@/lib/i18n/contribute-translations'
+import { resolveAgreementAccepted } from '@/lib/contributor/agreementAcceptance'
 import { Contribution, ContributorBrief, CoverageAssessment, InterviewQnA } from '@/lib/types/contributor'
 
-export type WizardStep = 'resume_selection' | 'path_intro' | 'pitch' | 'agreement' | 'guidelines' | 'interview' | 'coverage_review' | 'source_discovery' | 'outline' | 'draft_submission' | 'review'
+export type WizardStep = 'become_writer' | 'resume_selection' | 'path_intro' | 'pitch' | 'agreement' | 'guidelines' | 'interview' | 'coverage_review' | 'source_discovery' | 'outline' | 'draft_submission' | 'review'
 
 interface UseWizardStateReturn {
     // Core state
@@ -24,6 +25,11 @@ interface UseWizardStateReturn {
     hasCheckedContributions: boolean
     setHasCheckedContributions: (checked: boolean) => void
 
+    // Writer status
+    isWriter: boolean | null
+    hasAgreement: boolean | null
+    checkWriterStatus: () => Promise<void>
+
     // Mounting state
     isMounted: boolean
 
@@ -31,6 +37,7 @@ interface UseWizardStateReturn {
     lang: ContributeLanguage
     user: ReturnType<typeof useAuth>['user']
     searchParams: ReturnType<typeof useSearchParams>
+    isLoadingContribution: boolean
 }
 
 /**
@@ -47,7 +54,7 @@ export function useWizardState(): UseWizardStateReturn {
     const [isMounted, setIsMounted] = useState(false)
     const [step, setStep] = useState<WizardStep>('path_intro')
     const [data, setData] = useState<Partial<Contribution>>({
-        path: (searchParams.get('path') as any) || 'autonomy',
+        path: (searchParams.get('path') as any) || 'guided',
         language: lang || 'it',
         brief: {
             topic: '',
@@ -64,6 +71,39 @@ export function useWizardState(): UseWizardStateReturn {
     // Resume Selection State
     const [existingContributions, setExistingContributions] = useState<Contribution[]>([])
     const [hasCheckedContributions, setHasCheckedContributions] = useState(false)
+    const [isWriter, setIsWriter] = useState<boolean | null>(null)
+    const [hasAgreement, setHasAgreement] = useState<boolean | null>(null)
+    const [isLoadingContribution, setIsLoadingContribution] = useState(() => {
+        // Initialize to true if we have an ID in the URL to prevent rendering stale data
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search)
+            return !!params.get('id')
+        }
+        return false
+    })
+
+    const checkWriterStatus = useCallback(async () => {
+        if (!user) return
+        try {
+            const token = await user.getIdToken()
+            const res = await fetch('/api/user/writer-status', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            const json: unknown = await res.json()
+            if (res.ok && typeof json === 'object' && json) {
+                const j = json as { isWriter?: unknown; hasAgreement?: unknown }
+                setIsWriter(Boolean(j.isWriter))
+                setHasAgreement(typeof j.hasAgreement === 'boolean' ? j.hasAgreement : false)
+                return
+            }
+            setIsWriter(false)
+            setHasAgreement(false)
+        } catch (e) {
+            console.error("Failed to check writer status", e)
+            setIsWriter(false)
+            setHasAgreement(false)
+        }
+    }, [user])
 
     // Load state from localStorage after mount to avoid hydration mismatch
     // Load state from localStorage after mount to avoid hydration mismatch
@@ -156,22 +196,52 @@ export function useWizardState(): UseWizardStateReturn {
         return () => window.removeEventListener('beforeunload', handleBeforeUnload)
     }, [step, data.interviewHistory])
 
-    // Skip Agreement if already accepted
-    // Skip Agreement if already accepted
+    // Skip Agreement if already accepted (Firestore is source of truth; local only for immediate UX).
     useEffect(() => {
-        if (step === 'agreement' && data.agreement?.agreed) {
+        const accepted = resolveAgreementAccepted({ hasAgreement, agreement: data.agreement })
+        if (step === 'agreement' && accepted) {
             if (data.path === 'autonomy') {
                 setStep('guidelines')
             } else {
                 setStep('interview')
             }
         }
-    }, [step, data.agreement, data.path])
+    }, [step, data.agreement?.agreed, data.agreement?.checkbox_general, data.path, hasAgreement])
+
+    // SANITY CHECK: If Firestore says agreement is missing, we must not trust stale localStorage.
+    useEffect(() => {
+        const localAccepted = data.agreement?.checkbox_general === true || data.agreement?.agreed === true
+        if (hasAgreement === false && localAccepted) {
+            setData(prev => ({
+                ...prev,
+                agreement: undefined
+            }))
+        }
+    }, [hasAgreement, data.agreement?.agreed, data.agreement?.checkbox_general, setData])
+
+    // STEP GUARD: If no valid agreement, prevent accessing later steps.
+    useEffect(() => {
+        const protectedSteps: WizardStep[] = [
+            'interview', 'guidelines', 'coverage_review',
+            'source_discovery', 'outline', 'draft_submission', 'review'
+        ]
+
+        const accepted = resolveAgreementAccepted({ hasAgreement, agreement: data.agreement })
+        if (hasAgreement === false && !accepted && protectedSteps.includes(step)) {
+            // User is in a protected step but shouldn't be. Redirect to agreement (if brief exists) or pitch.
+            if (data.brief?.topic || data.brief?.thesis) {
+                setStep('agreement')
+            } else {
+                setStep('pitch')
+            }
+        }
+    }, [hasAgreement, data.agreement?.agreed, data.agreement?.checkbox_general, step, setStep, data.brief])
 
     // Fetch contribution from ID in URL
     useEffect(() => {
         const id = searchParams.get('id')
         if (id && user) {
+            setIsLoadingContribution(true) // Start loading
             fetchContribution(id)
         }
     }, [searchParams, user])
@@ -215,9 +285,39 @@ export function useWizardState(): UseWizardStateReturn {
                 const contribution = json.contribution as Contribution
                 setData(contribution)
                 setStep(resolveResumeStep(contribution))
+            } else {
+                // Contribution not found or error (e.g. 404)
+                console.warn(`Contribution ${id} not found:`, json.error)
+
+                // Clear state related to this stale ID
+                localStorage.removeItem('contributor_wizard_state')
+
+                // Reset state to initial avoiding stale data
+                setData(prev => ({
+                    ...prev,
+                    id: undefined, // Clear ID
+                    brief: {
+                        topic: '',
+                        target: 'newbie',
+                        format: 'tutorial',
+                        thesis: '',
+                        hasExample: false,
+                        sources: []
+                    },
+                    interviewHistory: [],
+                    agreement: undefined
+                }))
+                setStep('path_intro')
+
+                // Remove ID from URL without full reload
+                const url = new URL(window.location.href)
+                url.searchParams.delete('id')
+                window.history.replaceState({}, '', url.toString())
             }
         } catch (e) {
             console.error("Failed to fetch contribution", e)
+        } finally {
+            setIsLoadingContribution(false) // Done loading
         }
     }
 
@@ -266,9 +366,13 @@ export function useWizardState(): UseWizardStateReturn {
         setExistingContributions,
         hasCheckedContributions,
         setHasCheckedContributions,
+        isWriter,
+        hasAgreement,
+        checkWriterStatus,
         isMounted,
         lang,
         user,
-        searchParams
+        searchParams,
+        isLoadingContribution
     }
 }

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { LinkedInIcon } from '@/components/icons/SocialIcons'
 import { trackExternalLinkClicked } from '@/lib/analytics/trackEvent'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
-import { ScrollReveal, StaggerContainer, FadeIn } from '@/components/ui/Animations'
+import { ScrollReveal, FadeIn } from '@/components/ui/Animations'
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
@@ -21,62 +21,9 @@ const socialLinks = [
   },
 ]
 
-const footerNavigation = {
-  explore: {
-    title: 'Esplora',
-    links: [
-      { name: 'Blog', href: '/learn/articles' },
-      { name: 'Diventa Contributor', href: '/contribute' },
-      { name: 'Career OS', href: '/career-os' },
-      { name: 'Chi siamo', href: '/meet' },
-    ]
-  },
-  resources: {
-    title: 'Risorse',
-    links: [
-      { name: 'Role Fit Audit', href: '/role-fit-audit' },
-      { name: 'RSS Feed', href: '/rss.xml', external: true },
-    ]
-  },
-  legal: {
-    title: 'Legale',
-    links: [
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Termini e Condizioni', href: '/terms' },
-      { name: 'Cookie Policy', href: '/cookie-policy' },
-    ]
-  }
-}
-
 // =============================================================================
 // Sub-components
 // =============================================================================
-
-/**
- * Newsletter section with value proposition - compact version
- */
-function NewsletterSection() {
-  return (
-    <div className="lg:col-span-2">
-      <div className="bg-gradient-to-r from-primary-500/40 to-primary-600/60 rounded-xl p-4 border border-slate-500/20">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xl">📬</span>
-            <h3 className="text-sm font-semibold text-white whitespace-nowrap">
-              Newsletter AI
-            </h3>
-          </div>
-          <div className="flex-1">
-            <NewsletterSignup source="footer" variant="inline" showHeader={false} />
-          </div>
-        </div>
-        <p className="text-[10px] text-slate-400 mt-2 text-center sm:text-left">
-          Niente spam · Disiscriviti quando vuoi
-        </p>
-      </div>
-    </div>
-  )
-}
 
 /**
  * Single navigation column
@@ -86,28 +33,29 @@ interface NavColumnProps {
   links: Array<{ name: string; href: string; external?: boolean }>
   onCookieClick?: () => void
   showCookieButton?: boolean
+  manageCookiesLabel?: string
 }
 
-function NavColumn({ title, links, onCookieClick, showCookieButton, manageCookiesLabel }: NavColumnProps & { manageCookiesLabel?: string }) {
+function NavColumn({ title, links, onCookieClick, showCookieButton, manageCookiesLabel }: NavColumnProps) {
   return (
     <div>
-      <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+      <h4 className="text-xs font-semibold text-white uppercase tracking-wider mb-2">
         {title}
       </h4>
-      <ul className="space-y-3">
+      <ul className="space-y-1.5">
         {links.map((link) => (
           <li key={link.name}>
             <Link
               href={link.href}
               target={link.external ? '_blank' : undefined}
               rel={link.external ? 'noopener noreferrer' : undefined}
-              className="text-slate-300 hover:text-amber-300 transition-colors duration-200 text-sm flex items-center gap-1 group"
+              className="text-slate-400 hover:text-amber-300 transition-colors duration-200 text-xs flex items-center gap-1 group w-fit"
             >
-              <span className="group-hover:translate-x-1 transition-transform duration-200">
+              <span className="group-hover:translate-x-0.5 transition-transform duration-200">
                 {link.name}
               </span>
               {link.external && (
-                <svg className="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-2.5 h-2.5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               )}
@@ -119,9 +67,9 @@ function NavColumn({ title, links, onCookieClick, showCookieButton, manageCookie
             <button
               type="button"
               onClick={onCookieClick}
-              className="text-amber-300 hover:text-amber-200 transition-colors duration-200 text-sm font-medium flex items-center gap-1 group"
+              className="text-amber-300 hover:text-amber-200 transition-colors duration-200 text-xs font-medium flex items-center gap-1 group w-fit"
             >
-              <span className="group-hover:translate-x-1 transition-transform duration-200">
+              <span className="group-hover:translate-x-0.5 transition-transform duration-200">
                 {manageCookiesLabel || 'Gestisci cookie'}
               </span>
             </button>
@@ -137,7 +85,7 @@ function NavColumn({ title, links, onCookieClick, showCookieButton, manageCookie
  */
 function SocialLinks({ locale }: { locale: 'en' | 'it' }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-2">
       {socialLinks.map((social) => {
         const IconComponent = social.icon
         return (
@@ -148,54 +96,14 @@ function SocialLinks({ locale }: { locale: 'en' | 'it' }) {
             rel="noreferrer"
             aria-label={locale === 'it' ? `Seguici su ${social.name}` : `Follow us on ${social.name}`}
             onClick={() => trackExternalLinkClicked('linkedin', social.name)}
-            className="group flex items-center gap-2 text-slate-300 hover:text-amber-300 transition-all duration-300"
+            className="group flex items-center gap-2 text-slate-400 hover:text-amber-300 transition-all duration-300"
           >
-            <span className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-amber-500/20 transition-colors duration-300">
-              <IconComponent className="w-5 h-5" />
-            </span>
-            <span className="text-sm font-medium hidden sm:inline">
-              {social.name}
+            <span className="p-1.5 rounded-lg bg-slate-700/50 group-hover:bg-amber-500/20 transition-colors duration-300">
+              <IconComponent className="w-4 h-4" />
             </span>
           </a>
         )
       })}
-    </div>
-  )
-}
-
-/**
- * Bottom bar with logo, copyright, and disclaimer
- */
-function BottomBar({ t, locale }: { t: any, locale: 'en' | 'it' }) {
-  const currentYear = new Date().getFullYear()
-
-  return (
-    <div className="border-t border-slate-500/30 pt-6 mt-8">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        {/* Logo and copyright */}
-        <div className="flex items-center gap-4">
-          <Link href="/" className="block">
-            <Image
-              src="/assets/general/logo-text.png"
-              alt="stAItuned"
-              width={140}
-              height={30}
-              className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
-            />
-          </Link>
-          <span className="text-sm text-slate-400">
-            © {currentYear} stAItuned
-          </span>
-        </div>
-
-        {/* Social links */}
-        <SocialLinks locale={locale} />
-      </div>
-
-      {/* Disclaimer */}
-      <p className="text-[11px] text-slate-500 leading-relaxed mt-6 text-center md:text-left max-w-4xl">
-        {t.disclaimer}
-      </p>
     </div>
   )
 }
@@ -208,6 +116,7 @@ export function Footer() {
   const { openPreferences } = useCookieConsent()
   const { locale } = useLearnLocale()
   const t = homeTranslations[locale].footer
+  const currentYear = new Date().getFullYear()
 
   const localizedNavigation = {
     explore: {
@@ -224,86 +133,86 @@ export function Footer() {
       links: [
         { name: t.audit, href: '/role-fit-audit' },
         { name: t.rss, href: '/rss.xml', external: true },
-      ]
-    },
-    legal: {
-      title: t.legal,
-      links: [
         { name: t.privacyPolicy, href: '/privacy' },
         { name: t.termsConditions, href: '/terms' },
         { name: t.cookiePolicy, href: '/cookie-policy' },
+      ]
+    },
+    // Merged legal into resources for compactness or kept separate but very tight
+    legal: {
+      title: t.legal,
+      links: [
+        // moved to resources above or kept here if we want 3 columns
       ]
     }
   }
 
   return (
-    <footer className="bg-primary-600 text-slate-200">
+    <footer className="bg-primary-600 text-slate-200 border-t border-slate-500/10">
       <ScrollReveal threshold={0.1} triggerOnce={true}>
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12 lg:py-14">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-8 lg:py-10">
 
-          {/* Newsletter Row - separate from nav, mobile optimized */}
-          <FadeIn>
-            <div className="flex flex-col gap-4 pb-8 mb-8 border-b border-slate-500/30">
-              {/* Top row: Label + RSS (hidden on mobile) */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">📬</span>
-                  <span className="text-sm font-medium text-white">{t.stayUpdated}</span>
-                </div>
-                <Link
-                  href="/rss.xml"
-                  target="_blank"
-                  className="hidden sm:flex text-xs text-slate-400 hover:text-amber-300 transition items-center gap-1"
-                >
-                  <span>📡</span> {t.rss}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8">
+
+            {/* Column 1: Brand & Socials */}
+            <div className="lg:col-span-3 flex flex-col justify-between gap-4">
+              <div className="flex flex-col gap-3">
+                <Link href="/" className="block w-fit">
+                  <Image
+                    src="/assets/general/logo-text.png"
+                    alt="stAItuned"
+                    width={120}
+                    height={26}
+                    className="h-6 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+                  />
                 </Link>
+                <div className="flex flex-col gap-1">
+                  {/* Combined disclaimer + copyright + social for max compactness */}
+                  <p className="text-[10px] text-slate-500 leading-relaxed max-w-xs">
+                    {t.disclaimer}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-[10px] text-slate-600">
+                      © {currentYear}
+                    </span>
+                    <SocialLinks locale={locale} />
+                  </div>
+                </div>
               </div>
-              {/* Newsletter input - full width on mobile */}
-              <div className="w-full sm:max-w-md">
-                <NewsletterSignup source="footer" variant="inline" showHeader={false} />
-              </div>
-              <p className="text-[10px] text-slate-400">
-                {t.noSpam}
-              </p>
             </div>
-          </FadeIn>
 
-          {/* Navigation Grid - 3 columns */}
-          <StaggerContainer staggerDelay={100}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-16">
-
-              <FadeIn>
+            {/* Middle Columns: Navigation Links */}
+            <div className="lg:col-span-5 grid grid-cols-2 gap-8 sm:gap-4">
+              <FadeIn delay={100}>
                 <NavColumn
                   title={localizedNavigation.explore.title}
                   links={localizedNavigation.explore.links}
                 />
               </FadeIn>
 
-              <FadeIn delay={100}>
-                <NavColumn
-                  title={localizedNavigation.resources.title}
-                  links={localizedNavigation.resources.links}
-                />
-              </FadeIn>
-
               <FadeIn delay={200}>
                 <NavColumn
-                  title={localizedNavigation.legal.title}
-                  links={localizedNavigation.legal.links}
+                  title="Risorse & Legale"
+                  links={localizedNavigation.resources.links} // Contains merged links
                   onCookieClick={openPreferences}
                   showCookieButton={true}
                   manageCookiesLabel={t.manageCookies}
                 />
               </FadeIn>
-
             </div>
-          </StaggerContainer>
 
-          {/* Bottom bar */}
-          <FadeIn delay={300}>
-            <BottomBar t={t} locale={locale} />
-          </FadeIn>
+            {/* Right Column: Newsletter (Compact) */}
+            <div className="lg:col-span-4 flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-slate-200 mb-1">
+                <span className="text-sm">📬</span>
+                <h3 className="text-xs font-semibold uppercase tracking-wider">{t.stayUpdated}</h3>
+              </div>
+              <div className="w-full">
+                <NewsletterSignup source="footer" variant="inline" showHeader={false} className="transform scale-95 origin-top-left" />
+              </div>
+            </div>
 
+          </div>
         </div>
       </ScrollReveal>
     </footer>

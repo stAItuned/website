@@ -16,6 +16,7 @@ primaryTopic: ai-coding
 topics:
   - agents
   - genai-fundamentals
+  - llm-security
 ---
 
 Are you still chasing marginal gains in code generation speed, unaware that the real battle for AI coding assistant dominance has already pivoted? The future isn't just about writing code faster; it's about verifying its integrity at an unprecedented scale, making current benchmarks obsolete.

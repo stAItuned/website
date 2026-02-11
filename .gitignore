@@ -64,3 +64,12 @@ public/assets/staituned/*
 public/assets/role-fit-audit/Registrazione schermo 2026-01-20 alle 08.38.49.mov
 app/(public)/terms/contributor-agreement.en.pdf
 app/(public)/terms/contributor-agreement.pdf
+public/content/drafts/images/f7537e479d1bed0a.png
+public/content/team/stAI-Tuned/meta.md
+public/content/team/stAI-Tuned/propic.jpg
+tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T16-41-57-369Z.md
+tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T16-45-53-220Z.md
+tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T20-57-03-057Z.md
+tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T20-57-54-135Z.md
+tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T20-58-40-629Z.md
+scripts/verify-agreement-instructions.ts

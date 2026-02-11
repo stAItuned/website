@@ -1,12 +1,13 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { verifyCredential } from '@/lib/firebase/badge-service'
+import { verifyCredential, getEvidenceByCredentialId } from '@/lib/firebase/badge-service'
 import { getAuthorData } from '@/lib/authors'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { BadgeZoomModal } from '@/components/badges/BadgeZoomModal'
 import { allPosts } from '@/lib/contentlayer'
 import { BadgeShareControls } from '@/components/badges/BadgeShareControls'
+import { EvidenceList } from '@/components/badges/EvidenceList'
+import { BadgeEvidence } from '@/lib/types/badge'
 
 interface PageProps {
     params: Promise<{
@@ -25,14 +26,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 
     const badgeDef = BADGE_DEFINITIONS.find(b => b.id === badge.badgeId)
-    const authorName = badge.authorId.replaceAll('-', ' ')
+    const authorData = await getAuthorData(badge.authorId.replaceAll('-', ' '))
+    const authorName = authorData?.name || badge.authorId.replaceAll('-', ' ')
+    const title = `${badgeDef?.name.en} - ${authorName} - stAItuned Verification`
+    const description = `Verify that ${authorName} has earned the ${badgeDef?.name.en} badge on stAItuned. Credential ID: ${badge.credentialId}`
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
+    const pageUrl = new URL(`/verify/${encodeURIComponent(credentialId)}`, siteUrl).toString()
+    const ogImageUrl = new URL(`/api/badges/og/${encodeURIComponent(credentialId)}`, siteUrl).toString()
 
     return {
-        title: `${badgeDef?.name.en} - ${authorName} - stAItuned Verification`,
-        description: `Verify that ${authorName} has earned the ${badgeDef?.name.en} badge on stAItuned. Credential ID: ${badge.credentialId}`,
+        title,
+        description,
         openGraph: {
-            images: [`/api/badges/og/${credentialId}`]
-        }
+            title,
+            description,
+            url: pageUrl,
+            images: [
+                {
+                    url: ogImageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: `${badgeDef?.name.en} - ${authorName} (Verified)`,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [ogImageUrl],
+        },
     }
 }
 
@@ -62,8 +85,53 @@ export default async function CredentialPage({ params }: PageProps) {
     const badgeDef = BADGE_DEFINITIONS.find(b => b.id === badge.badgeId)!
     const authorData = await getAuthorData(badge.authorId.replaceAll('-', ' '))
 
-    // Find evidence articles
-    const evidenceArticles = allPosts.filter(p => badge.evidenceArticles?.includes(p.slug))
+    // Fetch evidence metrics from Firestore
+    const evidenceMetrics = await getEvidenceByCredentialId(credentialId)
+
+    // Merge CMS article data with evidence metrics
+    const enrichedEvidence = evidenceMetrics
+        .map(metric => {
+            const article = allPosts.find(p => p.slug === metric.articleSlug)
+            if (!article) return null
+            return {
+                ...metric,
+                articleUrl: metric.articleUrl || article.url,
+                title: article.title,
+                date: article.date
+            }
+        })
+        .filter((item): item is NonNullable<typeof item> => item !== null)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+    // Fallback chain: badge_evidence collection → articleMetrics snapshot → bare slug matching
+    // This handles legacy badges or cases where the join collection might be empty
+    const articleMetricsMap = new Map(
+        (badge.metrics.articleMetrics ?? []).map(m => [m.slug, m])
+    )
+
+    const finalEvidence = enrichedEvidence.length > 0
+        ? enrichedEvidence
+        : allPosts
+            .filter(p => badge.evidenceArticles?.includes(p.slug))
+            .map(article => {
+                const snapshot = articleMetricsMap.get(article.slug)
+                return {
+                    id: article.slug,
+                    badgeId: badge.badgeId,
+                    authorId: badge.authorId,
+                    articleSlug: article.slug,
+                    articleUrl: snapshot?.url || article.url,
+                    contributedAt: article.date,
+                    type: (badgeDef.category === 'impact' ? 'impact' : (badgeDef.category === 'quality' ? 'quality' : 'volume')) as BadgeEvidence['type'],
+                    // Use per-article metric from snapshot if available (only for impact badges), otherwise fall back to 1
+                    value: badgeDef.category === 'impact'
+                        ? (snapshot?.pageViews ?? badgeDef.thresholds.qualifiedReads ?? 1)
+                        : 1,
+                    title: article.title,
+                    date: article.date
+                }
+            })
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
     // Format date
     const earnedDate = new Date(badge.earnedAt).toLocaleDateString('en-US', {
@@ -156,26 +224,11 @@ export default async function CredentialPage({ params }: PageProps) {
 
 
                         {/* Evidence Section */}
-                        {evidenceArticles.length > 0 && (
-                            <div className="text-left border-t border-slate-100 dark:border-slate-800 pt-8">
-                                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">
-                                    Evidence ({evidenceArticles.length})
-                                </h3>
-                                <ul className="space-y-3">
-                                    {evidenceArticles.map(article => (
-                                        <li key={article.slug}>
-                                            <Link href={`/${article.slug}`} className="group block p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
-                                                <h4 className="font-medium text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors text-sm">
-                                                    {article.title}
-                                                </h4>
-                                                <p className="text-xs text-slate-500 mt-1">
-                                                    Published on {new Date(article.date).toLocaleDateString()}
-                                                </p>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                        <EvidenceList evidence={finalEvidence} />
+                        {badgeDef.category === 'impact' && (
+                            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                                Qualified Read = an article view with average time on page of 30 seconds or more (proxy).
+                            </p>
                         )}
 
                     </div>

@@ -10,7 +10,8 @@ meta: >-
 date: 2026-01-29T17:38:44.000Z
 published: true
 primaryTopic: ai-career
-topics: []
+topics:
+  - llm-security
 geo:
   quickAnswer:
     title: "GenAI in 2026: Embracing Enterprise Agents"

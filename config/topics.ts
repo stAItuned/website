@@ -117,6 +117,15 @@ export const topicHubs: TopicHub[] = [
         category: 'operations'
     },
     {
+        slug: 'llm-security',
+        name: 'AI Security, Safety & Governance',
+        description: 'Guardrails, prompt injection, data leakage, compliance, and red teaming for production AI.',
+        icon: '🛡️',
+        colorFrom: '#ef4444', // red-500
+        colorTo: '#b91c1c',   // red-700
+        category: 'operations'
+    },
+    {
         slug: 'llm-evaluation',
         name: 'LLM Evaluation & Benchmarks',
         description: 'Measuring performance, ELO ratings, benchmarks, and evaluation frameworks.',

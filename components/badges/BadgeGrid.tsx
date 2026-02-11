@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Badge, AuthorBadge } from '@/lib/types/badge'
+import { BADGE_DISPLAY_ORDER } from '@/lib/config/badge-config'
 import { BadgeIcon } from './BadgeIcon'
 import { BadgeTooltip } from './BadgeTooltip'
 import { BadgeDetailModal } from './BadgeDetailModal'
@@ -14,11 +15,15 @@ interface BadgeGridProps {
     showLocked?: boolean
 }
 
+/**
+ * Renders a grid of badges with earned badges surfaced first and a manual order for display.
+ */
 export function BadgeGrid({ badges, earnedBadges, className, showLocked = true }: BadgeGridProps) {
     // Map earned badges for quick lookup
     const earnedMap = new Map(earnedBadges.map(b => [b.badgeId, b]));
+    const orderIndex = new Map(BADGE_DISPLAY_ORDER.map((id, i) => [id, i]));
 
-    // Sort: Earned first, then by tier value (Simple heuristic)
+    // Sort: Earned first, then by manual order
     const sortedBadges = [...badges].sort((a, b) => {
         const aEarned = earnedMap.has(a.id);
         const bEarned = earnedMap.has(b.id);
@@ -26,10 +31,9 @@ export function BadgeGrid({ badges, earnedBadges, className, showLocked = true }
         if (aEarned && !bEarned) return -1;
         if (!aEarned && bEarned) return 1;
 
-        // If both earned or both locked, sort by tier importance (custom order)
-        const tierOrder = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 };
-        // @ts-ignore
-        return (tierOrder[b.tier] || 0) - (tierOrder[a.tier] || 0);
+        const aIndex = orderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+        const bIndex = orderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+        return aIndex - bIndex;
     });
 
     const [selectedBadge, setSelectedBadge] = React.useState<Badge | null>(null);

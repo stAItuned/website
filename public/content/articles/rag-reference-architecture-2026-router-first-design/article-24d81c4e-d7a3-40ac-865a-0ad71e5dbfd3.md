@@ -10,7 +10,8 @@ meta: >-
 date: 2026-02-09T08:00:29.000Z
 published: true
 primaryTopic: rag
-topics: []
+topics:
+  - llm-security
 geo:
   quickAnswer:
     title: "RAG 2026 Reference Architecture in 30 seconds"

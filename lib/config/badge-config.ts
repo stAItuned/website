@@ -58,16 +58,16 @@ export const BADGE_DEFINITIONS: Badge[] = [
     },
 
     // ==========================================
-    // IMPACT (PERFORMANCE) BADGES - Rolling 90d
+    // Impact Writer (PERFORMANCE) BADGES - Rolling 90d
     // ==========================================
     {
         id: 'bronze-impact',
         category: 'impact',
         tier: 'bronze',
-        name: { en: 'Bronze Impact', it: 'Bronze Impact' },
+        name: { en: 'Bronze Impact Writer', it: 'Bronze Impact Writer' },
         description: {
-            en: '500+ Qualified Reads across all articles',
-            it: '500+ Letture Qualificate su tutti gli articoli'
+            en: '500+ Qualified Reads in one article',
+            it: '500+ Letture Qualificate in un articolo'
         },
         icon: 'bronze-impact',
         criteria: [{ label: 'Qualified Reads', value: '500+' }],
@@ -77,10 +77,10 @@ export const BADGE_DEFINITIONS: Badge[] = [
         id: 'silver-impact',
         category: 'impact',
         tier: 'silver',
-        name: { en: 'Silver Impact', it: 'Silver Impact' },
+        name: { en: 'Silver Impact Writer', it: 'Silver Impact Writer' },
         description: {
-            en: '2,000+ Qualified Reads across all articles',
-            it: '2.000+ Letture Qualificate su tutti gli articoli'
+            en: '2,000+ Qualified Reads in one article',
+            it: '2.000+ Letture Qualificate in un articolo'
         },
         icon: 'silver-impact',
         criteria: [{ label: 'Qualified Reads', value: '2K+' }],
@@ -90,10 +90,10 @@ export const BADGE_DEFINITIONS: Badge[] = [
         id: 'gold-impact',
         category: 'impact',
         tier: 'gold',
-        name: { en: 'Gold Impact', it: 'Gold Impact' },
+        name: { en: 'Gold Impact Writer', it: 'Gold Impact Writer' },
         description: {
-            en: '5,000+ Qualified Reads across all articles',
-            it: '5,000+ Letture Qualificate su tutti gli articoli'
+            en: '5,000+ Qualified Reads in one article',
+            it: '5,000+ Letture Qualificate in un articolo'
         },
         icon: 'gold-impact',
         criteria: [{ label: 'Qualified Reads', value: '5K+' }],
@@ -116,46 +116,63 @@ export const BADGE_DEFINITIONS: Badge[] = [
     //     criteria: [{ label: 'Editorial Verification', value: 'Verified' }],
     //     thresholds: {} // Manual award
     // },
-    {
-        id: 'reader-favorite',
-        category: 'quality',
-        tier: 'special',
-        name: { en: 'Reader Favorite', it: 'Reader Favorite' },
-        description: {
-            en: 'Top 10% highest completion rate',
-            it: 'Top 10% tasso di completamento'
-        },
-        icon: 'reader-favorite',
-        criteria: [
-            { label: 'Completion Rate', value: 'Top 10%' },
-            { label: 'Min. Reads', value: '100' }
-        ],
-        thresholds: { topPercentile: 10 }
-    },
-    {
-        id: 'specialist-rag',
-        category: 'quality',
-        tier: 'special',
-        name: { en: 'RAG Specialist', it: 'RAG Specialist' },
-        description: {
-            en: 'Expert knowledge in Retrieval Augmented Generation',
-            it: 'Esperto in Retrieval Augmented Generation'
-        },
-        icon: 'specialist-rag',
-        criteria: [{ label: 'RAG Articles', value: '3+' }],
-        thresholds: { topicArticleCount: 3, topic: 'RAG' }
-    },
-    {
-        id: 'specialist-agents',
-        category: 'quality',
-        tier: 'special',
-        name: { en: 'AI Agents Specialist', it: 'AI Agents Specialist' },
-        description: {
-            en: 'Expert knowledge in AI Agents & Orchestration',
-            it: 'Esperto in AI Agents & Orchestration'
-        },
-        icon: 'specialist-agents',
-        criteria: [{ label: 'AI Agents Articles', value: '3+' }],
-        thresholds: { topicArticleCount: 3, topic: 'AI Agents' }
-    }
+    // {
+    //     id: 'reader-favorite',
+    //     category: 'quality',
+    //     tier: 'special',
+    //     name: { en: 'Reader Favorite', it: 'Reader Favorite' },
+    //     description: {
+    //         en: 'Top 10% highest completion rate',
+    //         it: 'Top 10% tasso di completamento'
+    //     },
+    //     icon: 'reader-favorite',
+    //     criteria: [
+    //         { label: 'Completion Rate', value: 'Top 10%' },
+    //         { label: 'Min. Reads', value: '100' }
+    //     ],
+    //     thresholds: { topPercentile: 10 }
+    // },
+    // {
+    //     id: 'specialist-rag',
+    //     category: 'quality',
+    //     tier: 'special',
+    //     name: { en: 'RAG Specialist', it: 'RAG Specialist' },
+    //     description: {
+    //         en: 'Expert knowledge in Retrieval Augmented Generation',
+    //         it: 'Esperto in Retrieval Augmented Generation'
+    //     },
+    //     icon: 'specialist-rag',
+    //     criteria: [{ label: 'RAG Articles', value: '3+' }],
+    //     thresholds: { topicArticleCount: 3, topic: 'RAG' }
+    // },
+    // {
+    //     id: 'specialist-agents',
+    //     category: 'quality',
+    //     tier: 'special',
+    //     name: { en: 'AI Agents Specialist', it: 'AI Agents Specialist' },
+    //     description: {
+    //         en: 'Expert knowledge in AI Agents & Orchestration',
+    //         it: 'Esperto in AI Agents & Orchestration'
+    //     },
+    //     icon: 'specialist-agents',
+    //     criteria: [{ label: 'AI Agents Articles', value: '3+' }],
+    //     thresholds: { topicArticleCount: 3, topic: 'AI Agents' }
+    // }
+];
+
+/**
+ * Manual badge display order by badge id.
+ * Badges not listed will appear after the ordered set.
+ */
+export const BADGE_DISPLAY_ORDER: Badge['id'][] = [
+    'contributor',
+    'bronze-writer',
+    'silver-writer',
+    'gold-writer',
+    'bronze-impact',
+    'silver-impact',
+    'gold-impact',
+    'reader-favorite',
+    'specialist-rag',
+    'specialist-agents'
 ];

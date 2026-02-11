@@ -92,3 +92,20 @@ export async function getAllContributions(status?: string): Promise<Contribution
         return dateB - dateA;
     });
 }
+
+export async function checkUserHasAgreement(userId: string): Promise<boolean> {
+    const db = getAdminDb();
+    // Check for contributions where agreement.checkbox_general is true
+    const snapshot = await db.collection(COLLECTION)
+        .where('contributorId', '==', userId)
+        .get();
+
+    // Iterate to find any valid agreement
+    // (We do client-side filtering because Firestore limited queries might be tricky with nested fields depending on indexes)
+    const hasAgreement = snapshot.docs.some(doc => {
+        const data = doc.data() as Contribution;
+        return data.agreement?.checkbox_general === true || data.agreement?.agreed === true;
+    });
+
+    return hasAgreement;
+}

@@ -9,19 +9,49 @@ import { motion, AnimatePresence } from 'framer-motion'
 interface AgreementModalProps {
     isOpen: boolean
     onClose: () => void
+    agreementData?: {
+        legalName: string
+        agreedAt: string
+        version: string
+    }
 }
 
-export function AgreementModal({ isOpen, onClose }: AgreementModalProps) {
+export function AgreementModal({ isOpen, onClose, agreementData }: AgreementModalProps) {
     const { user } = useAuth()
     const { locale } = useLearnLocale()
     const [agreementText, setAgreementText] = useState('')
+    const [sendingEmail, setSendingEmail] = useState(false)
+    const [emailSent, setEmailSent] = useState(false)
     const language = (locale as 'it' | 'en') || 'it'
+
+    const handleSendCopy = async () => {
+        if (!user || sendingEmail) return
+        setSendingEmail(true)
+        try {
+            const res = await fetch('/api/account/send-agreement-copy', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${await user.getIdToken()}`
+                }
+            })
+            if (res.ok) {
+                setEmailSent(true)
+                setTimeout(() => setEmailSent(false), 5000)
+            }
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setSendingEmail(false)
+        }
+    }
 
     useEffect(() => {
         if (!isOpen) return
 
         const fetchAgreement = async () => {
             try {
+                // Determine which version to fetch. If agreementData provides a version (e.g. 1.0), we might want that.
+                // For now, we fetch current, but use historical names/dates.
                 const filename = language === 'it' ? 'contributor-agreement.md' : 'contributor-agreement.en.md'
                 const res = await fetch(`/assets/staituned/contributors/article-writing/${filename}`)
                 if (res.ok) {
@@ -39,9 +69,11 @@ export function AgreementModal({ isOpen, onClose }: AgreementModalProps) {
         if (!agreementText) return ''
         let text = agreementText
 
-        const nameDisplay = user?.displayName ? `**${user.displayName}**` : '____(Nome Cognome)____'
+        const nameDisplay = agreementData?.legalName || (user?.displayName ? `**${user.displayName}**` : '____(Nome Cognome)____')
         const emailDisplay = user?.email ? `**${user.email}**` : '____(Email)____'
-        const dateDisplay = new Date().toLocaleDateString(language === 'it' ? 'it-IT' : 'en-US')
+        const dateDisplay = agreementData?.agreedAt
+            ? new Date(agreementData.agreedAt).toLocaleDateString(language === 'it' ? 'it-IT' : 'en-US')
+            : new Date().toLocaleDateString(language === 'it' ? 'it-IT' : 'en-US')
 
         // Replace placeholders common in the body
         text = text.replace(/{Nome Cognome}/g, nameDisplay)
@@ -66,12 +98,12 @@ export function AgreementModal({ isOpen, onClose }: AgreementModalProps) {
             `**Editore (stAItuned / Daniele Moltisanti)**: Daniele Moltisanti Data: **${dateDisplay}**`
         )
         text = text.replace(
-            /\*\*Publisher \(stAItuned \/ Daniele Moltisanti\)\*\*: _{5,} Date: _{5,}/g,
-            `**Publisher (stAItuned / Daniele Moltisanti)**: Daniele Moltisanti Date: **${dateDisplay}**`
+            /\*\*Publisher \(stAItuned \/ Daniele Moltisanti\)\*\*: _{5,} Data: _{5,}/g,
+            `**Publisher (stAItuned / Daniele Moltisanti)**: Daniele Moltisanti Data: **${dateDisplay}**`
         )
 
         return text
-    }, [agreementText, user, language])
+    }, [agreementText, user, language, agreementData])
 
     // Prevent body scroll when open
     useEffect(() => {
@@ -126,12 +158,32 @@ export function AgreementModal({ isOpen, onClose }: AgreementModalProps) {
                             </div>
 
                             {/* Footer */}
-                            <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex justify-end">
+                            <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                {agreementData && (
+                                    <button
+                                        onClick={handleSendCopy}
+                                        disabled={sendingEmail}
+                                        className="text-xs font-bold text-primary-600 hover:text-primary-700 dark:text-primary-400 disabled:opacity-50 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all"
+                                    >
+                                        <svg className={`w-4 h-4 ${sendingEmail ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            {sendingEmail ? (
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            ) : (
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            )}
+                                        </svg>
+                                        {sendingEmail
+                                            ? (language === 'it' ? 'Invio in corso...' : 'Sending...')
+                                            : (emailSent
+                                                ? (language === 'it' ? 'Copia Inviata!' : 'Copy Sent!')
+                                                : (language === 'it' ? 'Invia copia via email' : 'Send copy via email'))}
+                                    </button>
+                                )}
                                 <button
                                     onClick={onClose}
-                                    className="px-6 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl hover:opacity-90 transition"
+                                    className="w-full sm:w-auto px-8 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl hover:opacity-90 transition shadow-lg shadow-slate-900/10"
                                 >
-                                    Close
+                                    {language === 'it' ? 'Chiudi' : 'Close'}
                                 </button>
                             </div>
                         </div>

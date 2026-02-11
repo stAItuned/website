@@ -42,8 +42,8 @@ export function StepDraftSubmission({ contribution, onNext, translations }: Step
                     <button
                         onClick={() => setHasDraft(true)}
                         className={`p-4 rounded-xl border-2 transition-all font-bold ${hasDraft === true
-                                ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
+                            : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                             }`}
                     >
                         {translations.yesOption || 'Sì, ho il testo'}
@@ -51,8 +51,8 @@ export function StepDraftSubmission({ contribution, onNext, translations }: Step
                     <button
                         onClick={() => setHasDraft(false)}
                         className={`p-4 rounded-xl border-2 transition-all font-bold ${hasDraft === false
-                                ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
-                                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                            ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300'
+                            : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                             }`}
                     >
                         {translations.noOption || 'No, devo scriverlo'}
@@ -66,24 +66,25 @@ export function StepDraftSubmission({ contribution, onNext, translations }: Step
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="space-y-4 overflow-hidden"
+                            className="space-y-6 text-center"
                         >
-                            <textarea
-                                value={draftContent}
-                                onChange={(e) => setDraftContent(e.target.value)}
-                                placeholder={translations.placeholder || "Incolla qui il tuo contenuto..."}
-                                rows={12}
-                                className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-none"
-                            />
-                            <div className="flex justify-end">
-                                <button
-                                    onClick={handleSubmit}
-                                    disabled={!draftContent.trim()}
-                                    className="px-8 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg"
+                            <div className="bg-primary-50 dark:bg-primary-900/10 p-6 rounded-xl border border-primary-200 dark:border-primary-800">
+                                <p className="text-slate-700 dark:text-slate-300 mb-4">
+                                    {translations.editorDesc || 'Abbiamo creato un editor dedicato per la tua bozza. Clicca qui sotto per aprirlo a schermo intero.'}
+                                </p>
+                                <a
+                                    href={`/contribute/draft?id=${contribution.id}`}
+                                    target="_blank"
+                                    className="inline-flex items-center px-8 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 transition shadow-lg gap-2"
                                 >
-                                    {translations.submitDraft || 'Invia Bozza'} ➤
-                                </button>
+                                    {translations.openEditor || 'Apri Editor'}
+                                    <span className="text-xl">↗</span>
+                                </a>
                             </div>
+
+                            <p className="text-sm text-slate-500">
+                                {translations.afterEditor || 'Dopo aver inviato la bozza dall\'editor, questa pagina si aggiornerà automaticamente.'}
+                            </p>
                         </motion.div>
                     )}
 

@@ -175,17 +175,8 @@ export function MyArticles({ userEmail }: MyArticlesProps) {
 
     return (
         <>
-            <div id="my-articles-section" className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-8">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                    <div>
-                        <h2 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent dark:text-white dark:bg-none">
-                            {t_dash.title || 'My Contributions'}
-                        </h2>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
-                            {locale === 'it' ? 'Gestisci i tuoi articoli pubblicati e le bozze in corso' : 'Manage your published articles and ongoing drafts'}
-                        </p>
-                    </div>
-
+            <div id="my-articles-section">
+                <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center mb-6 gap-4">
                     <div className="flex bg-gray-100 dark:bg-slate-700 p-1 rounded-lg">
                         <button
                             onClick={() => setActiveTab('published')}
@@ -262,6 +253,7 @@ export function MyArticles({ userEmail }: MyArticlesProps) {
                                                     alt={article.title}
                                                     fill
                                                     className="object-cover"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                 />
                                             ) : (
                                                 <div className="w-full h-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">

@@ -359,6 +359,7 @@ export function RoleFitHowItWorks() {
                             fill
                             className="object-contain"
                             quality={100}
+                            sizes="100vw"
                         />
                         <button
                             className="absolute top-4 right-4 text-white/70 hover:text-white bg-black/50 hover:bg-black/70 rounded-full p-2 backdrop-blur-sm transition-all"

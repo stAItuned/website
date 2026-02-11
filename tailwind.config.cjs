@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     fontFamily: {
       //serif: 'Roboto Serif, serif',
-      sans: 'Montserrat, sans-serif'
+      sans: ['var(--font-montserrat)', 'sans-serif']
       //mono: 'JetBrains Mono, monospace'
     },
     screens: {

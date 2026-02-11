@@ -1,14 +1,28 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useAuth } from '@/components/auth/AuthContext'
+import { useEffect, useMemo, useState } from 'react'
+import type { ComponentProps } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import { useAuth } from '@/components/auth/AuthContext'
 import { app } from '@/lib/firebase/client'
 import { allPosts } from '@/lib/contentlayer'
 import { ArticleCard } from '@/components/ArticleCard'
-import Link from 'next/link'
+import { BookMarked, Compass, Home, Sparkles } from 'lucide-react'
 
+type ArticlePreview = ComponentProps<typeof ArticleCard>['article']
+
+const isArticlePreview = (value: unknown): value is ArticlePreview => {
+  if (!value || typeof value !== 'object') return false
+  const maybe = value as { slug?: unknown; title?: unknown }
+  return typeof maybe.slug === 'string' && typeof maybe.title === 'string'
+}
+
+/**
+ * Displays user bookmark collection with quick navigation actions.
+ */
 export default function BookmarksPage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
@@ -16,15 +30,12 @@ export default function BookmarksPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Redirect to signin if not authenticated
     if (!authLoading && !user) {
-      // Store current URL for redirect after login
       localStorage.setItem('redirectAfterLogin', '/bookmarks')
       router.push('/signin')
       return
     }
 
-    // Fetch user's bookmarks
     const fetchBookmarks = async () => {
       if (!user) return
 
@@ -49,17 +60,23 @@ export default function BookmarksPage() {
     }
   }, [user, authLoading, router])
 
-  // Get bookmarked articles
-  const bookmarkedArticles = allPosts.filter((article: any) =>
-    bookmarks.includes(article.slug)
-  )
+  const bookmarkedArticles = useMemo(() => {
+    const allPostsList = Array.isArray(allPosts)
+      ? (allPosts as unknown[]).filter(isArticlePreview)
+      : []
 
-  if (authLoading || loading) {
+    return allPostsList.filter((article) => bookmarks.includes(article.slug))
+  }, [bookmarks])
+
+  if (authLoading || loading || !user) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-32 pb-16">
+      <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 pt-32 pb-16 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
         <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-200 border-t-primary-600"></div>
+          <div className="flex min-h-[400px] items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Loading your bookmarks...</p>
+            </div>
           </div>
         </div>
       </main>
@@ -67,145 +84,114 @@ export default function BookmarksPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-32 pb-16">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-                My Bookmarks
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
-                {bookmarkedArticles.length}{' '}
-                {bookmarkedArticles.length === 1 ? 'article' : 'articles'} saved
-              </p>
-            </div>
-          </div>
+    <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-primary-50 via-white to-secondary-50 pt-32 pb-16 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-primary-200/40 blur-3xl dark:bg-primary-900/30" />
+        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-secondary-200/50 blur-3xl dark:bg-secondary-900/20" />
+      </div>
 
-          {user && (
-            <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-              <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+      <div className="container relative mx-auto max-w-6xl px-4">
+        <div className="mb-10">
+          <Link
+            href="/account/settings"
+            className="inline-flex items-center gap-2 text-sm text-slate-600 transition-colors hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-300"
+          >
+            <Home className="h-4 w-4" />
+            Back to Account
+          </Link>
+
+          <div className="mt-5 rounded-3xl border border-slate-200/70 bg-white/90 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/80 md:p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white">
+                  <BookMarked className="h-6 w-6" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Bookmarks</h1>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                    {bookmarkedArticles.length} {bookmarkedArticles.length === 1 ? 'article' : 'articles'} saved for later
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/learn"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-200 hover:text-primary-600 hover:shadow-md sm:w-auto dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                >
+                  <Compass className="h-4 w-4" />
+                  Explore articles
+                </Link>
+                <Link
+                  href="/account/settings"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary-600 to-secondary-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:w-auto"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Account settings
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900">
                 {user.photoURL ? (
-                  <img
+                  <Image
                     src={user.photoURL}
                     alt={user.displayName || 'User'}
-                    className="w-8 h-8 rounded-full"
+                    width={40}
+                    height={40}
+                    className="h-10 w-10 rounded-full object-cover"
                   />
                 ) : (
-                  <span className="text-primary-600 dark:text-primary-400 font-semibold">
+                  <span className="text-sm font-semibold text-primary-700 dark:text-primary-300">
                     {user.displayName?.charAt(0) || user.email?.charAt(0) || '?'}
                   </span>
                 )}
               </div>
               <span>{user.displayName || user.email}</span>
             </div>
-          )}
+          </div>
         </div>
 
-        {/* Content */}
         {bookmarkedArticles.length === 0 ? (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-12 text-center">
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
-              <svg
-                className="w-12 h-12 text-gray-400 dark:text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                />
-              </svg>
+          <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-12 text-center shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/80">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-300">
+              <BookMarked className="h-10 w-10" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-              No bookmarks yet
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-              Start saving articles you want to read later by clicking the bookmark
-              icon while reading an article.
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">No bookmarks yet</h2>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+              Save articles you want to read later. Just tap the bookmark icon on any article page.
             </p>
             <Link
               href="/learn"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary-600 to-secondary-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                />
-              </svg>
-              Explore Articles
+              <Compass className="h-4 w-4" />
+              Discover content
             </Link>
           </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {bookmarkedArticles.map((article: any) => (
-              <ArticleCard
-                key={article.slug}
-                article={article}
-              />
+            {bookmarkedArticles.map((article) => (
+              <ArticleCard key={article.slug} article={article} />
             ))}
           </div>
         )}
 
-        {/* Tips */}
-        {bookmarkedArticles.length > 0 && (
-          <div className="mt-12 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-slate-800 dark:to-slate-800 rounded-xl p-6 border border-primary-200 dark:border-slate-700">
+        {bookmarkedArticles.length > 0 ? (
+          <div className="mt-10 rounded-2xl border border-primary-200/70 bg-primary-50/70 p-6 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-primary-600 dark:text-primary-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-300">
+                <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Pro Tip
-                </h3>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Your bookmarks are synced across all your devices. You can remove
-                  bookmarks by clicking the bookmark icon again while reading the
-                  article.
+                <h3 className="font-semibold text-slate-900 dark:text-white">Pro tip</h3>
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  Your bookmarks sync across devices. Remove a bookmark by tapping the icon again while reading the article.
                 </p>
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </main>
   )

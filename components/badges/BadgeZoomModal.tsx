@@ -46,7 +46,7 @@ export function BadgeZoomModal({ badge, className, authorName, earnedBadge }: Ba
                         width={300}
                         height={330}
                         className="drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
-                        style={{ maxWidth: '100%', height: 'auto' }}
+                        style={{ maxWidth: '100%', width: 'auto', height: 'auto' }}
                         priority
                         onError={(e) => {
                             e.currentTarget.src = "/badges/contributor.png"
@@ -120,7 +120,7 @@ export function BadgeZoomModal({ badge, className, authorName, earnedBadge }: Ba
                                         width={500}
                                         height={550}
                                         className="drop-shadow-2xl mx-auto"
-                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                        style={{ maxWidth: '100%', width: 'auto', height: 'auto' }}
                                         priority
                                         onError={(e) => {
                                             e.currentTarget.src = "/badges/contributor.png"

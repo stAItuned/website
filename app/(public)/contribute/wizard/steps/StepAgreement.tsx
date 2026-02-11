@@ -21,6 +21,7 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
     const [legalName, setLegalName] = useState('')
     const [fiscalCode, setFiscalCode] = useState('')
     const [agreed, setAgreed] = useState(false)
+    const [specificApproval, setSpecificApproval] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState('')
 
@@ -61,8 +62,12 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
 
         // Replace placeholders common in the body
         text = text.replace(/{Nome Cognome}/g, nameDisplay)
-        text = text.replace(/CF {…}/g, `CF ${cfDisplay}`)
+        text = text.replace(/{First Name Last Name}/g, nameDisplay)
+        text = text.replace(/CF {…}/g, '') // Remove if still present
+        text = text.replace(/Tax ID\/SSN {…}/g, '') // Remove if still present
         text = text.replace(/email {…}/g, `email ${emailDisplay}`)
+        text = text.replace(/{Data}/g, `**${dateDisplay}**`)
+        text = text.replace(/{Date}/g, `**${dateDisplay}**`)
         text = text.replace(/{…}/g, `____`)
 
         // Signatures Auto-fill
@@ -117,11 +122,13 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
                         currentStep: 'agreement',
                         status: path === 'autonomy' ? 'draft' : 'pitch',
                         agreement: {
-                            agreed: true,
-                            agreedAt: new Date().toISOString(),
-                            legalName: legalName,
-                            fiscalCode: fiscalCode,
-                            version: '1.0'
+                            checkbox_general: agreed,
+                            checkbox_1341: specificApproval,
+                            accepted_at: new Date().toISOString(),
+                            author_name: legalName,
+                            author_email: user.email || '',
+                            fiscal_code: fiscalCode,
+                            agreement_version: '1.1'
                         }
                     }
                 })
@@ -141,7 +148,8 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
                     agreement: {
                         agreed: true,
                         legalName: legalName,
-                        fiscalCode: fiscalCode
+                        fiscalCode: fiscalCode,
+                        specificApproval: true
                     }
                 }
                 onNext(contribution)
@@ -206,74 +214,60 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
             </div>
 
             {/* Compact Action Bar - Floating at Bottom */}
-            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-5xl px-6 z-50">
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl p-6 md:py-6 md:px-10 rounded-[2.5rem] border border-white/20 dark:border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] space-y-4 ring-1 ring-slate-900/5 dark:ring-white/5">
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6 z-50">
+                <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-3xl p-4 md:py-4 md:px-8 rounded-[2rem] border border-white/20 dark:border-white/10 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] space-y-3 ring-1 ring-slate-900/5 dark:ring-white/5">
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
-                        {/* Legal Name Input */}
-                        <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 ml-1">
-                                {translations.legalName}
-                            </label>
-                            <input
-                                type="text"
-                                value={legalName}
-                                onChange={(e) => setLegalName(e.target.value)}
-                                className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-sm font-bold text-slate-900 dark:text-white"
-                                placeholder="Nome Cognome"
-                            />
-                        </div>
-
-                        {/* Fiscal Code Input */}
-                        <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 ml-1">
-                                {translations.fiscalCode}
-                            </label>
-                            <input
-                                type="text"
-                                value={fiscalCode}
-                                onChange={(e) => setFiscalCode(e.target.value.toUpperCase())}
-                                className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all text-sm font-bold uppercase text-slate-900 dark:text-white"
-                                placeholder={language === 'it' ? "Codice Fiscale" : "Tax ID"}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 border-t border-slate-100 dark:border-white/5">
-                        <label className="flex items-center gap-4 cursor-pointer group/label">
-                            <div className="relative flex items-center justify-center">
-                                <input
-                                    type="checkbox"
-                                    checked={agreed}
-                                    onChange={(e) => setAgreed(e.target.checked)}
-                                    className="peer h-6 w-6 cursor-pointer appearance-none rounded-lg border-2 border-slate-200 dark:border-slate-800 checked:bg-amber-500 checked:border-amber-500 transition-all"
-                                />
-                                <svg className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-sm font-bold text-slate-600 dark:text-slate-300 select-none group-hover/label:text-amber-600 transition-colors leading-tight">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 flex-grow">
+                            {/* General Consent */}
+                            <label className="flex items-center gap-2 cursor-pointer group/label">
+                                <div className="relative flex items-center justify-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={agreed}
+                                        onChange={(e) => setAgreed(e.target.checked)}
+                                        className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-slate-300 dark:border-slate-700 checked:bg-amber-500 checked:border-amber-500 transition-all"
+                                    />
+                                    <svg className="absolute h-3 w-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 select-none group-hover/label:text-amber-600 transition-colors leading-tight">
                                     {translations.checkbox}
                                 </span>
-                                {translations.adminDisclaimer && (
-                                    <span className="text-xs text-slate-400 dark:text-slate-500 leading-tight">
-                                        {translations.adminDisclaimer}
-                                    </span>
-                                )}
-                            </div>
-                        </label>
+                            </label>
 
-                        <div className="flex items-center gap-6">
+                            {/* Specific Approval (Art. 1341) */}
+                            <label className="flex items-center gap-2 cursor-pointer group/label">
+                                <div className="relative flex items-center justify-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={specificApproval}
+                                        onChange={(e) => setSpecificApproval(e.target.checked)}
+                                        className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-slate-300 dark:border-slate-700 checked:bg-amber-500 checked:border-amber-500 transition-all"
+                                    />
+                                    <svg className="absolute h-3 w-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 select-none group-hover/label:text-amber-600 transition-colors leading-tight">
+                                    {language === 'it'
+                                        ? "Approvazione clausole (art. 1341 c.c.)"
+                                        : "Approval of clauses (art. 1341 Civil Code)"}
+                                </span>
+                            </label>
+                        </div>
+
+                        <div className="flex items-center gap-4 flex-shrink-0">
                             {error && (
-                                <p className="text-[10px] text-red-500 font-black uppercase tracking-tight max-w-[150px] leading-tight text-right">
+                                <p className="text-[10px] text-red-500 font-bold uppercase tracking-tight max-w-[120px] leading-tight text-right">
                                     {error}
                                 </p>
                             )}
                             <button
                                 onClick={handleAgreeAndContinue}
-                                disabled={!agreed || !legalName.trim() || isSaving}
-                                className="px-12 py-4 rounded-2xl stai-btn-gradient text-sm shadow-xl shadow-amber-500/20 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed whitespace-nowrap min-w-[180px]"
+                                disabled={!agreed || !specificApproval || isSaving}
+                                className="px-6 py-2.5 rounded-xl stai-btn-gradient text-[11px] font-bold shadow-lg shadow-amber-500/10 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed whitespace-nowrap"
                             >
                                 {isSaving ? 'Salvataggio...' : translations.cta}
                             </button>

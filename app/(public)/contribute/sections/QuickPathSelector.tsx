@@ -9,9 +9,10 @@ interface QuickPathSelectorProps {
     paths: any
     lang: string
     onPathSelected?: (pathKey: string | null) => void
+    autonomyHref: string
 }
 
-export function QuickPathSelector({ translations: t, paths, lang, onPathSelected }: QuickPathSelectorProps) {
+export function QuickPathSelector({ translations: t, paths, lang, onPathSelected, autonomyHref }: QuickPathSelectorProps) {
     const [step, setStep] = useState(1)
     const [answers, setAnswers] = useState({ hasDraft: false, preference: '', needsHelp: false })
 
@@ -183,7 +184,7 @@ export function QuickPathSelector({ translations: t, paths, lang, onPathSelected
                                 </span>
                             </div>
                             <Link
-                                href={`/contribute/wizard?path=${resultKey}&lang=${lang}`}
+                                href={resultKey === 'autonomy' ? autonomyHref : `/contribute/wizard?path=${resultKey}&lang=${lang}`}
                                 className="px-5 py-1.5 rounded-full stai-btn-gradient text-sm font-bold shadow-md active:scale-95 transition-all"
                             >
                                 {selectedPath.cta} →

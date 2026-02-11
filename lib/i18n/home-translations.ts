@@ -192,7 +192,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pain: "Contenuti pratici scritti da chi lavora con l'AI ogni giorno. **Zero hype**, solo ciò che funziona davvero",
             mission: "Aggiornati. Specializzati. Costruisci.",
             ctaArticles: "Inizia a leggere",
-            ctaCareerOS: "Lancia la tua carriera",
+            ctaCareerOS: "Scopri come Contribuire",
             stats: {
                 articles: "Articoli",
                 contributors: "Contributors",
@@ -212,7 +212,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
                 careerOS: {
                     title: "🚀 Lancia la tua carriera con Career OS",
                     description: "Smetti di inviare CV nel vuoto. Un percorso di **mentoring pratico** per costruire la tua carriera nell'AI in *8 settimane*, con **prove concrete** da aggiungere al tuo portfolio.",
-                    cta: "Lancia la tua carriera"
+                    cta: "Contribuisci"
                 },
                 practitionerLed: {
                     title: "✍️ Practitioner-led",
@@ -390,7 +390,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pain: "Practical content written by AI practitioners. **Zero hype**, only what actually works.",
             mission: "Stay Updated. Specialize. Build.",
             ctaArticles: "Start Reading",
-            ctaCareerOS: "Launch Your Career",
+            ctaCareerOS: "Discover how to Contribute",
             stats: {
                 articles: "Articles",
                 contributors: "Contributors",

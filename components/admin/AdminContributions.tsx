@@ -108,15 +108,15 @@ export function AdminContributions() {
                                             <div className="text-sm">
                                                 <div className="font-medium text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
                                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                                    {contribution.agreement?.legalName}
+                                                    {contribution.agreement?.author_name}
                                                 </div>
-                                                {contribution.agreement?.fiscalCode && (
+                                                {contribution.agreement?.fiscal_code && (
                                                     <div className="text-xs text-slate-500 font-mono">
-                                                        {contribution.agreement?.fiscalCode}
+                                                        {contribution.agreement?.fiscal_code}
                                                     </div>
                                                 )}
                                                 <div className="text-[10px] text-slate-400">
-                                                    {contribution.agreement?.agreedAt && new Date(contribution.agreement.agreedAt).toLocaleDateString()}
+                                                    {contribution.agreement?.accepted_at && new Date(contribution.agreement.accepted_at).toLocaleDateString()}
                                                 </div>
                                             </div>
                                         ) : (

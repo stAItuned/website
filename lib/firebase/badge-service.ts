@@ -99,3 +99,34 @@ export async function hasBadge(authorSlug: string, badgeId: string): Promise<boo
 
     return doc.exists;
 }
+
+/**
+ * Ensure a badge has a pending email status (used for backfilling).
+ */
+export async function markBadgeEmailPending(authorSlug: string, badgeId: string): Promise<void> {
+    const db = getAdminDb();
+    await db
+        .collection(BADGES_COLLECTION)
+        .doc(authorSlug)
+        .collection('earned')
+        .doc(badgeId)
+        .set({ emailStatus: 'pending' }, { merge: true });
+}
+
+/**
+ * Get all evidence for a specific credential
+ */
+export async function getEvidenceByCredentialId(credentialId: string): Promise<BadgeEvidence[]> {
+    try {
+        const db = getAdminDb();
+        const snapshot = await db
+            .collection(EVIDENCE_COLLECTION)
+            .where('credentialId', '==', credentialId)
+            .get();
+
+        return snapshot.docs.map(doc => doc.data() as BadgeEvidence);
+    } catch (error) {
+        console.error(`Error fetching evidence for ${credentialId}:`, error);
+        return [];
+    }
+}

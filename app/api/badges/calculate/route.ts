@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { allPosts } from '@/lib/contentlayer';
 import { getAuthorData } from '@/lib/authors';
-import { getAuthorBadges, awardBadge } from '@/lib/firebase/badge-service';
+import { getAuthorBadges, awardBadge, markBadgeEmailPending } from '@/lib/firebase/badge-service';
+import { fetchMultipleArticlesAnalytics } from '@/lib/analytics-server';
 import { calculateEligibleBadges } from '@/lib/badges/badge-calculator';
 
 export const dynamic = 'force-dynamic'; // Defaults to auto, but we want to ensure it runs dynamically if verified
@@ -41,27 +42,38 @@ export async function GET(request: NextRequest) {
             const slug = authorName.replaceAll(' ', '-');
             const existingBadges = await getAuthorBadges(slug);
             const existingIds = existingBadges.map(b => b.badgeId);
+            const missingEmailStatus = existingBadges.filter(b => !b.emailStatus);
 
             // Build Context
             const authorArticles = allPosts.filter(p => p.author === authorName && p.published !== false);
+            const analyticsBySlug = await fetchMultipleArticlesAnalytics(authorArticles.map(a => a.slug));
 
             // Transform articles to metrics format expected by calculator
-            // Note: In a real app we would fetch GA4 data here. 
-            // For MVP/Dev, we mock analytics or use basic metadata if available.
             const context = {
                 slug,
-                articles: authorArticles.map(a => ({
-                    slug: a.slug,
-                    publishedAt: a.date,
-                    topic: a.topic, // Assuming topic exists on post or needs extraction
-                    analytics: {
-                        pageViews: 100, // Mock: Replace with real GA fetch
-                        avgTimeOnPage: 45 // Mock: Replace with real GA fetch
-                    }
-                }))
+                articles: authorArticles.map(a => {
+                    const analytics = analyticsBySlug[a.slug] ?? { pageViews: 0, avgTimeOnPage: 0 };
+                    return {
+                        slug: a.slug,
+                        title: a.title,
+                        url: a.url,
+                        publishedAt: a.date,
+                        topic: a.topic,
+                        analytics: {
+                            pageViews: analytics.pageViews,
+                            avgTimeOnPage: analytics.avgTimeOnPage
+                        }
+                    };
+                })
             };
 
             const eligible = calculateEligibleBadges(context, existingIds);
+
+            if (missingEmailStatus.length > 0) {
+                await Promise.all(
+                    missingEmailStatus.map(badge => markBadgeEmailPending(slug, badge.badgeId))
+                );
+            }
 
             if (eligible.length > 0) {
                 for (const { badge, evidence } of eligible) {

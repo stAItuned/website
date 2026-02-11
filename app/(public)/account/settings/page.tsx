@@ -1,23 +1,51 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useAuth } from '@/components/auth/AuthContext'
-import { useRouter } from 'next/navigation'
+import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'
+import { useAuth } from '@/components/auth/AuthContext'
 import { app } from '@/lib/firebase/client'
-import Link from 'next/link'
-import { MyArticles } from '@/components/account/MyArticles'
-import { CostMonitoringDashboard } from '@/components/admin/CostMonitoringDashboard'
-import { isAdmin } from '@/lib/firebase/admin-emails'
+import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { AgreementModal } from '@/components/account/AgreementModal'
-import { AdminBadgeControls } from '@/components/admin/AdminBadgeControls'
-import { AdminContributions } from '@/components/admin/AdminContributions'
-import { AdminRoleFitSubmissions } from '@/components/admin/AdminRoleFitSubmissions'
+import { AccountSettingsLoading } from '@/components/account/settings/AccountSettingsLoading'
+import { AccountSettingsShell } from '@/components/account/settings/AccountSettingsShell'
+import { DeleteAccountModal, DeleteDataModal } from '@/components/account/settings/AccountSettingsModals'
+import { isAdmin } from '@/lib/firebase/admin-emails'
 
-export default function AccountSettingsPage() {
+interface FirestoreTimestampLike {
+  seconds: number
+  nanoseconds: number
+}
+
+interface UserData {
+  createdAt?: string | number | Date | FirestoreTimestampLike | { toDate: () => Date }
+  bookmarks?: string[]
+}
+
+const resolveMemberSince = (createdAt?: UserData['createdAt']) => {
+  if (!createdAt) return null
+  if (createdAt instanceof Date) return createdAt
+  if (typeof createdAt === 'string' || typeof createdAt === 'number') {
+    const parsed = new Date(createdAt)
+    return Number.isNaN(parsed.getTime()) ? null : parsed
+  }
+  if (typeof createdAt === 'object') {
+    const maybe = createdAt as { toDate?: () => Date; seconds?: number }
+    if (typeof maybe.toDate === 'function') return maybe.toDate()
+    if (typeof maybe.seconds === 'number') return new Date(maybe.seconds * 1000)
+  }
+  return null
+}
+
+/**
+ * Account settings content component that uses search params.
+ */
+function AccountSettingsContent() {
   const { user, loading: authLoading } = useAuth()
+  const { isWriter, loading: writerStatusLoading } = useWriterStatus()
   const router = useRouter()
-  const [userData, setUserData] = useState<any>(null)
+  const searchParams = useSearchParams()
+  const [userData, setUserData] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showDataDeleteConfirm, setShowDataDeleteConfirm] = useState(false)
@@ -25,27 +53,56 @@ export default function AccountSettingsPage() {
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
   const [showAgreement, setShowAgreement] = useState(false)
+  const [contributions, setContributions] = useState<any[]>([])
+  const [agreementData, setAgreementData] = useState<any>(null)
   const [activeAdminTab, setActiveAdminTab] = useState<'contributions' | 'role_fit'>('contributions')
+  const activeTab = searchParams.get('tab')
 
   useEffect(() => {
-    // Redirect to signin if not authenticated
+    if (activeTab === 'in_progress') {
+      const element = document.getElementById('contributor-section')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+        element.classList.add('ring-2', 'ring-primary-500', 'ring-offset-4')
+        setTimeout(() => {
+          element.classList.remove('ring-2', 'ring-primary-500', 'ring-offset-4')
+        }, 3000)
+      }
+    }
+  }, [activeTab])
+
+  useEffect(() => {
     if (!authLoading && !user) {
       localStorage.setItem('redirectAfterLogin', '/account/settings')
       router.push('/signin')
       return
     }
 
-    // Fetch user data
     const fetchUserData = async () => {
       if (!user) return
-
       try {
         const db = getFirestore(app)
         const userDocRef = doc(db, 'users', user.uid)
         const userDoc = await getDoc(userDocRef)
-
         if (userDoc.exists()) {
-          setUserData(userDoc.data())
+          setUserData(userDoc.data() as UserData)
+        }
+
+        // Fetch Contributions to get Agreement
+        const res = await fetch('/api/contributor/get-progress', {
+          headers: { 'Authorization': `Bearer ${await user.getIdToken()}` }
+        })
+        const json = await res.json()
+        if (json.success && json.contributions) {
+          setContributions(json.contributions)
+          // Find the latest contribution with an agreement
+          const latestWithAgreement = json.contributions
+            .filter((c: any) => c.agreement?.agreed)
+            .sort((a: any, b: any) => new Date(b.agreement.agreedAt).getTime() - new Date(a.agreement.agreedAt).getTime())[0]
+
+          if (latestWithAgreement) {
+            setAgreementData(latestWithAgreement.agreement)
+          }
         }
       } catch (error) {
         console.error('Error fetching user data:', error)
@@ -61,17 +118,12 @@ export default function AccountSettingsPage() {
 
   const handleDeleteData = async () => {
     if (!user) return
-
     setDeleting(true)
     setError('')
-
     try {
       const db = getFirestore(app)
       const userDocRef = doc(db, 'users', user.uid)
-
-      // Delete user data from Firestore
       await deleteDoc(userDocRef)
-
       setUserData(null)
       setShowDataDeleteConfirm(false)
       alert('Your data has been successfully deleted. Your account remains active.')
@@ -88,35 +140,20 @@ export default function AccountSettingsPage() {
       setError('Please type DELETE to confirm')
       return
     }
-
     setDeleting(true)
     setError('')
-
     try {
-      // First delete Firestore data
       const db = getFirestore(app)
       const userDocRef = doc(db, 'users', user.uid)
       await deleteDoc(userDocRef)
-
-      // Then delete the Firebase Auth account
       const response = await fetch('/api/account/delete', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.uid,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.uid }),
       })
-
-      if (!response.ok) {
-        throw new Error('Failed to delete account')
-      }
-
-      // Sign out and redirect
+      if (!response.ok) throw new Error('Failed to delete account')
       const { signOutUser } = await import('@/lib/firebase/auth')
       await signOutUser()
-
       router.push('/')
       alert('Your account has been permanently deleted.')
     } catch (error) {
@@ -127,320 +164,71 @@ export default function AccountSettingsPage() {
     }
   }
 
-  if (authLoading || loading) {
-    return (
-      <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-32 pb-16">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-200 border-t-primary-600"></div>
-          </div>
-        </div>
-      </main>
-    )
-  }
+  const memberSince = useMemo(() => resolveMemberSince(userData?.createdAt), [userData?.createdAt])
+  const bookmarksCount = userData?.bookmarks?.length ?? 0
+  const admin = Boolean(user?.email && isAdmin(user.email))
+
+  if (authLoading || loading || writerStatusLoading || !user) return <AccountSettingsLoading />
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-32 pb-16">
-      <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 mb-4 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </Link>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 bg-clip-text text-transparent mb-2">
-            Profile
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage your account data and privacy settings
-          </p>
-        </div>
-
-        {/* Account Info */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            Account Information
-          </h2>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              {user?.photoURL && (
-                <img
-                  src={user.photoURL}
-                  alt={user.displayName || 'User'}
-                  className="w-16 h-16 rounded-full border-2 border-primary-200"
-                />
-              )}
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
-                <p className="font-semibold text-gray-900 dark:text-white">{user?.displayName || 'Not set'}</p>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-              <p className="font-semibold text-gray-900 dark:text-white">{user?.email}</p>
-            </div>
-            {userData?.createdAt && (
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Member since</p>
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  {new Date(userData.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* My Articles (Only shows if user is an author) */}
-        {user?.email && <MyArticles userEmail={user.email} />}
-
-        {/* Cost Monitoring (Admin Only) */}
-        {user?.email && isAdmin(user.email) && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
-            <CostMonitoringDashboard />
-            <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
-              <div className="flex gap-4 border-b border-gray-200 dark:border-slate-700 mb-6">
-                <button
-                  onClick={() => setActiveAdminTab('contributions')}
-                  className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${activeAdminTab === 'contributions'
-                      ? 'border-primary-600 text-primary-600 dark:text-primary-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                    }`}
-                >
-                  Contributor Path
-                </button>
-                <button
-                  onClick={() => setActiveAdminTab('role_fit')}
-                  className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${activeAdminTab === 'role_fit'
-                      ? 'border-primary-600 text-primary-600 dark:text-primary-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                    }`}
-                >
-                  Role Fit Audit
-                </button>
-              </div>
-              {activeAdminTab === 'contributions' ? <AdminContributions /> : <AdminRoleFitSubmissions />}
-            </div>
-            <div className="mt-8">
-              <AdminBadgeControls />
-            </div>
-          </div>
-        )}
-
-        {/* Your Data */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Your Data
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Bookmarks</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {userData?.bookmarks?.length || 0} saved articles
-                </p>
-              </div>
-              <Link
-                href="/bookmarks"
-                className="px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
-              >
-                View
-              </Link>
-            </div>
-
-            {userData && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="font-semibold text-red-900 dark:text-red-200">Delete Your Data</p>
-                    <p className="text-sm text-red-700 dark:text-red-300 mt-1">
-                      This will permanently delete all your data (bookmarks, preferences) but keep your account active.
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setShowDataDeleteConfirm(true)}
-                    disabled={deleting}
-                    className="ml-4 px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border border-red-300 dark:border-red-700 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
-                  >
-                    Delete Data
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Legal & Agreements */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Legal & Agreements
-          </h2>
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
-            <div>
-              <p className="font-semibold text-gray-900 dark:text-white">Contributor Agreement</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                View the terms for submitting articles to stAItuned.
-              </p>
-            </div>
-            <button
-              onClick={() => setShowAgreement(true)}
-              className="px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors border border-primary-200 dark:border-primary-800 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20"
-            >
-              Read Agreement
-            </button>
-          </div>
-        </div>
-
-        {/* Danger Zone */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border-2 border-red-300 dark:border-red-800 p-6">
-          <h2 className="text-xl font-bold text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            Danger Zone
-          </h2>
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-            <p className="font-semibold text-red-900 dark:text-red-200 mb-2">Delete Account</p>
-            <p className="text-sm text-red-700 dark:text-red-300 mb-4">
-              Once you delete your account, there is no going back. This will permanently delete your account and all associated data.
-            </p>
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              disabled={deleting}
-              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
-            >
-              Delete Account
-            </button>
-          </div>
-        </div>
-
-        {/* Delete Data Confirmation Modal */}
-        {showDataDeleteConfirm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Confirm Data Deletion</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                Are you sure you want to delete all your data? This will remove:
-              </p>
-              <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-1">
-                <li>All bookmarks ({userData?.bookmarks?.length || 0})</li>
-                <li>User preferences</li>
-                <li>Account metadata</li>
-              </ul>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                Your account will remain active and you can continue using the site.
-              </p>
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
-                  {error}
-                </div>
-              )}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    setShowDataDeleteConfirm(false)
-                    setError('')
-                  }}
-                  disabled={deleting}
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDeleteData}
-                  disabled={deleting}
-                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
-                >
-                  {deleting ? 'Deleting...' : 'Delete Data'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Delete Account Confirmation Modal */}
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
-              <h3 className="text-xl font-bold text-red-600 dark:text-red-400 mb-4">Permanently Delete Account</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
-                This action <strong>cannot be undone</strong>. This will permanently delete:
-              </p>
-              <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-1">
-                <li>Your account and authentication</li>
-                <li>All bookmarks and preferences</li>
-                <li>All personal data</li>
-              </ul>
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Type <span className="text-red-600">DELETE</span> to confirm:
-                </label>
-                <input
-                  type="text"
-                  value={deleteConfirmText}
-                  onChange={(e) => {
-                    setDeleteConfirmText(e.target.value)
-                    setError('')
-                  }}
-                  placeholder="DELETE"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                />
-              </div>
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
-                  {error}
-                </div>
-              )}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    setShowDeleteConfirm(false)
-                    setDeleteConfirmText('')
-                    setError('')
-                  }}
-                  disabled={deleting}
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDeleteAccount}
-                  disabled={deleting || deleteConfirmText !== 'DELETE'}
-                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {deleting ? 'Deleting...' : 'Delete Forever'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
+    <>
+      <AccountSettingsShell
+        user={user}
+        isWriter={isWriter}
+        memberSince={memberSince}
+        bookmarksCount={bookmarksCount}
+        hasUserData={Boolean(userData)}
+        isAdmin={admin}
+        agreementData={agreementData}
+        activeAdminTab={activeAdminTab}
+        onAdminTabChange={setActiveAdminTab}
+        onOpenAgreement={() => setShowAgreement(true)}
+        onRequestDeleteData={() => setShowDataDeleteConfirm(true)}
+        onRequestDeleteAccount={() => setShowDeleteConfirm(true)}
+      />
+      <DeleteDataModal
+        isOpen={showDataDeleteConfirm}
+        onClose={() => {
+          setShowDataDeleteConfirm(false)
+          setError('')
+        }}
+        onConfirm={handleDeleteData}
+        deleting={deleting}
+        error={error}
+        bookmarksCount={bookmarksCount}
+      />
+      <DeleteAccountModal
+        isOpen={showDeleteConfirm}
+        onClose={() => {
+          setShowDeleteConfirm(false)
+          setDeleteConfirmText('')
+          setError('')
+        }}
+        onConfirm={handleDeleteAccount}
+        deleting={deleting}
+        error={error}
+        confirmText={deleteConfirmText}
+        onConfirmTextChange={(value) => {
+          setDeleteConfirmText(value)
+          setError('')
+        }}
+      />
       <AgreementModal
         isOpen={showAgreement}
         onClose={() => setShowAgreement(false)}
+        agreementData={agreementData}
       />
-    </main >
+    </>
   )
 }
 
-function AgreementSection({ onOpen }: { onOpen: () => void }) {
-  return null; // Inline above instead
+/**
+ * Account settings hub for profile, writer tools, and privacy controls.
+ */
+export default function AccountSettingsPage() {
+  return (
+    <Suspense fallback={<AccountSettingsLoading />}>
+      <AccountSettingsContent />
+    </Suspense>
+  )
 }

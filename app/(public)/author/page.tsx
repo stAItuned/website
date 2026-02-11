@@ -91,7 +91,7 @@ export default async function AuthorsPage() {
                 const def = BADGE_DEFINITIONS.find(d => d.id === eb.badgeId)
                 return def ? { def, earned: eb } : null
               })
-              .filter(Boolean) as { def: any, earned: any }[]
+              .filter((b): b is { def: any, earned: any } => Boolean(b && b.def.id !== 'contributor'))
 
             topBadges.sort((a, b) => {
               const tierOrder = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 }
@@ -105,30 +105,17 @@ export default async function AuthorsPage() {
               <Link
                 key={author.slug}
                 href={`/author/${author.slug}`}
-                className="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+                className="group relative block bg-white rounded-lg shadow-sm hover:shadow-md transition-all p-6 hover:z-20"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="relative">
-                    <Image
-                      src={`/content/team/${author.slug}/propic.jpg`}
-                      alt={author.name}
-                      width={64}
-                      height={64}
-                      className="rounded-full object-cover ring-2 ring-gray-100 group-hover:ring-primary-200 transition-all"
-                    />
-                    {displayBadges.length > 0 && (
-                      <div className="absolute -bottom-1 -right-2 flex -space-x-1 filter drop-shadow-sm">
-                        {displayBadges.map(({ def, earned }) => (
-                          <div key={def.id} className="transition-transform hover:z-10 hover:scale-110">
-                            <BadgeTooltip badge={def} earnedBadge={earned}>
-                              <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
-                            </BadgeTooltip>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
+                  <Image
+                    src={`/content/team/${author.slug}/propic.jpg`}
+                    alt={author.name}
+                    width={64}
+                    height={64}
+                    className="rounded-full object-cover ring-2 ring-gray-100 group-hover:ring-primary-200 transition-all shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
                       {author.data?.name || author.name}
                     </h3>
@@ -140,11 +127,22 @@ export default async function AuthorsPage() {
                   </div>
                 </div>
 
+                {/* Badges row */}
+                {displayBadges.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {displayBadges.map(({ def, earned }) => (
+                      <div key={def.id} className="transition-transform hover:scale-110">
+                        <BadgeTooltip badge={def} earnedBadge={earned}>
+                          <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
+                        </BadgeTooltip>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {author.data?.description && (
-                  <p className="text-sm text-gray-600 mb-4 overflow-hidden">
-                    <span className="block truncate">
-                      {author.data.description}
-                    </span>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                    {author.data.description}
                   </p>
                 )}
 

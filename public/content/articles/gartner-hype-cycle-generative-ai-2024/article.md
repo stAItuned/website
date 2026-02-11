@@ -14,6 +14,7 @@ primaryTopic: ai-fundamentals
 topics:
   - ai-research
   - llm-evaluation
+  - llm-security
 ---
 
 

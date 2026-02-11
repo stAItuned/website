@@ -3,6 +3,8 @@ import { verifyAuth } from '@/lib/firebase/server-auth';
 import { getAllContributions } from '@/lib/firebase/contributor-db';
 import { isAdmin } from '@/lib/firebase/admin-emails';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     try {
         const user = await verifyAuth(request);
@@ -12,24 +14,24 @@ export async function GET(request: NextRequest) {
         }
 
         if (!isAdmin(user.email)) {
-            return NextResponse.json({ success: false, error: 'Forbidden: Admin access required' }, { status: 403 });
+            return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
         }
 
-        const { searchParams } = new URL(request.url);
-        const status = searchParams.get('status') || undefined;
+        // Fetch all contributions
+        const contributions = await getAllContributions();
 
-        const contributions = await getAllContributions(status);
+        // Filter for review or draft
+        const reviewItems = contributions.filter(c => c.status === 'review' || c.status === 'draft');
 
         return NextResponse.json({
             success: true,
-            contributions,
-            total: contributions.length
+            contributions: reviewItems
         });
 
     } catch (error) {
         console.error('[API] admin/contributions error:', error);
         return NextResponse.json(
-            { success: false, error: 'Failed to list contributions' },
+            { success: false, error: 'Failed to fetch contributions' },
             { status: 500 }
         );
     }

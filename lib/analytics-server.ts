@@ -5,7 +5,7 @@
  * This significantly reduces Cloud Function invocations and improves page load performance.
  */
 
-import { db } from '@/lib/firebase/admin';
+import { dbDefault } from '@/lib/firebase/admin';
 import { sanitizeSlug } from '@/lib/sanitizeSlug';
 
 export interface ArticleAnalytics {
@@ -43,7 +43,7 @@ export interface GlobalAnalytics {
 export async function fetchArticleAnalytics(slug: string): Promise<ArticleAnalytics> {
   try {
     const sanitizedSlug = sanitizeSlug(slug);
-    const snap = await db().collection('articles').doc(sanitizedSlug).get();
+    const snap = await dbDefault().collection('articles').doc(sanitizedSlug).get();
     
     if (snap.exists) {
       const data = snap.data();
@@ -91,7 +91,7 @@ export async function fetchArticleAnalytics(slug: string): Promise<ArticleAnalyt
  */
 export async function fetchGlobalAnalytics(): Promise<GlobalAnalytics> {
   try {
-    const snap = await db().doc('analytics/daily').get();
+    const snap = await dbDefault().doc('analytics/daily').get();
     
     if (snap.exists) {
       const data = snap.data();

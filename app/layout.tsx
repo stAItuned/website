@@ -27,6 +27,7 @@ import { ToastProvider } from '@/components/ui/Toast'
 import { TopLoadingBar } from '@/components/ui/PageProgress'
 import { PWALearnNavigator, PWAAnalyticsTracker } from '@/components/pwa'
 import { FirebaseAnalyticsConsent } from '@/components/FirebaseAnalyticsConsent'
+import { WriterStatusProvider } from '@/components/auth/WriterStatusContext'
 
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -34,7 +35,11 @@ import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/seo/seo
 import { LearnLocaleProvider } from '@/lib/i18n'
 
 
-const montserrat = Montserrat({ subsets: ['latin'] })
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
@@ -193,70 +198,52 @@ export default function RootLayout({
           )
         })}
         */}
-        {/* Preload critical fonts */}
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
         {/* Preconnect to Firebase for auth iframe */}
         <link rel="preconnect" href="https://staituned-production-163f4.firebaseapp.com" />
         <link rel="dns-prefetch" href="https://staituned-production-163f4.firebaseapp.com" />
         <link rel="preconnect" href="https://apis.google.com" />
         <link rel="preconnect" href="https://www.googleapis.com" />
 
-        {/* Preload Google Fonts CSS to improve font fetch priority */}
-        <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-        />
       </head>
-      <body className={`${montserrat.className} antialiased stai-body`}>
+      <body className={`${montserrat.variable} font-sans antialiased stai-body`}>
         <ThemeProvider>
           <ToastProvider>
             <FirebaseAuthProvider>
-              <LearnLocaleProvider defaultLocale="it">
-                <CookieConsentProvider>
-                  <PerformanceProvider
-                    enableMonitoring={process.env.NODE_ENV === 'production'}
-                    sampleRate={0.1}
-                  >
-                    <TopLoadingBar />
-                    <FirebaseAnalyticsConsent />
-                    <GoogleAnalytics />
-                    {/* Main site SW removed - Learn section has its own PWA SW */}
-                    {/* Solo i componenti essenziali sono server-side */}
-                    <SearchProvider>
-                      <SafePageViewTracker />
-                      <Header />
-                      <section className="relative min-h-screen flex flex-col justify-between">
-                        <main className="flex flex-col">
-                          {children}
-                        </main>
-                        <Footer />
-                        <TickerSpacer />
-                      </section>
-                      <SearchModal />
-                      {/* PWA navigation helper - shows "Torna a Learn" on non-learn pages */}
-                      <PWALearnNavigator />
-                      {/* PWA Analytics - tracks standalone mode sessions */}
-                      <PWAAnalyticsTracker />
-                    </SearchProvider>
-                    <Suspense fallback={null}>
-                      <ContributeFeedbackWidget />
-                    </Suspense>
-                  </PerformanceProvider>
-                </CookieConsentProvider>
-              </LearnLocaleProvider>
+              <WriterStatusProvider>
+                <LearnLocaleProvider defaultLocale="it">
+                  <CookieConsentProvider>
+                    <PerformanceProvider
+                      enableMonitoring={process.env.NODE_ENV === 'production'}
+                      sampleRate={0.1}
+                    >
+                      <TopLoadingBar />
+                      <FirebaseAnalyticsConsent />
+                      <GoogleAnalytics />
+                      {/* Main site SW removed - Learn section has its own PWA SW */}
+                      {/* Solo i componenti essenziali sono server-side */}
+                      <SearchProvider>
+                        <SafePageViewTracker />
+                        <Header />
+                        <section className="relative min-h-screen flex flex-col justify-between">
+                          <main className="flex flex-col">
+                            {children}
+                          </main>
+                          <Footer />
+                          <TickerSpacer />
+                        </section>
+                        <SearchModal />
+                        {/* PWA navigation helper - shows "Torna a Learn" on non-learn pages */}
+                        <PWALearnNavigator />
+                        {/* PWA Analytics - tracks standalone mode sessions */}
+                        <PWAAnalyticsTracker />
+                      </SearchProvider>
+                      <Suspense fallback={null}>
+                        <ContributeFeedbackWidget />
+                      </Suspense>
+                    </PerformanceProvider>
+                  </CookieConsentProvider>
+                </LearnLocaleProvider>
+              </WriterStatusProvider>
             </FirebaseAuthProvider>
           </ToastProvider>
         </ThemeProvider>

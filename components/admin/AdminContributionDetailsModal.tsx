@@ -62,10 +62,13 @@ export function AdminContributionDetailsModal({ contribution, onClose }: AdminCo
                             {contribution.agreement?.agreed ? (
                                 <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl p-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <InfoItem label="Legal Name" value={contribution.agreement.legalName} />
-                                        <InfoItem label="Fiscal Code / Tax ID" value={contribution.agreement.fiscalCode || 'N/A'} />
-                                        <InfoItem label="Signed At" value={new Date(contribution.agreement.agreedAt).toLocaleString()} />
-                                        <InfoItem label="Agreement Version" value={contribution.agreement.version} />
+                                        <InfoItem label="Legal Name" value={contribution.agreement.author_name || 'N/A'} />
+                                        <InfoItem label="Fiscal Code / Tax ID" value={contribution.agreement.fiscal_code || 'N/A'} />
+                                        <InfoItem
+                                            label="Signed At"
+                                            value={contribution.agreement.accepted_at ? new Date(contribution.agreement.accepted_at).toLocaleString() : 'N/A'}
+                                        />
+                                        <InfoItem label="Agreement Version" value={contribution.agreement.agreement_version || 'N/A'} />
                                     </div>
                                     <div className="mt-4 pt-4 border-t border-emerald-200 dark:border-emerald-800 flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-sm font-medium">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>

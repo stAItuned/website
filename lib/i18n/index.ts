@@ -10,3 +10,7 @@ export type { HomeTranslations } from './home-translations'
 // Legal translations
 export { legalTranslations } from './legal-translations'
 export type { LegalTranslations } from './legal-translations'
+
+// Account translations
+export { accountTranslations } from './account-translations'
+export type { AccountTranslations } from './account-translations'

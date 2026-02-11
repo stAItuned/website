@@ -49,6 +49,7 @@ export function BadgeCard({
                     width={width}
                     height={height}
                     className="drop-shadow-xl"
+                    style={{ width: 'auto', height: 'auto' }}
                     priority={size === 'lg' || size === 'xl'}
                     onError={(e) => {
                         // Fallback to a default generic badge if specific PNG missing

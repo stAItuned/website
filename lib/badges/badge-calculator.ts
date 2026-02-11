@@ -1,9 +1,11 @@
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config';
-import { AuthorBadge, Badge, BadgeEvidence } from '@/lib/types/badge';
+import { ArticleMetricSnapshot, AuthorBadge, Badge, BadgeEvidence } from '@/lib/types/badge';
 import { generateCredentialId } from '@/lib/firebase/badge-service';
 
 interface ArticleMetrics {
     slug: string;
+    title: string;
+    url: string;
     publishedAt: string;
     topic?: string;
     analytics: {
@@ -18,6 +20,8 @@ interface AuthorContext {
     articles: ArticleMetrics[];
 }
 
+const QUALIFIED_READ_SECONDS = 30;
+
 /**
  * Calculate eligible badges for an author based on current metrics
  */
@@ -27,6 +31,8 @@ export function calculateEligibleBadges(context: AuthorContext, existingBadges: 
 }[] {
     const earned: { badge: AuthorBadge; evidence: BadgeEvidence[] }[] = [];
     const now = new Date().toISOString();
+    const allArticleSlugs = context.articles.map((article) => article.slug);
+    const allArticleUrls = context.articles.map((article) => article.url);
 
     // 1. Volume Badges (Contribution)
     // -------------------------------------------------------------
@@ -37,28 +43,105 @@ export function calculateEligibleBadges(context: AuthorContext, existingBadges: 
         if (existingBadges.includes(badgeDef.id)) continue;
 
         if (badgeDef.thresholds.articleCount && publishedCount >= badgeDef.thresholds.articleCount) {
-            earned.push(createBadgeAward(badgeDef, context.slug, { articleCount: publishedCount }));
+            // Build per-article evidence and metric snapshots
+            const evidence: BadgeEvidence[] = context.articles.map((art) => ({
+                id: `${badgeDef.id}:${art.slug}`,
+                badgeId: badgeDef.id,
+                authorId: context.slug,
+                articleSlug: art.slug,
+                articleUrl: art.url,
+                contributedAt: art.publishedAt,
+                type: 'volume' as const,
+                value: 1
+            }));
+
+            const articleMetrics: ArticleMetricSnapshot[] = context.articles.map((art) => ({
+                slug: art.slug,
+                title: art.title,
+                url: art.url,
+                pageViews: art.analytics.pageViews,
+                avgTimeOnPage: art.analytics.avgTimeOnPage,
+                publishedAt: art.publishedAt,
+                topic: art.topic
+            }));
+
+            earned.push(
+                createBadgeAward(
+                    badgeDef,
+                    context.slug,
+                    {
+                        articleCount: publishedCount,
+                        articleSlugs: allArticleSlugs,
+                        articleUrls: allArticleUrls,
+                    },
+                    allArticleSlugs,
+                    allArticleUrls,
+                    evidence,
+                    articleMetrics
+                )
+            );
         }
     }
 
-    // 2. Impact Badges (Lifetime Qualified Reads)
+    // 2. Impact Badges (Qualified Reads per article)
     // -------------------------------------------------------------
-    // Qualified Read = >30s time on page (simplified proxy for now)
-    // Sum qualified reads (using avgTimeOnPage > 30s as proxy logic applied to pageViews)
-    const qualifiedReads = context.articles.reduce((acc, art) => {
-        if (art.analytics.avgTimeOnPage >= 30) {
-            return acc + art.analytics.pageViews;
-        }
-        return acc;
-    }, 0);
-
     const impactBadges = BADGE_DEFINITIONS.filter(b => b.category === 'impact');
 
     for (const badgeDef of impactBadges) {
         if (existingBadges.includes(badgeDef.id)) continue;
 
-        if (badgeDef.thresholds.qualifiedReads && qualifiedReads >= badgeDef.thresholds.qualifiedReads) {
-            earned.push(createBadgeAward(badgeDef, context.slug, { qualifiedReads }));
+        const qualifiedReadsThreshold = badgeDef.thresholds.qualifiedReads;
+        if (!qualifiedReadsThreshold) continue;
+
+        // Qualified Read = article avgTimeOnPage >= 30s (proxy).
+        // Impact badges are awarded per-article, based on qualified reads in a single article.
+        const qualifyingArticles = context.articles.filter(
+            (art) =>
+                art.analytics.avgTimeOnPage >= QUALIFIED_READ_SECONDS &&
+                art.analytics.pageViews >= qualifiedReadsThreshold
+        );
+
+        if (qualifyingArticles.length > 0) {
+            const qualifiedReads = qualifyingArticles.reduce((acc, art) => acc + art.analytics.pageViews, 0);
+            const qualifiedSlugs = qualifyingArticles.map((art) => art.slug);
+            const qualifiedUrls = qualifyingArticles.map((art) => art.url);
+            const evidence: BadgeEvidence[] = qualifyingArticles.map((art) => ({
+                id: `${badgeDef.id}:${art.slug}`,
+                badgeId: badgeDef.id,
+                authorId: context.slug,
+                articleSlug: art.slug,
+                articleUrl: art.url,
+                contributedAt: art.publishedAt,
+                type: 'impact' as const,
+                value: art.analytics.pageViews
+            }));
+
+            // Per-article metric snapshots for qualifying articles
+            const articleMetrics: ArticleMetricSnapshot[] = qualifyingArticles.map((art) => ({
+                slug: art.slug,
+                title: art.title,
+                url: art.url,
+                pageViews: art.analytics.pageViews,
+                avgTimeOnPage: art.analytics.avgTimeOnPage,
+                publishedAt: art.publishedAt,
+                topic: art.topic
+            }));
+
+            earned.push(
+                createBadgeAward(
+                    badgeDef,
+                    context.slug,
+                    {
+                        qualifiedReads,
+                        articleSlugs: qualifiedSlugs,
+                        articleUrls: qualifiedUrls,
+                    },
+                    qualifiedSlugs,
+                    qualifiedUrls,
+                    evidence,
+                    articleMetrics
+                )
+            );
         }
     }
 
@@ -74,9 +157,48 @@ export function calculateEligibleBadges(context: AuthorContext, existingBadges: 
         const requiredCount = badgeDef.thresholds.topicArticleCount || 3;
 
         if (requiredTopic) {
-            const topicCount = context.articles.filter(a => a.topic === requiredTopic).length;
+            const topicArticles = context.articles.filter(a => a.topic === requiredTopic);
+            const topicCount = topicArticles.length;
+            const topicSlugs = topicArticles.map((art) => art.slug);
+            const topicUrls = topicArticles.map((art) => art.url);
             if (topicCount >= requiredCount) {
-                earned.push(createBadgeAward(badgeDef, context.slug, { topicArticleCount: topicCount }));
+                // Build per-article evidence and metric snapshots
+                const evidence: BadgeEvidence[] = topicArticles.map((art) => ({
+                    id: `${badgeDef.id}:${art.slug}`,
+                    badgeId: badgeDef.id,
+                    authorId: context.slug,
+                    articleSlug: art.slug,
+                    articleUrl: art.url,
+                    contributedAt: art.publishedAt,
+                    type: 'quality' as const,
+                    value: 1
+                }));
+
+                const articleMetrics: ArticleMetricSnapshot[] = topicArticles.map((art) => ({
+                    slug: art.slug,
+                    title: art.title,
+                    url: art.url,
+                    pageViews: art.analytics.pageViews,
+                    avgTimeOnPage: art.analytics.avgTimeOnPage,
+                    publishedAt: art.publishedAt,
+                    topic: art.topic
+                }));
+
+                earned.push(
+                    createBadgeAward(
+                        badgeDef,
+                        context.slug,
+                        {
+                            topicArticleCount: topicCount,
+                            articleSlugs: topicSlugs,
+                            articleUrls: topicUrls,
+                        },
+                        topicSlugs,
+                        topicUrls,
+                        evidence,
+                        articleMetrics
+                    )
+                );
             }
         }
     }
@@ -84,21 +206,55 @@ export function calculateEligibleBadges(context: AuthorContext, existingBadges: 
     return earned;
 }
 
-function createBadgeAward(badgeDef: Badge, authorSlug: string, metrics: any): { badge: AuthorBadge; evidence: BadgeEvidence[] } {
+/**
+ * Helper to remove undefined properties from an object recursively
+ * to prevent Firestore "Value for argument "data" is not a valid Firestore document" error.
+ */
+function stripUndefined<T>(obj: T): T {
+    if (obj === null || typeof obj !== 'object') return obj;
+
+    if (Array.isArray(obj)) {
+        return obj.map(stripUndefined) as unknown as T;
+    }
+
+    const result: any = {};
+    for (const key in obj) {
+        const value = (obj as any)[key];
+        if (value !== undefined) {
+            result[key] = stripUndefined(value);
+        }
+    }
+    return result as T;
+}
+
+function createBadgeAward(
+    badgeDef: Badge,
+    authorSlug: string,
+    metrics: Record<string, number | boolean | string | string[] | ArticleMetricSnapshot[] | undefined>,
+    evidenceArticles: string[],
+    evidenceUrls: string[],
+    evidence: BadgeEvidence[] = [],
+    articleMetrics: ArticleMetricSnapshot[] = []
+): { badge: AuthorBadge; evidence: BadgeEvidence[] } {
     const now = new Date();
     const credentialId = generateCredentialId(now.getFullYear() % 100);
 
     return {
-        badge: {
+        badge: stripUndefined({
             badgeId: badgeDef.id,
             authorId: authorSlug,
             earnedAt: now.toISOString(),
             credentialId,
-            evidenceArticles: [], // Populated by caller if needed
-            metrics,
+            evidenceArticles,
+            evidenceUrls,
+            metrics: {
+                ...metrics,
+                articleMetrics
+            },
             version: '1.0',
-            isNew: true
-        },
-        evidence: [] // Simplified for now
+            isNew: true,
+            emailStatus: 'pending'
+        }),
+        evidence: evidence.map(stripUndefined)
     };
 }
