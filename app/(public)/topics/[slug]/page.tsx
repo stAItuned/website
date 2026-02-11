@@ -9,6 +9,8 @@ import { StartHereSection } from '../components/StartHereSection'
 import fs from 'fs'
 import path from 'path'
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+
 export async function generateStaticParams() {
     return allTopics.map((topic) => ({
         slug: topic.slug,
@@ -19,10 +21,20 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     const params = await props.params;
     const topic = allTopics.find((t) => t.slug === params.slug)
     if (!topic) return {}
+    const url = `${SITE_URL}/topics/${topic.slug}`
 
     return {
         title: topic.seoTitle || `${topic.title} | stAItuned`,
         description: topic.seoDescription || topic.description,
+        alternates: {
+            canonical: url,
+        },
+        openGraph: {
+            url,
+            title: topic.seoTitle || `${topic.title} | stAItuned`,
+            description: topic.seoDescription || topic.description,
+            type: 'website',
+        },
     }
 }
 
@@ -131,4 +143,3 @@ export default async function TopicHubPage(props: { params: Promise<{ slug: stri
         </div>
     )
 }
-

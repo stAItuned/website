@@ -15,14 +15,19 @@ import { generateArticleSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-s
 
 // Force dynamic rendering (no caching)
 export const dynamic = 'force-dynamic'
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export async function generateMetadata({ params, searchParams }: { params: Promise<{ target: string; slug: string }>, searchParams: Promise<{ token?: string }> }): Promise<Metadata> {
     const { target, slug } = await params;
     const { token } = await searchParams;
+    const canonicalUrl = `${SITE_URL}/learn/${target}/${slug}`
 
     // No indexing for preview pages
     return {
         title: 'Preview Article - stAItuned',
+        alternates: {
+            canonical: canonicalUrl,
+        },
         robots: {
             index: false,
             follow: false,

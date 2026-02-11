@@ -8,7 +8,7 @@ import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
-import { LearnLocaleToggle } from '@/lib/i18n'
+import { LearnLocaleToggle, useLearnLocale } from '@/lib/i18n'
 
 
 
@@ -24,6 +24,7 @@ export function Header() {
   const { openSearch } = useSearch()
   const { user, loading } = useAuth()
   const { resolvedTheme } = useTheme()
+  const { t } = useLearnLocale()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
 
@@ -84,12 +85,12 @@ export function Header() {
 
   const navigation = [
     {
-      name: 'Career OS',
+      name: t.header.nav.careerOS,
       path: '/career-os',
       icon: <span aria-hidden className="text-lg">🚀</span>
     },
     {
-      name: 'Role Fit Audit',
+      name: t.header.nav.roleFit,
       path: '/role-fit-audit',
       icon: <span aria-hidden className="text-lg">🔎</span>
     },
@@ -99,17 +100,17 @@ export function Header() {
     //   icon: <span aria-hidden className="text-lg">🧭</span>
     // },
     {
-      name: 'Blog',
+      name: t.header.nav.blog,
       path: '/learn/articles',
       icon: <span aria-hidden className="text-lg">📚</span>
     },
     {
-      name: 'Contribuisci',
+      name: t.header.nav.contribute,
       path: '/contribute',
       icon: <span aria-hidden className="text-lg">✍️</span>
     },
     {
-      name: 'Chi siamo',
+      name: t.header.nav.about,
       path: '/meet',
       icon: <span aria-hidden className="text-lg">🧑‍🤝‍🧑</span>
     }
@@ -179,7 +180,7 @@ export function Header() {
                 ) : (
                   <Link
                     href="/signin"
-                    aria-label="Sign In"
+                    aria-label={t.header.actions.signIn}
                     className="group relative flex items-center justify-center gap-2 px-4 h-10 rounded-full transition-all duration-300 ease-out text-slate-800 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium text-sm hover:scale-105"
                     onClick={() => {
                       if (typeof window !== 'undefined') {
@@ -200,13 +201,13 @@ export function Header() {
               type="button"
               className="stai-icon-button relative group w-10 h-10"
               onClick={openSearch}
-              aria-label="Open search"
+              aria-label={t.header.actions.search}
             >
               <svg className="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <span className="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 rounded-full bg-slate-900 text-white px-2 py-1 text-[10px] font-semibold opacity-0 transition-opacity duration-150 group-hover:opacity-100 shadow-sm dark:bg-white dark:text-slate-900">
-                ⌘K / Ctrl+K
+                {t.header.actions.searchShortcut}
               </span>
             </button>
 
@@ -214,7 +215,7 @@ export function Header() {
               type="button"
               className="lg:hidden stai-icon-button w-10 h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Open menu"
+              aria-label={isMenuOpen ? t.header.actions.closeMenu : t.header.actions.openMenu}
             >
               <svg className="w-8 h-8 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
@@ -269,7 +270,7 @@ export function Header() {
                 type="button"
                 className="stai-icon-button w-10 h-10 !p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500 transition-transform duration-300 hover:rotate-90"
                 onClick={() => setIsMenuOpen(false)}
-                aria-label="Close menu"
+                aria-label={t.header.actions.closeMenu}
               >
                 <svg className="w-7 h-7 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

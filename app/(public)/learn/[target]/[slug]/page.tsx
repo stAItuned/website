@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { extractTOC } from '@/lib/markdown-headings'
 import { getAuthorData } from '@/lib/authors'
+import { getAuthorBadges } from '@/lib/firebase/badge-service'
 import { fetchArticleAnalytics } from '@/lib/analytics-server'
 import ArticlePageClient from './ArticlePageClient'
 import { renderMarkdownToHtml } from '@/lib/markdown-server'
@@ -171,6 +172,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   const htmlContent = renderMarkdownToHtml(article.body.raw)
 
   const authorData = article.author ? await getAuthorData(article.author) : null
+  const authorSlug = article.author ? article.author.trim().replaceAll(' ', '-') : null
+  const authorBadges = authorSlug ? await getAuthorBadges(authorSlug) : []
 
   // Fetch analytics server-side during SSR/ISR (no client-side API call needed!)
   const analytics = await fetchArticleAnalytics(slug)
@@ -212,10 +215,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
         targetDisplay={targetDisplay}
         relatedArticles={relatedArticles}
         authorData={authorData}
+        authorBadges={authorBadges}
         analytics={analytics}
         htmlContent={htmlContent}
       />
     </>
   )
 }
-

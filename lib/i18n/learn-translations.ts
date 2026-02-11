@@ -144,6 +144,32 @@ export interface LearnTranslations {
         articles: string
         free: string
     }
+    header: {
+        nav: {
+            careerOS: string
+            roleFit: string
+            blog: string
+            contribute: string
+            about: string
+        }
+        actions: {
+            signIn: string
+            search: string
+            searchShortcut: string
+            openMenu: string
+            closeMenu: string
+            themeToggle: string
+            themeToggleShort: string
+            themeNames: {
+                light: string
+                dark: string
+            }
+        }
+        localeToggle: {
+            switchToItalian: string
+            switchToEnglish: string
+        }
+    }
 
     // Topic Hub Section
     topicHub: {
@@ -353,6 +379,32 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             exploreArticles: "Explore articles",
             articles: "articles",
             free: "Free"
+        },
+        header: {
+            nav: {
+                careerOS: "Career OS",
+                roleFit: "Role Fit Audit",
+                blog: "Blog",
+                contribute: "Contribute",
+                about: "About us"
+            },
+            actions: {
+                signIn: "Sign in",
+                search: "Open search",
+                searchShortcut: "Search (⌘K / Ctrl+K)",
+                openMenu: "Open menu",
+                closeMenu: "Close menu",
+                themeToggle: "Current theme: {theme}. Click to toggle.",
+                themeToggleShort: "Toggle theme",
+                themeNames: {
+                    light: "light",
+                    dark: "dark"
+                }
+            },
+            localeToggle: {
+                switchToItalian: "Switch language to Italian",
+                switchToEnglish: "Switch language to English"
+            }
         },
         topicHub: {
             breadcrumbs: {
@@ -589,6 +641,32 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             exploreArticles: "Esplora articoli",
             articles: "articoli",
             free: "Gratis"
+        },
+        header: {
+            nav: {
+                careerOS: "Career OS",
+                roleFit: "Role Fit Audit",
+                blog: "Blog",
+                contribute: "Contribuisci",
+                about: "Chi siamo"
+            },
+            actions: {
+                signIn: "Accedi",
+                search: "Apri ricerca",
+                searchShortcut: "Cerca (⌘K / Ctrl+K)",
+                openMenu: "Apri menu",
+                closeMenu: "Chiudi menu",
+                themeToggle: "Tema attuale: {theme}. Tocca per cambiare.",
+                themeToggleShort: "Cambia tema",
+                themeNames: {
+                    light: "chiaro",
+                    dark: "scuro"
+                }
+            },
+            localeToggle: {
+                switchToItalian: "Passa all'italiano",
+                switchToEnglish: "Passa all'inglese"
+            }
         },
         topicHub: {
             breadcrumbs: {

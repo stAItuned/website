@@ -63,6 +63,7 @@ export default function ArticlePageClient({
   targetDisplay,
   relatedArticles,
   authorData,
+  authorBadges,
 
   analytics,
   isPreview = false
@@ -1437,7 +1438,7 @@ export default function ArticlePageClient({
         </section>
         {/* Author Bio Card */}
         <div className="max-w-6xl mx-auto px-4">
-          <AuthorBioCard author={article.author} authorData={authorData} />
+          <AuthorBioCard author={article.author} authorData={authorData} authorBadges={authorBadges} />
         </div>
 
         {/* Role Fit Audit CTA - Primary */}

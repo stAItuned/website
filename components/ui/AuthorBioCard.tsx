@@ -2,9 +2,14 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
+import { Badge, AuthorBadge } from '@/lib/types/badge'
+import { BadgeIcon } from '@/components/badges/BadgeIcon'
+import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 
 interface AuthorBioCardProps {
   author: string
+  authorBadges?: AuthorBadge[]
   authorData: {
     name: string
     title?: string
@@ -17,7 +22,10 @@ interface AuthorBioCardProps {
   } | null
 }
 
-export function AuthorBioCard({ author, authorData }: AuthorBioCardProps) {
+/**
+ * Displays the author bio block with profile info and earned badges.
+ */
+export function AuthorBioCard({ author, authorBadges, authorData }: AuthorBioCardProps) {
   if (!authorData) return null
 
   const { name, title, description, avatar, linkedin, twitter, github, website } = authorData
@@ -25,6 +33,17 @@ export function AuthorBioCard({ author, authorData }: AuthorBioCardProps) {
   // Convert author name to slug format for URL
   // Use trim() to handle potential trailing spaces
   const authorSlug = author.trim().replaceAll(' ', '-')
+
+  const badgesToDisplay = (authorBadges ?? [])
+    .map((earned) => {
+      const def = BADGE_DEFINITIONS.find((badge) => badge.id === earned.badgeId)
+      return def ? { def, earned } : null
+    })
+    .filter((badge): badge is { def: Badge; earned: AuthorBadge } => Boolean(badge && badge.def.id !== 'contributor'))
+
+  const tierOrder: Record<string, number> = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 }
+  badgesToDisplay.sort((a, b) => (tierOrder[b.def.tier] || 0) - (tierOrder[a.def.tier] || 0))
+  const topBadges = badgesToDisplay.slice(0, 4)
 
   return (
 
@@ -83,6 +102,23 @@ export function AuthorBioCard({ author, authorData }: AuthorBioCardProps) {
               <p className="text-gray-700 dark:text-gray-300 text-xs md:text-sm leading-relaxed mb-3 line-clamp-2">
                 {description}
               </p>
+            )}
+
+            {topBadges.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-3">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+                  Badges
+                </span>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {topBadges.map(({ def, earned }) => (
+                    <div key={def.id} className="transition-transform hover:scale-110">
+                      <BadgeTooltip badge={def} earnedBadge={earned}>
+                        <BadgeIcon badge={def} earnedBadge={earned} size="xs" />
+                      </BadgeTooltip>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
 
             {/* Social Links */}

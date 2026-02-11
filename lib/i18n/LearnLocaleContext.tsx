@@ -140,7 +140,7 @@ export function useLearnLocale(): LearnLocaleContextType {
  * Simple locale toggle component for Learn page
  */
 export function LearnLocaleToggle({ className = '' }: { className?: string }) {
-    const { locale, toggleLocale } = useLearnLocale()
+    const { locale, toggleLocale, t } = useLearnLocale()
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
@@ -153,7 +153,7 @@ export function LearnLocaleToggle({ className = '' }: { className?: string }) {
         return (
             <button
                 className={`inline-flex items-center gap-1 p-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 ${className}`}
-                aria-label="Language toggle"
+                aria-label={locale === 'en' ? t.header.localeToggle.switchToItalian : t.header.localeToggle.switchToEnglish}
             >
                 <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-white dark:bg-slate-700 shadow-sm opacity-50">
                     <span>🇮🇹</span>
@@ -171,7 +171,7 @@ export function LearnLocaleToggle({ className = '' }: { className?: string }) {
         <button
             onClick={toggleLocale}
             className={`group inline-flex items-center gap-0.5 p-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-all hover:border-slate-300 dark:hover:border-slate-600 ${className}`}
-            aria-label={`Switch language to ${locale === 'en' ? 'Italian' : 'English'}`}
+            aria-label={locale === 'en' ? t.header.localeToggle.switchToItalian : t.header.localeToggle.switchToEnglish}
         >
             <span className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 ${locale === 'it'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5'

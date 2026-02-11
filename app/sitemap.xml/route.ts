@@ -47,8 +47,16 @@ function getMostRecentPostDate(posts: typeof allPosts, section?: string): string
 }
 
 export async function GET() {
-  // Only published posts
-  const posts = allPosts.filter((p) => p.published !== false);
+  // Only published posts (explicit true to exclude drafts/null)
+  const posts = allPosts.filter((p) => p.published === true);
+
+  // Exclude preview/draft routes from sitemap (defense in depth)
+  const excludedPathPrefixes = ["/preview", "/contribute/draft"];
+  const isExcludedUrl = (loc: string) =>
+    excludedPathPrefixes.some((prefix) => {
+      const fullPrefix = `${baseUrl}${prefix}`;
+      return loc === fullPrefix || loc.startsWith(`${fullPrefix}/`);
+    });
 
   // All products
   const products = getAllProducts();
@@ -85,6 +93,7 @@ export async function GET() {
     { loc: `${baseUrl}/privacy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },
     { loc: `${baseUrl}/cookie-policy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },
   ]
+    .filter((u) => !isExcludedUrl(u.loc))
     .map((u) => `
   <url>
     <loc>${escapeXml(u.loc)}</loc>
@@ -97,6 +106,7 @@ export async function GET() {
   const authorUrls = authors
     .map((name) => {
       const url = `${baseUrl}/author/${authorSlug(name)}/`;
+      if (isExcludedUrl(url)) return "";
       const authorPosts = posts.filter(p => p.author === name);
       const lastmod = authorPosts.length > 0
         ? new Date(Math.max(...authorPosts.map(p => new Date(p.updatedAt || p.date || 0).getTime()))).toISOString()
@@ -116,6 +126,7 @@ export async function GET() {
     .map((post) => {
       const section = (post.target || "general").toLowerCase();
       const url = `${baseUrl}/learn/${section}/${post.slug}/`;
+      if (isExcludedUrl(url)) return "";
       const lastmod = new Date(post.updatedAt || post.date || Date.now()).toISOString();
 
       const coverUrl = post.cover
@@ -154,6 +165,7 @@ export async function GET() {
   const productUrls = products
     .map((product) => {
       const url = `${baseUrl}/prodotti/${product.slug}/`;
+      if (isExcludedUrl(url)) return "";
 
       const imageTag = product.image
         ? `<image:image>

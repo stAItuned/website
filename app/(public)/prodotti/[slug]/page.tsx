@@ -10,6 +10,7 @@ import { MarkdownContent } from '@/components/MarkdownContent'
 
 export const dynamic = 'force-static'
 export const revalidate = 21600 // 6 hours
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 /**
  * Generate static params for all products
@@ -37,12 +38,17 @@ export async function generateMetadata({
       title: 'Prodotto non trovato - stAItuned',
     }
   }
+  const url = `${SITE_URL}/prodotti/${product.slug}`
 
   return {
     title: `${product.title} - stAItuned`,
     description: product.metaDescription || product.description,
     keywords: product.keywords,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
+      url,
       title: `${product.title} - stAItuned`,
       description: product.metaDescription || product.description,
       type: 'website',

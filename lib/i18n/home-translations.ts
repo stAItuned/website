@@ -200,7 +200,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             }
         },
         whoWeAre: {
-            badge: "L'ecosistema stAItuned",
+            badge: "L'ecosistema stAI tuned",
             title: "Tutto ciò che ti serve per capire e usare l'AI",
             subtitle: "Non siamo un corso online. Siamo una community di professionisti che condivide ciò che funziona davvero.",
             pillars: {
@@ -308,15 +308,15 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             hero: {
                 badge: "Chi siamo",
                 headline: "Dove l'AI diventa **pratica**",
-                description: "**stAItuned** nasce per chi vuole capire l'AI senza perdersi nell'hype. Contenuti *pratici*, scritti da chi lavora con l'AI *ogni giorno*."
+                description: "**stAI tuned** nasce per chi vuole capire l'AI senza perdersi nell'hype. Contenuti *pratici*, scritti da chi lavora con l'AI *ogni giorno*."
             },
             story: {
                 badge: "La nostra storia",
                 title: "Da **junior frustrati** a practitioner che condividono",
-                p1: "Prima di creare stAItuned, eravamo junior confusi. L'AI esplodeva, ma le risorse erano frammentate, piene di **hype**, scritte da chi non lavorava davvero nel campo.",
+                p1: "Prima di creare stAI tuned, eravamo junior confusi. L'AI esplodeva, ma le risorse erano frammentate, piene di **hype**, scritte da chi non lavorava davvero nel campo.",
                 p2: "Ci siamo chiesti: *cosa succederebbe se i practitioner condividessero ciò che sanno?*",
                 quote: "Se chi lavora nell'AI ogni giorno condividesse ciò che sa, quante persone potrebbero crescere più velocemente?",
-                quoteLabel: "L'idea che ha dato vita a stAItuned"
+                quoteLabel: "L'idea che ha dato vita a stAI tuned"
             },
             mission: {
                 badge: "La nostra mission",
@@ -347,7 +347,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             },
             contributors: {
                 badge: "I nostri contributor",
-                title: "Chi scrive su stAItuned",
+                title: "Chi scrive su stAI tuned",
                 description: "Professionals che lavorano con l'AI **ogni giorno** e condividono la loro esperienza.",
                 cta: "Scopri tutti i contributor",
                 stats: "articol" // singular/plural handled logic in client
@@ -355,7 +355,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             join: {
                 badge: "Contributor Program",
                 title: "Vuoi scrivere su AI?",
-                description: "I contenuti di stAItuned sono scritti da professionisti che lavorano con l'AI. Se hai **esperienza pratica** da condividere, potresti diventare contributor.",
+                description: "I contenuti di stAI tuned sono scritti da professionisti che lavorano con l'AI. Se hai **esperienza pratica** da condividere, potresti diventare contributor.",
                 ctaProgram: "Scopri il Contributor Program →",
                 ctaArticles: "Esplora gli articoli"
             },
@@ -376,7 +376,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             audit: "Role Fit Audit",
             rss: "RSS Feed",
             manageCookies: "Gestisci cookie",
-            disclaimer: "stAItuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell'orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.",
+            disclaimer: "stAI tuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell'orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.",
             stayUpdated: "Resta aggiornato",
             noSpam: "Niente spam · Disiscriviti quando vuoi",
             privacyPolicy: "Privacy Policy",
@@ -398,7 +398,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             }
         },
         whoWeAre: {
-            badge: "The stAItuned Ecosystem",
+            badge: "The stAI tuned Ecosystem",
             title: "Everything you need to understand and use AI",
             subtitle: "We're not an online course. We're a community of practitioners sharing what actually works.",
             pillars: {
@@ -506,15 +506,15 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             hero: {
                 badge: "Who We Are",
                 headline: "Where AI Gets **Practical**",
-                description: "**stAItuned** is for those who want to understand AI without getting lost in result. *Practical* content, written by those who work with AI *every day*."
+                description: "**stAI tuned** is for those who want to understand AI without getting lost in result. *Practical* content, written by those who work with AI *every day*."
             },
             story: {
                 badge: "Our Story",
                 title: "From **Frustrated Juniors** to Practitioners Who Share",
-                p1: "Before founding stAItuned, we were confused juniors. AI was exploding, but resources were fragmented, full of **hype**, written by people who didn't really work in the field.",
+                p1: "Before founding stAI tuned, we were confused juniors. AI was exploding, but resources were fragmented, full of **hype**, written by people who didn't really work in the field.",
                 p2: "We asked ourselves: *what would happen if practitioners shared what they know?*",
                 quote: "If those who work in AI every day shared what they know, how many people could grow faster?",
-                quoteLabel: "The idea that sparked stAItuned"
+                quoteLabel: "The idea that sparked stAI tuned"
             },
             mission: {
                 badge: "Our Mission",
@@ -545,7 +545,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             },
             contributors: {
                 badge: "Our Contributors",
-                title: "Who Writes on stAItuned",
+                title: "Who Writes on stAI tuned",
                 description: "Professionals who work with AI **every day** and share their experience.",
                 cta: "Discover all contributors",
                 stats: "article"
@@ -553,7 +553,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             join: {
                 badge: "Contributor Program",
                 title: "Want to Write About AI?",
-                description: "stAItuned content is written by professionals working with AI. If you have **practical experience** to share, you could become a contributor.",
+                description: "stAI tuned content is written by professionals working with AI. If you have **practical experience** to share, you could become a contributor.",
                 ctaProgram: "Discover Contributor Program →",
                 ctaArticles: "Explore Articles"
             },
@@ -574,7 +574,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             audit: "Role Fit Audit",
             rss: "RSS Feed",
             manageCookies: "Manage Cookies",
-            disclaimer: "stAItuned is an independent project for training and experimentation on AI. Activities are carried out outside of employee working hours and without the use of confidential information or internal projects of other employers.",
+            disclaimer: "stAI tuned is an independent project for training and experimentation on AI. Activities are carried out outside of employee working hours and without the use of confidential information or internal projects of other employers.",
             stayUpdated: "Stay Updated",
             noSpam: "No spam · Unsubscribe anytime",
             privacyPolicy: "Privacy Policy",

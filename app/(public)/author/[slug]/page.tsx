@@ -11,6 +11,8 @@ import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { generatePersonSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-schemas'
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+
 interface AuthorPageProps {
   params: Promise<{
     slug: string
@@ -36,7 +38,11 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
   return {
     title: `${authorData.name} - Articles - stAItuned`,
     description: `Read all articles written by ${authorData.name}${authorData.title ? `, ${authorData.title}` : ''}. ${authorData.description}`,
+    alternates: {
+      canonical: `${SITE_URL}/author/${slug}`,
+    },
     openGraph: {
+      url: `${SITE_URL}/author/${slug}`,
       title: `${authorData.name} - Articles`,
       description: `Read all articles written by ${authorData.name}`,
       type: 'profile',

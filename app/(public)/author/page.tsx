@@ -13,10 +13,16 @@ import { PageTransition } from '@/components/ui/PageTransition'
 export const dynamic = 'force-static'
 export const revalidate = 21600 // 6 ore (60*60*6) - increased from 1h to save function calls
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+
 export const metadata: Metadata = {
   title: 'All Authors - stAItuned',
   description: 'Meet the talented writers and experts behind stAItuned articles. Discover their expertise and read their latest publications.',
+  alternates: {
+    canonical: `${SITE_URL}/author`,
+  },
   openGraph: {
+    url: `${SITE_URL}/author`,
     title: 'All Authors - stAItuned',
     description: 'Meet the talented writers and experts behind stAItuned articles.',
     type: 'website',
