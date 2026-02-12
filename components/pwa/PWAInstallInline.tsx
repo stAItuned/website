@@ -13,6 +13,12 @@ const SmartphoneIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
     </svg>
 )
 
+const ComputerIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+    </svg>
+)
+
 const WifiOffIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z" />
@@ -88,7 +94,11 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
             >
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                        <SmartphoneIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        {isLarge ? (
+                            <ComputerIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        ) : (
+                            <SmartphoneIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        )}
                     </div>
                     <div>
                         <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
@@ -140,7 +150,11 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
                         <div className="flex items-center gap-4">
                             <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10">
-                                <SmartphoneIcon className="w-8 h-8 text-white" />
+                                {isLarge ? (
+                                    <ComputerIcon className="w-8 h-8 text-white" />
+                                ) : (
+                                    <SmartphoneIcon className="w-8 h-8 text-white" />
+                                )}
                             </div>
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
@@ -223,7 +237,11 @@ export function PWAInstallInline({ className = '', variant = 'default' }: PWAIns
         >
             <div className="flex items-start gap-4 mb-5">
                 <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-md">
-                    <SmartphoneIcon className="w-6 h-6 text-white" />
+                    {isLarge ? (
+                        <ComputerIcon className="w-6 h-6 text-white" />
+                    ) : (
+                        <SmartphoneIcon className="w-6 h-6 text-white" />
+                    )}
                 </div>
                 <div>
                     <h3 className="font-bold text-slate-800 dark:text-white text-lg mb-1">

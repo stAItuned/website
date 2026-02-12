@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePWADetection } from '@/hooks/usePWADetection'
 import { usePWAInstall, dismissPWAInstall } from '@/hooks/usePWAInstall'
+import { useScreenSize } from '@/lib/hooks/useScreenSize'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // Inline SVG Icons
@@ -26,6 +27,7 @@ interface PWAInstallBannerProps {
  * - User hasn't dismissed recently
  */
 export function PWAInstallBanner({ className = '' }: PWAInstallBannerProps) {
+    const isLarge = useScreenSize()
     const { isInBrowser } = usePWADetection()
     const { isPromptReady, promptInstall, wasDismissed, isInstalled } = usePWAInstall()
     const { locale } = useLearnLocale()
@@ -71,9 +73,13 @@ export function PWAInstallBanner({ className = '' }: PWAInstallBannerProps) {
         >
             <div className="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <span className="text-xl" role="img" aria-label="smartphone">📱</span>
+                    <span className="text-xl" role="img" aria-label={isLarge ? "desktop" : "smartphone"}>
+                        {isLarge ? '💻' : '📱'}
+                    </span>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0">
-                        <span className="font-semibold text-sm whitespace-nowrap">{t.title}</span>
+                        <span className="font-semibold text-sm whitespace-nowrap">
+                            {isLarge ? t.title_desktop : t.title}
+                        </span>
                         <span className="text-xs sm:text-sm opacity-90 truncate hidden sm:inline">
                             {t.subtitle}
                         </span>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePWADetection } from '@/hooks/usePWADetection'
 import { usePWAInstall, dismissPWAInstall, isFirstLearnVisit } from '@/hooks/usePWAInstall'
+import { useScreenSize } from '@/lib/hooks/useScreenSize'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // Inline SVG Icons
@@ -15,6 +16,12 @@ const XIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
 const SmartphoneIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+    </svg>
+)
+
+const ComputerIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
     </svg>
 )
 
@@ -49,6 +56,7 @@ interface PWAInstallCardProps {
  * Slides up from the bottom with a beautiful design.
  */
 export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardProps) {
+    const isLarge = useScreenSize()
     const { isInBrowser } = usePWADetection()
     const { isPromptReady, promptInstall, isInstalled } = usePWAInstall()
     const { locale } = useLearnLocale()
@@ -137,10 +145,16 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
 
                         <div className="flex items-center gap-3">
                             <div className="p-2.5 bg-white/20 rounded-xl">
-                                <SmartphoneIcon className="w-6 h-6 text-white" />
+                                {isLarge ? (
+                                    <ComputerIcon className="w-6 h-6 text-white" />
+                                ) : (
+                                    <SmartphoneIcon className="w-6 h-6 text-white" />
+                                )}
                             </div>
                             <div>
-                                <h3 className="font-bold text-white text-lg">{t.title}</h3>
+                                <h3 className="font-bold text-white text-lg">
+                                    {isLarge ? t.title_desktop : t.title}
+                                </h3>
                                 <p className="text-blue-100 text-sm">{t.subtitle}</p>
                             </div>
                         </div>
