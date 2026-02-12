@@ -49,6 +49,8 @@ export async function POST(request: NextRequest) {
 
     const timestamp = new Date().toISOString()
     const currentAnnotations = existing.review?.annotations ?? []
+    const existingReviewHistory = existing.reviewHistory ?? []
+    const reviewStatus = existing.review?.status || 'changes_requested'
     const nextAnnotations = [
       ...currentAnnotations,
       {
@@ -60,14 +62,26 @@ export async function POST(request: NextRequest) {
       },
     ]
 
+    const nextReviewHistory = [
+      ...existingReviewHistory,
+      {
+        action: 'annotation',
+        status: reviewStatus,
+        note,
+        updatedAt: timestamp,
+        reviewerEmail: user.email || 'admin',
+      },
+    ]
+
     await updateContribution(id, {
       review: {
-        status: existing.review?.status || 'changes_requested',
+        status: reviewStatus,
         note: existing.review?.note || '',
         updatedAt: timestamp,
         reviewerEmail: existing.review?.reviewerEmail || user.email || 'admin',
         annotations: nextAnnotations,
       },
+      reviewHistory: nextReviewHistory,
       updatedAt: timestamp,
       lastSavedAt: timestamp,
     })
@@ -81,4 +95,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

@@ -98,10 +98,24 @@ export async function POST(request: NextRequest) {
                 // The client sends the full object.
             }
 
+            const nextStatus = dataToSave.status ?? existing.status;
+            const nextStep = dataToSave.currentStep ?? existing.currentStep;
+            const statusChanged = nextStatus !== existing.status || nextStep !== existing.currentStep;
+            const nextStatusHistory = statusChanged ? [
+                ...(existing.statusHistory ?? []),
+                {
+                    status: nextStatus,
+                    currentStep: nextStep,
+                    changedAt: lastSaved,
+                    changedBy: user.email || 'user',
+                },
+            ] : existing.statusHistory;
+
             await updateContribution(id, {
                 ...dataToSave,
                 lastSavedAt: lastSaved,
-                updatedAt: lastSaved
+                updatedAt: lastSaved,
+                ...(statusChanged ? { statusHistory: nextStatusHistory } : {}),
             });
         }
 

@@ -11,7 +11,12 @@ export async function createContribution(data: Omit<Contribution, 'id'>): Promis
 
     const contribution: Contribution = {
         ...data,
-        id
+        id,
+        statusHistory: data.statusHistory ?? (data.status && data.currentStep ? [{
+            status: data.status,
+            currentStep: data.currentStep,
+            changedAt: data.createdAt || new Date().toISOString(),
+        }] : undefined),
     };
 
     await docRef.set(contribution);

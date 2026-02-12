@@ -9,8 +9,14 @@ interface AdminContributionDetailsModalProps {
     onClose: () => void
 }
 
+/**
+ * Admin modal showing full contribution details with audit history.
+ */
 export function AdminContributionDetailsModal({ contribution, onClose }: AdminContributionDetailsModalProps) {
     if (!contribution) return null
+
+    const statusHistory = (contribution.statusHistory ?? []).slice().reverse()
+    const reviewHistory = (contribution.reviewHistory ?? []).slice().reverse()
 
     return (
         <AnimatePresence>
@@ -146,6 +152,42 @@ export function AdminContributionDetailsModal({ contribution, onClose }: AdminCo
                                 </div>
                             </Section>
                         )}
+
+                        {/* Status History */}
+                        <Section title="Status History" highlight>
+                            {statusHistory.length > 0 ? (
+                                <div className="space-y-3">
+                                    {statusHistory.map((entry, idx) => (
+                                        <HistoryItem
+                                            key={`${entry.changedAt}-${idx}`}
+                                            title={`${entry.status} • ${entry.currentStep}`}
+                                            meta={`${formatDateTime(entry.changedAt)}${entry.changedBy ? ` • ${entry.changedBy}` : ''}`}
+                                            note={entry.note}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <EmptyState text="No status changes recorded yet." />
+                            )}
+                        </Section>
+
+                        {/* Review History */}
+                        <Section title="Review History" highlight>
+                            {reviewHistory.length > 0 ? (
+                                <div className="space-y-3">
+                                    {reviewHistory.map((entry, idx) => (
+                                        <HistoryItem
+                                            key={`${entry.updatedAt}-${idx}`}
+                                            title={`${entry.action.replace('_', ' ')} • ${entry.status}`}
+                                            meta={`${formatDateTime(entry.updatedAt)} • ${entry.reviewerEmail}`}
+                                            note={entry.note}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <EmptyState text="No review actions recorded yet." />
+                            )}
+                        </Section>
                     </div>
 
                     {/* Footer */}
@@ -181,4 +223,33 @@ function InfoItem({ label, value }: { label: string, value: string | number }) {
             <span className="text-sm font-semibold dark:text-white break-all">{value}</span>
         </div>
     )
+}
+
+function HistoryItem({ title, meta, note }: { title: string, meta: string, note?: string }) {
+    return (
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-950">
+            <div className="flex items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-slate-900 dark:text-white">{title}</div>
+                <div className="text-xs text-slate-400 font-mono">{meta}</div>
+            </div>
+            {note ? (
+                <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">{note}</p>
+            ) : null}
+        </div>
+    )
+}
+
+function EmptyState({ text }: { text: string }) {
+    return (
+        <div className="p-4 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 text-slate-500 text-sm">
+            {text}
+        </div>
+    )
+}
+
+function formatDateTime(value: string) {
+    if (!value) return 'Unknown date'
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return value
+    return date.toLocaleString()
 }

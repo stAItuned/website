@@ -136,6 +136,19 @@ export async function PUT(request: NextRequest) {
         const timestamp = new Date().toISOString();
         const mergedBrief = updates.brief ? { ...existing.brief, ...updates.brief } : undefined;
 
+        const nextStatus = updates.status ?? existing.status
+        const nextStep = updates.currentStep ?? existing.currentStep
+        const statusChanged = nextStatus !== existing.status || nextStep !== existing.currentStep
+        const nextStatusHistory = statusChanged ? [
+            ...(existing.statusHistory ?? []),
+            {
+                status: nextStatus,
+                currentStep: nextStep,
+                changedAt: timestamp,
+                changedBy: user.email || 'user',
+            },
+        ] : existing.statusHistory
+
         await updateContribution(id, {
             ...(updates.status ? { status: updates.status } : {}),
             ...(updates.currentStep ? { currentStep: updates.currentStep } : {}),
@@ -143,6 +156,7 @@ export async function PUT(request: NextRequest) {
             ...(mergedBrief ? { brief: mergedBrief } : {}),
             updatedAt: timestamp,
             lastSavedAt: timestamp,
+            ...(statusChanged ? { statusHistory: nextStatusHistory } : {}),
         });
 
         return NextResponse.json({ success: true });

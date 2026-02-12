@@ -52,6 +52,31 @@ export async function POST(request: NextRequest) {
     const nextCurrentStep =
       action === 'approve' ? existing.currentStep : 'draft_submission'
 
+    const existingStatusHistory = existing.statusHistory ?? []
+    const existingReviewHistory = existing.reviewHistory ?? []
+
+    const nextStatusHistory = [
+      ...existingStatusHistory,
+      {
+        status: nextStatus,
+        currentStep: nextCurrentStep,
+        changedAt: timestamp,
+        changedBy: user.email || 'admin',
+        note: note || undefined,
+      },
+    ]
+
+    const nextReviewHistory = [
+      ...existingReviewHistory,
+      {
+        action: reviewStatus,
+        status: reviewStatus,
+        note: note || undefined,
+        updatedAt: timestamp,
+        reviewerEmail: user.email || 'admin',
+      },
+    ]
+
     await updateContribution(id, {
       status: nextStatus,
       currentStep: nextCurrentStep,
@@ -63,6 +88,8 @@ export async function POST(request: NextRequest) {
         updatedAt: timestamp,
         reviewerEmail: user.email || 'admin',
       },
+      statusHistory: nextStatusHistory,
+      reviewHistory: nextReviewHistory,
     })
 
     return NextResponse.json({
@@ -84,4 +111,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

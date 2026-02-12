@@ -14,12 +14,9 @@ export async function GET(request: NextRequest) {
         // Fetch all contributions
         const contributions = await getAllContributions();
 
-        // Filter for review or draft
-        const reviewItems = contributions.filter((c: any) => c.status === 'review' || c.status === 'draft');
-
         return NextResponse.json({
             success: true,
-            contributions: reviewItems
+            contributions
         });
 
     } catch (error) {

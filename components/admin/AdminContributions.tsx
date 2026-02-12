@@ -5,6 +5,9 @@ import { useAuth } from '@/components/auth/AuthContext'
 import { Contribution, ContributionStatus, ContributionPath } from '@/lib/types/contributor'
 import { AdminContributionDetailsModal } from './AdminContributionDetailsModal'
 
+/**
+ * Admin contributions table with per-item detail modal.
+ */
 export function AdminContributions() {
     const { user } = useAuth()
     const [contributions, setContributions] = useState<Contribution[]>([])
