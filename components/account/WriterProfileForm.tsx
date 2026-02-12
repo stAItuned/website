@@ -9,6 +9,7 @@ import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { useLearnLocale } from '@/lib/i18n'
 import { writerProfileFieldsSchema } from '@/lib/validation/writerProfile'
 import { getWriterProfileErrorMessage } from '@/lib/validation/writerProfileMessages'
+import { readApiResponse } from '@/lib/http/readApiResponse'
 
 interface WriterProfileDto {
   slug: string
@@ -75,12 +76,16 @@ export function WriterProfileForm() {
         const res = await fetch('/api/user/writer-profile', {
           headers: { Authorization: `Bearer ${token}` },
         })
-        const json = (await res.json()) as
-          | { success: true; profile: WriterProfileDto }
-          | { success: false; error: string }
+        const { json, rawText } = await readApiResponse<
+          { success: true; profile: WriterProfileDto } | { success: false; error: string }
+        >(res)
 
-        if (!res.ok || !json.success) {
-          throw new Error('error' in json ? json.error : 'Failed to load profile')
+        if (!res.ok || !json?.success) {
+          const fallbackError = rawText.trim() || 'Failed to load profile'
+          if (json && 'error' in json && typeof json.error === 'string') {
+            throw new Error(json.error)
+          }
+          throw new Error(fallbackError)
         }
 
         setProfile(json.profile)
@@ -149,8 +154,11 @@ export function WriterProfileForm() {
         headers: { Authorization: `Bearer ${token}` },
         body: formDataToSend,
       })
-      const json = (await res.json()) as { success?: boolean; error?: string }
-      if (!res.ok || !json.success) throw new Error(json.error || 'Failed to update profile')
+      const { json, rawText } = await readApiResponse<{ success?: boolean; error?: string }>(res)
+      if (!res.ok || !json?.success) {
+        const fallbackError = rawText.trim() || 'Failed to update profile'
+        throw new Error(json?.error || fallbackError)
+      }
 
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('writer-status-changed'))

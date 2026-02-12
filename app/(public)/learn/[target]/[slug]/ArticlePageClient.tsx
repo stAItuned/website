@@ -1206,7 +1206,6 @@ export default function ArticlePageClient({
                   {article.geo ? (
                     <GeoPlaybookRail
                       geo={article.geo}
-                      articleSlug={article.slug}
                       toc={toc}
                       onTOCClick={handleTOCClick}
                     />

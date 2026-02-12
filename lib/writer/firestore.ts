@@ -16,6 +16,7 @@ const WRITER_SLUGS_COLLECTION = 'writer_slugs'
 
 const PUBLIC_WRITER_CACHE_SECONDS = 300
 const REVALIDATE_PROFILE = 'default'
+const MAX_SLUG_SUFFIX_ATTEMPTS = 200
 
 /**
  * Get a public writer profile by slug.
@@ -115,7 +116,8 @@ export async function upsertWriterProfile(
   uid: string,
   data: WriterProfileFields,
   email: string,
-  currentImage?: WriterDocument['image']
+  currentImage?: WriterDocument['image'],
+  resolvedSlug?: string
 ) {
   const db = dbDefault()
   const derivedSlug = normalizeSlug(`${data.name}-${data.surname}`)
@@ -129,7 +131,7 @@ export async function upsertWriterProfile(
     existingUserSlug = userSlugSnap.data()?.slug || null
   }
 
-  const finalSlug = existingUserSlug ?? derivedSlug
+  const finalSlug = existingUserSlug ?? resolvedSlug ?? derivedSlug
 
   // Check if the final slug is taken by another UID
   const existingSlugDoc = await db.collection(WRITERS_COLLECTION).doc(finalSlug).get()
@@ -175,6 +177,38 @@ export async function upsertWriterProfile(
   revalidateTag(`writer:${finalSlug}`, REVALIDATE_PROFILE)
 
   return writerData
+}
+
+/**
+ * Resolves the slug to use for a writer.
+ * - Keeps existing slug stable for users who already have one.
+ * - Creates a unique slug for new users when there are collisions.
+ */
+export async function resolveWriterSlug(uid: string, baseSlug: string): Promise<string> {
+  const db = dbDefault()
+  const normalizedBase = normalizeSlug(baseSlug)
+  const userSlugRef = db.collection(WRITER_SLUGS_COLLECTION).doc(uid)
+  const userSlugSnap = await userSlugRef.get()
+
+  if (userSlugSnap.exists) {
+    const currentSlug = userSlugSnap.data()?.slug
+    if (typeof currentSlug === 'string' && currentSlug.length > 0) {
+      return currentSlug
+    }
+  }
+
+  const fallbackBase = normalizedBase || `writer-${uid.slice(0, 8)}`
+
+  const baseDoc = await db.collection(WRITERS_COLLECTION).doc(fallbackBase).get()
+  if (!baseDoc.exists) return fallbackBase
+
+  for (let suffix = 2; suffix <= MAX_SLUG_SUFFIX_ATTEMPTS; suffix += 1) {
+    const candidate = `${fallbackBase}-${suffix}`
+    const candidateDoc = await db.collection(WRITERS_COLLECTION).doc(candidate).get()
+    if (!candidateDoc.exists) return candidate
+  }
+
+  return `${fallbackBase}-${randomUUID().slice(0, 8)}`
 }
 
 /**

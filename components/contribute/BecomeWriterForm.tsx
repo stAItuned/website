@@ -8,6 +8,7 @@ import { useLearnLocale } from '@/lib/i18n'
 import { contributeTranslations, ContributeLanguage } from '@/lib/i18n/contribute-translations'
 import { writerProfileFieldsSchema } from '@/lib/validation/writerProfile'
 import { getWriterProfileErrorMessage } from '@/lib/validation/writerProfileMessages'
+import { readApiResponse } from '@/lib/http/readApiResponse'
 
 export interface BecomeWriterSuccessPayload {
     slug: string
@@ -107,17 +108,23 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                 body: formDataToSend
             })
 
-            const data = await response.json()
+            const { json, rawText } = await readApiResponse<{
+                success?: boolean
+                error?: string
+                profile?: { slug?: string }
+                writerActivatedAt?: string
+            }>(response)
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to create profile')
+            if (!response.ok || !json?.success) {
+                const fallbackError = rawText.trim() || 'Failed to create profile'
+                throw new Error(json?.error || fallbackError)
             }
 
             if (typeof window !== 'undefined') {
                 window.dispatchEvent(new Event('writer-status-changed'))
             }
 
-            const profile = data.profile as { slug?: string } | undefined
+            const profile = json.profile
             const slug = typeof profile?.slug === 'string' ? profile.slug : ''
             if (!slug) {
                 throw new Error(t.slugMissing)
@@ -126,7 +133,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
             await onSuccess({
                 slug,
                 profilePath: `/author/${slug}`,
-                writerActivatedAt: typeof data.writerActivatedAt === 'string' ? data.writerActivatedAt : undefined,
+                writerActivatedAt: typeof json.writerActivatedAt === 'string' ? json.writerActivatedAt : undefined,
             })
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : t.genericError)

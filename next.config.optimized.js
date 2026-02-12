@@ -9,16 +9,6 @@ const nextConfig = {
   webpack: (config, { dev, isServer }) => {
     config.resolve.symlinks = false
     
-    // Exclude Firebase Admin SDK from client-side bundles
-    if (!isServer) {
-      config.externals = config.externals || []
-      config.externals.push({
-        'firebase-admin': 'firebase-admin',
-        'firebase-admin/app': 'firebase-admin/app',
-        'firebase-admin/firestore': 'firebase-admin/firestore',
-      })
-    }
-    
     // ULTRA-AGGRESSIVE bundle splitting
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
@@ -158,7 +148,6 @@ const nextConfig = {
     ],
     serverComponentsExternalPackages: [
       'googleapis',
-      'firebase-admin',
       '@google-analytics/data'
     ]
   },

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import sharp from 'sharp'
 import { verifyAuth } from '@/lib/firebase/server-auth'
 import { dbDefault } from '@/lib/firebase/admin'
 import {
   getWriterByUid,
+  resolveWriterSlug,
   upsertWriterProfile,
   uploadWriterImage,
 } from '@/lib/writer/firestore'
@@ -57,7 +57,7 @@ async function handleUpsert(request: NextRequest) {
 
     let uploadedImage = undefined
     const derivedSlug = normalizeSlug(`${parsed.data.name}-${parsed.data.surname}`)
-    const finalSlug = currentProfile?.slug ?? derivedSlug
+    const finalSlug = await resolveWriterSlug(user.uid, currentProfile?.slug ?? derivedSlug)
 
     // Handle Image Upload
     if (imageFile instanceof File) {
@@ -82,6 +82,7 @@ async function handleUpsert(request: NextRequest) {
 
       const arrayBuffer = await imageFile.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
+      const { default: sharp } = await import('sharp')
 
       // Resize to 500x500 cover
       const processedBuffer = await sharp(buffer)
@@ -125,7 +126,8 @@ async function handleUpsert(request: NextRequest) {
       user.uid,
       parsed.data,
       user.email,
-      uploadedImage
+      uploadedImage,
+      finalSlug
     )
 
     const writerActivatedAt = new Date().toISOString()

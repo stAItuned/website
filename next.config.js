@@ -22,7 +22,7 @@ const nextConfig = {
   output: 'standalone',
   // Add empty turbopack config to silence the warning (Next.js 16+)
   turbopack: {},
-  serverExternalPackages: ['googleapis', 'firebase-admin'],
+  serverExternalPackages: ['googleapis'],
   // eslint configuration removed for Next.js 16 compatibility
   images: {
     formats: ['image/webp'], // Temporarily removed AVIF to reduce CPU load
@@ -61,16 +61,6 @@ const nextConfig = {
   // Handle the content submodule
   webpack: (config, { dev, isServer }) => {
     config.resolve.symlinks = false
-
-    // Exclude Firebase Admin SDK from client-side bundles
-    if (!isServer) {
-      config.externals = config.externals || []
-      config.externals.push({
-        'firebase-admin': 'firebase-admin',
-        'firebase-admin/app': 'firebase-admin/app',
-        'firebase-admin/firestore': 'firebase-admin/firestore',
-      })
-    }
 
     // Optimize bundle splitting - AGGRESSIVE OPTIMIZATION
     if (!dev && !isServer) {

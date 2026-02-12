@@ -1,22 +1,15 @@
 "use client"
 
-import { QuickAnswerCard } from './QuickAnswerCard'
-import { ActionChecklist } from './ActionChecklist'
-import { TimelineStepper } from './TimelineStepper'
-import { DecisionRules } from '@/components/geo/DecisionRules'
-import { AudienceFit } from './AudienceFit'
 import { ArticleTOC } from '@/components/ArticleTOC'
 
 interface GeoPlaybookRailProps {
     geo: any // Typed as any for now, matches contentlayer config
-    articleSlug: string
     toc: any[]
     onTOCClick: (slug: string) => void
 }
 
 export function GeoPlaybookRail({
     geo,
-    articleSlug,
     toc,
     onTOCClick
 }: GeoPlaybookRailProps) {
@@ -35,22 +28,6 @@ export function GeoPlaybookRail({
                     sticky={false}
                 />
             </div>
-
-            {/* Persistent Tools (Checklist) - Only keeping the checklist as a side-widget */}
-            {geo.checklist && geo.checklist.items && (
-                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
-                        <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Progress</h3>
-                    </div>
-                    <div className="p-2">
-                        <ActionChecklist
-                            items={geo.checklist.items}
-                            articleSlug={articleSlug}
-                            className="border-none shadow-none"
-                        />
-                    </div>
-                </div>
-            )}
         </div>
     )
 }
