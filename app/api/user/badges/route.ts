@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAuth } from '@/lib/firebase/server-auth'
-import { findWriterProfileByEmail } from '@/lib/writer/fs'
+import { getWriterByUid } from '@/lib/writer/firestore'
 import { getAuthorBadges } from '@/lib/firebase/badge-service'
 
 export const runtime = 'nodejs'
@@ -10,11 +10,11 @@ export async function GET(request: NextRequest) {
   try {
     const user = await verifyAuth(request)
 
-    if (!user?.email) {
+    if (!user?.uid) {
       return NextResponse.json({ success: true, isWriter: false, badges: [] }, { status: 200 })
     }
 
-    const profile = await findWriterProfileByEmail(user.email)
+    const profile = await getWriterByUid(user.uid)
     if (!profile) {
       return NextResponse.json({ success: true, isWriter: false, badges: [] }, { status: 200 })
     }

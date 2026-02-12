@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     appleWebApp: {
         capable: true,
         statusBarStyle: 'black-translucent',
-        title: 'stAItuned Learn',
+        title: 'stAI tuned Learn',
     },
 }
 

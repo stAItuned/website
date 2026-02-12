@@ -15,7 +15,7 @@ export function StepBecomeWriter({ onNext, translations }: StepBecomeWriterProps
                     Diventa un Writer
                 </h2>
                 <p className="text-slate-600 dark:text-slate-400">
-                    Per pubblicare articoli su stAItuned, devi prima creare il tuo profilo autore.
+                    Per pubblicare articoli su stAI tuned, devi prima creare il tuo profilo autore.
                 </p>
             </div>
 

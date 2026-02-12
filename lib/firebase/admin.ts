@@ -1,9 +1,12 @@
 import { getApps, initializeApp, cert, App } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import { getAuth, Auth } from 'firebase-admin/auth';
+import { getStorage, Storage } from 'firebase-admin/storage';
 
 let cachedApp: App | null = null;
 let cachedDb: Firestore | null = null;
 let cachedDbDefault: Firestore | null = null;
+let cachedStorage: Storage | null = null;
 
 function getFirebaseApp(): App {
   if (cachedApp) {
@@ -26,8 +29,12 @@ function getFirebaseApp(): App {
   const creds = JSON.parse(rawKey);
   console.log('[Firebase Admin] Initializing with project ID:', creds.project_id);
 
+  const storageBucket =
+    process.env.GCS_BUCKET_NAME
+
   cachedApp = initializeApp({
     credential: cert(creds),
+    storageBucket: storageBucket || undefined,
   });
 
   return cachedApp;
@@ -77,4 +84,27 @@ export function db() {
 // Export default database getter for analytics
 export function dbDefault() {
   return getDbDefault();
+}
+
+/**
+ * Get the default Firebase Storage instance
+ */
+function getStorageInstance(): Storage {
+  if (cachedStorage) {
+    return cachedStorage;
+  }
+
+  cachedStorage = getStorage(getFirebaseApp());
+  return cachedStorage;
+}
+
+export function storage() {
+  return getStorageInstance();
+}
+
+/**
+ * Get the default Firebase Auth instance
+ */
+export function auth() {
+  return getAuth(getFirebaseApp());
 }

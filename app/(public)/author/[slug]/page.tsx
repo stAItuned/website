@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import type { ComponentProps } from 'react'
 import { allPosts } from '@/lib/contentlayer'
-import { getAuthorData } from '@/lib/authors'
+import { getPublicWriter } from '@/lib/writer/firestore'
 import { getAuthorBadges } from '@/lib/firebase/badge-service'
 import { AuthorPageWithPagination } from '@/components/AuthorPageWithPagination'
 import { AdminBadgeControls } from '@/components/admin/AdminBadgeControls'
@@ -13,6 +14,8 @@ import { generatePersonSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-sc
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
+export const dynamic = 'force-dynamic'
+
 interface AuthorPageProps {
   params: Promise<{
     slug: string
@@ -22,74 +25,97 @@ interface AuthorPageProps {
 export async function generateMetadata({ params }: AuthorPageProps): Promise<Metadata> {
   const { slug } = await params
 
-  // Convert slug back to author name
-  const authorName = slug.replaceAll('-', ' ')
+  // Get author data from Firestore
+  const writer = await getPublicWriter(slug)
 
-  // Get author data
-  const authorData = await getAuthorData(authorName)
-
-  if (!authorData) {
+  if (!writer) {
     return {
-      title: 'Author Not Found - stAItuned',
+      title: 'Author Not Found - stAI tuned',
       description: 'The requested author could not be found.'
     }
   }
 
+  const title = writer.title ? `, ${writer.title}` : ''
+  const description = writer.bio || `Read all articles written by ${writer.displayName}`
+  const ogImageUrl = writer.image?.publicUrl
+
   return {
-    title: `${authorData.name} - Articles - stAItuned`,
-    description: `Read all articles written by ${authorData.name}${authorData.title ? `, ${authorData.title}` : ''}. ${authorData.description}`,
+    title: `${writer.displayName} - Articles - stAI tuned`,
+    description: `Read all articles written by ${writer.displayName}${title}. ${description}`,
     alternates: {
       canonical: `${SITE_URL}/author/${slug}`,
     },
     openGraph: {
       url: `${SITE_URL}/author/${slug}`,
-      title: `${authorData.name} - Articles`,
-      description: `Read all articles written by ${authorData.name}`,
+      title: `${writer.displayName} - Articles`,
+      description: `Read all articles written by ${writer.displayName}`,
       type: 'profile',
-      images: [{
-        url: `/cms/team/${slug}/propic.jpg`,
-        alt: authorData.name
-      }],
+      images: ogImageUrl
+        ? [
+            {
+              url: ogImageUrl,
+              alt: writer.displayName,
+            },
+          ]
+        : undefined,
     },
     twitter: {
       card: 'summary',
-      title: `${authorData.name} - Articles`,
-      description: `Read all articles written by ${authorData.name}`,
-      images: [`/cms/team/${slug}/propic.jpg`],
+      title: `${writer.displayName} - Articles`,
+      description: `Read all articles written by ${writer.displayName}`,
+      images: ogImageUrl ? [ogImageUrl] : undefined,
     }
   }
 }
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const { slug } = await params
-  // Convert slug back to author name
-  const authorName = slug.replaceAll('-', ' ')
-  // Get author data
-  const authorData = await getAuthorData(authorName)
-  if (!authorData) {
+
+  // Get author data from Firestore
+  const writer = await getPublicWriter(slug)
+
+  if (!writer) {
     notFound()
   }
 
-  // Fetch author badges from Firestore
+  // Fetch author badges from Firestore (Client function or Server?)
+  // getAuthorBadges imports from badge-service which imports admin. It is server side.
   const badges = await getAuthorBadges(slug)
-  authorData.badges = badges
+
+  type AuthorData = ComponentProps<typeof AuthorPageWithPagination>['authorData']
+  const authorData: AuthorData = {
+    name: writer.displayName,
+    title: writer.title,
+    description: writer.bio,
+    linkedin: writer.linkedin,
+    website: writer.website,
+    avatar: writer.image?.publicUrl,
+    badges: badges
+  }
 
   // Find all articles by this author
+  // We need to match author name. contentlayer posts use 'author' field.
+  // It might be 'Mario Rossi' or 'mario-rossi' depending on how it was saved.
+  // getAuthorData used to normalize space vs hyphen.
+  // Writers on FS had 'name: Mario Rossi'.
+  // We should try to match displayName or Name Surname.
+  const authorName = writer.displayName || slug.replaceAll('-', ' ')
+
   const authorArticles = allPosts.filter((post) =>
-    post.author === authorName && post.published !== false
+    (post.author === authorName || post.author === writer.name + ' ' + writer.surname) && post.published !== false
   ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   // Generate Person schema for E-E-A-T
   const personSchema = generatePersonSchema({
-    name: authorData.name,
-    jobTitle: authorData.title || undefined,
+    name: writer.displayName,
+    jobTitle: writer.title || undefined,
     url: `/author/${slug}`,
-    image: authorData.avatar,
-    description: authorData.description || undefined,
+    image: writer.image?.publicUrl || undefined,
+    description: writer.bio || undefined,
     knowsAbout: ['Artificial Intelligence', 'GenAI', 'Machine Learning', 'AI Engineering'],
-    sameAs: authorData.linkedin ? [authorData.linkedin] : undefined,
+    sameAs: writer.linkedin ? [writer.linkedin] : undefined,
     worksFor: {
-      name: 'stAItuned',
+      name: 'stAI tuned',
       url: 'https://staituned.com',
     },
   })
@@ -98,7 +124,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Authors', url: '/author' },
-    { name: authorData.name, url: `/author/${slug}` },
+    { name: writer.displayName, url: `/author/${slug}` },
   ])
 
   // Pagination logic

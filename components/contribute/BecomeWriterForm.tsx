@@ -94,7 +94,7 @@ export function BecomeWriterForm({ onSuccess, redirectUrl }: BecomeWriterFormPro
             formDataToSend.append('image', file)
 
             const token = await user?.getIdToken()
-            const response = await fetch('/api/user/create-writer-profile', {
+            const response = await fetch('/api/user/writer-profile', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

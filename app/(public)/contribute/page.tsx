@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import ContributePageClient from './ContributePageClient'
 
 export const metadata: Metadata = {
-    title: 'Diventa Contributor | stAItuned',
+    title: 'Diventa Contributor | stAI tuned',
     description: 'Condividi la tua competenza AI. Noi gestiamo l\'ottimizzazione GEO, la distribuzione e il design. Tu mantieni la paternità.',
 }
 

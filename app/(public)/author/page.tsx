@@ -16,15 +16,15 @@ export const revalidate = 21600 // 6 ore (60*60*6) - increased from 1h to save f
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-  title: 'All Authors - stAItuned',
-  description: 'Meet the talented writers and experts behind stAItuned articles. Discover their expertise and read their latest publications.',
+  title: 'All Authors - stAI tuned',
+  description: 'Meet the talented writers and experts behind stAI tuned articles. Discover their expertise and read their latest publications.',
   alternates: {
     canonical: `${SITE_URL}/author`,
   },
   openGraph: {
     url: `${SITE_URL}/author`,
-    title: 'All Authors - stAItuned',
-    description: 'Meet the talented writers and experts behind stAItuned articles.',
+    title: 'All Authors - stAI tuned',
+    description: 'Meet the talented writers and experts behind stAI tuned articles.',
     type: 'website',
   },
 }
@@ -76,7 +76,7 @@ export default async function AuthorsPage() {
             Meet Our Authors
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover the talented writers and experts behind stAItuned. Each author brings unique insights and expertise to help you stay up-to-date with the latest in AI and technology.
+            Discover the talented writers and experts behind stAI tuned. Each author brings unique insights and expertise to help you stay up-to-date with the latest in AI and technology.
           </p>
         </div>
 
@@ -115,7 +115,7 @@ export default async function AuthorsPage() {
               >
                 <div className="flex items-center gap-4 mb-4">
                   <Image
-                    src={`/content/team/${author.slug}/propic.jpg`}
+                    src={author.data?.avatar || `/content/team/${author.slug}/propic.jpg`}
                     alt={author.name}
                     width={64}
                     height={64}

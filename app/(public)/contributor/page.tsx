@@ -4,11 +4,11 @@ import type { Metadata } from 'next'
 import ContributorProgramClient from './ContributorProgramClient'
 
 export const metadata: Metadata = {
-    title: 'Contributor Program | stAItuned',
-    description: 'Unisciti a stAItuned e condividi le tue conoscenze sull\'Intelligenza Artificiale. Scopri come diventare contributor.',
+    title: 'Contributor Program | stAI tuned',
+    description: 'Unisciti a stAI tuned e condividi le tue conoscenze sull\'Intelligenza Artificiale. Scopri come diventare contributor.',
     openGraph: {
-        title: 'Contributor Program | stAItuned',
-        description: 'Unisciti a stAItuned e condividi le tue conoscenze sull\'Intelligenza Artificiale.',
+        title: 'Contributor Program | stAI tuned',
+        description: 'Unisciti a stAI tuned e condividi le tue conoscenze sull\'Intelligenza Artificiale.',
         type: 'website',
     },
 }

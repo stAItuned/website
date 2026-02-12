@@ -350,7 +350,7 @@ const FOUNDATIONAL_WEEKS: WeekNode[] = [
         subtitle: 'Articolo + preparazione completa',
         icon: Users,
         deliverables: [
-            { name: 'Technical Article (stAItuned)', tag: 'Doc', description: 'articolo pubblicato', highlight: true },
+            { name: 'Technical Article (stAI tuned)', tag: 'Doc', description: 'articolo pubblicato', highlight: true },
             { name: 'Interview Manual 360°', tag: 'Doc', description: 'soft + hard + negotiation' },
             { name: 'LinkedIn Share Kit', tag: 'Doc', description: 'strategia di distribuzione' },
         ],
@@ -450,7 +450,7 @@ const CHECKPOINTS: Record<'week4' | 'week8', Checkpoint> = {
         deliverables: [
             { name: 'Career Goal + Positioning', tag: 'Doc', description: 'narrativa chiara' },
             { name: 'CV Master + LinkedIn ottimizzato', tag: 'Doc', description: 'ATS-ready + ottimizzati' },
-            { name: 'AI Article', tag: 'Doc', description: 'pubblicato su stAItuned', highlight: true },
+            { name: 'AI Article', tag: 'Doc', description: 'pubblicato su stAI tuned', highlight: true },
             { name: 'Interview Manual 360°', tag: 'Doc', description: 'soft + hard + negotiation' },
         ],
     },

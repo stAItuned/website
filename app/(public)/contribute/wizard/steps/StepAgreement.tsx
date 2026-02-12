@@ -85,12 +85,12 @@ export function StepAgreement({ brief, path, onNext, translations, language, id:
 
         // Publisher Auto-fill
         text = text.replace(
-            /\*\*Editore \(stAItuned \/ Daniele Moltisanti\)\*\*: _{5,} Data: _{5,}/g,
-            `**Editore (stAItuned / Daniele Moltisanti)**: Daniele Moltisanti Data: **${dateDisplay}**`
+            /\*\*Editore \(stAI tuned \/ Daniele Moltisanti\)\*\*: _{5,} Data: _{5,}/g,
+            `**Editore (stAI tuned / Daniele Moltisanti)**: Daniele Moltisanti Data: **${dateDisplay}**`
         )
         text = text.replace(
-            /\*\*Publisher \(stAItuned \/ Daniele Moltisanti\)\*\*: _{5,} Date: _{5,}/g,
-            `**Publisher (stAItuned / Daniele Moltisanti)**: Daniele Moltisanti Date: **${dateDisplay}**`
+            /\*\*Publisher \(stAI tuned \/ Daniele Moltisanti\)\*\*: _{5,} Date: _{5,}/g,
+            `**Publisher (stAI tuned / Daniele Moltisanti)**: Daniele Moltisanti Date: **${dateDisplay}**`
         )
 
         return text

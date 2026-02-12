@@ -44,14 +44,14 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
   title: {
-    default: 'stAItuned | AI e GenAI concreta per tutti',
-    template: '%s | stAItuned',
+    default: 'stAI tuned | AI e GenAI concreta per tutti',
+    template: '%s | stAI tuned',
   },
   description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
-  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia', 'stAItuned', 'stay tuned AI', 'staituned'],
-  authors: [{ name: 'stAItuned' }],
-  creator: 'stAItuned',
-  publisher: 'stAItuned',
+  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia', 'stAI tuned', 'stay tuned AI', 'staituned'],
+  authors: [{ name: 'stAI tuned' }],
+  creator: 'stAI tuned',
+  publisher: 'stAI tuned',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
@@ -66,15 +66,15 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'it_IT',
     url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
-    siteName: 'stAItuned',
-    title: 'stAItuned | AI e GenAI concreta per tutti',
+    siteName: 'stAI tuned',
+    title: 'stAI tuned | AI e GenAI concreta per tutti',
     description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
     images: [
       {
         url: '/api/og',
         width: 1200,
         height: 630,
-        alt: 'stAItuned | AI e GenAI concreta per tutti',
+        alt: 'stAI tuned | AI e GenAI concreta per tutti',
       },
     ],
   },
@@ -143,7 +143,7 @@ export default function RootLayout({
         <link
           rel="alternate"
           type="application/rss+xml"
-          title="stAItuned RSS Feed"
+          title="stAI tuned RSS Feed"
           href="/rss.xml"
         />
         {/* Preload critical resources */}

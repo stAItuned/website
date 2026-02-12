@@ -37,7 +37,7 @@ const PROCESS_PROOF: ProcessProofItem[] = [
     {
         icon: FileText,
         title: 'Write-up Tecnico',
-        description: 'Articolo pubblicato su stAItuned che dimostra le tue competenze.',
+        description: 'Articolo pubblicato su stAI tuned che dimostra le tue competenze.',
         mediaType: 'image',
         mediaSrc: '/assets/career-os/articolo_screen.png',
         mediaAlt: 'Esempio articolo tecnico pubblicato',

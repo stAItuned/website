@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/firebase/server-auth';
 import { checkUserHasAgreement } from '@/lib/firebase/contributor-db';
-import { findWriterProfileByEmail } from '@/lib/writer/fs';
+import { getWriterByUid } from '@/lib/writer/firestore';
 import { promises as fs } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        if (!user.email) {
+        if (!user.uid) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Contributor agreement required' }, { status: 403 });
         }
 
-        const writerProfile = await findWriterProfileByEmail(user.email);
+        const writerProfile = await getWriterByUid(user.uid);
         if (!writerProfile) {
             return NextResponse.json({ error: 'Writer profile required' }, { status: 403 });
         }

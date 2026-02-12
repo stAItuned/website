@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import WizardClient from './WizardClient'
 
 export const metadata: Metadata = {
-    title: 'Contributor Wizard | stAItuned',
+    title: 'Contributor Wizard | stAI tuned',
     description: 'Crea il tuo articolo con il supporto dell\'IA.',
 }
 

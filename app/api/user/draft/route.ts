@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/firebase/server-auth';
 import { checkUserHasAgreement, createContribution, getContribution, updateContribution } from '@/lib/firebase/contributor-db';
 import { Contribution } from '@/lib/types/contributor';
-import { findWriterProfileByEmail } from '@/lib/writer/fs';
+import { getWriterByUid } from '@/lib/writer/firestore';
 import { contributionDraftCreateSchema, contributionDraftUpdateSchema } from '@/lib/validation/contributionDraft';
 
 export async function GET(request: NextRequest) {
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        if (!user.email) {
+        if (!user.uid) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Contributor agreement required' }, { status: 403 });
         }
 
-        const writerProfile = await findWriterProfileByEmail(user.email);
+        const writerProfile = await getWriterByUid(user.uid);
         if (!writerProfile) {
             return NextResponse.json({ error: 'Writer profile required' }, { status: 403 });
         }
@@ -95,7 +95,7 @@ export async function PUT(request: NextRequest) {
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        if (!user.email) {
+        if (!user.uid) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -104,7 +104,7 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'Contributor agreement required' }, { status: 403 });
         }
 
-        const writerProfile = await findWriterProfileByEmail(user.email);
+        const writerProfile = await getWriterByUid(user.uid);
         if (!writerProfile) {
             return NextResponse.json({ error: 'Writer profile required' }, { status: 403 });
         }

@@ -73,3 +73,5 @@ tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T20-57-03-057Z.md
 tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T20-57-54-135Z.md
 tests/badge-debug/badge-debug-Daniele-Moltisanti-2026-02-10T20-58-40-629Z.md
 scripts/verify-agreement-instructions.ts
+docs/writers/firestore-source-of-truth-plan.md
+scripts/migrate-writers.ts

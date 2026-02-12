@@ -8,16 +8,17 @@ import { ArticleCard } from '@/components/ArticleCard'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { BadgeGrid } from '@/components/badges/BadgeGrid'
 import type { AuthorBadge, Badge } from '@/lib/types/badge'
+import { MarkdownContent } from '@/components/MarkdownContent'
 
 interface AuthorData {
   name: string
   title?: string
   description?: string
   linkedin?: string
-  email?: string
   website?: string
   speaker?: boolean
   badges?: AuthorBadge[]
+  avatar?: string
 }
 
 interface Article {
@@ -40,6 +41,13 @@ interface AuthorPageWithPaginationProps {
   slug: string
 }
 
+function getInitials(fullName: string): string {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean)
+  const initials = parts.slice(0, 2).map((p) => p[0]?.toUpperCase()).join('')
+  return initials || '?'
+}
+
+/** Public author page with client-side pagination. */
 export function AuthorPageWithPagination({
   authorData,
   authorArticles,
@@ -70,13 +78,22 @@ export function AuthorPageWithPagination({
       {/* Author Header */}
       <div className="bg-white rounded-lg shadow-sm p-4 sm:p-8 mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-          <Image
-            src={`/content/team/${slug}/propic.jpg`}
-            alt={authorData.name}
-            width={90}
-            height={90}
-            className="rounded-full object-cover w-20 h-20 sm:w-[120px] sm:h-[120px]"
-          />
+          {authorData.avatar ? (
+            <Image
+              src={authorData.avatar}
+              alt={authorData.name}
+              width={120}
+              height={120}
+              className="rounded-full object-cover w-20 h-20 sm:w-[120px] sm:h-[120px]"
+            />
+          ) : (
+            <div
+              aria-label={`${authorData.name} avatar`}
+              className="rounded-full w-20 h-20 sm:w-[120px] sm:h-[120px] bg-primary-50 border border-primary-100 text-primary-700 flex items-center justify-center text-xl sm:text-3xl font-bold"
+            >
+              {getInitials(authorData.name)}
+            </div>
+          )}
           <div className="flex-1 text-center sm:text-left">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
               {authorData.name}
@@ -94,18 +111,22 @@ export function AuthorPageWithPagination({
                 <span>Available for speech</span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 ml-2">AI & Innovation</span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 ml-1">GenAI applied to the business</span>
-                <a
-                  href={`mailto:${authorData.email}?subject=Request%20for%20Speech%20Engagement&body=Hi%20${encodeURIComponent(authorData.name)},%0D%0A%0D%0AI'd%20like%20to%20invite%20you%20for%20a%20speech%20at%20our%20event.%20Please%20let%20me%20know%20your%20availability.`}
-                  className="ml-2 px-3 py-1 rounded-full bg-primary-600 text-white text-xs font-semibold transition-all duration-200 hover:bg-primary-700 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
-                >
-                  Request a speech
-                </a>
+                {authorData.linkedin ? (
+                  <a
+                    href={authorData.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 px-3 py-1 rounded-full bg-primary-600 text-white text-xs font-semibold transition-all duration-200 hover:bg-primary-700 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
+                  >
+                    Contact on LinkedIn
+                  </a>
+                ) : null}
               </div>
             )}
             {authorData.description && (
-              <p className="text-gray-600 mb-2 sm:mb-4 text-sm sm:text-base">
-                {authorData.description}
-              </p>
+              <div className="text-gray-600 mb-2 sm:mb-4 text-sm sm:text-base">
+                <MarkdownContent content={authorData.description} />
+              </div>
             )}
             <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-4 mt-2">
               {authorData.linkedin && (
@@ -119,17 +140,6 @@ export function AuthorPageWithPagination({
                     <path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clipRule="evenodd" />
                   </svg>
                   LinkedIn
-                </a>
-              )}
-              {authorData.email && (
-                <a
-                  href={`mailto:${authorData.email}`}
-                  className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  Email
                 </a>
               )}
               {authorData.website && (
