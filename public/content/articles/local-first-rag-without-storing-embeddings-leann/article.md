@@ -17,7 +17,7 @@ geo:
   quickAnswer:
     title: "Local RAG Without Persisting Full Embeddings"
     bullets:
-      - "**Non-obvious insight:** you can delete the **dense embedding matrix** after index build—**the graph preserves neighborhood structure** (with PQ codes + selective recompute)."
+      - "**Non-obvious insight:** you can delete the **dense embedding matrix** after index build, **the graph preserves neighborhood structure** (with PQ codes + selective recompute)."
       - "**Paper reports ~10% end-to-end overhead on RAG workloads** in their specific evaluation setup while achieving up to ~50× smaller storage."
       - "Best fit: **privacy-first, storage-constrained** local knowledge bases (laptop/edge)."
       - "Not best fit: **high-QPS / ultra-low-latency** or rapidly changing corpora with heavy incremental updates."
@@ -64,7 +64,7 @@ geo:
 ---
 
 
-The biggest hidden cost in local RAG often isn’t the inference—it’s **persisting the dense embedding matrix**. LEANN (a low-storage vector index) shows a different path: build a graph using embeddings once, then **drop the dense matrix** and **selectively recompute** only what you need at query time.
+The biggest hidden cost in local RAG often isn’t the inference, it’s **persisting the dense embedding matrix**. LEANN (a low-storage vector index) shows a different path: build a graph using embeddings once, then **drop the dense matrix** and **selectively recompute** only what you need at query time.
 
 > **Technical note:** LEANN doesn’t store the full embedding matrix; it persists a compact structure (a pruned proximity graph + PQ codes) to route queries efficiently [[1](#ref-1)].
 
@@ -76,13 +76,15 @@ To be precise: you still need a vector index (graph + PQ), but you don’t need 
 
 For developers building local-first applications, the "hidden tax" is storage footprint. A typical corpus can easily result in an embedding index larger than the documents themselves. If you're building for a laptop or an edge device, this is a real constraint.
 
-The core insight from the LEANN paper [[1](#ref-1)] is that **structure > vectors**. A proximity graph like HNSW [[3](#ref-3)] encodes semantic relationships in its edges. Once that graph is built, the original high-dimensional vectors are mostly redundant—they served to define the neighborhood, but the graph *is* the neighborhood. More precisely: the topology preserves neighbor relationships; PQ provides cheap approximate distances, and recomputation reranks a small candidate set.
+The core insight from the LEANN paper [[1](#ref-1)] is that **structure > vectors**. A proximity graph like HNSW (Hierarchical Navigable Small World) [[3](#ref-3)] encodes semantic relationships in its edges. Once that graph is built, the original high-dimensional vectors are mostly redundant, they served to define the neighborhood, but the graph *is* the neighborhood. More precisely: the topology preserves neighbor relationships; PQ provides cheap approximate distances, and recomputation reranks a small candidate set.
 
 By discarding the dense matrix and using Product Quantization (PQ) for initial routing, you can cut storage by up to **~50×** while only adding a **~10% latency overhead** [[1](#ref-1)].
 
 > **Key Takeaway:** Stop worrying about how to compress your vector database and start asking if you need to store it at all. In local environments, recomputing a few embeddings on-the-fly is often faster than reading a massive matrix from disk.
 
 ## Why Local-First RAG Demands a New Architecture
+
+![An infographic showing the 'Local RAG Bill of Materials'. Three pillars: 1) Disk (showing a shrinking bar for LEANN), 2) RAM (showing the proximity graph), 3) GPU/CPU (showing selective recompute peaks). The visual emphasizes the trade-off: moving the burden from storage to transient compute.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_comparison_1_20260211_224540.webp)
 
 Building RAG (Retrieval-Augmented Generation) for the cloud is about scaling QPS; building it for local devices is about **scarcity management**. This shift in focus is why [Router-first RAG](/learn/articles/rag-reference-architecture-2026-router-first-design) architectures are gaining traction in local-first designs.
 
@@ -92,7 +94,7 @@ Keeping the index local isn't just a performance choice; it's a security guardra
 ### The Bottleneck Shift: Disk I/O vs. GPU
 In cloud environments, optimization typically focuses on compute density. On a local device, **storage I/O** is frequently the bottleneck. Loading a multi-gigabyte embedding matrix into RAM or swapping it from disk kills the user experience. By trading a tiny bit of CPU/GPU throughput for a massive reduction in I/O, LEANN aligns with the strengths of modern local hardware.
 
-![An infographic showing the 'Local RAG Bill of Materials'. Three pillars: 1) Disk (showing a shrinking bar for LEANN), 2) RAM (showing the proximity graph), 3) GPU/CPU (showing selective recompute peaks). The visual emphasizes the trade-off: moving the burden from storage to transient compute.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_comparison_1_20260211_224540.webp)
+
 
 ## How LEANN Works: The Pipeline Walkthrough
 
@@ -102,7 +104,7 @@ The LEANN pipeline is a clean example of **lazy evaluation**. Instead of prepari
 
 1.  **Ingestion & Normalization**: Standard text chunking, perhaps slightly coarser to reduce graph nodes.
 2.  **Temporary Embedding**: You still need embeddings to build the graph, but they are transient.
-3.  **Graph Construction**: Build any proximity graph (like HNSW). This is where semantic knowledge is "baked" into topology.
+3.  **Graph Construction**: Build any proximity graph (like HNSW - Hierarchical Navigable Small World). This is where semantic knowledge is "baked" into topology.
 4.  **The Purge**: Delete the dense embedding matrix. This is the moment you reclaim your disk space.
 5.  **Query-Time Selective Recompute**:
     *   Compute the query embedding.
@@ -111,7 +113,7 @@ The LEANN pipeline is a clean example of **lazy evaluation**. Instead of prepari
     *   Rank these few candidates and assemble the context.
 
 ### Why recompute isn't slow
-Selective recomputation is only viable because of the proximity graph. You aren't recomputing the world—you are recomputing the **neighborhood**. Modern local encoders are often fast enough in many local setups to re-embed a dozen chunks in milliseconds, which is often negligible compared to the time the LLM takes to generate a response.
+Selective recomputation is only viable because of the proximity graph. You aren't recomputing the world, you are recomputing the **neighborhood**. Modern local encoders are often fast enough in many local setups to re-embed a dozen chunks in milliseconds, which is often negligible compared to the time the LLM takes to generate a response.
 
 ### Evidence that Matters
 Across standard benchmarks, the researchers report results that challenge the "always persist" dogma:
@@ -135,7 +137,7 @@ Across standard benchmarks, the researchers report results that challenge the "a
 For most internal knowledge bases or on-device assistants like those powered by systems like **Claude Code and MCP**, LEANN is a superior design pattern.
 
 ### Playbook: What to cache in a LEANN-style system
-If you're implementing this architecture, caching is your best friend for masking recompute latency (inspired by systems like [RAGCache](/learn/articles/ragcache-efficient-knowledge-caching)):
+If you're implementing this architecture, caching is your best friend for masking recompute latency (read also the deep dive with [RAGCache](/learn/articles/ragcache-efficient-knowledge-caching)):
 *   **Traversal results**: Cache traversal results for frequent queries (or query embeddings) to skip graph walking.
 *   **Candidate sets**: Cache candidate sets or top-K nodes per query cluster.
 *   **Embedding hot-nodes**: Keep the dense vectors for the top 1% most visited nodes in RAM.
