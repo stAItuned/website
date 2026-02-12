@@ -32,7 +32,12 @@ async function fetchPublicWriter(slug: string): Promise<PublicWriterDocument | n
   if (data.published !== true) return null
 
   // Strip private fields
-  return publicWriterSchema.parse(data)
+  try {
+    return publicWriterSchema.parse(data)
+  } catch (error) {
+    console.error('[writers] Invalid public writer doc:', normalizedSlug, error)
+    return null
+  }
 }
 
 /**

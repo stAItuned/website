@@ -34,7 +34,7 @@ export async function getAuthorData(authorName: string): Promise<AuthorData | nu
       website: writer.website || '',
       description: writer.bio,
       speaker: false, // Default false until added to schema
-      avatar: writer.image?.publicUrl || `/content/team/${slug}/propic.jpg`
+      avatar: writer.image?.publicUrl
     }
   } catch (error) {
     console.error('Error reading author data:', error)
