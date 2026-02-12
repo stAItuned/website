@@ -11,8 +11,6 @@ primaryTopic: rag
 topics:
   - genai-fundamentals
   - production-reliability
-  - agents
-  - llm-security
 geo:
   quickAnswer:
     title: "Local RAG Without Persisting Full Embeddings"
