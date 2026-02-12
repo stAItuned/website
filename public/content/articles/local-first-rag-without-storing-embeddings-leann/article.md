@@ -72,7 +72,7 @@ The biggest hidden cost in local RAG often isn’t the inference—it’s **pers
 
 To be precise: you still need a vector index (graph + PQ), but you don’t need to persist the dense embedding matrix.
 
-![A technical diagram comparing 'Classic Vector Store' vs 'LEANN Architecture'. On the left, a large 'Embedding Matrix' block (marked '32GB') dominates the storage. On the right, the matrix is replaced by a 'Proximity Graph' + 'Compact PQ Codes' (marked '0.6GB'), with small arrows showing selective recompute of only 3 nodes during a query. The style is clean, modern, and uses a hierarchy of cool grays and a bright teal for the LEANN 'Winner' path.](https://storage.googleapis.com/editorial-planner-images/article-images/leann-comparison-diagram.webp)
+![A technical diagram comparing 'Classic Vector Store' vs 'LEANN Architecture'. On the left, a large 'Embedding Matrix' block (marked '32GB') dominates the storage. On the right, the matrix is replaced by a 'Proximity Graph' + 'Compact PQ Codes' (marked '0.6GB'), with small arrows showing selective recompute of only 3 nodes during a query. The style is clean, modern, and uses a hierarchy of cool grays and a bright teal for the LEANN 'Winner' path.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_comparison_0_20260211_224446.webp)
 
 For developers building local-first applications, the "hidden tax" is storage footprint. A typical corpus can easily result in an embedding index larger than the documents themselves. If you're building for a laptop or an edge device, this is a real constraint.
 
@@ -92,11 +92,11 @@ Keeping the index local isn't just a performance choice; it's a security guardra
 ### The Bottleneck Shift: Disk I/O vs. GPU
 In cloud environments, optimization typically focuses on compute density. On a local device, **storage I/O** is frequently the bottleneck. Loading a multi-gigabyte embedding matrix into RAM or swapping it from disk kills the user experience. By trading a tiny bit of CPU/GPU throughput for a massive reduction in I/O, LEANN aligns with the strengths of modern local hardware.
 
-![An infographic showing the 'Local RAG Bill of Materials'. Three pillars: 1) Disk (showing a shrinking bar for LEANN), 2) RAM (showing the proximity graph), 3) GPU/CPU (showing selective recompute peaks). The visual emphasizes the trade-off: moving the burden from storage to transient compute.](https://storage.googleapis.com/editorial-planner-images/article-images/local-rag-bom-infographic.webp)
+![An infographic showing the 'Local RAG Bill of Materials'. Three pillars: 1) Disk (showing a shrinking bar for LEANN), 2) RAM (showing the proximity graph), 3) GPU/CPU (showing selective recompute peaks). The visual emphasizes the trade-off: moving the burden from storage to transient compute.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_comparison_1_20260211_224540.webp)
 
 ## How LEANN Works: The Pipeline Walkthrough
 
-![A pipeline diagram showing the steps of the LEANN workflow. 1. Ingest (Text documents) -> 2. Embed (Temporary) -> 3. Graph Build (Semantic edges) -> 4. **PURGE** (Deleting the dense matrix icon) -> 5. Compact Store (Graph + PQ). A 'Query' enters at step 6, triggering the selective recompute loop. High-contrast colors use Red for the Purge step to make it stand out.](https://storage.googleapis.com/editorial-planner-images/article-images/leann-pipeline-walkthrough.webp)
+![A pipeline diagram showing the steps of the LEANN workflow. 1. Ingest (Text documents) -> 2. Embed (Temporary) -> 3. Graph Build (Semantic edges) -> 4. **PURGE** (Deleting the dense matrix icon) -> 5. Compact Store (Graph + PQ). A 'Query' enters at step 6, triggering the selective recompute loop. High-contrast colors use Red for the Purge step to make it stand out.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_infographic_2_20260211_224556.webp)
 
 The LEANN pipeline is a clean example of **lazy evaluation**. Instead of preparing everything in advance, it builds a structural map and waits for the query to define what's relevant.
 
@@ -122,7 +122,7 @@ Across standard benchmarks, the researchers report results that challenge the "a
 
 ## Decision Matrix: When to Delete Your Embeddings
 
-![A printable decision table comparing Classic, Compressed, and LEANN approaches. Row headers: Storage, Latency, QPS, Privacy. Each cell has a clear 'High/Medium/Low' label with color-coded status circles.](https://storage.googleapis.com/editorial-planner-images/article-images/decision-matrix-card.webp)
+![A printable decision table comparing Classic, Compressed, and LEANN approaches. Row headers: Storage, Latency, QPS, Privacy. Each cell has a clear 'High/Medium/Low' label with color-coded status circles.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_diagram_4_20260211_224502.webp)
 
 | Constraint | Classic Vector Store | Compressed (PQ/Quant) | LEANN (Recompute) | Why |
 | :--- | :--- | :--- | :--- | :--- |
@@ -144,6 +144,8 @@ If you're implementing this architecture, caching is your best friend for maskin
 *   **Hardware batches**: Group recompute requests to leverage SIMD/GPU parallelism efficiently.
 
 ## Authority & Deployment: Using MCP and Local Backends
+
+![A central block representing an LLM application. A separate server component acts as a central hub or coordinator, connecting to the LLM application. Multiple external data sources and tools are depicted as distinct blocks, with arrows showing data flow into the coordinator. Another component, representing an on-device proximity graph, also connects to the coordinator. A protective barrier or shield icon is visually integrated around the LLM application's input path, with a warning symbol indicating the need to validate incoming data, symbolizing guardrails and untrusted input.](https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/section_diagram_4_20260212_090118.webp)
 
 To move from paper to production, you need a standardized bridge. The **Model Context Protocol (MCP)** is a JSON-RPC protocol to plug an LLM app into tools/data sources via standardized servers [[4](#ref-4)]. In a LEANN setup, the MCP server acts as the coordinator between the on-device proximity graph and the LLM.
 

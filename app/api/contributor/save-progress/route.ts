@@ -45,8 +45,7 @@ export async function POST(request: NextRequest) {
 
         let isNewAgreement = false;
 
-        if (!id) {
-            // Create New
+        const createNewContribution = async () => {
             const newContribution: Omit<Contribution, 'id'> = {
                 status: 'pitch',
                 currentStep: 'pitch',
@@ -59,12 +58,26 @@ export async function POST(request: NextRequest) {
             };
 
             id = await createContribution(newContribution);
-            if (newContribution.agreement?.agreed) isNewAgreement = true;
+            if (dataToSave.agreement?.checkbox_general || dataToSave.agreement?.agreed) {
+                isNewAgreement = true;
+            }
+        };
+
+        if (!id) {
+            // Create New
+            await createNewContribution();
         } else {
             // Update Existing
             const existing = await getContribution(id);
             if (!existing) {
-                return NextResponse.json({ success: false, error: 'Contribution not found' }, { status: 404 });
+                // If stale/invalid id, create a new contribution instead of failing
+                await createNewContribution();
+                return NextResponse.json({
+                    success: true,
+                    contributionId: id,
+                    lastSaved,
+                    note: 'Recreated missing contribution'
+                });
             }
 
             if (existing.contributorId !== user.uid) {

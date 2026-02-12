@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/components/auth/AuthContext';
 
 interface User {
@@ -13,6 +13,14 @@ interface User {
     agreement: {
         version: string;
         agreedAt: string;
+        accepted_at?: string;
+        ip?: string;
+        user_agent?: string;
+        fiscal_code?: string;
+        author_name?: string;
+        author_email?: string;
+        agreement_hash_sha256?: string;
+        agreement_view_url?: string;
     } | null;
     writerProfile?: {
         slug: string;
@@ -23,11 +31,19 @@ interface User {
     } | null;
 }
 
+/**
+ * Admin users table with writer agreement details modal.
+ */
 export default function AdminUsersPage() {
     const { user } = useAuth();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [agreementPreviewUrl, setAgreementPreviewUrl] = useState<string | null>(null);
+    const [agreementPreviewError, setAgreementPreviewError] = useState<string | null>(null);
+    const [agreementPreviewLoading, setAgreementPreviewLoading] = useState(false);
+    const [previewZoom, setPreviewZoom] = useState(1);
+    const lastAgreementSourceRef = useRef<string | null>(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -50,6 +66,106 @@ export default function AdminUsersPage() {
         fetchUsers();
     }, [user]);
 
+    const formatDate = (value?: string | null) => {
+        if (!value) return '-';
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
+    };
+
+    const getAgreementDate = (agreement?: User['agreement']) => {
+        if (!agreement) return '-';
+        return formatDate(agreement.accepted_at);
+    };
+
+    useEffect(() => {
+        if (!selectedUser?.agreement?.agreement_view_url || !user) {
+            if (agreementPreviewUrl) {
+                URL.revokeObjectURL(agreementPreviewUrl);
+            }
+            lastAgreementSourceRef.current = null;
+            setAgreementPreviewUrl(null);
+            setAgreementPreviewError(null);
+            setAgreementPreviewLoading(false);
+            setPreviewZoom(1);
+            return;
+        }
+
+        let isActive = true;
+        const controller = new AbortController();
+        const agreementViewUrl = selectedUser.agreement?.agreement_view_url as string;
+        const localAgreementPath = (() => {
+            try {
+                const url = new URL(agreementViewUrl);
+                if (url.pathname.startsWith('/api/admin/agreement/')) {
+                    return url.pathname;
+                }
+            } catch {
+                // Ignore invalid URL, fallback to raw string below
+            }
+            return agreementViewUrl;
+        })();
+
+        if (lastAgreementSourceRef.current === localAgreementPath) {
+            return () => {
+                isActive = false;
+                controller.abort();
+            };
+        }
+
+        lastAgreementSourceRef.current = localAgreementPath;
+        setPreviewZoom(1);
+
+        const loadAgreementPreview = async () => {
+            setAgreementPreviewLoading(true);
+            setAgreementPreviewError(null);
+
+            try {
+                const token = await user.getIdToken();
+                const res = await fetch(localAgreementPath, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    signal: controller.signal,
+                });
+
+                if (!res.ok) {
+                    throw new Error(`Failed to load agreement (${res.status})`);
+                }
+
+                const blob = await res.blob();
+                const objectUrl = URL.createObjectURL(blob);
+
+                if (!isActive) {
+                    URL.revokeObjectURL(objectUrl);
+                    return;
+                }
+
+                if (agreementPreviewUrl) {
+                    URL.revokeObjectURL(agreementPreviewUrl);
+                }
+
+                setAgreementPreviewUrl(objectUrl);
+            } catch (error) {
+                if (!isActive) return;
+                const message = error instanceof Error ? error.message : 'Unable to load agreement preview.';
+                setAgreementPreviewError(message);
+                if (agreementPreviewUrl) {
+                    URL.revokeObjectURL(agreementPreviewUrl);
+                }
+                setAgreementPreviewUrl(null);
+            } finally {
+                if (isActive) setAgreementPreviewLoading(false);
+            }
+        };
+
+        void loadAgreementPreview();
+
+        return () => {
+            isActive = false;
+            controller.abort();
+        };
+    }, [agreementPreviewUrl, selectedUser?.agreement?.agreement_view_url, user]);
+
     if (loading) {
         return (
             <div className="flex animate-pulse flex-col space-y-4">
@@ -60,12 +176,6 @@ export default function AdminUsersPage() {
             </div>
         );
     }
-
-    const formatDate = (value?: string | null) => {
-        if (!value) return '-';
-        const date = new Date(value);
-        return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
-    };
 
     return (
         <div className="space-y-6">
@@ -133,7 +243,7 @@ export default function AdminUsersPage() {
                                                 {person.agreement ? (
                                                     <div className="flex flex-col">
                                                         <span className="text-slate-900 dark:text-white">v{person.agreement.version}</span>
-                                                        <span className="text-xs">{formatDate(person.agreement.agreedAt)}</span>
+                                                        <span className="text-xs">{formatDate(person.agreement.accepted_at)}</span>
                                                     </div>
                                                 ) : (
                                                     <span className="text-slate-400">-</span>
@@ -209,11 +319,116 @@ export default function AdminUsersPage() {
                                         <span className="font-semibold text-slate-900 dark:text-white">v{selectedUser.agreement.version}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-slate-500">Agreed At</span>
+                                        <span className="text-slate-500">Accepted At</span>
                                         <span className="font-semibold text-slate-900 dark:text-white">
-                                            {formatDate(selectedUser.agreement.agreedAt)}
+                                            {getAgreementDate(selectedUser.agreement)}
                                         </span>
                                     </div>
+                                    {selectedUser.agreement.agreement_view_url ? (
+                                        <div className="flex flex-col gap-1">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-slate-500">Agreement Preview</span>
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setPreviewZoom((prev) => Math.max(0.75, Math.round((prev - 0.25) * 100) / 100))}
+                                                        className="rounded-md border border-slate-200 px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                                                    >
+                                                        -
+                                                    </button>
+                                                    <span className="min-w-[48px] text-center text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                                        {Math.round(previewZoom * 100)}%
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setPreviewZoom((prev) => Math.min(2.5, Math.round((prev + 0.25) * 100) / 100))}
+                                                        className="rounded-md border border-slate-200 px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                                                    >
+                                                        +
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setPreviewZoom(1)}
+                                                        className="rounded-md border border-slate-200 px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                                                    >
+                                                        Reset
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {agreementPreviewLoading ? (
+                                                <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+                                                    Loading preview...
+                                                </div>
+                                            ) : agreementPreviewError ? (
+                                                <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 dark:border-amber-900/40 dark:bg-amber-900/20 dark:text-amber-200">
+                                                    {agreementPreviewError}
+                                                </div>
+                                            ) : agreementPreviewUrl ? (
+                                                <div className="rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+                                                    <div className="h-80 w-full overflow-auto">
+                                                        <div
+                                                            className="origin-top-left"
+                                                            style={{ transform: `scale(${previewZoom})`, width: `${Math.max(100, previewZoom * 100)}%` }}
+                                                        >
+                                                            <object
+                                                                data={agreementPreviewUrl}
+                                                                type="application/pdf"
+                                                                className="h-80 w-full"
+                                                            >
+                                                                <div className="flex h-full w-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
+                                                                    PDF preview not available.
+                                                                </div>
+                                                            </object>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+                                                    No preview available.
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : null}
+                                    {selectedUser.agreement.agreement_hash_sha256 ? (
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-slate-500">Agreement Hash (SHA-256)</span>
+                                            <span className="break-words font-mono text-xs text-slate-900 dark:text-white">
+                                                {selectedUser.agreement.agreement_hash_sha256}
+                                            </span>
+                                        </div>
+                                    ) : null}
+                                    {selectedUser.agreement.author_name ? (
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500">Legal Name</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white">
+                                                {selectedUser.agreement.author_name}
+                                            </span>
+                                        </div>
+                                    ) : null}
+                                    {selectedUser.agreement.fiscal_code ? (
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500">Fiscal Code</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white">
+                                                {selectedUser.agreement.fiscal_code}
+                                            </span>
+                                        </div>
+                                    ) : null}
+                                    {selectedUser.agreement.ip ? (
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500">IP</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white">
+                                                {selectedUser.agreement.ip}
+                                            </span>
+                                        </div>
+                                    ) : null}
+                                    {selectedUser.agreement.user_agent ? (
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-slate-500">User Agent</span>
+                                            <span className="break-words font-medium text-slate-900 dark:text-white">
+                                                {selectedUser.agreement.user_agent}
+                                            </span>
+                                        </div>
+                                    ) : null}
                                 </div>
                             ) : (
                                 <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 dark:border-amber-900/40 dark:bg-amber-900/20 dark:text-amber-200">

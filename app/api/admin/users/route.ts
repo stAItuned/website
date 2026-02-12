@@ -17,6 +17,27 @@ interface WriterProfileDoc {
     createdAt?: string;
 }
 
+interface ContributionAgreementDoc {
+    contributorId?: string;
+    agreement?: {
+        agreement_version?: string;
+        version?: string;
+        accepted_at?: string;
+        agreedAt?: string;
+        checkbox_general?: boolean;
+        agreed?: boolean;
+        author_name?: string;
+        author_email?: string;
+        fiscal_code?: string;
+        agreement_hash_sha256?: string;
+        agreement_view_url?: string;
+        ip?: string;
+        user_agent?: string;
+    };
+    updatedAt?: string;
+    createdAt?: string;
+}
+
 export async function GET(request: NextRequest) {
     const auth = await verifyAdmin(request);
     if (auth.error) {
@@ -33,6 +54,40 @@ export async function GET(request: NextRequest) {
             db.collection('writer_slugs').get(),
             db.collection('writers').get()
         ]);
+
+        const [agreementsByCheckbox, agreementsByAgreed] = await Promise.all([
+            db.collection('contributions')
+                .where('agreement.checkbox_general', '==', true)
+                .get(),
+            db.collection('contributions')
+                .where('agreement.agreed', '==', true)
+                .get()
+        ]);
+
+        const agreementsByUser = new Map<string, ContributionAgreementDoc['agreement']>();
+        const agreementDocs = [...agreementsByCheckbox.docs, ...agreementsByAgreed.docs];
+        agreementDocs.forEach((doc) => {
+            const data = doc.data() as ContributionAgreementDoc;
+            if (!data.contributorId || !data.agreement) return;
+            const normalizedAgreement = {
+                ...data.agreement,
+                version: data.agreement.version || data.agreement.agreement_version,
+                agreedAt: data.agreement.agreedAt || data.agreement.accepted_at,
+                accepted_at: data.agreement.accepted_at || data.agreement.agreedAt,
+            };
+
+            const existing = agreementsByUser.get(data.contributorId);
+            if (!existing) {
+                agreementsByUser.set(data.contributorId, normalizedAgreement);
+                return;
+            }
+
+            const existingDate = (existing.accepted_at || existing.agreedAt) ?? '';
+            const currentDate = (normalizedAgreement.accepted_at || normalizedAgreement.agreedAt) ?? '';
+            if (currentDate && currentDate > existingDate) {
+                agreementsByUser.set(data.contributorId, normalizedAgreement);
+            }
+        });
 
         // Map UID -> Slug
         const uidToSlug = new Map<string, string>();
@@ -59,6 +114,7 @@ export async function GET(request: NextRequest) {
             const uid = doc.id;
             const slug = uidToSlug.get(uid);
             const writerProfile = (slug ? slugToProfile.get(slug) : null) ?? uidToWriter.get(uid) ?? null;
+            const agreement = agreementsByUser.get(uid) ?? null;
 
             return {
                 uid,
@@ -68,7 +124,7 @@ export async function GET(request: NextRequest) {
                 lastLoginAt: data.lastLoginAt?.toDate ? data.lastLoginAt.toDate() : data.lastLoginAt,
                 // Use actual writer profile existence as source of truth, fallback to flag
                 isWriter: Boolean(writerProfile) || data.isWriter || false,
-                agreement: data.agreement || null,
+                agreement,
                 writerProfile: writerProfile ? {
                     slug: writerProfile.slug,
                     displayName: writerProfile.displayName,
@@ -101,7 +157,7 @@ export async function GET(request: NextRequest) {
                 createdAt: writer.createdAt || null,
                 lastLoginAt: null,
                 isWriter: true,
-                agreement: null,
+                agreement: writer.uid ? agreementsByUser.get(writer.uid) ?? null : null,
                 writerProfile: writer.slug ? {
                     slug: writer.slug,
                     displayName: writer.displayName,
