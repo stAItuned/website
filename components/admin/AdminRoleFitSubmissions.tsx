@@ -15,12 +15,15 @@ interface RoleFitSubmission {
         archetypeName?: string
         scores?: Record<string, number>
     }
+    answers?: Record<string, unknown> | unknown[] | string | null
+    report?: Record<string, unknown> | string | null
 }
 
 export function AdminRoleFitSubmissions() {
     const { user } = useAuth()
     const [submissions, setSubmissions] = useState<RoleFitSubmission[]>([])
     const [loading, setLoading] = useState(true)
+    const [selectedSubmission, setSelectedSubmission] = useState<RoleFitSubmission | null>(null)
     const [error, setError] = useState('')
 
     useEffect(() => {
@@ -58,6 +61,18 @@ export function AdminRoleFitSubmissions() {
 
     if (error) {
         return <div className="text-red-500 p-4 border border-red-200 rounded-xl bg-red-50">{error}</div>
+    }
+
+    const formatDate = (value: string) => {
+        if (!value) return 'N/A'
+        const date = new Date(value)
+        return Number.isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString()
+    }
+
+    const formatDateTime = (value: string) => {
+        if (!value) return 'N/A'
+        const date = new Date(value)
+        return Number.isNaN(date.getTime()) ? 'N/A' : date.toLocaleString()
     }
 
     return (
@@ -117,7 +132,15 @@ export function AdminRoleFitSubmissions() {
                                         )}
                                     </td>
                                     <td className="px-4 py-3 text-right text-gray-500 dark:text-gray-400 font-mono text-xs">
-                                        {new Date(sub.createdAt).toLocaleDateString()}
+                                        <div className="flex flex-col items-end gap-1">
+                                            <span>{formatDate(sub.createdAt)}</span>
+                                            <button
+                                                onClick={() => setSelectedSubmission(sub)}
+                                                className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium text-xs underline"
+                                            >
+                                                View Details
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -132,6 +155,111 @@ export function AdminRoleFitSubmissions() {
                     </table>
                 </div>
             </div>
-        </div>
+
+            {/* Details Modal */}
+            {
+                selectedSubmission && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                        onClick={() => setSelectedSubmission(null)}
+                    >
+                        <div className="bg-white dark:bg-slate-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start sticky top-0 bg-white dark:bg-slate-900 z-10">
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Audit Details</h3>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                                        {selectedSubmission.name || 'Anonymous'} • {formatDateTime(selectedSubmission.createdAt)}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedSubmission(null)}
+                                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                >
+                                    <span className="sr-only">Close</span>
+                                    <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="p-6 space-y-8">
+                                {/* Summary */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
+                                        <h4 className="font-semibold mb-3 text-slate-900 dark:text-white">Result Overview</h4>
+                                        <dl className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                                <dt className="text-slate-500">Current Role:</dt>
+                                                <dd className="font-medium text-slate-900 dark:text-white">{selectedSubmission.result?.roleNow || 'N/A'}</dd>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <dt className="text-slate-500">Readiness:</dt>
+                                                <dd className="font-medium text-slate-900 dark:text-white">{selectedSubmission.result?.readinessLabel || 'N/A'}</dd>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <dt className="text-slate-500">Archetype:</dt>
+                                                <dd className="font-medium text-purple-600 dark:text-purple-400">{selectedSubmission.result?.archetypeName || 'N/A'}</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
+                                        <h4 className="font-semibold mb-3 text-slate-900 dark:text-white">Scores</h4>
+                                        <div className="space-y-2">
+                                            {Object.entries(selectedSubmission.result?.scores || {}).map(([key, value]) => (
+                                                <div key={key} className="flex items-center text-sm">
+                                                    <span className="w-32 capitalize text-slate-500 truncate">{key.replace(/_/g, ' ')}</span>
+                                                    <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mx-2">
+                                                        <div className="h-full bg-purple-500" style={{ width: `${(value / 10) * 100}%` }}></div>
+                                                    </div>
+                                                    <span className="w-8 text-right font-medium text-slate-900 dark:text-white">{value}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Q&A / Answers */}
+                                <div>
+                                    <h4 className="font-semibold mb-4 text-lg text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">
+                                        Submission Answers
+                                    </h4>
+                                    <div className="space-y-4">
+                                        {selectedSubmission.answers ? (
+                                            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 overflow-x-auto">
+                                                <pre className="text-xs whitespace-pre-wrap font-mono text-slate-700 dark:text-slate-300">
+                                                    {JSON.stringify(selectedSubmission.answers, null, 2)}
+                                                </pre>
+                                            </div>
+                                        ) : (
+                                            <p className="text-slate-500 italic">No detailed answers available.</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Full Report */}
+                                <div>
+                                    <h4 className="font-semibold mb-4 text-lg text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">
+                                        Generated Report
+                                    </h4>
+                                    {selectedSubmission.report ? (
+                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-6 prose dark:prose-invert max-w-none text-sm">
+                                            {/* Simple rendering for now, could be marked down if report is MD */}
+                                            <pre className="whitespace-pre-wrap font-sans text-slate-700 dark:text-slate-300">
+                                                {typeof selectedSubmission.report === 'string'
+                                                    ? selectedSubmission.report
+                                                    : JSON.stringify(selectedSubmission.report, null, 2)}
+                                            </pre>
+                                        </div>
+                                    ) : (
+                                        <p className="text-slate-500 italic">No report generated.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
     )
 }

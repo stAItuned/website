@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { App, getApps, initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
+import { isAdmin } from '@/lib/firebase/admin-emails';
 
 // Initialize Firebase Admin safely
 function getFirebaseAdmin(): App {
@@ -49,4 +50,15 @@ export function getAdminDb() {
         // Ignore setting already set error if called multiple times on same instance
     }
     return db;
+}
+
+export async function verifyAdmin(request: NextRequest) {
+    const user = await verifyAuth(request);
+    if (!user) {
+        return { error: 'Unauthorized', status: 401 };
+    }
+    if (!isAdmin(user.email)) {
+        return { error: 'Forbidden', status: 403 };
+    }
+    return { user };
 }

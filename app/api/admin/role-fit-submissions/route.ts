@@ -19,6 +19,20 @@ interface RoleFitSubmission {
         normalizedScores?: Record<string, number>;
         archetypeName?: string;
     };
+    answers?: Record<string, unknown> | unknown[] | string | null;
+    report?: Record<string, unknown> | string | null;
+}
+
+function toIsoString(value: unknown): string {
+    if (!value) return '';
+    if (value instanceof Date) return value.toISOString();
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return new Date(value).toISOString();
+    if (typeof value === 'object' && value !== null && 'toDate' in value) {
+        const possible = value as { toDate?: () => Date };
+        if (possible.toDate) return possible.toDate().toISOString();
+    }
+    return '';
 }
 
 export async function GET(request: NextRequest) {
@@ -44,15 +58,32 @@ export async function GET(request: NextRequest) {
         console.log('[Admin RoleFit] Found submissions count:', snapshot.docs.length);
 
         const submissions: RoleFitSubmission[] = snapshot.docs.map(doc => {
-            const data = doc.data();
+            const data = doc.data() as {
+                email?: string;
+                name?: string;
+                linkedinUrl?: string;
+                marketingConsent?: boolean;
+                paypalOrderId?: string;
+                createdAt?: unknown;
+                result?: {
+                    readinessLabel?: string;
+                    roleNow?: string;
+                    roleNext?: string;
+                    scores?: Record<string, number>;
+                    normalizedScores?: Record<string, number>;
+                    archetypeName?: string;
+                };
+                answers?: Record<string, unknown> | unknown[] | string | null;
+                report?: Record<string, unknown> | string | null;
+            };
             return {
                 id: doc.id,
-                email: data.email,
+                email: data.email || '',
                 name: data.name,
                 linkedinUrl: data.linkedinUrl,
                 marketingConsent: data.marketingConsent,
                 paypalOrderId: data.paypalOrderId,
-                createdAt: data.createdAt,
+                createdAt: toIsoString(data.createdAt),
                 result: data.result ? {
                     readinessLabel: data.result.readinessLabel,
                     roleNow: data.result.roleNow,
@@ -60,7 +91,9 @@ export async function GET(request: NextRequest) {
                     scores: data.result.scores,
                     normalizedScores: data.result.normalizedScores,
                     archetypeName: data.result.archetypeName,
-                } : undefined
+                } : undefined,
+                answers: data.answers,
+                report: data.report
             };
         });
 

@@ -2,7 +2,6 @@ import { User } from 'firebase/auth'
 import { AccountOverviewSection } from '@/components/account/settings/AccountOverviewSection'
 import { WriterWorkspaceSection } from '@/components/account/settings/WriterWorkspaceSection'
 import { AccountArticlesSection } from '@/components/account/settings/AccountArticlesSection'
-import { AdminToolsSection } from '@/components/account/settings/AdminToolsSection'
 import { DataPrivacySection } from '@/components/account/settings/DataPrivacySection'
 import { LegalAgreementSection } from '@/components/account/settings/LegalAgreementSection'
 import { DangerZoneSection } from '@/components/account/settings/DangerZoneSection'
@@ -14,9 +13,6 @@ interface AccountSettingsContentProps {
   bookmarksCount: number
   hasUserData: boolean
   isWriter: boolean | null
-  isAdmin: boolean
-  activeAdminTab: 'contributions' | 'role_fit'
-  onAdminTabChange: (tab: 'contributions' | 'role_fit') => void
   onOpenAgreement: () => void
   onRequestDeleteData: () => void
   onRequestDeleteAccount: () => void
@@ -32,9 +28,6 @@ export function AccountSettingsContent({
   bookmarksCount,
   hasUserData,
   isWriter,
-  isAdmin,
-  activeAdminTab,
-  onAdminTabChange,
   onOpenAgreement,
   onRequestDeleteData,
   onRequestDeleteAccount,
@@ -49,14 +42,8 @@ export function AccountSettingsContent({
         isWriter={isWriter}
       />
       <WriterWorkspaceSection isWriter={isWriter} />
-      <PersonalBadgeProgramSection isAdmin={isAdmin} />
+      <PersonalBadgeProgramSection />
       <AccountArticlesSection userEmail={user.email} />
-      {isAdmin ? (
-        <AdminToolsSection
-          activeAdminTab={activeAdminTab}
-          onAdminTabChange={onAdminTabChange}
-        />
-      ) : null}
       <DataPrivacySection
         bookmarksCount={bookmarksCount}
         hasUserData={hasUserData}

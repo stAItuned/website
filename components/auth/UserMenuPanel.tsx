@@ -164,7 +164,7 @@ export function UserMenuPanel({
       {isAdmin ? (
         <div className="mt-4 space-y-2">
           <div className="px-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Admin</div>
-          <MenuLink href="/admin/reviews" icon={ShieldCheck} label="Review drafts" />
+          <MenuLink href="/admin" icon={ShieldCheck} label="Admin Dashboard" />
         </div>
       ) : null}
 

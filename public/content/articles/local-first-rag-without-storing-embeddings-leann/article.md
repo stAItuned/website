@@ -7,7 +7,7 @@ cover: "{cover_url}"
 meta: "Cut local RAG storage by 50× with LEANN: drop the dense embedding matrix, keep a compact graph + PQ codes, and selectively recompute at query time."
 date: 2026-02-11T00:00:00.000Z
 published: false
-primaryTopic: rag-context-engineering
+primaryTopic: rag
 topics:
   - genai-fundamentals
   - production-reliability

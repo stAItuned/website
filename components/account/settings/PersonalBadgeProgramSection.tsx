@@ -6,7 +6,6 @@ import { BadgeGrid } from '@/components/badges/BadgeGrid'
 import { SettingsSectionCard } from '@/components/account/settings/SettingsSectionCard'
 import { PremiumLink } from '@/components/ui/PremiumLink'
 import { useLearnLocale, accountTranslations } from '@/lib/i18n'
-import { AdminBadgeControls } from '@/components/admin/AdminBadgeControls'
 import { useAuth } from '@/components/auth/AuthContext'
 import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
@@ -23,7 +22,7 @@ interface BadgeResponse {
 /**
  * Personal badge program overview with earned and locked badges.
  */
-export function PersonalBadgeProgramSection({ isAdmin }: { isAdmin?: boolean }) {
+export function PersonalBadgeProgramSection() {
   const { user } = useAuth()
   const { isWriter } = useWriterStatus()
   const [earnedBadges, setEarnedBadges] = useState<AuthorBadge[]>([])
@@ -135,11 +134,7 @@ export function PersonalBadgeProgramSection({ isAdmin }: { isAdmin?: boolean }) 
           <BadgeGrid badges={BADGE_DEFINITIONS} earnedBadges={earnedBadges} />
         )}
 
-        {isAdmin && (
-          <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700">
-            <AdminBadgeControls />
-          </div>
-        )}
+
       </div>
     </SettingsSectionCard>
   )

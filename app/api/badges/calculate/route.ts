@@ -7,21 +7,16 @@ import { calculateEligibleBadges } from '@/lib/badges/badge-calculator';
 
 export const dynamic = 'force-dynamic'; // Defaults to auto, but we want to ensure it runs dynamically if verified
 
-// Protect this route with a secret key in headers
-const CRON_SECRET = process.env.CRON_SECRET || 'dev-secret-key';
+import { verifyAdmin } from '@/lib/firebase/server-auth';
 
-export async function GET(request: NextRequest) {
-    const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${CRON_SECRET}`) {
-        // Allow public access in dev for easy testing if no secret set, or strictly enforce? 
-        // For safe dev environment, we can check NODE_ENV.
-        if (process.env.NODE_ENV === 'production') {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+export async function POST(request: NextRequest) {
+    const auth = await verifyAdmin(request);
+    if (auth.error) {
+        return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
 
-    const { searchParams } = new URL(request.url);
-    const specificAuthor = searchParams.get('author');
+    const { author } = await request.json();
+    const specificAuthor = author;
 
     try {
         // 1. Get List of Authors

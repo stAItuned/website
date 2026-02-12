@@ -22,8 +22,6 @@ interface AccountSettingsShellProps {
   bookmarksCount: number
   hasUserData: boolean
   isAdmin: boolean
-  activeAdminTab: 'contributions' | 'role_fit'
-  onAdminTabChange: (tab: 'contributions' | 'role_fit') => void
   onOpenAgreement: () => void
   onRequestDeleteData: () => void
   onRequestDeleteAccount: () => void
@@ -40,8 +38,6 @@ export function AccountSettingsShell({
   bookmarksCount,
   hasUserData,
   isAdmin,
-  activeAdminTab,
-  onAdminTabChange,
   onOpenAgreement,
   onRequestDeleteData,
   onRequestDeleteAccount,
@@ -55,7 +51,6 @@ export function AccountSettingsShell({
     { id: 'writer', label: t.nav.writer, icon: FilePenLine },
     { id: 'badges', label: t.nav.badges, icon: Award },
     { id: 'articles', label: t.nav.contributions, icon: LayoutList, hidden: !user.email },
-    { id: 'admin', label: t.nav.admin, icon: ShieldCheck, hidden: !isAdmin },
     { id: 'data', label: t.nav.data, icon: BookMarked },
     { id: 'legal', label: t.nav.legal, icon: FileText },
     { id: 'danger', label: t.nav.danger, icon: AlertTriangle },
@@ -116,10 +111,7 @@ export function AccountSettingsShell({
             bookmarksCount={bookmarksCount}
             hasUserData={hasUserData}
             isWriter={isWriter}
-            isAdmin={isAdmin}
-            activeAdminTab={activeAdminTab}
             agreementData={agreementData}
-            onAdminTabChange={onAdminTabChange}
             onOpenAgreement={onOpenAgreement}
             onRequestDeleteData={onRequestDeleteData}
             onRequestDeleteAccount={onRequestDeleteAccount}

@@ -14,6 +14,7 @@ import { LearnLocaleToggle, useLearnLocale } from '@/lib/i18n'
 
 const DISABLE_AUTH = false
 import { UserMenu } from '@/components/auth/UserMenu'
+import { isAdmin } from '@/lib/firebase/admin-emails'
 
 import { trackHeaderCTAClicked } from '@/lib/analytics/trackEvent'
 
@@ -23,10 +24,12 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
   const { openSearch } = useSearch()
   const { user, loading } = useAuth()
+
   const { resolvedTheme } = useTheme()
   const { t } = useLearnLocale()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
+  const admin = user?.email ? isAdmin(user.email) : false
 
   // Wait for component to mount before determining logo source
   // This prevents hydration mismatch between server and client
@@ -372,6 +375,19 @@ export function Header() {
                       Sign In
                     </Link>
                   )}
+
+
+                  {/* Admin Link for Mobile */}
+                  {admin ? (
+                    <Link
+                      href="/admin"
+                      className="flex items-center justify-center w-full py-3 px-4 mt-2 bg-slate-800 text-white text-lg font-semibold rounded-lg hover:bg-slate-700 transition"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span className="text-xl mr-2">🛡️</span>
+                      Admin Dashboard
+                    </Link>
+                  ) : null}
                 </div>
               )}
 

@@ -55,7 +55,7 @@ function AccountSettingsContent() {
   const [showAgreement, setShowAgreement] = useState(false)
   const [contributions, setContributions] = useState<any[]>([])
   const [agreementData, setAgreementData] = useState<any>(null)
-  const [activeAdminTab, setActiveAdminTab] = useState<'contributions' | 'role_fit'>('contributions')
+
   const activeTab = searchParams.get('tab')
 
   useEffect(() => {
@@ -180,8 +180,6 @@ function AccountSettingsContent() {
         hasUserData={Boolean(userData)}
         isAdmin={admin}
         agreementData={agreementData}
-        activeAdminTab={activeAdminTab}
-        onAdminTabChange={setActiveAdminTab}
         onOpenAgreement={() => setShowAgreement(true)}
         onRequestDeleteData={() => setShowDataDeleteConfirm(true)}
         onRequestDeleteAccount={() => setShowDeleteConfirm(true)}
