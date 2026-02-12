@@ -8,11 +8,11 @@ import PromoCodeGate from './components/PromoCodeGate'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
 
 export const metadata: Metadata = {
-    title: 'Role Fit Audit | Scopri il tuo ruolo GenAI ideale | stAItuned',
+    title: 'GenAI Fit Check | Scopri il tuo ruolo GenAI ideale | stAItuned',
     description:
         'PwC 2025: le skill AI specializzate valgono un +56% di salario. Fai l\'audit (5 min) per scoprire il tuo ranking e colmare i gap tecnici.',
     keywords: [
-        'Role Fit Audit',
+        'GenAI Fit Check',
         'test carriera AI',
         'profilo GenAI',
         'assessment AI Italia',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         locale: 'it_IT',
         url: `${SITE_URL}/role-fit-audit`,
         siteName: 'stAItuned',
-        title: 'Role Fit Audit | Scopri il tuo ruolo GenAI ideale',
+        title: 'GenAI Fit Check | Scopri il tuo ruolo GenAI ideale',
         description:
             'PwC 2025: +56% di salario per skill AI specializzate. Scopri il tuo ranking e colma i gap in 5 minuti.',
         images: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
                 url: '/assets/role-fit-audit/role-fit-audit-logo.png',
                 width: 1200,
                 height: 630,
-                alt: 'Role Fit Audit - Scopri il tuo ruolo GenAI ideale',
+                alt: 'GenAI Fit Check - Scopri il tuo ruolo GenAI ideale',
             },
         ],
     },

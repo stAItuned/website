@@ -109,6 +109,60 @@ export const contributeTranslations = {
             }
         },
 
+        becomeWriter: {
+            onboarding: {
+                badge: 'Onboarding Writer',
+                stepCounter: 'Passo {current}/4',
+                title: 'Attiva il tuo profilo writer',
+                subtitle: 'Ti guidiamo passo passo dalla prima idea alla pubblicazione.',
+                step1Title: 'Cosa ottieni come writer',
+                step1Items: [
+                    'Supporto editoriale su struttura e qualità del contenuto.',
+                    'Distribuzione e visibilità sul canale stAI tuned.',
+                    'Percorso guidato dall\'idea alla pubblicazione.'
+                ],
+                continue: 'Continua',
+                step2Title: 'Come funziona',
+                step2Cards: [
+                    'Definisci la tua idea',
+                    'Segui il percorso guidato',
+                    'Pubblica con supporto stAI tuned'
+                ],
+                back: 'Indietro',
+                startSetup: 'Inizia setup writer',
+                activateProfile: 'Attiva profilo writer',
+                successTitle: 'Profilo writer attivato',
+                successMessage: 'Perfetto, il tuo profilo e pronto. Ora puoi iniziare il tuo primo brief.',
+                authorPage: 'Pagina autore:',
+                firstIdeaCta: 'Proponi la tua prima idea',
+                dashboardCta: 'Vai alla dashboard writer'
+            },
+            form: {
+                loginRequired: 'Devi essere loggato per creare un profilo writer.',
+                slugMissing: 'Profilo creato ma slug non disponibile',
+                genericError: 'Qualcosa è andato storto. Riprova.',
+                imageAlt: 'Anteprima profilo',
+                imageHint: 'Formato consigliato: JPG quadrato (opzionale, es. 400x400px)',
+                name: 'Nome',
+                surname: 'Cognome',
+                title: 'Titolo / Ruolo',
+                titlePlaceholder: 'es. Senior Data Scientist',
+                bio: 'Bio',
+                bioPlaceholder: 'Raccontaci chi sei...',
+                linkedin: 'LinkedIn (opzionale)',
+                website: 'Sito Web (opzionale)',
+                consentPrefix: 'Accetto i',
+                terms: 'Termini e Condizioni',
+                consentMiddle: 'e la',
+                privacy: 'Privacy Policy',
+                consentSuffix: 'Acconsento al trattamento dei miei dati personali per la creazione del profilo autore pubblico.',
+                saving: 'Salvataggio...',
+                checkingSession: 'Verifica sessione...',
+                loginNeeded: 'Login richiesto',
+                defaultSubmit: 'Crea Profilo Writer'
+            }
+        },
+
         // Wizard
         wizard: {
             steps: {
@@ -583,6 +637,60 @@ export const contributeTranslations = {
                     comment: { label: 'Comment', description: 'Note or suggestion' },
                     idea: { label: 'Idea', description: 'New proposal' }
                 }
+            }
+        },
+
+        becomeWriter: {
+            onboarding: {
+                badge: 'Writer Onboarding',
+                stepCounter: 'Step {current}/4',
+                title: 'Activate your writer profile',
+                subtitle: 'We guide you step by step from your first idea to publication.',
+                step1Title: 'What you get as a writer',
+                step1Items: [
+                    'Editorial support on structure and content quality.',
+                    'Distribution and visibility on stAI tuned channels.',
+                    'A guided path from idea to publication.'
+                ],
+                continue: 'Continue',
+                step2Title: 'How it works',
+                step2Cards: [
+                    'Define your idea',
+                    'Follow the guided path',
+                    'Publish with stAI tuned support'
+                ],
+                back: 'Back',
+                startSetup: 'Start writer setup',
+                activateProfile: 'Activate writer profile',
+                successTitle: 'Writer profile activated',
+                successMessage: 'Great, your profile is ready. You can now start your first brief.',
+                authorPage: 'Author page:',
+                firstIdeaCta: 'Pitch your first idea',
+                dashboardCta: 'Go to writer dashboard'
+            },
+            form: {
+                loginRequired: 'You must be logged in to create a writer profile.',
+                slugMissing: 'Profile created but slug is not available.',
+                genericError: 'Something went wrong. Please try again.',
+                imageAlt: 'Profile preview',
+                imageHint: 'Recommended format: square JPG (optional, e.g. 400x400px)',
+                name: 'First name',
+                surname: 'Last name',
+                title: 'Title / Role',
+                titlePlaceholder: 'e.g. Senior Data Scientist',
+                bio: 'Bio',
+                bioPlaceholder: 'Tell us who you are...',
+                linkedin: 'LinkedIn (optional)',
+                website: 'Website (optional)',
+                consentPrefix: 'I accept the',
+                terms: 'Terms and Conditions',
+                consentMiddle: 'and the',
+                privacy: 'Privacy Policy',
+                consentSuffix: 'I consent to the processing of my personal data for creating a public author profile.',
+                saving: 'Saving...',
+                checkingSession: 'Checking session...',
+                loginNeeded: 'Login required',
+                defaultSubmit: 'Create Writer Profile'
             }
         },
 

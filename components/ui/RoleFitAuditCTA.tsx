@@ -202,7 +202,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 						<svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
 						</svg>
-						<span className="text-xs font-semibold tracking-wide uppercase">Role Fit Audit</span>
+						<span className="text-xs font-semibold tracking-wide uppercase">GenAI Fit Check</span>
 					</div>
 
 					<h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
@@ -265,7 +265,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 										onClick={handleCTAClick}
 										className="absolute inset-0 z-10 sm:hidden"
 									>
-										<span className="sr-only">Apri Role Fit Audit</span>
+										<span className="sr-only">Apri GenAI Fit Check</span>
 									</Link>
 
 									<button

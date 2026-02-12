@@ -92,7 +92,7 @@ export default function RoleFitAuditResults({ result }: Props) {
                     ✓ Audit completato
                 </span>
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                    Il tuo Role Fit Audit
+                    Il tuo GenAI Fit Check
                 </h1>
             </div>
 
@@ -374,7 +374,7 @@ export default function RoleFitAuditResults({ result }: Props) {
             {/* CTA */}
             <div className="bg-gradient-to-r from-[#1A1E3B] to-[#2A3050] rounded-2xl p-8 text-center">
                 <h3 className="text-2xl font-bold text-white mb-3">
-                    Prenota il tuo 1:1 per avere un feedback personalizzato sul tuo Role Fit Audit
+                    Prenota il tuo 1:1 per avere un feedback personalizzato sul tuo GenAI Fit Check
                 </h3>
                 <p className="text-slate-300 mb-6 max-w-xl mx-auto">
                     Una call <strong>gratuita</strong> di 15 minuti, in cui i nostri esperti AI saranno a <strong>tua completa disposizione</strong> per darti feedback, chiarire dubbi, darti consigli.

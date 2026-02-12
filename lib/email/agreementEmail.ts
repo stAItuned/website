@@ -62,6 +62,7 @@ export async function sendAgreementConfirmationEmail(params: SendAgreementConfir
         const payload: any = {
             from: FROM_EMAIL,
             to: email,
+            cc: 'staituned.owner@gmail.com',
             subject,
             html,
         }

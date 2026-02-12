@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { verifyAuth } from '@/lib/firebase/server-auth'
 import { isAdmin } from '@/lib/firebase/admin-emails'
 import { getContribution, updateContribution } from '@/lib/firebase/contributor-db'
+import { ContributionReviewHistoryEntry } from '@/lib/types/contributor'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,11 +63,11 @@ export async function POST(request: NextRequest) {
       },
     ]
 
-    const nextReviewHistory = [
+    const nextReviewHistory: ContributionReviewHistoryEntry[] = [
       ...existingReviewHistory,
       {
         action: 'annotation',
-        status: reviewStatus,
+        status: reviewStatus as any, // Cast as any or specific type if needed, but the entry type will enforce it
         note,
         updatedAt: timestamp,
         reviewerEmail: user.email || 'admin',

@@ -78,7 +78,7 @@ export function AdminRoleFitSubmissions() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Role Fit Audits</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">GenAI Fit Checks</h3>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                     Total: {submissions.length}
                 </div>

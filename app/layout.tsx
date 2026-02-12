@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     default: 'stAI tuned | AI e GenAI concreta per tutti',
     template: '%s | stAI tuned',
   },
-  description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
+  description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal GenAI Fit Check e dal Career OS.',
   keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia', 'stAI tuned', 'stay tuned AI', 'staituned'],
   authors: [{ name: 'stAI tuned' }],
   creator: 'stAI tuned',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
     siteName: 'stAI tuned',
     title: 'stAI tuned | AI e GenAI concreta per tutti',
-    description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.',
+    description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal GenAI Fit Check e dal Career OS.',
     images: [
       {
         url: '/api/og',

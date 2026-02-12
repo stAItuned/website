@@ -90,7 +90,7 @@ export const topicHubs: TopicHub[] = [
     {
         slug: 'ai-career',
         name: 'AI Career & Learning',
-        description: 'Role Fit Audit, Career OS, and learning strategies for the AI era.',
+        description: 'GenAI Fit Check, Career OS, and learning strategies for the AI era.',
         icon: '🚀',
         colorFrom: '#f59e0b', // amber-500
         colorTo: '#ea580c',   // orange-600

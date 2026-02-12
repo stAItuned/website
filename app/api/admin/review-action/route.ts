@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { verifyAuth } from '@/lib/firebase/server-auth'
 import { isAdmin } from '@/lib/firebase/admin-emails'
 import { getContribution, updateContribution } from '@/lib/firebase/contributor-db'
+import { ContributionStatus, ContributionReviewHistoryEntry } from '@/lib/types/contributor'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,10 +44,10 @@ export async function POST(request: NextRequest) {
     }
 
     const timestamp = new Date().toISOString()
-    const reviewStatus =
+    const reviewStatus: ContributionReviewHistoryEntry['status'] =
       action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'changes_requested'
 
-    const nextStatus =
+    const nextStatus: ContributionStatus =
       action === 'approve' ? 'scheduled' : 'draft'
 
     const nextCurrentStep =

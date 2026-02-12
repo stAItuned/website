@@ -7,8 +7,7 @@ import {
     Users,
     FileText,
     Award,
-    Target,
-    logOut
+    Target
 } from 'lucide-react';
 import { useAuth } from '@/components/auth/AuthContext';
 

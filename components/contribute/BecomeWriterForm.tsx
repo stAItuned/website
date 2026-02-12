@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useAuth } from '@/components/auth/AuthContext'
 import { useLearnLocale } from '@/lib/i18n'
+import { contributeTranslations, ContributeLanguage } from '@/lib/i18n/contribute-translations'
 import { writerProfileFieldsSchema } from '@/lib/validation/writerProfile'
 import { getWriterProfileErrorMessage } from '@/lib/validation/writerProfileMessages'
 
@@ -25,6 +26,8 @@ interface BecomeWriterFormProps {
 export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormProps) {
     const { user, loading: authLoading } = useAuth()
     const { locale } = useLearnLocale()
+    const lang = locale as ContributeLanguage
+    const t = contributeTranslations[lang].becomeWriter.form
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -63,7 +66,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
         setIsLoading(true)
 
         if (!user) {
-            setError('Devi essere loggato per creare un profilo writer.')
+            setError(t.loginRequired)
             setIsLoading(false)
             return
         }
@@ -117,7 +120,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
             const profile = data.profile as { slug?: string } | undefined
             const slug = typeof profile?.slug === 'string' ? profile.slug : ''
             if (!slug) {
-                throw new Error('Profilo creato ma slug non disponibile')
+                throw new Error(t.slugMissing)
             }
 
             await onSuccess({
@@ -126,7 +129,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                 writerActivatedAt: typeof data.writerActivatedAt === 'string' ? data.writerActivatedAt : undefined,
             })
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Qualcosa è andato storto. Riprova.')
+            setError(err instanceof Error ? err.message : t.genericError)
         } finally {
             setIsLoading(false)
         }
@@ -141,7 +144,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     {previewUrl ? (
                         <Image
                             src={previewUrl}
-                            alt="Profile preview"
+                            alt={t.imageAlt}
                             fill
                             className="object-cover"
                             sizes="128px"
@@ -166,12 +169,12 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         dark:file:bg-primary-900/20 dark:file:text-primary-300
                     "
                 />
-                <p className="text-xs text-slate-500">Formato consigliato: JPG quadrato (opzionale, es. 400x400px)</p>
+                <p className="text-xs text-slate-500">{t.imageHint}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-white">Nome</label>
+                    <label className="text-sm font-medium text-slate-900 dark:text-white">{t.name}</label>
                     <input
                         type="text"
                         required
@@ -181,7 +184,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-white">Cognome</label>
+                    <label className="text-sm font-medium text-slate-900 dark:text-white">{t.surname}</label>
                     <input
                         type="text"
                         required
@@ -193,11 +196,11 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
             </div>
 
             <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-900 dark:text-white">Titolo / Ruolo</label>
+                <label className="text-sm font-medium text-slate-900 dark:text-white">{t.title}</label>
                 <input
                     type="text"
                     required
-                    placeholder="es. Senior Data Scientist"
+                    placeholder={t.titlePlaceholder}
                     value={formData.title}
                     onChange={e => setFormData({ ...formData, title: e.target.value })}
                     className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
@@ -205,11 +208,11 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
             </div>
 
             <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-900 dark:text-white">Bio</label>
+                <label className="text-sm font-medium text-slate-900 dark:text-white">{t.bio}</label>
                 <textarea
                     required
                     rows={4}
-                    placeholder="Raccontaci chi sei..."
+                    placeholder={t.bioPlaceholder}
                     value={formData.bio}
                     onChange={e => setFormData({ ...formData, bio: e.target.value })}
                     className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none resize-none"
@@ -218,7 +221,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-white">LinkedIn (opzionale)</label>
+                    <label className="text-sm font-medium text-slate-900 dark:text-white">{t.linkedin}</label>
                     <input
                         type="url"
                         value={formData.linkedin}
@@ -227,7 +230,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-white">Sito Web (opzionale)</label>
+                    <label className="text-sm font-medium text-slate-900 dark:text-white">{t.website}</label>
                     <input
                         type="url"
                         value={formData.website}
@@ -248,7 +251,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         className="mt-1 w-5 h-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
                     />
                     <span className="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">
-                        Accetto i <Link href="/terms" className="text-primary-600 underline hover:text-primary-700">Termini e Condizioni</Link> e la <Link href="/privacy" className="text-primary-600 underline hover:text-primary-700">Privacy Policy</Link>. Acconsento al trattamento dei miei dati personali per la creazione del profilo autore pubblico.
+                        {t.consentPrefix} <Link href="/terms" className="text-primary-600 underline hover:text-primary-700">{t.terms}</Link> {t.consentMiddle} <Link href="/privacy" className="text-primary-600 underline hover:text-primary-700">{t.privacy}</Link>. {t.consentSuffix}
                     </span>
                 </label>
             </div>
@@ -268,14 +271,14 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     {isLoading ? (
                         <>
                             <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
-                            Salvataggio...
+                            {t.saving}
                         </>
                     ) : authLoading ? (
-                        'Verifica sessione...'
+                        t.checkingSession
                     ) : !user ? (
-                        'Login richiesto'
+                        t.loginNeeded
                     ) : (
-                        submitLabel || 'Crea Profilo Writer'
+                        submitLabel || t.defaultSubmit
                     )}
                 </button>
             </div>

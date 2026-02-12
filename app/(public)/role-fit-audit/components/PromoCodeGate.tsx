@@ -130,7 +130,7 @@ export default function PromoCodeGate() {
                 items: [
                     {
                         item_id: 'audit_genai',
-                        item_name: 'Role Fit Audit',
+                        item_name: 'GenAI Fit Check',
                         price: 0,
                         discount: AUDIT_CONFIG.originalPrice,
                         coupon: promoCode || 'FREE_OFFER',
@@ -334,7 +334,7 @@ export default function PromoCodeGate() {
                                             return actions.order.create({
                                                 intent: 'CAPTURE',
                                                 purchase_units: [{
-                                                    description: 'Role Fit Audit - stAItuned',
+                                                    description: 'GenAI Fit Check - stAItuned',
                                                     amount: {
                                                         currency_code: 'EUR',
                                                         value: AUDIT_CONFIG.price.toFixed(2)
@@ -358,7 +358,7 @@ export default function PromoCodeGate() {
                                                         items: [
                                                             {
                                                                 item_id: 'audit_genai',
-                                                                item_name: 'Role Fit Audit',
+                                                                item_name: 'GenAI Fit Check',
                                                                 price: amount,
                                                                 quantity: 1
                                                             }
@@ -395,7 +395,7 @@ export default function PromoCodeGate() {
                                             return actions.order.create({
                                                 intent: 'CAPTURE',
                                                 purchase_units: [{
-                                                    description: 'Role Fit Audit - stAItuned',
+                                                    description: 'GenAI Fit Check - stAItuned',
                                                     amount: {
                                                         currency_code: 'EUR',
                                                         value: AUDIT_CONFIG.price.toFixed(2)
@@ -418,7 +418,7 @@ export default function PromoCodeGate() {
                                                         items: [
                                                             {
                                                                 item_id: 'audit_genai',
-                                                                item_name: 'Role Fit Audit',
+                                                                item_name: 'GenAI Fit Check',
                                                                 price: amount,
                                                                 quantity: 1
                                                             }

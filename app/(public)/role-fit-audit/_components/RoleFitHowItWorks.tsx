@@ -19,7 +19,7 @@ const steps = [
         ],
         img: {
             src: '/assets/role-fit-audit/slide_3_1600.webp',
-            alt: 'Role Fit Audit - Fase 1: Profilo e posizionamento',
+            alt: 'GenAI Fit Check - Fase 1: Profilo e posizionamento',
         },
         accent: 'from-violet-500 to-purple-600',
         accentLight: 'bg-violet-500/10 border-violet-500/30 text-violet-400',
@@ -35,7 +35,7 @@ const steps = [
         ],
         img: {
             src: '/assets/role-fit-audit/slide_4_1600.webp',
-            alt: 'Role Fit Audit - Fase 2: Punteggi e Readiness',
+            alt: 'GenAI Fit Check - Fase 2: Punteggi e Readiness',
         },
         accent: 'from-blue-500 to-cyan-500',
         accentLight: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
@@ -51,7 +51,7 @@ const steps = [
         ],
         img: {
             src: '/assets/role-fit-audit/slide_5_1600.webp',
-            alt: 'Role Fit Audit - Fase 3: Gap Analysis',
+            alt: 'GenAI Fit Check - Fase 3: Gap Analysis',
         },
         accent: 'from-amber-500 to-orange-500',
         accentLight: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
@@ -67,7 +67,7 @@ const steps = [
         ],
         img: {
             src: '/assets/role-fit-audit/slide_6_1600.webp',
-            alt: 'Role Fit Audit - Fase 4: Piano d\'azione',
+            alt: 'GenAI Fit Check - Fase 4: Piano d\'azione',
         },
         accent: 'from-emerald-500 to-teal-500',
         accentLight: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',

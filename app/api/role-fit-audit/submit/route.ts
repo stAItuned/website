@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
         // Honeypot check - silently accept but don't process bot submissions
         if (website && typeof website === 'string' && website.trim() !== '') {
-            console.log('[Role Fit Audit] Bot detected via honeypot, ignoring submission')
+            console.log('[GenAI Fit Check] Bot detected via honeypot, ignoring submission')
             return NextResponse.json({ ok: true, result: null }, { status: 200 })
         }
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
         // -------------------------------------------------------------------------
         // Generate AI Result (with static fallback)
         // -------------------------------------------------------------------------
-        console.log('[Role Fit Audit] Generating result...')
+        console.log('[GenAI Fit Check] Generating result...')
         const result = await generateAIAuditResult(
             answers,
             name?.trim(),
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
                 endpoint: 'role-fit-audit'
             }
         )
-        console.log(`[Role Fit Audit] Result generated (${result.generatedBy})`)
+        console.log(`[GenAI Fit Check] Result generated (${result.generatedBy})`)
 
         // -------------------------------------------------------------------------
         // Save to Firestore
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
         // -------------------------------------------------------------------------
         try {
             const telegramMessage = [
-                `🎯 Nuovo Role Fit Audit completato (${result.generatedBy.toUpperCase()})`,
+                `🎯 Nuovo GenAI Fit Check completato (${result.generatedBy.toUpperCase()})`,
                 '',
                 name ? `👤 Nome: ${name.trim()}` : '',
                 `📧 Email: ${normalizedEmail}`,
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
         // Return the result to the frontend
         return NextResponse.json({ ok: true, result }, { status: 200 })
     } catch (err) {
-        console.error('Role Fit Audit submit error:', err)
+        console.error('GenAI Fit Check submit error:', err)
         return NextResponse.json({ error: 'Server error' }, { status: 500 })
     }
 }

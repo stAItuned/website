@@ -55,6 +55,8 @@ export function useWizardNavigation({
     searchParams
 }: UseWizardNavigationProps): UseWizardNavigationReturn {
     const router = useRouter()
+    const isTerminalStatus = (status: Contribution['status']) =>
+        status === 'review' || status === 'scheduled' || status === 'published'
 
     // Step handlers
     const handlePitchSubmit = useCallback((brief: ContributorBrief) => {
@@ -201,15 +203,22 @@ export function useWizardNavigation({
     }, [step, data.path, router, setStep])
 
     const handleResumeSelect = useCallback((c: Contribution) => {
+        if (isTerminalStatus(c.status)) {
+            router.push('/contributor-dashboard')
+            return
+        }
         const resolvedStep: WizardStep = c.generatedOutline && (c.currentStep === 'review' || c.currentStep === 'draft_submission')
             ? 'outline'
             : (c.currentStep || 'pitch')
         setData(c)
         setStep(resolvedStep)
         if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href)
+            url.searchParams.set('id', c.id)
+            window.history.replaceState({}, '', url.toString())
             localStorage.setItem('contributor_wizard_state', JSON.stringify({ step: resolvedStep, data: c }))
         }
-    }, [setData, setStep])
+    }, [router, setData, setStep])
 
     const handleStartNew = useCallback(() => {
         const freshData: Partial<Contribution> = {

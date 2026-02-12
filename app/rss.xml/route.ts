@@ -6,7 +6,7 @@ export const revalidate = 3600; // Regenerate every hour
 
 const SITE_URL = "https://staituned.com";
 const SITE_TITLE = "stAItuned | AI e GenAI concreta per tutti";
-const SITE_DESCRIPTION = "Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal Role Fit Audit e dal Career OS.";
+const SITE_DESCRIPTION = "Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal GenAI Fit Check e dal Career OS.";
 
 /**
  * Escape special XML characters to prevent XML injection

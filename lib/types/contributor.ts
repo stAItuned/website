@@ -204,36 +204,10 @@ export interface Contribution {
      */
     reviewHistory?: ContributionReviewHistoryEntry[];
 
-    /**
-     * Audit history of status changes across the contribution lifecycle.
-     */
-    statusHistory?: ContributionStatusHistoryEntry[];
-
-    /**
-     * Audit history of review actions and annotations.
-     */
-    reviewHistory?: ContributionReviewHistoryEntry[];
-
     // Metadata
     createdAt: string; // ISO
     updatedAt: string; // ISO
     lastSavedAt: string; // ISO
-}
-
-export interface ContributionStatusHistoryEntry {
-    status: ContributionStatus;
-    currentStep: Contribution['currentStep'];
-    changedAt: string;
-    changedBy?: string;
-    note?: string;
-}
-
-export interface ContributionReviewHistoryEntry {
-    action: 'approved' | 'rejected' | 'changes_requested' | 'annotation';
-    status: 'approved' | 'rejected' | 'changes_requested';
-    note?: string;
-    updatedAt: string;
-    reviewerEmail: string;
 }
 
 export interface ContributionStatusHistoryEntry {

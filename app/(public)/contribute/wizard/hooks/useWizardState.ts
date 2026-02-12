@@ -1,14 +1,21 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { useLearnLocale } from '@/lib/i18n'
 import { ContributeLanguage } from '@/lib/i18n/contribute-translations'
 import { resolveAgreementAccepted } from '@/lib/contributor/agreementAcceptance'
-import { Contribution, ContributorBrief, CoverageAssessment, InterviewQnA } from '@/lib/types/contributor'
+import { Contribution, ContributionStatus, CoverageAssessment } from '@/lib/types/contributor'
 
 export type WizardStep = 'become_writer' | 'resume_selection' | 'path_intro' | 'pitch' | 'agreement' | 'guidelines' | 'interview' | 'coverage_review' | 'source_discovery' | 'outline' | 'draft_submission' | 'review'
+const TERMINAL_STATUSES: ContributionStatus[] = ['review', 'scheduled', 'published']
+
+function toMillis(value?: string): number {
+    if (!value) return 0
+    const parsed = Date.parse(value)
+    return Number.isNaN(parsed) ? 0 : parsed
+}
 
 interface UseWizardStateReturn {
     // Core state
@@ -81,6 +88,34 @@ export function useWizardState(): UseWizardStateReturn {
         }
         return false
     })
+    const lastFetchedContributionIdRef = useRef<string | null>(null)
+
+    const syncUrlContributionId = useCallback((id: string) => {
+        if (typeof window === 'undefined') return
+        const url = new URL(window.location.href)
+        url.searchParams.set('id', id)
+        window.history.replaceState({}, '', url.toString())
+    }, [])
+
+    const redirectToDashboard = useCallback(() => {
+        if (typeof window === 'undefined') return
+        window.location.replace('/contributor-dashboard')
+    }, [])
+
+    const getLocalStateContribution = useCallback((id?: string): Partial<Contribution> | null => {
+        if (typeof window === 'undefined') return null
+        const raw = localStorage.getItem('contributor_wizard_state')
+        if (!raw) return null
+        try {
+            const parsed = JSON.parse(raw) as { data?: Partial<Contribution> } | null
+            const localData = parsed?.data
+            if (!localData) return null
+            if (id && localData.id !== id) return null
+            return localData
+        } catch {
+            return null
+        }
+    }, [])
 
     const checkWriterStatus = useCallback(async () => {
         if (!user) return
@@ -237,40 +272,64 @@ export function useWizardState(): UseWizardStateReturn {
         }
     }, [hasAgreement, data.agreement?.agreed, data.agreement?.checkbox_general, step, setStep, data.brief])
 
-    // Fetch contribution from ID in URL
+    // Fetch contribution from URL ID or local draft ID on refresh
     useEffect(() => {
+        if (!user) return
         const id = searchParams.get('id')
-        if (id && user) {
-            setIsLoadingContribution(true) // Start loading
-            fetchContribution(id)
-        }
-    }, [searchParams, user])
+        const localDraftId = !id ? data.id : null
+        const targetId = id || localDraftId || null
 
-    // Check for existing contributions
+        if (!targetId) return
+        if (lastFetchedContributionIdRef.current === targetId) return
+
+        lastFetchedContributionIdRef.current = targetId
+        setIsLoadingContribution(true)
+        fetchContribution(targetId)
+    }, [searchParams, user, data.id])
+
+    // Check for existing contributions and resolve landing
     useEffect(() => {
         if (!isMounted) return
+        if (!user) return
 
         const id = searchParams.get('id')
-        const pathParam = searchParams.get('path')
-        const hasLocalBrief = Boolean(data.brief?.topic || data.brief?.thesis)
-        const hasLocalProgress = hasLocalBrief && !data.id
+        if (id) return
 
-        const shouldCheckContributions = user && !id && !hasCheckedContributions && !hasLocalProgress && (
-            (step === 'path_intro' && !pathParam) ||
+        const hasLocalUnsavedBrief = Boolean((data.brief?.topic || data.brief?.thesis) && !data.id)
+        if (hasLocalUnsavedBrief) return
+
+        const pathParam = searchParams.get('path')
+        const shouldCheckContributions = !hasCheckedContributions && (
+            step === 'path_intro' ||
             step === 'resume_selection'
         )
 
         if (shouldCheckContributions) {
-            checkExistingContributions()
+            checkExistingContributions(pathParam)
         }
     }, [user, step, searchParams, hasCheckedContributions, isMounted, data.brief, data.id])
 
     const resolveResumeStep = (contribution: Contribution): WizardStep => {
+        if (TERMINAL_STATUSES.includes(contribution.status)) {
+            return 'review'
+        }
         const currentStep = contribution.currentStep as WizardStep | undefined
         if (contribution.generatedOutline && (currentStep === 'review' || currentStep === 'draft_submission')) {
             return 'outline'
         }
-        return currentStep || 'pitch'
+        if (currentStep) return currentStep
+        switch (contribution.status) {
+            case 'pitch':
+                return 'agreement'
+            case 'interview':
+                return 'interview'
+            case 'outline':
+                return 'outline'
+            case 'draft':
+                return contribution.path === 'autonomy' ? 'draft_submission' : 'outline'
+            default:
+                return 'pitch'
+        }
     }
 
     const fetchContribution = async (id: string) => {
@@ -282,9 +341,35 @@ export function useWizardState(): UseWizardStateReturn {
             })
             const json = await res.json()
             if (json.success) {
-                const contribution = json.contribution as Contribution
-                setData(contribution)
-                setStep(resolveResumeStep(contribution))
+                const serverContribution = json.contribution as Contribution
+                if (TERMINAL_STATUSES.includes(serverContribution.status)) {
+                    redirectToDashboard()
+                    return
+                }
+
+                const localContribution = getLocalStateContribution(id)
+                const localTs = Math.max(
+                    toMillis(localContribution?.updatedAt),
+                    toMillis(localContribution?.lastSavedAt)
+                )
+                const serverTs = Math.max(
+                    toMillis(serverContribution.updatedAt),
+                    toMillis(serverContribution.lastSavedAt)
+                )
+
+                const resolvedContribution = (localContribution && localTs > serverTs)
+                    ? {
+                        ...serverContribution,
+                        ...localContribution,
+                        id: serverContribution.id,
+                        contributorId: serverContribution.contributorId,
+                        contributorEmail: serverContribution.contributorEmail,
+                    } as Contribution
+                    : serverContribution
+
+                setData(resolvedContribution)
+                setStep(resolveResumeStep(resolvedContribution))
+                syncUrlContributionId(serverContribution.id)
             } else {
                 // Contribution not found or error (e.g. 404)
                 console.warn(`Contribution ${id} not found:`, json.error)
@@ -321,7 +406,7 @@ export function useWizardState(): UseWizardStateReturn {
         }
     }
 
-    const checkExistingContributions = async () => {
+    const checkExistingContributions = async (pathParam?: string | null) => {
         if (!user) return
         try {
             const token = await user.getIdToken()
@@ -329,22 +414,35 @@ export function useWizardState(): UseWizardStateReturn {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             const json = await res.json()
-            const pathParam = searchParams.get('path')
+            const allContributions = json.success && Array.isArray(json.contributions)
+                ? (json.contributions as Contribution[])
+                : []
 
-            if (json.success && json.contributions && json.contributions.length > 0) {
-                let filtered = json.contributions
-                if (pathParam) {
-                    filtered = filtered.filter((c: Contribution) => c.path === pathParam)
+            const scopedContributions = pathParam
+                ? allContributions.filter((contribution) => contribution.path === pathParam)
+                : allContributions
+
+            const inProgress = scopedContributions.filter(
+                (contribution) => !TERMINAL_STATUSES.includes(contribution.status)
+            )
+
+            if (inProgress.length === 1) {
+                const contribution = inProgress[0]
+                setData(contribution)
+                setStep(resolveResumeStep(contribution))
+                syncUrlContributionId(contribution.id)
+                return
+            }
+
+            if (inProgress.length > 1) {
+                setExistingContributions(inProgress)
+                if (step !== 'resume_selection') {
+                    setStep('resume_selection')
                 }
-                if (filtered.length > 0) {
-                    setExistingContributions(filtered)
-                    if (step !== 'resume_selection') {
-                        setStep('resume_selection')
-                    }
-                } else if (step === 'resume_selection') {
-                    setStep('path_intro')
-                }
-            } else if (step === 'resume_selection') {
+                return
+            }
+
+            if (step === 'resume_selection') {
                 setStep('path_intro')
             }
         } catch (e) {
