@@ -120,10 +120,12 @@ export function AccountHeader({
               <Bookmark className="h-4 w-4" />
               {bookmarksCount} {t.header.bookmarks}
             </Link>
-            <PremiumLink href={isWriter ? '/contribute/draft' : '/contribute/become-writer'}>
-              {isWriter ? <PenLine className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
-              {isWriter ? t.header.buttons.newDraft : t.header.buttons.becomeWriter}
-            </PremiumLink>
+            <div data-tour="writer-header-cta">
+              <PremiumLink href={isWriter ? '/contribute/draft' : '/contribute/become-writer'}>
+                {isWriter ? <PenLine className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
+                {isWriter ? t.header.buttons.newDraft : t.header.buttons.becomeWriter}
+              </PremiumLink>
+            </div>
           </div>
         </div>
       </div>

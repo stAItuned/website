@@ -3,24 +3,28 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { useLearnLocale } from '@/lib/i18n'
 import { writerProfileFieldsSchema } from '@/lib/validation/writerProfile'
 import { getWriterProfileErrorMessage } from '@/lib/validation/writerProfileMessages'
 
+export interface BecomeWriterSuccessPayload {
+    slug: string
+    profilePath: string
+    writerActivatedAt?: string
+}
+
 interface BecomeWriterFormProps {
-    onSuccess: () => void
-    redirectUrl?: string
+    onSuccess: (payload: BecomeWriterSuccessPayload) => void | Promise<void>
+    submitLabel?: string
 }
 
 /**
  * Collects the minimum public author profile info to enable drafting articles.
  */
-export function BecomeWriterForm({ onSuccess, redirectUrl }: BecomeWriterFormProps) {
+export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormProps) {
     const { user, loading: authLoading } = useAuth()
     const { locale } = useLearnLocale()
-    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -87,11 +91,9 @@ export function BecomeWriterForm({ onSuccess, redirectUrl }: BecomeWriterFormPro
             formDataToSend.append('consent', String(formData.consent))
 
             const file = fileInputRef.current?.files?.[0]
-            if (!file) {
-                throw new Error('Please upload a profile picture')
+            if (file) {
+                formDataToSend.append('image', file)
             }
-
-            formDataToSend.append('image', file)
 
             const token = await user?.getIdToken()
             const response = await fetch('/api/user/writer-profile', {
@@ -112,11 +114,17 @@ export function BecomeWriterForm({ onSuccess, redirectUrl }: BecomeWriterFormPro
                 window.dispatchEvent(new Event('writer-status-changed'))
             }
 
-            if (redirectUrl) {
-                router.push(redirectUrl)
-            } else {
-                onSuccess()
+            const profile = data.profile as { slug?: string } | undefined
+            const slug = typeof profile?.slug === 'string' ? profile.slug : ''
+            if (!slug) {
+                throw new Error('Profilo creato ma slug non disponibile')
             }
+
+            await onSuccess({
+                slug,
+                profilePath: `/author/${slug}`,
+                writerActivatedAt: typeof data.writerActivatedAt === 'string' ? data.writerActivatedAt : undefined,
+            })
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Qualcosa è andato storto. Riprova.')
         } finally {
@@ -158,7 +166,7 @@ export function BecomeWriterForm({ onSuccess, redirectUrl }: BecomeWriterFormPro
                         dark:file:bg-primary-900/20 dark:file:text-primary-300
                     "
                 />
-                <p className="text-xs text-slate-500">Formato consigliato: JPG, Quadrato (es. 400x400px)</p>
+                <p className="text-xs text-slate-500">Formato consigliato: JPG quadrato (opzionale, es. 400x400px)</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -267,7 +275,7 @@ export function BecomeWriterForm({ onSuccess, redirectUrl }: BecomeWriterFormPro
                     ) : !user ? (
                         'Login richiesto'
                     ) : (
-                        'Crea Profilo Writer'
+                        submitLabel || 'Crea Profilo Writer'
                     )}
                 </button>
             </div>

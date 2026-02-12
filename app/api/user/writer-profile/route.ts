@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import sharp from 'sharp'
 import { verifyAuth } from '@/lib/firebase/server-auth'
+import { dbDefault } from '@/lib/firebase/admin'
 import {
   getWriterByUid,
   upsertWriterProfile,
@@ -127,9 +128,23 @@ async function handleUpsert(request: NextRequest) {
       uploadedImage
     )
 
+    const writerActivatedAt = new Date().toISOString()
+    await dbDefault().collection('users').doc(user.uid).set(
+      {
+        writerIntent: 'yes',
+        writerProfileStatus: 'completed',
+        writerActivatedAt,
+        writerOnboardingCompleted: true,
+        writerOnboardingVersion: 'v1',
+        updatedAt: writerActivatedAt,
+      },
+      { merge: true }
+    )
+
     return jsonNoStore({
       success: true,
       profile: updatedProfile, // Returning full profile including slug
+      writerActivatedAt,
       // Legacy fields for compatibility if needed immediately
       slug: updatedProfile.slug,
       profilePath: `/author/${updatedProfile.slug}`,

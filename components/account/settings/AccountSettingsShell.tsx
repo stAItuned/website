@@ -2,6 +2,7 @@ import { User } from 'firebase/auth'
 import { AccountHeader } from '@/components/account/settings/AccountHeader'
 import { AccountNavigation } from '@/components/account/settings/AccountNavigation'
 import { AccountSettingsContent } from '@/components/account/settings/AccountSettingsContent'
+import { WriterOnboardingTour } from '@/components/account/settings/WriterOnboardingTour'
 import { useLearnLocale, accountTranslations } from '@/lib/i18n'
 import {
   AlertTriangle,
@@ -10,7 +11,6 @@ import {
   FilePenLine,
   FileText,
   LayoutList,
-  ShieldCheck,
   Sparkles,
   UserRound
 } from 'lucide-react'
@@ -25,7 +25,7 @@ interface AccountSettingsShellProps {
   onOpenAgreement: () => void
   onRequestDeleteData: () => void
   onRequestDeleteAccount: () => void
-  agreementData?: any
+  agreementData?: unknown
 }
 
 /**
@@ -118,6 +118,7 @@ export function AccountSettingsShell({
           />
         </div>
       </div>
+      <WriterOnboardingTour isWriter={isWriter} />
     </main>
   )
 }
