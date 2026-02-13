@@ -2,12 +2,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
-import { getAuthorData } from '@/lib/authors'
 import { getAuthorBadges } from '@/lib/firebase/badge-service'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { BadgeIcon } from '@/components/badges/BadgeIcon'
 import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { getPublicWritersList } from '@/lib/writer/firestore'
 
 // Force static generation
 export const dynamic = 'force-static'
@@ -30,34 +30,60 @@ export const metadata: Metadata = {
 }
 
 export default async function AuthorsPage() {
-  // Get all unique authors from published posts
-  const uniqueAuthors = Array.from(new Set(
-    allPosts
-      .filter(post => post.published !== false && post.author)
-      .map(post => post.author!)
-  ))
+  const normalizeAuthorKey = (value: string) =>
+    value.trim().toLowerCase().replace(/\s+/g, ' ')
 
-  // Get author data and article counts
-  const authorsWithData = await Promise.all(
-    uniqueAuthors.map(async (authorName) => {
-      const authorData = await getAuthorData(authorName)
-      const slug = authorName.replaceAll(' ', '-')
+  const articleCountByAuthor = new Map<string, number>()
+  const displayNameByAuthorKey = new Map<string, string>()
+  for (const post of allPosts) {
+    if (post.published === false || !post.author) continue
+    const key = normalizeAuthorKey(post.author)
+    displayNameByAuthorKey.set(key, post.author)
+    articleCountByAuthor.set(key, (articleCountByAuthor.get(key) ?? 0) + 1)
+  }
 
-      const articleCount = allPosts.filter(
-        post => post.author === authorName && post.published !== false
-      ).length
+  const writers = await getPublicWritersList()
+  const writerKeys = new Set(writers.map((writer) => normalizeAuthorKey(writer.displayName)))
 
-      const earnedBadges = await getAuthorBadges(slug)
+  const firestoreAuthors = await Promise.all(
+    writers.map(async (writer) => {
+      const articleCount = articleCountByAuthor.get(normalizeAuthorKey(writer.displayName)) ?? 0
+      const earnedBadges = await getAuthorBadges(writer.slug)
 
       return {
-        name: authorName,
-        slug,
-        data: authorData,
+        name: writer.displayName,
+        slug: writer.slug,
+        data: {
+          name: writer.displayName,
+          team: ['Writers'],
+          title: writer.title,
+          description: writer.bio,
+          avatar: writer.image?.publicUrl,
+        },
         articleCount,
-        earnedBadges
+        earnedBadges,
       }
     })
   )
+
+  const fallbackAuthors = await Promise.all(
+    Array.from(displayNameByAuthorKey.entries())
+      .filter(([authorKey]) => !writerKeys.has(authorKey))
+      .map(async ([authorKey, authorName]) => {
+        const slug = authorName.replaceAll(' ', '-')
+        const earnedBadges = await getAuthorBadges(slug)
+
+        return {
+          name: authorName,
+          slug,
+          data: null,
+          articleCount: articleCountByAuthor.get(authorKey) ?? 0,
+          earnedBadges,
+        }
+      })
+  )
+
+  const authorsWithData = [...firestoreAuthors, ...fallbackAuthors]
 
   // Sort by article count (descending) then by name
   authorsWithData.sort((a, b) => {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
-import { getAuthorData } from '@/lib/authors'
 import { getAuthorBadges } from '@/lib/firebase/badge-service'
+import { getPublicWritersList } from '@/lib/writer/firestore'
 import MeetPageClient from './MeetPageClient'
 
 // Force static generation
@@ -21,37 +21,60 @@ export const metadata: Metadata = {
 }
 
 export default async function MeetPage() {
-  // Get all unique authors from published posts (same logic as /author page)
-  const uniqueAuthors = Array.from(new Set(
-    allPosts
-      .filter(post => post.published !== false && post.author)
-      .map(post => post.author!)
-  ))
+  const normalizeAuthorKey = (value: string) =>
+    value.trim().toLowerCase().replace(/\s+/g, ' ')
 
-  // Get author data and article counts
-  const authorsWithData = await Promise.all(
-    uniqueAuthors.map(async (authorName) => {
-      const authorData = await getAuthorData(authorName)
-      const slug = authorName.replaceAll(' ', '-')
+  const articleCountByAuthor = new Map<string, number>()
+  const displayNameByAuthorKey = new Map<string, string>()
+  for (const post of allPosts) {
+    if (post.published === false || !post.author) continue
+    const key = normalizeAuthorKey(post.author)
+    displayNameByAuthorKey.set(key, post.author)
+    articleCountByAuthor.set(key, (articleCountByAuthor.get(key) ?? 0) + 1)
+  }
 
-      // Fetch badges if author data exists
-      if (authorData) {
-        const badges = await getAuthorBadges(slug)
-        authorData.badges = badges
-      }
+  const writers = await getPublicWritersList()
+  const writerKeys = new Set(writers.map((writer) => normalizeAuthorKey(writer.displayName)))
 
-      const articleCount = allPosts.filter(
-        post => post.author === authorName && post.published !== false
-      ).length
-
+  const firestoreAuthors = await Promise.all(
+    writers.map(async (writer) => {
+      const badges = await getAuthorBadges(writer.slug)
       return {
-        name: authorName,
-        slug,
-        data: authorData,
-        articleCount
+        name: writer.displayName,
+        slug: writer.slug,
+        data: {
+          name: writer.displayName,
+          team: ['Writers'],
+          title: writer.title,
+          description: writer.bio,
+          linkedin: writer.linkedin,
+          website: writer.website,
+          avatar: writer.image?.publicUrl,
+          badges,
+        },
+        articleCount: articleCountByAuthor.get(normalizeAuthorKey(writer.displayName)) ?? 0,
       }
     })
   )
+
+  const fallbackAuthors = await Promise.all(
+    Array.from(displayNameByAuthorKey.entries())
+      .filter(([authorKey]) => !writerKeys.has(authorKey))
+      .map(async ([authorKey, authorName]) => {
+        const slug = authorName.replaceAll(' ', '-')
+        return {
+          name: authorName,
+          slug,
+          data: {
+            name: authorName,
+            badges: await getAuthorBadges(slug),
+          },
+          articleCount: articleCountByAuthor.get(authorKey) ?? 0,
+        }
+      })
+  )
+
+  const authorsWithData = [...firestoreAuthors, ...fallbackAuthors]
 
   // Sort by article count (descending) and take top 8 contributors
   const topContributors = authorsWithData

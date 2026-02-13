@@ -14,7 +14,14 @@ import { Badge, AuthorBadge } from '@/lib/types/badge'
 interface AuthorData {
     name: string
     slug: string
-    data: any
+    data: {
+        name?: string
+        title?: string
+        description?: string
+        website?: string
+        avatar?: string
+        badges?: AuthorBadge[]
+    } | null
     articleCount: number
 }
 
@@ -258,7 +265,7 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                 >
                                     <div className="flex flex-col items-center text-center space-y-3">
                                         <Image
-                                            src={`/content/team/${author.slug}/propic.jpg`}
+                                            src={author.data?.avatar || `/content/team/${author.slug}/propic.jpg`}
                                             alt={author.name}
                                             width={80}
                                             height={80}
@@ -278,6 +285,17 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 pt-1">
                                                     {author.data.description}
                                                 </p>
+                                            )}
+                                            {author.data?.website && (
+                                                <a
+                                                    href={author.data.website.startsWith('http') ? author.data.website : `https://${author.data.website}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center pt-1 text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                                                    onClick={(event) => event.stopPropagation()}
+                                                >
+                                                    Website
+                                                </a>
                                             )}
                                             <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 pt-1">
                                                 {author.articleCount} {t.contributors.stats}

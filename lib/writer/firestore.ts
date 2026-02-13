@@ -8,7 +8,7 @@ import {
   normalizeSlug,
   WriterProfileFields,
 } from '@/lib/validation/writerProfile'
-import { unstable_cache, revalidateTag } from 'next/cache'
+import { unstable_cache, revalidatePath, revalidateTag } from 'next/cache'
 import { randomUUID } from 'crypto'
 import { shouldSkipFirestoreDuringBuild } from '@/lib/next-phase'
 
@@ -180,6 +180,9 @@ export async function upsertWriterProfile(
 
   revalidateTag('writers:list', REVALIDATE_PROFILE)
   revalidateTag(`writer:${finalSlug}`, REVALIDATE_PROFILE)
+  revalidatePath('/author', REVALIDATE_PROFILE)
+  revalidatePath('/meet', REVALIDATE_PROFILE)
+  revalidatePath(`/author/${finalSlug}`, REVALIDATE_PROFILE)
 
   return writerData
 }
