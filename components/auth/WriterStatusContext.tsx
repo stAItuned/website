@@ -9,6 +9,8 @@ interface WriterStatus {
   loading: boolean
   profilePath?: string
   name?: string
+  writerDisplayName?: string
+  writerImageUrl?: string
   refresh: () => Promise<void>
 }
 
@@ -25,6 +27,8 @@ export function WriterStatusProvider({ children }: { children: React.ReactNode }
   const [loading, setLoading] = useState(false)
   const [profilePath, setProfilePath] = useState<string | undefined>(undefined)
   const [name, setName] = useState<string | undefined>(undefined)
+  const [writerDisplayName, setWriterDisplayName] = useState<string | undefined>(undefined)
+  const [writerImageUrl, setWriterImageUrl] = useState<string | undefined>(undefined)
 
   const refresh = useCallback(async () => {
     if (!user) {
@@ -32,6 +36,8 @@ export function WriterStatusProvider({ children }: { children: React.ReactNode }
       setHasAgreement(false)
       setProfilePath(undefined)
       setName(undefined)
+      setWriterDisplayName(undefined)
+      setWriterImageUrl(undefined)
       return
     }
 
@@ -44,23 +50,36 @@ export function WriterStatusProvider({ children }: { children: React.ReactNode }
       const json: unknown = await res.json()
 
       if (res.ok && typeof json === 'object' && json) {
-        const j = json as { isWriter?: unknown; hasAgreement?: unknown; profilePath?: unknown; name?: unknown }
+        const j = json as {
+          isWriter?: unknown
+          hasAgreement?: unknown
+          profilePath?: unknown
+          name?: unknown
+          writerDisplayName?: unknown
+          writerImageUrl?: unknown
+        }
         const nextIsWriter = Boolean(j.isWriter)
         setIsWriter(nextIsWriter)
         setHasAgreement(typeof j.hasAgreement === 'boolean' ? j.hasAgreement : false)
         setProfilePath(typeof j.profilePath === 'string' ? j.profilePath : undefined)
         setName(typeof j.name === 'string' ? j.name : undefined)
+        setWriterDisplayName(typeof j.writerDisplayName === 'string' ? j.writerDisplayName : undefined)
+        setWriterImageUrl(typeof j.writerImageUrl === 'string' ? j.writerImageUrl : undefined)
       } else {
         setIsWriter(false)
         setHasAgreement(false)
         setProfilePath(undefined)
         setName(undefined)
+        setWriterDisplayName(undefined)
+        setWriterImageUrl(undefined)
       }
     } catch {
       setIsWriter(false)
       setHasAgreement(false)
       setProfilePath(undefined)
       setName(undefined)
+      setWriterDisplayName(undefined)
+      setWriterImageUrl(undefined)
     } finally {
       setLoading(false)
     }
@@ -77,8 +96,8 @@ export function WriterStatusProvider({ children }: { children: React.ReactNode }
   }, [refresh])
 
   const value = useMemo<WriterStatus>(
-    () => ({ isWriter, hasAgreement, loading, profilePath, name, refresh }),
-    [isWriter, hasAgreement, loading, profilePath, name, refresh]
+    () => ({ isWriter, hasAgreement, loading, profilePath, name, writerDisplayName, writerImageUrl, refresh }),
+    [isWriter, hasAgreement, loading, profilePath, name, writerDisplayName, writerImageUrl, refresh]
   )
 
   return <WriterStatusContext.Provider value={value}>{children}</WriterStatusContext.Provider>

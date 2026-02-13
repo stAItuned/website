@@ -41,11 +41,11 @@ function BecomeWriterContent() {
     const progress = step === 4 ? 100 : Math.round((step / 4) * 100)
 
     return (
-        <main className="min-h-screen bg-slate-50 dark:bg-slate-900 pt-32 pb-20 px-6">
+        <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-20 px-6">
             <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
                 <header className="space-y-4">
                     <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-primary-600">{t.badge}</p>
+                        <p className="text-sm font-semibold text-primary-600 dark:text-primary-300">{t.badge}</p>
                         <p className="text-sm text-slate-500 dark:text-slate-400">{t.stepCounter.replace('{current}', String(step))}</p>
                     </div>
                     <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
@@ -65,18 +65,18 @@ function BecomeWriterContent() {
                 </header>
 
                 {step === 1 && (
-                    <section className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800 animate-slide-up">
+                    <section className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 animate-slide-up">
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{t.step1Title}</h2>
                         <ul className="space-y-3 text-slate-600 dark:text-slate-300">
                             {t.step1Items.map((item) => (
-                                <li key={item} className="rounded-xl bg-slate-50 dark:bg-slate-900/60 px-4 py-3">{item}</li>
+                                <li key={item} className="rounded-xl bg-slate-50 dark:bg-slate-800 px-4 py-3">{item}</li>
                             ))}
                         </ul>
                         <div className="mt-6 flex justify-end">
                             <button
                                 type="button"
                                 onClick={() => setStep(2)}
-                                className="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 transition-all duration-300"
+                                className="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                             >
                                 {t.continue}
                             </button>
@@ -85,19 +85,19 @@ function BecomeWriterContent() {
                 )}
 
                 {step === 2 && (
-                    <section className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800 animate-slide-up">
+                    <section className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 animate-slide-up">
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t.step2Title}</h2>
                         <div className="grid gap-4 sm:grid-cols-3">
-                            <div className="rounded-xl bg-slate-50 dark:bg-slate-900/60 p-4">
-                                <p className="text-xs font-bold text-primary-600 mb-2">1</p>
+                            <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-4">
+                                <p className="text-xs font-bold text-primary-600 dark:text-primary-300 mb-2">1</p>
                                 <p className="text-sm text-slate-700 dark:text-slate-300">{t.step2Cards[0]}</p>
                             </div>
-                            <div className="rounded-xl bg-slate-50 dark:bg-slate-900/60 p-4">
-                                <p className="text-xs font-bold text-primary-600 mb-2">2</p>
+                            <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-4">
+                                <p className="text-xs font-bold text-primary-600 dark:text-primary-300 mb-2">2</p>
                                 <p className="text-sm text-slate-700 dark:text-slate-300">{t.step2Cards[1]}</p>
                             </div>
-                            <div className="rounded-xl bg-slate-50 dark:bg-slate-900/60 p-4">
-                                <p className="text-xs font-bold text-primary-600 mb-2">3</p>
+                            <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-4">
+                                <p className="text-xs font-bold text-primary-600 dark:text-primary-300 mb-2">3</p>
                                 <p className="text-sm text-slate-700 dark:text-slate-300">{t.step2Cards[2]}</p>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ function BecomeWriterContent() {
                             <button
                                 type="button"
                                 onClick={() => setStep(3)}
-                                className="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 transition-all duration-300"
+                                className="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                             >
                                 {t.startSetup}
                             </button>
@@ -127,7 +127,7 @@ function BecomeWriterContent() {
                 )}
 
                 {step === 4 && activation && (
-                    <section className="rounded-2xl border border-emerald-200 bg-white p-8 shadow-sm dark:border-emerald-800 dark:bg-slate-800 animate-fade-in">
+                    <section className="rounded-2xl border border-emerald-200 bg-white p-8 shadow-sm dark:border-emerald-900/60 dark:bg-slate-900 animate-fade-in">
                         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
                             <CheckCircle2 className="h-7 w-7 text-emerald-600 dark:text-emerald-300" />
                         </div>
@@ -137,20 +137,20 @@ function BecomeWriterContent() {
                                 {t.successMessage}
                             </p>
                             <p className="text-sm text-slate-500 dark:text-slate-400">
-                                {t.authorPage} <Link href={activation.profilePath} className="text-primary-600 hover:underline">{activation.profilePath}</Link>
+                                {t.authorPage} <Link href={activation.profilePath} className="text-primary-600 dark:text-primary-300 hover:underline">{activation.profilePath}</Link>
                             </p>
                         </div>
                         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
                             <Link
                                 href="/contribute/wizard"
-                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-5 py-3 font-semibold text-white transition-all duration-300 hover:bg-primary-500"
+                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-5 py-3 font-semibold text-white transition-all duration-300 hover:bg-primary-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                             >
                                 <FilePenLine className="h-4 w-4" />
                                 {t.firstIdeaCta}
                             </Link>
                             <Link
                                 href={nextUrl}
-                                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-700 transition-all duration-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
+                                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-700 transition-all duration-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:focus-visible:ring-slate-500 dark:focus-visible:ring-offset-slate-900"
                             >
                                 <LayoutDashboard className="h-4 w-4" />
                                 {t.dashboardCta}
@@ -165,7 +165,7 @@ function BecomeWriterContent() {
 
 export default function BecomeWriterPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-slate-50 dark:bg-slate-900 pt-32 pb-20 px-6 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+        <Suspense fallback={<div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-20 px-6 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
             <BecomeWriterContent />
         </Suspense>
     )

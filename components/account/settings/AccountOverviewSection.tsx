@@ -3,6 +3,8 @@ import { User } from 'firebase/auth'
 import { BadgeCheck, BookMarked, UserRound } from 'lucide-react'
 import { SettingsSectionCard } from '@/components/account/settings/SettingsSectionCard'
 import { useLearnLocale, accountTranslations } from '@/lib/i18n'
+import { useWriterStatus } from '@/components/auth/WriterStatusContext'
+import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 
 interface AccountOverviewSectionProps {
   user: User
@@ -22,7 +24,13 @@ export function AccountOverviewSection({
 }: AccountOverviewSectionProps) {
   const { locale } = useLearnLocale()
   const t = accountTranslations[locale]
-  const displayName = user.displayName || user.email || 'User'
+  const { writerDisplayName, writerImageUrl } = useWriterStatus()
+  const identity = resolveProfileIdentity({
+    user,
+    writerDisplayName,
+    writerImageUrl,
+  })
+  const displayName = identity.displayName
 
   return (
     <SettingsSectionCard
@@ -34,9 +42,9 @@ export function AccountOverviewSection({
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 p-[2px]">
-            {user.photoURL ? (
+            {identity.imageUrl ? (
               <Image
-                src={user.photoURL}
+                src={identity.imageUrl}
                 alt={displayName}
                 width={64}
                 height={64}
@@ -44,7 +52,7 @@ export function AccountOverviewSection({
               />
             ) : (
               <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-2xl font-semibold text-white">
-                {displayName.charAt(0).toUpperCase()}
+                {identity.initials}
               </span>
             )}
           </div>

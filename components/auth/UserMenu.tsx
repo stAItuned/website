@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { User } from 'firebase/auth'
 import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { isAdmin } from '@/lib/firebase/admin-emails'
+import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 import { ChevronDown } from 'lucide-react'
 import { UserMenuPanel } from '@/components/auth/UserMenuPanel'
 
@@ -20,10 +21,13 @@ export function UserMenu({ user }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
-  const { isWriter, refresh } = useWriterStatus()
+  const { isWriter, writerDisplayName, writerImageUrl, refresh } = useWriterStatus()
   const admin = isAdmin(user.email)
-  const displayName = user.displayName || 'User'
-  const initials = (displayName || user.email || 'U').charAt(0).toUpperCase()
+  const identity = resolveProfileIdentity({
+    user,
+    writerDisplayName,
+    writerImageUrl,
+  })
 
   useEffect(() => {
     if (isOpen) void refresh()
@@ -68,23 +72,23 @@ export function UserMenu({ user }: UserMenuProps) {
         )}
       >
         <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 p-[2px]">
-          {user.photoURL ? (
+          {identity.imageUrl ? (
             <Image
-              src={user.photoURL}
-              alt={displayName}
+              src={identity.imageUrl}
+              alt={identity.displayName}
               width={36}
               height={36}
               className="h-9 w-9 rounded-full bg-white object-cover"
             />
           ) : (
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
-              {initials}
+              {identity.initials}
             </span>
           )}
           <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-400 dark:border-slate-900" />
         </span>
         <span className="hidden md:block max-w-28 truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
-          {displayName.split(' ')[0] || user.email?.split('@')[0]}
+          {identity.shortName}
         </span>
         <ChevronDown className={clsx('h-4 w-4 text-slate-500 transition-transform', isOpen && 'rotate-180')} />
       </button>
@@ -94,6 +98,8 @@ export function UserMenu({ user }: UserMenuProps) {
           user={user}
           isWriter={Boolean(isWriter)}
           isAdmin={admin}
+          profileDisplayName={identity.displayName}
+          profileImageUrl={identity.imageUrl}
           menuId={menuId}
           onClose={() => setIsOpen(false)}
           onSignOut={handleSignOut}

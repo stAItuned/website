@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthContext";
+import { useWriterStatus } from "@/components/auth/WriterStatusContext";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import { resolveProfileIdentity } from "@/lib/auth/profileIdentity";
 
 type Payload = {
   category: string;
@@ -31,6 +33,14 @@ export default function FeedbackLauncher() {
 
   // Get auth state
   const { user, loading } = useAuth();
+  const { writerDisplayName, writerImageUrl } = useWriterStatus();
+  const identity = user
+    ? resolveProfileIdentity({
+      user,
+      writerDisplayName,
+      writerImageUrl,
+    })
+    : null;
 
   const pathname = usePathname();
   const search = useSearchParams();
@@ -57,11 +67,11 @@ export default function FeedbackLauncher() {
       setPayload((p) => ({
         ...p,
         userId: user.uid,
-        userName: user.displayName || "",
+        userName: identity?.displayName || "",
         email: user.email || p.email,
       }));
     }
-  }, [user]);
+  }, [user, identity?.displayName]);
 
   // Handle opening feedback - check auth first
   const handleOpenFeedback = useCallback(() => {
@@ -318,10 +328,10 @@ export default function FeedbackLauncher() {
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
-                  {user.displayName?.[0] || user.email?.[0] || "U"}
+                  {identity?.initials || user.email?.[0] || "U"}
                 </div>
                 <p className="text-xs opacity-90">
-                  Signed in as {user.displayName || user.email}
+                  Signed in as {identity?.displayName || user.email}
                 </p>
               </div>
             </div>

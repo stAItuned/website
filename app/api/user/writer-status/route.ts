@@ -41,7 +41,9 @@ export async function GET(request: NextRequest) {
             slug: profile.slug,
             // Returning profilePath for compatibility, though we should move to /author/[slug]
             profilePath: `/author/${profile.slug}`,
-            name: profile.displayName || profile.slug
+            name: profile.displayName || profile.slug,
+            writerDisplayName: profile.displayName || profile.slug,
+            writerImageUrl: profile.image?.publicUrl || null,
         }, { status: 200 });
 
     } catch (error) {

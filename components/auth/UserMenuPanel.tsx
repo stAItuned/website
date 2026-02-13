@@ -19,6 +19,8 @@ interface UserMenuPanelProps {
   user: User
   isWriter: boolean
   isAdmin: boolean
+  profileDisplayName: string
+  profileImageUrl?: string
   menuId: string
   onClose: () => void
   onSignOut: () => void
@@ -31,11 +33,13 @@ export function UserMenuPanel({
   user,
   isWriter,
   isAdmin,
+  profileDisplayName,
+  profileImageUrl,
   menuId,
   onClose,
   onSignOut,
 }: UserMenuPanelProps) {
-  const displayName = user.displayName || 'User'
+  const displayName = profileDisplayName
   const initials = (displayName || user.email || 'U').charAt(0).toUpperCase()
   const baseItemClasses =
     'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-300'
@@ -100,9 +104,9 @@ export function UserMenuPanel({
     >
       <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-3 dark:border-slate-800 dark:bg-slate-800">
         <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 p-[2px]">
-          {user.photoURL ? (
+          {profileImageUrl ? (
             <Image
-              src={user.photoURL}
+              src={profileImageUrl}
               alt={displayName}
               width={48}
               height={48}

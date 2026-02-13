@@ -46,7 +46,7 @@ export function DeleteDataModal({
           <div>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Delete your data</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              This action removes your stored preferences and bookmarks.
+              This action removes your personal data from Firestore while keeping your account active.
             </p>
           </div>
         </div>
@@ -56,10 +56,11 @@ export function DeleteDataModal({
           <ul className="mt-2 list-disc space-y-1 pl-4">
             <li>All bookmarks ({bookmarksCount})</li>
             <li>User preferences</li>
-            <li>Account metadata</li>
+            <li>Contributor drafts, interview data, and signed agreements</li>
+            <li>Writer profile metadata and related badges</li>
           </ul>
           <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-            Your account remains active and you can continue using the platform.
+            Your account remains active and published articles are preserved.
           </p>
         </div>
 
@@ -127,8 +128,9 @@ export function DeleteAccountModal({
           <p className="font-semibold">This will permanently delete:</p>
           <ul className="mt-2 list-disc space-y-1 pl-4">
             <li>Your account and authentication</li>
-            <li>All bookmarks and preferences</li>
-            <li>All personal data</li>
+            <li>All personal data on Firestore (including contributor agreements)</li>
+            <li>Writer profile metadata and related badges</li>
+            <li>Published articles are preserved</li>
           </ul>
         </div>
 

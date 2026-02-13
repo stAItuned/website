@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'
+import { getFirestore, doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '@/components/auth/AuthContext'
 import { app } from '@/lib/firebase/client'
 import { useWriterStatus } from '@/components/auth/WriterStatusContext'
@@ -20,6 +20,40 @@ interface FirestoreTimestampLike {
 interface UserData {
   createdAt?: string | number | Date | FirestoreTimestampLike | { toDate: () => Date }
   bookmarks?: string[]
+}
+
+interface AgreementData {
+  checkbox_general?: boolean
+  agreed?: boolean
+  accepted_at?: string
+  agreedAt?: string
+  legalName?: string
+  author_name?: string
+  agreement_version?: string
+  version?: string
+}
+
+interface ContributionWithAgreement {
+  agreement?: AgreementData
+}
+
+type AccountDeleteMode = 'data' | 'account'
+
+function hasSignedAgreement(agreement?: AgreementData): boolean {
+  return agreement?.checkbox_general === true || agreement?.agreed === true
+}
+
+function agreementAcceptedAt(agreement?: AgreementData): string {
+  return agreement?.accepted_at || agreement?.agreedAt || ''
+}
+
+interface AccountDeleteApiResponse {
+  success?: boolean
+  mode?: AccountDeleteMode
+  authDeleted?: boolean
+  authDeletionWarning?: string | null
+  error?: string
+  details?: string
 }
 
 const resolveMemberSince = (createdAt?: UserData['createdAt']) => {
@@ -53,8 +87,8 @@ function AccountSettingsContent() {
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
   const [showAgreement, setShowAgreement] = useState(false)
-  const [contributions, setContributions] = useState<any[]>([])
-  const [agreementData, setAgreementData] = useState<any>(null)
+  const [contributions, setContributions] = useState<ContributionWithAgreement[]>([])
+  const [agreementData, setAgreementData] = useState<AgreementData | null>(null)
 
   const activeTab = searchParams.get('tab')
 
@@ -92,15 +126,22 @@ function AccountSettingsContent() {
         const res = await fetch('/api/contributor/get-progress', {
           headers: { 'Authorization': `Bearer ${await user.getIdToken()}` }
         })
-        const json = await res.json()
+        const json = await res.json() as {
+          success?: boolean
+          contributions?: ContributionWithAgreement[]
+        }
         if (json.success && json.contributions) {
           setContributions(json.contributions)
           // Find the latest contribution with an agreement
           const latestWithAgreement = json.contributions
-            .filter((c: any) => c.agreement?.agreed)
-            .sort((a: any, b: any) => new Date(b.agreement.agreedAt).getTime() - new Date(a.agreement.agreedAt).getTime())[0]
+            .filter((c) => hasSignedAgreement(c.agreement))
+            .sort((a, b) => {
+              const bTime = Date.parse(agreementAcceptedAt(b.agreement))
+              const aTime = Date.parse(agreementAcceptedAt(a.agreement))
+              return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime)
+            })[0]
 
-          if (latestWithAgreement) {
+          if (latestWithAgreement?.agreement) {
             setAgreementData(latestWithAgreement.agreement)
           }
         }
@@ -121,10 +162,23 @@ function AccountSettingsContent() {
     setDeleting(true)
     setError('')
     try {
-      const db = getFirestore(app)
-      const userDocRef = doc(db, 'users', user.uid)
-      await deleteDoc(userDocRef)
+      const token = await user.getIdToken()
+      const response = await fetch('/api/account/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ mode: 'data' satisfies AccountDeleteMode }),
+      })
+      const result = await response.json() as AccountDeleteApiResponse
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.error || result.details || 'Failed to delete user data')
+      }
+
       setUserData(null)
+      setContributions([])
+      setAgreementData(null)
       setShowDataDeleteConfirm(false)
       alert('Your data has been successfully deleted. Your account remains active.')
     } catch (error) {
@@ -143,15 +197,31 @@ function AccountSettingsContent() {
     setDeleting(true)
     setError('')
     try {
-      const db = getFirestore(app)
-      const userDocRef = doc(db, 'users', user.uid)
-      await deleteDoc(userDocRef)
+      const token = await user.getIdToken()
       const response = await fetch('/api/account/delete', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.uid }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ mode: 'account' satisfies AccountDeleteMode }),
       })
-      if (!response.ok) throw new Error('Failed to delete account')
+
+      const result = await response.json() as AccountDeleteApiResponse
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.error || result.details || 'Failed to delete account')
+      }
+
+      if (result.authDeleted === false) {
+        setShowDeleteConfirm(false)
+        setDeleteConfirmText('')
+        setError(
+          'I dati sono stati cancellati, ma la rimozione dell’account Auth è fallita per permessi IAM backend. ' +
+          'Serve assegnare al service account il ruolo roles/serviceusage.serviceUsageConsumer.'
+        )
+        return
+      }
+
       const { signOutUser } = await import('@/lib/firebase/auth')
       await signOutUser()
       router.push('/')
@@ -167,6 +237,14 @@ function AccountSettingsContent() {
   const memberSince = useMemo(() => resolveMemberSince(userData?.createdAt), [userData?.createdAt])
   const bookmarksCount = userData?.bookmarks?.length ?? 0
   const admin = Boolean(user?.email && isAdmin(user.email))
+  const modalAgreementData = useMemo(() => {
+    if (!agreementData) return undefined
+    return {
+      legalName: agreementData.legalName || agreementData.author_name || user?.displayName || '',
+      agreedAt: agreementAcceptedAt(agreementData),
+      version: agreementData.agreement_version || agreementData.version || '1.1',
+    }
+  }, [agreementData, user?.displayName])
 
   if (authLoading || loading || writerStatusLoading || !user) return <AccountSettingsLoading />
 
@@ -214,7 +292,7 @@ function AccountSettingsContent() {
       <AgreementModal
         isOpen={showAgreement}
         onClose={() => setShowAgreement(false)}
-        agreementData={agreementData}
+        agreementData={modalAgreementData}
       />
     </>
   )

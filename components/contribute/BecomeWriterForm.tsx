@@ -143,11 +143,11 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
     }
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
 
             {/* Image Upload */}
             <div className="flex flex-col items-center gap-4">
-                <div className="relative w-32 h-32 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 border-4 border-white dark:border-slate-600 shadow-lg">
+                <div className="relative w-32 h-32 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-700 shadow-lg">
                     {previewUrl ? (
                         <Image
                             src={previewUrl}
@@ -157,7 +157,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                             sizes="128px"
                         />
                     ) : (
-                        <div className="flex items-center justify-center h-full text-4xl text-slate-300">
+                        <div className="flex items-center justify-center h-full text-4xl text-slate-300 dark:text-slate-500">
                             👤
                         </div>
                     )}
@@ -167,16 +167,16 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     ref={fileInputRef}
                     onChange={handleImageChange}
                     accept="image/jpeg,image/png,image/webp"
-                    className="block w-full text-sm text-slate-500
+                    className="block w-full text-sm text-slate-500 dark:text-slate-400
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
                         file:bg-primary-50 file:text-primary-700
                         hover:file:bg-primary-100
-                        dark:file:bg-primary-900/20 dark:file:text-primary-300
+                        dark:file:bg-primary-900/30 dark:file:text-primary-200 dark:hover:file:bg-primary-900/50
                     "
                 />
-                <p className="text-xs text-slate-500">{t.imageHint}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t.imageHint}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -187,7 +187,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         required
                         value={formData.name}
                         onChange={e => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
+                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500 outline-none"
                     />
                 </div>
                 <div className="space-y-2">
@@ -197,7 +197,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         required
                         value={formData.surname}
                         onChange={e => setFormData({ ...formData, surname: e.target.value })}
-                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
+                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500 outline-none"
                     />
                 </div>
             </div>
@@ -210,7 +210,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     placeholder={t.titlePlaceholder}
                     value={formData.title}
                     onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500 outline-none"
                 />
             </div>
 
@@ -222,7 +222,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                     placeholder={t.bioPlaceholder}
                     value={formData.bio}
                     onChange={e => setFormData({ ...formData, bio: e.target.value })}
-                    className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none resize-none"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500 outline-none resize-none"
                 />
             </div>
 
@@ -233,7 +233,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         type="text"
                         value={formData.linkedin}
                         onChange={e => setFormData({ ...formData, linkedin: e.target.value })}
-                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
+                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500 outline-none"
                     />
                 </div>
                 <div className="space-y-2">
@@ -242,7 +242,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         type="text"
                         value={formData.website}
                         onChange={e => setFormData({ ...formData, website: e.target.value })}
-                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
+                        className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500 outline-none"
                     />
                 </div>
             </div>
@@ -255,16 +255,16 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                         required
                         checked={formData.consent}
                         onChange={e => setFormData({ ...formData, consent: e.target.checked })}
-                        className="mt-1 w-5 h-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                        className="mt-1 w-5 h-5 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-primary-600 focus:ring-primary-500"
                     />
                     <span className="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">
-                        {t.consentPrefix} <Link href="/terms" className="text-primary-600 underline hover:text-primary-700">{t.terms}</Link> {t.consentMiddle} <Link href="/privacy" className="text-primary-600 underline hover:text-primary-700">{t.privacy}</Link>. {t.consentSuffix}
+                        {t.consentPrefix} <Link href="/terms" className="text-primary-600 dark:text-primary-300 underline hover:text-primary-700 dark:hover:text-primary-200">{t.terms}</Link> {t.consentMiddle} <Link href="/privacy" className="text-primary-600 dark:text-primary-300 underline hover:text-primary-700 dark:hover:text-primary-200">{t.privacy}</Link>. {t.consentSuffix}
                     </span>
                 </label>
             </div>
 
             {error && (
-                <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm">
+                <div className="p-4 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 rounded-xl text-sm border border-red-200 dark:border-red-900/40">
                     {error}
                 </div>
             )}
@@ -273,7 +273,7 @@ export function BecomeWriterForm({ onSuccess, submitLabel }: BecomeWriterFormPro
                 <button
                     type="submit"
                     disabled={isLoading || authLoading || !user}
-                    className="px-8 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg flex items-center gap-2"
+                    className="px-8 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                 >
                     {isLoading ? (
                         <>

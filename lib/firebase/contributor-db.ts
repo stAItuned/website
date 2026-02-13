@@ -3,6 +3,26 @@ import { Contribution } from '../types/contributor';
 import { sanitizeFirestoreDate } from './utils';
 
 const COLLECTION = 'contributions';
+const DEFAULT_AGREEMENT_VERSION = '1.1';
+
+export interface SignedAgreementRecord {
+    contributionId: string;
+    version: string;
+    acceptedAt: string;
+}
+
+function isAgreementSigned(agreement?: Contribution['agreement']): boolean {
+    return agreement?.checkbox_general === true || agreement?.agreed === true;
+}
+
+function normalizeAgreementVersion(agreement?: Contribution['agreement']): string {
+    const value = agreement?.agreement_version || agreement?.version || DEFAULT_AGREEMENT_VERSION;
+    return String(value).trim() || DEFAULT_AGREEMENT_VERSION;
+}
+
+function normalizeAgreementAcceptedAt(agreement?: Contribution['agreement']): string {
+    return agreement?.accepted_at || agreement?.agreedAt || '';
+}
 
 export async function createContribution(data: Omit<Contribution, 'id'>): Promise<string> {
     const db = getAdminDb();
@@ -99,18 +119,33 @@ export async function getAllContributions(status?: string): Promise<Contribution
 }
 
 export async function checkUserHasAgreement(userId: string): Promise<boolean> {
+    const agreements = await getUserSignedAgreements(userId);
+    return agreements.length > 0;
+}
+
+export async function getUserSignedAgreements(userId: string): Promise<SignedAgreementRecord[]> {
     const db = getAdminDb();
-    // Check for contributions where agreement.checkbox_general is true
     const snapshot = await db.collection(COLLECTION)
         .where('contributorId', '==', userId)
         .get();
 
-    // Iterate to find any valid agreement
-    // (We do client-side filtering because Firestore limited queries might be tricky with nested fields depending on indexes)
-    const hasAgreement = snapshot.docs.some(doc => {
+    const agreements = snapshot.docs
+        .map((doc) => {
         const data = doc.data() as Contribution;
-        return data.agreement?.checkbox_general === true || data.agreement?.agreed === true;
-    });
+            if (!isAgreementSigned(data.agreement)) return null;
 
-    return hasAgreement;
+            return {
+                contributionId: doc.id,
+                version: normalizeAgreementVersion(data.agreement),
+                acceptedAt: normalizeAgreementAcceptedAt(data.agreement),
+            } as SignedAgreementRecord;
+        })
+        .filter((value): value is SignedAgreementRecord => value !== null)
+        .sort((a, b) => {
+            const aTime = Date.parse(a.acceptedAt || '');
+            const bTime = Date.parse(b.acceptedAt || '');
+            return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime);
+        });
+
+    return agreements;
 }

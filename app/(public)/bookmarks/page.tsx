@@ -7,8 +7,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getFirestore, doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '@/components/auth/AuthContext'
+import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { app } from '@/lib/firebase/client'
 import { ArticleCard } from '@/components/ArticleCard'
+import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 import { BookMarked, Compass, Home, Sparkles } from 'lucide-react'
 
 type ArticlePreview = ComponentProps<typeof ArticleCard>['article']
@@ -24,6 +26,7 @@ const isArticlePreview = (value: unknown): value is ArticlePreview => {
  */
 export default function BookmarksPage() {
   const { user, loading: authLoading } = useAuth()
+  const { writerDisplayName, writerImageUrl } = useWriterStatus()
   const router = useRouter()
   const [bookmarks, setBookmarks] = useState<string[]>([])
   const [articles, setArticles] = useState<ArticlePreview[]>([])
@@ -80,6 +83,13 @@ export default function BookmarksPage() {
   const bookmarkedArticles = useMemo(() => {
     return articles.filter((article) => bookmarks.includes(article.slug))
   }, [articles, bookmarks])
+  const identity = user
+    ? resolveProfileIdentity({
+      user,
+      writerDisplayName,
+      writerImageUrl,
+    })
+    : null
 
   if (authLoading || loading || !user) {
     return (
@@ -146,21 +156,21 @@ export default function BookmarksPage() {
 
             <div className="mt-6 flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900">
-                {user.photoURL ? (
+                {identity?.imageUrl ? (
                   <Image
-                    src={user.photoURL}
-                    alt={user.displayName || 'User'}
+                    src={identity.imageUrl}
+                    alt={identity.displayName}
                     width={40}
                     height={40}
                     className="h-10 w-10 rounded-full object-cover"
                   />
                 ) : (
                   <span className="text-sm font-semibold text-primary-700 dark:text-primary-300">
-                    {user.displayName?.charAt(0) || user.email?.charAt(0) || '?'}
+                    {identity?.initials || user.email?.charAt(0) || '?'}
                   </span>
                 )}
               </div>
-              <span>{user.displayName || user.email}</span>
+              <span>{identity?.displayName || user.email}</span>
             </div>
           </div>
         </div>

@@ -6,9 +6,11 @@ import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
 import { useSafePathname } from '@/components/SafeNavigation'
 import { useAuth } from '@/components/auth/AuthContext'
+import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
 import { LearnLocaleToggle, useLearnLocale } from '@/lib/i18n'
+import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 
 
 
@@ -24,12 +26,20 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
   const { openSearch } = useSearch()
   const { user, loading } = useAuth()
+  const { writerDisplayName, writerImageUrl } = useWriterStatus()
 
   const { resolvedTheme } = useTheme()
   const { t } = useLearnLocale()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
   const admin = user?.email ? isAdmin(user.email) : false
+  const identity = user
+    ? resolveProfileIdentity({
+      user,
+      writerDisplayName,
+      writerImageUrl,
+    })
+    : null
 
   // Wait for component to mount before determining logo source
   // This prevents hydration mismatch between server and client
@@ -309,10 +319,10 @@ export function Header() {
                   {user ? (
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3 p-3 bg-primary-500 rounded-lg">
-                        {user.photoURL ? (
+                        {identity?.imageUrl ? (
                           <Image
-                            src={user.photoURL}
-                            alt={user.displayName || 'User'}
+                            src={identity.imageUrl}
+                            alt={identity.displayName}
                             width={40}
                             height={40}
                             className="rounded-full border-2 border-white"
@@ -320,13 +330,13 @@ export function Header() {
                         ) : (
                           <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center border-2 border-white">
                             <span className="text-white text-sm font-semibold">
-                              {user.displayName?.charAt(0) || user.email?.charAt(0)}
+                              {identity?.initials || user.email?.charAt(0)}
                             </span>
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
                           <p className="text-white text-sm font-medium truncate">
-                            {user.displayName || 'User'}
+                            {identity?.displayName || 'User'}
                           </p>
                           <p className="text-primary-200 text-xs truncate">
                             {user.email}

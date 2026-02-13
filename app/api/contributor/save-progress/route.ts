@@ -1,9 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/firebase/server-auth';
-import { createContribution, updateContribution, getContribution } from '@/lib/firebase/contributor-db';
+import { createContribution, updateContribution, getContribution, getUserSignedAgreements } from '@/lib/firebase/contributor-db';
 import { Contribution } from '@/lib/types/contributor';
 import { headers } from 'next/headers';
-import { sendAgreementConfirmationEmail } from '@/lib/email/agreementEmail';
+import { evaluateAgreementSignaturePolicy, AgreementPolicyDecision } from '@/lib/contributor/agreementPolicy';
+
+const DEFAULT_AGREEMENT_VERSION = '1.1';
+
+function getRequestedAgreementVersion(agreement: Contribution['agreement'] | undefined): string {
+    if (!agreement) return '';
+    return String(agreement.agreement_version || agreement.version || DEFAULT_AGREEMENT_VERSION).trim();
+}
+
+function getAgreementFiscalCode(agreement: Contribution['agreement'] | undefined): string | undefined {
+    if (!agreement) return undefined;
+    if (agreement.fiscal_code) return agreement.fiscal_code;
+    const legacyFiscalCode = (agreement as Record<string, unknown>).fiscalCode;
+    return typeof legacyFiscalCode === 'string' ? legacyFiscalCode : undefined;
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -13,8 +27,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 
-        const body = await request.json();
-        const { contributionId, data } = body;
+        const body = await request.json() as {
+            contributionId?: string;
+            data?: Partial<Contribution>;
+        };
+        const contributionId = body.contributionId;
+        const incomingData = body.data ?? {};
 
         // Audit Trail Extraction
         const headersList = await headers();
@@ -27,9 +45,43 @@ export async function POST(request: NextRequest) {
         // 1. Prepare Data to Save
         // Inject Audit Trail into Agreement if present and not already auditing
         // Note: The client sends 'agreement' object when saving from StepAgreement
-        let dataToSave = { ...data };
+        let dataToSave: Partial<Contribution> = { ...incomingData };
 
-        if (dataToSave.agreement && (dataToSave.agreement.agreed || dataToSave.agreement.checkbox_general)) {
+        const hasIncomingAgreement =
+            Boolean(dataToSave.agreement && (dataToSave.agreement.agreed || dataToSave.agreement.checkbox_general));
+
+        let agreementPolicyDecision: AgreementPolicyDecision | undefined;
+        if (hasIncomingAgreement) {
+            const requestedVersion = getRequestedAgreementVersion(dataToSave.agreement);
+            const existingSignedAgreements = await getUserSignedAgreements(user.uid);
+            agreementPolicyDecision = evaluateAgreementSignaturePolicy({
+                existingVersions: existingSignedAgreements.map((record) => record.version),
+                requestedVersion,
+            });
+
+            if (agreementPolicyDecision === 'invalid_requested_version') {
+                return NextResponse.json(
+                    { success: false, error: 'Invalid agreement version' },
+                    { status: 400 }
+                );
+            }
+
+            if (agreementPolicyDecision === 'max_versions_reached') {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Agreement signature limit reached (max 2 versions per user).'
+                    },
+                    { status: 409 }
+                );
+            }
+        }
+
+        if (
+            hasIncomingAgreement &&
+            agreementPolicyDecision !== 'already_signed_same_version' &&
+            dataToSave.agreement
+        ) {
             dataToSave.agreement = {
                 ...dataToSave.agreement,
                 checkbox_general: true,
@@ -41,15 +93,36 @@ export async function POST(request: NextRequest) {
                 ip: ip,
                 user_agent: userAgent
             };
+        } else if (agreementPolicyDecision === 'already_signed_same_version') {
+            dataToSave = {
+                ...dataToSave,
+                agreement: undefined,
+            };
         }
 
         let isNewAgreement = false;
 
         const createNewContribution = async () => {
+            const normalizedPath = dataToSave.path || 'guided';
+            const normalizedLanguage = dataToSave.language || 'it';
+            const normalizedBrief = dataToSave.brief || {
+                topic: '',
+                target: 'newbie',
+                format: 'tutorial',
+                thesis: '',
+                hasExample: false,
+                sources: []
+            };
+            const normalizedInterviewHistory = dataToSave.interviewHistory || [];
+
             const newContribution: Omit<Contribution, 'id'> = {
-                status: 'pitch',
-                currentStep: 'pitch',
                 ...dataToSave,
+                status: dataToSave.status || 'pitch',
+                currentStep: dataToSave.currentStep || 'pitch',
+                path: normalizedPath,
+                language: normalizedLanguage,
+                brief: normalizedBrief,
+                interviewHistory: normalizedInterviewHistory,
                 contributorId: user.uid,
                 contributorEmail: user.email || '',
                 createdAt: lastSaved,
@@ -58,7 +131,10 @@ export async function POST(request: NextRequest) {
             };
 
             id = await createContribution(newContribution);
-            if (dataToSave.agreement?.checkbox_general || dataToSave.agreement?.agreed) {
+            if (
+                agreementPolicyDecision === 'allow_new_signature' &&
+                (dataToSave.agreement?.checkbox_general || dataToSave.agreement?.agreed)
+            ) {
                 isNewAgreement = true;
             }
         };
@@ -85,7 +161,11 @@ export async function POST(request: NextRequest) {
             }
 
             // Check if this is a fresh agreement
-            if (!existing.agreement?.checkbox_general && dataToSave.agreement?.checkbox_general) {
+            if (
+                agreementPolicyDecision === 'allow_new_signature' &&
+                !existing.agreement?.checkbox_general &&
+                dataToSave.agreement?.checkbox_general
+            ) {
                 isNewAgreement = true;
             }
 
@@ -122,6 +202,10 @@ export async function POST(request: NextRequest) {
         // 2. Send Email if New Agreement
         if (isNewAgreement && dataToSave.agreement) {
             try {
+                if (!id) {
+                    throw new Error('Missing contribution id after agreement save');
+                }
+
                 const { sendAgreementWithPDF } = await import('@/lib/contributor/agreement-service');
                 const { hash } = await sendAgreementWithPDF({
                     email: user.email || '',
@@ -130,7 +214,7 @@ export async function POST(request: NextRequest) {
                     agreedAt: dataToSave.agreement.accepted_at,
                     version: dataToSave.agreement.agreement_version,
                     language: dataToSave.language || 'it',
-                    fiscalCode: dataToSave.agreement.fiscal_code || (dataToSave.agreement as any).fiscalCode || (dataToSave.agreement as any).fiscalCode,
+                    fiscalCode: getAgreementFiscalCode(dataToSave.agreement),
                     ipAddress: ip as string
                 });
 
@@ -153,7 +237,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             contributionId: id,
-            lastSaved
+            lastSaved,
+            agreementPolicyDecision
         });
 
     } catch (error) {

@@ -11,6 +11,8 @@ import {
 } from 'lucide-react'
 import { PremiumLink } from '@/components/ui/PremiumLink'
 import { useLearnLocale, accountTranslations } from '@/lib/i18n'
+import { useWriterStatus } from '@/components/auth/WriterStatusContext'
+import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 
 interface AccountHeaderProps {
   user: User
@@ -32,9 +34,15 @@ export function AccountHeader({
 }: AccountHeaderProps) {
   const { locale } = useLearnLocale()
   const t = accountTranslations[locale]
+  const { writerDisplayName, writerImageUrl } = useWriterStatus()
 
-  const displayName = user.displayName || user.email || 'User'
-  const initials = displayName.charAt(0).toUpperCase()
+  const identity = resolveProfileIdentity({
+    user,
+    writerDisplayName,
+    writerImageUrl,
+  })
+  const displayName = identity.displayName
+  const initials = identity.initials
 
   return (
     <div className="mb-10">
@@ -50,9 +58,9 @@ export function AccountHeader({
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 p-[2px]">
-              {user.photoURL ? (
+              {identity.imageUrl ? (
                 <Image
-                  src={user.photoURL}
+                  src={identity.imageUrl}
                   alt={displayName}
                   width={64}
                   height={64}

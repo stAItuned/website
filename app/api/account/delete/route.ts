@@ -1,88 +1,191 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { auth as adminAuth } from '@/lib/firebase/admin'
+import { getAdminDb, verifyAuth } from '@/lib/firebase/server-auth'
 
-// Use dynamic import for Firebase Admin to handle initialization
-async function deleteUserAccount(userId: string) {
-  try {
-    // Dynamic import for Firebase Admin
-    const admin = await import('firebase-admin/app')
-    const { getAuth } = await import('firebase-admin/auth')
-    const { getFirestore } = await import('firebase-admin/firestore')
-    
-    // Get or initialize app
-    let app
-    if (admin.getApps().length === 0) {
-      const serviceAccountKey = process.env.FB_SERVICE_ACCOUNT_KEY
-      
-      if (!serviceAccountKey || serviceAccountKey.includes('placeholder')) {
-        throw new Error('Firebase Admin not configured')
-      }
-      
-      app = admin.initializeApp({
-        credential: admin.cert(JSON.parse(serviceAccountKey)),
-      })
-    } else {
-      app = admin.getApps()[0]
-    }
-    
-    const auth = getAuth(app)
-    const db = getFirestore(app)
+type DeleteMode = 'data' | 'account'
 
-    // Delete user data from Firestore (all collections)
-    const collections = ['users', 'preferences', 'drafts']
-    
-    for (const collectionName of collections) {
-      try {
-        const docRef = db.collection(collectionName).doc(userId)
-        const doc = await docRef.get()
-        
-        if (doc.exists) {
-          await docRef.delete()
-          console.log(`Deleted ${collectionName} data for user ${userId}`)
-        }
-      } catch (error) {
-        console.error(`Error deleting ${collectionName}:`, error)
-        // Continue with other collections even if one fails
-      }
-    }
+interface DeleteRequestBody {
+  mode?: DeleteMode
+}
 
-    // Delete user from Firebase Authentication
-    try {
-      await auth.deleteUser(userId)
-      console.log(`Deleted auth user ${userId}`)
-    } catch (error) {
-      console.error('Error deleting auth user:', error)
-      throw error
-    }
+interface CleanupSummary {
+  deleted: string[]
+  errors: string[]
+}
 
-    return { success: true }
-  } catch (error) {
-    console.error('Error deleting user account:', error)
-    throw error
+function isAuthPermissionError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error)
+  return (
+    message.includes('USER_PROJECT_DENIED') ||
+    message.includes('serviceusage.services.use') ||
+    message.includes('roles/serviceusage.serviceUsageConsumer') ||
+    message.includes('identitytoolkit.googleapis.com')
+  )
+}
+
+function addDeleted(summary: CleanupSummary, path: string) {
+  summary.deleted.push(path)
+}
+
+function addError(summary: CleanupSummary, path: string, error: unknown) {
+  const detail = error instanceof Error ? error.message : 'Unknown error'
+  summary.errors.push(`${path}: ${detail}`)
+}
+
+async function deleteDocIfExists(
+  collectionName: string,
+  docId: string,
+  summary: CleanupSummary
+) {
+  const db = getAdminDb()
+  const ref = db.collection(collectionName).doc(docId)
+  const snap = await ref.get()
+  if (!snap.exists) return
+  await ref.delete()
+  addDeleted(summary, `${collectionName}/${docId}`)
+}
+
+async function deleteUserDrafts(uid: string, summary: CleanupSummary) {
+  const db = getAdminDb()
+  const draftRootRef = db.collection('drafts').doc(uid)
+  const articlesSnapshot = await draftRootRef.collection('articles').get()
+  for (const doc of articlesSnapshot.docs) {
+    await doc.ref.delete()
+    addDeleted(summary, `drafts/${uid}/articles/${doc.id}`)
   }
+  await deleteDocIfExists('drafts', uid, summary)
+}
+
+async function deleteContributions(uid: string, summary: CleanupSummary) {
+  const db = getAdminDb()
+  const snapshot = await db.collection('contributions').where('contributorId', '==', uid).get()
+  for (const doc of snapshot.docs) {
+    await doc.ref.delete()
+    addDeleted(summary, `contributions/${doc.id}`)
+  }
+}
+
+async function deleteWriterProfile(uid: string, summary: CleanupSummary) {
+  const db = getAdminDb()
+  const writerSlugs = new Set<string>()
+
+  const writerSlugDoc = await db.collection('writer_slugs').doc(uid).get()
+  if (writerSlugDoc.exists) {
+    const slugValue = writerSlugDoc.data()?.slug
+    if (typeof slugValue === 'string' && slugValue.trim()) {
+      writerSlugs.add(slugValue.trim())
+    }
+    await writerSlugDoc.ref.delete()
+    addDeleted(summary, `writer_slugs/${uid}`)
+  }
+
+  const writerQuery = await db.collection('writers').where('uid', '==', uid).get()
+  for (const doc of writerQuery.docs) {
+    writerSlugs.add(doc.id)
+    await doc.ref.delete()
+    addDeleted(summary, `writers/${doc.id}`)
+  }
+
+  for (const slug of writerSlugs) {
+    const writerDoc = await db.collection('writers').doc(slug).get()
+    if (writerDoc.exists) {
+      await writerDoc.ref.delete()
+      addDeleted(summary, `writers/${slug}`)
+    }
+
+    const badgesRef = db.collection('badges').doc(slug)
+    const earnedSnapshot = await badgesRef.collection('earned').get()
+    for (const earnedDoc of earnedSnapshot.docs) {
+      await earnedDoc.ref.delete()
+      addDeleted(summary, `badges/${slug}/earned/${earnedDoc.id}`)
+    }
+
+    const badgesDoc = await badgesRef.get()
+    if (badgesDoc.exists) {
+      await badgesDoc.ref.delete()
+      addDeleted(summary, `badges/${slug}`)
+    }
+  }
+}
+
+async function cleanupUserFirestoreData(uid: string): Promise<CleanupSummary> {
+  const summary: CleanupSummary = { deleted: [], errors: [] }
+
+  const tasks: Array<() => Promise<void>> = [
+    async () => deleteDocIfExists('users', uid, summary),
+    async () => deleteDocIfExists('preferences', uid, summary),
+    async () => deleteUserDrafts(uid, summary),
+    async () => deleteContributions(uid, summary),
+    async () => deleteWriterProfile(uid, summary),
+  ]
+
+  for (const task of tasks) {
+    try {
+      await task()
+    } catch (error) {
+      addError(summary, 'firestore_cleanup', error)
+    }
+  }
+
+  return summary
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await request.json()
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
-      )
+    const user = await verifyAuth(request)
+    if (!user?.uid) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Delete the user account
-    await deleteUserAccount(userId)
+    let mode: DeleteMode = 'account'
+    try {
+      const body = (await request.json()) as DeleteRequestBody
+      if (body.mode === 'data' || body.mode === 'account') {
+        mode = body.mode
+      }
+    } catch {
+      // Empty or invalid body -> fallback to default "account"
+    }
+
+    const summary = await cleanupUserFirestoreData(user.uid)
+
+    let authDeleted = mode === 'data'
+    let authDeletionWarning: string | null = null
+
+    if (mode === 'account') {
+      try {
+        await adminAuth().deleteUser(user.uid)
+        authDeleted = true
+      } catch (error) {
+        if (isAuthPermissionError(error)) {
+          authDeleted = false
+          authDeletionWarning = error instanceof Error ? error.message : String(error)
+        } else {
+          throw error
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Account deleted successfully'
+      mode,
+      authDeleted,
+      authDeletionWarning,
+      summary,
+      message: mode === 'account'
+        ? (authDeleted
+          ? 'Account and related data deleted'
+          : 'User data deleted, but auth account deletion was skipped due to IAM permissions')
+        : 'User data deleted while keeping account active'
     })
   } catch (error) {
-    console.error('Error in account deletion:', error)
+    console.error('[API] account/delete error:', error)
     return NextResponse.json(
-      { error: 'Failed to delete account', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        success: false,
+        error: 'Failed to delete account data',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     )
   }
