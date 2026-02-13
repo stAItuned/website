@@ -17,8 +17,11 @@ export default function ContributorProgramPage() {
     const itPath = path.join(process.cwd(), 'public/assets/staituned/contributors/contributor-program.it.md')
     const enPath = path.join(process.cwd(), 'public/assets/staituned/contributors/contributor-program.en.md')
 
-    const contentIt = fs.readFileSync(itPath, 'utf8')
-    const contentEn = fs.readFileSync(enPath, 'utf8')
+    const fallbackIt = '# Contributor Program\n\nContenuto temporaneamente non disponibile.'
+    const fallbackEn = '# Contributor Program\n\nContent temporarily unavailable.'
+
+    const contentIt = fs.existsSync(itPath) ? fs.readFileSync(itPath, 'utf8') : fallbackIt
+    const contentEn = fs.existsSync(enPath) ? fs.readFileSync(enPath, 'utf8') : fallbackEn
 
     return (
         <ContributorProgramClient
