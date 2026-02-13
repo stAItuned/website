@@ -13,4 +13,177 @@ env:
     availability:
       - BUILD
       - RUNTIME
-
+  - variable: NEXT_PUBLIC_DISABLE_AUTH
+    value: "true"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: "https://staituned-dev-42883.web.app"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_GA_MEASUREMENT_ID
+    value: "G-LBSYL8WF8M"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "AIzaSyD8ZBfLzHE2XVnwd6HUj1N9AjY8CKXAog8"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "staituned-production-163f4.firebaseapp.com"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "staituned-production-163f4"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "staituned-production-163f4.firebasestorage.app"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "1070464718249"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:1070464718249:web:f7c6e040a3f029c1d2a0b8"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_VAPID_KEY
+    value: "BPhLf8LNe45QbHcQFzj1VZD-GQOI79wwIsxPkgxKhcad1xWAZPFNujwicWhiSvSY1go0iI5jB65eTN_JlzCCORo"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_PAYPAL_CLIENT_ID
+    value: "ATSuyppT1FHknDjUrIHjSqUTYaWhWOFn8FJQhF2MxXvKaxcGFa-Ex1St3Vt1Rz-shfP8LBggNeDuIFHR"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: GCP_PROJECT_ID
+    value: "staituned-production-163f4"
+    availability:
+      - RUNTIME
+  - variable: GCS_BUCKET_NAME
+    value: "staituned-production-163f4.firebasestorage.app"
+    availability:
+      - RUNTIME
+  - variable: GCP_LOCATION
+    value: "europe-west4"
+    availability:
+      - RUNTIME
+  - variable: RESEND_FROM_EMAIL
+    value: "stAI tuned <noreply@staituned.com>"
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_ANALYTICS_PROPERTY_ID
+    value: "500759891"
+    availability:
+      - RUNTIME
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: FB_SERVICE_ACCOUNT_KEY_B64
+    secret: FB_SERVICE_ACCOUNT_KEY_B64
+    availability:
+      - RUNTIME
+  - variable: FB_SERVICE_ACCOUNT_KEY
+    secret: FB_SERVICE_ACCOUNT_KEY
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_ANALYTICS_PRIVATE_KEY
+    secret: GOOGLE_ANALYTICS_PRIVATE_KEY
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_ANALYTICS_CLIENT_EMAIL
+    secret: GOOGLE_ANALYTICS_CLIENT_EMAIL
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_ANALYTICS_PROJECT_ID
+    secret: GOOGLE_ANALYTICS_PROJECT_ID
+    availability:
+      - RUNTIME
+  - variable: TELEGRAM_BOT_TOKEN
+    secret: TELEGRAM_BOT_TOKEN
+    availability:
+      - RUNTIME
+  - variable: TELEGRAM_CHAT_ID
+    secret: TELEGRAM_CHAT_ID
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_AI_API_KEY
+    secret: GOOGLE_AI_API_KEY
+    availability:
+      - RUNTIME
+  - variable: PERPLEXITY_API_KEY
+    secret: PERPLEXITY_API_KEY
+    availability:
+      - RUNTIME
+  - variable: PREVIEW_SECRET
+    secret: PREVIEW_SECRET
+    availability:
+      - RUNTIME
+  - variable: GA_API_SECRET
+    secret: GA_API_SECRET
+    availability:
+      - RUNTIME
+  - variable: SLACK_WEBHOOK_FEEDBACK
+    secret: SLACK_WEBHOOK_FEEDBACK
+    availability:
+      - RUNTIME
+  - variable: WEBSITE_DISPATCH_TOKEN
+    secret: WEBSITE_DISPATCH_TOKEN
+    availability:
+      - RUNTIME
+  - variable: CRON_SECRET
+    secret: CRON_SECRET
+    availability:
+      - RUNTIME
+  - variable: CAREER_OS_CALENDLY_URL
+    secret: CAREER_OS_CALENDLY_URL
+    availability:
+      - RUNTIME
+  - variable: NEXT_PUBLIC_CAREER_OS_CALENDLY_URL
+    secret: NEXT_PUBLIC_CAREER_OS_CALENDLY_URL
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_ENABLE_FEEDBACK
+    secret: NEXT_PUBLIC_ENABLE_FEEDBACK
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: ANALYTICS_MAX_DAILY_CALLS
+    secret: ANALYTICS_MAX_DAILY_CALLS
+    availability:
+      - RUNTIME
+  - variable: ANALYTICS_CACHE_DURATION
+    secret: ANALYTICS_CACHE_DURATION
+    availability:
+      - RUNTIME
+  - variable: ANALYTICS_CLIENT_CACHE_DURATION
+    secret: ANALYTICS_CLIENT_CACHE_DURATION
+    availability:
+      - RUNTIME
+  - variable: ENABLE_ANALYTICS_API
+    secret: ENABLE_ANALYTICS_API
+    availability:
+      - RUNTIME
+  - variable: ANALYTICS_VERBOSE_LOGGING
+    secret: ANALYTICS_VERBOSE_LOGGING
+    availability:
+      - RUNTIME
+  - variable: FORCE_ANALYTICS_MOCK
+    secret: FORCE_ANALYTICS_MOCK
+    availability:
+      - RUNTIME

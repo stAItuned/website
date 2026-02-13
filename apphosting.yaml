@@ -10,3 +10,25 @@ runConfig:
   maxInstances: 10
   concurrency: 100
 
+env:
+  - variable: FB_SERVICE_ACCOUNT_KEY_B64
+    secret: FB_SERVICE_ACCOUNT_KEY_B64
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_AI_API_KEY
+    secret: GOOGLE_AI_API_KEY
+    availability:
+      - RUNTIME
+  - variable: PERPLEXITY_API_KEY
+    secret: PERPLEXITY_API_KEY
+    availability:
+      - RUNTIME
+  - variable: PREVIEW_SECRET
+    secret: PREVIEW_SECRET
+    availability:
+      - RUNTIME
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME

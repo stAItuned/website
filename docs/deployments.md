@@ -42,6 +42,7 @@ This repo defaults to skipping Firestore network calls during build-time prerend
 ## Roadmap: Firebase App Hosting
 Action plan for migrating from Hosting `frameworksBackend` to App Hosting lives in `docs/app-hosting-action-plan.md`.
 Execution runbook (commands + rollout order) lives in `docs/app-hosting-runbook.md`.
+Environment and secrets matrix lives in `docs/app-hosting-env.md`.
 App Hosting default region is `europe-west4` in repository scripts.
 
 ## Stability Notes

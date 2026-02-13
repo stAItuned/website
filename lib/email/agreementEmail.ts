@@ -2,9 +2,14 @@
 import { Resend } from 'resend'
 import { BRAND } from '@/lib/brand'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAI tuned <noreply@staituned.com>'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? BRAND.url).replace(/\/+$/, '')
+
+function getResendClient(): Resend | null {
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) return null
+    return new Resend(apiKey)
+}
 
 interface SendAgreementConfirmationParams {
     email: string
@@ -22,6 +27,12 @@ interface SendAgreementConfirmationParams {
 
 export async function sendAgreementConfirmationEmail(params: SendAgreementConfirmationParams): Promise<boolean> {
     const { email, name, agreement_version, accepted_at, author_name, author_email, fiscal_code, language, pdfBuffer, agreement_hash_sha256, ip } = params
+    const resend = getResendClient()
+
+    if (!resend) {
+        console.error('[Agreement Email] CRITICAL: RESEND_API_KEY is missing in process.env')
+        return false
+    }
 
     // Force English subject and body if requested, or based on parameter
     const subject = 'stAI tuned Contributor Agreement Confirmation'
@@ -59,7 +70,7 @@ export async function sendAgreementConfirmationEmail(params: SendAgreementConfir
     `
 
     try {
-        const payload: any = {
+        const basePayload = {
             from: FROM_EMAIL,
             to: email,
             cc: 'staituned.owner@gmail.com',
@@ -67,14 +78,17 @@ export async function sendAgreementConfirmationEmail(params: SendAgreementConfir
             html,
         }
 
-        if (pdfBuffer) {
-            payload.attachments = [
-                {
-                    filename: `staituned-contributor-agreement-${accepted_at.split('T')[0]}.pdf`,
-                    content: pdfBuffer,
-                }
-            ]
-        }
+        const payload = pdfBuffer
+            ? {
+                ...basePayload,
+                attachments: [
+                    {
+                        filename: `staituned-contributor-agreement-${accepted_at.split('T')[0]}.pdf`,
+                        content: pdfBuffer,
+                    }
+                ]
+            }
+            : basePayload
 
         const { error } = await resend.emails.send(payload)
 

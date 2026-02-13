@@ -6,9 +6,13 @@
 
 import { Resend } from 'resend'
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
+
+function getResendClient(): Resend | null {
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) return null
+    return new Resend(apiKey)
+}
 
 interface SendWelcomeEmailParams {
     email: string
@@ -107,7 +111,8 @@ export async function sendNewsletterWelcomeEmail(params: SendWelcomeEmailParams)
     const { email } = params
     console.log(`[Newsletter Service] Preparing email for: ${email}`)
 
-    if (!process.env.RESEND_API_KEY) {
+    const resend = getResendClient()
+    if (!resend) {
         console.error('[Newsletter Service] CRITICAL: RESEND_API_KEY is missing in process.env')
         return false
     }

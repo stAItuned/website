@@ -13,7 +13,11 @@ import { generateRoleFitAuditPDF } from '../pdf/generatePDF'
 // Resend Client
 // =============================================================================
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResendClient(): Resend | null {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) return null
+  return new Resend(apiKey)
+}
 
 // Email sender configuration
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
@@ -234,6 +238,12 @@ https://staituned.com
 
 export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams): Promise<boolean> {
   const { email, name, result } = params
+  const resend = getResendClient()
+
+  if (!resend) {
+    console.error('[Role Fit Audit] CRITICAL: RESEND_API_KEY is missing in process.env')
+    return false
+  }
 
   try {
     // Generate PDF report
@@ -246,7 +256,7 @@ export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams)
     }
 
     // Build email options
-    const emailOptions: Parameters<typeof resend.emails.send>[0] = {
+    const emailOptions = {
       from: FROM_EMAIL,
       to: email,
       subject: `🎯 Il tuo Role Fit Audit: sei un ${result.archetype.name}`,
@@ -254,17 +264,19 @@ export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams)
       text: generateReportEmailText(name, result),
     }
 
-    // Add PDF attachment if generated successfully
-    if (pdfBuffer) {
-      emailOptions.attachments = [
-        {
-          filename: `role-fit-audit-${result.archetype.id}.pdf`,
-          content: pdfBuffer,
-        },
-      ]
-    }
+    const payload = pdfBuffer
+      ? {
+          ...emailOptions,
+          attachments: [
+            {
+              filename: `role-fit-audit-${result.archetype.id}.pdf`,
+              content: pdfBuffer,
+            },
+          ],
+        }
+      : emailOptions
 
-    const { error } = await resend.emails.send(emailOptions)
+    const { error } = await resend.emails.send(payload)
 
     if (error) {
       console.error('Resend error:', error)

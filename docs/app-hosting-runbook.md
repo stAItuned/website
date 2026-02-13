@@ -47,6 +47,8 @@ Set runtime baseline:
 - `cpu: 1`
 
 ## 4) Set secrets
+Environment matrix and variable policy live in `docs/app-hosting-env.md`.
+
 Interactive:
 
 ```bash
@@ -61,6 +63,9 @@ npm run apphosting:secrets:set -- SECRET_NAME secret_value
 
 Recommended separate secrets for test/prod integrations:
 - `*_TEST` and `*_PROD` naming, then wire backend env accordingly.
+
+Minimum required secret for current email flows:
+- `RESEND_API_KEY` (wired in `apphosting.yaml`, runtime availability)
 
 ## 5) Test rollout
 Create rollout from branch `pre_release`:
