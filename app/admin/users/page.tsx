@@ -188,97 +188,185 @@ export default function AdminUsersPage() {
                 </div>
             </div>
             <div className="mt-8 flow-root">
-                <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                        <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                            <table className="min-w-full divide-y divide-slate-300 dark:divide-slate-700">
-                                <thead className="bg-slate-50 dark:bg-slate-900">
-                                    <tr>
-                                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 dark:text-white sm:pl-6">
-                                            Name
-                                        </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
-                                            Writer Status
-                                        </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
-                                            Agreement
-                                        </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
-                                            Writer
-                                        </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
-                                            Joined
-                                        </th>
-                                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                            <span className="sr-only">Edit</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-800">
-                                    {users.map((person) => (
-                                        <tr key={person.uid}>
-                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                                                <div className="font-medium text-slate-900 dark:text-white">{person.displayName || 'No Name'}</div>
-                                                <div className="text-slate-500 dark:text-slate-400">{person.email}</div>
-                                            </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                                {person.writerProfile ? (
-                                                    <div className="flex flex-col">
-                                                        <a href={`/author/${person.writerProfile.slug}`} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline font-medium dark:text-indigo-400">
-                                                            {person.writerProfile.displayName}
-                                                        </a>
-                                                        <span className="text-xs text-slate-500">{person.writerProfile.title}</span>
-                                                    </div>
-                                                ) : person.isWriter ? (
-                                                    <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20 dark:bg-amber-900/30 dark:text-amber-400">
-                                                        Writer (No Profile)
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-400">
-                                                        User
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                                {person.agreement ? (
-                                                    <div className="flex flex-col">
-                                                        <span className="text-slate-900 dark:text-white">v{person.agreement.version}</span>
-                                                        <span className="text-xs">{formatDate(person.agreement.accepted_at)}</span>
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-slate-400">-</span>
-                                                )}
-                                            </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                                {person.isWriter ? (
-                                                    <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/30 dark:text-emerald-300">
-                                                        Writer
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-400">
-                                                        No
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                                {formatDate(person.createdAt)}
-                                            </td>
-                                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                {person.isWriter ? (
-                                                    <button
-                                                        onClick={() => setSelectedUser(person)}
-                                                        className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                                                    >
-                                                        Agreement<span className="sr-only">, {person.displayName}</span>
-                                                    </button>
-                                                ) : (
-                                                    <span className="text-slate-400">-</span>
-                                                )}
-                                            </td>
+                <div className="md:hidden space-y-3">
+                    {users.map((person) => (
+                        <article
+                            key={person.uid}
+                            className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+                        >
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                                        {person.displayName || 'No Name'}
+                                    </p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 break-all">{person.email}</p>
+                                </div>
+                                <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-300">
+                                    Joined {formatDate(person.createdAt)}
+                                </span>
+                            </div>
+
+                            <dl className="mt-4 grid grid-cols-1 gap-3 text-sm">
+                                <div>
+                                    <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Writer Status</dt>
+                                    <dd className="mt-1">
+                                        {person.writerProfile ? (
+                                            <div className="flex flex-col">
+                                                <a href={`/author/${person.writerProfile.slug}`} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline font-medium dark:text-indigo-400">
+                                                    {person.writerProfile.displayName}
+                                                </a>
+                                                <span className="text-xs text-slate-500">{person.writerProfile.title}</span>
+                                            </div>
+                                        ) : person.isWriter ? (
+                                            <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20 dark:bg-amber-900/30 dark:text-amber-400">
+                                                Writer (No Profile)
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-400">
+                                                User
+                                            </span>
+                                        )}
+                                    </dd>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                    <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Agreement</dt>
+                                    <dd className="text-sm text-slate-700 dark:text-slate-200">
+                                        {person.agreement ? (
+                                            <span className="font-medium text-slate-900 dark:text-white">
+                                                v{person.agreement.version} ({formatDate(person.agreement.accepted_at)})
+                                            </span>
+                                        ) : (
+                                            <span className="text-slate-400">-</span>
+                                        )}
+                                    </dd>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                    <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Writer</dt>
+                                    <dd>
+                                        {person.isWriter ? (
+                                            <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/30 dark:text-emerald-300">
+                                                Writer
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-400">
+                                                No
+                                            </span>
+                                        )}
+                                    </dd>
+                                </div>
+                            </dl>
+
+                            <div className="mt-4">
+                                {person.isWriter ? (
+                                    <button
+                                        onClick={() => setSelectedUser(person)}
+                                        className="inline-flex w-full items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-100 dark:border-indigo-900/50 dark:bg-indigo-900/20 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                                    >
+                                        View Agreement
+                                    </button>
+                                ) : (
+                                    <p className="text-xs text-slate-400">Agreement not available for non-writer users.</p>
+                                )}
+                            </div>
+                        </article>
+                    ))}
+                </div>
+
+                <div className="hidden md:block">
+                    <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                                <table className="min-w-full divide-y divide-slate-300 dark:divide-slate-700">
+                                    <thead className="bg-slate-50 dark:bg-slate-900">
+                                        <tr>
+                                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 dark:text-white sm:pl-6">
+                                                Name
+                                            </th>
+                                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                                                Writer Status
+                                            </th>
+                                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                                                Agreement
+                                            </th>
+                                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                                                Writer
+                                            </th>
+                                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                                                Joined
+                                            </th>
+                                            <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                                <span className="sr-only">Edit</span>
+                                            </th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-800">
+                                        {users.map((person) => (
+                                            <tr key={person.uid}>
+                                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                                                    <div className="font-medium text-slate-900 dark:text-white">{person.displayName || 'No Name'}</div>
+                                                    <div className="text-slate-500 dark:text-slate-400">{person.email}</div>
+                                                </td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                                    {person.writerProfile ? (
+                                                        <div className="flex flex-col">
+                                                            <a href={`/author/${person.writerProfile.slug}`} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline font-medium dark:text-indigo-400">
+                                                                {person.writerProfile.displayName}
+                                                            </a>
+                                                            <span className="text-xs text-slate-500">{person.writerProfile.title}</span>
+                                                        </div>
+                                                    ) : person.isWriter ? (
+                                                        <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20 dark:bg-amber-900/30 dark:text-amber-400">
+                                                            Writer (No Profile)
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-400">
+                                                            User
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                                    {person.agreement ? (
+                                                        <div className="flex flex-col">
+                                                            <span className="text-slate-900 dark:text-white">v{person.agreement.version}</span>
+                                                            <span className="text-xs">{formatDate(person.agreement.accepted_at)}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-slate-400">-</span>
+                                                    )}
+                                                </td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                                    {person.isWriter ? (
+                                                        <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/30 dark:text-emerald-300">
+                                                            Writer
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-400">
+                                                            No
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                                    {formatDate(person.createdAt)}
+                                                </td>
+                                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                    {person.isWriter ? (
+                                                        <button
+                                                            onClick={() => setSelectedUser(person)}
+                                                            className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                                        >
+                                                            Agreement<span className="sr-only">, {person.displayName}</span>
+                                                        </button>
+                                                    ) : (
+                                                        <span className="text-slate-400">-</span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
