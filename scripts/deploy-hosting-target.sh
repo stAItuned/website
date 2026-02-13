@@ -34,10 +34,9 @@ echo "[deploy] target: $TARGET"
 echo "[deploy] project: $PROJECT_ID"
 echo "[deploy] config: $FIREBASE_CONFIG_FILE"
 
-ensure_node_20_9_plus
+ensure_node_22_plus
 
 # Keep deploy behavior aligned with production stability constraints.
-export NEXT_PRIVATE_TURBOPACK=false
 export CI=1
 export npm_config_update_notifier=false
 export npm_config_fund=false
@@ -46,7 +45,7 @@ export npm_config_audit=false
 if [ "${SKIP_INSTALL:-0}" != "1" ]; then
   echo ""
   echo "[deploy] === install (npm ci) ==="
-  npm ci --legacy-peer-deps
+  npm ci
 else
   echo "[deploy] SKIP_INSTALL=1 (skipping npm ci)"
 fi
@@ -57,7 +56,7 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
   npm run typecheck
 
   echo ""
-  echo "[deploy] === build (Next, webpack) ==="
+  echo "[deploy] === build (Next, Turbopack) ==="
   npm run build
 else
   echo "[deploy] SKIP_BUILD=1 (skipping build)"

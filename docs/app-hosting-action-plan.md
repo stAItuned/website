@@ -4,9 +4,16 @@ Obiettivo: migrare l'app Next.js full-stack (SSR/RSC + Route Handlers `/app/api`
 
 Contesto attuale (repo):
 - Deploy staging/prod via `scripts/deploy-hosting-target.sh` con `firebase deploy --only hosting` e due config (`firebase.json`, `firebase.development.json`).
-- Next build forzata a Webpack (`npm run build` -> `next build --webpack`), Turbopack disabilitato in deploy (`NEXT_PRIVATE_TURBOPACK=false`).
+- Next build con Turbopack (`npm run build` -> `next build --turbopack`).
 - `output: 'standalone'` in `next.config.js` per ridurre bundle e migliorare portabilita'.
 - Backend "server" oggi gestito da Hosting `frameworksBackend`.
+
+## Decisioni Confermate
+- Topologia: 1 Firebase project con 2 backend App Hosting (`test` e `prod`).
+- Branch mapping: `pre_release` -> test, `master` -> prod.
+- Runtime baseline: `region=europe-west4`, `memory=1GiB`, `minInstances=0`, `maxInstances=10`, `concurrency=100`.
+- Build engine: Turbopack attivo.
+- Runbook operativo: `docs/app-hosting-runbook.md`.
 
 ## Principi (non negoziabili)
 - 2 ambienti sempre disponibili: `test/staging` e `prod`.
@@ -34,13 +41,10 @@ Checklist packaging:
 - Nessun artifact di build (es. `.next`, `.firebase`) entra nella suite di test.
 
 ## Fase 0: Decisioni Di Prodotto (30-60 min)
-1. Definire la topologia ambienti App Hosting:
-   - Opzione A: 2 backends App Hosting nello stesso Firebase project (test + prod).
-   - Opzione B: 2 Firebase projects distinti (consigliato se serve isolamento dati completo).
-2. Definire mapping Git/branch:
-   - `main` -> prod
-   - `develop` (o `staging`) -> test
-3. Definire domini:
+1. Configurare 2 backend App Hosting nello stesso Firebase project:
+   - backend test collegato a branch `pre_release`
+   - backend prod collegato a branch `master`
+2. Definire domini:
    - prod: `staituned.com` (o attuale)
    - test: `staging.staituned.com` / `dev.staituned.com`
 
@@ -70,7 +74,7 @@ Deliverable:
    - garantire `npm ci` + `npm run typecheck` + `npm run build` funzionino senza dipendere da file locali.
 2. Verificare che `next.config.js` non faccia assunzioni "Hosting frameworks preview":
    - confermare che `output: 'standalone'` sia compatibile con App Hosting (TBD).
-   - mantenere Turbopack off per deploy finche' non e' dimostrato stabile.
+   - mantenere Turbopack attivo e validare packaging su backend test.
 3. Separare chiaramente config per ambiente:
    - evitare che `.env*` serva a produzione.
    - documentare quali variabili sono `BUILD` vs `RUNTIME`.
@@ -86,8 +90,12 @@ Deliverable:
 1. Creare backend App Hosting per `test` e `prod` (vedi Fase 0).
 2. Collegare repo GitHub e abilitare deploy automatico per branch.
 3. Impostare runtime config iniziale prendendo come baseline `frameworksBackend`:
-   - region: `europe-west1`
-   - concurrency/memory/timeout/minInstances/maxInstances (replicare prima, ottimizzare dopo)
+   - region: `europe-west4`
+   - concurrency: `100`
+   - memory: `1GiB`
+   - timeoutSeconds: `60`
+   - minInstances: `0`
+   - maxInstances: `10`
 4. Definire regole di rollout e rollback:
    - promozione in prod solo se smoke test passa su test.
 

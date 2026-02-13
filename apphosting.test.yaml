@@ -1,0 +1,16 @@
+# Backend config for App Hosting TEST backend (branch: pre_release)
+
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+  minInstances: 0
+  maxInstances: 10
+  concurrency: 100
+
+env:
+  - variable: APP_ENV
+    value: test
+    availability:
+      - BUILD
+      - RUNTIME
+

@@ -44,25 +44,25 @@ repair_node_modules_if_needed() {
 npm_ci_compatible() {
   repair_node_modules_if_needed
 
-  if npm ci --legacy-peer-deps; then
+  if npm ci; then
     return 0
   fi
 
   echo "[verify] npm ci failed; retrying after clearing local npm cache..." >&2
   rm -rf "${npm_config_cache:-$ROOT_DIR/.npm-cache}"
   rm -rf node_modules
-  if npm ci --legacy-peer-deps; then
+  if npm ci; then
     return 0
   fi
 
-  echo "[verify] npm ci failed; attempting to re-sync lockfile via npm install --legacy-peer-deps" >&2
+  echo "[verify] npm ci failed; attempting to re-sync lockfile via npm install" >&2
   rm -rf node_modules
-  npm install --legacy-peer-deps
+  npm install
 }
 
-ensure_node_20_9_plus
+ensure_node_22_plus
 
-export NEXT_PRIVATE_TURBOPACK=false
+export NEXT_PRIVATE_TURBOPACK=true
 export CI=1
 export npm_config_cache="$ROOT_DIR/.npm-cache"
 export npm_config_update_notifier=false
@@ -102,7 +102,7 @@ else
 fi
 
 if [ "${SKIP_BUILD:-0}" != "1" ]; then
-  run_step "build (Next, webpack)" npm run build
+  run_step "build (Next, Turbopack)" npm run build
 else
   echo "[verify] SKIP_BUILD=1 (skipping build)"
 fi

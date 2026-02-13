@@ -41,7 +41,16 @@ This repo defaults to skipping Firestore network calls during build-time prerend
 
 ## Roadmap: Firebase App Hosting
 Action plan for migrating from Hosting `frameworksBackend` to App Hosting lives in `docs/app-hosting-action-plan.md`.
+Execution runbook (commands + rollout order) lives in `docs/app-hosting-runbook.md`.
+App Hosting default region is `europe-west4` in repository scripts.
 
 ## Stability Notes
-- The deploy script enforces Node `>=20.9.0` and allows Node 20/22+.
-- Hosting deploy uses webpack build path (`NEXT_PRIVATE_TURBOPACK=false`) for Firebase stability.
+- The deploy script enforces Node 22 (`.nvmrc` aligned).
+- Current build path uses Turbopack (`next build --turbopack`).
+- `next-contentlayer` load has a robust fallback with diagnostics:
+  - set `NEXT_USE_CONTENTLAYER_PLUGIN=1` to enable the plugin loading path.
+  - set `NEXT_REQUIRE_CONTENTLAYER=1` to fail build when plugin is unavailable.
+- Experimental optimizations are now runtime-configurable:
+  - `NEXT_DISABLE_EXPERIMENTAL=1` disables all configured experiments.
+  - `NEXT_ENABLE_OPTIMIZE_CSS=0` disables only `optimizeCss`.
+  - `NEXT_ENABLE_OPTIMIZE_PACKAGE_IMPORTS=0` disables only `optimizePackageImports`.

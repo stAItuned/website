@@ -1,0 +1,12 @@
+# Firebase App Hosting runtime baseline for stAItuned.
+# This file is shared by test (`pre_release`) and prod (`master`) backends.
+# If you need backend-specific differences, use apphosting.<env>.yaml variants
+# and apply them in console to each backend.
+
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+  minInstances: 0
+  maxInstances: 10
+  concurrency: 100
+

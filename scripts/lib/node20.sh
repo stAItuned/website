@@ -26,25 +26,25 @@ use_node_from_nvmrc() {
   fi
 
   if maybe_load_nvm; then
-    nvm use >/dev/null
+    nvm use >/dev/null 2>&1 || true
   fi
 }
 
-try_prefer_node20_path() {
+try_prefer_node22_path() {
   # Fallback when `nvm` isn't available in non-interactive shells.
-  # Prefers the newest installed v20.x under the default NVM directory.
+  # Prefers the newest installed v22.x under the default NVM directory.
   local nvm_dir="${NVM_DIR:-$HOME/.nvm}"
   local node_bin_dir=""
 
-  if [ -n "${NODE20_BIN:-}" ] && [ -x "${NODE20_BIN:-}" ]; then
-    node_bin_dir="$(cd "$(dirname "$NODE20_BIN")" && pwd)"
+  if [ -n "${NODE22_BIN:-}" ] && [ -x "${NODE22_BIN:-}" ]; then
+    node_bin_dir="$(cd "$(dirname "$NODE22_BIN")" && pwd)"
     export PATH="$node_bin_dir:$PATH"
     hash -r 2>/dev/null || true
-    echo "[node] using NODE20_BIN=$NODE20_BIN"
+    echo "[node] using NODE22_BIN=$NODE22_BIN"
     return 0
   fi
 
-  node_bin_dir="$(ls -d "$nvm_dir"/versions/node/v20.*.*/bin 2>/dev/null | sort -V | tail -n 1 || true)"
+  node_bin_dir="$(ls -d "$nvm_dir"/versions/node/v22.*.*/bin 2>/dev/null | sort -V | tail -n 1 || true)"
   if [ -n "$node_bin_dir" ] && [ -x "$node_bin_dir/node" ]; then
     export PATH="$node_bin_dir:$PATH"
     hash -r 2>/dev/null || true
@@ -55,8 +55,8 @@ try_prefer_node20_path() {
   return 1
 }
 
-ensure_node_20_9_plus() {
-  # Prefer .nvmrc (20) when available to keep deploy behavior deterministic.
+ensure_node_22_plus() {
+  # Prefer .nvmrc when available to keep deploy behavior deterministic.
   use_node_from_nvmrc || true
 
   local v
@@ -75,26 +75,26 @@ ensure_node_20_9_plus() {
   fi
 
   local is_supported_major=0
-  if [ "$major" -eq 20 ] || [ "$major" -eq 22 ]; then
+  if [ "$major" -ge 22 ] && [ "$major" -lt 26 ]; then
     is_supported_major=1
   fi
 
-  if [ "$is_supported_major" -ne 1 ] || { [ "$major" -eq 20 ] && [ "$minor" -lt 9 ]; }; then
-    echo "[node] Node $v detected; trying to switch to a supported Node version..." >&2
+  if [ "$is_supported_major" -ne 1 ]; then
+    echo "[node] Node $v detected; trying to switch to a supported Node (>=22 <26)..." >&2
 
     use_node_from_nvmrc || true
-    try_prefer_node20_path || true
+    try_prefer_node22_path || true
 
     v="$(node -p "process.versions.node" 2>/dev/null || true)"
     IFS='.' read -r major minor patch <<<"$v"
     is_supported_major=0
-    if [ "$major" -eq 20 ] || [ "$major" -eq 22 ]; then
+    if [ "$major" -ge 22 ] && [ "$major" -lt 26 ]; then
       is_supported_major=1
     fi
 
-    if [ "$is_supported_major" -ne 1 ] || { [ "$major" -eq 20 ] && [ "$minor" -lt 9 ]; }; then
-      echo "[node] ERROR: Node $v detected; require Node 20 (>=20.9.0) or Node 22." >&2
-      echo "[node] Fix: run 'nvm use 20' (or 22) or set NODE20_BIN to a Node 20 binary." >&2
+    if [ "$is_supported_major" -ne 1 ]; then
+      echo "[node] ERROR: Node $v detected; require Node >=22 and <26." >&2
+      echo "[node] Fix: run 'nvm use 22' (or another supported major) or set NODE22_BIN to a Node 22+ binary." >&2
       exit 1
     fi
   fi
@@ -102,4 +102,8 @@ ensure_node_20_9_plus() {
   echo "[node] node: v$(node -p "process.versions.node")"
   echo "[node] npm:  v$(npm -v)"
   echo "[node] npm-bin: $(command -v npm)"
+}
+
+ensure_node_20_9_plus() {
+  ensure_node_22_plus
 }

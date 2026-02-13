@@ -1,28 +1,106 @@
 /** @type {import('next').NextConfig} */
+const fs = require('node:fs')
+const path = require('node:path')
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-// Try to load contentlayer, but don't fail if it's not available (e.g., in Firebase deploy)
-let withContentlayer
-try {
-  const contentlayerModule = require('next-contentlayer')
-  withContentlayer = contentlayerModule.withContentlayer
-  if (typeof withContentlayer !== 'function') {
-    console.warn('next-contentlayer withContentlayer is not a function, skipping')
-    withContentlayer = (config) => config
-  }
-} catch (e) {
-  console.warn('next-contentlayer not available, skipping')
-  withContentlayer = (config) => config
+const boolFromEnv = (value, defaultValue) => {
+  if (value === undefined) return defaultValue
+  const normalized = String(value).trim().toLowerCase()
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) return true
+  if (['0', 'false', 'no', 'off'].includes(normalized)) return false
+  return defaultValue
 }
+
+const isProduction = process.env.NODE_ENV === 'production'
+const forceDisableExperiments = boolFromEnv(process.env.NEXT_DISABLE_EXPERIMENTAL, false)
+const enableOptimizeCss =
+  !forceDisableExperiments && boolFromEnv(process.env.NEXT_ENABLE_OPTIMIZE_CSS, isProduction)
+const enableOptimizePackageImports =
+  !forceDisableExperiments &&
+  boolFromEnv(process.env.NEXT_ENABLE_OPTIMIZE_PACKAGE_IMPORTS, true)
+
+const optimizePackageImportsList = [
+  'lucide-react',
+  'date-fns',
+  '@heroicons/react',
+  'react-syntax-highlighter',
+  'firebase/auth',
+  'firebase/analytics',
+  '@tiptap/react',
+  '@tiptap/starter-kit',
+  'framer-motion',
+  'marked',
+]
+
+const experimentalConfig = {}
+if (enableOptimizeCss) {
+  experimentalConfig.optimizeCss = true
+}
+if (enableOptimizePackageImports) {
+  experimentalConfig.optimizePackageImports = optimizePackageImportsList
+}
+
+const passthroughConfig = (config) => config
+
+const resolveWithContentlayer = () => {
+  const enableContentlayerPlugin = boolFromEnv(process.env.NEXT_USE_CONTENTLAYER_PLUGIN, false)
+  const strictContentlayer = boolFromEnv(process.env.NEXT_REQUIRE_CONTENTLAYER, false)
+
+  if (!enableContentlayerPlugin) {
+    if (strictContentlayer) {
+      throw new Error(
+        '[next-config] NEXT_REQUIRE_CONTENTLAYER=1 requires NEXT_USE_CONTENTLAYER_PLUGIN=1.'
+      )
+    }
+    return passthroughConfig
+  }
+
+  const cjsEntry = path.join(process.cwd(), 'node_modules', 'next-contentlayer', 'dist', 'index-cjs.cjs')
+  if (!fs.existsSync(cjsEntry)) {
+    const message =
+      `[next-config] next-contentlayer plugin requested but build artifact is missing: ${cjsEntry}`
+    if (strictContentlayer) {
+      throw new Error(message)
+    }
+    console.warn(`${message}. Falling back to filesystem content loader.`)
+    return passthroughConfig
+  }
+
+  try {
+    const contentlayerModule = require('next-contentlayer')
+    const maybeWithContentlayer = contentlayerModule.withContentlayer
+    if (typeof maybeWithContentlayer !== 'function') {
+      const message =
+        '[next-config] next-contentlayer loaded but withContentlayer is not a function.'
+      if (strictContentlayer) {
+        throw new Error(message)
+      }
+      console.warn(`${message} Falling back to filesystem content loader.`)
+      return passthroughConfig
+    }
+    return maybeWithContentlayer
+  } catch (e) {
+    const code = e && typeof e === 'object' && 'code' in e ? e.code : 'UNKNOWN'
+    const detail = e && typeof e === 'object' && 'message' in e ? e.message : String(e)
+    const message = `[next-config] next-contentlayer load failed (code=${code}): ${detail}`
+    if (strictContentlayer) {
+      throw new Error(message)
+    }
+    console.warn(`${message}. Falling back to filesystem content loader.`)
+    return passthroughConfig
+  }
+}
+
+const withContentlayer = resolveWithContentlayer()
 
 const nextConfig = {
   // Standalone output for minimal production bundle (reduces Firebase deploy from ~240MB to ~80MB)
   output: 'standalone',
-  // Keep Turbopack config explicit to avoid Next 16 build errors when webpack config is present.
+  // Keep Turbopack config explicit for Next 16.
   turbopack: {},
-  // Turbopack is intentionally disabled via env (`NEXT_PRIVATE_TURBOPACK=false`) for Firebase deploy compatibility.
   // NOTE: Avoid externalizing firebase-admin under Turbopack/Frameworks builds, otherwise Next may emit
   // hashed external package aliases (e.g. firebase-admin-<hash>) that are resolved via symlinks that
   // are not reliably preserved in the deployed bundle, causing ERR_MODULE_NOT_FOUND at runtime.
@@ -49,22 +127,8 @@ const nextConfig = {
       },
     ],
   },
-  // Performance optimizations
-  experimental: {
-    optimizeCss: process.env.NODE_ENV === 'production',
-    optimizePackageImports: [
-      'lucide-react',
-      'date-fns',
-      '@heroicons/react',
-      'react-syntax-highlighter',
-      'firebase/auth',
-      'firebase/analytics',
-      '@tiptap/react',
-      '@tiptap/starter-kit',
-      'framer-motion',
-      'marked'
-    ]
-  },
+  // Performance optimizations, controllable via env flags for safer deployments.
+  experimental: experimentalConfig,
   // Handle the content submodule
   webpack: (config, { dev, isServer }) => {
     // Exclude Firebase Admin SDK from client-side bundles
