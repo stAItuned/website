@@ -78,11 +78,19 @@ function getFirebaseApp(): App {
   const creds = JSON.parse(rawKey);
   console.log('[Firebase Admin] Initializing with project ID:', creds.project_id);
 
+  const projectId =
+    process.env.GCP_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+    creds.project_id
+
   const storageBucket =
-    process.env.GCS_BUCKET_NAME
+    process.env.GCS_BUCKET_NAME ||
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    (projectId ? `${projectId}.firebasestorage.app` : undefined)
 
   cachedApp = initializeApp({
     credential: cert(creds),
+    projectId: projectId || undefined,
     storageBucket: storageBucket || undefined,
   });
 

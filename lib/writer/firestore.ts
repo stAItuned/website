@@ -224,8 +224,18 @@ export async function uploadWriterImage(
   fileBuffer: Buffer,
   mimeType: string
 ): Promise<WriterDocument['image']> {
-  const bucketName = process.env.GCS_BUCKET_NAME
-  const bucket = bucketName ? storage().bucket(bucketName) : storage().bucket()
+  const bucketName =
+    process.env.GCS_BUCKET_NAME ||
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    storage().app.options.storageBucket
+
+  if (!bucketName || String(bucketName).trim().length === 0) {
+    throw new Error(
+      'Missing storage bucket configuration. Set GCS_BUCKET_NAME or NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET.'
+    )
+  }
+
+  const bucket = storage().bucket(String(bucketName))
   const normalizedSlug = normalizeSlug(slug)
   const path = `writer_profiles_by_slug/${normalizedSlug}/propic.jpg`
   const file = bucket.file(path)

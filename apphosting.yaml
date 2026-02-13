@@ -11,6 +11,14 @@ runConfig:
   concurrency: 100
 
 env:
+  - variable: GCP_PROJECT_ID
+    value: "staituned-production-163f4"
+    availability:
+      - RUNTIME
+  - variable: GCS_BUCKET_NAME
+    value: "staituned-production-163f4.firebasestorage.app"
+    availability:
+      - RUNTIME
   - variable: FB_SERVICE_ACCOUNT_KEY_B64
     secret: FB_SERVICE_ACCOUNT_KEY_B64
     availability:
