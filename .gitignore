@@ -60,7 +60,6 @@ reset_project.sh
 topics_summary.md
 metadata_report.md
 final_metadata_report.md
-public/assets/staituned/*
 !public/assets/staituned/contributors/
 public/assets/staituned/contributors/**
 !public/assets/staituned/contributors/contributor-program.it.md
@@ -88,3 +87,10 @@ SKILLS.md
 spec_dev.md
 .npm-cache/*
 public/assets/staituned/*
+!public/assets/staituned/contributors/
+public/assets/staituned/contributors/**
+!public/assets/staituned/contributors/contributor-program.it.md
+!public/assets/staituned/contributors/contributor-program.en.md
+!public/assets/staituned/contributors/article-writing/
+!public/assets/staituned/contributors/article-writing/contributor-agreement.md
+!public/assets/staituned/contributors/article-writing/contributor-agreement.en.md
