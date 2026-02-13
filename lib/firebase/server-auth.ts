@@ -1,27 +1,9 @@
 import { NextRequest } from 'next/server';
-import { App, getApps, initializeApp, cert } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import type { DecodedIdToken } from 'firebase-admin/auth';
+import { auth as adminAuth, dbDefault } from '@/lib/firebase/admin';
 import { isAdmin } from '@/lib/firebase/admin-emails';
 
-// Initialize Firebase Admin safely
-function getFirebaseAdmin(): App {
-    if (getApps().length > 0) {
-        return getApps()[0];
-    }
-
-    const serviceAccountKey = process.env.FB_SERVICE_ACCOUNT_KEY;
-
-    if (!serviceAccountKey || serviceAccountKey.includes('placeholder')) {
-        throw new Error('Firebase Admin requires FB_SERVICE_ACCOUNT_KEY to be set.');
-    }
-
-    return initializeApp({
-        credential: cert(JSON.parse(serviceAccountKey)),
-    });
-}
-
-export async function verifyAuth(request: NextRequest) {
+export async function verifyAuth(request: NextRequest): Promise<DecodedIdToken | null> {
     const authHeader = request.headers.get('Authorization');
 
     if (!authHeader?.startsWith('Bearer ')) {
@@ -31,9 +13,7 @@ export async function verifyAuth(request: NextRequest) {
     const token = authHeader.split('Bearer ')[1];
 
     try {
-        const app = getFirebaseAdmin();
-        const auth = getAuth(app);
-        const decodedToken = await auth.verifyIdToken(token);
+        const decodedToken = await adminAuth().verifyIdToken(token);
         return decodedToken;
     } catch (error) {
         console.error('Auth verification failed:', error);
@@ -42,8 +22,7 @@ export async function verifyAuth(request: NextRequest) {
 }
 
 export function getAdminDb() {
-    const app = getFirebaseAdmin();
-    const db = getFirestore(app);
+    const db = dbDefault();
     try {
         db.settings({ ignoreUndefinedProperties: true });
     } catch (e) {

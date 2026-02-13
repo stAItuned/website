@@ -23,7 +23,8 @@
 		"apphosting:rollout:test": "bash scripts/apphosting-rollout.sh test",
 		"apphosting:rollout:prod": "bash scripts/apphosting-rollout.sh prod",
 		"apphosting:secrets:set": "bash scripts/apphosting-secrets-set.sh",
-		"apphosting:secrets:sync": "bash scripts/apphosting-secrets-sync.sh"
+		"apphosting:secrets:sync": "bash scripts/apphosting-secrets-sync.sh",
+		"apphosting:secrets:check": "bash scripts/apphosting-secrets-check.sh"
 	},
 	"dependencies": {
 		"@emotion/is-prop-valid": "^1.3.1",

@@ -44,6 +44,16 @@ npm run apphosting:secrets:sync -- all
 - `GOOGLE_AI_API_KEY`
 - `PERPLEXITY_API_KEY`
 - `PREVIEW_SECRET`
+- `GOOGLE_ANALYTICS_CLIENT_EMAIL`
+- `GOOGLE_ANALYTICS_PRIVATE_KEY`
+- `GOOGLE_ANALYTICS_PROJECT_ID`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+
+## Firebase Admin Alignment Rule
+- `FB_SERVICE_ACCOUNT_KEY` and `FB_SERVICE_ACCOUNT_KEY_B64` (if both set) must refer to the same Firebase project.
+- Expected project is read from `GCP_PROJECT_ID` (or fallback `NEXT_PUBLIC_FIREBASE_PROJECT_ID`).
+- Runtime now fails fast on mismatch to prevent `verifyIdToken` audience drift (`aud` mismatch).
 
 ## Rollout Order
 1. Update secrets.

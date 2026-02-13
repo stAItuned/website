@@ -97,10 +97,6 @@ env:
     secret: FB_SERVICE_ACCOUNT_KEY_B64
     availability:
       - RUNTIME
-  - variable: FB_SERVICE_ACCOUNT_KEY
-    secret: FB_SERVICE_ACCOUNT_KEY
-    availability:
-      - RUNTIME
   - variable: GOOGLE_ANALYTICS_PRIVATE_KEY
     secret: GOOGLE_ANALYTICS_PRIVATE_KEY
     availability:
@@ -131,59 +127,5 @@ env:
       - RUNTIME
   - variable: PREVIEW_SECRET
     secret: PREVIEW_SECRET
-    availability:
-      - RUNTIME
-  - variable: GA_API_SECRET
-    secret: GA_API_SECRET
-    availability:
-      - RUNTIME
-  - variable: SLACK_WEBHOOK_FEEDBACK
-    secret: SLACK_WEBHOOK_FEEDBACK
-    availability:
-      - RUNTIME
-  - variable: WEBSITE_DISPATCH_TOKEN
-    secret: WEBSITE_DISPATCH_TOKEN
-    availability:
-      - RUNTIME
-  - variable: CRON_SECRET
-    secret: CRON_SECRET
-    availability:
-      - RUNTIME
-  - variable: CAREER_OS_CALENDLY_URL
-    secret: CAREER_OS_CALENDLY_URL
-    availability:
-      - RUNTIME
-  - variable: NEXT_PUBLIC_CAREER_OS_CALENDLY_URL
-    secret: NEXT_PUBLIC_CAREER_OS_CALENDLY_URL
-    availability:
-      - BUILD
-      - RUNTIME
-  - variable: NEXT_PUBLIC_ENABLE_FEEDBACK
-    secret: NEXT_PUBLIC_ENABLE_FEEDBACK
-    availability:
-      - BUILD
-      - RUNTIME
-  - variable: ANALYTICS_MAX_DAILY_CALLS
-    secret: ANALYTICS_MAX_DAILY_CALLS
-    availability:
-      - RUNTIME
-  - variable: ANALYTICS_CACHE_DURATION
-    secret: ANALYTICS_CACHE_DURATION
-    availability:
-      - RUNTIME
-  - variable: ANALYTICS_CLIENT_CACHE_DURATION
-    secret: ANALYTICS_CLIENT_CACHE_DURATION
-    availability:
-      - RUNTIME
-  - variable: ENABLE_ANALYTICS_API
-    secret: ENABLE_ANALYTICS_API
-    availability:
-      - RUNTIME
-  - variable: ANALYTICS_VERBOSE_LOGGING
-    secret: ANALYTICS_VERBOSE_LOGGING
-    availability:
-      - RUNTIME
-  - variable: FORCE_ANALYTICS_MOCK
-    secret: FORCE_ANALYTICS_MOCK
     availability:
       - RUNTIME

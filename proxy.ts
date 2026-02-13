@@ -28,6 +28,14 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Normalize accidental duplicated slashes in path (e.g. //preview/...)
+  // to avoid browser interpreting them as protocol-relative URLs.
+  const normalizedPathname = url.pathname.replace(/\/{2,}/g, '/')
+  if (normalizedPathname !== url.pathname) {
+    url.pathname = normalizedPathname
+    return NextResponse.redirect(url, 308)
+  }
+
   let hasInternalParams = false
   for (const param of INTERNAL_PARAMS_TO_STRIP) {
     if (url.searchParams.has(param)) {
@@ -48,4 +56,3 @@ export const config = {
     '/((?!api|_next/static|_next/image|favicon.ico|icon.svg|assets|content|.*\\.webp$|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$).*)',
   ],
 }
-

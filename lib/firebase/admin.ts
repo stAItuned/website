@@ -8,6 +8,60 @@ let cachedDb: Firestore | null = null;
 let cachedDbDefault: Firestore | null = null;
 let cachedStorage: Storage | null = null;
 
+type ServiceAccountLike = {
+  project_id?: string;
+  [key: string]: unknown;
+};
+
+function parseServiceAccount(raw: string | undefined): ServiceAccountLike | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as ServiceAccountLike;
+  } catch {
+    return null;
+  }
+}
+
+function decodeServiceAccountB64(rawB64: string | undefined): string | undefined {
+  if (!rawB64) return undefined;
+  try {
+    return Buffer.from(rawB64, 'base64').toString('utf8');
+  } catch {
+    return undefined;
+  }
+}
+
+function pickServiceAccountRawKey(): string {
+  const rawKeyDirect = process.env.FB_SERVICE_ACCOUNT_KEY;
+  const rawKeyB64Decoded = decodeServiceAccountB64(process.env.FB_SERVICE_ACCOUNT_KEY_B64);
+  const directCreds = parseServiceAccount(rawKeyDirect);
+  const b64Creds = parseServiceAccount(rawKeyB64Decoded);
+
+  const expectedProjectId =
+    process.env.GCP_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+
+  if (expectedProjectId) {
+    const directMatch = directCreds?.project_id === expectedProjectId;
+    const b64Match = b64Creds?.project_id === expectedProjectId;
+
+    if (directMatch) return rawKeyDirect as string;
+    if (b64Match) return rawKeyB64Decoded as string;
+
+    const directProjectId = directCreds?.project_id ?? 'missing';
+    const b64ProjectId = b64Creds?.project_id ?? 'missing';
+    throw new Error(
+      `Firebase Admin service-account project mismatch: expected "${expectedProjectId}", ` +
+      `got FB_SERVICE_ACCOUNT_KEY="${directProjectId}" and FB_SERVICE_ACCOUNT_KEY_B64="${b64ProjectId}".`
+    );
+  }
+
+  if (rawKeyDirect) return rawKeyDirect;
+  if (rawKeyB64Decoded) return rawKeyB64Decoded;
+
+  throw new Error('FB_SERVICE_ACCOUNT_KEY / FB_SERVICE_ACCOUNT_KEY_B64 env variable is required for Firebase Admin SDK.');
+}
+
 function getFirebaseApp(): App {
   if (cachedApp) {
     return cachedApp;
@@ -19,12 +73,7 @@ function getFirebaseApp(): App {
     return cachedApp;
   }
 
-  const rawKey = process.env.FB_SERVICE_ACCOUNT_KEY
-    || (process.env.FB_SERVICE_ACCOUNT_KEY_B64 ? Buffer.from(process.env.FB_SERVICE_ACCOUNT_KEY_B64, 'base64').toString('utf8') : undefined);
-
-  if (!rawKey) {
-    throw new Error('FB_SERVICE_ACCOUNT_KEY env variable is required for Firebase Admin SDK.');
-  }
+  const rawKey = pickServiceAccountRawKey();
 
   const creds = JSON.parse(rawKey);
   console.log('[Firebase Admin] Initializing with project ID:', creds.project_id);

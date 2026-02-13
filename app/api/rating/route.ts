@@ -36,6 +36,14 @@ export async function GET(request: Request) {
         })
     } catch (error) {
         console.error('Rating GET API error', error)
+        const code = (error as { code?: number | string } | null)?.code
+        if (code === 5 || code === '5') {
+            return NextResponse.json({
+                success: true,
+                average: null,
+                count: 0
+            })
+        }
         return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 })
     }
 }
