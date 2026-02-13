@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const urlOrEmpty = z.union([z.string().url(), z.literal('')])
+const urlOrEmpty = z.string().trim().max(1000).optional().or(z.literal(''))
 
 /**
  * Writer profile payload (fields come from multipart/form-data).
@@ -12,7 +12,7 @@ export const writerProfileFieldsSchema = z.object({
   bio: z
     .string()
     .trim()
-    .min(20, { message: 'Bio must contain at least 20 characters.' })
+    .min(5, { message: 'Bio must contain at least 5 characters.' })
     .max(6000),
   linkedin: urlOrEmpty.optional(),
   website: urlOrEmpty.optional(),

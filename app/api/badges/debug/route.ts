@@ -36,6 +36,12 @@ interface ImpactDiagnostic {
     meetsCriteria: boolean;
 }
 
+function normalizeTopic(value: unknown, fallback: unknown): string | undefined {
+    if (typeof value === 'string' && value.trim().length > 0) return value;
+    if (typeof fallback === 'string' && fallback.trim().length > 0) return fallback;
+    return undefined;
+}
+
 function formatNumber(value: number): string {
     return new Intl.NumberFormat('en-US').format(value);
 }
@@ -162,7 +168,7 @@ export async function GET(request: NextRequest) {
             title: article.title,
             url: article.url,
             publishedAt: article.date,
-            topic: article.topic,
+            topic: normalizeTopic((article as { topic?: unknown }).topic, article.primaryTopic),
             analytics: {
                 pageViews: analytics.pageViews,
                 avgTimeOnPage: analytics.avgTimeOnPage

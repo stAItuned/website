@@ -25,6 +25,7 @@ Use this template for every meaningful feature, refactor, or architectural updat
 ## 4. User Experience Definition
 - Primary user persona(s):
 - Core user journey:
+- Language scope: `it`, `en`, or `it+en` (default: `it+en`)
 - Entry points (routes/components):
 - UX states required:
   - Loading:
@@ -73,26 +74,42 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - Offline behavior impact:
 - Update prompt/versioning impact:
 
-## 10. Performance Considerations
+## 10. SEO and GEO Plan
+- Route metadata plan (title, description, canonical, OG):
+- Structured data plan (JSON-LD types):
+- URL/content deduplication considerations:
+- GEO plan (answer-first summaries, terminology clarity, trust signals):
+- Indexing constraints (if any):
+
+## 11. Bilingual Localization Plan (`it/en`)
+- Affected languages:
+- Content parity plan:
+- UI string parity plan:
+- Locale metadata parity plan:
+- Translation ownership and review notes:
+
+## 12. Performance Considerations
 - Rendering strategy (RSC/SSR/CSR):
 - Image/media optimization (`next/image`, formats, lazy loading):
 - Hydration minimization plan:
 - Monitoring/telemetry notes:
 
-## 11. Testing Strategy
+## 13. Testing Strategy
 - Unit tests:
 - Component tests:
 - Integration/E2E considerations:
 - Manual QA scenarios:
 
-## 12. Documentation Deliverables
+## 14. Documentation Deliverables
 - Files to update in `docs/`:
 - README updates required: `yes/no`
 - TSDoc/JSDoc targets:
 - Runbook or support notes:
 
-## 13. Rollout and Risk Management
+## 15. Rollout and Risk Management
 - Rollout plan:
+- Deploy target(s): `development` (test) and/or `production`
+- Environment config notes (secrets, third-party integrations, analytics):
 - Backward compatibility concerns:
 - Risk matrix:
   - Risk:
@@ -100,7 +117,7 @@ Use this template for every meaningful feature, refactor, or architectural updat
   - Mitigation:
 - Fallback/rollback strategy:
 
-## 14. Acceptance Criteria (Definition of Done)
+## 16. Acceptance Criteria (Definition of Done)
 - [ ] Architecture is modular and atomic; no unnecessary duplication.
 - [ ] Reusable components are extended via typed variants/props.
 - [ ] Visual design uses approved brand tokens and style conventions.
@@ -108,11 +125,14 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - [ ] Responsive behavior verified on mobile and desktop breakpoints.
 - [ ] Accessibility baseline validated (keyboard/focus/labels/contrast).
 - [ ] PWA behavior is preserved or improved for `/learn` scope.
+- [ ] SEO foundations are complete (metadata, canonical, semantic structure).
+- [ ] GEO foundations are complete (answer-first clarity + trust/context signals).
+- [ ] Bilingual `it/en` parity is preserved for UX and content scope.
 - [ ] Performance impact reviewed and acceptable.
 - [ ] Tests cover critical logic and interactive paths.
 - [ ] Documentation updated and maintainable.
 
-## 15. Implementation Log (Optional During Execution)
+## 17. Implementation Log (Optional During Execution)
 - Decision 1:
 - Decision 2:
 - Tradeoff notes:

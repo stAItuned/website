@@ -8,6 +8,7 @@ import { allPosts } from '@/lib/contentlayer'
 import { BadgeShareControls } from '@/components/badges/BadgeShareControls'
 import { EvidenceList } from '@/components/badges/EvidenceList'
 import { BadgeEvidence } from '@/lib/types/badge'
+import { getContentDateTime } from '@/lib/content-date'
 
 interface PageProps {
     params: Promise<{
@@ -104,7 +105,7 @@ export default async function CredentialPage({ params }: PageProps) {
             }
         })
         .filter((item): item is NonNullable<typeof item> => item !== null)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => getContentDateTime(b.date) - getContentDateTime(a.date))
 
     // Fallback chain: badge_evidence collection → articleMetrics snapshot → bare slug matching
     // This handles legacy badges or cases where the join collection might be empty
@@ -134,7 +135,7 @@ export default async function CredentialPage({ params }: PageProps) {
                     date: article.date
                 }
             })
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .sort((a, b) => getContentDateTime(b.date) - getContentDateTime(a.date))
 
     // Format date
     const earnedDate = new Date(badge.earnedAt).toLocaleDateString('en-US', {

@@ -1,12 +1,12 @@
 {
   "hosting": {
-    "site": "staituned-production",
+    "site": "staituned-dev-42883",
     "source": ".",
     "ignore": [
       "firebase.json",
+      "firebase.development.json",
       "**/.*",
       "node_modules/**",
-      "**/node_modules/**",
       "functions/node_modules/**",
       "vendor/**",
       "scripts/**",

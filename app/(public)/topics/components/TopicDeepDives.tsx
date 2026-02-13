@@ -5,12 +5,14 @@ import { getTopicHub } from '@/config/topics'
 import { useLearnLocale } from '@/lib/i18n'
 import { ArticleCard } from './ArticleCard'
 import { useBatchAnalytics } from '@/lib/hooks/useBatchAnalytics'
+import { getContentDateTime } from '@/lib/content-date'
 
 interface Article {
     _id: string
     title: string
     slug: string
     date: string // Assuming Contentlayer provides ISO string
+    updatedAt?: string
     meta?: string
     url: string
     cover?: string
@@ -45,7 +47,7 @@ export function TopicDeepDives({ articles, accentColor }: TopicDeepDivesProps) {
         let sorted = [...articles]
 
         if (sortBy === 'recency') {
-            sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            sorted.sort((a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt))
         } else if (sortBy === 'trending') {
             sorted.sort((a, b) => {
                 const viewsA = analyticsData[a.slug]?.pageViews || 0

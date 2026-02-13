@@ -1,11 +1,5 @@
-import { allPosts } from '@/lib/contentlayer'
-
-interface Article {
-  cover?: string
-  slug: string
-  published?: boolean
-  date?: string
-}
+import { allPosts, type ContentPost } from '@/lib/contentlayer'
+import { getContentDateTime } from '@/lib/content-date'
 
 // Extract cover images for preloading
 export function getArticleCoversForPreload() {
@@ -13,8 +7,7 @@ export function getArticleCoversForPreload() {
   const recentArticles = allPosts
     .filter(post => post.published !== false)
     .sort((a, b) => {
-      if (!a.date || !b.date) return 0;
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
+      return getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt)
     })
     .slice(0, 4); // Reduced from 8 to 4 to prevent optimizer overload
 
@@ -32,11 +25,11 @@ export function getArticleCoversForPreload() {
 
   const relevantArticles = relevantArticleSlugs
     .map(slug => allPosts.find(post => post.slug.includes(slug)))
-    .filter((article): article is Article => Boolean(article))
+    .filter((article): article is ContentPost => Boolean(article))
     .slice(0, 4); // Reduced from 8 to 4
 
   // Extract valid covers
-  const getValidImageSrc = (article: Article) => {
+  const getValidImageSrc = (article: ContentPost) => {
     if (!article.cover) return null
     
     // If it's already a valid absolute URL, return as is

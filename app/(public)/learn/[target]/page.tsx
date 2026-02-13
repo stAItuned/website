@@ -2,7 +2,6 @@
 
 import { use, useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
-import { allPosts } from '@/lib/contentlayer'
 import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { ArticleCard } from '@/components/ArticleCard'
@@ -32,6 +31,7 @@ interface Article {
   target?: string
   language?: string
   topics?: string[]
+  published?: boolean
 }
 
 export default function LearnTargetPage({ params }: LearnTargetPageProps) {
@@ -50,6 +50,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
   const [viewMode, setViewMode] = useState<'recent' | 'trending'>('recent')
   const [analyticsData, setAnalyticsData] = useState<Record<string, number>>({})
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
+  const [articles, setArticles] = useState<Article[]>([])
   const pageSize = PAGINATION_SIZE
 
   // Fetch analytics data on mount
@@ -90,9 +91,26 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`/api/articles?target=${encodeURIComponent(target)}`)
+        if (!response.ok) return
+        const result = await response.json()
+        if (!result?.success || !Array.isArray(result.data)) return
+        setArticles(result.data)
+      } catch (error) {
+        console.error('Failed to fetch target articles:', error)
+      }
+    }
+
+    fetchArticles()
+    setCurrentPage(1)
+  }, [target])
+
   // Filter articles by target
-  const targetArticles = allPosts.filter((article: Article) =>
-    article.target?.toLowerCase() === target.toLowerCase()
+  const targetArticles = articles.filter((article: Article) =>
+    article.target?.toLowerCase() === target.toLowerCase() && article.published !== false
   )
 
   // Get unique filter options from the target articles
@@ -207,7 +225,7 @@ export default function LearnTargetPage({ params }: LearnTargetPageProps) {
     }
 
     // Sort articles
-    return filtered.sort((a: Article, b: Article) => {
+    return [...filtered].sort((a: Article, b: Article) => {
       if (viewMode === 'trending') {
         const viewsA = analyticsData[`/learn/${a.target?.toLowerCase() || 'midway'}/${a.slug}`] || 0
         const viewsB = analyticsData[`/learn/${b.target?.toLowerCase() || 'midway'}/${b.slug}`] || 0

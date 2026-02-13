@@ -296,7 +296,7 @@ export function WriterProfileForm() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900 dark:text-white">LinkedIn (opzionale)</label>
               <input
-                type="url"
+                type="text"
                 value={formData.linkedin}
                 onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"
@@ -305,7 +305,7 @@ export function WriterProfileForm() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900 dark:text-white">Sito Web (opzionale)</label>
               <input
-                type="url"
+                type="text"
                 value={formData.website}
                 onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-primary-500 outline-none"

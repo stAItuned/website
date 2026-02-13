@@ -10,6 +10,7 @@ import { NewsletterModal } from '@/components/ui/NewsletterModal'
 import { ArticleCard } from '@/components/ArticleCard'
 import Link from 'next/link'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
+import { getContentDateTime } from '@/lib/content-date'
 
 
 interface HomePageClientProps {
@@ -79,7 +80,7 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
     // THIS IS A PLACEHOLDER - I NEED TO FIX API FIRST
     // Sort by date (recent) or keep as-is (trending = sorted by views from server)
     const displayedPosts = articleFilter === 'recent'
-        ? [...latestPosts].sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())
+        ? [...latestPosts].sort((a, b) => getContentDateTime(b.date) - getContentDateTime(a.date))
         : (trendingArticles && trendingArticles.length > 0 ? trendingArticles : latestPosts)
 
     const firstRowPosts = displayedPosts.slice(0, 3)
@@ -276,4 +277,3 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
         </>
     )
 }
-

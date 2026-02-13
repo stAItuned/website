@@ -75,7 +75,44 @@ DoD:
 - [ ] No regression to install/update/offline flow.
 - [ ] Manifest metadata and shortcuts remain coherent.
 
-## Skill 5: Performance Engineering
+## Skill 5: SEO + GEO Discoverability
+When to use:
+- Any indexable page, article, topic page, or content template.
+
+Required actions:
+1. Define route metadata (title, description, canonical, OG/Twitter if applicable).
+2. Ensure semantic HTML structure and clean heading hierarchy.
+3. Add or validate structured data for relevant entities (Article, Organization, FAQ, etc.).
+4. Optimize copy for GEO: direct answer-first sections, concise summaries, explicit terminology, and source trust signals.
+5. Avoid metadata/content duplication across similar routes.
+
+Output:
+- Content discoverable by both traditional search engines and AI answer systems.
+
+DoD:
+- [ ] Metadata and canonical signals are correct.
+- [ ] Structured data and page semantics are valid and consistent.
+- [ ] GEO-oriented content clarity is present (answer-first + context signals).
+
+## Skill 6: Bilingual Localization (`it/en`)
+When to use:
+- Any user-facing content, UI copy, route, or metadata change.
+
+Required actions:
+1. Update both Italian and English versions of affected strings/content.
+2. Keep parity in functionality and UX across languages.
+3. Ensure locale-specific metadata is complete for both languages when localized.
+4. Validate that CTAs and critical instructions preserve meaning in translation.
+
+Output:
+- Stable bilingual experience without language drift.
+
+DoD:
+- [ ] `it/en` strings/content updated together.
+- [ ] No locale-specific feature regressions.
+- [ ] No placeholder or partially translated UX text.
+
+## Skill 7: Performance Engineering
 When to use:
 - New UI sections, image-heavy pages, or client interactivity.
 
@@ -92,7 +129,7 @@ DoD:
 - [ ] No avoidable hydration-heavy patterns.
 - [ ] Non-critical code deferred.
 
-## Skill 6: Type Safety & Validation
+## Skill 8: Type Safety & Validation
 When to use:
 - API routes, form handling, external integrations, content parsing.
 
@@ -108,7 +145,7 @@ DoD:
 - [ ] No `any` introduced.
 - [ ] Input boundaries validated.
 
-## Skill 7: Testing & Regression Safety
+## Skill 9: Testing & Regression Safety
 When to use:
 - Utility logic changes, interactive flows, bug fixes.
 
@@ -124,7 +161,7 @@ DoD:
 - [ ] Tests cover key risk points.
 - [ ] Lint/tests pass locally for changed scope.
 
-## Skill 8: Documentation
+## Skill 10: Documentation
 When to use:
 - Always, for every meaningful feature or refactor.
 
@@ -133,7 +170,9 @@ Required actions:
 2. Document architecture decisions and extension points.
 3. Document UX states and responsive behavior.
 4. Document PWA impact when relevant.
-5. Update `README.md` for user-facing setup or workflow changes.
+5. Document SEO/GEO impact and discoverability decisions.
+6. Document bilingual `it/en` impact and localization notes.
+7. Update `README.md` for user-facing setup or workflow changes.
 
 Output:
 - Feature is maintainable by future contributors without tribal knowledge.
@@ -142,6 +181,24 @@ DoD:
 - [ ] Documentation updated in the same change.
 - [ ] Rationale captured (why), not only implementation details (what).
 
+## Skill 11: Environments & Deployments (Test vs Prod)
+When to use:
+- Any change that affects config, external integrations, or runtime behavior.
+- Any backend route that touches third-party services or secrets.
+
+Required actions:
+1. Identify deploy targets impacted: `development` (test) vs `production`.
+2. Ensure Firebase Hosting targets remain deployable (`firebase.json`, `.firebaserc`).
+3. Confirm env var expectations and secret scopes (no accidental prod secrets in test).
+4. Add a minimal smoke-test checklist and a rollback note to the spec/runbook.
+
+Output:
+- Predictable deploys with explicit target selection and low risk of configuration drift.
+
+DoD:
+- [ ] Deploy target(s) and env var notes documented.
+- [ ] Deploy commands verified for the intended target.
+
 ## Recommended Skill Sequence
 For most product features:
 1. Architecture & Modularity
@@ -149,6 +206,9 @@ For most product features:
 3. UX/UI System & Brand Consistency
 4. Responsive & Accessible Experience
 5. PWA Readiness (if `/learn` scope)
-6. Performance Engineering
-7. Testing & Regression Safety
-8. Documentation
+6. SEO + GEO Discoverability
+7. Bilingual Localization (`it/en`)
+8. Performance Engineering
+9. Testing & Regression Safety
+10. Documentation
+11. Environments & Deployments (when relevant)

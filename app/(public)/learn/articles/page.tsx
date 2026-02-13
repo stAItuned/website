@@ -3,11 +3,12 @@ import type { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { PWAInstallBanner } from '@/components/pwa'
 import { allPosts, allTopics } from '@/lib/contentlayer'
+import { getContentDateTime } from '@/lib/content-date'
 import { ArticlesPageClient } from './ArticlesPageClient'
 import { topicHubs } from '@/config/topics'
 
 export const dynamic = 'force-static'
-export const revalidate = 86400 // ISR ogni giorno
+export const revalidate = 3600 // ISR ogni ora (keep list fresh)
 
 export const metadata: Metadata = {
     title: {
@@ -49,13 +50,14 @@ export default function ArticlesPage() {
     // Prepare all published articles
     const allArticles = allPosts
         .filter(post => post.published !== false)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt))
         .map(post => ({
             title: post.title,
             slug: post.slug,
             cover: post.cover,
             author: post.author,
             date: post.date,
+            updatedAt: post.updatedAt,
             meta: post.meta,
             readingTime: post.readingTime,
             target: post.target,

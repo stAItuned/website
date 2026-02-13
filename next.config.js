@@ -20,9 +20,16 @@ try {
 const nextConfig = {
   // Standalone output for minimal production bundle (reduces Firebase deploy from ~240MB to ~80MB)
   output: 'standalone',
-  // Add empty turbopack config to silence the warning (Next.js 16+)
+  // Keep Turbopack config explicit to avoid Next 16 build errors when webpack config is present.
   turbopack: {},
+  // Turbopack is intentionally disabled via env (`NEXT_PRIVATE_TURBOPACK=false`) for Firebase deploy compatibility.
+  // NOTE: Avoid externalizing firebase-admin under Turbopack/Frameworks builds, otherwise Next may emit
+  // hashed external package aliases (e.g. firebase-admin-<hash>) that are resolved via symlinks that
+  // are not reliably preserved in the deployed bundle, causing ERR_MODULE_NOT_FOUND at runtime.
   serverExternalPackages: ['googleapis'],
+  outputFileTracingIncludes: {
+    '*': ['.next/server/chunks/ssr/**'],
+  },
   // eslint configuration removed for Next.js 16 compatibility
   images: {
     formats: ['image/webp'], // Temporarily removed AVIF to reduce CPU load
@@ -44,7 +51,7 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
+    optimizeCss: process.env.NODE_ENV === 'production',
     optimizePackageImports: [
       'lucide-react',
       'date-fns',
@@ -60,7 +67,15 @@ const nextConfig = {
   },
   // Handle the content submodule
   webpack: (config, { dev, isServer }) => {
-    config.resolve.symlinks = false
+    // Exclude Firebase Admin SDK from client-side bundles
+    if (!isServer) {
+      config.externals = config.externals || []
+      config.externals.push({
+        'firebase-admin': 'firebase-admin',
+        'firebase-admin/app': 'firebase-admin/app',
+        'firebase-admin/firestore': 'firebase-admin/firestore',
+      })
+    }
 
     // Optimize bundle splitting - AGGRESSIVE OPTIMIZATION
     if (!dev && !isServer) {

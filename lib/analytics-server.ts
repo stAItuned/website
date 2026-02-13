@@ -7,6 +7,7 @@
 
 import { dbDefault } from '@/lib/firebase/admin';
 import { sanitizeSlug } from '@/lib/sanitizeSlug';
+import { shouldSkipFirestoreDuringBuild } from '@/lib/next-phase';
 
 export interface ArticleAnalytics {
   pageViews: number;
@@ -42,6 +43,18 @@ export interface GlobalAnalytics {
  */
 export async function fetchArticleAnalytics(slug: string): Promise<ArticleAnalytics> {
   try {
+    if (shouldSkipFirestoreDuringBuild()) {
+      return {
+        pageViews: 0,
+        users: 0,
+        sessions: 0,
+        avgTimeOnPage: 0,
+        bounceRate: 0,
+        likes: 0,
+        updatedAt: null,
+      };
+    }
+
     const sanitizedSlug = sanitizeSlug(slug);
     const snap = await dbDefault().collection('articles').doc(sanitizedSlug).get();
     
@@ -91,6 +104,22 @@ export async function fetchArticleAnalytics(slug: string): Promise<ArticleAnalyt
  */
 export async function fetchGlobalAnalytics(): Promise<GlobalAnalytics> {
   try {
+    if (shouldSkipFirestoreDuringBuild()) {
+      return {
+        totalStats: {
+          pageViews: 0,
+          users: 0,
+          sessions: 0,
+          avgTimeOnPage: 0,
+          bounceRate: 0,
+        },
+        topPages: [],
+        updatedAt: null,
+        dateRange: null,
+        date: null,
+      };
+    }
+
     const snap = await dbDefault().doc('analytics/daily').get();
     
     if (snap.exists) {

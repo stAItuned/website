@@ -1,6 +1,7 @@
 import { allPosts } from '@/lib/contentlayer'
 import { HomePageClient } from '@/components/home/HomePageClient'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { getContentDateTime } from '@/lib/content-date'
 
 // Force static generation
 export const dynamic = 'force-static'
@@ -23,7 +24,7 @@ export default async function HomePage() {
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
   const tickerArticles = [...publishedPosts]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt))
     .slice(0, 20)
     .map(post => ({
       title: post.title,
@@ -31,11 +32,11 @@ export default async function HomePage() {
       cover: post.cover,
       author: post.author,
       date: post.date,
-      readingTime: post.readingTime ? parseInt(post.readingTime, 10) : undefined,
+      readingTime: post.readingTime > 0 ? post.readingTime : undefined,
       target: post.target,
       language: post.language,
       meta: post.meta, // Add this line
-      isNew: new Date(post.date) >= sevenDaysAgo,
+      isNew: getContentDateTime(post.date, post.updatedAt) >= sevenDaysAgo.getTime(),
     }))
 
   return (
@@ -51,5 +52,3 @@ export default async function HomePage() {
     </PageTransition>
   )
 }
-
-

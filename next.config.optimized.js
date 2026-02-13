@@ -5,10 +5,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const { withContentlayer } = require('next-contentlayer')
 
 const nextConfig = {
+  // Keep Turbopack config explicit to avoid Next 16 build errors when webpack config is present.
+  turbopack: {},
   // Enhanced webpack optimization
   webpack: (config, { dev, isServer }) => {
-    config.resolve.symlinks = false
-    
     // ULTRA-AGGRESSIVE bundle splitting
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
@@ -97,10 +97,10 @@ const nextConfig = {
         }
       }
     }
-    
+
     return config
   },
-  
+
   // Enhanced image optimization
   images: {
     formats: ['image/avif', 'image/webp'], // Re-enable AVIF for better compression
@@ -110,8 +110,8 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     domains: [
-      'images.unsplash.com', 
-      'via.placeholder.com', 
+      'images.unsplash.com',
+      'via.placeholder.com',
       'localhost',
       'dev.staituned.com',
       'miro.medium.com',
@@ -126,10 +126,10 @@ const nextConfig = {
       }
     ],
   },
-  
+
   // Enhanced experimental features
   experimental: {
-    optimizeCss: true,
+    optimizeCss: process.env.NODE_ENV === 'production',
     optimizeServerReact: true,
     workerThreads: false, // Disable for better memory usage
     optimizePackageImports: [
@@ -207,12 +207,12 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: true,
   trailingSlash: false,
-  
+
   // Remove unused build options
   eslint: {
     ignoreDuringBuilds: false, // Fix linting issues
   },
-  
+
   transpilePackages: ['contentlayer'],
 }
 

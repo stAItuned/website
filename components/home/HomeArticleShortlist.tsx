@@ -5,7 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { ScrollReveal, FadeIn, StaggerContainer } from '@/components/ui/Animations'
-import type { Post } from 'contentlayer/generated'
+import type { ContentPost } from '@/lib/contentlayer'
+import { getContentDateTime } from '@/lib/content-date'
 
 interface ShortlistItemDef {
   slug: string
@@ -29,14 +30,14 @@ export interface ColumnShortlist {
 
 interface HomeArticleShortlistProps {
   columns: ColumnShortlist[]
-  posts: Post[]
+  posts: ContentPost[]
 }
 
 export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistProps) {
   const [activeTab, setActiveTab] = useState(0)
   const postMap = new Map(posts.map((post) => [post.slug, post]))
 
-  const getArticleHref = (post: Post, fallbackSlug: string) => {
+  const getArticleHref = (post: ContentPost | undefined, fallbackSlug: string) => {
     if (!post) return `/learn/${fallbackSlug}`
     const target = (post.target || 'midway').toString().toLowerCase()
     return `/learn/${target}/${post.slug}`
@@ -52,7 +53,7 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
     })
   }
 
-  const getCoverSrc = (post: Post) => {
+  const getCoverSrc = (post: ContentPost) => {
     const cover = post.cover?.trim()
     if (!cover) return null
     if (cover.startsWith('http://') || cover.startsWith('https://')) {
@@ -230,7 +231,7 @@ export function HomeArticleShortlist({ columns, posts }: HomeArticleShortlistPro
             <div className="grid gap-2.5 md:grid-cols-3">
               {posts
                 .filter((post) => post.published !== false)
-                .sort((a, b) => new Date(b.date as any).getTime() - new Date(a.date as any).getTime())
+                .sort((a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt))
                 .slice(0, 3)
                 .map((post) => {
                   const href = getArticleHref(post, post.slug)

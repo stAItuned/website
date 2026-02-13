@@ -8,7 +8,7 @@ cover: >-
 meta: >-
   Implement MCP and A2A protocols for AI agents with our playbook. Learn layered architecture, decision-making for tools vs. agents, and secure communication.
 date: 2026-02-12T14:54:40.000Z
-published: false
+published: true
 primaryTopic: agents
 topics:
   - llm-security
@@ -20,7 +20,7 @@ geo:
       - "**MCP** (Model Context Protocol) is a connection-oriented, client-server protocol used by **worker agents** to exchange context and execute atomic tools [Anthropic 2024](https://www.anthropic.com/news/model-context-protocol)."
       - "**A2A** (Agent-to-Agent) is a stateful, peer-to-peer protocol enabling **manager agents** to delegate and orchestrate multi-stage tasks [Google Developers Blog](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)."
       - "Modern architectures layer these: A2A for high-level **routing and state**, MCP for **capability execution** and data retrieval [Model Context Protocol Docs](https://modelcontextprotocol.io/docs/learn/architecture)."
-      - "MCP is currently the most mature and widely adopted standard for tool/data connectors in the agentic ecosystem."
+      - "MCP is recognized as a highly mature standard for tool-connector interoperability, with rapid adoption across major model providers and agent frameworks."
     oneThing: "Treat MCP and A2A as a unified stack: use A2A for stateful delegation and MCP for connection-oriented tool execution."
   audience:
     title: "Who is this for"
@@ -81,7 +81,7 @@ Understanding the stack necessitates moving beyond a competitive view of these p
 
 ### The Architectural Divide
 
-When an agent needs to fetch a real-time stock price, it acts as a client using **MCP**—specifically JSON-RPC 2.0 over stdio or SSE—to query a tool [[2](#ref-2)]. It functions as a "worker," executing precise, isolated instructions. In contrast, if that agent needs to resolve a complex billing dispute, it uses **A2A** to collaborate with a specialized `BillingAgent`. This is a peer-to-peer interaction where the agent manages a stateful, long-running workflow, delegating sub-problems rather than just executing functions [[2](#ref-2)].
+When an agent needs to fetch a real-time stock price, it acts as a client using **MCP**—specifically JSON-RPC 2.0 over stdio or Streamable HTTP (SSE legacy)—to query a tool [[2](#ref-2)]. It functions as a "worker," executing precise, isolated instructions. In contrast, if that agent needs to resolve a complex billing dispute, it uses **A2A** to collaborate with a specialized `BillingAgent`. This is a peer-to-peer interaction where the agent manages a stateful, long-running workflow, delegating sub-problems rather than just executing functions [[2](#ref-2)].
 
 > **The Network Engineer's Mental Model**
 >
@@ -93,7 +93,7 @@ When an agent needs to fetch a real-time stock price, it acts as a client using 
 
 This architectural difference dictates how memory is handled. **MCP is stateful** regarding its connection and capability negotiation, but its tool calls are ideally atomic and composable [[2](#ref-2)]. **A2A** is inherently stateful across the entire agent-to-agent negotiation, allowing it to maintain context across multi-stage workflows. 
 
-Attempting to build a massive multi-agent system using only MCP creates a complexity ceiling. The architecture requires **A2A** to act as the routing boundary—the "manager" that knows *who* can do the work—while **MCP** remains the "worker" interface that actually *does* the work [[1](#ref-1)].
+Attempting to build a massive multi-agent system using only MCP creates a complexity ceiling. The architecture requires **A2A** to act as the routing boundary, the "manager" that knows *who* can do the work, while **MCP** remains the "worker" interface that actually *does* the work [[1](#ref-1)].
 
 ## Why is implementing MCP and A2A protocols for AI agents a layered architecture strategy?
 
@@ -132,7 +132,42 @@ If the answer is no, build an MCP tool. MCP acts as the connection-oriented "wor
 
 However, if the task requires coordinating multiple steps, delegating sub-tasks, or maintaining context over hours or days, you need a specialized A2A agent. A2A is inherently stateful, supporting the long-running workflows that simple tool connections simply cannot handle [[2](#ref-2)].
 
-> **Decision Rule:** Use **MCP** for "Get current weather in London" (atomic execution). Use **A2A** for "Plan a 3-day itinerary based on weather" (complex, multi-step orchestration). ### Playbook: The Marketing Automation Decision Consider the following framework application in a real-world Marketing Scenario: | Capability | Protocol Choice | Rationale | | --- | --- | --- | | :--- | :--- | :--- | | **Send Email** | **MCP Tool** | Atomic action. Input (address, body) $\to$ Output (sent status). No memory needed. | | **Get Ad Metrics** | **MCP Tool** | Simple data retrieval. The LLM just needs to see the numbers once. | | **Campaign Optimizer** | **A2A Agent** | Complex. Needs to fetch metrics, compare against budget (state), decide on adjustments, and coordinate with the "Copywriter Agent." | ### The Agent Card: Enabling Discovery If you choose A2A, your "Manager" agents require a mechanism for discovery and interaction. Unlike MCP tools which are explicitly listed, A2A relies on **Agent Cards** - high-level descriptors that capture overall capabilities rather than specific implementation details [[1](#ref-1)]. Here is the JSON template I use to register a Supply Chain agent: ```json { "agent_id": "supply-chain-optimizer-v2", "name": "Supply Chain Optimization Agent", "description": "Orchestrates inventory levels by coordinating procurement and logistics.", "capabilities": [ "forecast_demand", "optimize_inventory_reorder_points" ], "dependencies": ["procurement_agent", "logistics_agent"], "security_level": "restricted_data_access", "metadata": { "standard": "Linux Foundation Open Agents", "sla_response": "500ms" } } ```
+> **Decision Rule:** Use **MCP** for "Get current weather in London" (atomic execution).  
+> Use **A2A** for "Plan a 3-day itinerary based on weather" (complex, multi-step orchestration).
+
+### Playbook: The Marketing Automation Decision
+
+Consider the following framework application in a real-world Marketing Scenario:
+
+| Capability | Protocol Choice | Rationale |
+| :--- | :--- | :--- |
+| **Send Email** | **MCP Tool** | Atomic action. Input (address, body) $\to$ Output (sent status). No memory needed. |
+| **Get Ad Metrics** | **MCP Tool** | Simple data retrieval. The LLM just needs to see the numbers once. |
+| **Campaign Optimizer** | **A2A Agent** | Complex. Needs to fetch metrics, compare against budget (state), decide on adjustments, and coordinate with the "Copywriter Agent." |
+
+### The Agent Card: Enabling Discovery
+
+If you choose A2A, your "Manager" agents require a mechanism for discovery and interaction. Unlike MCP tools which are explicitly listed, A2A relies on **Agent Cards** - high-level descriptors that capture overall capabilities rather than specific implementation details [[1](#ref-1)].
+
+Here is the JSON template I use to register a Supply Chain agent:
+
+```json
+{
+  "agent_id": "supply-chain-optimizer-v2",
+  "name": "Supply Chain Optimization Agent",
+  "description": "Orchestrates inventory levels by coordinating procurement and logistics.",
+  "capabilities": [
+    "forecast_demand",
+    "optimize_inventory_reorder_points"
+  ],
+  "dependencies": ["procurement_agent", "logistics_agent"],
+  "security_level": "restricted_data_access",
+  "metadata": {
+    "standard": "Linux Foundation Open Agents",
+    "sla_response": "500ms"
+  }
+}
+```
 
 ## What are the essential architectural patterns for a hybrid protocol deployment?
 
@@ -189,22 +224,38 @@ To secure the transition from high-level delegation to low-level execution, impl
 To move from architecture to action, follow these implementation patterns for both protocols.
 
 ### 1. Build a minimal MCP Server (Python)
-MCP servers can be exposed via `stdio` or `HTTP/SSE`. Here is a basic pattern using the Python SDK to expose a context-aware tool.
+MCP servers can be exposed via `stdio` or `Streamable HTTP (SSE legacy)`. You can choose between the official SDK for a standard-first approach or FastMCP for enhanced developer experience.
+
+#### Option A: Official Python SDK (Standard)
+The official SDK provides the most robust implementation of the protocol specifications.
 
 ```python
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
+
+# Initialize MCP Server
+mcp = MCPServer("StaitunedWorker")
+
+@mcp.tool()
+def query_inventory(item_id: str) -> str:
+    """Fetch real-time stock levels for a specific item."""
+    # Logic to hit internal DB or ERP
+    return f"Inventory for {item_id}: 42 units available."
+```
+
+#### Option B: FastMCP (Performance & DX)
+FastMCP offers a more concise syntax and is ideal for rapid prototyping and high-performance tools.
+
+```python
+from fastmcp import FastMCP
 
 # Initialize MCP Server
 mcp = FastMCP("StaitunedWorker")
 
-@mcp.tool()
-async def query_inventory(item_id: str) -> str:
+@mcp.tool
+def query_inventory(item_id: str) -> str:
     """Fetch real-time stock levels for a specific item."""
     # Logic to hit internal DB or ERP
     return f"Inventory for {item_id}: 42 units available."
-
-if __name__ == "__main__":
-    mcp.run()
 ```
 
 ### 2. Expose an Agent Card for A2A

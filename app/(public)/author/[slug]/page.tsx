@@ -101,9 +101,18 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   // We should try to match displayName or Name Surname.
   const authorName = writer.displayName || slug.replaceAll('-', ' ')
 
-  const authorArticles = allPosts.filter((post) =>
-    (post.author === authorName || post.author === writer.name + ' ' + writer.surname) && post.published !== false
-  ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const getDateTime = (date: string): number => {
+    const time = new Date(date).getTime()
+    return Number.isNaN(time) ? 0 : time
+  }
+
+  const authorArticles = allPosts
+    .filter(
+      (post) =>
+        (post.author === authorName || post.author === `${writer.name} ${writer.surname}`) &&
+        post.published !== false
+    )
+    .sort((a, b) => getDateTime(b.date) - getDateTime(a.date))
 
   // Generate Person schema for E-E-A-T
   const personSchema = generatePersonSchema({

@@ -33,6 +33,10 @@ function stripHtml(html: string | null | undefined): string {
         .slice(0, 300);          // Limit description length
 }
 
+function asOptionalString(value: unknown): string | undefined {
+    return typeof value === "string" ? value : undefined;
+}
+
 /**
  * Format date to RFC 822 format required by RSS
  */
@@ -65,7 +69,12 @@ export async function GET() {
 
             // Get description from meta, description, or excerpt
             const description = escapeXml(
-                stripHtml(post.meta || post.description || post.excerpt || "")
+                stripHtml(
+                    post.meta ||
+                    asOptionalString((post as { description?: unknown }).description) ||
+                    asOptionalString((post as { excerpt?: unknown }).excerpt) ||
+                    ""
+                )
             );
 
             // Author email format for RSS (optional)

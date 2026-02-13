@@ -1,5 +1,6 @@
 import { getPublicWriter } from '@/lib/writer/firestore'
 import { normalizeSlug } from '@/lib/validation/writerProfile'
+import { shouldSkipFirestoreDuringBuild } from '@/lib/next-phase'
 
 // Utility function to load author data from team metadata
 export interface AuthorData {
@@ -17,6 +18,10 @@ export interface AuthorData {
 
 export async function getAuthorData(authorName: string): Promise<AuthorData | null> {
   try {
+    if (shouldSkipFirestoreDuringBuild()) {
+      return null
+    }
+
     // Normalize user name to slug
     const slug = normalizeSlug(authorName)
     const writer = await getPublicWriter(slug)

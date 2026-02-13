@@ -9,7 +9,6 @@ import { getBadgeImageSource } from '@/lib/badges/badge-utils'
 import type { Badge, ArticleMetricSnapshot } from '@/lib/types/badge'
 import { BRAND } from '@/lib/brand'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? BRAND.url).replace(/\/+$/, '')
 
@@ -23,6 +22,12 @@ interface SendBadgeAwardEmailParams {
 }
 
 const LINKEDIN_ADD_CERT_URL = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME'
+
+function getResendClient(): Resend | null {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) return null
+  return new Resend(apiKey)
+}
 
 /**
  * Build a LinkedIn share URL with optional prefilled text.
@@ -319,6 +324,12 @@ ${SITE_URL}
 export async function sendBadgeAwardEmail(params: SendBadgeAwardEmailParams): Promise<boolean> {
   const { email, badge } = params
   try {
+    const resend = getResendClient()
+    if (!resend) {
+      console.error('[Badge Email] RESEND_API_KEY is missing')
+      return false
+    }
+
     const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,

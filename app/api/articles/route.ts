@@ -9,6 +9,7 @@ interface ArticleData {
   topics: string[]
   date?: string
   cover?: string
+  meta?: string
   published?: boolean
   readingTime: number
   url: string
@@ -68,6 +69,7 @@ export async function GET(request: NextRequest) {
         topics: post.topics || [],
         date: post.date,
         cover: post.cover,
+        meta: post.meta,
         published: post.published !== false,
         readingTime: post.readingTime || 5,
         url: `/learn/${target.toLowerCase()}/${post.slug}`

@@ -10,6 +10,7 @@ import {
 } from '@/lib/validation/writerProfile'
 import { unstable_cache, revalidateTag } from 'next/cache'
 import { randomUUID } from 'crypto'
+import { shouldSkipFirestoreDuringBuild } from '@/lib/next-phase'
 
 const WRITERS_COLLECTION = 'writers'
 const WRITER_SLUGS_COLLECTION = 'writer_slugs'
@@ -22,6 +23,8 @@ const MAX_SLUG_SUFFIX_ATTEMPTS = 200
  * Get a public writer profile by slug.
  */
 async function fetchPublicWriter(slug: string): Promise<PublicWriterDocument | null> {
+  if (shouldSkipFirestoreDuringBuild()) return null
+
   const normalizedSlug = normalizeSlug(slug)
   const snap = await dbDefault().collection(WRITERS_COLLECTION).doc(normalizedSlug).get()
   if (!snap.exists) return null
@@ -63,6 +66,8 @@ export async function getPublicWriter(slug: string): Promise<PublicWriterDocumen
  */
 export const getPublicWritersList = unstable_cache(
   async (): Promise<PublicWriterDocument[]> => {
+    if (shouldSkipFirestoreDuringBuild()) return []
+
     const snap = await dbDefault()
       .collection(WRITERS_COLLECTION)
       .where('published', '==', true)

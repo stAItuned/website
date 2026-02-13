@@ -1,4 +1,5 @@
 import { allTopics, allPosts } from '@/lib/contentlayer'
+import { getContentDateTime } from '@/lib/content-date'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { getTopicHub } from '@/config/topics'
@@ -74,7 +75,7 @@ export default async function TopicHubPage(props: { params: Promise<{ slug: stri
     // Get articles for this topic
     const topicArticles = allPosts
         .filter(article => article.primaryTopic === topic.slug && article.published)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt))
 
     // "Start Here" Logic: Try to pick 1 Newbie, 1 Midway, 1 High Value/Recent
     const newbie = topicArticles.find(a => a.target?.toLowerCase() === 'newbie')

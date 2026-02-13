@@ -8,8 +8,8 @@ const FALLBACK_MESSAGES: Record<WriterProfileLocale, string> = {
 }
 
 const BIO_MIN_MESSAGES: Record<WriterProfileLocale, string> = {
-  it: 'La bio deve contenere almeno 20 caratteri.',
-  en: 'Bio must contain at least 20 characters.',
+  it: 'La bio deve contenere almeno 5 caratteri.',
+  en: 'Bio must contain at least 5 characters.',
 }
 
 /**

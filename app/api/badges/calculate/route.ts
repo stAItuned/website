@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { allPosts } from '@/lib/contentlayer';
-import { getAuthorData } from '@/lib/authors';
 import { getAuthorBadges, awardBadge, markBadgeEmailPending } from '@/lib/firebase/badge-service';
 import { fetchMultipleArticlesAnalytics } from '@/lib/analytics-server';
 import { calculateEligibleBadges } from '@/lib/badges/badge-calculator';
@@ -8,6 +7,12 @@ import { calculateEligibleBadges } from '@/lib/badges/badge-calculator';
 export const dynamic = 'force-dynamic'; // Defaults to auto, but we want to ensure it runs dynamically if verified
 
 import { verifyAdmin } from '@/lib/firebase/server-auth';
+
+function normalizeTopic(value: unknown, fallback: unknown): string | undefined {
+    if (typeof value === 'string' && value.trim().length > 0) return value;
+    if (typeof fallback === 'string' && fallback.trim().length > 0) return fallback;
+    return undefined;
+}
 
 export async function POST(request: NextRequest) {
     const auth = await verifyAdmin(request);
@@ -53,7 +58,7 @@ export async function POST(request: NextRequest) {
                         title: a.title,
                         url: a.url,
                         publishedAt: a.date,
-                        topic: a.topic,
+                        topic: normalizeTopic((a as { topic?: unknown }).topic, a.primaryTopic),
                         analytics: {
                             pageViews: analytics.pageViews,
                             avgTimeOnPage: analytics.avgTimeOnPage

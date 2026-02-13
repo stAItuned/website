@@ -1,6 +1,7 @@
 import { getAdminDb } from './server-auth';
 import { AuthorBadge, BadgeEvidence } from '@/lib/types/badge';
 import { nanoid } from 'nanoid';
+import { shouldSkipFirestoreDuringBuild } from '@/lib/next-phase';
 
 const BADGES_COLLECTION = 'badges';
 const CREDENTIALS_COLLECTION = 'credentials';
@@ -20,6 +21,10 @@ export function generateCredentialId(year: number = new Date().getFullYear() % 1
  */
 export async function getAuthorBadges(authorSlug: string): Promise<AuthorBadge[]> {
     try {
+        if (shouldSkipFirestoreDuringBuild()) {
+            return [];
+        }
+
         const db = getAdminDb();
         const snapshot = await db
             .collection(BADGES_COLLECTION)

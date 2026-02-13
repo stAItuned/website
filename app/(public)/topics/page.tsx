@@ -20,15 +20,15 @@ export default function TopicsIndexPage() {
         acc[slug] = (acc[slug] || 0) + 1
         return acc
     }, {} as Record<string, number>)
+    const totalArticles = allPosts.filter((post) => post.published && post.primaryTopic).length
 
     return (
         <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-12">
             {/* Hero Section */}
-            <TopicsHero />
+            <TopicsHero totalArticles={totalArticles} />
 
             {/* Topics Grid by Category (Client Component for I18n) */}
             <TopicsIndexClient allTopics={allTopics} topicCounts={topicCounts} />
         </div>
     )
 }
-

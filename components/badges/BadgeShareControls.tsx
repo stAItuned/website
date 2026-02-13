@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/auth/AuthContext'
-import { getAuthorByEmail } from '@/lib/getAuthorByEmail'
 
 interface BadgeShareControlsProps {
     credentialId: string
@@ -20,11 +19,22 @@ export function BadgeShareControls({ credentialId, title, authorSlug }: BadgeSha
 
     if (loading) return null
 
-    const authorName = getAuthorByEmail(user?.email)
-    const ownerSlug = authorName ? authorName.trim().replaceAll(' ', '-') : null
-    const isOwner = Boolean(user && ownerSlug && ownerSlug === authorSlug)
+    const toSlug = (value: string | null | undefined): string | null => {
+        if (!value) return null
+        return value
+            .trim()
+            .toLowerCase()
+            .replaceAll(' ', '-')
+    }
 
-    if (!isOwner) {
+    const ownerSlug =
+        toSlug(user?.displayName) ??
+        toSlug(user?.email?.split('@')[0])
+    const expectedSlug = toSlug(authorSlug)
+    const isOwner = Boolean(user && ownerSlug && ownerSlug === authorSlug)
+    const isOwnerNormalized = Boolean(user && ownerSlug && expectedSlug && ownerSlug === expectedSlug)
+
+    if (!isOwner && !isOwnerNormalized) {
         return (
             <div className="flex justify-center">
                 {user ? (

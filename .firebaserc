@@ -11,7 +11,7 @@
           "staituned-production"
         ],
         "development": [
-          "staituned-dev"
+          "staituned-dev-42883"
         ]
       }
     }

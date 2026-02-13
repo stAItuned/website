@@ -11,6 +11,7 @@ import { getTopicHub } from '@/config/topics'
 import { TopicsCarousel } from './components/TopicsCarousel'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { TopicGrid } from '@/components/TopicGrid'
+import { getContentDateTime } from '@/lib/content-date'
 
 interface Article {
     title: string
@@ -18,6 +19,7 @@ interface Article {
     cover?: string
     author?: string
     date: string
+    updatedAt?: string
     meta?: string
     readingTime?: number
     target?: string
@@ -157,7 +159,9 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
             result = result.sort((a, b) => (b.pageViews || 0) - (a.pageViews || 0))
         } else {
             // Default: Recent (Date desc)
-            result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            result = result.sort(
+                (a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt)
+            )
         }
 
         return result

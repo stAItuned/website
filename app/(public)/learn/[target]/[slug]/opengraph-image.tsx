@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { allPosts } from '@/lib/contentlayer'
  
-export const runtime = 'edge'
+export const runtime = 'nodejs'
  
 export const alt = 'stAItuned Article'
 export const size = {

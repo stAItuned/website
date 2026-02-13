@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation'
 import { getFirestore, doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '@/components/auth/AuthContext'
 import { app } from '@/lib/firebase/client'
-import { allPosts } from '@/lib/contentlayer'
 import { ArticleCard } from '@/components/ArticleCard'
 import { BookMarked, Compass, Home, Sparkles } from 'lucide-react'
 
@@ -27,6 +26,7 @@ export default function BookmarksPage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
   const [bookmarks, setBookmarks] = useState<string[]>([])
+  const [articles, setArticles] = useState<ArticlePreview[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -60,13 +60,26 @@ export default function BookmarksPage() {
     }
   }, [user, authLoading, router])
 
-  const bookmarkedArticles = useMemo(() => {
-    const allPostsList = Array.isArray(allPosts)
-      ? (allPosts as unknown[]).filter(isArticlePreview)
-      : []
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch('/api/articles')
+        if (!response.ok) return
+        const result = await response.json()
+        if (!result?.success || !Array.isArray(result.data)) return
+        const articleList = result.data.filter(isArticlePreview)
+        setArticles(articleList)
+      } catch (error) {
+        console.error('Error fetching articles for bookmarks:', error)
+      }
+    }
 
-    return allPostsList.filter((article) => bookmarks.includes(article.slug))
-  }, [bookmarks])
+    fetchArticles()
+  }, [])
+
+  const bookmarkedArticles = useMemo(() => {
+    return articles.filter((article) => bookmarks.includes(article.slug))
+  }, [articles, bookmarks])
 
   if (authLoading || loading || !user) {
     return (

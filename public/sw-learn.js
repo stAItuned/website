@@ -11,7 +11,7 @@
  */
 
 // Cache versioning - increment on major changes
-const SW_VERSION = 'v2.1.0'
+const SW_VERSION = 'v2.1.1'
 const CACHE_PREFIX = 'staituned-learn'
 
 // Cache names with versioning
@@ -160,6 +160,12 @@ function selectStrategy(request, url) {
     // Navigation requests (page loads) - STALE WHILE REVALIDATE for instant loads
     if (request.mode === 'navigate') {
         if (isLearnUrl(pathname)) {
+            // For index-like pages we prefer fresh content when online (new articles, nav updates),
+            // while still keeping an offline fallback via cache.
+            if (pathname === '/learn' || pathname === '/learn/articles') {
+                return networkFirst(request, CACHE_NAMES.ARTICLES)
+            }
+
             return staleWhileRevalidate(request, CACHE_NAMES.ARTICLES)
         }
         // Non-learn navigation - let browser handle

@@ -1,7 +1,6 @@
 'use client'
 
 import { topicHubs } from '@/config/topics'
-import { allPosts } from '@/lib/contentlayer'
 import { useLearnLocale } from '@/lib/i18n'
 
 /**
@@ -13,9 +12,11 @@ import { useLearnLocale } from '@/lib/i18n'
  * - Premium gradient text treatment
  * - Subtle dot pattern overlay
  */
-export function TopicsHero() {
-    // Calculate total articles across all topic hubs
-    const totalArticles = allPosts.filter(p => p.published && p.primaryTopic).length
+interface TopicsHeroProps {
+    totalArticles: number
+}
+
+export function TopicsHero({ totalArticles }: TopicsHeroProps) {
     const { t } = useLearnLocale()
 
     return (

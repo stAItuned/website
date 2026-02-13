@@ -1,5 +1,9 @@
 # Documentation
 
+## Build / Deploy (Firebase)
+
+- Turbopack is intentionally disabled for this repo’s `dev`/`build` scripts (`next dev/build --webpack`) to avoid Firebase deploy/runtime issues with Turbopack “external module” hashing.
+
 ## Table of contents
 
 ## Client Application Routes

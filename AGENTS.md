@@ -8,6 +8,8 @@ The primary goals are:
 - Consistent UX/UI aligned with stAItuned brand guidelines.
 - Mobile-first responsiveness and strong accessibility.
 - PWA-ready behavior for the `/learn` experience.
+- Strong SEO and GEO (Generative Engine Optimization) coverage.
+- Strict bilingual parity for Italian and English (`it/en`).
 - Clear, durable feature documentation.
 
 ## Stack Baseline
@@ -18,12 +20,32 @@ The primary goals are:
 - Contentlayer (MDX content)
 - Vitest + Testing Library
 
+## Deploy Environments (Test vs Prod)
+The repo supports two Firebase Hosting deploy targets (same Firebase project, different Hosting sites):
+- `development` (test/staging) -> `staituned-dev`
+- `production` -> `staituned-production`
+
+Reference files:
+- `.firebaserc`: target mapping
+- `firebase.json`: hosting targets configuration
+- `deploy.yaml`: deploy runbook
+
+Commands:
+- `npm run deploy:test` deploys to the `development` hosting target.
+- `npm run deploy:prod` deploys to the `production` hosting target.
+
+Rules:
+- Do not merge “test” data/config into prod by default; keep env vars and third-party integrations scoped per target.
+- If a feature depends on environment-specific behavior, document the expected differences in `spec_dev.md` and `docs/deployments.md`.
+
 ## Non-Negotiables
 1. No `any` in application code. Use explicit types and Zod validation where external input exists.
 2. Default to Server Components; add `'use client'` only when required (state, effects, browser APIs, event handlers).
 3. No hardcoded brand colors when a Tailwind theme token exists.
 4. New UI must be mobile-first and verified at `xs`, `md`, and `xl` breakpoints.
 5. Every non-trivial feature must include documentation updates.
+6. Every user-facing feature/content update must preserve `it/en` parity.
+7. SEO and GEO requirements are mandatory for discoverable pages/content.
 
 ## Project Structure Rules
 - `app/`: routes, layouts, server-first page composition.
@@ -90,6 +112,22 @@ When touching PWA-related features:
 - Validate offline/fallback behavior for core learning flows.
 - Keep icons, screenshots, shortcuts, and metadata coherent with brand and product behavior.
 
+## SEO and GEO Requirements
+Apply these rules to every indexable route and content page:
+- Provide unique metadata (`title`, `description`, canonical, OpenGraph).
+- Keep semantic heading hierarchy (`h1` -> `h2` -> `h3`) and descriptive link labels.
+- Keep structured data (JSON-LD) accurate when entities/articles are involved.
+- Optimize content for both classic search (SEO) and AI answer engines (GEO): clear intent, concise definitions, factual statements, and scannable sections.
+- Include trustworthy context signals when relevant: author, publish/update date, source references, and topical scope.
+- Avoid thin/duplicate pages and duplicated metadata.
+
+## Bilingual Content Policy (`it/en`)
+- Every user-facing content or UI string change must be evaluated for both Italian and English.
+- If a page exists in both languages, features and core messaging must remain aligned (no one-language-only functional gaps).
+- Locale-specific metadata must be present for both languages when the route/content is localized.
+- Translation quality must preserve meaning, tone, and CTA intent; do not ship placeholder untranslated text.
+- When adding new docs/specs for product behavior, include language notes if behavior differs by locale.
+
 ## Performance Standards
 - Prefer server rendering and streaming where possible.
 - Use `next/image` for content images unless there is a justified exception.
@@ -111,6 +149,8 @@ For each meaningful feature/change, update docs in the same PR:
 - UX states (loading, empty, error, success).
 - Mobile behavior and accessibility notes.
 - PWA impact (if any).
+- SEO/GEO impact.
+- Bilingual (`it/en`) impact and translation notes.
 
 Use:
 - TSDoc/JSDoc for exported components and complex functions.
@@ -124,5 +164,7 @@ A task is complete only when all are true:
 - [ ] Verified responsive at mobile and desktop breakpoints.
 - [ ] Accessibility basics are covered (keyboard, labels, focus, contrast).
 - [ ] PWA constraints respected when feature touches `/learn`.
+- [ ] SEO/GEO constraints respected for indexable pages/content.
+- [ ] Bilingual `it/en` parity preserved for user-facing changes.
 - [ ] Tests updated for critical logic.
 - [ ] Documentation updated (`docs/`, `README.md`, or feature notes as needed).

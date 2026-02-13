@@ -74,11 +74,23 @@ interface LearnLocaleProviderProps {
  */
 export function LearnLocaleProvider({ children, defaultLocale = 'en' }: LearnLocaleProviderProps) {
     const [locale, setLocaleState] = useState<LearnLocale>(defaultLocale)
-    const [mounted, setMounted] = useState(false)
+    const [isHydrationSafe, setIsHydrationSafe] = useState(false)
     const pathname = usePathname()
 
-    // Initialize locale on mount and handle path-based defaults
+    // Keep server locale through the first hydration pass to avoid text mismatches.
+    // Then bootstrap client locale (saved preference or browser language).
     useEffect(() => {
+        const timer = window.setTimeout(() => {
+            setIsHydrationSafe(true)
+        }, 0)
+
+        return () => window.clearTimeout(timer)
+    }, [])
+
+    // Initialize locale after hydration safety gate
+    useEffect(() => {
+        if (!isHydrationSafe) return
+
         const saved = getSavedLocale()
         if (saved) {
             setLocaleState(saved)
@@ -92,8 +104,7 @@ export function LearnLocaleProvider({ children, defaultLocale = 'en' }: LearnLoc
                 setLocaleState(defaultLocale)
             }
         }
-        setMounted(true)
-    }, [pathname, defaultLocale])
+    }, [isHydrationSafe, pathname, defaultLocale])
 
     const setLocale = useCallback((newLocale: LearnLocale) => {
         setLocaleState(newLocale)
@@ -105,14 +116,12 @@ export function LearnLocaleProvider({ children, defaultLocale = 'en' }: LearnLoc
         setLocale(newLocale)
     }, [locale, setLocale])
 
-    // Get translations for current locale
-    const t = translations[locale]
-
     // Prevent hydration mismatch by using default locale during SSR
+    const effectiveLocale = isHydrationSafe ? locale : defaultLocale
     const value: LearnLocaleContextType = {
-        locale: mounted ? locale : defaultLocale,
+        locale: effectiveLocale,
         setLocale,
-        t: mounted ? t : translations[defaultLocale],
+        t: translations[effectiveLocale],
         toggleLocale
     }
 

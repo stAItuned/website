@@ -30,19 +30,28 @@ export function SearchModal() {
   useEffect(() => {
     if (searchTerm.trim()) {
       setIsLoading(true)
-      // Dynamic import to load content only when searching
-      import('@/lib/contentlayer').then(({ allPosts }) => {
-        const filtered = allPosts.filter((article: SearchResult) =>
-          article.published !== false &&
-          (article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            article.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            article.meta?.toLowerCase().includes(searchTerm.toLowerCase()))
-        )
-        setFilteredArticles(filtered)
-        setIsLoading(false)
-      }).catch(() => {
-        setIsLoading(false)
-      })
+      ;(async () => {
+        try {
+          const res = await fetch('/api/articles?published=true')
+          const json: unknown = await res.json()
+          const rec = json as { data?: SearchResult[] }
+          const all = Array.isArray(rec.data) ? rec.data : []
+
+          const q = searchTerm.toLowerCase()
+          const filtered = all.filter((article) =>
+            article.published !== false &&
+            (article.title?.toLowerCase().includes(q) ||
+              article.author?.toLowerCase().includes(q) ||
+              article.meta?.toLowerCase().includes(q))
+          )
+
+          setFilteredArticles(filtered)
+        } catch {
+          setFilteredArticles([])
+        } finally {
+          setIsLoading(false)
+        }
+      })()
     } else {
       setFilteredArticles([])
       setIsLoading(false)
