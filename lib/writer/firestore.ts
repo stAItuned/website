@@ -180,9 +180,9 @@ export async function upsertWriterProfile(
 
   revalidateTag('writers:list', REVALIDATE_PROFILE)
   revalidateTag(`writer:${finalSlug}`, REVALIDATE_PROFILE)
-  revalidatePath('/author', REVALIDATE_PROFILE)
-  revalidatePath('/meet', REVALIDATE_PROFILE)
-  revalidatePath(`/author/${finalSlug}`, REVALIDATE_PROFILE)
+  revalidatePath('/author')
+  revalidatePath('/meet')
+  revalidatePath(`/author/${finalSlug}`)
 
   return writerData
 }
