@@ -66,12 +66,8 @@ export function useWizardNavigation({
 
     const handleAgreementComplete = useCallback((contribution: Contribution) => {
         setData(contribution)
-        if (contribution.path === 'autonomy') {
-            setStep('guidelines')
-        } else {
-            setStep('interview')
-        }
-    }, [setData, setStep])
+        router.push('/contribute')
+    }, [router, setData])
 
     const handleInterviewComplete = useCallback((history: InterviewQnA[], coverage?: CoverageAssessment) => {
         setData(prev => ({ ...prev, interviewHistory: history }))

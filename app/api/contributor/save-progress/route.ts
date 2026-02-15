@@ -4,6 +4,8 @@ import { createContribution, updateContribution, getContribution, getUserSignedA
 import { Contribution } from '@/lib/types/contributor';
 import { headers } from 'next/headers';
 import { evaluateAgreementSignaturePolicy, AgreementPolicyDecision } from '@/lib/contributor/agreementPolicy';
+import { dbDefault } from '@/lib/firebase/admin';
+import { isWriterPublishEnabled, resolveWriterOnboardingState } from '@/lib/writer/onboarding-state';
 
 const DEFAULT_AGREEMENT_VERSION = '1.1';
 
@@ -229,8 +231,24 @@ export async function POST(request: NextRequest) {
                         agreement_view_url: agreementViewUrl
                     }
                 });
+
             } catch (emailError) {
                 console.error('[API] Failed to generate PDF or send email:', emailError);
+            }
+
+            try {
+                const onboardingState = resolveWriterOnboardingState({
+                    hasProfile: true,
+                    hasAgreement: true
+                });
+                await dbDefault().collection('users').doc(user.uid).set({
+                    writerOnboardingState: onboardingState,
+                    writerPublishEnabled: isWriterPublishEnabled(onboardingState),
+                    writerAgreementSignedAt: dataToSave.agreement.accepted_at || lastSaved,
+                    updatedAt: new Date().toISOString(),
+                }, { merge: true });
+            } catch (stateError) {
+                console.error('[API] Failed to persist writer onboarding state:', stateError);
             }
         }
 

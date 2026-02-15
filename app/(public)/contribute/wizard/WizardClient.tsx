@@ -71,7 +71,7 @@ export default function WizardClient() {
         // We only check this if we are not already on the "become_writer" step (although that step is deprecated in favor of the page)
         if (isWriter === false) {
             const next = `/contribute/wizard${typeof window !== 'undefined' ? window.location.search : ''}`
-            router.replace(`/contribute/become-writer?next=${encodeURIComponent(next)}`)
+            router.replace(`/become-writer?next=${encodeURIComponent(next)}`)
         }
 
     }, [user, authLoading, isWriter, checkWriterStatus, router])
@@ -89,7 +89,7 @@ export default function WizardClient() {
             case 'become_writer':
                 // This case should ideally not be reached anymore due to redirect,
                 // but keeping it for safety or redirecting manually here
-                router.push('/contribute/become-writer')
+                router.push('/become-writer')
                 return null
             case 'resume_selection':
                 return <StepResumeSelection

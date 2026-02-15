@@ -38,7 +38,7 @@ export function DraftEditor() {
     }
     if (isWriter === false) {
       const next = `/contribute/draft${typeof window !== 'undefined' ? window.location.search : ''}`
-      router.replace(`/contribute/become-writer?next=${encodeURIComponent(next)}`)
+      router.replace(`/become-writer?next=${encodeURIComponent(next)}`)
     }
   }, [authLoading, user, isWriter, router])
 

@@ -59,7 +59,7 @@ export function AccountSettingsShell({
   const navActions = [
     { href: '/bookmarks', label: t.nav.actions.bookmarks, icon: BookMarked, tone: 'ghost' as const },
     {
-      href: isWriter ? '/contribute/draft' : '/contribute/become-writer',
+      href: isWriter ? '/contribute/draft' : '/become-writer',
       label: isWriter ? t.nav.actions.newDraft : t.nav.actions.becomeWriter,
       icon: Sparkles,
       tone: 'primary' as const,

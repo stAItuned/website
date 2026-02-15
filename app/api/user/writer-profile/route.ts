@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAuth } from '@/lib/firebase/server-auth'
 import { dbDefault } from '@/lib/firebase/admin'
+import { checkUserHasAgreement } from '@/lib/firebase/contributor-db'
 import {
   getWriterByUid,
   resolveWriterSlug,
@@ -8,6 +9,7 @@ import {
   uploadWriterImage,
 } from '@/lib/writer/firestore'
 import { normalizeSlug, writerProfileFieldsSchema } from '@/lib/validation/writerProfile'
+import { isWriterPublishEnabled, resolveWriterOnboardingState } from '@/lib/writer/onboarding-state'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -131,6 +133,12 @@ async function handleUpsert(request: NextRequest) {
     )
 
     const writerActivatedAt = new Date().toISOString()
+    const hasAgreement = await checkUserHasAgreement(user.uid)
+    const onboardingState = resolveWriterOnboardingState({
+      hasProfile: true,
+      hasAgreement,
+    })
+
     await dbDefault().collection('users').doc(user.uid).set(
       {
         writerIntent: 'yes',
@@ -138,6 +146,8 @@ async function handleUpsert(request: NextRequest) {
         writerActivatedAt,
         writerOnboardingCompleted: true,
         writerOnboardingVersion: 'v1',
+        writerOnboardingState: onboardingState,
+        writerPublishEnabled: isWriterPublishEnabled(onboardingState),
         updatedAt: writerActivatedAt,
       },
       { merge: true }

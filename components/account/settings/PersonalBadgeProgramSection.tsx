@@ -110,7 +110,7 @@ export function PersonalBadgeProgramSection() {
               {earnedCount} / {totalCount} {t.personalbadges.earned}
             </div>
           ) : (
-            <PremiumLink href="/contribute/become-writer">
+            <PremiumLink href="/become-writer">
               {t.personalbadges.becomeWriter}
               <ChevronRight className="h-4 w-4" />
             </PremiumLink>

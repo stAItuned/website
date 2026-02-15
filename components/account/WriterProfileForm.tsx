@@ -188,7 +188,7 @@ export function WriterProfileForm() {
           <p className="text-slate-600 dark:text-slate-400 mb-4">
             Prima di modificare il profilo autore devi completare l&apos;onboarding.
           </p>
-          <Link href="/contribute/become-writer" className="text-primary-600 hover:underline">
+          <Link href="/become-writer" className="text-primary-600 hover:underline">
             Diventa Writer →
           </Link>
         </div>

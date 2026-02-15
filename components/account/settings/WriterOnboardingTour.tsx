@@ -202,7 +202,7 @@ export function WriterOnboardingTour({ isWriter }: WriterOnboardingTourProps) {
             </button>
             {isLastStep ? (
               <Link
-                href="/contribute/become-writer"
+                href="/become-writer"
                 onClick={() => saveAndClose('completed')}
                 className="rounded-lg bg-primary-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-primary-500"
               >

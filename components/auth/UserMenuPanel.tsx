@@ -161,7 +161,7 @@ export function UserMenuPanel({
             <MenuLink href="/account/writer-profile" icon={UserRound} label="Writer profile" />
           </>
         ) : (
-          <MenuLink href="/contribute/become-writer" icon={Sparkles} label="Become a writer" tone="premium" />
+          <MenuLink href="/become-writer" icon={Sparkles} label="Become a writer" tone="premium" />
         )}
       </div>
 

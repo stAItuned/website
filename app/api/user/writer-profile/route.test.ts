@@ -8,6 +8,7 @@ import {
   resolveWriterSlug,
   upsertWriterProfile,
 } from '@/lib/writer/firestore'
+import { checkUserHasAgreement } from '@/lib/firebase/contributor-db'
 import type { WriterDocument } from '@/lib/validation/writerProfile'
 import type { DecodedIdToken } from 'firebase-admin/auth'
 
@@ -24,6 +25,10 @@ vi.mock('@/lib/writer/firestore', () => ({
   resolveWriterSlug: vi.fn(),
   upsertWriterProfile: vi.fn(),
   uploadWriterImage: vi.fn(),
+}))
+
+vi.mock('@/lib/firebase/contributor-db', () => ({
+  checkUserHasAgreement: vi.fn(),
 }))
 
 type FormDataOverrides = Partial<{
@@ -108,6 +113,7 @@ function createDecodedIdToken(overrides?: Partial<DecodedIdToken>): DecodedIdTok
 describe('api/user/writer-profile route', () => {
   beforeEach(() => {
     vi.resetAllMocks()
+    vi.mocked(checkUserHasAgreement).mockResolvedValue(false)
 
     const set = vi.fn(async () => undefined)
     const doc = vi.fn(() => ({ set }))
@@ -229,9 +235,40 @@ describe('api/user/writer-profile route', () => {
         writerProfileStatus: 'completed',
         writerOnboardingCompleted: true,
         writerOnboardingVersion: 'v1',
+        writerOnboardingState: 'profile_completed',
+        writerPublishEnabled: false,
       })
     )
     expect(setArgs[1]).toEqual({ merge: true })
+  })
+
+  it('marks publish enabled when agreement is already signed', async () => {
+    vi.mocked(verifyAuth).mockResolvedValue(createDecodedIdToken({ email: 'mario@example.com' }))
+    vi.mocked(checkUserHasAgreement).mockResolvedValue(true)
+    vi.mocked(getWriterByUid).mockResolvedValue(null)
+    vi.mocked(resolveWriterSlug).mockResolvedValue('mario-rossi')
+    vi.mocked(upsertWriterProfile).mockResolvedValue(createWriterProfile())
+
+    const response = await POST(createPostRequest(createValidFormData()))
+    const payload = (await response.json()) as { success: boolean }
+
+    expect(response.status).toBe(200)
+    expect(payload.success).toBe(true)
+
+    const firestore = vi.mocked(dbDefault).mock.results[0]?.value
+    const collection = firestore.collection as ReturnType<typeof vi.fn>
+    const usersCollection = collection.mock.results[0]?.value
+    const doc = usersCollection.doc as ReturnType<typeof vi.fn>
+    const userDoc = doc.mock.results[0]?.value
+    const set = userDoc.set as ReturnType<typeof vi.fn>
+    const setArgs = set.mock.calls[0]
+
+    expect(setArgs[0]).toEqual(
+      expect.objectContaining({
+        writerOnboardingState: 'agreement_signed',
+        writerPublishEnabled: true,
+      })
+    )
   })
 
   it('accepts linkedin/website without protocol and forwards them as-is', async () => {

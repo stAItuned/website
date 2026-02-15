@@ -60,7 +60,7 @@ export function WriterWorkspaceSection({ isWriter }: WriterWorkspaceSectionProps
               {t.writerWorkspace.inactive.text}
             </p>
             <div data-tour="writer-activate-cta">
-              <PremiumLink href="/contribute/become-writer">
+              <PremiumLink href="/become-writer">
                 <Sparkles className="h-4 w-4" />
                 {t.writerWorkspace.inactive.becomeWriter}
               </PremiumLink>
