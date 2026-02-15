@@ -77,6 +77,16 @@ export default function AdminUsersPage() {
         return formatDate(agreement.accepted_at);
     };
 
+    const getDisplayName = (person: User) => {
+        return (
+            person.displayName?.trim() ||
+            person.writerProfile?.displayName?.trim() ||
+            person.agreement?.author_name?.trim() ||
+            person.email?.split('@')[0] ||
+            'User'
+        );
+    };
+
     useEffect(() => {
         if (!selectedUser?.agreement?.agreement_view_url || !user) {
             if (agreementPreviewUrl) {
@@ -197,7 +207,7 @@ export default function AdminUsersPage() {
                             <div className="flex items-start justify-between gap-3">
                                 <div>
                                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                                        {person.displayName || 'No Name'}
+                                        {getDisplayName(person)}
                                     </p>
                                     <p className="text-xs text-slate-500 dark:text-slate-400 break-all">{person.email}</p>
                                 </div>
@@ -305,7 +315,7 @@ export default function AdminUsersPage() {
                                         {users.map((person) => (
                                             <tr key={person.uid}>
                                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                                                    <div className="font-medium text-slate-900 dark:text-white">{person.displayName || 'No Name'}</div>
+                                                    <div className="font-medium text-slate-900 dark:text-white">{getDisplayName(person)}</div>
                                                     <div className="text-slate-500 dark:text-slate-400">{person.email}</div>
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
@@ -356,7 +366,7 @@ export default function AdminUsersPage() {
                                                             onClick={() => setSelectedUser(person)}
                                                             className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                                                         >
-                                                            Agreement<span className="sr-only">, {person.displayName}</span>
+                                                            Agreement<span className="sr-only">, {getDisplayName(person)}</span>
                                                         </button>
                                                     ) : (
                                                         <span className="text-slate-400">-</span>
@@ -385,7 +395,7 @@ export default function AdminUsersPage() {
                             <div>
                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Writer Agreement</h3>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                                    {selectedUser.displayName || 'User'} • {selectedUser.email}
+                                    {getDisplayName(selectedUser)} • {selectedUser.email}
                                 </p>
                             </div>
                             <button

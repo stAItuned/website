@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard,
     Users,
@@ -18,6 +18,7 @@ import { useAuth } from '@/components/auth/AuthContext';
 
 export function AdminSidebar() {
     const pathname = usePathname();
+    const router = useRouter();
     const { signOut } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,12 +36,21 @@ export function AdminSidebar() {
         return pathname.startsWith(href);
     };
 
+    const activeRouteHref = useMemo(() => {
+        const active = navigation.find((item) => isRouteActive(item.href));
+        return active?.href ?? '/admin';
+    }, [navigation, pathname]);
+
+    useEffect(() => {
+        setMobileMenuOpen(false);
+    }, [pathname]);
+
     return (
         <>
             <div className="lg:hidden">
                 <div className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-900/95">
                     <div className="px-4 py-3">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-3">
                             <h1 className="text-base font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
                             <button
                                 type="button"
@@ -53,6 +63,28 @@ export function AdminSidebar() {
                                 {mobileMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
                             </button>
                         </div>
+                    </div>
+
+                    <div className="px-4 pb-3">
+                        <label htmlFor="admin-mobile-route" className="sr-only">Go to admin section</label>
+                        <select
+                            id="admin-mobile-route"
+                            value={activeRouteHref}
+                            onChange={(event) => {
+                                const nextRoute = event.target.value;
+                                if (nextRoute && nextRoute !== pathname) {
+                                    router.push(nextRoute);
+                                }
+                            }}
+                            className="block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                            aria-label="Go to admin section"
+                        >
+                            {navigation.map((item) => (
+                                <option key={item.href} value={item.href}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <nav aria-label="Admin quick navigation" className="overflow-x-auto px-2 pb-3">
