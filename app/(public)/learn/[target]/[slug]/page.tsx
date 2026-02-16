@@ -185,7 +185,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
     slug: article.slug,
     author: article.author ?? 'stAItuned',
     datePublished: article.date,
-    dateModified: article.date,
+    dateModified: article.updatedAt ?? article.date,
     image: coverImage || undefined,
     section: article.target,
     keywords: article.topics,

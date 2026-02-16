@@ -8,6 +8,11 @@ Applica sempre anche i controlli di autenticità (manuali o automatizzati): vedi
 
 ## 1) Deve essere (MUST)
 
+### 1.0 Metadati (date) — pubblicazione vs aggiornamento
+- `date`: **data di pubblicazione** (non cambiarla per fix minori/typo).
+- `updatedAt`: **data ultimo aggiornamento** quando fai modifiche sostanziali (contenuto, sezioni, claim, fonti, struttura).
+- Note: nel sito l’ordinamento “più recente” e il flag “new” possono usare `updatedAt` quando presente; la sitemap usa `updatedAt` come `lastmod`.
+
 ### 1.1 Tesi chiara e posizionamento
 - La **tesi** sta in 1 frase nelle prime righe.
 - L’articolo prende una posizione (“dipende” va bene) ma la **argomenta con criteri** e assunzioni esplicite.
@@ -138,6 +143,11 @@ Esempi da tagliare:
 ---
 
 ## Appendix (EN) — Article MUST / MUST NOT (short)
+
+### Metadata (dates) — publish vs update
+- `date`: publication date (don’t change it for minor edits/typos).
+- `updatedAt`: last-updated date for substantial revisions (content/structure/claims/sources).
+- Note: site recency/newness and sitemap `lastmod` may use `updatedAt` when present.
 
 ### MUST
 - Clear thesis in the first lines, explicit assumptions.

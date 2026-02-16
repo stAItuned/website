@@ -451,198 +451,50 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
 }
 
 /**
- * Inline contributor application form
- * Sends to /api/contributors/apply which triggers Telegram notification
+ * Inline contributor CTA
+ * Redirects users to the full /contribute flow
  */
 function ContributorInlineForm() {
     const { t } = useLearnLocale()
-    const [isExpanded, setIsExpanded] = useState(false)
-    const [formData, setFormData] = useState({ name: '', email: '', expertise: '', consent: false })
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-    const [message, setMessage] = useState('')
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!formData.name.trim() || !formData.email.trim() || !formData.expertise.trim()) {
-            setStatus('error')
-            setMessage('Please fill in all fields')
-            return
-        }
-        if (!formData.consent) {
-            setStatus('error')
-            setMessage('Please accept the privacy policy')
-            return
-        }
-
-        setStatus('loading')
-        try {
-            const res = await fetch('/api/contributors/apply', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
-                    expertise: formData.expertise,
-                    bio: `Quick application from /learn/articles`,
-                    source: 'articles-inline-form',
-                    website: '', // honeypot
-                }),
-            })
-
-            if (res.ok) {
-                setStatus('success')
-                setMessage('🎉 Application received! We\'ll be in touch soon.')
-                setFormData({ name: '', email: '', expertise: '', consent: false })
-            } else {
-                const data = await res.json().catch(() => ({}))
-                setStatus('error')
-                setMessage(data.error || 'Something went wrong')
-            }
-        } catch {
-            setStatus('error')
-            setMessage('Connection error. Please try again.')
-        }
-    }
 
     return (
         <div id="contributor-form" className="mt-16 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 border border-slate-700/50">
-            {status === 'success' ? (
-                <div className="text-center py-4">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500/20 mb-4">
-                        <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    <p className="text-lg font-semibold text-white">{message}</p>
-                    <p className="text-sm text-slate-400 mt-2">Check your inbox for next steps.</p>
-                </div>
-            ) : !isExpanded ? (
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-indigo-500 flex items-center justify-center">
-                                <span className="text-xl">✍️</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-white">
-                                {t.articlesPage.writingTitle}
-                            </h3>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-indigo-500 flex items-center justify-center">
+                            <span className="text-xl">✍️</span>
                         </div>
-                        <p className="text-slate-300 max-w-xl">
-                            {t.articlesPage.writingSubtitle}
-                        </p>
-                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-400">
-                            <span className="flex items-center gap-1.5">
-                                <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit1}
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                                <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit2}
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                                <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit3}
-                            </span>
-                        </div>
+                        <h3 className="text-xl font-bold text-white">
+                            {t.articlesPage.writingTitle}
+                        </h3>
                     </div>
-
-                    <button
-                        onClick={() => setIsExpanded(true)}
-                        className="flex-shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold shadow-lg hover:shadow-xl transition-all group"
-                    >
-                        {t.articlesPage.writingStart}
-                        <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                    </button>
-                </div>
-            ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="flex items-center justify-between mb-2">
-                        <div>
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                <span>✍️</span> {t.articlesPage.writingStart}
-                            </h3>
-                            <p className="text-xs text-slate-400 mt-1">{t.articlesPage.writingResponseTime}</p>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={() => setIsExpanded(false)}
-                            className="text-slate-400 hover:text-white transition-colors"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <input
-                            type="text"
-                            placeholder="Your name"
-                            value={formData.name}
-                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                            className="px-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            required
-                            disabled={status === 'loading'}
-                        />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={formData.email}
-                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                            className="px-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            required
-                            disabled={status === 'loading'}
-                        />
-                    </div>
-
-                    <textarea
-                        placeholder="What article would you like to write? (e.g. 'A guide to fine-tuning LLMs for RAG')"
-                        value={formData.expertise}
-                        onChange={(e) => setFormData(prev => ({ ...prev, expertise: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                        rows={2}
-                        required
-                        disabled={status === 'loading'}
-                    />
-
-                    {status === 'error' && (
-                        <p className="text-sm text-red-400">{message}</p>
-                    )}
-
-                    {/* Privacy consent */}
-                    <label className="flex items-start gap-3 cursor-pointer group">
-                        <input
-                            type="checkbox"
-                            checked={formData.consent}
-                            onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
-                            className="mt-0.5 w-4 h-4 rounded border-slate-500 bg-slate-700 text-primary-500 focus:ring-primary-500 focus:ring-offset-0"
-                            disabled={status === 'loading'}
-                        />
-                        <span className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">
-                            {t.articlesPage.privacyNote.split('Privacy Policy')[0]}
-                            <a href="/privacy" target="_blank" className="text-primary-400 hover:underline">
-                                Privacy Policy
-                            </a>
-                            {t.articlesPage.privacyNote.split('Privacy Policy')[1]}
+                    <p className="text-slate-300 max-w-xl">
+                        {t.articlesPage.writingSubtitle}
+                    </p>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-400">
+                        <span className="flex items-center gap-1.5">
+                            <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit1}
                         </span>
-                    </label>
-
-                    <div className="flex items-center justify-between gap-4">
-                        <p className="text-xs text-slate-500">
-                            {t.articlesPage.writingResponseTime}
-                        </p>
-                        <button
-                            type="submit"
-                            disabled={status === 'loading' || !formData.consent}
-                            className="px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-white font-semibold shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition-all"
-                        >
-                            {status === 'loading' ? t.articlesPage.writingSending : t.articlesPage.writingSend}
-                        </button>
+                        <span className="flex items-center gap-1.5">
+                            <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit2}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                            <span className="text-emerald-400">✓</span> {t.articlesPage.writingBenefit3}
+                        </span>
                     </div>
+                </div>
 
-                    {/* Honeypot */}
-                    <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-                </form>
-            )}
+                <Link
+                    href="/contribute"
+                    className="flex-shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold shadow-lg hover:shadow-xl transition-all group"
+                >
+                    {t.articlesPage.writingStart}
+                    <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </Link>
+            </div>
         </div>
     )
 }
