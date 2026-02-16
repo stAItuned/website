@@ -1,12 +1,12 @@
 ---
 title: "LEANN: Local-First RAG With 50× Less Storage (No Dense Matrix)"
-author: Name Surname
+author: Yichuan Wang
 target: Midway
 language: English
 cover: "https://storage.googleapis.com/editorial-planner-images/article-images/b1062103-ffbd-4932-ac7f-c6b18ee25c5b/cover_20260211_224104.webp"
 meta: "Cut local RAG storage by 50× with LEANN: drop the dense embedding matrix, keep a compact graph + PQ codes, and selectively recompute at query time."
-date: 2026-02-13T00:00:00.000Z
-published: false
+date: 2026-02-16T00:00:00.000Z
+published: true
 primaryTopic: rag
 topics:
   - genai-fundamentals
