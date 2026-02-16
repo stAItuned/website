@@ -23,7 +23,6 @@ import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar'
 import { ContinueReadingPrompt } from '@/components/ui/ContinueReadingPrompt'
 import { SwipeNavigation } from '@/components/ui/SwipeNavigation'
 import { FloatingSectionIndicator } from '@/components/ui/FloatingSectionIndicator'
-import { RoleFitAuditCTA } from '@/components/ui/RoleFitAuditCTA'
 import { useReadingProgress } from '@/lib/hooks/useReadingProgress'
 import { useReadingHistory } from '@/hooks/useReadingHistory'
 import { event } from '@/lib/gtag'
@@ -1498,11 +1497,6 @@ export default function ArticlePageClient({
         {/* Author Bio Card */}
         <div className="max-w-6xl mx-auto px-4">
           <AuthorBioCard author={article.author} authorData={resolvedAuthorData} authorBadges={authorBadges} />
-        </div>
-
-        {/* Role Fit Audit CTA - Primary */}
-        <div className="max-w-3xl mx-auto px-4 mt-12 mb-8">
-          <RoleFitAuditCTA variant="box" />
         </div>
 
         {/* Contributor CTA - Secondary */}

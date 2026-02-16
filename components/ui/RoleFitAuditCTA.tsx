@@ -42,6 +42,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 	const [bottomOffset, setBottomOffset] = useState(16)
 	const pathname = usePathname()
 	const scrollProgress = useScrollProgress()
+	const isLearnArticleRoute = /^\/learn\/[^/]+\/[^/]+\/?$/.test(pathname ?? '')
 
 	// Constants
 	const TIME_TRIGGER_MS = 30000 // 30s
@@ -235,6 +236,7 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 	if (variant === 'sticky') {
 		if (!isVisible) return null
 		if (pathname?.startsWith('/role-fit-audit')) return null
+		if (isLearnArticleRoute) return null
 
 		return (
 			<AnimatePresence>
