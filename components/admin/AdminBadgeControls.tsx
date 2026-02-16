@@ -19,16 +19,20 @@ export function AdminBadgeControls({ authorSlug }: { authorSlug?: string }) {
         setIsLoading(true)
         setResult(null)
         try {
-            // In a real app, the secret should be handled securely or via auth session
-            // For this dev/personal context, we'll use the default dev secret provided in the API route
-            const url = authorSlug
-                ? `/api/badges/calculate?author=${authorSlug}`
-                : '/api/badges/calculate';
+            if (!user) {
+                setResult('Error: Missing authenticated user');
+                return;
+            }
 
-            const res = await fetch(url, {
+            const token = await user.getIdToken();
+
+            const res = await fetch('/api/badges/calculate', {
+                method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer dev-secret-key'
-                }
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ author: authorSlug })
             })
 
             const data = await res.json()

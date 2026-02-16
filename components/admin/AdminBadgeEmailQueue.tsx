@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/components/auth/AuthContext'
-import { Search, Filter, ChevronLeft, ChevronRight, RefreshCw, Mail } from 'lucide-react'
+import { Search, Filter, ChevronLeft, ChevronRight, RefreshCw, Mail, ArrowUpDown, ChevronUp, ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
 
 interface BadgeEmailItem {
@@ -29,9 +29,11 @@ export function AdminBadgeEmailQueue() {
   const [error, setError] = useState('')
   const [sending, setSending] = useState<Record<string, boolean>>({})
 
-  // Filtering and Pagination State
+  // Filtering, Sorting and Pagination State
   const [searchTerm, setSearchTerm] = useState('')
   const [tierFilter, setTierFilter] = useState('all')
+  const [sortBy, setSortBy] = useState<'authorName' | 'earnedAt'>('earnedAt')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
@@ -52,9 +54,21 @@ export function AdminBadgeEmailQueue() {
       result = result.filter(item => item.badgeTier === tierFilter)
     }
 
-    // Sort by date (descending)
-    return result.sort((a, b) => new Date(b.earnedAt).getTime() - new Date(a.earnedAt).getTime())
-  }, [items, searchTerm, tierFilter])
+    // Dynamic Sort
+    return result.sort((a, b) => {
+      if (sortBy === 'authorName') {
+        const nameA = a.authorName.toLowerCase()
+        const nameB = b.authorName.toLowerCase()
+        if (sortOrder === 'asc') return nameA.localeCompare(nameB)
+        return nameB.localeCompare(nameA)
+      } else {
+        const dateA = new Date(a.earnedAt).getTime()
+        const dateB = new Date(b.earnedAt).getTime()
+        if (sortOrder === 'asc') return dateA - dateB
+        return dateB - dateA
+      }
+    })
+  }, [items, searchTerm, tierFilter, sortBy, sortOrder])
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
   const paginatedItems = useMemo(() => {
@@ -62,10 +76,10 @@ export function AdminBadgeEmailQueue() {
     return filteredItems.slice(start, start + itemsPerPage)
   }, [filteredItems, currentPage])
 
-  // Reset to first page when filters change
+  // Reset to first page when filters or sort change
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchTerm, tierFilter])
+  }, [searchTerm, tierFilter, sortBy, sortOrder])
 
   const fetchQueue = useCallback(async () => {
     if (!user) return
@@ -122,6 +136,15 @@ export function AdminBadgeEmailQueue() {
     }
   }
 
+  const handleSort = (field: 'authorName' | 'earnedAt') => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(field)
+      setSortOrder(field === 'earnedAt' ? 'desc' : 'asc')
+    }
+  }
+
   const tiers = useMemo(() => {
     const uniqueTiers = Array.from(new Set(items.map(i => i.badgeTier)))
     return uniqueTiers.sort()
@@ -153,8 +176,8 @@ export function AdminBadgeEmailQueue() {
       </div>
 
       {/* Filter Bar */}
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-12">
-        <div className="relative sm:col-span-8">
+      <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center">
+        <div className="relative flex-grow">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <Search className="h-4 w-4 text-slate-400" />
           </div>
@@ -166,20 +189,41 @@ export function AdminBadgeEmailQueue() {
             className="block w-full rounded-xl border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm placeholder-slate-400 shadow-sm transition-all focus:border-primary-500 focus:ring-primary-500 dark:border-slate-800 dark:bg-slate-900 dark:placeholder-slate-500"
           />
         </div>
-        <div className="relative sm:col-span-4">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <Filter className="h-4 w-4 text-slate-400" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="relative min-w-[160px]">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <Filter className="h-4 w-4 text-slate-400" />
+            </div>
+            <select
+              value={tierFilter}
+              onChange={(e) => setTierFilter(e.target.value)}
+              className="block w-full rounded-xl border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm shadow-sm transition-all focus:border-primary-500 focus:ring-primary-500 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <option value="all">All Tiers</option>
+              {tiers.map(tier => (
+                <option key={tier} value={tier}>{tier.charAt(0).toUpperCase() + tier.slice(1)}</option>
+              ))}
+            </select>
           </div>
-          <select
-            value={tierFilter}
-            onChange={(e) => setTierFilter(e.target.value)}
-            className="block w-full rounded-xl border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm shadow-sm transition-all focus:border-primary-500 focus:ring-primary-500 dark:border-slate-800 dark:bg-slate-900"
-          >
-            <option value="all">All Tiers</option>
-            {tiers.map(tier => (
-              <option key={tier} value={tier}>{tier.charAt(0).toUpperCase() + tier.slice(1)}</option>
-            ))}
-          </select>
+          <div className="relative min-w-[200px]">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <ArrowUpDown className="h-4 w-4 text-slate-400" />
+            </div>
+            <select
+              value={`${sortBy}-${sortOrder}`}
+              onChange={(e) => {
+                const [field, order] = e.target.value.split('-') as ['authorName' | 'earnedAt', 'asc' | 'desc']
+                setSortBy(field)
+                setSortOrder(order)
+              }}
+              className="block w-full rounded-xl border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm shadow-sm transition-all focus:border-primary-500 focus:ring-primary-500 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <option value="earnedAt-desc">Newest First</option>
+              <option value="earnedAt-asc">Oldest First</option>
+              <option value="authorName-asc">Name (A-Z)</option>
+              <option value="authorName-desc">Name (Z-A)</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -270,9 +314,29 @@ export function AdminBadgeEmailQueue() {
                 <table className="w-full text-left text-sm">
                   <thead className="bg-slate-50/80 text-xs font-bold uppercase tracking-wider text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
                     <tr>
-                      <th className="px-6 py-4">Author</th>
+                      <th
+                        className="cursor-pointer px-6 py-4 transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+                        onClick={() => handleSort('authorName')}
+                      >
+                        <div className="flex items-center gap-1">
+                          Author
+                          {sortBy === 'authorName' && (
+                            sortOrder === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                          )}
+                        </div>
+                      </th>
                       <th className="px-6 py-4">Badge</th>
-                      <th className="px-6 py-4">Earned</th>
+                      <th
+                        className="cursor-pointer px-6 py-4 transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+                        onClick={() => handleSort('earnedAt')}
+                      >
+                        <div className="flex items-center gap-1">
+                          Earned
+                          {sortBy === 'earnedAt' && (
+                            sortOrder === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                          )}
+                        </div>
+                      </th>
                       <th className="px-6 py-4 text-right">Action</th>
                     </tr>
                   </thead>
