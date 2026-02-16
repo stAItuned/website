@@ -52,6 +52,15 @@ type ReferenceMeta = {
   context: string
 }
 
+type ResolvedAuthorData = {
+  name: string
+  title?: string
+  avatar?: string
+  description?: string
+  linkedin?: string
+  website?: string
+} | null
+
 /**
  * Client-side article page renderer with responsive desktop/mobile layouts.
  */
@@ -87,6 +96,9 @@ export default function ArticlePageClient({
   const [textSize, setTextSize] = useState<'small' | 'normal' | 'large'>('small')
   const [fontFamily, setFontFamily] = useState<'sans' | 'serif'>('sans')
   const [showPlaybookSheet, setShowPlaybookSheet] = useState(false)
+  const [resolvedAuthorData, setResolvedAuthorData] = useState<ResolvedAuthorData>(
+    authorData ? { ...authorData, name: authorData.name || article.author } : null
+  )
   const hasStrategicPlaybook = useMemo(
     () => Boolean(
       article.geo &&
@@ -133,6 +145,54 @@ export default function ArticlePageClient({
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    setResolvedAuthorData(authorData ? { ...authorData, name: authorData.name || article.author } : null)
+  }, [article.author, authorData])
+
+  useEffect(() => {
+    if (authorData || !article.author) return
+
+    const normalizedSlug = article.author
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+
+    if (!normalizedSlug) return
+
+    let active = true
+
+    const fetchAuthorAtRuntime = async () => {
+      try {
+        const response = await fetch(`/api/public/writers/${normalizedSlug}`, {
+          cache: 'no-store'
+        })
+        if (!response.ok) return
+
+        const writer = await response.json()
+        if (!active) return
+
+        setResolvedAuthorData({
+          name: writer.displayName || article.author,
+          title: writer.title || undefined,
+          description: writer.bio || undefined,
+          linkedin: writer.linkedin || undefined,
+          website: writer.website || undefined,
+          avatar: writer.image?.publicUrl || undefined,
+        })
+      } catch {
+        // Keep fallback UI when runtime writer fetch is unavailable.
+      }
+    }
+
+    fetchAuthorAtRuntime()
+
+    return () => {
+      active = false
+    }
+  }, [article.author, authorData])
 
   // Track article in reading history for PWA shortcuts
   useEffect(() => {
@@ -1025,7 +1085,7 @@ export default function ArticlePageClient({
                     {/* Author */}
                     <div className="flex items-center gap-2">
                       {article.author && (
-                        <AuthorAvatar author={article.author} authorData={authorData} />
+                        <AuthorAvatar author={article.author} authorData={resolvedAuthorData} />
                       )}
                     </div>
                     {/* Meta Info Group */}
@@ -1257,7 +1317,7 @@ export default function ArticlePageClient({
                       {/* Author */}
                       <div className="flex flex-col items-center gap-2 border-radius 0">
                         {article.author && (
-                          <AuthorAvatar author={article.author} authorData={authorData} />
+                          <AuthorAvatar author={article.author} authorData={resolvedAuthorData} />
                         )}
                       </div>
                       {article.primaryTopic && (
@@ -1437,7 +1497,7 @@ export default function ArticlePageClient({
         </section>
         {/* Author Bio Card */}
         <div className="max-w-6xl mx-auto px-4">
-          <AuthorBioCard author={article.author} authorData={authorData} authorBadges={authorBadges} />
+          <AuthorBioCard author={article.author} authorData={resolvedAuthorData} authorBadges={authorBadges} />
         </div>
 
         {/* Role Fit Audit CTA - Primary */}
