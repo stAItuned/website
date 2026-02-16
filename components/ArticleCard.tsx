@@ -23,6 +23,8 @@ interface ArticleCardProps {
   pageViews?: number
 }
 
+const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
+
 export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCardProps) {
   // Fetch analytics for this article (fast endpoint)
   const { data: internalAnalytics, loading: analyticsLoading } = useFastAnalytics({
@@ -63,8 +65,9 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
 
   const getAuthorImageSrc = (author?: string) => {
     if (!author) return null
-    const authorSlug = author.replaceAll(' ', '-')
-    return `/content/team/${authorSlug}/propic.jpg`
+    // Prefer author avatars from Firestore/GCS in dedicated author views.
+    // For feed cards, fallback to a neutral placeholder.
+    return DEFAULT_AVATAR_SRC
   }
 
   const isArticleNew = (dateString?: string) => {
@@ -193,7 +196,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
               {authorImageSrc && (
                 <Image
                   src={authorImageSrc}
-                  alt="avatar"
+                  alt={`${article.author || 'Author'} avatar`}
                   width={24}
                   height={24}
                   className="w-5 h-5 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 shadow-sm"

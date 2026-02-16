@@ -41,6 +41,9 @@ export CI=1
 export npm_config_update_notifier=false
 export npm_config_fund=false
 export npm_config_audit=false
+# Allow Firestore access during next build prerender (enables GCS-backed author avatars).
+export NEXT_BUILD_ALLOW_FIRESTORE=1
+echo "[deploy] NEXT_BUILD_ALLOW_FIRESTORE: ${NEXT_BUILD_ALLOW_FIRESTORE}"
 
 if [ "${SKIP_INSTALL:-0}" != "1" ]; then
   echo ""

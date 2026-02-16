@@ -11,6 +11,8 @@ import { BadgeIcon } from '@/components/badges/BadgeIcon'
 import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { Badge, AuthorBadge } from '@/lib/types/badge'
 
+const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
+
 interface AuthorData {
     name: string
     slug: string
@@ -265,7 +267,7 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                 >
                                     <div className="flex flex-col items-center text-center space-y-3">
                                         <Image
-                                            src={author.data?.avatar || `/content/team/${author.slug}/propic.jpg`}
+                                            src={author.data?.avatar || DEFAULT_AVATAR_SRC}
                                             alt={author.name}
                                             width={80}
                                             height={80}

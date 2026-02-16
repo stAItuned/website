@@ -14,6 +14,7 @@ export const dynamic = 'force-static'
 export const revalidate = 21600 // 6 ore (60*60*6) - increased from 1h to save function calls
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
 
 export const metadata: Metadata = {
   title: 'All Authors - stAI tuned',
@@ -141,7 +142,7 @@ export default async function AuthorsPage() {
               >
                 <div className="flex items-center gap-4 mb-4">
                   <Image
-                    src={author.data?.avatar || `/content/team/${author.slug}/propic.jpg`}
+                    src={author.data?.avatar || DEFAULT_AVATAR_SRC}
                     alt={author.name}
                     width={64}
                     height={64}

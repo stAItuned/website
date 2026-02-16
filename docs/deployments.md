@@ -34,6 +34,8 @@ Using Firebase CLI directly:
 
 This repo defaults to skipping Firestore network calls during build-time prerender. To allow them (when the build environment has egress), set `NEXT_BUILD_ALLOW_FIRESTORE=1`.
 
+Current deploy scripts (`npm run deploy:test` and `npm run deploy:prod`) export `NEXT_BUILD_ALLOW_FIRESTORE=1` before `next build`, so both targets resolve build-time Firestore-backed author avatars (GCS URLs) by default.
+
 ## Smoke Checklist (Minimal)
 - Verify homepage renders and static assets are cached as expected.
 - Verify `/learn` PWA behavior (manifest + service worker registration) is unchanged.

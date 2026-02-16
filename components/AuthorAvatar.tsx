@@ -13,6 +13,8 @@ interface AuthorAvatarProps {
   imageFit?: 'cover' | 'contain'
 }
 
+const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
+
 /**
  * Author avatar + metadata for article headers.
  */
@@ -27,8 +29,8 @@ export default function AuthorAvatar({
   const cleanAuthor = (authorData?.name || author).trim()
   const authorSlug = cleanAuthor.replaceAll(' ', '-')
 
-  // Use avatar from authorData if available, otherwise fallback to default path
-  const avatarSrc = authorData?.avatar || `/content/team/${authorSlug}/propic.jpg`
+  // Prefer Firestore/GCS avatar; fallback to a generic placeholder only.
+  const avatarSrc = authorData?.avatar || DEFAULT_AVATAR_SRC
 
   const initials = useMemo(() => {
     const parts = cleanAuthor.split(' ').filter(Boolean)
