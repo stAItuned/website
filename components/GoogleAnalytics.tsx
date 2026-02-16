@@ -2,16 +2,16 @@
 
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
-import { GA_MEASUREMENT_ID } from '@/lib/gtag'
+import { GA_MEASUREMENT_ID, isAnalyticsDisabledForCurrentOrigin } from '@/lib/gtag'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
 export function GoogleAnalytics() {
   const { hasConsentedToAnalytics } = useCookieConsent()
-  // TEMPORARY: Ensure analytics are always on, even if user declines.
-  // Set to false to respect user consent.
-  const FORCE_ANALYTICS_ENABLED = true
+  // Keep analytics strictly consent-based.
+  const FORCE_ANALYTICS_ENABLED = false
 
-  const shouldTrack = hasConsentedToAnalytics || FORCE_ANALYTICS_ENABLED
+  const isDisabledForOrigin = isAnalyticsDisabledForCurrentOrigin()
+  const shouldTrack = !isDisabledForOrigin && (hasConsentedToAnalytics || FORCE_ANALYTICS_ENABLED)
   const [delayed, setDelayed] = useState(false)
 
   useEffect(() => {

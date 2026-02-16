@@ -7,7 +7,7 @@
  * across the website, including PWA, article engagement, and user journey events.
  */
 
-import { event as gtagEvent } from '@/lib/gtag'
+import { event as gtagEvent, isAnalyticsDisabledForCurrentOrigin } from '@/lib/gtag'
 
 // ============================================================================
 // Event Categories
@@ -231,6 +231,7 @@ export function trackEvent(
     params: AnalyticsEventParams = {}
 ): void {
     if (typeof window === 'undefined') return
+    if (isAnalyticsDisabledForCurrentOrigin()) return
 
     // Determine category if not provided
     const category = params.category || inferCategory(eventName)
