@@ -11,7 +11,7 @@
  */
 
 // Cache versioning - increment on major changes
-const SW_VERSION = 'v2.1.1'
+const SW_VERSION = 'v2.1.2'
 const CACHE_PREFIX = 'staituned-learn'
 
 // Cache names with versioning
@@ -126,16 +126,6 @@ self.addEventListener('message', (event) => {
     switch (type) {
         case 'SKIP_WAITING':
             self.skipWaiting()
-            break
-
-        case 'CACHE_ARTICLE':
-            if (data.url && isLearnUrl(data.url)) {
-                cacheArticleManually(data.url)
-            }
-            break
-
-        case 'CLEAR_ARTICLES_CACHE':
-            caches.delete(CACHE_NAMES.ARTICLES)
             break
 
         case 'GET_CACHE_STATUS':
@@ -351,23 +341,6 @@ function isImage(request) {
  */
 function isApiRequest(pathname) {
     return pathname.startsWith('/api/')
-}
-
-/**
- * Manually cache an article for offline reading
- */
-async function cacheArticleManually(url) {
-    try {
-        const response = await fetch(url)
-        if (response.ok) {
-            const cache = await caches.open(CACHE_NAMES.ARTICLES)
-            await cache.put(url, response)
-            await trimCache(CACHE_NAMES.ARTICLES, CACHE_LIMITS.ARTICLES)
-            console.log('[Learn SW] Article cached:', url)
-        }
-    } catch (error) {
-        console.error('[Learn SW] Failed to cache article:', url, error)
-    }
 }
 
 /**

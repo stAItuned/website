@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
 
 const SERVICE_WORKER_PATH = '/sw-learn.js'
 
@@ -26,7 +26,6 @@ function dispatchEvent(eventName: string, detail: Record<string, unknown> = {}) 
  * - Registers learn-specific service worker with /learn scope
  * - Handles updates gracefully with user notification
  * - Coordinates app shell to full app transition
- * - Supports article caching for offline reading
  */
 export function LearnServiceWorkerRegister() {
     useEffect(() => {
@@ -113,41 +112,6 @@ export function LearnServiceWorkerRegister() {
 // ===============================
 // UTILITY FUNCTIONS
 // ===============================
-
-/**
- * Cache an article for offline reading
- * Called when user explicitly saves an article
- */
-export function cacheArticleForOffline(articlePath: string): Promise<boolean> {
-    return new Promise((resolve) => {
-        if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) {
-            console.warn('[Learn PWA] No active service worker')
-            resolve(false)
-            return
-        }
-
-        navigator.serviceWorker.controller.postMessage({
-            type: 'CACHE_ARTICLE',
-            url: articlePath,
-        })
-
-        // Assume success since SW doesn't confirm
-        resolve(true)
-    })
-}
-
-/**
- * Clear all cached articles
- */
-export function clearArticlesCache(): void {
-    if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) {
-        return
-    }
-
-    navigator.serviceWorker.controller.postMessage({
-        type: 'CLEAR_ARTICLES_CACHE',
-    })
-}
 
 /**
  * Request service worker to skip waiting and activate new version

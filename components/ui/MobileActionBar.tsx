@@ -8,71 +8,6 @@ import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove }
 import { app } from '@/lib/firebase/client'
 import { useHaptics } from '@/lib/hooks/useHaptics'
 import { TimeRemainingIndicator } from './TimeRemainingIndicator'
-import { useOfflineArticle } from '@/hooks/useOfflineArticle'
-import { usePWADetection } from '@/hooks/usePWADetection'
-
-/**
- * Offline Save Button for Mobile Action Bar
- */
-/**
- * Offline Save Button for Mobile Action Bar
- * Only visible when running as installed PWA
- */
-function OfflineSaveButton({ articleSlug }: { articleSlug: string }) {
-  const { isPWA } = usePWADetection()
-  const { isCached, isLoading, saveForOffline } = useOfflineArticle(articleSlug)
-  const haptics = useHaptics()
-
-  // Only show in PWA mode
-  if (!isPWA) return null
-
-  const handleClick = async () => {
-    haptics.light()
-    if (isCached) return
-
-    const success = await saveForOffline()
-    if (success) {
-      haptics.success()
-      event({
-        action: 'offline_save',
-        category: 'engagement',
-        label: articleSlug,
-        value: 1
-      })
-    }
-  }
-
-  return (
-    <button
-      onClick={handleClick}
-      disabled={isLoading || isCached}
-      className={`flex flex-col items-center gap-1 px-3 py-2 min-w-[64px] rounded-xl transition-colors active:scale-95 ${isCached
-        ? 'bg-emerald-50 dark:bg-emerald-900/30'
-        : 'hover:bg-gray-100 dark:hover:bg-slate-800'
-        }`}
-      aria-label={isCached ? 'Available offline' : 'Make available offline'}
-    >
-      {isLoading ? (
-        <svg className="w-6 h-6 text-gray-700 dark:text-gray-300 animate-spin" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-        </svg>
-      ) : isCached ? (
-        <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-      ) : (
-        <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-        </svg>
-      )}
-      <span className={`text-[10px] leading-tight font-medium ${isCached
-        ? 'text-emerald-600 dark:text-emerald-400'
-        : 'text-gray-700 dark:text-gray-300'
-        }`}>Offline</span>
-    </button>
-  )
-}
 
 interface MobileActionBarProps {
   articleSlug: string
@@ -406,11 +341,6 @@ export function MobileActionBar({
                     {isBookmarked ? 'Saved' : 'Save'}
                   </span>
                 </button>
-              </div>
-
-              {/* Offline Save Button */}
-              <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl">
-                <OfflineSaveButton articleSlug={articleSlug} />
               </div>
 
               {/* Share Button */}

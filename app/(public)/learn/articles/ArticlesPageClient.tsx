@@ -5,8 +5,6 @@ import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { ArticleCard } from '@/components/ArticleCard'
 import { useLearnLocale } from '@/lib/i18n'
-import { OfflineArticlesList } from '@/components/pwa'
-import { usePWADetection } from '@/hooks/usePWADetection'
 import { getTopicHub } from '@/config/topics'
 import { TopicsCarousel } from './components/TopicsCarousel'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
@@ -64,12 +62,10 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
     const searchParams = useSearchParams()
     const router = useRouter()
     const levelFromUrl = searchParams.get('level')
-    const { isPWA } = usePWADetection()
 
     const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [searchQuery, setSearchQuery] = useState('')
-    const [showOfflineSection, setShowOfflineSection] = useState(false)
     const [sortBy, setSortBy] = useState<SortOption>('recent')
     const [analyticsData, setAnalyticsData] = useState<Record<string, number>>({})
     const [showFilters, setShowFilters] = useState(false)
@@ -352,36 +348,6 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
                     )}
                 </div>
             </div>
-
-            {/* Offline Articles Section - Only visible in PWA mode */}
-            {isPWA && (
-                <div className="mb-8 animate-in fade-in duration-300 max-w-5xl mx-auto">
-                    <button
-                        onClick={() => setShowOfflineSection(!showOfflineSection)}
-                        className="w-full flex items-center justify-between p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
-                    >
-                        <div className="flex items-center gap-3">
-                            <span className="text-xl">📥</span>
-                            <span className="font-medium text-emerald-800 dark:text-emerald-300">
-                                Articoli Salvati Offline
-                            </span>
-                        </div>
-                        <svg
-                            className={`w-5 h-5 text-emerald-600 dark:text-emerald-400 transition-transform ${showOfflineSection ? 'rotate-180' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    {showOfflineSection && (
-                        <div className="mt-2 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-800">
-                            <OfflineArticlesList />
-                        </div>
-                    )}
-                </div>
-            )}
 
             {/* Main Content Container */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">

@@ -27,7 +27,6 @@ const FloatingShareBar = dynamic(() => import('@/components/ui/FloatingShareBar'
 const AuthorBioCard = dynamic(() => import('@/components/ui/AuthorBioCard').then(mod => mod.AuthorBioCard))
 const ContributorCTA = dynamic(() => import('@/components/ui/ContributorCTA').then(mod => mod.ContributorCTA))
 const PWAInstallInline = dynamic(() => import('@/components/pwa').then(mod => mod.PWAInstallInline))
-const SaveForOfflineButton = dynamic(() => import('@/components/pwa').then(mod => mod.SaveForOfflineButton))
 const MobileActionBar = dynamic(() => import('@/components/ui/MobileActionBar').then(mod => mod.MobileActionBar))
 const ReadingProgressBar = dynamic(() => import('@/components/ui/ReadingProgressBar').then(mod => mod.ReadingProgressBar))
 const ContinueReadingPrompt = dynamic(() => import('@/components/ui/ContinueReadingPrompt').then(mod => mod.ContinueReadingPrompt))

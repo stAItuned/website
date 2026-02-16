@@ -18,7 +18,6 @@ export type EventCategory =
     | 'article'          // Article engagement events
     | 'engagement'       // General engagement events
     | 'user_journey'     // User journey/funnel events
-    | 'offline'          // Offline feature events
     | 'notifications'    // Push notification events
     | 'navigation'       // Navigation events
     | 'conversion'       // Conversion events
@@ -37,7 +36,6 @@ export type PWAEvent =
     | 'pwa_app_installed'
     | 'pwa_standalone_session'
     | 'pwa_offline_page_view'
-    | 'pwa_article_saved_offline'
     | 'pwa_service_worker_updated'
 
 // Notification Events  
@@ -319,11 +317,7 @@ export function trackPWAStandaloneSession() {
 }
 
 export function trackOfflinePageView(page: string) {
-    trackEvent('pwa_offline_page_view', { category: 'offline', page })
-}
-
-export function trackArticleSavedOffline(articleSlug: string) {
-    trackEvent('pwa_article_saved_offline', { category: 'offline', articleSlug })
+    trackEvent('pwa_offline_page_view', { category: 'pwa', page })
 }
 
 export function trackServiceWorkerUpdated() {

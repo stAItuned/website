@@ -32,7 +32,6 @@ export {
     trackPWAAppInstalled,
     trackPWAStandaloneSession,
     trackOfflinePageView,
-    trackArticleSavedOffline,
     trackServiceWorkerUpdated,
 } from './trackEvent'
 

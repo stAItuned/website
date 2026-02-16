@@ -9,7 +9,6 @@ import { getReadingHistorySync } from '@/hooks/useReadingHistory'
  * 
  * Updates PWA shortcuts in real-time based on user behavior:
  * - Last read article (dynamic)
- * - Saved articles count
  * - Search
  * 
  * Note: Dynamic shortcuts require the Shortcuts API which is
@@ -47,20 +46,7 @@ export function PWADynamicShortcuts() {
                     })
                 }
 
-                // 2. Saved articles
-                dynamicShortcuts.push({
-                    name: 'Articoli Salvati',
-                    short_name: 'Salvati',
-                    description: 'I tuoi articoli offline',
-                    url: '/learn/articles?showOffline=true',
-                    icons: [{
-                        src: '/icon-192.png',
-                        sizes: '192x192',
-                        type: 'image/png'
-                    }]
-                })
-
-                // 3. Search
+                // 2. Search
                 dynamicShortcuts.push({
                     name: 'Cerca Articoli',
                     short_name: 'Cerca',

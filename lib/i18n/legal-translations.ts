@@ -260,10 +260,6 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         content: 'Se abiliti le notifiche push, generiamo un token identificativo del dispositivo tramite Firebase Cloud Messaging (Google LLC). Il token è un identificativo tecnico, non associato alla tua identità personale.'
                     },
                     {
-                        title: 'Contenuti offline (PWA)',
-                        content: 'La funzionalità "Salva per offline" memorizza articoli localmente sul tuo dispositivo (Cache API, IndexedDB). Questi dati non vengono trasmessi ai nostri server.'
-                    },
-                    {
                         title: 'Candidature per collaborazioni',
                         content: 'Raccogliamo nome, email, ruolo, portfolio/LinkedIn e note per valutare la candidatura e organizzare l\'eventuale collaborazione.'
                     },
@@ -333,11 +329,6 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         title: 'Cookie strettamente necessari',
                         content: 'Consentono la performance base del sito. Esempi: Next.js session, CSRF, protezione bot.',
                         details: { label: 'Durata', value: '15 minuti / sessione' }
-                    },
-                    {
-                        title: 'Archiviazione locale per funzionalità offline',
-                        content: 'Memorizzano articoli nel browser (IndexedDB) per la lettura senza connessione. Restano sul dispositivo.',
-                        details: { label: 'Tecnologie', value: 'Service Worker, Cache API, IndexedDB' }
                     },
                     {
                         title: 'Cookie di analisi (Google Analytics)',
@@ -518,10 +509,6 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         content: 'If enabled, we generate a device identification token via Firebase Cloud Messaging. This is a technical identifier, not linked to your personal identity.'
                     },
                     {
-                        title: 'Offline Content (PWA)',
-                        content: '"Save for offline" stores articles locally on your device (Cache API, IndexedDB). This data is not transmitted to our servers.'
-                    },
-                    {
                         title: 'Collaboration Applications',
                         content: 'We collect name, email, role, portfolio/LinkedIn, and notes to evaluate applications and organize collaboration.'
                     },
@@ -591,11 +578,6 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         title: 'Strictly Necessary Cookies',
                         content: 'Allow basic site performance. Examples: Next.js session, CSRF, bot protection.',
                         details: { label: 'Duration', value: '15 minutes / session' }
-                    },
-                    {
-                        title: 'Local Storage for Offline Features',
-                        content: 'Store articles in the browser (IndexedDB) for reading without connection. They remain on the device.',
-                        details: { label: 'Technologies', value: 'Service Worker, Cache API, IndexedDB' }
                     },
                     {
                         title: 'Analytical Cookies (Google Analytics)',
