@@ -137,7 +137,10 @@ Apply these rules to every indexable route and content page:
 
 ## Testing Standards
 - Unit tests for utilities and non-trivial transformations.
+- Backend/API function tests are mandatory for every new/changed server route or business function.
 - Component behavior tests for complex interactive UI.
+- UI usability tests are mandatory for key interactions (navigation, form submit, feedback/error states, keyboard flow).
+- E2E tests are mandatory for the most important user journeys and must verify consistency across critical steps.
 - Regression tests when fixing production bugs.
 - At minimum, pass `npm run lint` and relevant `npm run test` scope before merge.
 
@@ -166,5 +169,50 @@ A task is complete only when all are true:
 - [ ] PWA constraints respected when feature touches `/learn`.
 - [ ] SEO/GEO constraints respected for indexable pages/content.
 - [ ] Bilingual `it/en` parity preserved for user-facing changes.
-- [ ] Tests updated for critical logic.
+- [ ] Backend/API functions are covered by tests.
+- [ ] UI usability interactions are covered by tests.
+- [ ] Critical E2E journeys are tested and consistent end-to-end.
 - [ ] Documentation updated (`docs/`, `README.md`, or feature notes as needed).
+
+## Agent Prompting Protocol
+Goal: make agent outputs consistently high-quality and verifiable.
+
+### Required prompt header (use internally)
+1) PERSONA (specific): role + years + domain + approach.
+2) METHOD: "Take a deep breath and work step by step."
+3) QUALITY GATES:
+   - Map changes to SKILLS checklist items
+   - For code: Red-Green-Refactor when adding behavior
+   - After output: self-evaluate confidence (0-1) on correctness, completeness, and regression risk
+   - If any score < 0.9: revise once, then stop with missing info list
+4) EVIDENCE: include commands run + summaries (tests/lint/typecheck).
+
+### Allowed techniques (internal-only)
+- Deep-breath + step-by-step
+- Detailed expert persona
+- Self-evaluation + retry threshold
+- Stakes/challenge language ONLY as internal “effort framing”
+
+### Effectiveness strategies (use when necessary)
+Use one or more of these when task complexity, ambiguity, or risk is high:
+- Objective framing: restate goal, constraints, and non-goals in 3-5 lines before execution.
+- Decomposition-first: split work into small verifiable steps with an explicit checkpoint after each step.
+- Assumption log: list assumptions, mark unknowns, and convert high-risk unknowns into verification actions.
+- Verification ladder: validate in this order when applicable: types/lint -> unit tests -> integration/API tests -> E2E critical journeys.
+- Counterexample pass: explicitly test at least one edge case and one failure path for each critical flow.
+- Minimal-diff strategy: prefer the smallest safe change first; expand only if evidence shows it is insufficient.
+- Consistency pass: cross-check outcomes against SKILLS DoD, spec acceptance criteria, SEO/GEO constraints, and `it/en` parity.
+- Confidence gating: if confidence on correctness/completeness/regression risk is <0.9, do one targeted revision and report remaining gaps.
+
+### Trigger conditions for effectiveness strategies
+Activate the strategies above by default if one or more conditions apply:
+- Multi-file or cross-layer changes (UI + backend/API + data contracts).
+- User-facing journey changes that affect conversion, onboarding, or critical actions.
+- Security/privacy/permissions logic changes.
+- Production incident fixes or regressions.
+- Ambiguous requirements, missing context, or conflicting constraints.
+- Significant SEO/GEO or localization (`it/en`) impact.
+
+### Forbidden in user-facing content
+- Monetary tipping language, emotional manipulation, “prove you’re better” style challenges
+- Any claims that imply real incentives or real-world consequences

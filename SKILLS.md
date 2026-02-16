@@ -148,16 +148,23 @@ DoD:
 ## Skill 9: Testing & Regression Safety
 When to use:
 - Utility logic changes, interactive flows, bug fixes.
+- Backend function changes and API route updates.
 
 Required actions:
 1. Add or update unit tests for transformed/business data.
-2. Add component tests for critical interactive behavior.
-3. Run `npm run lint` and relevant tests.
+2. Add backend/API tests for server functions and route handlers.
+3. Add component/UI tests for critical interactive and usability behavior.
+4. Add/maintain E2E coverage for the most important user journeys.
+5. Run `npm run lint` and relevant tests.
+6. If agent-assisted: require self-check + evidence (commands + outputs summary).
 
 Output:
 - Changes protected against known regressions.
 
 DoD:
+- [ ] Backend/API functions touched by the change are tested.
+- [ ] UI usability interactions touched by the change are tested.
+- [ ] Critical journey E2E coverage is present or updated.
 - [ ] Tests cover key risk points.
 - [ ] Lint/tests pass locally for changed scope.
 
@@ -173,6 +180,7 @@ Required actions:
 5. Document SEO/GEO impact and discoverability decisions.
 6. Document bilingual `it/en` impact and localization notes.
 7. Update `README.md` for user-facing setup or workflow changes.
+8. If agent-assisted: record (a) what quality gates were used, (b) what was verified.
 
 Output:
 - Feature is maintainable by future contributors without tribal knowledge.
