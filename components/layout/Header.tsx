@@ -86,13 +86,44 @@ export function Header() {
 
   useEffect(() => {
     if (typeof document === 'undefined') return
+    const body = document.body
+    const html = document.documentElement
+
     if (isMenuOpen) {
-      document.body.classList.add('overflow-hidden')
+      const scrollY = window.scrollY
+      body.dataset.menuScrollY = String(scrollY)
+      body.style.position = 'fixed'
+      body.style.top = `-${scrollY}px`
+      body.style.left = '0'
+      body.style.right = '0'
+      body.style.width = '100%'
+      body.style.overflow = 'hidden'
+      html.style.overflow = 'hidden'
     } else {
-      document.body.classList.remove('overflow-hidden')
+      const savedScrollY = Number(body.dataset.menuScrollY || '0')
+      body.style.position = ''
+      body.style.top = ''
+      body.style.left = ''
+      body.style.right = ''
+      body.style.width = ''
+      body.style.overflow = ''
+      html.style.overflow = ''
+      delete body.dataset.menuScrollY
+
+      if (savedScrollY > 0) {
+        window.scrollTo(0, savedScrollY)
+      }
     }
+
     return () => {
-      document.body.classList.remove('overflow-hidden')
+      body.style.position = ''
+      body.style.top = ''
+      body.style.left = ''
+      body.style.right = ''
+      body.style.width = ''
+      body.style.overflow = ''
+      html.style.overflow = ''
+      delete body.dataset.menuScrollY
     }
   }, [isMenuOpen])
 
@@ -132,7 +163,7 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed top-0 z-50 px-4 w-full transition-all duration-500 ease-out ${isScrolled ? 'py-1 sm:py-1.5 bg-white dark:bg-slate-900 shadow-lg' : 'py-1.5 sm:py-3 bg-white dark:bg-slate-900 shadow-sm'}`}>
+      <header className={`fixed top-0 z-40 px-4 w-full transition-all duration-500 ease-out ${isScrolled ? 'py-1 sm:py-1.5 bg-white dark:bg-slate-900 shadow-lg' : 'py-1.5 sm:py-3 bg-white dark:bg-slate-900 shadow-sm'}`}>
         <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Link href="/" onClick={() => setIsMenuOpen(false)} className="transition-transform duration-300 hover:scale-105">
@@ -245,12 +276,12 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className={`fixed inset-0 z-50 lg:hidden flex items-start justify-end transition-all duration-400 ${isMenuOpen ? 'pointer-events-auto bg-slate-900/50 dark:bg-black/80 backdrop-blur-md' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
+        <div className={`fixed inset-0 z-[90] lg:hidden flex items-start justify-end transition-all duration-400 ${isMenuOpen ? 'pointer-events-auto bg-slate-900/50 dark:bg-black/80 backdrop-blur-md' : 'pointer-events-none bg-transparent backdrop-blur-0'}`}
           style={{ transitionProperty: 'background,backdrop-filter' }}
           onClick={() => setIsMenuOpen(false)}
         >
           <div
-            className={`stai-drawer w-full max-w-xs h-full rounded-t-2xl flex flex-col pt-0 pb-8 px-0 relative transform transition-all duration-500 ease-out ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+            className={`stai-drawer w-full max-w-xs h-full rounded-t-2xl flex flex-col pt-0 pb-0 px-0 relative overflow-y-auto overscroll-contain touch-pan-y transform transition-all duration-500 ease-out ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
             style={{ transitionProperty: 'transform,opacity', willChange: 'transform' }}
             onClick={e => e.stopPropagation()}
           >
@@ -291,7 +322,7 @@ export function Header() {
               </button>
             </div>
 
-            <div className="flex flex-col pt-5 gap-2.5 px-5 stai-text">
+            <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pt-5 pb-8 gap-2.5 px-5 stai-text">
               {navigation.map((item, index) => {
                 const active = pathname === item.path
                 return (

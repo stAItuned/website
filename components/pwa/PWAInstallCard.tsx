@@ -109,7 +109,7 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
             {/* Backdrop */}
             <div
                 className={`
-          fixed inset-0 bg-black/40 backdrop-blur-sm z-50
+          fixed inset-0 bg-black/40 backdrop-blur-sm z-[80]
           transition-opacity duration-300
           ${isVisible ? 'opacity-100' : 'opacity-0'}
         `}
@@ -119,7 +119,7 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
             {/* Card */}
             <div
                 className={`
-          fixed bottom-0 left-0 right-0 z-50
+          fixed bottom-0 left-0 right-0 z-[80]
           px-4 pb-6 pt-2
           transform transition-transform duration-300 ease-out
           ${isVisible ? 'translate-y-0' : 'translate-y-full'}

@@ -38,7 +38,7 @@ export default function AuthorAvatar({
   }, [cleanAuthor])
 
   const imageClassName = imageFit === 'contain'
-    ? 'object-contain'
+    ? 'object-contain p-1.5'
     : 'object-cover'
 
   return (
@@ -52,17 +52,25 @@ export default function AuthorAvatar({
             {initials}
           </div>
         ) : (
-          <Image
-            src={avatarSrc}
-            alt={cleanAuthor}
-            width={64}
-            height={64}
-            priority
-            className={`h-12 w-12 md:h-14 md:w-14 rounded-full bg-white/80 dark:bg-slate-900/80 ${imageClassName}`}
-            style={{ objectPosition: '50% 35%' }}
-            unoptimized
-            onError={() => setImageErrored(true)}
-          />
+          <div className="relative h-12 w-12 md:h-14 md:w-14 rounded-full overflow-hidden ring-1 ring-white/70 dark:ring-slate-700/80 bg-white/80 dark:bg-slate-900/80">
+            <Image
+              src={avatarSrc}
+              alt={cleanAuthor}
+              fill
+              sizes="(max-width: 768px) 48px, 56px"
+              priority
+              className={`${imageClassName}`}
+              style={{
+                objectPosition: '50% 50%',
+                width: '100%',
+                height: '100%',
+                margin: 0,
+                display: 'block'
+              }}
+              unoptimized
+              onError={() => setImageErrored(true)}
+            />
+          </div>
         )}
       </div>
       <div className="flex flex-col">

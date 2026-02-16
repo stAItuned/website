@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/components/auth/AuthContext';
-import { BADGE_DEFINITIONS } from '@/lib/config/badge-config';
+import { AdminBadgeEmailQueue } from '@/components/admin/AdminBadgeEmailQueue';
 
 export default function AdminBadgesPage() {
     const { user } = useAuth();
@@ -48,15 +48,15 @@ export default function AdminBadgesPage() {
 
 
     return (
-        <div className="max-w-xl space-y-8">
+        <div className="space-y-8">
             <div>
                 <h1 className="text-2xl font-semibold leading-6 text-slate-900 dark:text-white">Badge Management</h1>
                 <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-                    Recalculate badges from existing article metrics.
+                    Recalculate badges and send approval emails from the admin dashboard.
                 </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 shadow sm:rounded-lg">
+            <div className="max-w-xl bg-white dark:bg-slate-800 shadow sm:rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
                     <h3 className="text-base font-semibold leading-6 text-slate-900 dark:text-white">Badge Calculator</h3>
                     <div className="mt-2 max-w-xl text-sm text-slate-500 dark:text-slate-400">
@@ -123,6 +123,8 @@ export default function AdminBadgesPage() {
                     </div>
                 </div>
             </div>
+
+            <AdminBadgeEmailQueue />
         </div>
     );
 }

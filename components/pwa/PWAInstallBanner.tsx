@@ -63,7 +63,7 @@ export function PWAInstallBanner({ className = '' }: PWAInstallBannerProps) {
     return (
         <div
             className={`
-        fixed top-0 left-0 right-0 z-50
+        fixed top-0 left-0 right-0 z-[70]
         bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800
         text-white shadow-lg
         transform transition-transform duration-300 ease-out

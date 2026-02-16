@@ -11,6 +11,9 @@ Implemented in `components/admin/AdminSidebar.tsx`.
   - an expandable navigation menu (overlay drawer)
 - Preserved desktop sidebar behavior (`lg` and above).
 - Extended navigation map with `Reviews` (`/admin/reviews`) so review flows are reachable directly.
+- Consolidated admin operations inside the admin dashboard:
+  - removed admin tools from `/account/settings`
+  - badge email approval/sending queue is now managed from `/admin/badges`
 - Reused one shared navigation source for desktop and mobile to avoid divergence.
 - Added mobile-optimized data cards in:
   - `app/admin/page.tsx` for "Usage by Model" and "Daily Cost"

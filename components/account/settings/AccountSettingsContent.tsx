@@ -16,7 +16,7 @@ interface AccountSettingsContentProps {
   onOpenAgreement: () => void
   onRequestDeleteData: () => void
   onRequestDeleteAccount: () => void
-  agreementData?: any
+  agreementData?: unknown
 }
 
 /**
