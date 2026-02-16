@@ -182,6 +182,9 @@ export async function upsertWriterProfile(
   revalidateTag(`writer:${finalSlug}`, REVALIDATE_PROFILE)
   revalidatePath('/author')
   revalidatePath('/meet')
+  // Learn article routes are statically generated and embed authorData.
+  // Invalidate the learn tree so avatar/title updates propagate quickly.
+  revalidatePath('/learn', 'layout')
   revalidatePath(`/author/${finalSlug}`)
 
   return writerData

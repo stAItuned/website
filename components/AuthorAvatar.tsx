@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link'
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface AuthorAvatarProps {
   author: string
@@ -15,6 +15,12 @@ interface AuthorAvatarProps {
 
 const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
 
+type PublicWriterApiResponse = {
+  image?: {
+    publicUrl?: string
+  }
+}
+
 /**
  * Author avatar + metadata for article headers.
  */
@@ -24,13 +30,57 @@ export default function AuthorAvatar({
   imageFit = 'cover'
 }: AuthorAvatarProps) {
   const [imageErrored, setImageErrored] = useState(false)
+  const [runtimeAvatar, setRuntimeAvatar] = useState<string | null>(authorData?.avatar ?? null)
 
   // Ensure author name is trimmed and formatted for slug
   const cleanAuthor = (authorData?.name || author).trim()
   const authorSlug = cleanAuthor.replaceAll(' ', '-')
+  const normalizedAuthorSlug = cleanAuthor
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
 
-  // Prefer Firestore/GCS avatar; fallback to a generic placeholder only.
-  const avatarSrc = authorData?.avatar || DEFAULT_AVATAR_SRC
+  useEffect(() => {
+    if (authorData?.avatar) {
+      setRuntimeAvatar(authorData.avatar)
+      return
+    }
+
+    if (!normalizedAuthorSlug) {
+      setRuntimeAvatar(null)
+      return
+    }
+
+    let active = true
+
+    const fetchRuntimeAvatar = async () => {
+      try {
+        const response = await fetch(`/api/public/writers/${normalizedAuthorSlug}`, {
+          cache: 'no-store',
+        })
+        if (!response.ok) return
+
+        const payload: PublicWriterApiResponse = await response.json()
+        const publicUrl = payload.image?.publicUrl
+
+        if (active && publicUrl) {
+          setRuntimeAvatar(publicUrl)
+        }
+      } catch {
+        // Keep placeholder avatar on fetch failure.
+      }
+    }
+
+    fetchRuntimeAvatar()
+
+    return () => {
+      active = false
+    }
+  }, [authorData?.avatar, normalizedAuthorSlug])
+
+  // Prefer Firestore/GCS avatar; fallback to generic placeholder.
+  const avatarSrc = runtimeAvatar || DEFAULT_AVATAR_SRC
 
   const initials = useMemo(() => {
     const parts = cleanAuthor.split(' ').filter(Boolean)
