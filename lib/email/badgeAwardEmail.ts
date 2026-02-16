@@ -21,8 +21,6 @@ interface SendBadgeAwardEmailParams {
   articleMetrics?: ArticleMetricSnapshot[]
 }
 
-const LINKEDIN_ADD_CERT_URL = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME'
-
 function getResendClient(): Resend | null {
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) return null
@@ -30,24 +28,35 @@ function getResendClient(): Resend | null {
 }
 
 /**
- * Build a LinkedIn share URL with optional prefilled text.
+ * Build a LinkedIn Link (Feed Share) URL.
+ * This is better than shareArticle for pre-filling text.
  */
-export function buildLinkedInShareUrl(verifyUrl: string, title: string, summary: string): string {
-  const params = new URLSearchParams({
-    mini: 'true',
-    url: verifyUrl,
-    title,
-    summary,
-    source: 'stAItuned',
-  })
-  return `https://www.linkedin.com/shareArticle?${params.toString()}`
+export function buildLinkedInShareUrl(verifyUrl: string, badgeName: string): string {
+  const text = `I'm excited to share that I've earned the ${badgeName} badge on stAItuned! 🚀\n\nIt represents my commitment to practical AI education and community contribution.\n\nVerify my credential here:`
+  const url = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}%20${encodeURIComponent(verifyUrl)}`
+  return url
 }
 
 /**
  * Build a LinkedIn "Add Certification" URL.
  */
-export function buildLinkedInAddCertificationUrl(): string {
-  return LINKEDIN_ADD_CERT_URL
+export function buildLinkedInAddCertificationUrl(badge: Badge, credentialId: string, earnedAt: string, verifyUrl: string): string {
+  const date = new Date(earnedAt)
+  const issueYear = date.getFullYear()
+  const issueMonth = date.getMonth() + 1 // 1-12
+
+  const params = new URLSearchParams({
+    startTask: 'CERTIFICATION_NAME',
+    name: badge.name.en,
+    organizationName: 'stAI tuned',
+    organizationId: '101346338', // Attempting to use the ID for stAI tuned if valid, otherwise it might be ignored or require manual input.
+    issueYear: issueYear.toString(),
+    issueMonth: issueMonth.toString(),
+    certUrl: verifyUrl,
+    certId: credentialId,
+  })
+
+  return `https://www.linkedin.com/profile/add?${params.toString()}`
 }
 
 function formatIssueDate(earnedAt: string): string {
@@ -75,20 +84,36 @@ function buildVerificationUrl(credentialId: string): string {
   return `${SITE_URL}/verify/${encodeURIComponent(credentialId)}`
 }
 
-function generateBadgeEmailHtml(params: SendBadgeAwardEmailParams): string {
+function getNextGoalMessage(badge: Badge): string | null {
+  if (badge.category === 'contribution') {
+    if (badge.tier === 'contributor') return 'Next milestone: Bronze Writer (10 articles). Keep it up!'
+    if (badge.tier === 'bronze') return 'Next milestone: Silver Writer (30 articles). You can do it!'
+    if (badge.tier === 'silver') return 'Next milestone: Gold Writer (50 articles). Legend status awaits!'
+  }
+  if (badge.category === 'impact') {
+    if (badge.tier === 'bronze') return 'Aim for Silver Impact: 2,000 qualified reads on a single article.'
+    if (badge.tier === 'silver') return 'Aim for Gold Impact: 5,000 qualified reads. That sets you apart.'
+  }
+  return null
+}
+
+export function generateBadgeEmailHtml(params: SendBadgeAwardEmailParams): string {
   const { name, badge, credentialId, earnedAt } = params
   const greeting = name ? `Hi ${name},` : 'Hi,'
   const verifyUrl = buildVerificationUrl(credentialId)
-  const shareCopy = `Proud to share that I earned the ${badge.name.en} badge from stAItuned. Credential ID: ${credentialId}. Verify here: ${verifyUrl}`
-  const shareTitle = `${badge.name.en} Badge · stAItuned`
-  const shareUrl = buildLinkedInShareUrl(verifyUrl, shareTitle, shareCopy)
-  const addCertUrl = buildLinkedInAddCertificationUrl()
+
+  const shareUrl = buildLinkedInShareUrl(verifyUrl, badge.name.en)
+  const addCertUrl = buildLinkedInAddCertificationUrl(badge, credentialId, earnedAt, verifyUrl)
+
   const badgeImage = `${SITE_URL}${getBadgeImageSource(badge.icon)}`
   const issueDate = formatIssueDate(earnedAt)
   const accent = getTierAccent(badge.tier)
+  const nextGoalMsg = getNextGoalMessage(badge)
+
   const criteriaSummary = badge.criteria
     .map((criteria) => `${criteria.value ? `${criteria.value} ` : ''}${criteria.label}`)
     .join(' · ')
+
   const qualifiedReadDefinition =
     'Qualified read = an article view with average time on page of 30 seconds or more (proxy).'
   const qualifiedReadHtml =
@@ -158,86 +183,89 @@ function generateBadgeEmailHtml(params: SendBadgeAwardEmailParams): string {
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; color: #0f172a;">
   <div style="max-width: 640px; margin: 0 auto; padding: 36px 20px;">
     <div style="text-align: center; margin-bottom: 28px;">
-      <img src="${SITE_URL}/assets/general/logo-text-dark.png" alt="stAItuned" style="height: 36px; width: auto;" />
+      <a href="${SITE_URL}" style="text-decoration: none;">
+        <img src="${SITE_URL}/assets/general/logo-text-dark.png" alt="stAItuned" style="height: 36px; width: auto;" />
+      </a>
     </div>
 
     <div style="background: white; border-radius: 18px; padding: 32px; box-shadow: 0 8px 24px rgba(15,23,42,0.08); border: 1px solid #e2e8f0;">
-      <p style="margin: 0 0 8px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em; color: #94a3b8;">Badge unlocked</p>
-      <h1 style="margin: 0 0 12px 0; font-size: 26px; color: #0f172a;">${greeting} you earned the ${badge.name.en} badge.</h1>
-      <p style="margin: 0 0 20px 0; font-size: 16px; color: #475569;">
-        Thank you for contributing to the stAItuned mission of practical, high-impact AI education. This badge recognizes the tangible impact of your work and marks a clear milestone in your contributor journey.
+      <p style="margin: 0 0 8px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em; color: #94a3b8; text-align: center;">Badge unlocked</p>
+      <h1 style="margin: 0 0 12px 0; font-size: 26px; color: #0f172a; text-align: center;">${greeting} you earned the ${badge.name.en} badge! 🏆</h1>
+      <p style="margin: 0 0 20px 0; font-size: 16px; color: #475569; text-align: center;">
+        Your contributions are making a real impact. This badge recognizes your effort in sharing practical AI knowledge with our community.
       </p>
-      <div style="margin: 0 0 22px 0; padding: 14px 16px; border-radius: 12px; background: #f1f5f9; border: 1px solid #e2e8f0;">
-        <p style="margin: 0; font-size: 14px; color: #0f172a; font-weight: 600;">Goal achieved</p>
-        <p style="margin: 6px 0 0 0; font-size: 14px; color: #475569;">${badge.description.en}</p>
-      </div>
 
-      <div style="text-align: center; margin-bottom: 24px;">
-        <div style="display: inline-block; padding: 18px; border-radius: 24px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 16px 30px rgba(15, 23, 42, 0.25);">
-          <img src="${badgeImage}" alt="${badge.name.en} badge" style="width: 220px; height: auto; border-radius: 18px; display: block; background: #fff;" />
-          <div style="margin-top: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(15, 23, 42, 0.8); color: #cbd5f5; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block;">
-            ID ${credentialId}
+      <div style="text-align: center; margin-bottom: 28px;">
+        <div style="display: inline-block; padding: 24px; border-radius: 24px; background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);">
+          <img src="${badgeImage}" alt="${badge.name.en} badge" style="width: 200px; height: auto; display: block; margin: 0 auto;" />
+          <div style="margin-top: 16px;">
+             <span style="display: inline-block; padding: 6px 12px; border-radius: 99px; background: ${accent.bg}; color: ${accent.text}; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">
+              ${badge.tier} Tier
+            </span>
           </div>
-        </div>
-        <div style="margin-top: 16px;">
-          <div style="display: inline-block; padding: 6px 12px; border-radius: 999px; background: ${accent.bg}; color: ${accent.text}; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">
-            ${badge.tier} tier
-          </div>
-          <p style="margin: 10px 0 0 0; font-size: 14px; color: #475569;">
+          <p style="margin: 12px 0 0 0; font-size: 15px; font-weight: 600; color: #0f172a;">
+            ${badge.description.en}
+          </p>
+          <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b;">
             ${criteriaSummary}
           </p>
-        </div>
-      </div>
 
-      <div style="background: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-        <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 700; color: #0f172a;">Badge criteria</p>
-        <ul style="margin: 0; padding-left: 18px; color: #475569; font-size: 13px; line-height: 1.6;">
-          ${badge.criteria.map((criteria) => `<li>${criteria.label}${criteria.value ? `: ${criteria.value}` : ''}</li>`).join('')}
-        </ul>
-      </div>
-      ${articlesHtml}
-      ${qualifiedReadHtml}
-
-      <div style="border: 1px solid #fde68a; background: #fffbeb; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-        <h2 style="margin: 0 0 10px 0; font-size: 18px; color: #92400e;">Share it on LinkedIn</h2>
-        <p style="margin: 0 0 14px 0; font-size: 14px; color: #854d0e;">
-          Help others discover stAItuned and the impact you create. The button below opens LinkedIn with a prefilled post and your verified credential link.
-        </p>
-        <a href="${shareUrl}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); color: #1e293b; text-decoration: none; padding: 12px 24px; border-radius: 999px; font-weight: 700; font-size: 14px;">
-          Share on LinkedIn
-        </a>
-        <div style="margin-top: 12px; font-size: 12px; color: #92400e; line-height: 1.6;">
-          Suggested copy (ready to paste or tweak):
-          <div style="margin-top: 6px; background: #fff7ed; padding: 10px; border-radius: 10px; font-family: 'Courier New', monospace; color: #7c2d12;">
-            ${shareCopy}
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed #e2e8f0;">
+            <p style="margin: 0; font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em;">Credential ID</p>
+            <p style="margin: 2px 0 8px 0; font-family: monospace; font-size: 14px; color: #334155;">${credentialId}</p>
+            <a href="${verifyUrl}" style="display: inline-block; font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 600;">View Verified Badge →</a>
           </div>
         </div>
       </div>
 
-      <div style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; margin-bottom: 22px;">
-        <h2 style="margin: 0 0 10px 0; font-size: 16px; color: #0f172a;">Add it to LinkedIn Certifications</h2>
-        <ol style="margin: 0 0 12px 0; padding-left: 18px; font-size: 13px; color: #475569; line-height: 1.7;">
-          <li>Go to your LinkedIn profile and click "Add profile section".</li>
-          <li>Choose "Add licenses and certifications".</li>
-          <li>Fill in the details below.</li>
-        </ol>
-        <div style="background: #f8fafc; border-radius: 10px; padding: 12px; font-size: 12px; color: #334155; line-height: 1.6;">
-          Name: <strong>${badge.name.en}</strong><br/>
-          Issuing organization: <strong>stAI tuned</strong><br/>
-          Issue date: <strong>${issueDate}</strong><br/>
-          Credential ID: <strong>${credentialId}</strong><br/>
-          Credential URL: <strong>${verifyUrl}</strong>
-        </div>
-        <a href="${addCertUrl}" style="display: inline-block; margin-top: 12px; color: #1d4ed8; text-decoration: none; font-weight: 600; font-size: 13px;">
-          Open LinkedIn add certification
+      <!-- Call to Action Section -->
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px;">
+         <a href="${shareUrl}" style="display: inline-flex; align-items: center; justify-content: center; background: #0077b5; color: white; text-decoration: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(0, 119, 181, 0.25);">
+           <!-- LinkedIn Icon SVG -->
+           <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="In" style="height: 16px; width: 16px; margin-right: 8px; filter: brightness(0) invert(1);" /> 
+           Share on LinkedIn
+        </a>
+        <a href="${addCertUrl}" style="display: inline-flex; align-items: center; justify-content: center; background: white; border: 1px solid #cbd5e1; color: #334155; text-decoration: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 15px; transition: all 0.2s;">
+           Add to Profile
         </a>
       </div>
 
-      <div style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 16px;">
-        <a href="${verifyUrl}" style="color: #1d4ed8; text-decoration: none; font-weight: 600; font-size: 13px;">
-          View and verify credential
-        </a>
+      ${nextGoalMsg ? `
+      <div style="margin: 0 0 24px 0; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 16px; text-align: center;">
+        <p style="margin: 0; font-size: 14px; color: #0369a1; font-weight: 600;">
+          🚀 What's Next?
+        </p>
+        <p style="margin: 4px 0 0 0; font-size: 14px; color: #0c4a6e; font-weight: 500;">
+          ${nextGoalMsg}
+        </p>
+        <div style="margin-top: 12px;">
+           <a href="${SITE_URL}/write" style="font-size: 13px; color: #0284c7; text-decoration: none; font-weight: 600;">Write your next article →</a>
+        </div>
       </div>
+      ` : ''}
+
+      <div style="border-top: 1px solid #e2e8f0; margin-top: 24px; padding-top: 24px;">
+         ${articlesHtml}
+         ${qualifiedReadHtml}
+         
+         <div style="background: #f8fafc; border-radius: 12px; padding: 16px; font-size: 13px; color: #475569;">
+            <p style="margin: 0 0 8px 0; font-weight: 600; color: #0f172a;">Verification Details</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline;">
+              <div>
+               <span style="color: #94a3b8; margin-right: 4px;">Credential ID:</span>
+               <span style="font-family: monospace; color: #0f172a;">${credentialId}</span>
+              </div>
+              <div>
+               <span style="color: #94a3b8; margin-right: 4px;">Issued On:</span>
+               <span>${issueDate}</span>
+              </div>
+              <div style="width: 100%; margin-top: 4px;">
+                <a href="${verifyUrl}" style="color: #2563eb; text-decoration: none; font-size: 12px; word-break: break-all;">${verifyUrl}</a>
+              </div>
+            </div>
+         </div>
+      </div>
+
     </div>
 
     <div style="text-align: center; margin-top: 28px; padding: 12px;">
@@ -246,7 +274,7 @@ function generateBadgeEmailHtml(params: SendBadgeAwardEmailParams): string {
       </p>
       <p style="margin: 0; font-size: 12px; color: #94a3b8;">
         <a href="${SITE_URL}/privacy" style="color: #94a3b8;">Privacy Policy</a> ·
-        <a href="${SITE_URL}" style="color: #94a3b8;">${SITE_URL.replace('https://', '')}</a>
+        <a href="${SITE_URL}" style="color: #94a3b8;">stAItuned.com</a>
       </p>
     </div>
   </div>
@@ -259,11 +287,11 @@ function generateBadgeEmailText(params: SendBadgeAwardEmailParams): string {
   const { name, badge, credentialId, earnedAt } = params
   const greeting = name ? `Hi ${name},` : 'Hi,'
   const verifyUrl = buildVerificationUrl(credentialId)
-  const shareCopy = `Proud to share that I earned the ${badge.name.en} badge from stAItuned. Credential ID: ${credentialId}. Verify here: ${verifyUrl}`
-  const shareTitle = `${badge.name.en} Badge · stAItuned`
-  const shareUrl = buildLinkedInShareUrl(verifyUrl, shareTitle, shareCopy)
-  const addCertUrl = buildLinkedInAddCertificationUrl()
+  const shareUrl = buildLinkedInShareUrl(verifyUrl, badge.name.en)
+  const addCertUrl = buildLinkedInAddCertificationUrl(badge, credentialId, earnedAt, verifyUrl)
   const issueDate = formatIssueDate(earnedAt)
+  const nextGoalMsg = getNextGoalMessage(badge)
+
   const criteriaSummary = badge.criteria
     .map((criteria) => `${criteria.value ? `${criteria.value} ` : ''}${criteria.label}`)
     .join(' · ')
@@ -291,29 +319,39 @@ ${hasMoreArticles ? `[...and ${metrics.length - 5} other contributing articles]`
   return `
 ${greeting}
 
-You earned the ${badge.name.en} badge on stAItuned.
+You earned the ${badge.name.en} badge on stAItuned! 🏆
 
-Goal achieved: ${badge.description.en}
-Criteria: ${criteriaSummary}
+This recognizes your contribution to practical AI education.
 
+Badge Details:
+- Name: ${badge.name.en}
+- Tier: ${badge.tier}
+- Date: ${issueDate}
+- ID: ${credentialId}
+- Verify: ${verifyUrl}
+
+${badge.description.en}
+(${criteriaSummary})
+
+${nextGoalMsg ? `\n> ${nextGoalMsg}\n` : ''}
+
+--------------------------------------------------
+SHARE YOUR SUCCESS
+--------------------------------------------------
+
+1. Share on LinkedIn:
+${shareUrl}
+
+2. Add to LinkedIn Certifications:
+${addCertUrl}
+
+(Or add manually: Name: ${badge.name.en}, Issuing Org: stAItuned, Date: ${issueDate}, ID: ${credentialId}, URL: ${verifyUrl})
+
+--------------------------------------------------
 ${articlesText}
-${badge.category === 'impact' ? `Qualified read: ${qualifiedReadDefinition}` : ''}
-Credential ID: ${credentialId}
-Verify: ${verifyUrl}
+${badge.category === 'impact' ? `Qualified read: ${qualifiedReadDefinition}\n` : ''}
 
-Share on LinkedIn (prefilled): ${shareUrl}
-
-Add it to LinkedIn Certifications:
-1) Add profile section -> Add licenses and certifications
-2) Name: ${badge.name.en}
-3) Issuing organization: stAI tuned
-4) Issue date: ${issueDate}
-5) Credential ID: ${credentialId}
-6) Credential URL: ${verifyUrl}
-
-Open LinkedIn add certification: ${addCertUrl}
-
-Thank you for supporting the stAItuned mission. Your contribution helps professionals learn practical AI and GenAI with clarity, rigor, and real-world impact.
+Thank you for being a valued contributor.
 ${SITE_URL}
 `
 }
@@ -333,7 +371,7 @@ export async function sendBadgeAwardEmail(params: SendBadgeAwardEmailParams): Pr
     const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: `You earned the ${badge.name.en} badge — thank you for supporting the stAItuned mission`,
+      subject: `You earned the ${badge.name.en} badge! 🏆`,
       html: generateBadgeEmailHtml(params),
       text: generateBadgeEmailText(params),
     })

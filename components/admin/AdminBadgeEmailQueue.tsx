@@ -34,6 +34,7 @@ export function AdminBadgeEmailQueue() {
   const [tierFilter, setTierFilter] = useState('all')
   const [sortBy, setSortBy] = useState<'authorName' | 'earnedAt'>('earnedAt')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const [emailStatusFilter, setEmailStatusFilter] = useState<'pending' | 'sent' | 'all'>('pending')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
@@ -79,7 +80,7 @@ export function AdminBadgeEmailQueue() {
   // Reset to first page when filters or sort change
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchTerm, tierFilter, sortBy, sortOrder])
+  }, [searchTerm, tierFilter, sortBy, sortOrder, emailStatusFilter])
 
   const fetchQueue = useCallback(async () => {
     if (!user) return
@@ -87,7 +88,7 @@ export function AdminBadgeEmailQueue() {
     setError('')
     try {
       const token = await user.getIdToken()
-      const res = await fetch('/api/admin/badge-emails', {
+      const res = await fetch(`/api/admin/badge-emails?status=${emailStatusFilter}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
@@ -102,7 +103,7 @@ export function AdminBadgeEmailQueue() {
     } finally {
       setLoading(false)
     }
-  }, [user])
+  }, [user, emailStatusFilter])
 
   useEffect(() => {
     fetchQueue()
@@ -125,6 +126,20 @@ export function AdminBadgeEmailQueue() {
       })
       const data = await res.json()
       if (!res.ok || !data.success) {
+        if (res.status === 409 && data?.emailSentAt) {
+          const sentAt = new Date(data.emailSentAt).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+          setError(`Email already sent on ${sentAt}.`)
+          setItems((prev) =>
+            prev.filter((entry) => !(entry.authorSlug === item.authorSlug && entry.badgeId === item.badgeId))
+          )
+          return
+        }
         throw new Error(data.error || 'Failed to send email')
       }
       setItems((prev) => prev.filter((entry) => !(entry.authorSlug === item.authorSlug && entry.badgeId === item.badgeId)))
@@ -162,7 +177,8 @@ export function AdminBadgeEmailQueue() {
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Badge Email Queue</h3>
           </div>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            {items.length} pending awards. Filter and approve to send emails.
+            {items.length} {emailStatusFilter === 'pending' ? 'pending' : emailStatusFilter} awards.
+            {' '}Filter and {emailStatusFilter === 'pending' ? 'approve to send emails' : 'review delivery history'}.
           </p>
         </div>
         <button
@@ -190,6 +206,20 @@ export function AdminBadgeEmailQueue() {
           />
         </div>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="relative min-w-[170px]">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <Mail className="h-4 w-4 text-slate-400" />
+            </div>
+            <select
+              value={emailStatusFilter}
+              onChange={(e) => setEmailStatusFilter(e.target.value as 'pending' | 'sent' | 'all')}
+              className="block w-full rounded-xl border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm shadow-sm transition-all focus:border-primary-500 focus:ring-primary-500 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <option value="pending">Pending Emails</option>
+              <option value="sent">Sent Emails</option>
+              <option value="all">All Emails</option>
+            </select>
+          </div>
           <div className="relative min-w-[160px]">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <Filter className="h-4 w-4 text-slate-400" />
@@ -247,7 +277,7 @@ export function AdminBadgeEmailQueue() {
               <div className="rounded-full bg-slate-50 p-4 dark:bg-slate-900/50">
                 <Search className="h-8 w-8 text-slate-300" />
               </div>
-              <h4 className="mt-4 font-bold text-slate-900 dark:text-white">No pending badge emails found</h4>
+              <h4 className="mt-4 font-bold text-slate-900 dark:text-white">No badge emails found</h4>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Try adjusting your search or filters.
               </p>
@@ -287,6 +317,20 @@ export function AdminBadgeEmailQueue() {
                           <p className="text-[10px] font-bold uppercase tracking-tight text-slate-400">Credential ID</p>
                           <p className="font-mono text-[11px] text-slate-500 dark:text-slate-400">{item.credentialId}</p>
                         </div>
+                        {item.emailSentAt && (
+                          <div className="col-span-2">
+                            <p className="text-[10px] font-bold uppercase tracking-tight text-slate-400">Email Sent</p>
+                            <p className="font-semibold text-slate-700 dark:text-slate-200">
+                              {new Date(item.emailSentAt).toLocaleString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       {item.emailLastError && (
@@ -295,15 +339,21 @@ export function AdminBadgeEmailQueue() {
                         </div>
                       )}
 
-                      <button
-                        onClick={() => handleSend(item)}
-                        disabled={isSending}
-                        className="mt-5 w-full rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition-all hover:bg-primary-700 hover:shadow-primary-500/30 disabled:opacity-50"
-                      >
-                        {isSending ? (
-                          <RefreshCw className="mx-auto h-4 w-4 animate-spin" />
-                        ) : 'Send Approval Email'}
-                      </button>
+                      {item.emailStatus === 'sent' ? (
+                        <div className="mt-5 w-full rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-center text-sm font-bold text-emerald-700 dark:border-emerald-800/50 dark:bg-emerald-900/20 dark:text-emerald-300">
+                          Already Sent
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleSend(item)}
+                          disabled={isSending}
+                          className="mt-5 w-full rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary-500/20 transition-all hover:bg-primary-700 hover:shadow-primary-500/30 disabled:opacity-50"
+                        >
+                          {isSending ? (
+                            <RefreshCw className="mx-auto h-4 w-4 animate-spin" />
+                          ) : 'Send Approval Email'}
+                        </button>
+                      )}
                     </div>
                   )
                 })}
@@ -351,6 +401,17 @@ export function AdminBadgeEmailQueue() {
                               <span className="font-bold text-slate-900 dark:text-white">{item.authorName}</span>
                               <span className="text-xs text-slate-500 dark:text-slate-400">{item.authorEmail || 'No email'}</span>
                               <span className="mt-1 font-mono text-[10px] text-slate-400">{item.credentialId}</span>
+                              {item.emailSentAt && (
+                                <span className="mt-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                                  Sent: {new Date(item.emailSentAt).toLocaleString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </span>
+                              )}
                               {item.emailLastError && (
                                 <span className="mt-1 text-[10px] font-medium text-red-500">{item.emailLastError}</span>
                               )}
@@ -374,13 +435,19 @@ export function AdminBadgeEmailQueue() {
                             </span>
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button
-                              onClick={() => handleSend(item)}
-                              disabled={isSending}
-                              className="inline-flex h-9 items-center justify-center rounded-lg bg-primary-600 px-4 text-xs font-bold text-white shadow-sm transition-all hover:bg-primary-700 hover:shadow-md disabled:opacity-50 active:scale-95"
-                            >
-                              {isSending ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Send'}
-                            </button>
+                            {item.emailStatus === 'sent' ? (
+                              <span className="inline-flex h-9 items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 px-4 text-xs font-bold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300">
+                                Sent
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => handleSend(item)}
+                                disabled={isSending}
+                                className="inline-flex h-9 items-center justify-center rounded-lg bg-primary-600 px-4 text-xs font-bold text-white shadow-sm transition-all hover:bg-primary-700 hover:shadow-md disabled:opacity-50 active:scale-95"
+                              >
+                                {isSending ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Send'}
+                              </button>
+                            )}
                           </td>
                         </tr>
                       )

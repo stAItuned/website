@@ -262,3 +262,25 @@ export async function uploadWriterImage(
     publicUrl: `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(path)}?alt=media&token=${token}`,
   }
 }
+
+/**
+ * Admin: Get full writer profile by slug (including email/private fields).
+ * Not cached to ensure fresh data for admin operations.
+ */
+export async function getAdminWriter(slug: string): Promise<WriterDocument | null> {
+  if (shouldSkipFirestoreDuringBuild()) return null
+
+  const normalizedSlug = normalizeSlug(slug)
+  const snap = await dbDefault().collection(WRITERS_COLLECTION).doc(normalizedSlug).get()
+  if (!snap.exists) return null
+
+  const data = snap.data()
+  if (!data) return null
+
+  try {
+    return writerDocumentSchema.parse(data)
+  } catch (error) {
+    console.error('[getAdminWriter] Invalid writer doc:', normalizedSlug, error)
+    return null
+  }
+}

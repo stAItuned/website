@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { verifyAuth, getAdminDb } from '@/lib/firebase/server-auth'
 import { isAdmin } from '@/lib/firebase/admin-emails'
 import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
-import { getAuthorData } from '@/lib/authors'
+import { getAdminWriter } from '@/lib/writer/firestore'
 import { sendBadgeAwardEmail } from '@/lib/email/badgeAwardEmail'
 import { badgeEmailSendSchema } from '@/lib/validation/badgeEmail'
 import type { AuthorBadge } from '@/lib/types/badge'
@@ -11,6 +11,23 @@ import type { AuthorBadge } from '@/lib/types/badge'
 export const dynamic = 'force-dynamic'
 
 const pendingQueryLimit = 200
+const queueStatusSchema = z.enum(['pending', 'sent', 'all'])
+
+function normalizeQueueEmailError(rawError: string | null | undefined, hasAuthorEmail: boolean): string | null {
+  if (!rawError) return null
+  if (!hasAuthorEmail) return rawError
+
+  const normalized = rawError.trim().toLowerCase()
+  if (normalized === 'missing author email') {
+    return null
+  }
+
+  return rawError
+}
+
+function inferEmailSentAt(badge: AuthorBadge): string {
+  return badge.emailSentAt || badge.emailApprovedAt || badge.earnedAt || new Date().toISOString()
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,37 +39,49 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
     }
 
+    const { searchParams } = new URL(request.url)
+    const requestedStatusRaw = searchParams.get('status') ?? 'pending'
+    const requestedStatusResult = queueStatusSchema.safeParse(requestedStatusRaw)
+    const requestedStatus = requestedStatusResult.success ? requestedStatusResult.data : 'pending'
+
     const db = getAdminDb()
-    const snapshot = await db
-      .collectionGroup('earned')
-      .where('emailStatus', '==', 'pending')
-      .limit(pendingQueryLimit)
-      .get()
+    let query: FirebaseFirestore.Query = db.collectionGroup('earned')
+    if (requestedStatus !== 'all') {
+      query = query.where('emailStatus', '==', requestedStatus)
+    }
+
+    const snapshot = await query.limit(pendingQueryLimit).get()
 
     const items = await Promise.all(
       snapshot.docs.map(async (doc) => {
         const badge = doc.data() as AuthorBadge
         const authorSlug = badge.authorId || doc.ref.parent.parent?.id || 'unknown'
         const badgeDef = BADGE_DEFINITIONS.find((def) => def.id === badge.badgeId)
-        const authorData = await getAuthorData(authorSlug)
+
+        // Use admin fetcher to get email (includes private fields like email)
+        const authorData = await getAdminWriter(authorSlug)
+        const hasAuthorEmail = Boolean(authorData?.email)
+        const emailStatus = badge.emailStatus || 'pending'
+        const emailSentAt = emailStatus === 'sent' ? inferEmailSentAt(badge) : (badge.emailSentAt || null)
 
         return {
           authorSlug,
-          authorName: authorData?.name || authorSlug.replaceAll('-', ' '),
+          // Fallback to name/slug if authorData missing (shouldn't happen for valid authors)
+          authorName: authorData?.displayName || authorSlug.replaceAll('-', ' '),
           authorEmail: authorData?.email || '',
           badgeId: badge.badgeId,
           badgeName: badgeDef?.name.en || badge.badgeId,
           badgeTier: badgeDef?.tier || 'contributor',
           credentialId: badge.credentialId,
           earnedAt: badge.earnedAt,
-          emailStatus: badge.emailStatus || 'pending',
-          emailSentAt: badge.emailSentAt || null,
-          emailLastError: badge.emailLastError || null,
+          emailStatus,
+          emailSentAt,
+          emailLastError: normalizeQueueEmailError(badge.emailLastError, hasAuthorEmail),
         }
       })
     )
 
-    return NextResponse.json({ success: true, items })
+    return NextResponse.json({ success: true, items, status: requestedStatus })
   } catch (error) {
     console.error('[API] admin/badge-emails GET error:', error)
     const details = error instanceof Error ? error.message : String(error)
@@ -94,7 +123,20 @@ export async function POST(request: NextRequest) {
     const badge = badgeSnap.data() as AuthorBadge
 
     if (badge.emailStatus === 'sent') {
-      return NextResponse.json({ success: false, error: 'Email already sent' }, { status: 409 })
+      // Backfill legacy records where status is already "sent" but timestamp is missing.
+      if (!badge.emailSentAt) {
+        const inferredSentAt = inferEmailSentAt(badge)
+        await badgeRef.update({
+          emailSentAt: inferredSentAt,
+          emailApprovedAt: badge.emailApprovedAt || inferredSentAt,
+          emailApprovedBy: badge.emailApprovedBy || user.email || 'admin',
+        })
+      }
+
+      return NextResponse.json(
+        { success: false, error: 'Email already sent', emailSentAt: inferEmailSentAt(badge) },
+        { status: 409 }
+      )
     }
 
     const badgeDef = BADGE_DEFINITIONS.find((def) => def.id === badge.badgeId)
@@ -106,7 +148,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Badge definition missing' }, { status: 400 })
     }
 
-    const authorData = await getAuthorData(authorSlug)
+    // Use admin fetcher to get email
+    const authorData = await getAdminWriter(authorSlug)
+
+    // Check for email specifically since getAdminWriter returns nullable
     if (!authorData?.email) {
       await badgeRef.update({
         emailStatus: 'pending',
@@ -117,7 +162,7 @@ export async function POST(request: NextRequest) {
 
     const sent = await sendBadgeAwardEmail({
       email: authorData.email,
-      name: authorData.name,
+      name: authorData.displayName,
       badge: badgeDef,
       credentialId: badge.credentialId,
       earnedAt: badge.earnedAt,
