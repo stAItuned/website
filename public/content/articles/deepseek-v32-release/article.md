@@ -78,12 +78,12 @@ DeepSeek-V3.2 is designed to be the **foundation** of your AI stack: the model y
 
 Public benchmarks place V3.2 squarely in **frontier territory**:
 
-* Around **93.1% accuracy on AIME 2025**, on par with GPT-5-level math reasoning. 
-* Strong results on **coding agent tests** like Terminal Bench 2.0 and SWE-Verified, competitive with top proprietary assistants. 
+* Around **93.1% accuracy on AIME 2025**[[1](#ref-1)], on par with GPT-5-level math reasoning. 
+* Strong results on **coding agent tests** like Terminal Bench 2.0 and SWE-Verified[[1](#ref-1)], competitive with top proprietary assistants. 
 
 Crucially, this comes with **dramatically lower costs**:
 
-* Analyses report **10–25× lower cost** than closed alternatives such as GPT-5 and Gemini-3.0-Pro, depending on provider and workload. 
+* Analyses report **10–25× lower cost** than closed alternatives such as GPT-5 and Gemini-3.0-Pro[[4](#ref-4)], depending on provider and workload. 
 * For long contexts (e.g., 128K tokens), inference costs can drop by **50–70%**, thanks to DeepSeek Sparse Attention (DSA). 
 
 In other words: **frontier-class reasoning at mid-tier prices**.
@@ -136,7 +136,7 @@ If V3.2 is your **electric daily driver**, then **V3.2-Speciale** is a **Formula
 
 DeepSeek explicitly positions Speciale as a **maxed-out reasoning model**, and its results back that up:
 
-* Around **96.0% on AIME 2025**, topping GPT-5-High on this benchmark. 
+* Around **96.0% on AIME 2025**[[1](#ref-1)], topping GPT-5-High on this benchmark. 
 * **Gold-medal performance** in:
 
   * **IMO 2025** (International Mathematical Olympiad)

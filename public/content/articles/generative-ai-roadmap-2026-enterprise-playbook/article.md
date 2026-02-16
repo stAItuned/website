@@ -101,7 +101,7 @@ geo:
 
 By 2026, **up to 40%** of enterprise applications will include **task-specific AI agents**, shifting from chatbots to workflow execution (Gartner). This article is for midway AI enthusiasts and business users who understand AI fundamentals but seek a practical playbook to navigate this architectural shift towards autonomous, goal-driven decision-making systems.
 
-## How to not fail with agents (in 5 bullets)
+## Critical Success Factors for Enterprise Agents
 
 - **Don't just chat, execute**: Focus on task-specific agents deeply embedded in apps (Gartner).
 - **Mitigate cancellation risk**: >40% of projects will fail by 2027 without clear ROI and risk controls.
@@ -334,4 +334,3 @@ Developers should focus on building the deterministic scaffolding around LLMs. T
 7. <a id="ref-7"></a>[**NIST AI 600-1: Generative AI Profile (July 2024)**](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
 
 ### Further reading (optional)
-- Market Curve (Substack) article can stay here as inspiration, but avoid using it as the primary evidence for Gartner stats.

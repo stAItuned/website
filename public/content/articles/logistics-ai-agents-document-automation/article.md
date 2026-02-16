@@ -75,13 +75,15 @@ geo:
 
 If you want to build a unicorn, stop looking for problems in Silicon Valley coffee shops and start looking at a shipping container. While the AI world is obsessed with generative art, the global supply chain is bleeding cash due to a problem that looks incredibly boring but is incredibly expensive: **Paper.**
 
-## How to not fail with Logistics AI Agents (in 5 bullets)
+## Strategic Pillars for Logistics AI Implementation
 
-- **Context over Coordinates**: Use semantic understanding, not pixel-perfect templates.
-- **Audit the Lifecycle**: Target the documents where a single typo causes a customs hold.
-- **Confidence Gating is Key**: Route low-scoring extractions to humans (HITL) to preserve integrity.
-- **Validate, Don't Just Extract**: Use Regex and DB checks to catch LLM "hallucinations" in numbers.
-- **The Happy Path First**: Automate the 80% standard formats before tackling the long-tail exceptions.
+Reliable document automation in logistics goes beyond simple OCR. Here are the core principles to ensure your agentic workflows succeed:
+
+1.  **Context-Driven Extraction**: Prioritize semantic understanding over fixed pixel coordinates to handle layout drift across different carriers.
+2.  **Lifecycle Auditing**: Focus on documents where errors cause the most friction, such as those triggering customs holds or demurrage fees.
+3.  **Intelligent Gating**: Use confidence thresholds to route low-scoring extractions to human experts (HITL), maintaining 100% data integrity.
+4.  **Deep Validation Layer**: Supplement extraction with deterministic checks (Regex, ISO standards) to prevent hallucinations in critical numbers like container IDs.
+5.  **Iterative Scaling**: Master the "Happy Path" of standard formats first before addressing the complex "Long Tail" of regional exceptions.
 
 ### Quick Glossary
 
@@ -102,7 +104,7 @@ The backbone of global trade still runs on PDFs, email attachments, and Excel sh
 
 For an AI Builder, this is the "Golden Ratio" of opportunity: A massive market drowning in unstructured data—**around 45 million** bills of lading are issued per year, yet **In 2021, only 1.2%** were electronic. The shift to **Agentic IDP** redefines Logistics AI, moving from passive scanners to proactive agents that can reason about shipping context and support the industry's **2030 commitment** to 100% eBL adoption.
 
-> **Key Stat (Savings):** Fully digitizing the Bill of Lading could save the industry **$6.5 Billion annually** at full adoption/at scale [[1](#ref-1)].
+The industry is recognizing that fully digitizing the Bill of Lading could save staggering sums—estimated at **$6.5 Billion annually** when reaching full adoption [[1](#ref-1)].
 
 > **Regulatory Tailwinds:** Legal recognition of electronic trade documents is advancing rapidly. The UK's **Electronic Trade Documents Act 2023** received Royal Assent in **July 2023** [[3](#ref-3)], a landmark move reducing the legal friction for eBL adoption globally.
 
