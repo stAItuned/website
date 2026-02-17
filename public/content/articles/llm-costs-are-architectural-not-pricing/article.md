@@ -86,24 +86,24 @@ The result is a system that becomes more powerful and less operable at the same 
 
 ## Why agentic RAG scales poorly in production
 
-![Diagram of the "Seven Step" Trap: a 5-step RAG pipeline where errors cascade, increasing latency, costs, and debugging complexity.](https://storage.googleapis.com/editorial-planner-images/article-images/1824726b-3564-4ec2-b14d-552f858e2cab/section_diagram_2_20260217_091638.webp)
+![Infographic showing Klarna's AI assistant success metrics (2.3M chats, 700 FTE equivalent) and the strategic shift toward balancing cost-cutting with service quality and operational control.](https://storage.googleapis.com/editorial-planner-images/article-images/1824726b-3564-4ec2-b14d-552f858e2cab/section_infographic_2_20260217_162629.webp)
 
-### Field note: The "seven step" trap
+### Public case study: Klarna’s customer service AI assistant (why “control” becomes the cost)
 
-In a recent production deployment for a financial services client, we replaced a hard-coded search with an "Autonomous Research Agent". The goal was to handle complex queries like *"Compare Q3 revenue growth adjusted for inflation"*.
+A concrete public example of “LLM costs are architectural” is Klarna’s customer service AI assistant.
 
-The pipeline looked robust:
-*   Intent Detection -> Query Rewriting -> Retrieval -> Validation -> Synthesis.
+Klarna reported that the assistant:
+- handled roughly **two-thirds** of customer service chats (about **2.3 million** conversations in its early rollout),
+- delivered resolution times of **<2 minutes vs ~11 minutes** previously,
+- and was described as doing work equivalent to **~700 full-time agents** (with reported reductions in repeat inquiries). [[5](#ref-5)]
 
-**The reality:**
-For a simple query like *"What is the Q3 revenue?"*, the agent still executed the full 5-step chain.
-*   **Latency:** Spiked from 400ms to 4.5s.
-*   **Cost:** 12 LLM calls per query (including self-correction).
-*   **Reliability:** The "Rewriter" occasionally altered the meaning of strict financial terms, causing subtle hallucinations.
+What matters for production economics is the *second-order effect*.
+Reuters later reported Klarna’s CEO acknowledged the company may have **over-indexed on AI for cost cutting**, shifting focus from “pure savings” to **service quality and growth**, including resuming hiring. [[6](#ref-6)]
 
-When a user reported an error, we couldn't just check the answer. We had to trace which of the 12 calls introduced the drift. We realized we had built a system where **debugging difficulty grew with reasoning depth**.
+> **Takeaway:** once an LLM system becomes a core operational layer, the dominant cost is not the API bill.
+It’s the **cost of control**: escalation policies, monitoring, QA, and the engineering effort to keep failure modes bounded.
 
-This aligns with findings from the "Seven Failure Points of RAG" [[2](#ref-2)], where errors cascade from retrieval to generation, making root-cause analysis a nightmare.
+(Technical note) Klarna’s stack is often discussed as moving toward a more **controllable architecture**, explicit routing/structured agent workflows and better observability, precisely to make production behavior operable. [[7](#ref-7)]
 
 ## Specialization changes the cost curve
 
@@ -180,6 +180,9 @@ Hybrid architectures redistribute complexity from runtime debugging to upfront a
 2. <a id="ref-2"></a>[**Seven Failure Points When Engineering a Retrieval Augmented Generation System**](https://arxiv.org/abs/2401.05856) - *Barnett et al., 2024.*
 3. <a id="ref-3"></a>[**Phi-3 Technical Report: A Highly Capable Language Model Locally on Your Phone**](https://arxiv.org/abs/2404.14219) - *Microsoft Research, 2024.*
 4. <a id="ref-4"></a>[**Building Effective AI Agents**](https://www.anthropic.com/research/building-effective-agents) - *Anthropic Research, 2024.*
+5. <a id="ref-5"></a>[**Klarna's AI assistant does the work of 700 full-time agents**](https://openai.com/index/klarna/) - *OpenAI, 2024.*
+6. <a id="ref-6"></a>[**Sweden's Klarna shifts AI focus from cost cuts to growth**](https://www.reuters.com/business/swedens-klarna-shifts-ai-focus-cost-cuts-growth-2025-09-10/) - *Reuters, 2025.*
+7. <a id="ref-7"></a>[**How Klarna's AI assistant redefined customer support at Klarna**](https://blog.langchain.com/customers-klarna/) - *LangChain Blog, 2024.*
 
 ---
 

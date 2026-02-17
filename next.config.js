@@ -363,21 +363,6 @@ const nextConfig = {
         destination: '/learn/expert/local-first-rag-without-storing-embeddings-leann',
         permanent: true,
       },
-      {
-        source: '/learn/Expert/:slug',
-        destination: '/learn/expert/:slug',
-        permanent: true,
-      },
-      {
-        source: '/learn/Midway/:slug',
-        destination: '/learn/midway/:slug',
-        permanent: true,
-      },
-      {
-        source: '/learn/Newbie/:slug',
-        destination: '/learn/newbie/:slug',
-        permanent: true,
-      },
     ]
   },
   async rewrites() {
