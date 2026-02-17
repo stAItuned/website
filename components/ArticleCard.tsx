@@ -2,6 +2,7 @@
 
 
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
 
 import { getTopicHub } from '@/config/topics'
@@ -24,8 +25,17 @@ interface ArticleCardProps {
 }
 
 const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
+const writerAvatarCache = new Map<string, string | null>()
+
+type PublicWriterApiResponse = {
+  image?: {
+    publicUrl?: string
+  }
+}
 
 export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCardProps) {
+  const [runtimeAuthorAvatar, setRuntimeAuthorAvatar] = useState<string | null>(null)
+
   // Fetch analytics for this article (fast endpoint)
   const { data: internalAnalytics, loading: analyticsLoading } = useFastAnalytics({
     slug: article.slug,
@@ -63,12 +73,60 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
     })
   }
 
-  const getAuthorImageSrc = (author?: string) => {
-    if (!author) return null
-    // Prefer author avatars from Firestore/GCS in dedicated author views.
-    // For feed cards, fallback to a neutral placeholder.
-    return DEFAULT_AVATAR_SRC
-  }
+  useEffect(() => {
+    const cleanAuthor = article.author?.trim()
+    if (!cleanAuthor) {
+      setRuntimeAuthorAvatar(null)
+      return
+    }
+
+    const normalizedSlug = cleanAuthor
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+
+    if (!normalizedSlug) {
+      setRuntimeAuthorAvatar(null)
+      return
+    }
+
+    const cached = writerAvatarCache.get(normalizedSlug)
+    if (cached !== undefined) {
+      setRuntimeAuthorAvatar(cached)
+      return
+    }
+
+    let active = true
+
+    const fetchAvatar = async () => {
+      try {
+        const response = await fetch(`/api/public/writers/${normalizedSlug}`, {
+          cache: 'force-cache',
+        })
+        if (!response.ok) {
+          writerAvatarCache.set(normalizedSlug, null)
+          return
+        }
+
+        const payload: PublicWriterApiResponse = await response.json()
+        const publicUrl = payload.image?.publicUrl ?? null
+        writerAvatarCache.set(normalizedSlug, publicUrl)
+
+        if (active) {
+          setRuntimeAuthorAvatar(publicUrl)
+        }
+      } catch {
+        writerAvatarCache.set(normalizedSlug, null)
+      }
+    }
+
+    fetchAvatar()
+
+    return () => {
+      active = false
+    }
+  }, [article.author])
 
   const isArticleNew = (dateString?: string) => {
     if (!dateString) return false
@@ -94,7 +152,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
   }
 
   const imageSrc = getValidImageSrc(article.cover)
-  const authorImageSrc = getAuthorImageSrc(article.author)
+  const authorImageSrc = runtimeAuthorAvatar || DEFAULT_AVATAR_SRC
   const isNewArticle = isArticleNew(article.date)
 
   const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'
