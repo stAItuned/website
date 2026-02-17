@@ -36,6 +36,14 @@ const toStringArray = (value: unknown): string[] => {
 }
 
 const toRecord = (value: unknown): UnknownRecord => (isRecord(value) ? value : {})
+const toOptionalRecord = (value: unknown): UnknownRecord | undefined =>
+  isRecord(value) ? value : undefined
+const toRecordArray = (value: unknown): UnknownRecord[] => {
+  if (!Array.isArray(value)) return []
+  return value
+    .map((item) => toRecord(item))
+    .filter((item) => Object.keys(item).length > 0)
+}
 
 const readingTimeMinutes = (content: string): number => {
   const wordsPerMinute = 200
@@ -63,6 +71,8 @@ export type ContentPost = {
   tags: string[]
   imagePath: string
   structuredData: UnknownRecord
+  faq?: UnknownRecord[]
+  geo?: UnknownRecord
   body: {
     raw: string
     [key: string]: unknown
@@ -166,14 +176,14 @@ const loadPostsFromFilesystem = (): ContentPost[] => {
     const published = toBooleanOr(frontmatter['published'], true)
 
     const faq = frontmatter['faq']
+    const normalizedFaq = toRecordArray(faq)
     const structuredData: UnknownRecord = (() => {
-      if (!Array.isArray(faq) || faq.length === 0) return {}
+      if (normalizedFaq.length === 0) return {}
 
-      const mainEntity = faq
+      const mainEntity = normalizedFaq
         .map((item): UnknownRecord | null => {
-          const rec = toRecord(item)
-          const question = toStringOr(rec['questionEn'], toStringOr(rec['question']))
-          const answer = toStringOr(rec['answerEn'], toStringOr(rec['answer']))
+          const question = toStringOr(item['questionEn'], toStringOr(item['question']))
+          const answer = toStringOr(item['answerEn'], toStringOr(item['answer']))
           if (!question || !answer) return null
           return {
             '@type': 'Question',
@@ -218,6 +228,8 @@ const loadPostsFromFilesystem = (): ContentPost[] => {
       tags: topics,
       imagePath,
       structuredData,
+      faq: normalizedFaq.length > 0 ? normalizedFaq : undefined,
+      geo: toOptionalRecord(frontmatter['geo']),
       body: { raw: bodyRaw },
       published,
       updatedAt: toIsoDateString(frontmatter['updatedAt']) || undefined,

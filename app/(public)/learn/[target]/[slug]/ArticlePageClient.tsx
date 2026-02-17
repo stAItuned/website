@@ -143,6 +143,9 @@ export default function ArticlePageClient({
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
     setMounted(true)
+    console.log('[DEBUG] ArticlePageClient mounted')
+    console.log('[DEBUG] article.geo:', article.geo)
+    console.log('[DEBUG] hasStrategicPlaybook:', hasStrategicPlaybook)
   }, [])
 
   useEffect(() => {
@@ -1105,7 +1108,7 @@ export default function ArticlePageClient({
                       </div>
                     </div>
                   </div>
-                <div className="flex-shrink-0 w-full sm:w-auto flex items-center justify-end sm:justify-center gap-2 mt-2 sm:mt-0">
+                  <div className="flex-shrink-0 w-full sm:w-auto flex items-center justify-end sm:justify-center gap-2 mt-2 sm:mt-0">
                     <div className="w-full sm:w-auto">
                       <LikeButton
                         articleSlug={article.slug}
