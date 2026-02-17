@@ -24,14 +24,15 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [innerWidth, setInnerWidth] = useState<number | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
     const handleResize = () => setInnerWidth(window.innerWidth)
-    handleResize() // Set initial value
+    const timer = window.setTimeout(handleResize, 0)
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.clearTimeout(timer)
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   // Auto-play functionality
@@ -69,7 +70,7 @@ export function RelatedArticles({ relatedArticles }: RelatedArticlesProps) {
   }
 
   // Render mobile view by default for SSR, then switch to appropriate view on client
-  if (!isMounted) {
+  if (innerWidth === null) {
     return (
       <section className="w-full">
         <div className="my-12 sm:my-16 md:my-24 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">

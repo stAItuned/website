@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useSyncExternalStore, ReactNode } from 'react'
 
 /**
  * User type for homepage personalization
@@ -25,17 +25,19 @@ const HomeUserTypeContext = createContext<HomeUserTypeContextValue | undefined>(
  * Provider component for homepage user type state
  */
 export function HomeUserTypeProvider({ children }: { children: ReactNode }) {
-    const [userType, setUserTypeState] = useState<HomeUserType>(null)
-    const [isLoading, setIsLoading] = useState(true)
-
-    // Load from localStorage on mount
-    useEffect(() => {
+    const [userType, setUserTypeState] = useState<HomeUserType>(() => {
+        if (typeof window === 'undefined') return null
         const stored = localStorage.getItem(STORAGE_KEY)
         if (stored === 'azienda' || stored === 'learner') {
-            setUserTypeState(stored)
+            return stored
         }
-        setIsLoading(false)
-    }, [])
+        return null
+    })
+    const isClient = useSyncExternalStore(
+        () => () => undefined,
+        () => true,
+        () => false
+    )
 
     // Save to localStorage when changed
     const setUserType = (type: HomeUserType) => {
@@ -52,7 +54,7 @@ export function HomeUserTypeProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <HomeUserTypeContext.Provider value={{ userType, setUserType, resetUserType, isLoading }}>
+        <HomeUserTypeContext.Provider value={{ userType, setUserType, resetUserType, isLoading: !isClient }}>
             {children}
         </HomeUserTypeContext.Provider>
     )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useToast } from './ui/Toast'
 import { event } from '@/lib/gtag'
 
@@ -26,20 +26,7 @@ export function ArticleRating({ articleSlug, className = '' }: ArticleRatingProp
     const [totalRatings, setTotalRatings] = useState<number>(0)
     const { showToast } = useToast()
 
-    // Check localStorage for existing rating
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const savedRating = localStorage.getItem(`rating_${articleSlug}`)
-            if (savedRating) {
-                setRating(parseInt(savedRating, 10))
-            }
-        }
-
-        // Fetch current average rating
-        fetchAverageRating()
-    }, [articleSlug])
-
-    const fetchAverageRating = async () => {
+    const fetchAverageRating = useCallback(async () => {
         try {
             const response = await fetch(`/api/rating?slug=${encodeURIComponent(articleSlug)}`)
             if (response.ok) {
@@ -52,7 +39,20 @@ export function ArticleRating({ articleSlug, className = '' }: ArticleRatingProp
         } catch (error) {
             console.error('Failed to fetch rating:', error)
         }
-    }
+    }, [articleSlug])
+
+    // Check localStorage for existing rating
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const savedRating = localStorage.getItem(`rating_${articleSlug}`)
+            if (savedRating) {
+                setRating(parseInt(savedRating, 10))
+            }
+        }
+
+        // Fetch current average rating
+        void fetchAverageRating()
+    }, [articleSlug, fetchAverageRating])
 
     const handleRate = async (value: number) => {
         if (loading || rating !== null) return

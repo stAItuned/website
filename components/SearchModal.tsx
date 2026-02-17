@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearch } from '@/components/SearchContext'
@@ -69,7 +69,7 @@ export function SearchModal() {
   }, [])
 
   // Save search to recent searches and track
-  const saveSearch = (term: string) => {
+  const saveSearch = useCallback((term: string) => {
     if (term.trim() && typeof window !== 'undefined') {
       const updated = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5)
       setRecentSearches(updated)
@@ -77,7 +77,7 @@ export function SearchModal() {
       // Track search performed
       trackSearchPerformed(term)
     }
-  }
+  }, [recentSearches])
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -108,7 +108,7 @@ export function SearchModal() {
       document.removeEventListener('keydown', handleKeyboard)
       document.body.style.overflow = 'unset'
     }
-  }, [isSearchOpen, closeSearch, filteredArticles, selectedIndex, searchTerm])
+  }, [isSearchOpen, closeSearch, filteredArticles, selectedIndex, searchTerm, saveSearch])
 
   // Reset search when modal closes
   useEffect(() => {

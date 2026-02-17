@@ -83,7 +83,7 @@ export default function FeedbackLauncher() {
       console.log('Opening feedback modal directly');
       setOpen(true);
     }
-  }, [user, loading]);
+  }, [user, loading, showAuthModal]);
 
     // Auto-open feedback modal when user becomes authenticated after auth modal was shown
   useEffect(() => {

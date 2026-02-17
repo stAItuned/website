@@ -72,7 +72,7 @@ export default function ArticleAnalyticsStats({ slug, initialAnalytics }: Articl
     }
 
     fetchAnalytics()
-  }, [slug])
+  }, [slug, initialAnalytics])
 
   // Log analytics data and props to the browser console
 //   if (typeof window !== 'undefined') {

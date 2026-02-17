@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLearnLocale } from '@/lib/i18n'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
 
@@ -125,12 +126,14 @@ export function ArticleCard({ article, accentColor, variant = 'list', index, pag
             {/* Cover image with overlay */}
             {article.cover && (
                 <div className="w-full sm:w-52 h-36 relative flex-shrink-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800">
-                    <img
+                    <Image
                         src={article.cover?.startsWith('/') || article.cover?.startsWith('http')
                             ? article.cover
                             : `${article.imagePath || ''}/${article.cover}`}
                         alt={article.title}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        sizes="(max-width: 640px) 100vw, 208px"
                     />
                     {/* Gradient overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

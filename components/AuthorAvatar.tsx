@@ -30,7 +30,7 @@ export default function AuthorAvatar({
   imageFit = 'cover'
 }: AuthorAvatarProps) {
   const [imageErrored, setImageErrored] = useState(false)
-  const [runtimeAvatar, setRuntimeAvatar] = useState<string | null>(authorData?.avatar ?? null)
+  const [fetchedAvatarBySlug, setFetchedAvatarBySlug] = useState<Record<string, string | null>>({})
 
   // Ensure author name is trimmed and formatted for slug
   const cleanAuthor = (authorData?.name || author).trim()
@@ -42,15 +42,8 @@ export default function AuthorAvatar({
     .replace(/^-|-$/g, '')
 
   useEffect(() => {
-    if (authorData?.avatar) {
-      setRuntimeAvatar(authorData.avatar)
-      return
-    }
-
-    if (!normalizedAuthorSlug) {
-      setRuntimeAvatar(null)
-      return
-    }
+    if (authorData?.avatar || !normalizedAuthorSlug) return
+    if (normalizedAuthorSlug in fetchedAvatarBySlug) return
 
     let active = true
 
@@ -62,13 +55,16 @@ export default function AuthorAvatar({
         if (!response.ok) return
 
         const payload: PublicWriterApiResponse = await response.json()
-        const publicUrl = payload.image?.publicUrl
+        const publicUrl = payload.image?.publicUrl ?? null
 
-        if (active && publicUrl) {
-          setRuntimeAvatar(publicUrl)
+        if (active) {
+          setFetchedAvatarBySlug((prev) => ({ ...prev, [normalizedAuthorSlug]: publicUrl }))
         }
       } catch {
         // Keep placeholder avatar on fetch failure.
+        if (active) {
+          setFetchedAvatarBySlug((prev) => ({ ...prev, [normalizedAuthorSlug]: null }))
+        }
       }
     }
 
@@ -77,10 +73,10 @@ export default function AuthorAvatar({
     return () => {
       active = false
     }
-  }, [authorData?.avatar, normalizedAuthorSlug])
+  }, [authorData?.avatar, fetchedAvatarBySlug, normalizedAuthorSlug])
 
   // Prefer Firestore/GCS avatar; fallback to generic placeholder.
-  const avatarSrc = runtimeAvatar || DEFAULT_AVATAR_SRC
+  const avatarSrc = authorData?.avatar || fetchedAvatarBySlug[normalizedAuthorSlug] || DEFAULT_AVATAR_SRC
 
   const initials = useMemo(() => {
     const parts = cleanAuthor.split(' ').filter(Boolean)

@@ -87,6 +87,10 @@ export default function AdminUsersPage() {
         );
     };
 
+    const getContactEmail = (person: User) => {
+        return person.email?.trim() || person.agreement?.author_email?.trim() || '-';
+    };
+
     useEffect(() => {
         if (!selectedUser?.agreement?.agreement_view_url || !user) {
             if (agreementPreviewUrl) {
@@ -209,7 +213,7 @@ export default function AdminUsersPage() {
                                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
                                         {getDisplayName(person)}
                                     </p>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 break-all">{person.email}</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 break-all">{getContactEmail(person)}</p>
                                 </div>
                                 <span className="inline-flex items-center rounded-md bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-700/30 dark:text-slate-300">
                                     Joined {formatDate(person.createdAt)}
@@ -316,7 +320,7 @@ export default function AdminUsersPage() {
                                             <tr key={person.uid}>
                                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                                                     <div className="font-medium text-slate-900 dark:text-white">{getDisplayName(person)}</div>
-                                                    <div className="text-slate-500 dark:text-slate-400">{person.email}</div>
+                                                    <div className="text-slate-500 dark:text-slate-400">{getContactEmail(person)}</div>
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
                                                     {person.writerProfile ? (
@@ -395,7 +399,7 @@ export default function AdminUsersPage() {
                             <div>
                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Writer Agreement</h3>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                                    {getDisplayName(selectedUser)} • {selectedUser.email}
+                                    {getDisplayName(selectedUser)} • {getContactEmail(selectedUser)}
                                 </p>
                             </div>
                             <button

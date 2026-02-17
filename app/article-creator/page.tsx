@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
 
@@ -153,7 +153,7 @@ export default function ArticleCreator() {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000);
   };
 
-  const renderMarkdown = () => {
+  const renderMarkdown = useCallback(() => {
     let html = marked(formData.content) as string;
     
     // Replace image references with actual base64 data
@@ -163,13 +163,13 @@ export default function ArticleCreator() {
     });
 
     setRenderedHtml(html);
-  };
+  }, [formData.content, uploadedImages]);
 
   useEffect(() => {
     if (activeTab === 'rendered') {
       renderMarkdown();
     }
-  }, [activeTab, formData.content, uploadedImages]);
+  }, [activeTab, renderMarkdown]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -438,6 +438,8 @@ export default function ArticleCreator() {
 
               {coverImage ? (
                 <div className="flex items-center gap-3 p-3 stai-glass-panel stai-border rounded-md">
+                  {/* Preview uses local data URL; next/image provides no optimization benefit here. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={coverImage.data}
                     alt="Cover"
@@ -508,6 +510,8 @@ export default function ArticleCreator() {
                 ) : (
                   uploadedImages.map((img) => (
                     <div key={img.id} className="flex items-center gap-3 p-3 stai-glass-panel stai-border rounded-md">
+                      {/* Preview uses local data URL; next/image provides no optimization benefit here. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={img.data}
                         alt={img.name}

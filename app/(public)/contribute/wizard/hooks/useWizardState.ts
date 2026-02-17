@@ -185,7 +185,7 @@ export function useWizardState(): UseWizardStateReturn {
             setData(parsedState.data)
         }
         setIsMounted(true)
-    }, [])
+    }, [searchParams])
 
     // Sync data.language when locale changes
     useEffect(() => {
@@ -241,7 +241,7 @@ export function useWizardState(): UseWizardStateReturn {
                 setStep('interview')
             }
         }
-    }, [step, data.agreement?.agreed, data.agreement?.checkbox_general, data.path, hasAgreement])
+    }, [step, data.agreement, data.agreement?.agreed, data.agreement?.checkbox_general, data.path, hasAgreement])
 
     // SANITY CHECK: If Firestore says agreement is missing, we must not trust stale localStorage.
     useEffect(() => {
@@ -270,44 +270,7 @@ export function useWizardState(): UseWizardStateReturn {
                 setStep('pitch')
             }
         }
-    }, [hasAgreement, data.agreement?.agreed, data.agreement?.checkbox_general, step, setStep, data.brief])
-
-    // Fetch contribution from URL ID or local draft ID on refresh
-    useEffect(() => {
-        if (!user) return
-        const id = searchParams.get('id')
-        const localDraftId = !id ? data.id : null
-        const targetId = id || localDraftId || null
-
-        if (!targetId) return
-        if (lastFetchedContributionIdRef.current === targetId) return
-
-        lastFetchedContributionIdRef.current = targetId
-        setIsLoadingContribution(true)
-        fetchContribution(targetId)
-    }, [searchParams, user, data.id])
-
-    // Check for existing contributions and resolve landing
-    useEffect(() => {
-        if (!isMounted) return
-        if (!user) return
-
-        const id = searchParams.get('id')
-        if (id) return
-
-        const hasLocalUnsavedBrief = Boolean((data.brief?.topic || data.brief?.thesis) && !data.id)
-        if (hasLocalUnsavedBrief) return
-
-        const pathParam = searchParams.get('path')
-        const shouldCheckContributions = !hasCheckedContributions && (
-            step === 'path_intro' ||
-            step === 'resume_selection'
-        )
-
-        if (shouldCheckContributions) {
-            checkExistingContributions(pathParam)
-        }
-    }, [user, step, searchParams, hasCheckedContributions, isMounted, data.brief, data.id])
+    }, [hasAgreement, data.agreement, data.agreement?.agreed, data.agreement?.checkbox_general, step, setStep, data.brief])
 
     const resolveResumeStep = (contribution: Contribution): WizardStep => {
         if (TERMINAL_STATUSES.includes(contribution.status)) {
@@ -332,7 +295,7 @@ export function useWizardState(): UseWizardStateReturn {
         }
     }
 
-    const fetchContribution = async (id: string) => {
+    const fetchContribution = useCallback(async (id: string) => {
         if (!user) return
         try {
             const token = await user.getIdToken()
@@ -404,9 +367,9 @@ export function useWizardState(): UseWizardStateReturn {
         } finally {
             setIsLoadingContribution(false) // Done loading
         }
-    }
+    }, [user, redirectToDashboard, getLocalStateContribution, syncUrlContributionId])
 
-    const checkExistingContributions = async (pathParam?: string | null) => {
+    const checkExistingContributions = useCallback(async (pathParam?: string | null) => {
         if (!user) return
         try {
             const token = await user.getIdToken()
@@ -451,7 +414,44 @@ export function useWizardState(): UseWizardStateReturn {
         } finally {
             setHasCheckedContributions(true)
         }
-    }
+    }, [user, step, syncUrlContributionId])
+
+    // Fetch contribution from URL ID or local draft ID on refresh
+    useEffect(() => {
+        if (!user) return
+        const id = searchParams.get('id')
+        const localDraftId = !id ? data.id : null
+        const targetId = id || localDraftId || null
+
+        if (!targetId) return
+        if (lastFetchedContributionIdRef.current === targetId) return
+
+        lastFetchedContributionIdRef.current = targetId
+        setIsLoadingContribution(true)
+        void fetchContribution(targetId)
+    }, [searchParams, user, data.id, fetchContribution])
+
+    // Check for existing contributions and resolve landing
+    useEffect(() => {
+        if (!isMounted) return
+        if (!user) return
+
+        const id = searchParams.get('id')
+        if (id) return
+
+        const hasLocalUnsavedBrief = Boolean((data.brief?.topic || data.brief?.thesis) && !data.id)
+        if (hasLocalUnsavedBrief) return
+
+        const pathParam = searchParams.get('path')
+        const shouldCheckContributions = !hasCheckedContributions && (
+            step === 'path_intro' ||
+            step === 'resume_selection'
+        )
+
+        if (shouldCheckContributions) {
+            void checkExistingContributions(pathParam)
+        }
+    }, [user, step, searchParams, hasCheckedContributions, isMounted, data.brief, data.id, checkExistingContributions])
 
     return {
         step,

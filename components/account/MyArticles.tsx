@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -77,16 +77,7 @@ export function MyArticles({ userEmail }: MyArticlesProps) {
     const [loadingContributions, setLoadingContributions] = useState(false)
     const [selectedContribution, setSelectedContribution] = useState<Contribution | null>(null)
 
-    useEffect(() => {
-        if (!userEmail) return
-        fetchArticles(1, sortBy, sortOrder)
-
-        if (user) {
-            fetchContributions()
-        }
-    }, [userEmail, user, sortBy, sortOrder])
-
-    const fetchArticles = async (page: number, sort: SortOption, order: SortOrder) => {
+    const fetchArticles = useCallback(async (page: number, sort: SortOption, order: SortOrder) => {
         if (!userEmail) {
             setLoading(false)
             return
@@ -124,9 +115,9 @@ export function MyArticles({ userEmail }: MyArticlesProps) {
         } finally {
             setLoading(false)
         }
-    }
+    }, [userEmail])
 
-    const fetchContributions = async () => {
+    const fetchContributions = useCallback(async () => {
         if (!user) return
         setLoadingContributions(true)
         try {
@@ -145,7 +136,16 @@ export function MyArticles({ userEmail }: MyArticlesProps) {
         } finally {
             setLoadingContributions(false)
         }
-    }
+    }, [user])
+
+    useEffect(() => {
+        if (!userEmail) return
+        void fetchArticles(1, sortBy, sortOrder)
+
+        if (user) {
+            void fetchContributions()
+        }
+    }, [userEmail, user, sortBy, sortOrder, fetchArticles, fetchContributions])
 
     const handlePageChange = (newPage: number) => {
         fetchArticles(newPage, sortBy, sortOrder)

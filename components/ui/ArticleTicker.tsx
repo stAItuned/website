@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle, useSyncExternalStore } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
@@ -185,7 +185,6 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
   externalPaused = false,
 }, ref) {
   const [isHovered, setIsHovered] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [isTabVisible, setIsTabVisible] = useState(true)
   const [trackWidth, setTrackWidth] = useState(0)
 
@@ -208,14 +207,16 @@ export const ArticleTicker = forwardRef<ArticleTickerRef, ArticleTickerProps>(fu
     }
   }), [])
 
-  // Check reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
-    mediaQuery.addEventListener('change', handler)
-    return () => mediaQuery.removeEventListener('change', handler)
-  }, [])
+  const prefersReducedMotion = useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === 'undefined') return () => undefined
+      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+      mediaQuery.addEventListener('change', onStoreChange)
+      return () => mediaQuery.removeEventListener('change', onStoreChange)
+    },
+    () => (typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false),
+    () => false
+  )
 
   // Page Visibility API
   useEffect(() => {

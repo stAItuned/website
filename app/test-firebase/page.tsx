@@ -16,37 +16,52 @@ export default function TestFirebasePage() {
   const { hasConsentedToAnalytics } = useCookieConsent()
 
   useEffect(() => {
-    try {
-      // Test Firebase app initialization
-      if (app) {
-        setFirebaseStatus('✅ Firebase app initialized successfully')
-        setConfig(app.options)
-      } else {
-        setFirebaseStatus('❌ Firebase app failed to initialize')
+    const timer = window.setTimeout(() => {
+      try {
+        // Test Firebase app initialization
+        if (app) {
+          setFirebaseStatus('✅ Firebase app initialized successfully')
+          setConfig(app.options)
+        } else {
+          setFirebaseStatus('❌ Firebase app failed to initialize')
+        }
+      } catch (error) {
+        setFirebaseStatus(`❌ Error: ${error}`)
+        setAnalyticsStatus(`❌ Error: ${error}`)
       }
-    } catch (error) {
-      setFirebaseStatus(`❌ Error: ${error}`)
-      setAnalyticsStatus(`❌ Error: ${error}`)
-    }
+    }, 0)
+
+    return () => window.clearTimeout(timer)
   }, [])
 
   useEffect(() => {
     if (!hasConsentedToAnalytics) {
-      setAnalyticsStatus('⛔ Analytics disabled (no consent)')
-      return
+      const timer = window.setTimeout(() => {
+        setAnalyticsStatus('⛔ Analytics disabled (no consent)')
+      }, 0)
+      return () => window.clearTimeout(timer)
     }
 
-    initFirebaseAnalytics()
-      .then((instance) => {
+    let isActive = true
+    const run = async () => {
+      try {
+        const instance = await initFirebaseAnalytics()
+        if (!isActive) return
         if (instance) {
           setAnalyticsStatus('✅ Analytics initialized successfully (consent granted)')
         } else {
           setAnalyticsStatus('⚠️ Analytics not initialized')
         }
-      })
-      .catch((error) => {
+      } catch (error) {
+        if (!isActive) return
         setAnalyticsStatus(`❌ Error: ${error}`)
-      })
+      }
+    }
+
+    run()
+    return () => {
+      isActive = false
+    }
   }, [hasConsentedToAnalytics])
 
   const handleSignInSuccess = (user: User) => {

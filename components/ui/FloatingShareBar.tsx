@@ -71,7 +71,7 @@ export function FloatingShareBar(props: FloatingShareBarProps) {
         setInternalCurrentLikes(likes)
       }
     }
-  }, [articleSlug, likes, isControlled])
+  }, [articleSlug, likes, isControlled, internalCurrentLikes])
 
   const handleLike = async () => {
     if (isControlled && externalOnLike) {

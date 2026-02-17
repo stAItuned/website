@@ -5,7 +5,7 @@ import type React from 'react'
 import { UserMenuPanel } from './UserMenuPanel'
 
 vi.mock('next/image', () => ({
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img alt="" {...props} />,
 }))
 
 vi.mock('next/link', () => ({

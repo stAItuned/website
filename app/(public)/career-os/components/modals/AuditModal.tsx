@@ -49,7 +49,7 @@ export default function AuditModal() {
                 trackAuditModalAbandon('closed_modal')
             }
         }
-    }, [isAuditModalOpen])
+    }, [isAuditModalOpen, status])
 
     if (!isAuditModalOpen) return null
 

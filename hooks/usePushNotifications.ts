@@ -59,6 +59,40 @@ export function usePushNotifications(): PushNotificationState {
     const [subscribedTopics, setSubscribedTopics] = useState<string[]>([])
     const [messaging, setMessaging] = useState<Messaging | null>(null)
 
+    // Initialize FCM messaging
+    const initializeMessaging = useCallback(async () => {
+        if (!isSupported || typeof window === 'undefined') return null
+
+        try {
+            // Register the FCM service worker
+            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            console.log('[FCM] Service worker registered:', registration.scope)
+
+            const msg = getMessaging(app)
+            setMessaging(msg)
+
+            // Set up foreground message handler
+            onMessage(msg, (payload) => {
+                console.log('[FCM] Foreground message:', payload)
+
+                // Show notification manually for foreground messages
+                if (Notification.permission === 'granted' && payload.notification) {
+                    new Notification(payload.notification.title || 'stAItuned Learn', {
+                        body: payload.notification.body,
+                        icon: '/icon-192.png',
+                        tag: 'staituned-foreground',
+                        data: payload.data
+                    })
+                }
+            })
+
+            return msg
+        } catch (err) {
+            console.error('[FCM] Failed to initialize messaging:', err)
+            return null
+        }
+    }, [isSupported])
+
     // Check support and current permission on mount
     useEffect(() => {
         if (typeof window === 'undefined') return
@@ -93,43 +127,9 @@ export function usePushNotifications(): PushNotificationState {
 
         // Initialize messaging if permission granted
         if (Notification.permission === 'granted') {
-            initializeMessaging()
+            void initializeMessaging()
         }
-    }, [])
-
-    // Initialize FCM messaging
-    const initializeMessaging = useCallback(async () => {
-        if (!isSupported || typeof window === 'undefined') return null
-
-        try {
-            // Register the FCM service worker
-            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
-            console.log('[FCM] Service worker registered:', registration.scope)
-
-            const msg = getMessaging(app)
-            setMessaging(msg)
-
-            // Set up foreground message handler
-            onMessage(msg, (payload) => {
-                console.log('[FCM] Foreground message:', payload)
-
-                // Show notification manually for foreground messages
-                if (Notification.permission === 'granted' && payload.notification) {
-                    new Notification(payload.notification.title || 'stAItuned Learn', {
-                        body: payload.notification.body,
-                        icon: '/icon-192.png',
-                        tag: 'staituned-foreground',
-                        data: payload.data
-                    })
-                }
-            })
-
-            return msg
-        } catch (err) {
-            console.error('[FCM] Failed to initialize messaging:', err)
-            return null
-        }
-    }, [isSupported])
+    }, [initializeMessaging])
 
     // Request permission and get token
     const requestPermission = useCallback(async (): Promise<boolean> => {

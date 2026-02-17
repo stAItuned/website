@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { allPosts } from '@/lib/contentlayer'
 import { extractTOC } from '@/lib/markdown-headings'
@@ -33,10 +33,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ target: string; slug: string }> }): Promise<Metadata> {
   const { target, slug } = await params;
+  const normalizedTarget = target.toLowerCase();
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com';
   // Find the article
   const article = allPosts.find((post) =>
-    post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
+    post.slug === slug && post.target?.toLowerCase() === normalizedTarget
   );
   if (!article) {
     return {
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
       description: 'The requested article could not be found.'
     };
   }
-  const url = `${base}/learn/${article.target}/${article.slug}`;
+  const url = `${base}/learn/${normalizedTarget}/${article.slug}`;
 
   // Use actual cover image if available, otherwise use default OG image
   // Note: article.imagePath contains the correct path to the article directory
@@ -82,6 +83,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
 
   // Determine locale based on article language
   const ogLocale = article.language === 'Italian' ? 'it_IT' : 'en_US';
+  const contentLanguage = article.language === 'Italian' ? 'it' : 'en';
 
   return {
     title: article.seoTitle ?? article.title,
@@ -98,7 +100,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
       title: article.seoTitle ?? article.title,
       description: article.seoDescription ?? article.meta ?? article.title,
       publishedTime: article.date,
-      modifiedTime: article.date,
+      modifiedTime: article.updatedAt ?? article.date,
       authors: article.author ? [article.author] : undefined,
       section: article.target ?? 'AI',
       tags: article.topics,
@@ -119,16 +121,23 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
       description: article.seoDescription ?? article.meta ?? article.title,
       images: [ogImage],
     },
+    other: {
+      'content-language': contentLanguage,
+    },
   };
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ target: string; slug: string }> }) {
   const { target, slug } = await params
+  const normalizedTarget = target.toLowerCase()
+  if (target !== normalizedTarget) {
+    permanentRedirect(`/learn/${normalizedTarget}/${slug}`)
+  }
   // Debug: log on mount
   console.log('[ArticlePage] MOUNTED', { target, slug })
   // Find the article
   const article = allPosts.find((post) =>
-    post.slug === slug && post.target?.toLowerCase() === target.toLowerCase()
+    post.slug === slug && post.target?.toLowerCase() === normalizedTarget
   )
   if (!article) {
     notFound()
@@ -137,7 +146,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   const getRelatedArticles = () => {
     // Filter articles by same target, excluding current article
     let relatedArticlesByTarget = allPosts.filter((post) =>
-      post.target?.toLowerCase() === target.toLowerCase() &&
+      post.target?.toLowerCase() === normalizedTarget &&
       post.slug !== slug &&
       post.published !== false
     )
@@ -153,7 +162,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
     return relatedArticlesByTarget.slice(0, 5)
   }
   const relatedArticles = getRelatedArticles()
-  const targetDisplay = target.charAt(0).toUpperCase() + target.slice(1)
+  const targetDisplay = normalizedTarget.charAt(0).toUpperCase() + normalizedTarget.slice(1)
   const getValidImageSrc = (cover?: string) => {
     if (!cover) return null
     if (cover.startsWith('http://') || cover.startsWith('https://')) {
@@ -190,14 +199,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
     section: article.target,
     keywords: article.topics,
     readingTime: article.readTime,
+    language: article.language,
   })
 
   // Breadcrumb schema
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Learn', url: '/learn' },
-    { name: targetDisplay, url: `/learn/${target}` },
-    { name: article.title, url: `/learn/${target}/${slug}` },
+    { name: targetDisplay, url: `/learn/${normalizedTarget}` },
+    { name: article.title, url: `/learn/${normalizedTarget}/${slug}` },
   ])
 
   return (
@@ -211,7 +221,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
         coverImage={coverImage}
         article={article}
         toc={toc}
-        target={target}
+        target={normalizedTarget}
         targetDisplay={targetDisplay}
         relatedArticles={relatedArticles}
         authorData={authorData}

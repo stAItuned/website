@@ -64,10 +64,13 @@ function ProofCard({ item }: { item: ProcessProofItem }) {
             {/* Media Preview */}
             <div className="relative aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 dark:bg-slate-800">
                 {item.mediaType === 'gif' && (
-                    <img
+                    <Image
                         src={item.mediaSrc}
                         alt={item.mediaAlt}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        unoptimized
                     />
                 )}
                 {item.mediaType === 'image' && (

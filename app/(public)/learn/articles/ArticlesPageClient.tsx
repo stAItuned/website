@@ -62,20 +62,30 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
     const searchParams = useSearchParams()
     const router = useRouter()
     const levelFromUrl = searchParams.get('level')
+    const sharedText = searchParams.get('text')
+    const sharedTitle = searchParams.get('title')
+    const sharedUrl = searchParams.get('url')
+    const normalizedLevelFromUrl =
+        levelFromUrl && ['newbie', 'midway', 'expert'].includes(levelFromUrl.toLowerCase())
+            ? levelFromUrl.toLowerCase()
+            : null
 
-    const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
+    const initialShareQuery = useMemo(() => {
+        if (sharedText) return sharedText.substring(0, 100)
+        if (sharedTitle) return sharedTitle.substring(0, 100)
+        if (sharedUrl) {
+            const urlMatch = sharedUrl.match(/learn\/[^/]+\/([^/]+)\/?$/)
+            if (urlMatch) return urlMatch[1].replace(/-/g, ' ').substring(0, 100)
+        }
+        return ''
+    }, [sharedText, sharedTitle, sharedUrl])
+
+    const [selectedLevel, setSelectedLevel] = useState<string | null>(normalizedLevelFromUrl)
     const [currentPage, setCurrentPage] = useState(1)
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useState(initialShareQuery)
     const [sortBy, setSortBy] = useState<SortOption>('recent')
     const [analyticsData, setAnalyticsData] = useState<Record<string, number>>({})
     const [showFilters, setShowFilters] = useState(false)
-
-    // Set initial level from URL param
-    useEffect(() => {
-        if (levelFromUrl && ['newbie', 'midway', 'expert'].includes(levelFromUrl.toLowerCase())) {
-            setSelectedLevel(levelFromUrl.toLowerCase())
-        }
-    }, [levelFromUrl])
 
     // Fetch analytics data for trending
     useEffect(() => {
@@ -101,35 +111,12 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
         fetchAnalytics()
     }, [])
 
-    // Handle PWA share_target - when content is shared to the app
+    // Handle PWA share_target cleanup after bootstrapping the initial query.
     useEffect(() => {
-        const sharedText = searchParams.get('text')
-        const sharedTitle = searchParams.get('title')
-        const sharedUrl = searchParams.get('url')
-
-        // If shared content exists, use it as search query
-        if (sharedText || sharedTitle || sharedUrl) {
-            // Prefer text, then title, extract keywords from URL
-            let query = ''
-            if (sharedText) {
-                query = sharedText
-            } else if (sharedTitle) {
-                query = sharedTitle
-            } else if (sharedUrl) {
-                // Extract article slug from URL if it's a stAItuned URL
-                const urlMatch = sharedUrl.match(/learn\/[^/]+\/([^/]+)\/?$/)
-                if (urlMatch) {
-                    query = urlMatch[1].replace(/-/g, ' ')
-                }
-            }
-
-            if (query) {
-                setSearchQuery(query.substring(0, 100)) // Limit query length
-                // Clean URL params to avoid re-triggering
-                router.replace('/learn/articles', { scroll: false })
-            }
+        if (initialShareQuery) {
+            router.replace('/learn/articles', { scroll: false })
         }
-    }, [searchParams, router])
+    }, [initialShareQuery, router])
 
     // Filter and Sort articles
     const filteredArticles = useMemo(() => {

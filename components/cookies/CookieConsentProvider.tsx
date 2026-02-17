@@ -92,16 +92,15 @@ export function CookieConsentProvider({ children }: { children: React.ReactNode 
   }, [language])
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    const timer = window.setTimeout(() => {
+      const storedValue = window.localStorage.getItem(STORAGE_KEY)
+      if (storedValue === 'accepted' || storedValue === 'rejected') {
+        setStatus(storedValue)
+      }
       setIsReady(true)
-      return
-    }
+    }, 0)
 
-    const storedValue = window.localStorage.getItem(STORAGE_KEY)
-    if (storedValue === 'accepted' || storedValue === 'rejected') {
-      setStatus(storedValue)
-    }
-    setIsReady(true)
+    return () => window.clearTimeout(timer)
   }, [])
 
   const persistStatus = (value: ConsentStatus) => {

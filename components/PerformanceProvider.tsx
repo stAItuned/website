@@ -59,7 +59,7 @@ export function PerformanceProvider({
       document.addEventListener('visibilitychange', handleVisibilityChange)
       return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [monitor])
+  }, [monitor, shouldMonitor])
 
   return (
     <>

@@ -15,27 +15,22 @@ export function ActionChecklist({
     className = ""
 }: ActionChecklistProps) {
     const storageKey = `checklist_${articleSlug}`
-    const [checkedIndices, setCheckedIndices] = useState<number[]>([])
-    const [mounted, setMounted] = useState(false)
+    const [checkedIndices, setCheckedIndices] = useState<number[]>(() => {
+        if (typeof window === 'undefined') return []
+        const saved = localStorage.getItem(storageKey)
+        if (!saved) return []
+        try {
+            const parsed = JSON.parse(saved)
+            return Array.isArray(parsed) ? parsed : []
+        } catch {
+            return []
+        }
+    })
     const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
-        setMounted(true)
-        const saved = localStorage.getItem(storageKey)
-        if (saved) {
-            try {
-                setCheckedIndices(JSON.parse(saved))
-            } catch (e) {
-                console.error("Failed to parse checklist progress", e)
-            }
-        }
-    }, [storageKey])
-
-    useEffect(() => {
-        if (mounted) {
-            localStorage.setItem(storageKey, JSON.stringify(checkedIndices))
-        }
-    }, [checkedIndices, mounted, storageKey])
+        localStorage.setItem(storageKey, JSON.stringify(checkedIndices))
+    }, [checkedIndices, storageKey])
 
     const toggleItem = (index: number) => {
         setCheckedIndices(prev =>
@@ -48,7 +43,7 @@ export function ActionChecklist({
     const next = () => setCurrentIndex((prev) => (prev + 1) % items.length)
     const prev = () => setCurrentIndex((prev) => (prev - 1 + items.length) % items.length)
 
-    if (!mounted || items.length === 0) return null
+    if (items.length === 0) return null
 
     return (
         <div className={`relative flex flex-col ${className}`}>

@@ -118,6 +118,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ cred
                     >
                         <img
                             src={badgeImageDataUrl}
+                            alt={`${badgeDef.name.en} badge`}
                             width={380}
                             height={418}
                             style={{

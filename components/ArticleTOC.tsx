@@ -20,7 +20,8 @@ export function ArticleTOC({ toc, enableScrollSpy = true, onLinkClick, highlight
 
   useEffect(() => {
     if (ids.length) {
-      setActive(ids[0])
+      const timer = window.setTimeout(() => setActive(ids[0]), 0)
+      return () => window.clearTimeout(timer)
     }
   }, [ids])
 

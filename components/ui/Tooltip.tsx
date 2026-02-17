@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, ReactNode, useEffect } from 'react'
+import { useState, useRef, useCallback, useMemo, useSyncExternalStore, type CSSProperties, ReactNode, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 /**
@@ -39,15 +39,19 @@ export function Tooltip({
 }: TooltipProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [coords, setCoords] = useState({ top: 0, left: 0 })
+    const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
     const triggerRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
-    const [mounted, setMounted] = useState(false)
     const hoveringContentRef = useRef(false)
     const [contentSize, setContentSize] = useState({ width: 0, height: 0 })
+    const mounted = useSyncExternalStore(
+        () => () => undefined,
+        () => true,
+        () => false
+    )
 
     useEffect(() => {
-        setMounted(true)
         return () => {
             if (timeoutRef.current) clearTimeout(timeoutRef.current)
         }
@@ -56,6 +60,7 @@ export function Tooltip({
     const updateCoords = useCallback(() => {
         if (triggerRef.current) {
             const rect = triggerRef.current.getBoundingClientRect()
+            setTriggerRect(rect)
             setCoords({
                 top: rect.top + window.scrollY,
                 left: rect.left + window.scrollX,
@@ -79,7 +84,7 @@ export function Tooltip({
         timeoutRef.current = setTimeout(() => {
             if (!hoveringContentRef.current) setIsOpen(false)
         }, 80)
-    }, [])
+    }, [interactive])
 
     const handleClick = useCallback(() => {
         if ('ontouchstart' in window) {
@@ -95,11 +100,11 @@ export function Tooltip({
     }, [isOpen, content, maxWidth])
 
     // Positioning logic with viewport clamp + flip
-    const getTooltipPosition = () => {
-        if (!triggerRef.current) {
+    const position = useMemo(() => {
+        if (!triggerRect) {
             return { style: {}, resolvedSide: side }
         }
-        const rect = triggerRef.current.getBoundingClientRect()
+        const rect = triggerRect
         const tooltipWidth = contentSize.width || maxWidth
         const tooltipHeight = contentSize.height || 0
 
@@ -161,7 +166,7 @@ export function Tooltip({
             },
             resolvedSide,
         }
-    }
+    }, [contentSize.height, contentSize.width, coords.left, coords.top, maxWidth, side, triggerRect])
 
     if (!content) return <>{children}</>
 
@@ -181,7 +186,7 @@ export function Tooltip({
                 <div
                     role="tooltip"
                     ref={contentRef}
-                    style={getTooltipPosition().style}
+                    style={position.style}
                     onMouseEnter={() => {
                         hoveringContentRef.current = true
                         if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -206,14 +211,10 @@ export function Tooltip({
                         className={`
                             absolute w-2 h-2 rotate-45
                             bg-slate-900 dark:bg-slate-100
-                            ${(() => {
-                                const { resolvedSide } = getTooltipPosition()
-                                if (resolvedSide === 'top') return 'top-full -mt-1 left-1/2 -translate-x-1/2'
-                                if (resolvedSide === 'bottom') return 'bottom-full -mb-1 left-1/2 -translate-x-1/2'
-                                if (resolvedSide === 'left') return 'left-full -ml-1 top-1/2 -translate-y-1/2'
-                                if (resolvedSide === 'right') return 'right-full -mr-1 top-1/2 -translate-y-1/2'
-                                return ''
-                            })()}
+                            ${position.resolvedSide === 'top' ? 'top-full -mt-1 left-1/2 -translate-x-1/2' : ''}
+                            ${position.resolvedSide === 'bottom' ? 'bottom-full -mb-1 left-1/2 -translate-x-1/2' : ''}
+                            ${position.resolvedSide === 'left' ? 'left-full -ml-1 top-1/2 -translate-y-1/2' : ''}
+                            ${position.resolvedSide === 'right' ? 'right-full -mr-1 top-1/2 -translate-y-1/2' : ''}
                         `}
                     />
                 </div>,

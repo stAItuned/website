@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { NewsletterSignup } from './NewsletterSignup'
 
 interface NewsletterModalProps {
@@ -9,14 +8,6 @@ interface NewsletterModalProps {
 }
 
 export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
-    if (!mounted) return null
-
     return (
         <div
             className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}

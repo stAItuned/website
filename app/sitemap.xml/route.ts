@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { allPosts } from "@/lib/contentlayer";
+import { statSync } from "node:fs";
+import path from "node:path";
+import { allPosts, allTopics } from "@/lib/contentlayer";
 import { getAllProducts } from "@/lib/products";
 
 export const runtime = "nodejs";
@@ -46,6 +48,37 @@ function getMostRecentPostDate(posts: typeof allPosts, section?: string): string
   return new Date(Math.max(...dates)).toISOString();
 }
 
+function getMostRecentPostDateForTopic(posts: typeof allPosts, topicSlug: string): string {
+  const normalizedTopic = topicSlug.toLowerCase();
+  const filtered = posts.filter((post) => {
+    const primaryTopic = (post.primaryTopic ?? "").toLowerCase();
+    const topics = (post.topics ?? []).map((topic) => topic.toLowerCase());
+    return primaryTopic === normalizedTopic || topics.includes(normalizedTopic);
+  });
+
+  if (filtered.length === 0) return buildDate;
+
+  const dates = filtered.map((post) => new Date(post.updatedAt || post.date || 0).getTime());
+  return new Date(Math.max(...dates)).toISOString();
+}
+
+function getLatestFileMtime(relativePaths: string[]): string {
+  const mtimes: number[] = [];
+
+  for (const relativePath of relativePaths) {
+    try {
+      const absolutePath = path.join(process.cwd(), relativePath);
+      const stat = statSync(absolutePath);
+      mtimes.push(stat.mtime.getTime());
+    } catch {
+      // Ignore missing files and keep best-effort behavior.
+    }
+  }
+
+  if (mtimes.length === 0) return buildDate;
+  return new Date(Math.max(...mtimes)).toISOString();
+}
+
 export async function GET() {
   // Only published posts (explicit true to exclude drafts/null)
   const posts = allPosts.filter((p) => p.published === true);
@@ -71,6 +104,20 @@ export async function GET() {
   const newbieLastmod = getMostRecentPostDate(posts, "newbie");
   const midwayLastmod = getMostRecentPostDate(posts, "midway");
   const expertLastmod = getMostRecentPostDate(posts, "expert");
+  const careerOsLastmod = getLatestFileMtime(["app/(public)/career-os/page.tsx"]);
+  const roleFitAuditLastmod = getLatestFileMtime(["app/(public)/role-fit-audit/page.tsx"]);
+  const prodottiLastmod = getLatestFileMtime(["app/(public)/prodotti/page.tsx", "app/(public)/demo/page.tsx"]);
+  const meetLastmod = getLatestFileMtime(["app/(public)/meet/page.tsx"]);
+  const contributeLastmod = getLatestFileMtime(["app/(public)/contribute/page.tsx"]);
+  const contributorLastmod = getLatestFileMtime(["app/(public)/contributor/page.tsx"]);
+  const termsLastmod = getLatestFileMtime(["app/(public)/terms/page.tsx"]);
+  const privacyLastmod = getLatestFileMtime(["app/(public)/privacy/page.tsx"]);
+  const cookiePolicyLastmod = getLatestFileMtime(["app/(public)/cookie-policy/page.tsx"]);
+  const productsCatalogLastmod = getLatestFileMtime([
+    "app/(public)/prodotti/[slug]/page.tsx",
+    "app/(public)/prodotti/page.tsx",
+    "lib/products/index.ts",
+  ]);
 
 
   // Static pages with priority and lastmod
@@ -78,20 +125,26 @@ export async function GET() {
   const staticUrls = [
     // Core pages - highest priority
     { loc: `${baseUrl}/`, priority: "1.0", lastmod: learnLastmod },
-    { loc: `${baseUrl}/learn/articles/`, priority: "0.9", lastmod: learnLastmod },
+    { loc: `${baseUrl}/learn/articles`, priority: "0.9", lastmod: learnLastmod },
     // Section/target pages - dynamically updated when new posts added
-    { loc: `${baseUrl}/learn/newbie/`, priority: "0.8", lastmod: newbieLastmod },
-    { loc: `${baseUrl}/learn/midway/`, priority: "0.8", lastmod: midwayLastmod },
-    { loc: `${baseUrl}/learn/expert/`, priority: "0.8", lastmod: expertLastmod },
+    { loc: `${baseUrl}/learn/newbie`, priority: "0.8", lastmod: newbieLastmod },
+    { loc: `${baseUrl}/learn/midway`, priority: "0.8", lastmod: midwayLastmod },
+    { loc: `${baseUrl}/learn/expert`, priority: "0.8", lastmod: expertLastmod },
 
     // Secondary pages
-    { loc: `${baseUrl}/prodotti/`, priority: "0.8", lastmod: buildDate },
-    { loc: `${baseUrl}/meet/`, priority: "0.7", lastmod: buildDate },
-    { loc: `${baseUrl}/author/`, priority: "0.6", lastmod: learnLastmod },
+    { loc: `${baseUrl}/topics`, priority: "0.8", lastmod: learnLastmod },
+    { loc: `${baseUrl}/career-os`, priority: "0.8", lastmod: careerOsLastmod },
+    { loc: `${baseUrl}/role-fit-audit`, priority: "0.7", lastmod: roleFitAuditLastmod },
+    { loc: `${baseUrl}/prodotti`, priority: "0.8", lastmod: prodottiLastmod },
+    { loc: `${baseUrl}/meet`, priority: "0.7", lastmod: meetLastmod },
+    { loc: `${baseUrl}/contribute`, priority: "0.7", lastmod: contributeLastmod },
+    { loc: `${baseUrl}/contributor`, priority: "0.6", lastmod: contributorLastmod },
+    { loc: `${baseUrl}/author`, priority: "0.6", lastmod: learnLastmod },
+    { loc: `${baseUrl}/terms`, priority: "0.3", lastmod: termsLastmod },
 
     // Legal pages - low priority, rarely updated
-    { loc: `${baseUrl}/privacy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },
-    { loc: `${baseUrl}/cookie-policy/`, priority: "0.3", lastmod: "2024-01-01T00:00:00.000Z" },
+    { loc: `${baseUrl}/privacy`, priority: "0.3", lastmod: privacyLastmod },
+    { loc: `${baseUrl}/cookie-policy`, priority: "0.3", lastmod: cookiePolicyLastmod },
   ]
     .filter((u) => !isExcludedUrl(u.loc))
     .map((u) => `
@@ -102,10 +155,26 @@ export async function GET() {
   </url>`)
     .join("");
 
+  // Topic hub pages
+  const topicUrls = allTopics
+    .map((topic) => {
+      const url = `${baseUrl}/topics/${topic.slug}`;
+      if (isExcludedUrl(url)) return "";
+      const lastmod = getMostRecentPostDateForTopic(posts, topic.slug);
+
+      return `
+  <url>
+    <loc>${escapeXml(url)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <priority>0.7</priority>
+  </url>`;
+    })
+    .join("");
+
   // Author pages - use most recent post by that author
   const authorUrls = authors
     .map((name) => {
-      const url = `${baseUrl}/author/${authorSlug(name)}/`;
+      const url = `${baseUrl}/author/${authorSlug(name)}`;
       if (isExcludedUrl(url)) return "";
       const authorPosts = posts.filter(p => p.author === name);
       const lastmod = authorPosts.length > 0
@@ -125,7 +194,7 @@ export async function GET() {
   const postUrls = posts
     .map((post) => {
       const section = (post.target || "general").toLowerCase();
-      const url = `${baseUrl}/learn/${section}/${post.slug}/`;
+      const url = `${baseUrl}/learn/${section}/${post.slug}`;
       if (isExcludedUrl(url)) return "";
       const lastmod = new Date(post.updatedAt || post.date || Date.now()).toISOString();
 
@@ -136,12 +205,11 @@ export async function GET() {
         : null;
 
       // hreflang for multilingual content
-      // Note: Our IT/EN articles are separate content (not translations), 
-      // so each article only declares its own language + x-default
+      // Note: Our IT/EN articles are separate content (not translations),
+      // so each article only declares its own language.
       const langCode = post.language === "Italian" ? "it" : "en";
       const hreflang = post.language
-        ? `<xhtml:link rel="alternate" hreflang="${langCode}" href="${escapeXml(url)}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(url)}" />`
+        ? `<xhtml:link rel="alternate" hreflang="${langCode}" href="${escapeXml(url)}" />`
         : "";
 
       const image = coverUrl
@@ -164,7 +232,7 @@ export async function GET() {
   // Product pages
   const productUrls = products
     .map((product) => {
-      const url = `${baseUrl}/prodotti/${product.slug}/`;
+      const url = `${baseUrl}/prodotti/${product.slug}`;
       if (isExcludedUrl(url)) return "";
 
       const imageTag = product.image
@@ -177,7 +245,7 @@ export async function GET() {
       return `
   <url>
     <loc>${escapeXml(url)}</loc>
-    <lastmod>${buildDate}</lastmod>
+    <lastmod>${productsCatalogLastmod}</lastmod>
     <priority>0.6</priority>
     ${imageTag}
   </url>`;
@@ -191,6 +259,7 @@ export async function GET() {
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
 >
   ${staticUrls}
+  ${topicUrls}
   ${authorUrls}
   ${postUrls}
   ${productUrls}

@@ -77,6 +77,7 @@ export default function ArticlePageClient({
   isPreview = false
 }: any & { analytics: ArticleAnalytics, isPreview?: boolean }) {
   const isLarge = useScreenSize()
+  const articleLang = article.language === 'Italian' ? 'it' : 'en'
   const [showTocModal, setShowTocModal] = useState(false)
 
   // Initialize shared like state
@@ -143,9 +144,6 @@ export default function ArticlePageClient({
   // Fix hydration mismatch by only rendering responsive UI after mount
   useEffect(() => {
     setMounted(true)
-    console.log('[DEBUG] ArticlePageClient mounted')
-    console.log('[DEBUG] article.geo:', article.geo)
-    console.log('[DEBUG] hasStrategicPlaybook:', hasStrategicPlaybook)
   }, [])
 
   useEffect(() => {
@@ -690,7 +688,7 @@ export default function ArticlePageClient({
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  }, [article.slug])
+  }, [])
 
   const buildReferenceMeta = useCallback((root: ParentNode | null, id: string, inlineRef?: HTMLAnchorElement) => {
     const definitionAnchor = root?.querySelector<HTMLAnchorElement>(`a[id="${id}"]`)
@@ -1080,7 +1078,7 @@ export default function ArticlePageClient({
                 currentLikes={likesCount}
               />
               {/* Center: Main Article Content */}
-              <article className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
+              <article lang={articleLang} className="prose prose-xl max-w-4xl text-base lg:text-lg mx-auto">
                 {/* Article Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 not-prose border-b border-gray-200 dark:border-slate-700 pb-4">
                   <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto gap-2 sm:gap-8">
@@ -1301,7 +1299,7 @@ export default function ArticlePageClient({
                   {/* Floating Section Indicator */}
                   <FloatingSectionIndicator toc={toc} />
 
-                  <article className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
+                  <article lang={articleLang} className="prose prose-sm max-w-2xl w-full mx-auto rounded-2xl bg-white/95 dark:bg-slate-900/90 shadow-lg ring-1 ring-gray-200/50 dark:ring-slate-700/50 p-5 sm:p-8 backdrop-blur-sm article-mobile-card">
                     {/* Article Header */}
                     <div className="flex flex-col gap-3 items-center mb-6 not-prose border-b border-gray-200 dark:border-slate-700 pb-5 text-center">
                       {/* Article Title */}

@@ -36,7 +36,6 @@ function useScrollProgress() {
 
 export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAuditCTAProps) {
 	const [isVisible, setIsVisible] = useState(variant === 'box')
-	const [isMounted, setIsMounted] = useState(false)
 	const [isBanned, setIsBanned] = useState(false)
 	const [hasSessionDismissed, setHasSessionDismissed] = useState(false)
 	const [bottomOffset, setBottomOffset] = useState(16)
@@ -52,31 +51,20 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 	const MAX_DISMISSALS_PER_DAY = 2
 
 	useEffect(() => {
-		setIsMounted(true)
-
-		if (variant === 'sticky') {
-			// Check storage for bans
-			try {
-				const storage = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-				const now = Date.now()
-
-				// Check if banned
-				if (storage.banExpires && storage.banExpires > now) {
-					setIsBanned(true)
-					return
-				}
-
-				// If ban expired or no ban, proceed with triggers
-				const timer = setTimeout(() => {
-					// Time condition met, now waiting for scroll
-				}, TIME_TRIGGER_MS)
-
-				return () => clearTimeout(timer)
-			} catch (e) {
-				console.error('Error reading CTA storage', e)
-			}
-		} else {
+		if (variant !== 'sticky') {
 			trackRoleFitAuditCTAView(variant)
+			return
+		}
+
+		try {
+			const storage = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+			const now = Date.now()
+			if (storage.banExpires && storage.banExpires > now) {
+				const timer = window.setTimeout(() => setIsBanned(true), 0)
+				return () => window.clearTimeout(timer)
+			}
+		} catch (e) {
+			console.error('Error reading CTA storage', e)
 		}
 	}, [variant])
 
@@ -98,16 +86,25 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 
 		if (timeConditionMet && scrollProgress > SCROLL_TRIGGER_PERCENT) {
 			// Double check ban status just in case
+			let timer: number | null = null
 			try {
 				const storage = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
 				if (!storage.banExpires || storage.banExpires < Date.now()) {
-					setIsVisible(true)
-					trackRoleFitAuditCTAView(variant)
+					timer = window.setTimeout(() => {
+						setIsVisible(true)
+						trackRoleFitAuditCTAView(variant)
+					}, 0)
 				}
 			} catch (e) {
 				// Fallback to showing it
-				setIsVisible(true)
-				trackRoleFitAuditCTAView(variant)
+				timer = window.setTimeout(() => {
+					setIsVisible(true)
+					trackRoleFitAuditCTAView(variant)
+				}, 0)
+			}
+
+			return () => {
+				if (timer !== null) window.clearTimeout(timer)
 			}
 		}
 	}, [timeConditionMet, scrollProgress, variant, isBanned, isVisible, hasSessionDismissed])
@@ -141,8 +138,6 @@ export function RoleFitAuditCTA({ variant = 'box', className = '' }: RoleFitAudi
 			window.removeEventListener('resize', updateOffset)
 		}
 	}, [variant])
-
-	if (!isMounted) return null
 
 	const handleCTAClick = () => {
 		trackRoleFitAuditCTAClicked('audit_start', variant)

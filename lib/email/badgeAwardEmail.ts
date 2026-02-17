@@ -48,7 +48,7 @@ export function buildLinkedInAddCertificationUrl(badge: Badge, credentialId: str
   const params = new URLSearchParams({
     startTask: 'CERTIFICATION_NAME',
     name: badge.name.en,
-    organizationName: 'stAI tuned',
+    organizationName: 'stAItuned',
     organizationId: '101346338', // Attempting to use the ID for stAI tuned if valid, otherwise it might be ignored or require manual input.
     issueYear: issueYear.toString(),
     issueMonth: issueMonth.toString(),

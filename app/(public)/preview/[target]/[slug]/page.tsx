@@ -20,7 +20,7 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').r
 export async function generateMetadata({ params, searchParams }: { params: Promise<{ target: string; slug: string }>, searchParams: Promise<{ token?: string }> }): Promise<Metadata> {
     const { target, slug } = await params;
     const { token } = await searchParams;
-    const canonicalUrl = `${SITE_URL}/learn/${target}/${slug}`
+    const canonicalUrl = `${SITE_URL}/learn/${target.toLowerCase()}/${slug}`
 
     // No indexing for preview pages
     return {
@@ -103,6 +103,7 @@ export default async function PreviewArticlePage({ params, searchParams }: { par
         section: article.target,
         keywords: article.topics,
         readingTime: article.readTime,
+        language: article.language,
     })
 
     // Breadcrumb schema

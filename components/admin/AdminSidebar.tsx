@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -36,14 +36,7 @@ export function AdminSidebar() {
         return pathname.startsWith(href);
     };
 
-    const activeRouteHref = useMemo(() => {
-        const active = navigation.find((item) => isRouteActive(item.href));
-        return active?.href ?? '/admin';
-    }, [navigation, pathname]);
-
-    useEffect(() => {
-        setMobileMenuOpen(false);
-    }, [pathname]);
+    const activeRouteHref = navigation.find((item) => isRouteActive(item.href))?.href ?? '/admin';
 
     return (
         <>

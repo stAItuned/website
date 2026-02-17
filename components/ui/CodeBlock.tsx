@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useToast } from './Toast'
 import { trackArticleCopyCode } from '@/lib/analytics'
 
@@ -34,12 +34,9 @@ export function CodeBlock({
   const [isExpanded, setIsExpanded] = useState(false)
   const [hoveredLine, setHoveredLine] = useState<number | null>(null)
   const { showToast } = useToast()
-  const codeRef = useRef<HTMLElement>(null)
 
   const lines = code?.split('\n') || []
-  const needsExpansion = codeRef.current
-    ? codeRef.current.scrollHeight > maxHeight
-    : lines.length > 15
+  const needsExpansion = lines.length > 15
 
   const handleCopy = async () => {
     try {
@@ -133,7 +130,6 @@ export function CodeBlock({
       >
         <pre className="overflow-x-auto p-4 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
           <code
-            ref={codeRef}
             className="block text-sm font-mono"
           >
             {lines.map((line, index) => {

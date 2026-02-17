@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { ComponentProps } from 'react'
 import { allPosts } from '@/lib/contentlayer'
@@ -11,6 +11,7 @@ import { PAGINATION_SIZE } from '@/lib/paginationConfig'
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
 import { generatePersonSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-schemas'
+import { normalizeSlug } from '@/lib/validation/writerProfile'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
@@ -24,9 +25,10 @@ interface AuthorPageProps {
 
 export async function generateMetadata({ params }: AuthorPageProps): Promise<Metadata> {
   const { slug } = await params
+  const normalizedSlug = normalizeSlug(slug)
 
   // Get author data from Firestore
-  const writer = await getPublicWriter(slug)
+  const writer = await getPublicWriter(normalizedSlug)
 
   if (!writer) {
     return {
@@ -43,10 +45,10 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
     title: `${writer.displayName} - Articles - stAI tuned`,
     description: `Read all articles written by ${writer.displayName}${title}. ${description}`,
     alternates: {
-      canonical: `${SITE_URL}/author/${slug}`,
+      canonical: `${SITE_URL}/author/${normalizedSlug}`,
     },
     openGraph: {
-      url: `${SITE_URL}/author/${slug}`,
+      url: `${SITE_URL}/author/${normalizedSlug}`,
       title: `${writer.displayName} - Articles`,
       description: `Read all articles written by ${writer.displayName}`,
       type: 'profile',
@@ -70,9 +72,13 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const { slug } = await params
+  const normalizedSlug = normalizeSlug(slug)
+  if (slug !== normalizedSlug) {
+    permanentRedirect(`/author/${normalizedSlug}`)
+  }
 
   // Get author data from Firestore
-  const writer = await getPublicWriter(slug)
+  const writer = await getPublicWriter(normalizedSlug)
 
   if (!writer) {
     notFound()
@@ -80,7 +86,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
   // Fetch author badges from Firestore (Client function or Server?)
   // getAuthorBadges imports from badge-service which imports admin. It is server side.
-  const badges = await getAuthorBadges(slug)
+  const badges = await getAuthorBadges(normalizedSlug)
 
   type AuthorData = ComponentProps<typeof AuthorPageWithPagination>['authorData']
   const authorData: AuthorData = {
@@ -118,7 +124,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   const personSchema = generatePersonSchema({
     name: writer.displayName,
     jobTitle: writer.title || undefined,
-    url: `/author/${slug}`,
+    url: `/author/${normalizedSlug}`,
     image: writer.image?.publicUrl || undefined,
     description: writer.bio || undefined,
     knowsAbout: ['Artificial Intelligence', 'GenAI', 'Machine Learning', 'AI Engineering'],
@@ -133,7 +139,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Authors', url: '/author' },
-    { name: writer.displayName, url: `/author/${slug}` },
+    { name: writer.displayName, url: `/author/${normalizedSlug}` },
   ])
 
   // Pagination logic
@@ -147,12 +153,12 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
         authorData={authorData}
         authorArticles={authorArticles}
         pageSize={PAGINATION_SIZE}
-        slug={slug}
+        slug={normalizedSlug}
       />
 
       {/* Admin Controls (Calculated for current author) */}
       <div className="max-w-6xl mx-auto px-4 pb-8">
-        <AdminBadgeControls authorSlug={slug} />
+        <AdminBadgeControls authorSlug={normalizedSlug} />
       </div>
     </>
   )

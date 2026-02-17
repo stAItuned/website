@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 'use client'
 
 import Image from 'next/image'

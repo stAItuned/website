@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 interface AnimatedCounterProps {
     /** Target number to count up to */
@@ -43,41 +43,15 @@ export function AnimatedCounter({
     const ref = useRef<HTMLSpanElement>(null)
 
     // Check for reduced motion preference
-    const prefersReducedMotion = useRef(
+    const prefersReducedMotion = useMemo(
+        () =>
         typeof window !== 'undefined'
             ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-            : false
+            : false,
+        []
     )
 
-    useEffect(() => {
-        const element = ref.current
-        if (!element) return
-
-        // Skip animation for reduced motion
-        if (prefersReducedMotion.current) {
-            setDisplayValue(value)
-            setHasAnimated(true)
-            return
-        }
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !hasAnimated) {
-                        setHasAnimated(true)
-                        animateValue(0, value, duration)
-                    }
-                })
-            },
-            { threshold: 0.3 }
-        )
-
-        observer.observe(element)
-
-        return () => observer.disconnect()
-    }, [value, duration, hasAnimated])
-
-    const animateValue = (start: number, end: number, animDuration: number) => {
+    const animateValue = useCallback((start: number, end: number, animDuration: number) => {
         const startTime = performance.now()
 
         const updateValue = (currentTime: number) => {
@@ -98,7 +72,33 @@ export function AnimatedCounter({
         }
 
         requestAnimationFrame(updateValue)
-    }
+    }, [])
+
+    useEffect(() => {
+        const element = ref.current
+        if (!element) return
+
+        // Skip animation for reduced motion
+        if (prefersReducedMotion) {
+            return
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !hasAnimated) {
+                        setHasAnimated(true)
+                        animateValue(0, value, duration)
+                    }
+                })
+            },
+            { threshold: 0.3 }
+        )
+
+        observer.observe(element)
+
+        return () => observer.disconnect()
+    }, [animateValue, value, duration, hasAnimated, prefersReducedMotion])
 
     const formatNumber = (num: number): string => {
         if (formatLarge) {
@@ -115,7 +115,7 @@ export function AnimatedCounter({
     return (
         <span ref={ref} className={className}>
             {prefix}
-            {formatNumber(displayValue)}
+            {formatNumber(prefersReducedMotion ? value : displayValue)}
             {suffix}
         </span>
     )

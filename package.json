@@ -14,7 +14,7 @@
 		"build": "next build --turbopack",
 		"typecheck": "tsc --noEmit",
 		"start": "next start",
-		"lint": "next lint",
+		"lint": "eslint .",
 		"test": "vitest",
 		"deploy:prod": "bash scripts/deploy-hosting-target.sh production",
 		"deploy:test": "bash scripts/deploy-hosting-target.sh development",

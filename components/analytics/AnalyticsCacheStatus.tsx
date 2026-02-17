@@ -40,9 +40,14 @@ export default function AnalyticsCacheStatus() {
   }
 
   useEffect(() => {
-    fetchStats()
+    const timer = window.setTimeout(() => {
+      void fetchStats()
+    }, 0)
     const interval = setInterval(fetchStats, 30000) // Refresh every 30 seconds
-    return () => clearInterval(interval)
+    return () => {
+      window.clearTimeout(timer)
+      clearInterval(interval)
+    }
   }, [])
 
   if (!stats) {

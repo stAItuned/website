@@ -26,6 +26,64 @@ interface UserMenuPanelProps {
   onSignOut: () => void
 }
 
+interface MenuLinkProps {
+  href: string
+  icon: typeof UserRound
+  label: string
+  tone?: 'default' | 'accent' | 'premium'
+  baseItemClasses: string
+  onClose: () => void
+}
+
+function MenuLink({
+  href,
+  icon: Icon,
+  label,
+  tone = 'default',
+  baseItemClasses,
+  onClose,
+}: MenuLinkProps) {
+  const isPremium = tone === 'premium'
+
+  return (
+    <Link
+      href={href}
+      className={clsx(
+        baseItemClasses,
+        tone === 'accent' &&
+        'text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/20',
+        tone === 'default' &&
+        'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-700/70',
+        isPremium &&
+        'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-900 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-transparent'
+      )}
+      onClick={onClose}
+      role="menuitem"
+    >
+      <span
+        className={clsx(
+          'flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300',
+          !isPremium && 'border',
+          tone === 'accent' &&
+          'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-900/40 dark:bg-amber-900/20 dark:text-amber-300',
+          tone === 'default' &&
+          'border-slate-200 bg-white text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
+          isPremium && 'bg-white/20 text-slate-900'
+        )}
+      >
+        <Icon className="h-4 w-4" />
+      </span>
+      <span className="flex-1 font-bold">{label}</span>
+      <ChevronDown
+        className={clsx(
+          "h-3.5 w-3.5 -rotate-90 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5",
+          isPremium ? "text-slate-900" : ""
+        )}
+      />
+    </Link>
+  )
+}
+
 /**
  * Dropdown panel for authenticated user actions.
  */
@@ -43,58 +101,6 @@ export function UserMenuPanel({
   const initials = (displayName || user.email || 'U').charAt(0).toUpperCase()
   const baseItemClasses =
     'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-300'
-
-  const MenuLink = ({
-    href,
-    icon: Icon,
-    label,
-    tone = 'default',
-  }: {
-    href: string
-    icon: typeof UserRound
-    label: string
-    tone?: 'default' | 'accent' | 'premium'
-  }) => {
-    const isPremium = tone === 'premium'
-
-    return (
-      <Link
-        href={href}
-        className={clsx(
-          baseItemClasses,
-          tone === 'accent' &&
-          'text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/20',
-          tone === 'default' &&
-          'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-700/70',
-          isPremium &&
-          'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-900 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 border-transparent'
-        )}
-        onClick={onClose}
-        role="menuitem"
-      >
-        <span
-          className={clsx(
-            'flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300',
-            !isPremium && 'border',
-            tone === 'accent' &&
-            'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-900/40 dark:bg-amber-900/20 dark:text-amber-300',
-            tone === 'default' &&
-            'border-slate-200 bg-white text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
-            isPremium && 'bg-white/20 text-slate-900'
-          )}
-        >
-          <Icon className="h-4 w-4" />
-        </span>
-        <span className="flex-1 font-bold">{label}</span>
-        <ChevronDown
-          className={clsx(
-            "h-3.5 w-3.5 -rotate-90 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5",
-            isPremium ? "text-slate-900" : ""
-          )}
-        />
-      </Link>
-    )
-  }
 
   return (
     <div
@@ -149,26 +155,26 @@ export function UserMenuPanel({
 
       <div className="mt-3 space-y-2">
         <div className="px-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Your Space</div>
-        <MenuLink href="/account/settings" icon={Settings} label="Account settings" />
-        <MenuLink href="/bookmarks" icon={Bookmark} label="Saved bookmarks" />
+        <MenuLink href="/account/settings" icon={Settings} label="Account settings" baseItemClasses={baseItemClasses} onClose={onClose} />
+        <MenuLink href="/bookmarks" icon={Bookmark} label="Saved bookmarks" baseItemClasses={baseItemClasses} onClose={onClose} />
       </div>
 
       <div className="mt-4 space-y-2">
         <div className="px-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Creator Tools</div>
         {isWriter ? (
           <>
-            <MenuLink href="/contribute/draft" icon={FilePenLine} label="Start a new draft" tone="premium" />
-            <MenuLink href="/account/writer-profile" icon={UserRound} label="Writer profile" />
+            <MenuLink href="/contribute/draft" icon={FilePenLine} label="Start a new draft" tone="premium" baseItemClasses={baseItemClasses} onClose={onClose} />
+            <MenuLink href="/account/writer-profile" icon={UserRound} label="Writer profile" baseItemClasses={baseItemClasses} onClose={onClose} />
           </>
         ) : (
-          <MenuLink href="/become-writer" icon={Sparkles} label="Become a writer" tone="premium" />
+          <MenuLink href="/become-writer" icon={Sparkles} label="Become a writer" tone="premium" baseItemClasses={baseItemClasses} onClose={onClose} />
         )}
       </div>
 
       {isAdmin ? (
         <div className="mt-4 space-y-2">
           <div className="px-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Admin</div>
-          <MenuLink href="/admin" icon={ShieldCheck} label="Admin Dashboard" />
+          <MenuLink href="/admin" icon={ShieldCheck} label="Admin Dashboard" baseItemClasses={baseItemClasses} onClose={onClose} />
         </div>
       ) : null}
 

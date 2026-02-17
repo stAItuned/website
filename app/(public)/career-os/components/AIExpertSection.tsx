@@ -1,6 +1,7 @@
 'use client'
 
-import { Target, Zap, CheckCircle2, User } from 'lucide-react'
+import { Target, Zap, CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
 
 import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
 import { useCareerOS } from '../context/CareerOSContext'
@@ -33,10 +34,12 @@ export default function AIExpertSection() {
                     <div className="flex flex-col sm:flex-row items-center gap-6 mb-6">
                         {/* Photo */}
                         <div className="relative flex-shrink-0 w-24 h-24 rounded-full border-2 border-[#FCD34D] overflow-hidden shadow-[0_0_20px_-5px_rgba(252,211,77,0.3)]">
-                            <img
+                            <Image
                                 src="/assets/career-os/mentor_profile.jpg"
                                 alt="Mentor Profile"
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
+                                sizes="96px"
                             />
                         </div>
                         <div className="text-center sm:text-left">

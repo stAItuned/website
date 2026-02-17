@@ -5,6 +5,10 @@ import WizardClient from './WizardClient'
 export const metadata: Metadata = {
     title: 'Contributor Wizard | stAI tuned',
     description: 'Crea il tuo articolo con il supporto dell\'IA.',
+    robots: {
+        index: false,
+        follow: false,
+    },
 }
 
 export default function WizardPage() {

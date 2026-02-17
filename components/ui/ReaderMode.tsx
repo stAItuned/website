@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { event } from '@/lib/gtag'
 
 interface ReaderModeProps {
@@ -11,19 +11,24 @@ interface ReaderModeProps {
 
 type ReaderModeTheme = 'default' | 'sepia' | 'highContrast' | 'dark'
 
-export function ReaderMode({ children, articleSlug, textSize = 'normal' }: ReaderModeProps) {
-  const [isReaderMode, setIsReaderMode] = useState(false)
-  const [theme, setTheme] = useState<ReaderModeTheme>('default')
-  const [showSettings, setShowSettings] = useState(false)
+function getInitialReaderMode(): boolean {
+  if (typeof window === 'undefined') return false
+  return localStorage.getItem('readerMode') === 'true'
+}
 
-  useEffect(() => {
-    // Load saved preferences
-    const savedMode = localStorage.getItem('readerMode') === 'true'
-    const savedTheme = (localStorage.getItem('readerTheme') as ReaderModeTheme) || 'default'
-    
-    setIsReaderMode(savedMode)
-    setTheme(savedTheme)
-  }, [])
+function getInitialReaderTheme(): ReaderModeTheme {
+  if (typeof window === 'undefined') return 'default'
+  const storedTheme = localStorage.getItem('readerTheme')
+  if (storedTheme === 'default' || storedTheme === 'sepia' || storedTheme === 'highContrast' || storedTheme === 'dark') {
+    return storedTheme
+  }
+  return 'default'
+}
+
+export function ReaderMode({ children, articleSlug, textSize = 'normal' }: ReaderModeProps) {
+  const [isReaderMode, setIsReaderMode] = useState(getInitialReaderMode)
+  const [theme, setTheme] = useState<ReaderModeTheme>(getInitialReaderTheme)
+  const [showSettings, setShowSettings] = useState(false)
 
   const toggleReaderMode = () => {
     const newMode = !isReaderMode

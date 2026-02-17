@@ -8,11 +8,17 @@ import MeetPageClient from './MeetPageClient'
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+
 export const metadata: Metadata = {
   title: 'Chi Siamo | stAItuned',
   description:
     'Scopri chi c\'è dietro stAItuned: la nostra storia, la nostra mission e i valori che ci guidano nel rendere l\'AI accessibile e pratica.',
+  alternates: {
+    canonical: `${SITE_URL}/meet`,
+  },
   openGraph: {
+    url: `${SITE_URL}/meet`,
     title: 'Chi Siamo | stAItuned',
     description:
       'Scopri chi c\'è dietro stAItuned: la nostra storia, la nostra mission e i valori che ci guidano.',

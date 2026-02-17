@@ -75,7 +75,7 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
         }
 
         fetchTrending()
-    }, [])
+    }, [trendingArticles])
 
     // THIS IS A PLACEHOLDER - I NEED TO FIX API FIRST
     // Sort by date (recent) or keep as-is (trending = sorted by views from server)

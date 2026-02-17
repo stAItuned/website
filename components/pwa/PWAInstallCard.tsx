@@ -63,14 +63,11 @@ export function PWAInstallCard({ className = '', delay = 3000 }: PWAInstallCardP
     const t = homeTranslations[locale].pwa
 
     const [isVisible, setIsVisible] = useState(false)
-    const [isFirstVisit, setIsFirstVisit] = useState(false)
+    const [isFirstVisit] = useState(() => {
+        if (typeof window === 'undefined') return false
+        return isFirstLearnVisit()
+    })
     const [isAnimating, setIsAnimating] = useState(false)
-
-    useEffect(() => {
-        // Check if first visit on client side
-        const firstVisit = isFirstLearnVisit()
-        setIsFirstVisit(firstVisit)
-    }, [])
 
     useEffect(() => {
         // Show card only on first visit when conditions are met

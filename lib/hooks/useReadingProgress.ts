@@ -28,6 +28,7 @@ export function useReadingProgress(articleSlug: string) {
     useEffect(() => {
         if (typeof window === 'undefined') return
 
+        let timer: number | null = null
         try {
             const stored = localStorage.getItem(storageKey)
             if (stored) {
@@ -37,12 +38,18 @@ export function useReadingProgress(articleSlug: string) {
                 const isSignificant = data.scrollPercent > 10 && data.scrollPercent < 95
 
                 if (isRecent && isSignificant) {
-                    setSavedProgress(data)
-                    setShowContinuePrompt(true)
+                    timer = window.setTimeout(() => {
+                        setSavedProgress(data)
+                        setShowContinuePrompt(true)
+                    }, 0)
                 }
             }
         } catch (e) {
             // localStorage not available or corrupted data
+        }
+
+        return () => {
+            if (timer !== null) window.clearTimeout(timer)
         }
     }, [storageKey])
 

@@ -75,7 +75,10 @@ export function MobileActionBar({
       }
       checkBookmark()
     } else {
-      setIsBookmarked(false)
+      const timer = window.setTimeout(() => {
+        setIsBookmarked(false)
+      }, 0)
+      return () => window.clearTimeout(timer)
     }
   }, [articleSlug, user])
 

@@ -85,7 +85,7 @@ export function useBatchAnalytics(slugs: string[], enabled: boolean = true): Use
         } finally {
             setLoading(false)
         }
-    }, [sortedSlugs, enabled, cacheKey]) // slugs dependency is handled by sortedSlugs string
+    }, [slugs, enabled, cacheKey])
 
     const refetch = useCallback(() => {
         localStorage.removeItem(cacheKey)

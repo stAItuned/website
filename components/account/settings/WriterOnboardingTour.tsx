@@ -83,8 +83,11 @@ export function WriterOnboardingTour({ isWriter }: WriterOnboardingTourProps) {
     const saved = typeof window !== 'undefined' ? window.localStorage.getItem(STORAGE_KEY) : null
 
     if (forcedTour || !saved) {
-      setIsOpen(true)
-      setStepIndex(0)
+      const timer = window.setTimeout(() => {
+        setIsOpen(true)
+        setStepIndex(0)
+      }, 0)
+      return () => window.clearTimeout(timer)
     }
   }, [isWriter, searchParams])
 

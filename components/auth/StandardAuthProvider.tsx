@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react'
 
 interface GoogleUser {
   id: string
@@ -25,20 +25,19 @@ interface StandardAuthProviderProps {
 }
 
 export function StandardAuthProvider({ children }: StandardAuthProviderProps) {
-  const [user, setUser] = useState<GoogleUser | null>(null)
-
-  // Load user from localStorage on mount
-  useEffect(() => {
+  const [user, setUser] = useState<GoogleUser | null>(() => {
+    if (typeof window === 'undefined') return null
     const savedUser = localStorage.getItem('google_user')
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser))
-      } catch (error) {
-        console.error('Failed to parse saved user:', error)
-        localStorage.removeItem('google_user')
-      }
+    if (!savedUser) return null
+
+    try {
+      return JSON.parse(savedUser) as GoogleUser
+    } catch (error) {
+      console.error('Failed to parse saved user:', error)
+      localStorage.removeItem('google_user')
+      return null
     }
-  }, [])
+  })
 
   const signIn = (user: GoogleUser) => {
     setUser(user)

@@ -24,6 +24,32 @@ interface PWAInstallState {
 const DISMISSED_KEY = 'pwa-install-dismissed'
 const DISMISSED_EXPIRY_DAYS = 7
 
+function supportsInstallPrompt(): boolean {
+    if (typeof window === 'undefined') return false
+    return 'BeforeInstallPromptEvent' in window
+}
+
+function isDismissedRecently(): boolean {
+    if (typeof window === 'undefined') return false
+    try {
+        const dismissedData = localStorage.getItem(DISMISSED_KEY)
+        if (!dismissedData) return false
+
+        const { timestamp } = JSON.parse(dismissedData) as { timestamp?: number }
+        if (!timestamp) return false
+
+        const daysSinceDismissed = (Date.now() - timestamp) / (1000 * 60 * 60 * 24)
+        if (daysSinceDismissed < DISMISSED_EXPIRY_DAYS) {
+            return true
+        }
+
+        localStorage.removeItem(DISMISSED_KEY)
+        return false
+    } catch {
+        return false
+    }
+}
+
 /**
  * Hook to manage PWA installation prompt
  * 
@@ -39,32 +65,13 @@ const DISMISSED_EXPIRY_DAYS = 7
 export function usePWAInstall(): PWAInstallState {
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
     const [isInstalled, setIsInstalled] = useState(false)
-    const [wasDismissed, setWasDismissed] = useState(false)
-    const [canInstall, setCanInstall] = useState(false)
+    const [wasDismissed, setWasDismissed] = useState(isDismissedRecently)
+    const [canInstall, setCanInstall] = useState(supportsInstallPrompt)
 
     // Track if we've already sent the prompt_shown event
     const hasTrackedPrompt = useRef(false)
 
     useEffect(() => {
-        // Check if browser supports PWA installation (client-side only)
-        setCanInstall('BeforeInstallPromptEvent' in window)
-
-        // Check if previously dismissed (with expiry)
-        try {
-            const dismissedData = localStorage.getItem(DISMISSED_KEY)
-            if (dismissedData) {
-                const { timestamp } = JSON.parse(dismissedData)
-                const daysSinceDismissed = (Date.now() - timestamp) / (1000 * 60 * 60 * 24)
-                if (daysSinceDismissed < DISMISSED_EXPIRY_DAYS) {
-                    setWasDismissed(true)
-                } else {
-                    localStorage.removeItem(DISMISSED_KEY)
-                }
-            }
-        } catch {
-            // Ignore localStorage errors
-        }
-
         // Capture the beforeinstallprompt event
         const handleBeforeInstall = (e: Event) => {
             e.preventDefault()
@@ -187,4 +194,3 @@ export function isFirstLearnVisit(): boolean {
 }
 
 export default usePWAInstall
-

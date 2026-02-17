@@ -45,7 +45,8 @@ function BecomeWriterContent() {
             return
         }
         if (isWriter && hasAgreement === false) {
-            setStep(4)
+            const timer = window.setTimeout(() => setStep(4), 0)
+            return () => window.clearTimeout(timer)
         }
     }, [isWriter, hasAgreement, loading, nextUrl, router])
 

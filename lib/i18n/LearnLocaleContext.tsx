@@ -1,7 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import { usePathname } from 'next/navigation'
+import { createContext, useContext, useState, useCallback, useSyncExternalStore, type ReactNode } from 'react'
 import { translations, type LearnLocale, type LearnTranslations } from './learn-translations'
 
 // Storage key for locale preference
@@ -64,6 +63,14 @@ interface LearnLocaleProviderProps {
     defaultLocale?: LearnLocale
 }
 
+function getInitialLocale(defaultLocale: LearnLocale): LearnLocale {
+    if (typeof window === 'undefined') return defaultLocale
+    const saved = getSavedLocale()
+    if (saved) return saved
+    if (window.location.pathname.startsWith('/learn')) return detectBrowserLocale()
+    return defaultLocale
+}
+
 /**
  * Provider for Learn page locale context
  * 
@@ -73,38 +80,12 @@ interface LearnLocaleProviderProps {
  * 3. Default to English
  */
 export function LearnLocaleProvider({ children, defaultLocale = 'en' }: LearnLocaleProviderProps) {
-    const [locale, setLocaleState] = useState<LearnLocale>(defaultLocale)
-    const [isHydrationSafe, setIsHydrationSafe] = useState(false)
-    const pathname = usePathname()
-
-    // Keep server locale through the first hydration pass to avoid text mismatches.
-    // Then bootstrap client locale (saved preference or browser language).
-    useEffect(() => {
-        const timer = window.setTimeout(() => {
-            setIsHydrationSafe(true)
-        }, 0)
-
-        return () => window.clearTimeout(timer)
-    }, [])
-
-    // Initialize locale after hydration safety gate
-    useEffect(() => {
-        if (!isHydrationSafe) return
-
-        const saved = getSavedLocale()
-        if (saved) {
-            setLocaleState(saved)
-        } else {
-            // Priority for first-time users:
-            // 1. If in /learn section, try detecting browser language
-            // 2. Otherwise use the defaultLocale (e.g. 'it')
-            if (pathname?.startsWith('/learn')) {
-                setLocaleState(detectBrowserLocale())
-            } else {
-                setLocaleState(defaultLocale)
-            }
-        }
-    }, [isHydrationSafe, pathname, defaultLocale])
+    const [locale, setLocaleState] = useState<LearnLocale>(() => getInitialLocale(defaultLocale))
+    const isClient = useSyncExternalStore(
+        () => () => undefined,
+        () => true,
+        () => false
+    )
 
     const setLocale = useCallback((newLocale: LearnLocale) => {
         setLocaleState(newLocale)
@@ -117,7 +98,7 @@ export function LearnLocaleProvider({ children, defaultLocale = 'en' }: LearnLoc
     }, [locale, setLocale])
 
     // Prevent hydration mismatch by using default locale during SSR
-    const effectiveLocale = isHydrationSafe ? locale : defaultLocale
+    const effectiveLocale = isClient ? locale : defaultLocale
     const value: LearnLocaleContextType = {
         locale: effectiveLocale,
         setLocale,
@@ -150,11 +131,11 @@ export function useLearnLocale(): LearnLocaleContextType {
  */
 export function LearnLocaleToggle({ className = '' }: { className?: string }) {
     const { locale, toggleLocale, t } = useLearnLocale()
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+    const mounted = useSyncExternalStore(
+        () => () => undefined,
+        () => true,
+        () => false
+    )
 
     // ...existing code...
     if (!mounted) {

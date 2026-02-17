@@ -91,13 +91,14 @@ export function ScrollReveal({
   const elementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    const node = elementRef.current
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
           // Only unobserve if triggerOnce is true
-          if (triggerOnce && elementRef.current) {
-            observer.unobserve(elementRef.current)
+          if (triggerOnce && node) {
+            observer.unobserve(node)
           }
         } else if (!triggerOnce) {
           // If triggerOnce is false, reset when scrolled out of view
@@ -107,13 +108,13 @@ export function ScrollReveal({
       { threshold }
     )
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current)
+    if (node) {
+      observer.observe(node)
     }
 
     return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current)
+      if (node) {
+        observer.unobserve(node)
       }
     }
   }, [threshold, triggerOnce])

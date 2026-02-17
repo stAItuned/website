@@ -101,7 +101,7 @@ export default function ApplicationModal() {
             }
             trackFormStart('career_os_app', source)
         }
-    }, [isAppModalOpen])
+    }, [isAppModalOpen, step, hasSubmitted, source])
 
     const handleClose = useCallback(() => {
         closeAppModal()

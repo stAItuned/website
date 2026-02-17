@@ -34,7 +34,7 @@ function AdminReviewDetailContent() {
   const [annotationError, setAnnotationError] = useState<string | null>(null)
   const draftRef = useRef<HTMLPreElement>(null)
 
-  const annotations = contribution?.review?.annotations ?? []
+  const annotations = useMemo(() => contribution?.review?.annotations ?? [], [contribution?.review?.annotations])
 
   const highlightedDraft = useMemo(() => {
     const text = contribution?.draftContent || ''

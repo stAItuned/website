@@ -29,30 +29,21 @@ function getInitialTheme(): Theme {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   // Initialize from browser storage/preference to avoid logo/theme flicker after mount.
   const [theme, setThemeState] = useState<Theme>(getInitialTheme)
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(theme)
-  const [mounted, setMounted] = useState(false)
+  const resolvedTheme: 'light' | 'dark' = theme
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
-    
     const root = document.documentElement
 
     if (theme === 'dark') {
       root.classList.add('dark')
       root.dataset.theme = 'dark'
       root.style.colorScheme = 'dark'
-      setResolvedTheme('dark')
     } else {
       root.classList.remove('dark')
       root.dataset.theme = 'light'
       root.style.colorScheme = 'light'
-      setResolvedTheme('light')
     }
-  }, [theme, mounted])
+  }, [theme])
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme)

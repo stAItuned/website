@@ -1,21 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 export function useScreenSize() {
-  const [isLarge, setIsLarge] = useState(true); // Default to true for SSR
-  const [isClient, setIsClient] = useState(false);
+  const subscribe = (onStoreChange: () => void) => {
+    if (typeof window === 'undefined') return () => undefined
+    window.addEventListener('resize', onStoreChange)
+    return () => window.removeEventListener('resize', onStoreChange)
+  }
 
-  useEffect(() => {
-    // Mark as client-side
-    setIsClient(true);
-    // Set initial value
-    setIsLarge(window.innerWidth >= 1024);
-    
-    const onResize = () => setIsLarge(window.innerWidth >= 1024);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  const getSnapshot = () => {
+    if (typeof window === 'undefined') return true
+    return window.innerWidth >= 1024
+  }
 
-  // During SSR and first render, return true to match server
-  // After hydration, return actual screen size
-  return isClient ? isLarge : true;
+  const getServerSnapshot = () => true
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }

@@ -184,6 +184,8 @@ export default async function CredentialPage({ params }: PageProps) {
                             <p className="text-slate-500 italic text-lg">Awarded to</p>
                             <div className="inline-flex items-center gap-3 px-4 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-full border border-slate-100 dark:border-slate-800">
                                 {authorData?.avatar && (
+                                    // User-generated external avatar URL; next/image optimization is not reliable here.
+                                    // eslint-disable-next-line @next/next/no-img-element
                                     <img src={authorData.avatar} alt={authorData.name} className="w-8 h-8 rounded-full" />
                                 )}
                                 <span className="font-bold text-slate-900 dark:text-white text-lg">

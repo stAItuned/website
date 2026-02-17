@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 
 interface PerformanceMetrics {
   FCP: number | null // First Contentful Paint
@@ -203,28 +203,21 @@ export class PerformanceMonitor {
 
 // React hook for easy integration
 export function usePerformanceMonitor(config: PerformanceConfig) {
-  const monitorRef = useRef<PerformanceMonitor | null>(null)
-  const configKeyRef = useRef<string>('')
+  const monitor = useMemo(() => new PerformanceMonitor(config), [config])
 
   useEffect(() => {
-    const configKey = JSON.stringify(config)
-    const shouldRecreate = configKeyRef.current !== configKey
-
-    if (!monitorRef.current || shouldRecreate) {
-      monitorRef.current?.destroy()
-      monitorRef.current = new PerformanceMonitor(config)
-      configKeyRef.current = configKey
-    }
-
     // Track bundle size after component mount
     const timer = setTimeout(() => {
-      monitorRef.current?.trackBundleSize()
+      monitor.trackBundleSize()
     }, 2000) // Wait for resources to load
 
-    return () => clearTimeout(timer)
-  }, [config])
+    return () => {
+      clearTimeout(timer)
+      monitor.destroy()
+    }
+  }, [monitor])
 
-  return monitorRef.current
+  return monitor
 }
 
 export default PerformanceMonitor

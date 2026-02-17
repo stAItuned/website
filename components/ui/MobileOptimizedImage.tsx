@@ -22,7 +22,7 @@ export function MobileOptimizedImage({
   className = ''
 }: MobileOptimizedImageProps) {
   const [isZoomed, setIsZoomed] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(priority)
   const [touchStart, setTouchStart] = useState({ x: 0, y: 0, distance: 0 })
   const [scale, setScale] = useState(1)
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -30,10 +30,7 @@ export function MobileOptimizedImage({
   const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
-    if (priority) {
-      setIsVisible(true)
-      return
-    }
+    if (priority) return
 
     // Intersection Observer for lazy loading
     observerRef.current = new IntersectionObserver(

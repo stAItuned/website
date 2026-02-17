@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { event } from '@/lib/gtag'
 import { useHaptics } from '@/lib/hooks/useHaptics'
@@ -134,11 +134,6 @@ export function SwipeNavigation({
         setSwipeOffset(0)
         setSwipeDirection(null)
     }, [touchStart, swipeOffset, swipeDirection, prevArticle, nextArticle, router, haptics, isNavigating])
-
-    // Reset navigating state on route change
-    useEffect(() => {
-        setIsNavigating(false)
-    }, [])
 
     const showLeftHint = swipeDirection === 'left' && nextArticle && Math.abs(swipeOffset) > 20
     const showRightHint = swipeDirection === 'right' && prevArticle && Math.abs(swipeOffset) > 20

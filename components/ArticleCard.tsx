@@ -34,7 +34,7 @@ type PublicWriterApiResponse = {
 }
 
 export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCardProps) {
-  const [runtimeAuthorAvatar, setRuntimeAuthorAvatar] = useState<string | null>(null)
+  const [runtimeAuthorAvatars, setRuntimeAuthorAvatars] = useState<Record<string, string | null>>({})
 
   // Fetch analytics for this article (fast endpoint)
   const { data: internalAnalytics, loading: analyticsLoading } = useFastAnalytics({
@@ -50,6 +50,12 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
   const analyticsData = initialPageViews !== undefined
     ? { pageViews: initialPageViews }
     : internalAnalytics
+  const cleanAuthor = article.author?.trim() || ''
+  const normalizedSlug = cleanAuthor
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
   const getValidImageSrc = (cover?: string) => {
     if (!cover) return null
     if (cover.startsWith('http://') || cover.startsWith('https://')) {
@@ -74,28 +80,9 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
   }
 
   useEffect(() => {
-    const cleanAuthor = article.author?.trim()
-    if (!cleanAuthor) {
-      setRuntimeAuthorAvatar(null)
-      return
-    }
-
-    const normalizedSlug = cleanAuthor
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '')
-
-    if (!normalizedSlug) {
-      setRuntimeAuthorAvatar(null)
-      return
-    }
-
-    const cached = writerAvatarCache.get(normalizedSlug)
-    if (cached !== undefined) {
-      setRuntimeAuthorAvatar(cached)
-      return
-    }
+    if (!normalizedSlug) return
+    if (writerAvatarCache.has(normalizedSlug)) return
+    if (normalizedSlug in runtimeAuthorAvatars) return
 
     let active = true
 
@@ -106,6 +93,9 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
         })
         if (!response.ok) {
           writerAvatarCache.set(normalizedSlug, null)
+          if (active) {
+            setRuntimeAuthorAvatars((prev) => ({ ...prev, [normalizedSlug]: null }))
+          }
           return
         }
 
@@ -114,10 +104,13 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
         writerAvatarCache.set(normalizedSlug, publicUrl)
 
         if (active) {
-          setRuntimeAuthorAvatar(publicUrl)
+          setRuntimeAuthorAvatars((prev) => ({ ...prev, [normalizedSlug]: publicUrl }))
         }
       } catch {
         writerAvatarCache.set(normalizedSlug, null)
+        if (active) {
+          setRuntimeAuthorAvatars((prev) => ({ ...prev, [normalizedSlug]: null }))
+        }
       }
     }
 
@@ -126,7 +119,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
     return () => {
       active = false
     }
-  }, [article.author])
+  }, [normalizedSlug, runtimeAuthorAvatars])
 
   const isArticleNew = (dateString?: string) => {
     if (!dateString) return false
@@ -152,7 +145,10 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
   }
 
   const imageSrc = getValidImageSrc(article.cover)
-  const authorImageSrc = runtimeAuthorAvatar || DEFAULT_AVATAR_SRC
+  const cachedAuthorAvatar = normalizedSlug ? writerAvatarCache.get(normalizedSlug) : undefined
+  const runtimeAuthorAvatar = normalizedSlug ? runtimeAuthorAvatars[normalizedSlug] : null
+  const authorImageSrc =
+    (cachedAuthorAvatar !== undefined ? cachedAuthorAvatar : runtimeAuthorAvatar) || DEFAULT_AVATAR_SRC
   const isNewArticle = isArticleNew(article.date)
 
   const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'

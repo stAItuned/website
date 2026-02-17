@@ -1,43 +1,41 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 /**
  * Hook that safely gets pathname during client-side only
  */
 export function useSafePathname(): string | null {
-  const [isClient, setIsClient] = useState(false)
-  const [pathname, setPathname] = useState<string | null>(null)
-  
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
+  const subscribe = (onStoreChange: () => void) => {
+    if (typeof window === 'undefined') return () => undefined
 
-  useEffect(() => {
-    if (!isClient) return
-    
-    try {
-      // Get pathname only on client side
-      if (typeof window !== 'undefined') {
-        setPathname(window.location.pathname)
-      }
-    } catch (error) {
-      setPathname(null)
+    window.addEventListener('popstate', onStoreChange)
+    window.addEventListener('hashchange', onStoreChange)
+    return () => {
+      window.removeEventListener('popstate', onStoreChange)
+      window.removeEventListener('hashchange', onStoreChange)
     }
-  }, [isClient])
+  }
 
-  return pathname
+  const getSnapshot = () => {
+    if (typeof window === 'undefined') return null
+    return window.location.pathname
+  }
+
+  const getServerSnapshot = () => null
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
 
 /**
  * Component wrapper for safe client-side navigation
  */
 export function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [hasMounted, setHasMounted] = useState(false)
-
-  useEffect(() => {
-    setHasMounted(true)
-  }, [])
+  const hasMounted = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false
+  )
 
   if (!hasMounted) {
     return null

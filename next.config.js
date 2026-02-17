@@ -259,6 +259,18 @@ const nextConfig = {
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
         ],
       },
+      {
+        source: '/contribute/wizard',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
+      {
+        source: '/contribute/wizard/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
       // SEO: noindex for dev/debug pages (should not be accessible in production)
       {
         source: '/debug',
@@ -341,6 +353,30 @@ const nextConfig = {
             value: '/learn',
           },
         ],
+      },
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/learn/midway/local-first-rag-without-storing-embeddings-leann',
+        destination: '/learn/expert/local-first-rag-without-storing-embeddings-leann',
+        permanent: true,
+      },
+      {
+        source: '/learn/Expert/:slug',
+        destination: '/learn/expert/:slug',
+        permanent: true,
+      },
+      {
+        source: '/learn/Midway/:slug',
+        destination: '/learn/midway/:slug',
+        permanent: true,
+      },
+      {
+        source: '/learn/Newbie/:slug',
+        destination: '/learn/newbie/:slug',
+        permanent: true,
       },
     ]
   },

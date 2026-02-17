@@ -32,16 +32,27 @@ export function useReadingHistory() {
 
     // Load history from localStorage on mount
     useEffect(() => {
+        let timer: number | null = null
         try {
             const stored = localStorage.getItem(STORAGE_KEY)
             if (stored) {
                 const parsed = JSON.parse(stored) as ReadingHistory
-                setHistory(parsed)
+                timer = window.setTimeout(() => {
+                    setHistory(parsed)
+                }, 0)
             }
         } catch (error) {
             console.error('[ReadingHistory] Failed to load:', error)
         }
-        setIsLoaded(true)
+
+        const loadedTimer = window.setTimeout(() => {
+            setIsLoaded(true)
+        }, 0)
+
+        return () => {
+            if (timer !== null) window.clearTimeout(timer)
+            window.clearTimeout(loadedTimer)
+        }
     }, [])
 
     // Save history to localStorage whenever it changes

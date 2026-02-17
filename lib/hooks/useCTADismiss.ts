@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 const DISMISS_STORAGE_PREFIX = 'staituned-cta-dismiss-'
 
@@ -8,6 +8,30 @@ interface UseCTADismissReturn {
     shouldShow: boolean
     dismiss: () => void
     reset: () => void
+}
+
+function getInitialShouldShow(storageKey: string, daysToHide: number): boolean {
+    if (typeof window === 'undefined') return true
+
+    try {
+        const dismissedAt = localStorage.getItem(storageKey)
+        if (!dismissedAt) return true
+
+        const dismissDate = new Date(parseInt(dismissedAt, 10))
+        const now = new Date()
+        const daysSinceDismiss = Math.floor(
+            (now.getTime() - dismissDate.getTime()) / (1000 * 60 * 60 * 24)
+        )
+
+        if (daysSinceDismiss < daysToHide) {
+            return false
+        }
+
+        localStorage.removeItem(storageKey)
+        return true
+    } catch {
+        return true
+    }
 }
 
 /**
@@ -29,41 +53,8 @@ interface UseCTADismissReturn {
  * )
  */
 export function useCTADismiss(key: string, daysToHide: number = 30): UseCTADismissReturn {
-    const [shouldShow, setShouldShow] = useState(true)
-    const [mounted, setMounted] = useState(false)
-
     const storageKey = `${DISMISS_STORAGE_PREFIX}${key}`
-
-    // Check localStorage on mount
-    useEffect(() => {
-        setMounted(true)
-
-        if (typeof window === 'undefined') return
-
-        try {
-            const dismissedAt = localStorage.getItem(storageKey)
-
-            if (dismissedAt) {
-                const dismissDate = new Date(parseInt(dismissedAt, 10))
-                const now = new Date()
-                const daysSinceDismiss = Math.floor(
-                    (now.getTime() - dismissDate.getTime()) / (1000 * 60 * 60 * 24)
-                )
-
-                // Still hidden if within the hide period
-                if (daysSinceDismiss < daysToHide) {
-                    setShouldShow(false)
-                } else {
-                    // Clear old dismissal
-                    localStorage.removeItem(storageKey)
-                    setShouldShow(true)
-                }
-            }
-        } catch {
-            // localStorage not available
-            setShouldShow(true)
-        }
-    }, [storageKey, daysToHide])
+    const [shouldShow, setShouldShow] = useState(() => getInitialShouldShow(storageKey, daysToHide))
 
     const dismiss = useCallback(() => {
         setShouldShow(false)
@@ -89,9 +80,8 @@ export function useCTADismiss(key: string, daysToHide: number = 30): UseCTADismi
         }
     }, [storageKey])
 
-    // Show by default during SSR to prevent hydration mismatch
     return {
-        shouldShow: mounted ? shouldShow : true,
+        shouldShow,
         dismiss,
         reset
     }

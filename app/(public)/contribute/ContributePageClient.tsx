@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { contributeTranslations, ContributeLanguage } from '@/lib/i18n/contribute-translations'
 import { useLearnLocale } from '@/lib/i18n'
 import { useAuth } from '@/components/auth/AuthContext'
@@ -32,7 +32,7 @@ export default function ContributePageClient() {
     const { user } = useAuth()
     const [drafts, setDrafts] = useState<Contribution[]>([])
 
-    const fetchTokenAndLoad = async () => {
+    const fetchTokenAndLoad = useCallback(async () => {
         if (!user) return
         try {
             const token = await user.getIdToken()
@@ -41,14 +41,17 @@ export default function ContributePageClient() {
             })
             const json = await res.json()
             if (json.success && json.contributions) {
-                setDrafts(json.contributions.filter((c: any) => c.status !== 'published' && c.status !== 'scheduled').slice(0, 3))
+                setDrafts(json.contributions.filter((c: Contribution) => c.status !== 'published' && c.status !== 'scheduled').slice(0, 3))
             }
         } catch (e) { console.error(e) }
-    }
+    }, [user])
 
     useEffect(() => {
-        fetchTokenAndLoad()
-    }, [user])
+        const timer = window.setTimeout(() => {
+            void fetchTokenAndLoad()
+        }, 0)
+        return () => window.clearTimeout(timer)
+    }, [fetchTokenAndLoad])
 
     const lang = locale as ContributeLanguage
     const t = contributeTranslations[lang].landing

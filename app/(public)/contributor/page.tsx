@@ -3,10 +3,16 @@ import path from 'path'
 import type { Metadata } from 'next'
 import ContributorProgramClient from './ContributorProgramClient'
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+
 export const metadata: Metadata = {
     title: 'Contributor Program | stAI tuned',
     description: 'Unisciti a stAI tuned e condividi le tue conoscenze sull\'Intelligenza Artificiale. Scopri come diventare contributor.',
+    alternates: {
+        canonical: `${SITE_URL}/contributor`,
+    },
     openGraph: {
+        url: `${SITE_URL}/contributor`,
         title: 'Contributor Program | stAI tuned',
         description: 'Unisciti a stAI tuned e condividi le tue conoscenze sull\'Intelligenza Artificiale.',
         type: 'website',

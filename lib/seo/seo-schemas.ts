@@ -125,6 +125,16 @@ export interface ArticleSchemaOptions {
     keywords?: string[]
     /** Reading time in minutes */
     readingTime?: number
+    /** Article content language in frontmatter format (Italian/English) */
+    language?: string
+}
+
+type ArticleLanguage = 'Italian' | 'English'
+
+export function mapArticleLanguageToLocale(language?: string): 'it-IT' | 'en-US' {
+    if (language === 'Italian') return 'it-IT'
+    if (language === 'English') return 'en-US'
+    return 'en-US'
 }
 
 /**
@@ -170,7 +180,7 @@ export function generateArticleSchema(options: ArticleSchemaOptions) {
         ...(options.keywords && { 'keywords': options.keywords.join(', ') }),
         ...(options.readingTime && { 'timeRequired': `PT${options.readingTime}M` }),
         'articleSection': options.section || 'Technology',
-        'inLanguage': 'it-IT',
+        'inLanguage': mapArticleLanguageToLocale(options.language as ArticleLanguage | undefined),
         'isAccessibleForFree': true,
         // Speakable specification for voice search / Google Assistant
         'speakable': {

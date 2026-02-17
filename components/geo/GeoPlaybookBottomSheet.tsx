@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Pitfalls, Pitfall } from './Pitfalls'
 import { DecisionRules, DecisionRule } from './DecisionRules'
 import { X, AlertTriangle, Sparkles } from 'lucide-react'
@@ -34,12 +34,7 @@ export function GeoPlaybookBottomSheet({
     ].filter(Boolean) as Array<'framework' | 'pitfalls'>), [geo])
 
     const [activeTab, setActiveTab] = useState<'framework' | 'pitfalls'>(tabs[0] ?? 'framework')
-
-    useEffect(() => {
-        if (tabs.length && !tabs.includes(activeTab)) {
-            setActiveTab(tabs[0])
-        }
-    }, [tabs, activeTab])
+    const effectiveTab = tabs.includes(activeTab) ? activeTab : tabs[0]
 
     if (!geo || tabs.length === 0) return null
 
@@ -95,11 +90,11 @@ export function GeoPlaybookBottomSheet({
 
                 {/* Content Area */}
                 <div className="overflow-y-auto p-4 pb-8 flex-1">
-                    {activeTab === 'framework' && geo.decisionRules?.rules?.length ? (
+                    {effectiveTab === 'framework' && geo.decisionRules?.rules?.length ? (
                         <DecisionRules rules={geo.decisionRules.rules} />
                     ) : null}
 
-                    {activeTab === 'pitfalls' && geo.pitfalls?.length ? (
+                    {effectiveTab === 'pitfalls' && geo.pitfalls?.length ? (
                         <Pitfalls
                             pitfalls={geo.pitfalls}
                         />

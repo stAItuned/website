@@ -115,10 +115,11 @@ export async function GET(request: NextRequest) {
             const slug = uidToSlug.get(uid);
             const writerProfile = (slug ? slugToProfile.get(slug) : null) ?? uidToWriter.get(uid) ?? null;
             const agreement = agreementsByUser.get(uid) ?? null;
+            const email = data.email || agreement?.author_email || writerProfile?.email || '';
 
             return {
                 uid,
-                email: data.email,
+                email,
                 displayName: data.displayName,
                 createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,
                 lastLoginAt: data.lastLoginAt?.toDate ? data.lastLoginAt.toDate() : data.lastLoginAt,
@@ -150,22 +151,27 @@ export async function GET(request: NextRequest) {
                 const slugOk = hasSlug ? !knownWriterSlugs.has(writer.slug as string) : false;
                 return uidOk && (hasSlug ? slugOk : true);
             })
-            .map((writer) => ({
-                uid: writer.uid || `writer:${writer.slug || 'unknown'}`,
-                email: writer.email || '',
-                displayName: writer.displayName || 'Writer',
-                createdAt: writer.createdAt || null,
-                lastLoginAt: null,
-                isWriter: true,
-                agreement: writer.uid ? agreementsByUser.get(writer.uid) ?? null : null,
-                writerProfile: writer.slug ? {
-                    slug: writer.slug,
-                    displayName: writer.displayName,
-                    title: writer.title,
-                    image: writer.image,
-                    published: Boolean(writer.published)
-                } : null
-            }));
+            .map((writer) => {
+                const agreement = writer.uid ? agreementsByUser.get(writer.uid) ?? null : null;
+                const email = writer.email || agreement?.author_email || '';
+
+                return {
+                    uid: writer.uid || `writer:${writer.slug || 'unknown'}`,
+                    email,
+                    displayName: writer.displayName || 'Writer',
+                    createdAt: writer.createdAt || null,
+                    lastLoginAt: null,
+                    isWriter: true,
+                    agreement,
+                    writerProfile: writer.slug ? {
+                        slug: writer.slug,
+                        displayName: writer.displayName,
+                        title: writer.title,
+                        image: writer.image,
+                        published: Boolean(writer.published)
+                    } : null
+                };
+            });
 
         const mergedUsers = [...users, ...writerOnlyUsers];
 

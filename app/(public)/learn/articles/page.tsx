@@ -10,14 +10,83 @@ import { topicHubs } from '@/config/topics'
 export const dynamic = 'force-static'
 export const revalidate = 3600 // ISR ogni ora (keep list fresh)
 
-export const metadata: Metadata = {
-    title: {
-        absolute: 'Blog stAItuned | AI & GenAI: guide e tutorial'
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+const VALID_LEVELS = ['newbie', 'midway', 'expert'] as const
+type ValidLevel = (typeof VALID_LEVELS)[number]
+
+const LEVEL_METADATA: Record<ValidLevel, { title: string; description: string }> = {
+    newbie: {
+        title: 'Newbie AI: guide introduttive e basi pratiche | stAItuned',
+        description:
+            'Articoli introduttivi su AI e GenAI per iniziare con chiarezza: concetti fondamentali, casi semplici e primi passi pratici.',
     },
-    description: 'Blog su AI e GenAI con guide, tutorial e risorse per capire e applicare l’intelligenza artificiale nel lavoro e nei progetti.',
-    openGraph: {
-        title: 'Blog stAItuned | AI & GenAI: guide e tutorial',
-        description: 'Blog su AI e GenAI con guide, tutorial e risorse per capire e applicare l’intelligenza artificiale nel lavoro e nei progetti.',
+    midway: {
+        title: 'Midway AI: guide pratiche e implementazione | stAItuned',
+        description:
+            'Articoli Midway su AI e GenAI con pattern operativi, implementazioni reali e trade-off utili per progetti concreti.',
+    },
+    expert: {
+        title: 'Expert AI: approfondimenti avanzati | stAItuned',
+        description:
+            'Articoli Expert su AI e GenAI: deep dive tecnici, architetture avanzate, ottimizzazioni e analisi di frontiera.',
+    },
+}
+
+function normalizeLevel(value: string | string[] | undefined): ValidLevel | null {
+    const firstValue = Array.isArray(value) ? value[0] : value
+    if (!firstValue) return null
+    const normalized = firstValue.toLowerCase()
+    return VALID_LEVELS.includes(normalized as ValidLevel) ? (normalized as ValidLevel) : null
+}
+
+export async function generateMetadata({
+    searchParams,
+}: {
+    searchParams: Promise<{ level?: string | string[] }>
+}): Promise<Metadata> {
+    const resolvedSearchParams = await searchParams
+    const level = normalizeLevel(resolvedSearchParams.level)
+
+    if (level) {
+        const levelMeta = LEVEL_METADATA[level]
+        const canonicalUrl = `${SITE_URL}/learn/${level}`
+
+        return {
+            title: {
+                absolute: levelMeta.title,
+            },
+            description: levelMeta.description,
+            alternates: {
+                canonical: canonicalUrl,
+            },
+            openGraph: {
+                url: canonicalUrl,
+                title: levelMeta.title,
+                description: levelMeta.description,
+                type: 'website',
+            },
+        }
+    }
+
+    const defaultTitle = 'Blog stAItuned | AI & GenAI: guide e tutorial'
+    const defaultDescription =
+        'Blog su AI e GenAI con guide, tutorial e risorse per capire e applicare l’intelligenza artificiale nel lavoro e nei progetti.'
+    const canonicalUrl = `${SITE_URL}/learn/articles`
+
+    return {
+        title: {
+            absolute: defaultTitle,
+        },
+        description: defaultDescription,
+        alternates: {
+            canonical: canonicalUrl,
+        },
+        openGraph: {
+            url: canonicalUrl,
+            title: defaultTitle,
+            description: defaultDescription,
+            type: 'website',
+        },
     }
 }
 

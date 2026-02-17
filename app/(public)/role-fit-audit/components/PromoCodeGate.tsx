@@ -51,17 +51,24 @@ export default function PromoCodeGate() {
     // Persistence: Load from LocalStorage
     // ---------------------------------------------------------------------------
     useEffect(() => {
+        let timer: number | null = null
         try {
             const savedUnlocked = localStorage.getItem(UNLOCKED_STORAGE_KEY)
             const savedOrderId = localStorage.getItem(PAYPAL_ORDER_ID_KEY)
-            if (savedUnlocked === 'true') {
-                setIsUnlocked(true)
-            }
-            if (savedOrderId) {
-                setPaypalOrderId(savedOrderId)
-            }
+            timer = window.setTimeout(() => {
+                if (savedUnlocked === 'true') {
+                    setIsUnlocked(true)
+                }
+                if (savedOrderId) {
+                    setPaypalOrderId(savedOrderId)
+                }
+            }, 0)
         } catch (e) {
             console.warn('Failed to load unlock state from localStorage:', e)
+        }
+
+        return () => {
+            if (timer !== null) window.clearTimeout(timer)
         }
     }, [])
 
@@ -89,8 +96,11 @@ export default function PromoCodeGate() {
         if (urlCoupon) {
             const normalizedCode = urlCoupon.trim().toUpperCase()
             if (VALID_PROMO_CODES.includes(normalizedCode)) {
-                setPromoCode(normalizedCode)
-                setPromoApplied(true)
+                const timer = window.setTimeout(() => {
+                    setPromoCode(normalizedCode)
+                    setPromoApplied(true)
+                }, 0)
+                return () => window.clearTimeout(timer)
             }
         }
     }, [searchParams])

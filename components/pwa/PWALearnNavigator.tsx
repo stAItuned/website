@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { usePWADetection } from '@/hooks/usePWADetection'
@@ -42,40 +42,22 @@ interface PWALearnNavigatorProps {
 export function PWALearnNavigator({ className = '' }: PWALearnNavigatorProps) {
     const { isPWA } = usePWADetection()
     const pathname = usePathname()
-    const [isDismissed, setIsDismissed] = useState(true)
-    const [isVisible, setIsVisible] = useState(false)
+    const [isDismissed, setIsDismissed] = useState(() => {
+        if (typeof window === 'undefined') return true
+        const dismissedAt = localStorage.getItem(DISMISS_KEY)
+        if (!dismissedAt) return false
+        const dismissedTime = parseInt(dismissedAt, 10)
+        return Date.now() - dismissedTime < DISMISS_DURATION
+    })
 
     // Check if we're on a learn page
     const isLearnPage = pathname === '/learn' || pathname === '/learn/articles' || pathname.startsWith('/learn/')
 
-    useEffect(() => {
-        // Check if dismissed from localStorage
-        const dismissedAt = localStorage.getItem(DISMISS_KEY)
-        if (dismissedAt) {
-            const dismissedTime = parseInt(dismissedAt, 10)
-            if (Date.now() - dismissedTime < DISMISS_DURATION) {
-                setIsDismissed(true)
-                return
-            }
-        }
-        setIsDismissed(false)
-    }, [])
-
-    useEffect(() => {
-        // Show only if: in PWA, not on learn page, not dismissed
-        if (isPWA && !isLearnPage && !isDismissed) {
-            // Small delay for smooth appearance after page load
-            const timer = setTimeout(() => setIsVisible(true), 800)
-            return () => clearTimeout(timer)
-        } else {
-            setIsVisible(false)
-        }
-    }, [isPWA, isLearnPage, isDismissed])
+    const isVisible = isPWA && !isLearnPage && !isDismissed
 
     const handleDismiss = (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        setIsVisible(false)
         setIsDismissed(true)
         localStorage.setItem(DISMISS_KEY, Date.now().toString())
     }

@@ -47,6 +47,10 @@ function getInitials(fullName: string): string {
   return initials || '?'
 }
 
+function toExternalUrl(url: string): string {
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`
+}
+
 /** Public author page with client-side pagination. */
 export function AuthorPageWithPagination({
   authorData,
@@ -113,7 +117,7 @@ export function AuthorPageWithPagination({
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 ml-1">GenAI applied to the business</span>
                 {authorData.linkedin ? (
                   <a
-                    href={authorData.linkedin}
+                    href={toExternalUrl(authorData.linkedin)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="ml-2 px-3 py-1 rounded-full bg-primary-600 dark:bg-primary-500 text-white text-xs font-semibold transition-all duration-200 hover:bg-primary-700 dark:hover:bg-primary-400 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -131,7 +135,7 @@ export function AuthorPageWithPagination({
             <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-4 mt-2">
               {authorData.linkedin && (
                 <a
-                  href={authorData.linkedin}
+                  href={toExternalUrl(authorData.linkedin)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-700 dark:hover:text-primary-200 transition-colors"
@@ -144,7 +148,7 @@ export function AuthorPageWithPagination({
               )}
               {authorData.website && (
                 <a
-                  href={authorData.website.startsWith('http') ? authorData.website : `https://${authorData.website}`}
+                  href={toExternalUrl(authorData.website)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-700 dark:hover:text-primary-200 transition-colors"
