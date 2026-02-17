@@ -93,7 +93,7 @@ export function generateWebsiteSchema() {
             '@type': 'SearchAction',
             'target': {
                 '@type': 'EntryPoint',
-                'urlTemplate': `${BRAND.url}/learn?q={search_term_string}`,
+                'urlTemplate': `${BRAND.url}/learn/articles?text={search_term_string}`,
             },
             'query-input': 'required name=search_term_string',
         },

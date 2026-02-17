@@ -78,7 +78,7 @@ export async function GET() {
   const staticUrls = [
     // Core pages - highest priority
     { loc: `${baseUrl}/`, priority: "1.0", lastmod: learnLastmod },
-    { loc: `${baseUrl}/learn/`, priority: "0.9", lastmod: learnLastmod },
+    { loc: `${baseUrl}/learn/articles/`, priority: "0.9", lastmod: learnLastmod },
     // Section/target pages - dynamically updated when new posts added
     { loc: `${baseUrl}/learn/newbie/`, priority: "0.8", lastmod: newbieLastmod },
     { loc: `${baseUrl}/learn/midway/`, priority: "0.8", lastmod: midwayLastmod },
