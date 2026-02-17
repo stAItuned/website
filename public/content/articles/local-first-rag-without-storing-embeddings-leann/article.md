@@ -9,8 +9,8 @@ date: 2026-02-16T00:00:00.000Z
 published: true
 primaryTopic: rag
 topics:
-  - genai-fundamentals
-  - production-reliability
+  - ai-research
+  - production
 geo:
   quickAnswer:
     title: "Local RAG Without Persisting Full Embeddings"
