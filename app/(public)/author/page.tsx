@@ -7,13 +7,12 @@ import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { BadgeIcon } from '@/components/badges/BadgeIcon'
 import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { PageTransition } from '@/components/ui/PageTransition'
-import { getPublicWritersList } from '@/lib/writer/firestore'
+import { getPublicWriter, getPublicWritersList } from '@/lib/writer/firestore'
 import { toPreviewText } from '@/lib/text/preview-text'
 import type { AuthorBadge, Badge, BadgeTier } from '@/lib/types/badge'
 
-// Force static generation
-export const dynamic = 'force-static'
-export const revalidate = 21600 // 6 ore (60*60*6) - increased from 1h to save function calls
+// Force runtime rendering so writers are read from Firestore on request.
+export const dynamic = 'force-dynamic'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
@@ -121,8 +120,28 @@ export default async function AuthorsPage() {
 
   const authorsWithData: AuthorCard[] = [...firestoreAuthors, ...fallbackAuthors]
 
+  // If an avatar is missing (would fallback to the default png), force a direct
+  // Firestore read for that specific slug before rendering.
+  const authorsWithResolvedAvatars: AuthorCard[] = await Promise.all(
+    authorsWithData.map(async (author) => {
+      if (author.data?.avatar) return author
+
+      const writer = await getPublicWriter(author.slug)
+      const forcedAvatar = writer?.image?.publicUrl
+      if (!forcedAvatar) return author
+
+      return {
+        ...author,
+        data: {
+          ...author.data,
+          avatar: forcedAvatar,
+        },
+      }
+    })
+  )
+
   // Sort by article count (descending) then by name
-  authorsWithData.sort((a, b) => {
+  authorsWithResolvedAvatars.sort((a, b) => {
     if (b.articleCount !== a.articleCount) {
       return b.articleCount - a.articleCount
     }
@@ -153,7 +172,7 @@ export default async function AuthorsPage() {
 
         {/* Authors Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {authorsWithData.map((author) => {
+          {authorsWithResolvedAvatars.map((author) => {
             const topBadges = (author.earnedBadges || [])
               .map(eb => {
                 const def = BADGE_DEFINITIONS.find(d => d.id === eb.badgeId)
@@ -236,7 +255,7 @@ export default async function AuthorsPage() {
           })}
         </div>
 
-        {authorsWithData.length === 0 && (
+        {authorsWithResolvedAvatars.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No authors found.</p>
           </div>
