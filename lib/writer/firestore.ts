@@ -34,10 +34,11 @@ function coercePublicWriter(data: unknown, fallbackSlug?: string): PublicWriterD
   if (parsed.success) return parsed.data
 
   const slug = toTrimmedString(asRecord.slug) ?? fallbackSlug ?? null
-  const displayName =
-    toTrimmedString(asRecord.displayName) ??
-    [toTrimmedString(asRecord.name), toTrimmedString(asRecord.surname)].filter(Boolean).join(' ') ||
-    null
+  const nameParts = [toTrimmedString(asRecord.name), toTrimmedString(asRecord.surname)].filter(
+    (part): part is string => Boolean(part)
+  )
+  const fallbackDisplayName = nameParts.join(' ').trim()
+  const displayName = toTrimmedString(asRecord.displayName) ?? (fallbackDisplayName || null)
 
   if (!slug || !displayName) return null
 
