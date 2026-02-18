@@ -7,7 +7,11 @@ import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { BadgeIcon } from '@/components/badges/BadgeIcon'
 import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { PageTransition } from '@/components/ui/PageTransition'
-import { getPublicWriter, getPublicWritersList } from '@/lib/writer/firestore'
+import {
+  getPublicWriterAvatarUrl,
+  getPublicWriterAvatarUrlByDisplayName,
+  getPublicWritersList,
+} from '@/lib/writer/firestore'
 import { toPreviewText } from '@/lib/text/preview-text'
 import type { AuthorBadge, Badge, BadgeTier } from '@/lib/types/badge'
 
@@ -126,8 +130,9 @@ export default async function AuthorsPage() {
     authorsWithData.map(async (author) => {
       if (author.data?.avatar) return author
 
-      const writer = await getPublicWriter(author.slug)
-      const forcedAvatar = writer?.image?.publicUrl
+      const forcedAvatar =
+        (await getPublicWriterAvatarUrl(author.slug)) ??
+        (await getPublicWriterAvatarUrlByDisplayName(author.data?.name || author.name))
       if (!forcedAvatar) return author
 
       return {

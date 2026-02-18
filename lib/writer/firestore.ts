@@ -19,6 +19,21 @@ const PUBLIC_WRITER_CACHE_SECONDS = 300
 const REVALIDATE_PROFILE = 'default'
 const MAX_SLUG_SUFFIX_ATTEMPTS = 200
 
+function extractPublicAvatarUrl(data: unknown): string | null {
+  if (!data || typeof data !== 'object') return null
+  const asRecord = data as Record<string, unknown>
+  if (asRecord.published !== true) return null
+
+  const image = asRecord.image
+  if (!image || typeof image !== 'object') return null
+  const imageRecord = image as Record<string, unknown>
+  const publicUrl = imageRecord.publicUrl
+
+  if (typeof publicUrl !== 'string') return null
+  const trimmed = publicUrl.trim()
+  return trimmed.length > 0 ? trimmed : null
+}
+
 /**
  * Get a public writer profile by slug.
  */
@@ -56,6 +71,59 @@ export async function getPublicWriter(slug: string): Promise<PublicWriterDocumen
     {
       revalidate: PUBLIC_WRITER_CACHE_SECONDS,
       tags: [`writer:${normalizedSlug}`],
+    }
+  )()
+}
+
+/**
+ * Get a writer avatar URL by slug.
+ * Tolerates legacy/incomplete writer docs (no strict schema parsing).
+ */
+export async function getPublicWriterAvatarUrl(slug: string): Promise<string | null> {
+  const normalizedSlug = normalizeSlug(slug)
+  return unstable_cache(
+    async () => {
+      if (shouldSkipFirestoreDuringBuild()) return null
+      const snap = await dbDefault().collection(WRITERS_COLLECTION).doc(normalizedSlug).get()
+      if (!snap.exists) return null
+      return extractPublicAvatarUrl(snap.data())
+    },
+    ['public-writer-avatar', normalizedSlug],
+    {
+      revalidate: PUBLIC_WRITER_CACHE_SECONDS,
+      tags: [`writer:${normalizedSlug}`],
+    }
+  )()
+}
+
+/**
+ * Get a writer avatar URL by display name.
+ * Useful when slug normalization from content does not match the canonical writer slug.
+ */
+export async function getPublicWriterAvatarUrlByDisplayName(displayName: string): Promise<string | null> {
+  const normalizedDisplayName = displayName.trim().toLowerCase().replace(/\s+/g, ' ')
+  return unstable_cache(
+    async () => {
+      if (shouldSkipFirestoreDuringBuild()) return null
+      if (!normalizedDisplayName) return null
+
+      const snap = await dbDefault()
+        .collection(WRITERS_COLLECTION)
+        .where('displayName', '==', displayName.trim())
+        .limit(3)
+        .get()
+
+      for (const doc of snap.docs) {
+        const avatarUrl = extractPublicAvatarUrl(doc.data())
+        if (avatarUrl) return avatarUrl
+      }
+
+      return null
+    },
+    ['public-writer-avatar-by-name', normalizedDisplayName],
+    {
+      revalidate: PUBLIC_WRITER_CACHE_SECONDS,
+      tags: ['writers:list'],
     }
   )()
 }
