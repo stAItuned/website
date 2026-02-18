@@ -10,6 +10,7 @@ import type { Badge, ArticleMetricSnapshot } from '@/lib/types/badge'
 import { BRAND } from '@/lib/brand'
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
+const BADGE_AWARD_CC_EMAIL = 'info@staituned.com'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? BRAND.url).replace(/\/+$/, '')
 
 interface SendBadgeAwardEmailParams {
@@ -371,6 +372,7 @@ export async function sendBadgeAwardEmail(params: SendBadgeAwardEmailParams): Pr
     const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
+      cc: BADGE_AWARD_CC_EMAIL,
       subject: `You earned the ${badge.name.en} badge! 🏆`,
       html: generateBadgeEmailHtml(params),
       text: generateBadgeEmailText(params),
