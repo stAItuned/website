@@ -9,6 +9,7 @@ import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { getPublicWritersList } from '@/lib/writer/firestore'
 import { toPreviewText } from '@/lib/text/preview-text'
+import type { AuthorBadge, Badge, BadgeTier } from '@/lib/types/badge'
 
 // Force static generation
 export const dynamic = 'force-static'
@@ -16,6 +17,22 @@ export const revalidate = 21600 // 6 ore (60*60*6) - increased from 1h to save f
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
+
+type AuthorCardData = {
+  name?: string
+  team?: string[]
+  title?: string
+  description?: string
+  avatar?: string
+}
+
+type AuthorCard = {
+  name: string
+  slug: string
+  data: AuthorCardData
+  articleCount: number
+  earnedBadges: AuthorBadge[]
+}
 
 export const metadata: Metadata = {
   title: 'All Authors - stAI tuned',
@@ -62,7 +79,7 @@ export default async function AuthorsPage() {
   const writers = await getPublicWritersList()
   const writerKeys = new Set(writers.map((writer) => normalizeAuthorKey(writer.displayName)))
 
-  const firestoreAuthors = await Promise.all(
+  const firestoreAuthors: AuthorCard[] = await Promise.all(
     writers.map(async (writer) => {
       const articleCount = articleCountByAuthor.get(normalizeAuthorKey(writer.displayName)) ?? 0
       const earnedBadges = await getAuthorBadges(writer.slug)
@@ -83,7 +100,7 @@ export default async function AuthorsPage() {
     })
   )
 
-  const fallbackAuthors = await Promise.all(
+  const fallbackAuthors: AuthorCard[] = await Promise.all(
     Array.from(displayNameByAuthorKey.entries())
       .filter(([authorKey]) => !writerKeys.has(authorKey))
       .map(async ([authorKey, authorName]) => {
@@ -102,7 +119,7 @@ export default async function AuthorsPage() {
       })
   )
 
-  const authorsWithData = [...firestoreAuthors, ...fallbackAuthors]
+  const authorsWithData: AuthorCard[] = [...firestoreAuthors, ...fallbackAuthors]
 
   // Sort by article count (descending) then by name
   authorsWithData.sort((a, b) => {
@@ -142,11 +159,10 @@ export default async function AuthorsPage() {
                 const def = BADGE_DEFINITIONS.find(d => d.id === eb.badgeId)
                 return def ? { def, earned: eb } : null
               })
-              .filter((b): b is { def: any, earned: any } => Boolean(b && b.def.id !== 'contributor'))
+              .filter((b): b is { def: Badge; earned: AuthorBadge } => Boolean(b && b.def.id !== 'contributor'))
 
             topBadges.sort((a, b) => {
-              const tierOrder = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 }
-              // @ts-ignore
+              const tierOrder: Record<BadgeTier, number> = { gold: 3, silver: 2, bronze: 1, contributor: 0, special: 4 }
               return (tierOrder[b.def.tier] || 0) - (tierOrder[a.def.tier] || 0)
             })
 
