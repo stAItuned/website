@@ -250,6 +250,7 @@ export async function uploadWriterImage(
   await file.save(fileBuffer, {
     metadata: {
       contentType: mimeType,
+      cacheControl: 'public, max-age=86400',
       metadata: {
         firebaseStorageDownloadTokens: token,
       },
