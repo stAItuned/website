@@ -7,7 +7,7 @@ cover: >-
   https://storage.googleapis.com/editorial-planner-images/article-images/8b8ebd08-97e1-4f0f-89e6-bd3bcddb7d0d/cover_20260209_132725.webp
 meta: >-
   A practical GenAI security guide: prompt injection (direct/indirect), system prompt leakage, and production guardrails—sanitization, permissions, rate limits, logging, and red teaming.
-date: 2026-02-09T16:05:04.000Z
+date: 2026-02-19T00:05:04.000Z
 published: true
 primaryTopic: llm-security
 topics:
