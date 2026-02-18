@@ -42,17 +42,17 @@ export function BadgeCard({
     return (
         <div className={cn("relative inline-flex flex-col items-center", className)}>
             {/* Badge Image */}
-            <div className="relative">
+            <div className="relative shrink-0" style={{ width }}>
                 <Image
                     src={imageSrc}
                     alt={badge.name.en}
                     width={width}
                     height={height}
-                    className="drop-shadow-xl"
-                    style={{ width: 'auto', height: 'auto' }}
+                    className="block h-auto w-full max-w-full drop-shadow-xl"
+                    sizes={`${width}px`}
                     priority={size === 'lg' || size === 'xl'}
                     onError={(e) => {
-                        // Fallback to a default generic badge if specific PNG missing
+                        // Fallback to a generic badge when a specific PNG is missing.
                         e.currentTarget.src = "/badges/contributor.png"
                     }}
                 />

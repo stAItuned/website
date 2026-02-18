@@ -3,17 +3,25 @@
 
 import React from 'react'
 import Image from 'next/image'
-import { Badge, BadgeTier } from '@/lib/types/badge'
+import type { AuthorBadge, Badge } from '@/lib/types/badge'
 import { cn } from '@/lib/utils'
 import { getBadgeImageSource } from '@/lib/badges/badge-utils'
 
 interface BadgeIconProps {
     badge: Badge
-    earnedBadge?: any // Using any to be flexible with AuthorBadge type
+    earnedBadge?: AuthorBadge
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     className?: string
     showGloss?: boolean // Kept for API compatibility but unused with PNGs
 }
+
+const BADGE_SIZES = {
+    xs: { width: 40, height: 44 },
+    sm: { width: 80, height: 88 },
+    md: { width: 120, height: 132 },
+    lg: { width: 200, height: 220 },
+    xl: { width: 300, height: 330 },
+} as const
 
 export function BadgeIcon({
     badge,
@@ -21,41 +29,26 @@ export function BadgeIcon({
     size = 'md',
     className,
 }: BadgeIconProps) {
-
-    // Dimensions map - adjusted for PNG display
-    const sizes = {
-        xs: { width: 40, height: 44 },
-        sm: { width: 80, height: 88 },
-        md: { width: 120, height: 132 },
-        lg: { width: 200, height: 220 },
-        xl: { width: 300, height: 330 },
-    }
-
-    const { width, height } = sizes[size]
+    const { width, height } = BADGE_SIZES[size]
 
     // Use the icon from definition, following naming convention
     const imageSrc = getBadgeImageSource(badge.icon)
-    // But Next/Image requires known src at build time or external URL
 
     const credentialId = earnedBadge?.credentialId
 
     return (
         <div className={cn("relative inline-flex flex-col items-center justify-center font-sans select-none group", className)}>
-            <div className="relative transition-transform duration-300 group-hover:scale-105">
+            <div className="relative shrink-0 transition-transform duration-300 group-hover:scale-105" style={{ width }}>
                 <Image
                     src={imageSrc}
                     alt={badge.name.en}
                     width={width}
                     height={height}
-                    className="drop-shadow-lg"
-                    style={{
-                        maxWidth: '100%',
-                        width: 'auto',
-                        height: 'auto',
-                    }}
-                    // Add error handling placeholder if needed
+                    className="block h-auto w-full max-w-full drop-shadow-lg"
+                    sizes={`${width}px`}
+                    priority={size === 'lg' || size === 'xl'}
                     onError={(e) => {
-                        // Fallback to a default generic badge if specific PNG missing
+                        // Fallback to a generic badge when a specific PNG is missing.
                         e.currentTarget.src = "/badges/contributor.png"
                     }}
                 />
