@@ -19,10 +19,57 @@ const PUBLIC_WRITER_CACHE_SECONDS = 300
 const REVALIDATE_PROFILE = 'default'
 const MAX_SLUG_SUFFIX_ATTEMPTS = 200
 
+function toTrimmedString(value: unknown): string | null {
+  if (typeof value !== 'string') return null
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
+}
+
+function coercePublicWriter(data: unknown, fallbackSlug?: string): PublicWriterDocument | null {
+  if (!data || typeof data !== 'object') return null
+  const asRecord = data as Record<string, unknown>
+  if (asRecord.published === false) return null
+
+  const parsed = publicWriterSchema.safeParse({ ...asRecord, published: true })
+  if (parsed.success) return parsed.data
+
+  const slug = toTrimmedString(asRecord.slug) ?? fallbackSlug ?? null
+  const displayName =
+    toTrimmedString(asRecord.displayName) ??
+    [toTrimmedString(asRecord.name), toTrimmedString(asRecord.surname)].filter(Boolean).join(' ') ||
+    null
+
+  if (!slug || !displayName) return null
+
+  const imageSource =
+    asRecord.image && typeof asRecord.image === 'object'
+      ? (asRecord.image as Record<string, unknown>)
+      : null
+
+  const bucket = toTrimmedString(imageSource?.bucket)
+  const path = toTrimmedString(imageSource?.path)
+  const publicUrl = toTrimmedString(imageSource?.publicUrl) ?? undefined
+
+  return {
+    slug,
+    displayName,
+    name: toTrimmedString(asRecord.name) ?? displayName,
+    surname: toTrimmedString(asRecord.surname) ?? '',
+    title: toTrimmedString(asRecord.title) ?? '',
+    bio: toTrimmedString(asRecord.bio) ?? '',
+    linkedin: toTrimmedString(asRecord.linkedin) ?? undefined,
+    website: toTrimmedString(asRecord.website) ?? undefined,
+    image: bucket && path ? { bucket, path, publicUrl } : undefined,
+    published: true,
+    createdAt: toTrimmedString(asRecord.createdAt) ?? new Date(0).toISOString(),
+    updatedAt: toTrimmedString(asRecord.updatedAt) ?? new Date(0).toISOString(),
+  }
+}
+
 function extractPublicAvatarUrl(data: unknown): string | null {
   if (!data || typeof data !== 'object') return null
   const asRecord = data as Record<string, unknown>
-  if (asRecord.published !== true) return null
+  if (asRecord.published === false) return null
 
   const image = asRecord.image
   if (!image || typeof image !== 'object') return null
@@ -47,16 +94,7 @@ async function fetchPublicWriter(slug: string): Promise<PublicWriterDocument | n
   const data = snap.data()
   if (!data) return null
 
-  // Ensure profile is public
-  if (data.published !== true) return null
-
-  // Strip private fields
-  try {
-    return publicWriterSchema.parse(data)
-  } catch (error) {
-    console.error('[writers] Invalid public writer doc:', normalizedSlug, error)
-    return null
-  }
+  return coercePublicWriter(data, normalizedSlug)
 }
 
 /**
@@ -136,19 +174,11 @@ export const getPublicWritersList = unstable_cache(
   async (): Promise<PublicWriterDocument[]> => {
     if (shouldSkipFirestoreDuringBuild()) return []
 
-    const snap = await dbDefault()
-      .collection(WRITERS_COLLECTION)
-      .where('published', '==', true)
-      .get()
+    const snap = await dbDefault().collection(WRITERS_COLLECTION).get()
 
     return snap.docs
       .map((d) => {
-        try {
-          return publicWriterSchema.parse(d.data())
-        } catch (e) {
-          console.error('Invalid writer doc:', d.id, e)
-          return null
-        }
+        return coercePublicWriter(d.data(), d.id)
       })
       .filter((w): w is PublicWriterDocument => w !== null)
   },
