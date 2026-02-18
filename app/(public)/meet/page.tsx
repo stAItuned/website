@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { allPosts } from '@/lib/contentlayer'
+import { allPosts, allTeams } from '@/lib/contentlayer'
 import { getAuthorBadges } from '@/lib/firebase/badge-service'
 import { getPublicWritersList } from '@/lib/writer/firestore'
 import MeetPageClient from './MeetPageClient'
@@ -29,9 +29,24 @@ export const metadata: Metadata = {
 export default async function MeetPage() {
   const normalizeAuthorKey = (value: string) =>
     value.trim().toLowerCase().replace(/\s+/g, ' ')
+  const normalizeTeamKey = (value: string) =>
+    value.trim().toLowerCase().replace(/-/g, ' ').replace(/\s+/g, ' ')
 
   const articleCountByAuthor = new Map<string, number>()
   const displayNameByAuthorKey = new Map<string, string>()
+  const teamMetaByAuthorKey = new Map<string, { bio?: string; role?: string }>()
+
+  for (const member of allTeams) {
+    const meta = { bio: member.bio || undefined, role: member.role || undefined }
+    if (member.name) {
+      teamMetaByAuthorKey.set(normalizeTeamKey(member.name), meta)
+    }
+    if (member.slug) {
+      teamMetaByAuthorKey.set(normalizeTeamKey(member.slug), meta)
+      teamMetaByAuthorKey.set(normalizeTeamKey(member.slug.replaceAll('-', ' ')), meta)
+    }
+  }
+
   for (const post of allPosts) {
     if (post.published === false || !post.author) continue
     const key = normalizeAuthorKey(post.author)
@@ -51,8 +66,8 @@ export default async function MeetPage() {
         data: {
           name: writer.displayName,
           team: ['Writers'],
-          title: writer.title,
-          description: writer.bio,
+          title: writer.title || teamMetaByAuthorKey.get(normalizeTeamKey(writer.displayName))?.role,
+          description: writer.bio || teamMetaByAuthorKey.get(normalizeTeamKey(writer.displayName))?.bio,
           linkedin: writer.linkedin,
           website: writer.website,
           avatar: writer.image?.publicUrl,
@@ -73,6 +88,7 @@ export default async function MeetPage() {
           slug,
           data: {
             name: authorName,
+            description: teamMetaByAuthorKey.get(normalizeTeamKey(authorName))?.bio,
             badges: await getAuthorBadges(slug),
           },
           articleCount: articleCountByAuthor.get(authorKey) ?? 0,

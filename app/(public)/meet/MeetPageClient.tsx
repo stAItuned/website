@@ -10,6 +10,7 @@ import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { BadgeIcon } from '@/components/badges/BadgeIcon'
 import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
 import { Badge, AuthorBadge } from '@/lib/types/badge'
+import { toPreviewText } from '@/lib/text/preview-text'
 
 const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
 
@@ -285,7 +286,7 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                             )}
                                             {author.data?.description && (
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 pt-1">
-                                                    {author.data.description}
+                                                    {toPreviewText(author.data.description)}
                                                 </p>
                                             )}
                                             {author.data?.website && (

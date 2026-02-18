@@ -6,6 +6,7 @@ import { BADGE_DEFINITIONS } from '@/lib/config/badge-config'
 import { Badge, AuthorBadge } from '@/lib/types/badge'
 import { BadgeIcon } from '@/components/badges/BadgeIcon'
 import { BadgeTooltip } from '@/components/badges/BadgeTooltip'
+import { toPreviewText } from '@/lib/text/preview-text'
 
 interface AuthorBioCardProps {
   author: string
@@ -100,7 +101,7 @@ export function AuthorBioCard({ author, authorBadges, authorData }: AuthorBioCar
 
             {description && (
               <p className="text-gray-700 dark:text-gray-300 text-xs md:text-sm leading-relaxed mb-3 line-clamp-2">
-                {description}
+                {toPreviewText(description)}
               </p>
             )}
 
