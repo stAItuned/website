@@ -1,6 +1,6 @@
 ---
 title: 'GenAI Security Guardrails: Prevent Prompt Injection, Data Leakage & Unsafe Agents'
-author: Name Surname
+author: Yuri Mariotti
 target: Midway
 language: English
 cover: >-
