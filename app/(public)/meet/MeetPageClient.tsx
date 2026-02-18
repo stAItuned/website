@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 import { HeroAnimatedBackground } from '@/components/home/HeroAnimatedBackground'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -30,6 +30,12 @@ interface AuthorData {
 
 interface MeetPageClientProps {
     topContributors: AuthorData[]
+}
+
+type PublicWriterApiResponse = {
+    image?: {
+        publicUrl?: string
+    }
 }
 
 const TextParser = ({
@@ -62,11 +68,61 @@ const TextParser = ({
 export default function MeetPageClient({ topContributors }: MeetPageClientProps) {
     const { locale } = useLearnLocale()
     const t = homeTranslations[locale].meet
+    const [runtimeAvatarBySlug, setRuntimeAvatarBySlug] = useState<Record<string, string | null>>({})
+    const requestedAvatarSlugsRef = useRef<Set<string>>(new Set())
 
     const filteredContributors = useMemo(() => {
         let list = [...topContributors]
         list.sort((a, b) => b.articleCount - a.articleCount)
         return list
+    }, [topContributors])
+
+    useEffect(() => {
+        const authorsMissingAvatar = topContributors.filter((author) => {
+            if (author.data?.avatar) return false
+            return !requestedAvatarSlugsRef.current.has(author.slug)
+        })
+
+        if (!authorsMissingAvatar.length) return
+        for (const author of authorsMissingAvatar) {
+            requestedAvatarSlugsRef.current.add(author.slug)
+        }
+
+        let active = true
+
+        const fetchMissingAvatars = async () => {
+            const resolvedEntries = await Promise.all(
+                authorsMissingAvatar.map(async (author) => {
+                    try {
+                        const response = await fetch(`/api/public/writers/${encodeURIComponent(author.slug)}`, {
+                            cache: 'no-store',
+                        })
+                        if (!response.ok) return [author.slug, null] as const
+
+                        const payload: PublicWriterApiResponse = await response.json()
+                        return [author.slug, payload.image?.publicUrl ?? null] as const
+                    } catch {
+                        return [author.slug, null] as const
+                    }
+                })
+            )
+
+            if (!active) return
+
+            setRuntimeAvatarBySlug((prev) => {
+                const next = { ...prev }
+                for (const [slug, avatarUrl] of resolvedEntries) {
+                    next[slug] = avatarUrl
+                }
+                return next
+            })
+        }
+
+        void fetchMissingAvatars()
+
+        return () => {
+            active = false
+        }
     }, [topContributors])
 
     const values = [
@@ -268,7 +324,7 @@ export default function MeetPageClient({ topContributors }: MeetPageClientProps)
                                 >
                                     <div className="flex flex-col items-center text-center space-y-3">
                                         <Image
-                                            src={author.data?.avatar || DEFAULT_AVATAR_SRC}
+                                            src={author.data?.avatar || runtimeAvatarBySlug[author.slug] || DEFAULT_AVATAR_SRC}
                                             alt={author.name}
                                             width={80}
                                             height={80}
