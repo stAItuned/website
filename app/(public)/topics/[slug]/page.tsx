@@ -7,10 +7,41 @@ import { TopicHubHero } from '../components/TopicHubHero'
 import { TopicOverview } from '../components/TopicOverview'
 import { TopicDeepDives } from '../components/TopicDeepDives'
 import { StartHereSection } from '../components/StartHereSection'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/seo-schemas'
+import { DynamicHtmlLang } from '@/components/seo/DynamicHtmlLang'
 import fs from 'fs'
 import path from 'path'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
+
+/**
+ * Parse FAQ items from the raw topic markdown content.
+ * Extracts <details><summary>Question</summary>Answer</details> blocks
+ * to generate FAQPage JSON-LD structured data for rich snippets.
+ */
+function extractFaqsFromMarkdown(raw: string): { question: string; answer: string }[] {
+    const faqs: { question: string; answer: string }[] = []
+    // Match <details>...<summary>Q</summary>A...</details> (non-greedy, multiline)
+    const detailsRegex = /<details>([\s\S]*?)<\/details>/gi
+    const summaryRegex = /<summary>([\s\S]*?)<\/summary>/i
+
+    let match: RegExpExecArray | null
+    while ((match = detailsRegex.exec(raw)) !== null) {
+        const inner = match[1]
+        const summaryMatch = summaryRegex.exec(inner)
+        if (!summaryMatch) continue
+        const question = summaryMatch[1].trim()
+        // Answer is everything after the </summary> tag
+        const answerRaw = inner.replace(summaryRegex, '').trim()
+        // Strip any remaining HTML tags for clean schema output
+        const answer = answerRaw.replace(/<[^>]+>/g, '').trim()
+        if (question && answer) {
+            faqs.push({ question, answer })
+        }
+    }
+    return faqs
+}
 
 export async function generateStaticParams() {
     return allTopics.map((topic) => ({
@@ -24,9 +55,19 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     if (!topic) return {}
     const url = `${SITE_URL}/topics/${topic.slug}`
 
+    // Determine if this topic has any published articles.
+    // Topics with no articles are thin pages and should not be indexed.
+    const hasArticles = allPosts.some(
+        (p) =>
+            p.published === true &&
+            (p.primaryTopic === topic.slug || (p.topics ?? []).includes(topic.slug))
+    )
+
     return {
         title: topic.seoTitle || `${topic.title} | stAItuned`,
         description: topic.seoDescription || topic.description,
+        // Noindex empty topic hubs to avoid wasting crawl budget on thin pages.
+        robots: hasArticles ? undefined : { index: false, follow: true },
         alternates: {
             canonical: url,
         },
@@ -35,6 +76,11 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
             title: topic.seoTitle || `${topic.title} | stAItuned`,
             description: topic.seoDescription || topic.description,
             type: 'website',
+            locale: 'en_US',
+            siteName: 'stAI tuned',
+        },
+        other: {
+            'content-language': 'en',
         },
     }
 }
@@ -89,8 +135,25 @@ export default async function TopicHubPage(props: { params: Promise<{ slug: stri
     // Use all articles for the main list
     const deepDives = topicArticles
 
+    // Extract FAQ items from the English topic markdown for FAQPage JSON-LD schema.
+    // Parses <details><summary>Question</summary>Answer</details> blocks.
+    const topicFaqs = extractFaqsFromMarkdown(topic.body.raw)
+
     return (
         <div className="max-w-5xl mx-auto px-4 pt-8 md:pt-12 pb-20">
+            {/* SEO: Dynamic HTML lang attribute (Topics are EN-first) */}
+            <DynamicHtmlLang lang="en" />
+
+            {/* SEO: BreadcrumbList structured data */}
+            <JsonLd data={generateBreadcrumbSchema([
+                { name: 'Home', url: '/' },
+                { name: 'Topics', url: '/topics' },
+                { name: topic.title, url: `/topics/${topic.slug}` },
+            ])} />
+
+            {/* SEO: FAQPage structured data — extracted from topic markdown FAQ blocks */}
+            {topicFaqs.length > 0 && <JsonLd data={generateFAQSchema(topicFaqs)} />}
+
             {/* Hero Section */}
             <TopicHubHero
                 topic={topic}

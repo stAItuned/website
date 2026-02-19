@@ -12,6 +12,9 @@ Disallow: /debug
 Disallow: /test-firebase
 Disallow: /article-creator
 
+# Block preview pages (draft content — real guard is X-Robots-Tag: noindex,nofollow)
+Disallow: /preview/
+
 # Block demo/internal pages
 Disallow: /demo/
 

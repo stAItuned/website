@@ -44,11 +44,11 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://staituned.com"),
   title: {
-    default: 'stAI tuned | AI e GenAI concreta per tutti',
+    default: 'stAI tuned | AI & GenAI for everyone',
     template: '%s | stAI tuned',
   },
-  description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal GenAI Fit Check e dal Career OS.',
-  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'guide AI', 'tutorial AI', 'cultura AI', 'carriera AI', 'machine learning', 'Italia', 'stAI tuned', 'stay tuned AI', 'staituned'],
+  description: 'Practical AI & GenAI guides for everyone. Articoli pratici su AI, strumenti e playbook per crescere. Start with GenAI Fit Check & Career OS.',
+  keywords: ['AI', 'intelligenza artificiale', 'GenAI', 'AI generativa', 'AI guides', 'AI tutorials', 'AI career', 'machine learning', 'stAI tuned', 'stay tuned AI'],
   authors: [{ name: 'stAI tuned' }],
   creator: 'stAI tuned',
   publisher: 'stAI tuned',
@@ -65,16 +65,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'it_IT',
+    alternateLocale: ['en_US'],
     url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com',
     siteName: 'stAI tuned',
-    title: 'stAI tuned | AI e GenAI concreta per tutti',
-    description: 'Articoli pratici su AI e GenAI, strumenti e playbook per crescere e ottenere risultati. Inizia dal GenAI Fit Check e dal Career OS.',
+    title: 'stAI tuned | AI & GenAI for everyone',
+    description: 'Practical AI & GenAI guides for everyone. Articoli pratici su AI, strumenti e playbook per crescere. Start with GenAI Fit Check & Career OS.',
     images: [
       {
         url: '/api/og',
         width: 1200,
         height: 630,
-        alt: 'stAI tuned | AI e GenAI concreta per tutti',
+        alt: 'stAI tuned | AI & GenAI for everyone',
       },
     ],
   },

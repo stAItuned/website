@@ -218,6 +218,14 @@ const nextConfig = {
   // Add cache headers for API routes and static assets
   async headers() {
     return [
+      // SEO: noindex for preview routes (draft content, token-protected)
+      // Defense in depth: header-level control independent of meta tags.
+      {
+        source: '/preview/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
       // SEO: Fallback noindex for URLs with internal RSC parameters
       // This is a safety net in case the middleware redirect fails
       {

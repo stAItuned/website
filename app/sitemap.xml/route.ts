@@ -62,7 +62,9 @@ function getMostRecentPostDateForTopic(posts: typeof allPosts, topicSlug: string
   return new Date(Math.max(...dates)).toISOString();
 }
 
-function getLatestFileMtime(relativePaths: string[]): string {
+// Helper to get file mtime - returns null if file doesn't exist or error
+// Preventing automatic fallback to buildDate unless explicitly desired
+function getLatestFileMtime(relativePaths: string[]): string | null {
   const mtimes: number[] = [];
 
   for (const relativePath of relativePaths) {
@@ -71,11 +73,11 @@ function getLatestFileMtime(relativePaths: string[]): string {
       const stat = statSync(absolutePath);
       mtimes.push(stat.mtime.getTime());
     } catch {
-      // Ignore missing files and keep best-effort behavior.
+      // Ignore missing files
     }
   }
 
-  if (mtimes.length === 0) return buildDate;
+  if (mtimes.length === 0) return null;
   return new Date(Math.max(...mtimes)).toISOString();
 }
 
@@ -104,24 +106,18 @@ export async function GET() {
   const newbieLastmod = getMostRecentPostDate(posts, "newbie");
   const midwayLastmod = getMostRecentPostDate(posts, "midway");
   const expertLastmod = getMostRecentPostDate(posts, "expert");
-  const careerOsLastmod = getLatestFileMtime(["app/(public)/career-os/page.tsx"]);
-  const roleFitAuditLastmod = getLatestFileMtime(["app/(public)/role-fit-audit/page.tsx"]);
-  const prodottiLastmod = getLatestFileMtime(["app/(public)/prodotti/page.tsx", "app/(public)/demo/page.tsx"]);
-  const meetLastmod = getLatestFileMtime(["app/(public)/meet/page.tsx"]);
-  const contributeLastmod = getLatestFileMtime(["app/(public)/contribute/page.tsx"]);
-  const contributorLastmod = getLatestFileMtime(["app/(public)/contributor/page.tsx"]);
-  const termsLastmod = getLatestFileMtime(["app/(public)/terms/page.tsx"]);
-  const privacyLastmod = getLatestFileMtime(["app/(public)/privacy/page.tsx"]);
-  const cookiePolicyLastmod = getLatestFileMtime(["app/(public)/cookie-policy/page.tsx"]);
+
+  // Static pages: rely on buildDate as safe fallback for now, since file mtime
+  // is unreliable on Vercel (resets on deploy). Ideally these should be manually updated.
+  const staticPageLastmod = buildDate;
+
+  // Products catalog updates when products file changes
   const productsCatalogLastmod = getLatestFileMtime([
-    "app/(public)/prodotti/[slug]/page.tsx",
-    "app/(public)/prodotti/page.tsx",
     "lib/products/index.ts",
-  ]);
+  ]) || buildDate;
 
 
   // Static pages with priority and lastmod
-  // Note: changefreq removed as Google ignores it, preferring lastmod
   const staticUrls = [
     // Core pages - highest priority
     { loc: `${baseUrl}/`, priority: "1.0", lastmod: learnLastmod },
@@ -131,20 +127,20 @@ export async function GET() {
     { loc: `${baseUrl}/learn/midway`, priority: "0.8", lastmod: midwayLastmod },
     { loc: `${baseUrl}/learn/expert`, priority: "0.8", lastmod: expertLastmod },
 
-    // Secondary pages
+    // Secondary pages - using reliable dates or safe fallbacks
     { loc: `${baseUrl}/topics`, priority: "0.8", lastmod: learnLastmod },
-    { loc: `${baseUrl}/career-os`, priority: "0.8", lastmod: careerOsLastmod },
-    { loc: `${baseUrl}/role-fit-audit`, priority: "0.7", lastmod: roleFitAuditLastmod },
-    { loc: `${baseUrl}/prodotti`, priority: "0.8", lastmod: prodottiLastmod },
-    { loc: `${baseUrl}/meet`, priority: "0.7", lastmod: meetLastmod },
-    { loc: `${baseUrl}/contribute`, priority: "0.7", lastmod: contributeLastmod },
-    { loc: `${baseUrl}/contributor`, priority: "0.6", lastmod: contributorLastmod },
+    { loc: `${baseUrl}/career-os`, priority: "0.8", lastmod: staticPageLastmod },
+    { loc: `${baseUrl}/role-fit-audit`, priority: "0.7", lastmod: staticPageLastmod },
+    { loc: `${baseUrl}/prodotti`, priority: "0.8", lastmod: productsCatalogLastmod },
+    { loc: `${baseUrl}/meet`, priority: "0.7", lastmod: staticPageLastmod },
+    { loc: `${baseUrl}/contribute`, priority: "0.7", lastmod: staticPageLastmod },
+    { loc: `${baseUrl}/contributor`, priority: "0.6", lastmod: staticPageLastmod },
     { loc: `${baseUrl}/author`, priority: "0.6", lastmod: learnLastmod },
-    { loc: `${baseUrl}/terms`, priority: "0.3", lastmod: termsLastmod },
+    { loc: `${baseUrl}/terms`, priority: "0.3", lastmod: staticPageLastmod },
 
-    // Legal pages - low priority, rarely updated
-    { loc: `${baseUrl}/privacy`, priority: "0.3", lastmod: privacyLastmod },
-    { loc: `${baseUrl}/cookie-policy`, priority: "0.3", lastmod: cookiePolicyLastmod },
+    // Legal pages - low priority
+    { loc: `${baseUrl}/privacy`, priority: "0.3", lastmod: staticPageLastmod },
+    { loc: `${baseUrl}/cookie-policy`, priority: "0.3", lastmod: staticPageLastmod },
   ]
     .filter((u) => !isExcludedUrl(u.loc))
     .map((u) => `
@@ -155,8 +151,15 @@ export async function GET() {
   </url>`)
     .join("");
 
-  // Topic hub pages
+  // Topic hub pages... (omitted for brevity in replace block, assuming it follows logic)
   const topicUrls = allTopics
+    .filter((topic) =>
+      posts.some(
+        (p) =>
+          p.primaryTopic === topic.slug ||
+          (p.topics ?? []).includes(topic.slug)
+      )
+    )
     .map((topic) => {
       const url = `${baseUrl}/topics/${topic.slug}`;
       if (isExcludedUrl(url)) return "";
@@ -171,7 +174,7 @@ export async function GET() {
     })
     .join("");
 
-  // Author pages - use most recent post by that author
+  // Author pages...
   const authorUrls = authors
     .map((name) => {
       const url = `${baseUrl}/author/${authorSlug(name)}`;
@@ -190,41 +193,23 @@ export async function GET() {
     })
     .join("");
 
-  // Article pages - use actual update date
+  // Article pages - use actual update date.
+  // CRITICAL FIX: If no date/updatedAt exists, DO NOT emit <lastmod>.
+  // Falling back to Date.now() causes constant churn in sitemap.
   const postUrls = posts
     .map((post) => {
       const section = (post.target || "general").toLowerCase();
       const url = `${baseUrl}/learn/${section}/${post.slug}`;
       if (isExcludedUrl(url)) return "";
-      const lastmod = new Date(post.updatedAt || post.date || Date.now()).toISOString();
 
-      const coverUrl = post.cover
-        ? post.cover.startsWith("http")
-          ? post.cover
-          : `${baseUrl}/content/articles/${post.slug}/${post.cover.replace("./", "")}`
-        : null;
-
-      // hreflang for multilingual content
-      // Note: Our IT/EN articles are separate content (not translations),
-      // so each article only declares its own language.
-      const langCode = post.language === "Italian" ? "it" : "en";
-      const hreflang = post.language
-        ? `<xhtml:link rel="alternate" hreflang="${langCode}" href="${escapeXml(url)}" />`
-        : "";
-
-      const image = coverUrl
-        ? `<image:image>
-      <image:loc>${escapeXml(coverUrl)}</image:loc>
-    </image:image>`
-        : "";
+      const dateStr = post.updatedAt || post.date;
+      const lastmod = dateStr ? new Date(dateStr).toISOString() : null;
 
       return `
   <url>
-    <loc>${escapeXml(url)}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <loc>${escapeXml(url)}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}
     <priority>0.7</priority>
-    ${hreflang}
-    ${image}
   </url>`;
     })
     .join("");
@@ -235,19 +220,11 @@ export async function GET() {
       const url = `${baseUrl}/prodotti/${product.slug}`;
       if (isExcludedUrl(url)) return "";
 
-      const imageTag = product.image
-        ? `<image:image>
-      <image:loc>${escapeXml(product.image.startsWith("http") ? product.image : `${baseUrl}${product.image}`)}</image:loc>
-      <image:title>${escapeXml(product.title)}</image:title>
-    </image:image>`
-        : "";
-
       return `
   <url>
     <loc>${escapeXml(url)}</loc>
     <lastmod>${productsCatalogLastmod}</lastmod>
     <priority>0.6</priority>
-    ${imageTag}
   </url>`;
     })
     .join("");
@@ -256,7 +233,6 @@ export async function GET() {
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
 >
   ${staticUrls}
   ${topicUrls}
@@ -264,6 +240,7 @@ export async function GET() {
   ${postUrls}
   ${productUrls}
 </urlset>`;
+
 
   return new NextResponse(xml, {
     headers: {

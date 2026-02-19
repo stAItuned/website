@@ -11,6 +11,7 @@ import { renderMarkdownToHtml } from '@/lib/markdown-server'
 // SEO Structured Data
 import { JsonLd } from '@/components/seo/JsonLd'
 import { generateArticleSchema, generateBreadcrumbSchema } from '@/lib/seo/seo-schemas'
+import { DynamicHtmlLang } from '@/components/seo/DynamicHtmlLang'
 
 // Force static generation per articoli
 export const dynamic = 'force-static'
@@ -56,8 +57,10 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
     if (article.cover.startsWith('http://') || article.cover.startsWith('https://')) {
       ogImage = article.cover;
     } else {
-      // Build the full image URL - article.imagePath is already '/content/articles/${slug}'
-      ogImage = `${base}${article.imagePath}/${article.cover}`;
+      // Build a clean image URL (strip local path prefixes like "./cover.jpg")
+      const normalizedImagePath = article.imagePath.replace(/\/+$/, '');
+      const normalizedCover = article.cover.replace(/^\.?\//, '');
+      ogImage = `${base}${normalizedImagePath}/${normalizedCover}`;
     }
 
     // Determine the correct MIME type based on file extension
@@ -78,8 +81,6 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
 
   // Ensure https (LinkedIn requirement)
   ogImage = ogImage.replace('http://', 'https://');
-
-  console.log(`[generateMetadata] Article: ${article.slug}, OG Image: ${ogImage}, Type: ${imageType}`);
 
   // Determine locale based on article language
   const ogLocale = article.language === 'Italian' ? 'it_IT' : 'en_US';
@@ -133,8 +134,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
   if (target !== normalizedTarget) {
     permanentRedirect(`/learn/${normalizedTarget}/${slug}`)
   }
-  // Debug: log on mount
-  console.log('[ArticlePage] MOUNTED', { target, slug })
   // Find the article
   const article = allPosts.find((post) =>
     post.slug === slug && post.target?.toLowerCase() === normalizedTarget
@@ -212,6 +211,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ target
 
   return (
     <>
+      {/* SEO: Dynamic HTML lang attribute */}
+      <DynamicHtmlLang lang={article.language === 'Italian' ? 'it' : 'en'} />
+
       {/* SEO Structured Data (JSON-LD) */}
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
