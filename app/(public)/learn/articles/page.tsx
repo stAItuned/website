@@ -16,17 +16,17 @@ type ValidLevel = (typeof VALID_LEVELS)[number]
 
 const LEVEL_METADATA: Record<ValidLevel, { title: string; description: string }> = {
     newbie: {
-        title: 'Newbie AI: guide introduttive e basi pratiche | stAItuned',
+        title: 'Newbie AI: guide introduttive e basi pratiche',
         description:
             'Articoli introduttivi su AI e GenAI per iniziare con chiarezza: concetti fondamentali, casi semplici e primi passi pratici.',
     },
     midway: {
-        title: 'Midway AI: guide pratiche e implementazione | stAItuned',
+        title: 'Midway AI: guide pratiche e implementazione',
         description:
             'Articoli Midway su AI e GenAI con pattern operativi, implementazioni reali e trade-off utili per progetti concreti.',
     },
     expert: {
-        title: 'Expert AI: approfondimenti avanzati | stAItuned',
+        title: 'Expert AI: approfondimenti avanzati',
         description:
             'Articoli Expert su AI e GenAI: deep dive tecnici, architetture avanzate, ottimizzazioni e analisi di frontiera.',
     },

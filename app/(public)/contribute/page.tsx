@@ -4,7 +4,7 @@ import ContributePageClient from './ContributePageClient'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-    title: 'Diventa Contributor | stAI tuned',
+    title: 'Diventa Contributor',
     description: 'Condividi la tua competenza AI. Noi gestiamo l\'ottimizzazione GEO, la distribuzione e il design. Tu mantieni la paternità.',
     alternates: {
         canonical: `${SITE_URL}/contribute`,

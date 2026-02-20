@@ -60,7 +60,7 @@ export async function generateMetadata({
   const canonicalUrl = `${SITE_URL}/learn/${normalizedTarget}`
 
   return {
-    title: `${content.title} | stAI tuned`,
+    title: content.title,
     description: content.description,
     alternates: {
       canonical: canonicalUrl,
@@ -68,7 +68,7 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       url: canonicalUrl,
-      title: `${content.title} | stAI tuned`,
+      title: content.title,
       description: content.description,
     },
     robots: {

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
 
   if (!writer) {
     return {
-      title: 'Author Not Found - stAI tuned',
+      title: 'Author Not Found',
       description: 'The requested author could not be found.'
     }
   }
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
   const ogImageUrl = writer.image?.publicUrl
 
   return {
-    title: `${writer.displayName} - Articles - stAI tuned`,
+    title: `${writer.displayName} - Articles`,
     description: `Read all articles written by ${writer.displayName}${title}. ${description}`,
     alternates: {
       canonical: `${SITE_URL}/author/${normalizedSlug}`,

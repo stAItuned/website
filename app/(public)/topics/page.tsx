@@ -6,7 +6,7 @@ import { TopicsIndexClient } from './components/TopicsIndexClient'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-    title: 'Topics Hub | stAItuned',
+    title: 'Topics Hub',
     description: 'Explore our AI architecture and learning paths. Structured guides on RAG, Agents, LLMs, and Career.',
     alternates: {
         canonical: `${SITE_URL}/topics`,
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: 'website',
         url: `${SITE_URL}/topics`,
-        title: 'Topics Hub | stAItuned',
+        title: 'Topics Hub',
         description: 'Explore our AI architecture and learning paths. Structured guides on RAG, Agents, LLMs, and Career.',
     },
 }

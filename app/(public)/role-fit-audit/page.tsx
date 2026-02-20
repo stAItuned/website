@@ -8,7 +8,7 @@ import PromoCodeGate from './components/PromoCodeGate'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
 
 export const metadata: Metadata = {
-    title: 'GenAI Fit Check | Scopri il tuo ruolo GenAI ideale | stAItuned',
+    title: 'GenAI Fit Check | Scopri il tuo ruolo GenAI ideale',
     description:
         'PwC 2025: le skill AI specializzate valgono un +56% di salario. Fai l\'audit (5 min) per scoprire il tuo ranking e colmare i gap tecnici.',
     keywords: [

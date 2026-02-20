@@ -35,13 +35,13 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: 'Prodotto non trovato - stAItuned',
+      title: 'Prodotto non trovato',
     }
   }
   const url = `${SITE_URL}/prodotti/${product.slug}`
 
   return {
-    title: `${product.title} - stAItuned`,
+    title: `${product.title}`,
     description: product.metaDescription || product.description,
     keywords: product.keywords,
     alternates: {
@@ -49,14 +49,14 @@ export async function generateMetadata({
     },
     openGraph: {
       url,
-      title: `${product.title} - stAItuned`,
+      title: `${product.title}`,
       description: product.metaDescription || product.description,
       type: 'website',
       images: product.coverImage ? [product.coverImage] : product.image ? [product.image] : [],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${product.title} - stAItuned`,
+      title: `${product.title}`,
       description: product.metaDescription || product.description,
       images: product.coverImage ? [product.coverImage] : product.image ? [product.image] : [],
     },

@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ target: s
   );
   if (!article) {
     return {
-      title: 'Article Not Found - stAItuned',
+      title: 'Article Not Found',
       description: 'The requested article could not be found.'
     };
   }

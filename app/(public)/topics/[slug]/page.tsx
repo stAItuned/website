@@ -64,7 +64,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     )
 
     return {
-        title: topic.seoTitle || `${topic.title} | stAItuned`,
+        title: topic.seoTitle || topic.title,
         description: topic.seoDescription || topic.description,
         // Noindex empty topic hubs to avoid wasting crawl budget on thin pages.
         robots: hasArticles ? undefined : { index: false, follow: true },
@@ -73,7 +73,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
         },
         openGraph: {
             url,
-            title: topic.seoTitle || `${topic.title} | stAItuned`,
+            title: topic.seoTitle || topic.title,
             description: topic.seoDescription || topic.description,
             type: 'website',
             locale: 'en_US',

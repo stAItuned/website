@@ -4,7 +4,7 @@ import DemoPage from '../demo/page'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-  title: 'Lab Projects - stAItuned',
+  title: 'Lab Projects',
   description:
     'Esperimenti di AI che diventano prodotti. Webapp nate da progetti pilota con PMI, riadattabili ai tuoi processi in poche settimane.',
   alternates: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: `${SITE_URL}/prodotti`,
-    title: 'Lab Projects - stAItuned',
+    title: 'Lab Projects',
     description:
       "Prodotti e webapp di AI nati da casi d'uso reali. Progetti pilota che diventano soluzioni concrete.",
     type: 'website',

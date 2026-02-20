@@ -9,7 +9,7 @@ export const dynamic = 'force-static'
 export const revalidate = 21600 // every 6 hours
 
 export const metadata: Metadata = {
-  title: 'Lab Projects - stAItuned',
+  title: 'Lab Projects',
   description: 'Esperimenti di AI che diventano prodotti. Webapp nate da progetti pilota con PMI, riadattabili ai tuoi processi in poche settimane.',
   alternates: {
     canonical: 'https://staituned.com/prodotti',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: 'https://staituned.com/prodotti',
-    title: 'Lab Projects - stAItuned',
+    title: 'Lab Projects',
     description: 'Prodotti e webapp di AI nati da casi d\'uso reali. Progetti pilota che diventano soluzioni concrete.',
     type: 'website',
   },

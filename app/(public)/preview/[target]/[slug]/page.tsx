@@ -24,7 +24,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
 
     // No indexing for preview pages
     return {
-        title: 'Preview Article - stAItuned',
+        title: 'Preview Article',
         alternates: {
             canonical: canonicalUrl,
         },

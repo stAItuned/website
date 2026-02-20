@@ -38,14 +38,14 @@ type AuthorCard = {
 }
 
 export const metadata: Metadata = {
-  title: 'All Authors - stAI tuned',
+  title: 'All Authors',
   description: 'Meet the talented writers and experts behind stAI tuned articles. Discover their expertise and read their latest publications.',
   alternates: {
     canonical: `${SITE_URL}/author`,
   },
   openGraph: {
     url: `${SITE_URL}/author`,
-    title: 'All Authors - stAI tuned',
+    title: 'All Authors',
     description: 'Meet the talented writers and experts behind stAI tuned articles.',
     type: 'website',
   },

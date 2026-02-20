@@ -22,14 +22,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!badge) {
         return {
-            title: 'Credential Not Found - stAItuned',
+            title: 'Credential Not Found',
         }
     }
 
     const badgeDef = BADGE_DEFINITIONS.find(b => b.id === badge.badgeId)
     const authorData = await getAuthorData(badge.authorId.replaceAll('-', ' '))
     const authorName = authorData?.name || badge.authorId.replaceAll('-', ' ')
-    const title = `${badgeDef?.name.en} - ${authorName} - stAItuned Verification`
+    const title = `${badgeDef?.name.en} - ${authorName} Verification`
     const description = `Verify that ${authorName} has earned the ${badgeDef?.name.en} badge on stAItuned. Credential ID: ${badge.credentialId}`
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
     const pageUrl = new URL(`/verify/${encodeURIComponent(credentialId)}`, siteUrl).toString()

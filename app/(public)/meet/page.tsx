@@ -11,7 +11,7 @@ export const revalidate = 3600
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-  title: 'Chi Siamo | stAItuned',
+  title: 'Chi Siamo',
   description:
     'Scopri chi c\'è dietro stAItuned: la nostra storia, la nostra mission e i valori che ci guidano nel rendere l\'AI accessibile e pratica.',
   alternates: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: `${SITE_URL}/meet`,
-    title: 'Chi Siamo | stAItuned',
+    title: 'Chi Siamo',
     description:
       'Scopri chi c\'è dietro stAItuned: la nostra storia, la nostra mission e i valori che ci guidano.',
     type: 'website',

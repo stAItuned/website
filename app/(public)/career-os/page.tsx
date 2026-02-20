@@ -32,7 +32,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
 const OG_IMAGE = '/assets/career-os/career_os_original.png'
 
 export const metadata: Metadata = {
-    title: 'Career OS, Il Percorso per Diventare GenAI Engineer | stAI tuned',
+    title: 'Career OS, Il Percorso per Diventare GenAI Engineer',
     description: 'Smetti di mandare CV a vuoto. Career OS ti prepara per ruoli Applied GenAI in 4-8 settimane: Role-fit, CV ottimizzato, Proof pubblica, Interview prep. Da chi assume, non da career coach.',
     keywords: [
         'GenAI Engineer',

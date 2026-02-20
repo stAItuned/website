@@ -4,7 +4,7 @@ import PrivacyPageClient from './PrivacyPageClient'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | stAItuned',
+  title: 'Privacy Policy',
   description: 'Come raccogliamo e utilizziamo i dati di chi visita il blog, richiede una call o desidera ricevere aggiornamenti.',
   alternates: {
     canonical: `${SITE_URL}/privacy`,
