@@ -63,6 +63,16 @@ const TimelineStep = defineNestedType(() => ({
   }
 }))
 
+const ChangelogEntry = defineNestedType(() => ({
+  name: 'ChangelogEntry',
+  fields: {
+    date: { type: 'date', required: true },
+    version: { type: 'string', required: false },
+    title: { type: 'string', required: false },
+    changes: { type: 'list', of: { type: 'string' }, required: true },
+  }
+}))
+
 const GeoChecklist = defineNestedType(() => ({
   name: 'GeoChecklist',
   fields: {
@@ -120,6 +130,7 @@ export const Post = defineDocumentType(() => ({
     cover: { type: 'string', required: false },
     published: { type: 'boolean', required: false },
     updatedAt: { type: 'date', required: false },
+    changelog: { type: 'list', of: ChangelogEntry, required: false },
     faq: {
       type: 'list',
       of: FAQItem,

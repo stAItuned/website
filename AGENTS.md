@@ -46,6 +46,8 @@ Rules:
 5. Every non-trivial feature must include documentation updates.
 6. Every user-facing feature/content update must preserve `it/en` parity.
 7. SEO and GEO requirements are mandatory for discoverable pages/content.
+8. Articles must include update signals: `updatedAt` (last meaningful update) and a human-readable changelog section/field; keep `it/en` parity when applicable.
+9. Data-driven/snapshot articles must include `asOf` (date of external data observation). `asOf` is not a substitute for `updatedAt`.
 
 ## Project Structure Rules
 - `app/`: routes, layouts, server-first page composition.
@@ -118,7 +120,9 @@ Apply these rules to every indexable route and content page:
 - Keep semantic heading hierarchy (`h1` -> `h2` -> `h3`) and descriptive link labels.
 - Keep structured data (JSON-LD) accurate when entities/articles are involved.
 - Optimize content for both classic search (SEO) and AI answer engines (GEO): clear intent, concise definitions, factual statements, and scannable sections.
-- Include trustworthy context signals when relevant: author, publish/update date, source references, and topical scope.
+- Include trustworthy context signals when relevant: author, publish date, **update date (`updatedAt`)**, source references, and topical scope.
+- For snapshot/data refreshes, update both `asOf` (source data date) and `updatedAt` (editorial update date) when the article content changes.
+- When content meaning changes, bump `updatedAt`, append a changelog entry, and ensure structured data reflects the change (e.g., `dateModified` for Article schema).
 - Avoid thin/duplicate pages and duplicated metadata.
 
 ## Bilingual Content Policy (`it/en`)

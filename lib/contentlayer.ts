@@ -45,6 +45,49 @@ const toRecordArray = (value: unknown): UnknownRecord[] => {
     .filter((item) => Object.keys(item).length > 0)
 }
 
+export type ChangelogEntry = {
+  /**
+   * ISO 8601 datetime string (recommended) or date-only string.
+   * Parsed to ISO when possible.
+   */
+  date: string
+  /**
+   * Human-friendly version identifier (e.g. "1.1", "2026.02", "v2").
+   */
+  version?: string
+  /**
+   * Optional short summary for the release/update.
+   */
+  title?: string
+  /**
+   * Bullet list of meaningful changes.
+   */
+  changes: string[]
+}
+
+const toChangelogEntryArray = (value: unknown): ChangelogEntry[] => {
+  const records = toRecordArray(value)
+  if (records.length === 0) return []
+
+  return records
+    .map((record): ChangelogEntry | null => {
+      const date = toIsoDateString(record['date'] ?? record['updatedAt'] ?? record['at'])
+      const version = toOptionalString(record['version'] ?? record['v'])
+      const title = toOptionalString(record['title'] ?? record['summary'])
+      const changes = toStringArray(record['changes'] ?? record['items'] ?? record['bullets'])
+
+      if (!date && changes.length === 0) return null
+
+      return {
+        date,
+        version,
+        title,
+        changes,
+      }
+    })
+    .filter((entry): entry is ChangelogEntry => Boolean(entry))
+}
+
 const readingTimeMinutes = (content: string): number => {
   const wordsPerMinute = 200
   const words = content.trim().split(/\s+/).filter(Boolean).length
@@ -73,6 +116,7 @@ export type ContentPost = {
   structuredData: UnknownRecord
   faq?: UnknownRecord[]
   geo?: UnknownRecord
+  changelog?: ChangelogEntry[]
   body: {
     raw: string
     [key: string]: unknown
@@ -208,6 +252,18 @@ const loadPostsFromFilesystem = (): ContentPost[] => {
     const readingTime = readingTimeMinutes(bodyRaw)
     const imagePath = `/content/articles/${slug}`
 
+    const changelog = toChangelogEntryArray(frontmatter['changelog'])
+    const updatedAtFromFrontmatter = toIsoDateString(frontmatter['updatedAt'])
+    const derivedUpdatedAt = (() => {
+      if (updatedAtFromFrontmatter) return updatedAtFromFrontmatter
+      if (changelog.length === 0) return ''
+      const timestamps = changelog
+        .map((entry) => new Date(entry.date).getTime())
+        .filter((ts) => Number.isFinite(ts))
+      if (timestamps.length === 0) return ''
+      return new Date(Math.max(...timestamps)).toISOString()
+    })()
+
     posts.push({
       _id: `Post:${slug}`,
       _raw: { slug },
@@ -230,9 +286,10 @@ const loadPostsFromFilesystem = (): ContentPost[] => {
       structuredData,
       faq: normalizedFaq.length > 0 ? normalizedFaq : undefined,
       geo: toOptionalRecord(frontmatter['geo']),
+      changelog: changelog.length > 0 ? changelog : undefined,
       body: { raw: bodyRaw },
       published,
-      updatedAt: toIsoDateString(frontmatter['updatedAt']) || undefined,
+      updatedAt: derivedUpdatedAt || undefined,
       readingTime,
       readTime: readingTime,
       // Keep a couple of legacy aliases used around the codebase.

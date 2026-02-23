@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { PreviewBanner } from '@/components/ui/PreviewBanner'
 import { ArticleTOC } from '@/components/ArticleTOC'
 import { MarkdownContent } from '@/components/MarkdownContent'
+import { ArticleChangelog } from '@/components/ArticleChangelog'
 import { LikeButton } from '@/components/LikeButton'
 import { ArticleRating } from '@/components/ArticleRating'
 import { BookmarkButton } from '@/components/BookmarkButton'
@@ -43,6 +44,9 @@ import { GeoPlaybookRail } from '@/components/geo/GeoPlaybookRail'
 import { GeoPlaybookBottomSheet } from '@/components/geo/GeoPlaybookBottomSheet'
 import { GeoAnswerLayer } from '@/components/geo/GeoAnswerLayer'
 import { GeoStrategicInsights } from '@/components/geo/GeoStrategicInsights'
+import type { ContentPost } from '@/lib/contentlayer'
+import type { AuthorData } from '@/lib/authors'
+import type { AuthorBadge } from '@/lib/types/badge'
 
 type ReferenceMeta = {
   id: string
@@ -60,6 +64,32 @@ type ResolvedAuthorData = {
   website?: string
 } | null
 
+type TocItem = { level: number; text: string; slug: string }
+
+type ArticlePageClientProps = {
+  coverImage: string | null
+  article: ContentPost
+  toc: TocItem[]
+  target: string
+  targetDisplay: string
+  relatedArticles: ContentPost[]
+  authorData: AuthorData | null
+  authorBadges?: AuthorBadge[]
+  analytics: ArticleAnalytics
+  isPreview?: boolean
+  htmlContent?: string
+}
+
+const formatArticleDate = (isoDate: string | undefined, locale: string, variant: 'short' | 'long'): string => {
+  if (!isoDate) return ''
+  const date = new Date(isoDate)
+  if (Number.isNaN(date.getTime())) return isoDate
+  return date.toLocaleDateString(locale, variant === 'long'
+    ? { year: 'numeric', month: 'long', day: 'numeric' }
+    : { year: 'numeric', month: 'short', day: 'numeric' }
+  )
+}
+
 /**
  * Client-side article page renderer with responsive desktop/mobile layouts.
  */
@@ -75,9 +105,13 @@ export default function ArticlePageClient({
 
   analytics,
   isPreview = false
-}: any & { analytics: ArticleAnalytics, isPreview?: boolean }) {
+}: ArticlePageClientProps) {
   const isLarge = useScreenSize()
   const articleLang = article.language === 'Italian' ? 'it' : 'en'
+  const locale = articleLang === 'it' ? 'it-IT' : 'en-US'
+  const labels = articleLang === 'it'
+    ? { updatedOn: 'Aggiornato il' }
+    : { updatedOn: 'Updated on' }
   const [showTocModal, setShowTocModal] = useState(false)
 
   // Initialize shared like state
@@ -85,6 +119,23 @@ export default function ArticlePageClient({
     articleSlug: article.slug,
     initialLikes: analytics.likes
   })
+
+  const showUpdatedAt = useMemo(() => {
+    if (!article.updatedAt) return false
+    const updatedTs = new Date(article.updatedAt).getTime()
+    if (!Number.isFinite(updatedTs)) return false
+
+    const publishedTs = new Date(article.date).getTime()
+    if (!Number.isFinite(publishedTs)) return true
+
+    // Avoid showing "updated" when it's effectively the same moment.
+    return updatedTs - publishedTs > 60 * 1000
+  }, [article.date, article.updatedAt])
+
+  const changelogForUi = useMemo(
+    () => (article.changelog && article.changelog.length > 1 ? article.changelog : undefined),
+    [article.changelog]
+  )
 
   const [modalActiveSlug, setModalActiveSlug] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -1095,8 +1146,21 @@ export default function ArticlePageClient({
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
                         </svg>
-                        <span>{new Date(article.date || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        <span>{formatArticleDate(article.date, locale, 'long') || formatArticleDate(new Date().toISOString(), locale, 'long')}</span>
                       </div>
+                      {/* Updated */}
+                      {showUpdatedAt ? (
+                        <div className="flex items-center gap-1 px-2" title={labels.updatedOn}>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v6h6M20 20v-6h-6" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 8a8 8 0 00-14.9-3M4 16a8 8 0 0014.9 3" />
+                          </svg>
+                          <span className="whitespace-nowrap">
+                            {labels.updatedOn}{' '}
+                            <time dateTime={article.updatedAt}>{formatArticleDate(article.updatedAt, locale, 'short')}</time>
+                          </span>
+                        </div>
+                      ) : null}
                       {/* Reading time */}
                       <div className="flex items-center gap-1 px-2">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1237,6 +1301,13 @@ export default function ArticlePageClient({
                   />
                 )}
 
+                <ArticleChangelog
+                  updatedAt={showUpdatedAt ? article.updatedAt : undefined}
+                  changelog={changelogForUi}
+                  lang={articleLang}
+                  className="max-w-4xl"
+                />
+
                 {/* End of Article Engagement */}
                 {/* Article FAQs */}
                 <ArticleFAQ faqs={article.faq} />
@@ -1339,8 +1410,23 @@ export default function ArticlePageClient({
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
                           </svg>
-                          <span>{new Date(article.date || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                          <span>{formatArticleDate(article.date, locale, 'short') || formatArticleDate(new Date().toISOString(), locale, 'short')}</span>
                         </div>
+                        {showUpdatedAt ? (
+                          <>
+                            <span className="text-gray-400 dark:text-gray-500">•</span>
+                            <div className="flex items-center gap-1.5">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v6h6M20 20v-6h-6" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 8a8 8 0 00-14.9-3M4 16a8 8 0 0014.9 3" />
+                              </svg>
+                              <span className="whitespace-nowrap">
+                                {labels.updatedOn}{' '}
+                                <time dateTime={article.updatedAt}>{formatArticleDate(article.updatedAt, locale, 'short')}</time>
+                              </span>
+                            </div>
+                          </>
+                        ) : null}
                         <span className="text-gray-400 dark:text-gray-500">•</span>
                         {/* Reading time */}
                         <div className="flex items-center gap-1.5">
@@ -1446,6 +1532,13 @@ export default function ArticlePageClient({
                       />
                     )}
 
+                    <ArticleChangelog
+                      updatedAt={showUpdatedAt ? article.updatedAt : undefined}
+                      changelog={changelogForUi}
+                      lang={articleLang}
+                      className="max-w-2xl mx-auto"
+                    />
+
                     {/* Article FAQs (Mobile) */}
                     <div className="not-prose mt-8 border-t border-gray-100 dark:border-slate-800 pt-8">
                       <ArticleFAQ faqs={article.faq} />
@@ -1512,7 +1605,7 @@ export default function ArticlePageClient({
         <BackToTopButton />
         {/* Related Articles */}
         <div data-related-articles>
-          <RelatedArticles relatedArticles={relatedArticles.map((post: any) => ({
+          <RelatedArticles relatedArticles={relatedArticles.map((post: ContentPost) => ({
             title: post.title,
             slug: post.slug,
             cover: post.cover,

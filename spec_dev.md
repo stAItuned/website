@@ -59,6 +59,10 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - External dependencies/apis:
 - Validation strategy (Zod schemas, runtime guards):
 - Error handling strategy:
+- Content model changes (Contentlayer/MDX frontmatter), if applicable:
+  - New/updated fields (e.g., `updatedAt`, `asOf`, `changelog`):
+  - Field types/format (ISO dates, versioning scheme):
+  - Backward compatibility and migration plan for existing content:
 
 ## 8. Responsiveness and Accessibility
 - Breakpoints validated: `xs`, `sm`, `md`, `lg`, `xl`
@@ -77,6 +81,8 @@ Use this template for every meaningful feature, refactor, or architectural updat
 ## 10. SEO and GEO Plan
 - Route metadata plan (title, description, canonical, OG):
 - Structured data plan (JSON-LD types):
+- Publish/update trust signals (e.g., `datePublished`, `updatedAt`/`dateModified`) and how they are derived:
+- Changelog visibility plan (frontmatter field vs in-body section) and indexing implications:
 - URL/content deduplication considerations:
 - GEO plan (answer-first summaries, terminology clarity, trust signals):
 - Indexing constraints (if any):
@@ -156,6 +162,8 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - [ ] PWA behavior is preserved or improved for `/learn` scope.
 - [ ] SEO foundations are complete (metadata, canonical, semantic structure).
 - [ ] GEO foundations are complete (answer-first clarity + trust/context signals).
+- [ ] If an article/content page is changed, `updatedAt` is bumped and a changelog entry is appended (with `it/en` parity when localized).
+- [ ] If snapshot/data values are updated, `asOf` is updated to the source-observation date.
 - [ ] Bilingual `it/en` parity is preserved for UX and content scope.
 - [ ] Performance impact reviewed and acceptable.
 - [ ] Tests cover critical logic and interactive paths.

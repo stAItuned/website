@@ -85,6 +85,8 @@ Required actions:
 3. Add or validate structured data for relevant entities (Article, Organization, FAQ, etc.).
 4. Optimize copy for GEO: direct answer-first sections, concise summaries, explicit terminology, and source trust signals.
 5. Avoid metadata/content duplication across similar routes.
+6. For articles, maintain update trust signals: keep `updatedAt` current, mirror it to structured data (`dateModified`), and append a changelog entry for meaningful changes.
+7. For data-driven/snapshot articles, maintain `asOf` as the external-data observation date; when snapshot values change, update both `asOf` and `updatedAt` and append a changelog entry.
 
 Output:
 - Content discoverable by both traditional search engines and AI answer systems.
@@ -181,6 +183,7 @@ Required actions:
 6. Document bilingual `it/en` impact and localization notes.
 7. Update `README.md` for user-facing setup or workflow changes.
 8. If agent-assisted: record (a) what quality gates were used, (b) what was verified.
+9. For article/content updates: bump `updatedAt`, keep `asOf` in sync for snapshot-driven pages, add a changelog entry, and keep `it/en` parity for both metadata and changelog when the article is localized.
 
 Output:
 - Feature is maintainable by future contributors without tribal knowledge.
