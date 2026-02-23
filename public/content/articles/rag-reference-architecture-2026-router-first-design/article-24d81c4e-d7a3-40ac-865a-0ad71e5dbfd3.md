@@ -28,14 +28,14 @@ changelog:
       - "Published the first version of the router-first enterprise RAG reference architecture guide."
 geo:
   quickAnswer:
-    title: "RAG 2026 Reference Architecture in 30 seconds"
+    title: "RAG 2026 Reference Architecture in a nutshell"
     bullets:
-      - "The 2026 RAG architecture standardizes a **multi-stage pipeline** with hybrid search, reranking, and built-in governance, moving beyond simple vector search."
-      - "A **Router-First design** classifies query intent (Fast, Standard, Deep lanes) to reduce LLM inference costs; savings depend on traffic mix and routing KPIs [9]."
-      - "The **Fused Retrieval Layer** uses **hybrid search** (vector + keyword) and **Reciprocal Rank Fusion (RRF)** to maximize relevance [4, 5]."
-      - "**Smart caching** (semantic/intermediate) optimizes performance for repeat workloads [11, 13], while **guardrails** must treat retrieved context as untrusted to mitigate injection risks [6, 7]."
-      - "While enhancing quality, components like cross-encoders introduce **latency and cost trade-offs**, which are managed by dynamically selecting the cheapest path per query [8]."
-    oneThing: "Adopt a phased, metric-driven approach to RAG architecture evolution, starting with a verifiable baseline and introducing complexity only as validated by performance metrics."
+      - "The 2026 standard is a **multi-stage pipeline**: semantic router, hybrid search (RRF), cross-encoder reranking, and active guardrails."
+      - "**Router-First design** classifies intent (Fast, Standard, Deep), enabling zero-shot or cache hits that cut LLM inference costs entirely for simple queries [9]."
+      - "**Fused Retrieval Layer**: combining dense (vector) and sparse (BM25 keyword) search via **Reciprocal Rank Fusion (RRF)** maximizes Day-1 relevance [4, 5]."
+      - "Treat retrieved context as untrusted. **Active guardrails** block prompt injections, while **semantic caching** serves repeat workloads at near-zero latency [11, 13, 6, 7]."
+      - "Cross-encoders increase precision but add ~200ms+ latency. The semantic router dynamically selects this path only for complex analytical queries [8]."
+    oneThing: "Implement a semantic router and BM25+Vector hybrid search first. Do not add cross-encoders or tools pending measured RAGAS baseline failures."
   audience:
     title: "Who is this for"
     description: "Senior engineers, ML engineers, and tech leads designing production RAG systems and looking for a pragmatic, router-first blueprint."

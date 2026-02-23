@@ -13,15 +13,29 @@ primaryTopic: agents
 topics:
   - llm-security
   - production-reliability
+updatedAt: 2026-02-23T11:45:00.000Z
+changelog:
+  - date: 2026-02-23T11:45:00.000Z
+    version: "1.1"
+    title: "Strategic SEO & Anti-Slop alignment"
+    changes:
+      - "Rewrote quickAnswer for front-loading and assertive tone."
+      - "Applied stAItuned 2026 'Anti-AI Slop' protocol to remove vague phrases."
+      - "Turned descriptive bullets into actionable decision rules."
+  - date: 2026-02-12T14:54:40.000Z
+    version: "1.0"
+    title: "Initial publication"
+    changes:
+      - "Published the first version of the MCP & A2A protocol playbook."
 geo:
   quickAnswer:
-    title: "Answer in 30 seconds"
+    title: "MCP vs A2A in a nutshell"
     bullets:
-      - "**MCP** (Model Context Protocol) is a connection-oriented, client-server protocol used by **worker agents** to exchange context and execute atomic tools [Anthropic 2024](https://www.anthropic.com/news/model-context-protocol)."
-      - "**A2A** (Agent-to-Agent) is a stateful, peer-to-peer protocol enabling **manager agents** to delegate and orchestrate multi-stage tasks [Google Developers Blog](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)."
-      - "Modern architectures layer these: A2A for high-level **routing and state**, MCP for **capability execution** and data retrieval [Model Context Protocol Docs](https://modelcontextprotocol.io/docs/learn/architecture)."
-      - "MCP is recognized as a highly mature standard for tool-connector interoperability, with rapid adoption across major model providers and agent frameworks."
-    oneThing: "Treat MCP and A2A as a unified stack: use A2A for stateful delegation and MCP for connection-oriented tool execution."
+      - "**MCP (Model Context Protocol)** is a client-server architecture (JSON-RPC) allowing **worker agents** to execute atomic tools and fetch context locally [Anthropic 2024](https://www.anthropic.com/news/model-context-protocol)."
+      - "**A2A (Agent-to-Agent)** is a stateful, peer-to-peer standard enabling **manager agents** to delegate and orchestrate multi-stage tasks [Google Developers Blog](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)."
+      - "Modern production stacks layer them: A2A handles **high-level routing and state transfer**, while MCP manages **capability execution and direct data retrieval** [Model Context Protocol Docs](https://modelcontextprotocol.io/docs/learn/architecture)."
+      - "Do not use MCP for task delegation or A2A for simple database reads. MCP standardizes the tool-connector layer; A2A standardizes the agent-orchestration layer."
+    oneThing: "Deploy A2A for multi-agent delegation pipelines and restrict MCP strictly to atomic tool execution and context loading."
   audience:
     title: "Who is this for"
     description: "Enterprise AI Architects and Lead Engineers facing the challenge of designing scalable, secure, and robust multi-agent systems by understanding how to layer MCP and A2A protocols effectively."

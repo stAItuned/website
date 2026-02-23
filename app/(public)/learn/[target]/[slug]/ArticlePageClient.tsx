@@ -43,6 +43,7 @@ import { useArticleLikes } from '@/lib/hooks/useArticleLikes'
 import { GeoPlaybookRail } from '@/components/geo/GeoPlaybookRail'
 import { GeoPlaybookBottomSheet } from '@/components/geo/GeoPlaybookBottomSheet'
 import { GeoAnswerLayer } from '@/components/geo/GeoAnswerLayer'
+import { GeoQuickAnswersIntro } from '@/components/geo/GeoQuickAnswersIntro'
 import { GeoStrategicInsights } from '@/components/geo/GeoStrategicInsights'
 import type { ContentPost } from '@/lib/contentlayer'
 import type { AuthorData } from '@/lib/authors'
@@ -65,6 +66,11 @@ type ResolvedAuthorData = {
 } | null
 
 type TocItem = { level: number; text: string; slug: string }
+type QuickAnswerIntroData = {
+  title?: string
+  bullets?: string[]
+  oneThing?: string
+}
 
 type ArticlePageClientProps = {
   coverImage: string | null
@@ -88,6 +94,21 @@ const formatArticleDate = (isoDate: string | undefined, locale: string, variant:
     ? { year: 'numeric', month: 'long', day: 'numeric' }
     : { year: 'numeric', month: 'short', day: 'numeric' }
   )
+}
+
+const toQuickAnswerIntroData = (value: unknown): QuickAnswerIntroData | null => {
+  if (!value || typeof value !== 'object') return null
+
+  const source = value as Record<string, unknown>
+  const title = typeof source.title === 'string' ? source.title : undefined
+  const oneThing = typeof source.oneThing === 'string' ? source.oneThing : undefined
+  const bullets = Array.isArray(source.bullets)
+    ? source.bullets.filter((item): item is string => typeof item === 'string')
+    : undefined
+
+  if (!oneThing && (!bullets || bullets.length === 0)) return null
+
+  return { title, oneThing, bullets }
 }
 
 /**
@@ -164,6 +185,10 @@ export default function ArticlePageClient({
   // Live analytics state - starts with SSR/ISR cached values, refreshes on mount
   const [liveAnalytics, setLiveAnalytics] = useState<ArticleAnalytics>(analytics)
   const primaryTopicHub = article.primaryTopic ? getTopicHub(article.primaryTopic) : null
+  const quickAnswerIntro = useMemo(
+    () => toQuickAnswerIntroData((article.geo as Record<string, unknown> | undefined)?.quickAnswer),
+    [article.geo]
+  )
 
   // Reading progress persistence
   const {
@@ -1285,6 +1310,13 @@ export default function ArticlePageClient({
                     />
                   )}
 
+                  {quickAnswerIntro && (
+                    <GeoQuickAnswersIntro
+                      quickAnswer={quickAnswerIntro}
+                      lang={articleLang}
+                    />
+                  )}
+
                   <MarkdownContent
                     content={article.body.raw}
                     className="prose prose-lg max-w-none"
@@ -1505,6 +1537,13 @@ export default function ArticlePageClient({
                         <GeoAnswerLayer
                           geo={article.geo}
                           articleSlug={article.slug}
+                        />
+                      )}
+
+                      {quickAnswerIntro && (
+                        <GeoQuickAnswersIntro
+                          quickAnswer={quickAnswerIntro}
+                          lang={articleLang}
                         />
                       )}
                     </div>
