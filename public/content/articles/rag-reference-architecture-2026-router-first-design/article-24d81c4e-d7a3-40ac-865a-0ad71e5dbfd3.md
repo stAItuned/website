@@ -1,17 +1,31 @@
 ---
-title: 'RAG Reference Architecture 2026: Router-First Design Guide'
+title: 'Enterprise RAG Blueprint: Router-First + Hybrid Search'
 author: Daniele Moltisanti
 target: Midway
 language: English
 cover: >-
   https://storage.googleapis.com/editorial-planner-images/article-images/24d81c4e-d7a3-40ac-865a-0ad71e5dbfd3/cover_20260206_142002.webp
 meta: >-
-  Explore the 2026 RAG reference architecture with a router-first approach. Learn to balance cost, latency, and quality using hybrid search and guardrails.
+  A pragmatic enterprise RAG architecture: semantic router lanes, hybrid retrieval with RRF, caching, guardrails, and measurement KPIs—production checklist included.
 date: 2026-02-09T08:00:29.000Z
+updatedAt: 2026-02-23T08:00:00.000Z
 published: true
 primaryTopic: rag
 topics:
   - llm-security
+changelog:
+  - date: 2026-02-23T08:00:00.000Z
+    version: "1.1"
+    title: "Router-first summary + clearer framing"
+    changes:
+      - "Rewrote the intro for GEO clarity (enterprise RAG / retrieval stack / context engineering synonyms)."
+      - "Added a 40-second router-first summary section (Fast/Standard/Deep lanes)."
+      - "Adjusted headings to better match 'enterprise RAG architecture' terminology."
+  - date: 2026-02-09T08:00:29.000Z
+    version: "1.0"
+    title: "Initial publication"
+    changes:
+      - "Published the first version of the router-first enterprise RAG reference architecture guide."
 geo:
   quickAnswer:
     title: "RAG 2026 Reference Architecture in 30 seconds"
@@ -86,10 +100,20 @@ geo:
         description: "Continuously monitor KPIs, refine components, and conduct A/B testing for trade-offs (cost, latency, quality). Consider integrating advanced '2026' complexities like knowledge graphs or multi-agent loops only when validated by evaluation metrics. Ensure ongoing compliance and document all critical architecture decisions via Architecture Decision Records (ADRs)."
 ---
 
-The landscape of Retrieval Augmented Generation (RAG) is evolving rapidly, demanding more sophisticated architectures to deliver reliable, high-quality AI outputs. This article is for senior engineers, ML engineers, and tech leads who already know RAG fundamentals and need a pragmatic router-first blueprint for production.
+This guide is a practical blueprint for **enterprise RAG architecture** (aka **RAG pipeline / retrieval stack / context engineering**): how to route queries, run **hybrid search** (BM25 + vectors), fuse results with **RRF**, add reranking, caching, guardrails, and measure quality with eval KPIs.
+
+It’s written for senior engineers, ML engineers, and tech leads who already know RAG fundamentals and need a pragmatic **router-first** design for production.
+
+## Enterprise RAG architecture in 40 seconds (Router-First)
+
+> **Route early, retrieve hybrid, fuse with RRF, rerank sparingly, guardrail always, evaluate continuously.**
+>
+> - **Fast lane:** cache/static answers (near-zero cost)
+> - **Standard lane:** hybrid retrieval (BM25 + vectors) + RRF
+> - **Deep lane:** tool/agent path when the query truly needs it
 
 
-## What Defines the RAG Reference Architecture 2026 for Enterprise AI?
+## What Defines an Enterprise RAG Architecture in 2026?
 
 ![Comparison diagram showing the evolution from simple 2024 RAG architectures to the complex, multi-stage 2026 enterprise RAG reference architecture.](https://storage.googleapis.com/editorial-planner-images/article-images/24d81c4e-d7a3-40ac-865a-0ad71e5dbfd3/section_comparison_0_20260206_141939.webp)
 
@@ -105,7 +129,7 @@ Crucially, this architecture treats **trust as a structural component**, not a p
 > *   **From:** "Black Box" Retrieval → **To:** Auditable, Compliant Pipelines
 > *   **From:** Static Indexing → **To:** Dynamic, Router-based Execution
 
-## Why a Router-First Approach is Essential for 2026 RAG System Design?
+## Why Router-First Routing Is Essential in Modern RAG Architecture?
 
 ![Flowchart illustrating a semantic router directing AI queries into Fast, Standard, and Deep processing lanes based on complexity.](https://storage.googleapis.com/editorial-planner-images/article-images/24d81c4e-d7a3-40ac-865a-0ad71e5dbfd3/section_diagram_1_20260206_141926.webp)
 

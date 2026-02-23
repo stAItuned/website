@@ -8,17 +8,30 @@ seoDescription: >-
 author: Daniele Moltisanti
 target: Expert
 language: English
-cover: cover.webp
+cover: imarena_cover.webp
 meta: >-
   LMArena explained: anonymous battles, Elo-style ratings, confidence intervals,
   category leaderboards, caveats, and a practical workflow to choose LLMs using
   human preference data.
 date: 2025-08-28T00:00:00.000Z
-updatedAt: 2026-02-02T00:00:00.000Z
+updatedAt: 2026-02-21T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
 topics: [production, rag]
-asOf: 2026-02-02
+asOf: 2026-02-21
+changelog:
+  - date: 2026-02-21T00:00:00.000Z
+    version: "1.1"
+    title: "Leaderboard snapshot refresh + internal linking"
+    changes:
+      - "Updated Text/Coding/WebDev leaderboard snapshot tables and labels (as of Feb 19-21, 2026)."
+      - "Aligned external references to arena.ai leaderboard URLs and refreshed `asOf`/`updatedAt`."
+      - "Added contextual internal links for routing, evaluation pitfalls, security, retrieval basics, and code assistants."
+  - date: 2025-08-28T00:00:00.000Z
+    version: "1.0"
+    title: "Initial publication"
+    changes:
+      - "Published the first version of the LMArena guide."
 geo:
   quickAnswer:
     title: "How to use LMArena without getting fooled"
@@ -55,13 +68,13 @@ geo:
 
 
 > **It’s 6:40 p.m. and your release train leaves tomorrow.**
-> Two models are neck-and-neck—but one crushes long prompts while the other shines on code diffs. You open **LMArena**, run 20 real prompts across **Overall → Coding → Longer Query**, then try your repo in **RepoChat**. By **7:15 p.m.**, the pattern is obvious: **route by task**, note the trade-offs, and ship with confidence.
+> Two models are neck-and-neck—but one crushes long prompts while the other shines on code diffs. You open **LMArena**, run 20 real prompts across **Overall → Coding → Longer Query**, then try your repo in **RepoChat** using [repo-aware code assistants (why "agentic" is not the same as "coding")](/learn/midway/modern-ai-code-assistant). By **7:15 p.m.**, the pattern is obvious: **route by task**, note the trade-offs, and ship with confidence.
 
 ---
 
 ## Answer in 30 seconds
 
-If you need a fast, **human-preference** signal to shortlist LLMs, use **LMArena**: run **anonymous battles** with your real prompts, interpret small Elo gaps as **noise** (use the confidence interval), and pick **per-task winners** instead of a single global #1. Then re-check periodically because leaderboards and models drift.
+If you need a fast, **human-preference** signal to shortlist LLMs, use **LMArena**: run **anonymous battles** with your real prompts, interpret small Elo gaps as **noise** (use the confidence interval), and pick **per-task winners** instead of a single global #1. Build a [router-first blueprint for production routing](/learn/midway/rag-reference-architecture-2026-router-first-design), then re-check periodically because leaderboards and models drift.
 
 
 ## What LMArena is (in 60 seconds)
@@ -76,46 +89,47 @@ If you need a fast, **human-preference** signal to shortlist LLMs, use **LMArena
 
 ---
 
-## Snapshot (as observed on Jan 29–Feb 1, 2026)
+## Snapshot (as observed on Feb 19–21, 2026)
 
 > Rankings drift. Treat tables as snapshots, and re-check the live leaderboards before you ship: [[4](#ref-4)], [[5](#ref-5)], [[6](#ref-6)].
 > If you want to track changes without re-reading this guide, follow the official changelog: [[7](#ref-7)].
 
-### Text Arena — Last updated Jan 29, 2026
+### Text Arena — Overall (as of Feb 21, 2026)
 
 | Rank | Model | Score |
 | ---: | --- | ---: |
-| 1 | `gemini-3-pro` | 1487±5 |
-| 2 | `grok-4.1-thinking` | 1475±5 |
-| 3 | `gemini-3-flash` | 1471±5 |
-| 4 | `claude-opus-4-5-20251101-thinking-32k` | 1468±5 |
-| 5 | `claude-opus-4-5-20251101` | 1466±5 |
-| 6 | `grok-4.1` | 1466±4 |
-| 7 | `gemini-3-flash (thinking-minimal)` | 1463±6 |
-| 8 | `gpt-5.1-high` | 1459±5 |
-| 9 | `ernie-5.0-0110` | 1453 (preliminary) ±7 |
-| 10 | `claude-sonnet-4-5-20250929-thinking-32k` | 1450±4 |
+| 1 | `claude-opus-4-6-thinking` | 1505±8 |
+| 2 | `claude-opus-4-6` | 1505±8 |
+| 3 | `gemini-3.1-pro-preview` | 1500±9 (preliminary) |
+| 4 | `gemini-3-pro` | 1486±4 |
+| 5 | `gpt-5.2-chat-latest-20260210` | 1478±12 |
+| 6 | `dola-seed-2.0-preview` | 1474±10 (preliminary) |
+| 7 | `gemini-3-flash` | 1474±5 |
+| 8 | `grok-4.1-thinking` | 1473±4 |
+| 9 | `claude-opus-4-5-20251101-thinking-32k` | 1472±4 |
+| 10 | `claude-opus-4-5-20251101` | 1467±4 |
 
 > Treat “Model” strings as leaderboard labels. Small gaps near the top are often noise unless confidence intervals separate.
 
-### WebDev Arena — snapshot (as of Feb 2, 2026)
+### WebDev Arena (Code Arena | WebDev) — snapshot (as of Feb 19, 2026)
 
 Top signals:
-- `GPT-5 (high)` leads with 1472.37 (95% CI +8.18 / -6.69)
-- `Claude Opus 4.1 thinking-16k (20250805)` follows at 1456.34
+- `claude-opus-4-6` leads with 1561 (+14/-14)
+- `claude-opus-4-6-thinking` follows at 1551 (+16/-16)
+- `claude-sonnet-4-6` is #3 at 1524 (+20/-20)
 - Several models cluster tightly behind, with overlapping CIs.
 
-### Code Arena (WebDev) — Last updated Feb 1, 2026
+### Code Arena (WebDev) — as of Feb 19, 2026
 
 | Rank | Model | Score |
 | ---: | --- | ---: |
-| 1 | `claude-opus-4-5-20251101-thinking-32k` | 1500±9 |
-| 2 | `gpt-5.2-high` | 1472±16 |
-| 3 | `claude-opus-4-5-20251101` | 1470±9 |
-| 4 | `gemini-3-pro` | 1453±8 |
-| 5 | `kimi-k2.5-thinking` | 1447±16 |
+| 1 | `claude-opus-4-6` | 1561 +14/-14 |
+| 2 | `claude-opus-4-6-thinking` | 1551 +16/-16 |
+| 3 | `claude-sonnet-4-6` | 1524 +20/-20 |
+| 4 | `claude-opus-4-5-20251101-thinking-32k` | 1501 +8/-8 |
+| 5 | `gpt-5.2-high` | 1471 +16/-16 |
 
-> Editorial note: today’s top cluster spans multiple vendors (e.g., Google, OpenAI, Anthropic, xAI, Baidu), which is exactly why “route by task” beats “pick a global #1”.
+> Editorial note: today’s top cluster spans multiple vendors (e.g., Google, OpenAI, Anthropic, xAI), which is exactly why “route by task” beats “pick a global #1” (see this [case study on specialization vs a single global winner](/learn/expert/ai-specialization-gemini-gpt-lmarena-dec-2025)).
 
 ---
 
@@ -138,7 +152,7 @@ Notable recent examples include new model additions to the Code leaderboard and 
 
 * **Elo is relative.** A model’s rating is updated by wins/losses vs opponents on the prompts it actually faced.
 * **Confidence intervals (CI) matter.** When two models’ 95% CIs overlap, a small gap (e.g., **+5–15 Elo**) is often indistinguishable from noise.
-* **Selection bias is real.** If a model mostly fights certain opponents or prompt types, its Elo reflects that mixture—not a universal “IQ”.
+* **Selection bias is real.** If a model mostly fights certain opponents or prompt types, its Elo reflects that mixture—not a universal “IQ” (see [LLM evaluation: Goodhart, regression tests, and eval pitfalls](/topics/llm-evaluation)).
 
 ```text
 Big gap + non-overlapping CI  → likely real difference
@@ -203,7 +217,7 @@ Pick two finalists (e.g., `gemini-2.5-pro` vs `claude-opus-4.1-20250805-thinking
 
 * **Start with the right tab.** If you ship front-end code, **WebDev** matters more than Text “Overall”.
 * **Triangulate.** Elo is human preference; cross-check the **MT-Bench/MMLU** panels shown next to rows.
-* **Beware tiny gaps.** A few points at the top are often noise—use **battles on your prompts** to decide.
+* **Beware tiny gaps.** A few points at the top are often noise—use **battles on your prompts** to decide, and keep your grounding solid with [IR basics (keyword vs semantic retrieval)](/learn/expert/introduction-to-information-retrieval-systems).
 
 ![Leaderboard overview tiles](./lmarena_leaderboard_overview.png)
 
@@ -229,12 +243,13 @@ Pick two finalists (e.g., `gemini-2.5-pro` vs `claude-opus-4.1-20250805-thinking
 * 6 prompts × 3 categories (Coding, Longer Query, Your Domain)
 * 6–10 battles per category vs last month’s winner
 * Log: win rate, latency, formatting, citation quality
-* Update your **router** only if deltas persist across two checks
+* Update your **router** only if deltas persist across two checks (use this guide on [how to route queries: CAG vs RAG](/learn/expert/cag-vs-rag))
 
 ### Related reading (internal)
 
 * Retrieval basics: `/learn/expert/introduction-to-information-retrieval-systems`
 * RAG architecture & trade-offs: `/learn/expert/cag-vs-rag`
+* RAG & context engineering hub: `/topics/rag`
 * Production fundamentals (context/tokens/tool use): `/learn/midway/llm-practical-fundamentals-guide-ai-apps`
 * 2026 enterprise playbook (agents, evaluation, governance): `/learn/midway/generative-ai-roadmap-2026-enterprise-playbook`
 
@@ -243,7 +258,7 @@ Pick two finalists (e.g., `gemini-2.5-pro` vs `claude-opus-4.1-20250805-thinking
 ## Curiosity bites
 
 * **Side-by-Side ≠ Elo:** SxS is labeled for audits; only **anonymous battles** change ratings (see: [[2](#ref-2)], plus the official [[3](#ref-3)]).
-* **Repo-aware surprises:** average overall models can **win** in **RepoChat** on your codebase.
+* **Repo-aware surprises:** average overall models can **win** in **RepoChat** on your codebase (especially if your workflow depends on [repo-aware code assistants](/learn/midway/modern-ai-code-assistant)).
 * **Latency matters:** ask raters to flag when answers are “**too slow to be useful**.”
 
 ---
@@ -252,7 +267,7 @@ Pick two finalists (e.g., `gemini-2.5-pro` vs `claude-opus-4.1-20250805-thinking
 
 * **Human preference ≠ ground truth.** Treat Elo as one signal; verify with your tests/benchmarks.
 * **Small Elo deltas are noisy.** Break ties with your own prompts.
-* **Privacy:** treat LMArena as **public**—don’t paste sensitive data.
+* **Privacy:** treat LMArena as **public**—don’t paste sensitive data, and review [why inputs should be treated as untrusted (and effectively public)](/learn/midway/genai-security-guardrails-prompt-injection).
 
 ---
 
@@ -268,7 +283,7 @@ Pick two finalists (e.g., `gemini-2.5-pro` vs `claude-opus-4.1-20250805-thinking
 
 ## Don’t pick a single winner—pick a routing plan
 
-Run **10–20 arena battles per task type**, compare **Overall + Category Elo** with **MT-Bench/MMLU**, and keep a lightweight rubric (correctness, latency, citations/tool-use). If the top two are close, prefer the one that wins **your failure cases**. **Re-check monthly**; model drift is real.
+Run **10–20 arena battles per task type**, compare **Overall + Category Elo** with **MT-Bench/MMLU**, and keep a lightweight rubric (correctness, latency, citations/tool-use). If the top two are close, prefer the one that wins **your failure cases**. Then formalize the decision with a [router-first blueprint for production routing](/learn/midway/rag-reference-architecture-2026-router-first-design). **Re-check monthly**; model drift is real.
 
 ---
 
@@ -366,9 +381,9 @@ Yes—LMArena/LMSYS periodically releases open datasets. Starting points:
 1. <a id="ref-1"></a>[**How it works**](https://lmarena.ai/how-it-works)
 2. <a id="ref-2"></a>[**Battle Mode help**](https://help.lmarena.ai/articles/4489017547-how-to-use-battle-mode)
 3. <a id="ref-3"></a>[**FAQ**](https://lmarena.ai/faq)
-4. <a id="ref-4"></a>[**LMArena Text Leaderboard**](https://lmarena.ai/leaderboard/text)
-5. <a id="ref-5"></a>[**LMArena Code Leaderboard**](https://lmarena.ai/leaderboard/code)
-6. <a id="ref-6"></a>[**LMArena WebDev Leaderboard**](https://dev.lmarena.ai/leaderboard)
+4. <a id="ref-4"></a>[**Text Leaderboard (Overall)**](https://arena.ai/leaderboard/text)
+5. <a id="ref-5"></a>[**Text Leaderboard (Coding)**](https://arena.ai/leaderboard/text/coding)
+6. <a id="ref-6"></a>[**Code Arena (WebDev)**](https://arena.ai/leaderboard/code)
 7. <a id="ref-7"></a>[**Leaderboard Changelog**](https://lmarena.ai/blog/leaderboard-changelog/)
 8. <a id="ref-8"></a>[**Auto-Modality Experiments**](https://help.lmarena.ai/articles/1350607902-lmarena-experiments-auto-modality)
 9. <a id="ref-9"></a>[**Chatbot Arena Conversations (33k) | Hugging Face**](https://huggingface.co/datasets/lmsys/chatbot_arena_conversations)

@@ -9,23 +9,56 @@ author: Daniele Moltisanti
 target: Midway
 business: true
 language: English
-cover: cover.webp
+cover: google_ai_studio_cover.webp
 meta: >-
   Learn Google AI Studio by doing: prompt workflows, built-in tools, safety settings,
   pricing & rate limits, and a production checklist—plus when to use Vertex AI.
 date: 2024-11-05T00:00:00.000Z
-updatedAt: 2026-02-02T00:00:00.000Z
+updatedAt: 2026-02-23T00:00:00.000Z
 published: true
 primaryTopic: llm-evaluation
 topics: [production]
-asOf: 2026-02-02
+asOf: 2026-02-23
+changelog:
+  - date: 2026-02-23T00:00:00.000Z
+    version: "1.4"
+    title: "Gemini 3-safe template defaults"
+    changes:
+      - "Updated Extractor, Grounded, and Ticket Router templates with Gemini 3-safe run settings."
+      - "Added grounding billing caveat for Gemini 3 (query-level tool billing behavior)."
+      - "Added explicit two-step workaround for built-in tools plus custom function-calling limitation."
+  - date: 2026-02-23T00:00:00.000Z
+    version: "1.3"
+    title: "Gemini 3 knobs section for practical tuning"
+    changes:
+      - "Added a focused section on Gemini 3 controls: thinking_level, temperature guidance, thought signatures, tool-preview constraints, and grounding billing behavior."
+      - "Aligned defaults for production-aware prototyping with Gemini 3 recommendations."
+  - date: 2026-02-23T00:00:00.000Z
+    version: "1.2"
+    title: "Gemini 3 guidance alignment"
+    changes:
+      - "Replaced generic tool-combination wording with explicit Gemini 3 limitation notes."
+      - "Updated extraction template guidance to prefer temperature 1.0 + thinking_level tuning for Gemini 3."
+      - "Added Gemini 3 Developer Guide as a direct source for tool-mixing and generation-setting caveats."
+  - date: 2026-02-23T00:00:00.000Z
+    version: "1.1"
+    title: "Accuracy refresh + contextual internal linking"
+    changes:
+      - "Refined billing/grounding wording for model-tier dependence and paid-key billing behavior."
+      - "Clarified preview constraints for structured outputs with tools (Gemini 3 series preview models)."
+      - "Added contextual internal links for roadmap, architecture-cost framing, security guardrails, RAG routing, and interoperability."
+  - date: 2024-11-05T00:00:00.000Z
+    version: "1.0"
+    title: "Initial publication"
+    changes:
+      - "Published the first practical guide to prototyping with Google AI Studio and Gemini API."
 geo:
   quickAnswer:
     title: "How to use Google AI Studio (without wasting time)"
     bullets:
       - "Use AI Studio to prototype prompts fast, then click 'Get code' to ship via the Gemini API."
       - "Turn on Tools for reliability: Structured Output (JSON Schema), Function Calling, and Search grounding."
-      - "Treat the free tier as experimental: rate limits change and free-tier data may be used to improve products."
+      - "Treat the free tier as experimental: rate limits change over time (visible in AI Studio) and free-tier content may be used to improve products."
       - "Move to Vertex AI for enterprise controls (IAM, VPC, compliance, SLAs) and for supervised fine-tuning."
     oneThing: "AI Studio is a prototyping cockpit—production readiness comes from tools + guardrails, and (often) Vertex AI."
   audience:
@@ -64,6 +97,7 @@ geo:
 **Google AI Studio** is the fastest way to **prototype with Gemini**: you try prompts, tweak run + safety settings, enable built-in **tools** (Structured Output / Function Calling / Search grounding / Code Execution), then click **“Get code”** to ship via the Gemini Developer API. [[1](#ref-1)]
 
 If you’re building anything serious for an organization (IAM, VPC, compliance, SLAs, tuning), the clean path is: **prototype in AI Studio → move to Vertex AI**. [[2](#ref-2)]
+For a broader rollout framework, use this [enterprise roadmap for shipping GenAI safely](/learn/midway/generative-ai-roadmap-2026-enterprise-playbook).
 
 ---
 
@@ -75,7 +109,8 @@ A web-based **prototyping cockpit** where you:
 
 * test prompts quickly,
 * configure generation + **safety settings**, [[3](#ref-3)]
-* enable tools like **Structured Output**, **Function Calling**, **Search grounding**, and **Code Execution** (Gemini 3 supports combining these). [[4](#ref-4)]
+* enable tools like **Structured Output**, **Function Calling**, **Search grounding**, and **Code Execution**.
+  **Note:** Gemini 3 supports combining Structured Outputs with built-in tools, but mixing built-in tools with custom function calling may be limited. [[4](#ref-4)] [[16](#ref-16)]
 * export code to integrate with the **Gemini API** (“Get code”). [[1](#ref-1)]
 
 ### What it isn’t
@@ -109,30 +144,71 @@ If you’re a solo dev or early-stage team, **start in AI Studio**. When the app
 </p>
 
 If your app needs **reliable JSON**, use **Structured Output** with a JSON Schema. This forces the model to return something you can validate with Pydantic/Zod instead of guessing. [[4](#ref-4)]
+See also [structured outputs, tokens, and reliability basics](/learn/midway/llm-practical-fundamentals-guide-ai-apps).
 
 **Best for:**
 
 * extraction (names, dates, entities),
 * classification into fixed labels,
-* tool-routing in agentic flows. [[4](#ref-4)]
+* tool-routing in agentic flows (and later, [MCP, tool calling and agent interoperability](/learn/midway/mcp-a2a-protocols-ai-agents-playbook)). [[4](#ref-4)]
 
 ### 2) Function Calling: connect Gemini to real actions
 
 Function calling lets the model **return structured arguments** to call your tools/APIs (CRM lookup, pricing, database queries, ticket creation). [[9](#ref-9)]
 
 **Why it matters:** it turns a “chat demo” into an app that can **do stuff** while staying auditable.
+For production hardening, pair this with [prompt injection + untrusted tool inputs (guardrails)](/learn/midway/genai-security-guardrails-prompt-injection).
 
 ### 3) Grounding with Google Search: freshness + citations
 
-If your use case includes “recent changes” (policies, news, docs), Search grounding improves factuality and can provide **citations**. [[10](#ref-10)]
+If your use case includes “recent changes” (policies, news, docs), Search grounding grounds answers in real-time info and can provide **citations**. [[10](#ref-10)]
+For drift-aware review habits, see [how to stay current (drift, snapshots, re-check workflows)](/learn/expert/imarena-ai-benchmarking-platform).
 
 **Rule of thumb:** if your user could ask “is this up to date?”, grounding should be in your toolbox.
 
-> **Pricing note:** Search grounding availability and quotas differ by tier and model; in the official pricing table, several grounding options are **not available on the Free Tier**. [[12](#ref-12)]
+> **Pricing note:** Grounding availability and quotas are **model- and tier-dependent**. The pricing table lists Free Tier grounding caps (for example, up to 500 RPD), and Paid Tier can include a free daily allowance (for example, 1,500 RPD) before pay-per-grounded-prompt pricing applies. [[12](#ref-12)]
 
 ### 4) Safety settings: prototype guardrails early
 
 AI Studio makes it easy to adjust safety thresholds while prototyping. Don’t leave it to “later”: safety settings affect user experience (false positives) and risk profile (false negatives). [[3](#ref-3)]
+
+---
+
+## Gemini 3 knobs in AI Studio (the 5 controls that actually matter)
+
+If you’re prototyping with **Gemini 3** in AI Studio, these parameters matter more than “tune temperature like old models”.
+
+### 1) `thinking_level`: your latency/cost dial
+
+Gemini 3 uses internal “thinking” by default. Use `thinking_level` to cap how much it thinks:
+- `low`: best for high-throughput chat, extraction, and routing
+- higher levels: better for complex reasoning/coding, but slower and costlier
+
+Use it as your main trade-off knob for **latency vs quality**. [[16](#ref-16)]
+
+### 2) Temperature: keep it at **1.0** for Gemini 3
+
+Docs recommend leaving Gemini 3 at the default `temperature = 1.0`. Lowering it can cause unexpected behavior (including degraded performance), especially on reasoning-heavy tasks. [[16](#ref-16)]
+
+**Practical rule:** for determinism, prefer **schema/structured outputs**, constraints, and validation over temperature tweaks.
+
+### 3) Thought signatures (when you need traceability)
+
+Gemini 3 introduces thought signatures for workflows where you need more control/traceability around thinking behavior (useful in agentic/debug contexts). [[16](#ref-16)]
+
+### 4) “Structured outputs with tools” is **preview-only**
+
+Combining **Structured Output + built-in tools** (Search grounding, URL context, Code Execution, File Search) is available only on **Gemini 3 preview models**. [[4](#ref-4)] [[16](#ref-16)]
+
+### 5) Grounding billing counts tool queries
+
+With **Grounding with Google Search**, billing can count each unique search query the model executes inside a request. [[12](#ref-12)] [[10](#ref-10)]
+
+> **Default setup for production-aware prototyping**
+> - `thinking_level = low`
+> - `temperature = 1.0`
+> - Structured Output ON (JSON Schema) for machine-consumed responses
+> - Enable grounding only when the user may ask “is this up to date?”
 
 ---
 
@@ -147,8 +223,18 @@ Below are three “ready-to-ship” templates for common use cases: reliable ext
 **In AI Studio (recommended toggles):**
 
 * **Structured Output**: ON (JSON Schema) [[4](#ref-4)]
-* **Temperature**: 0–0.3 (low creativity)
+* **Gemini 3 (recommended):** keep **Temperature = 1.0** and control latency/cost with **thinking_level = low**. [[16](#ref-16)]
+* *(Optional, older models):* low temperature can increase determinism, but prefer schema + validation over temperature tweaks. [[17](#ref-17)]
 * **Max output tokens**: Low/Medium (since we only need JSON)
+
+**Gemini 3 run settings (practical defaults):**
+
+```json
+{
+  "temperature": 1.0,
+  "thinkingConfig": { "thinkingLevel": "low" }
+}
+```
 
 **System prompt:**
 
@@ -178,7 +264,7 @@ Return JSON only.
 **JSON Schema (Starter):**
 
 > **Note:** Structured Output (JSON Schema) is supported by multiple Gemini models (including Gemini 2.5).
-> **Preview note:** combining Structured Output with built-in tools (Search grounding / URL context / Code Execution / File Search) is currently available only on **Gemini 3 preview models**.
+> **Preview note:** “Structured outputs with tools” is currently available only on **Gemini 3 series preview models** (per docs). [[4](#ref-4)] [[16](#ref-16)]
 
 ```json
 {
@@ -214,6 +300,18 @@ Test with 10 real inputs (no sensitive data) and measure: `% Valid JSON`, `% Cor
 
 * **Grounding with Google Search**: ON (for freshness + citations) [[10](#ref-10)]
 * **Structured Output**: Optional (ON only if using compatible preview models)
+
+**Gemini 3 grounding gotcha (billing):**
+With Gemini 3, billing counts **each search query** the model executes inside a request (multiple searches in one call can become multiple billable tool uses). Older models are billed **per prompt**. [[10](#ref-10)] [[16](#ref-16)]
+
+**Gemini 3 run settings (practical defaults):**
+
+```json
+{
+  "temperature": 1.0,
+  "thinkingConfig": { "thinkingLevel": "low" }
+}
+```
 
 **System prompt:**
 
@@ -274,6 +372,17 @@ Deliver:
 
 * **Function calling**: ON [[9](#ref-9)]
 * **Structured Output**: ON (often useful for the “final response schema” on the last turn)
+
+**Gemini 3 run settings (practical defaults):**
+
+```json
+{
+  "temperature": 1.0,
+  "thinkingConfig": { "thinkingLevel": "low" }
+}
+```
+
+> **Gemini 3 limitation (important):** combining **built-in tools** (Search/URL/Code/File Search) with **custom function calling** in the same request is not yet supported. If you need both, use a **two-step flow** (for example: grounded retrieval call -> function-calling call). [[16](#ref-16)]
 
 **Tool Declarations:**
 
@@ -350,12 +459,13 @@ Task:
 
 ### 1) “AI Studio is free” ≠ “your app is free”
 
-Google says **AI Studio usage remains free** even if you set up billing. [[11](#ref-11)]
+AI Studio can remain free **unless you link a paid API key** to access paid features; when a paid key is linked, AI Studio usage for that key becomes billable. [[11](#ref-11)]
 But your production costs are still driven by:
 
 * Gemini API pricing tiers,
 * token usage,
 * features like grounding. [[12](#ref-12)]
+* architecture choices (routing, retries, fallback design), as explained in [cost is mostly architecture (not token price)](/learn/expert/llm-costs-are-architectural-not-pricing).
 
 ### 2) Free-tier data usage policy differs from paid
 
@@ -433,7 +543,8 @@ Migration is simplified by the unified **Google GenAI SDK**:
    If you’re doing RAG / web / docs:
 
 * treat retrieved text as untrusted,
-* separate “data” from “instructions” in your system design.
+* separate “data” from “instructions” in your system design,
+* adopt a [RAG reference architecture (router-first) for production](/learn/midway/rag-reference-architecture-2026-router-first-design) and [prompt injection + untrusted tool inputs (guardrails)](/learn/midway/genai-security-guardrails-prompt-injection).
 
 5. **Graduate to Vertex AI when risk rises**
    If you need enterprise controls (IAM, VPC, compliance, SLAs), Vertex AI is the right surface. [[2](#ref-2)]
@@ -445,8 +556,8 @@ Migration is simplified by the unified **Google GenAI SDK**:
 <details>
   <summary><strong>Is Google AI Studio free?</strong></summary>
 
-AI Studio usage is free, even if you set up billing, according to Google’s billing FAQ. [[11](#ref-11)]
-However, Gemini API usage and features depend on tier and pricing. [[12](#ref-12)]
+AI Studio can stay free for prototyping, but usage becomes billable when you connect and use paid-tier API keys/features, according to Google’s billing docs. [[11](#ref-11)]
+However, paid usage applies when you use paid-tier API keys/features, and Gemini API usage/features depend on model tier and pricing. [[11](#ref-11)] [[12](#ref-12)]
 
 </details>
 
@@ -488,3 +599,5 @@ Google’s rate-limit docs say limits vary by tier/account status and can be vie
 13. <a id="ref-13"></a>[**Rate limits | Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/rate-limits)
 14. <a id="ref-14"></a>[**Fine-tuning with the Gemini API - Google AI for Developers**](https://ai.google.dev/gemini-api/docs/model-tuning)
 15. <a id="ref-15"></a>[**Using Tools & Agents with Gemini API**](https://ai.google.dev/gemini-api/docs/tools)
+16. <a id="ref-16"></a>[**Gemini 3 Developer Guide (thinking_level, tool limitations, temperature guidance)**](https://ai.google.dev/gemini-api/docs/gemini-3)
+17. <a id="ref-17"></a>[**Text generation (Gemini 3 temperature: keep default 1.0)**](https://ai.google.dev/gemini-api/docs/text-generation)
