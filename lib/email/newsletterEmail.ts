@@ -7,6 +7,7 @@
 import { Resend } from 'resend'
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
+const INTERNAL_BCC_EMAIL = 'info@staituned.com'
 
 function getResendClient(): Resend | null {
     const apiKey = process.env.RESEND_API_KEY
@@ -122,6 +123,7 @@ export async function sendNewsletterWelcomeEmail(params: SendWelcomeEmailParams)
         const { error, data } = await resend.emails.send({
             from: FROM_EMAIL,
             to: email,
+            bcc: INTERNAL_BCC_EMAIL,
             subject: '🚀 Benvenuto in stAItuned! (Iscrizione confermata)',
             html: generateWelcomeEmailHtml(),
             text: generateWelcomeEmailText(),

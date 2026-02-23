@@ -3,6 +3,7 @@ import { Resend } from 'resend'
 import { BRAND } from '@/lib/brand'
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAI tuned <noreply@staituned.com>'
+const INTERNAL_BCC_EMAIL = 'info@staituned.com'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? BRAND.url).replace(/\/+$/, '')
 
 function getResendClient(): Resend | null {
@@ -73,7 +74,7 @@ export async function sendAgreementConfirmationEmail(params: SendAgreementConfir
         const basePayload = {
             from: FROM_EMAIL,
             to: email,
-            cc: 'staituned.owner@gmail.com',
+            bcc: INTERNAL_BCC_EMAIL,
             subject,
             html,
         }

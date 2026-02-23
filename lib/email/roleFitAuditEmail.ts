@@ -21,6 +21,7 @@ function getResendClient(): Resend | null {
 
 // Email sender configuration
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
+const INTERNAL_BCC_EMAIL = 'info@staituned.com'
 
 // =============================================================================
 // Types
@@ -259,6 +260,7 @@ export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams)
     const emailOptions = {
       from: FROM_EMAIL,
       to: email,
+      bcc: INTERNAL_BCC_EMAIL,
       subject: `🎯 Il tuo Role Fit Audit: sei un ${result.archetype.name}`,
       html: generateReportEmailHtml(name, result),
       text: generateReportEmailText(name, result),

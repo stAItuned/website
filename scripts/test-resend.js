@@ -10,6 +10,7 @@ async function test() {
         const result = await resend.emails.send({
             from: 'stAItuned <noreply@staituned.com>',
             to: 'danielemoltisanti@gmail.com', // Assuming this is the user's email or a safe test
+            bcc: 'info@staituned.com',
             subject: 'Test Resend from Script',
             html: '<p>Benvenuto! Se leggi questo, Resend funziona.</p>'
         });
