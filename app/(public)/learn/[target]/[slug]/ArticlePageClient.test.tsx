@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type React from 'react'
 import ArticlePageClient from './ArticlePageClient'
+import type { ContentPost } from '@/lib/contentlayer'
 
 vi.mock('@/lib/hooks/useScreenSize', () => ({
   useScreenSize: () => true,
@@ -104,7 +105,35 @@ const baseProps = {
     pageViews: 0,
     users: 0,
     likes: 0,
+    sessions: 0,
+    avgTimeOnPage: 0,
+    bounceRate: 0,
+    updatedAt: new Date().toISOString(),
   },
+}
+
+function buildArticle(overrides: Partial<ContentPost>): ContentPost {
+  return {
+    _id: 'post-id',
+    _raw: {},
+    type: 'Post',
+    slug: 'article',
+    url: '/learn/newbie/article',
+    title: 'Article',
+    author: 'Author',
+    date: '2025-01-01',
+    target: 'newbie',
+    language: 'English',
+    topics: [],
+    tags: [],
+    imagePath: '',
+    structuredData: {},
+    body: { raw: 'Body' },
+    published: true,
+    readingTime: 5,
+    readTime: 5,
+    ...overrides,
+  }
 }
 
 describe('ArticlePageClient lang semantics', () => {
@@ -120,16 +149,11 @@ describe('ArticlePageClient lang semantics', () => {
     render(
       <ArticlePageClient
         {...baseProps}
-        article={{
+        article={buildArticle({
           slug: 'english-article',
           title: 'English article',
           language: 'English',
-          author: 'Author',
-          date: '2025-01-01',
-          readingTime: 5,
-          body: { raw: 'Body' },
-          topics: [],
-        }}
+        })}
       />
     )
 
@@ -141,16 +165,13 @@ describe('ArticlePageClient lang semantics', () => {
     render(
       <ArticlePageClient
         {...baseProps}
-        article={{
+        article={buildArticle({
           slug: 'articolo-italiano',
           title: 'Articolo italiano',
           language: 'Italian',
           author: 'Autore',
-          date: '2025-01-01',
-          readingTime: 5,
           body: { raw: 'Corpo' },
-          topics: [],
-        }}
+        })}
       />
     )
 

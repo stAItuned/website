@@ -71,6 +71,12 @@ type QuickAnswerIntroData = {
   bullets?: string[]
   oneThing?: string
 }
+type ArticleFaqItem = {
+  question: string
+  answer: string
+  questionEn?: string
+  answerEn?: string
+}
 
 type ArticlePageClientProps = {
   coverImage: string | null
@@ -109,6 +115,48 @@ const toQuickAnswerIntroData = (value: unknown): QuickAnswerIntroData | null => 
   if (!oneThing && (!bullets || bullets.length === 0)) return null
 
   return { title, oneThing, bullets }
+}
+
+const firstString = (...values: unknown[]): string | undefined => {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim().length > 0) return value
+  }
+  return undefined
+}
+
+const hasStrategicPlaybookData = (value: unknown): boolean => {
+  if (!value || typeof value !== 'object') return false
+
+  const source = value as Record<string, unknown>
+  const pitfallsLength = Array.isArray(source.pitfalls) ? source.pitfalls.length : 0
+
+  const decisionRules = source.decisionRules
+  const rules = decisionRules && typeof decisionRules === 'object'
+    ? (decisionRules as { rules?: unknown[] }).rules
+    : undefined
+  const rulesLength = Array.isArray(rules) ? rules.length : 0
+
+  return pitfallsLength > 0 || rulesLength > 0
+}
+
+const toArticleFaqItems = (value: unknown): ArticleFaqItem[] => {
+  if (!Array.isArray(value)) return []
+
+  const items: ArticleFaqItem[] = []
+  for (const item of value) {
+    if (!item || typeof item !== 'object') continue
+    const source = item as Record<string, unknown>
+    if (typeof source.question !== 'string' || typeof source.answer !== 'string') continue
+
+    items.push({
+      question: source.question,
+      answer: source.answer,
+      questionEn: typeof source.questionEn === 'string' ? source.questionEn : undefined,
+      answerEn: typeof source.answerEn === 'string' ? source.answerEn : undefined,
+    })
+  }
+
+  return items
 }
 
 /**
@@ -172,23 +220,22 @@ export default function ArticlePageClient({
     authorData ? { ...authorData, name: authorData.name || article.author } : null
   )
   const hasStrategicPlaybook = useMemo(
-    () => Boolean(
-      article.geo &&
-      (
-        (article.geo.decisionRules?.rules?.length ?? 0) > 0 ||
-        (article.geo.pitfalls?.length ?? 0) > 0
-      )
-    ),
+    () => hasStrategicPlaybookData(article.geo),
     [article.geo]
   )
 
   // Live analytics state - starts with SSR/ISR cached values, refreshes on mount
   const [liveAnalytics, setLiveAnalytics] = useState<ArticleAnalytics>(analytics)
   const primaryTopicHub = article.primaryTopic ? getTopicHub(article.primaryTopic) : null
+  const articleDescription = useMemo(
+    () => firstString(article.seoDescription, article.meta, article.description, article.excerpt),
+    [article.seoDescription, article.meta, article.description, article.excerpt]
+  )
   const quickAnswerIntro = useMemo(
     () => toQuickAnswerIntroData((article.geo as Record<string, unknown> | undefined)?.quickAnswer),
     [article.geo]
   )
+  const faqItems = useMemo(() => toArticleFaqItems(article.faq), [article.faq])
 
   // Reading progress persistence
   const {
@@ -1143,7 +1190,7 @@ export default function ArticlePageClient({
               <FloatingShareBar
                 title={article.title}
                 articleSlug={article.slug}
-                description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                description={articleDescription}
                 imageUrl={coverImage}
                 likes={likesCount}
                 views={liveAnalytics.pageViews || 0}
@@ -1342,7 +1389,7 @@ export default function ArticlePageClient({
 
                 {/* End of Article Engagement */}
                 {/* Article FAQs */}
-                <ArticleFAQ faqs={article.faq} />
+                <ArticleFAQ faqs={faqItems} />
 
                 {/* End of Article Engagement - Minimalist Redesign */}
                 <div className="not-prose flex flex-col items-center gap-6 my-12 py-8 border-t border-gray-100 dark:border-slate-800/50">
@@ -1580,7 +1627,7 @@ export default function ArticlePageClient({
 
                     {/* Article FAQs (Mobile) */}
                     <div className="not-prose mt-8 border-t border-gray-100 dark:border-slate-800 pt-8">
-                      <ArticleFAQ faqs={article.faq} />
+                      <ArticleFAQ faqs={faqItems} />
                     </div>
 
                     {/* End of Article Engagement (Mobile) */}
@@ -1610,7 +1657,7 @@ export default function ArticlePageClient({
               <MobileActionBar
                 articleSlug={article.slug}
                 title={article.title}
-                description={article.seoDescription ?? article.meta ?? article.description ?? article.excerpt}
+                description={articleDescription}
                 imageUrl={coverImage}
                 onTocClick={() => setShowTocModal(true)}
                 showToc={toc.length > 0}
