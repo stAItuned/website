@@ -118,7 +118,8 @@ export interface LearnTranslations {
         searchPlaceholder: string
         sort: {
             trending: string
-            recent: string
+            updated: string
+            published: string
         }
         all: string
         noArticles: string
@@ -454,7 +455,8 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             searchPlaceholder: "Search articles...",
             sort: {
                 trending: "Trending",
-                recent: "Recent"
+                updated: "Updated",
+                published: "Published"
             },
             all: "All",
             noArticles: "No articles found",
@@ -716,7 +718,8 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
             searchPlaceholder: "Cerca articoli...",
             sort: {
                 trending: "Popolari",
-                recent: "Recenti"
+                updated: "Aggiornati",
+                published: "Pubblicati"
             },
             all: "Tutti",
             noArticles: "Nessun articolo trovato",

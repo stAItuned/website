@@ -9,7 +9,7 @@ import { getTopicHub } from '@/config/topics'
 import { TopicsCarousel } from './components/TopicsCarousel'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { TopicGrid } from '@/components/TopicGrid'
-import { getContentDateTime } from '@/lib/content-date'
+import { getContentDateTime, getPublishedDateTime } from '@/lib/content-date'
 
 interface Article {
     title: string
@@ -53,7 +53,7 @@ interface ArticlesPageClientProps {
     topicCount: number
 }
 
-type SortOption = 'recent' | 'trending'
+type SortOption = 'updated' | 'published' | 'trending'
 
 const PAGE_SIZE = 12
 
@@ -83,7 +83,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
     const [selectedLevel, setSelectedLevel] = useState<string | null>(normalizedLevelFromUrl)
     const [currentPage, setCurrentPage] = useState(1)
     const [searchQuery, setSearchQuery] = useState(initialShareQuery)
-    const [sortBy, setSortBy] = useState<SortOption>('recent')
+    const [sortBy, setSortBy] = useState<SortOption>('published')
     const [analyticsData, setAnalyticsData] = useState<Record<string, number>>({})
     const [showFilters, setShowFilters] = useState(false)
 
@@ -140,8 +140,11 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
         // Apply Sorting
         if (sortBy === 'trending') {
             result = result.sort((a, b) => (b.pageViews || 0) - (a.pageViews || 0))
+        } else if (sortBy === 'published') {
+            result = result.sort(
+                (a, b) => getPublishedDateTime(b.date, b.updatedAt) - getPublishedDateTime(a.date, a.updatedAt)
+            )
         } else {
-            // Default: Recent (Date desc)
             result = result.sort(
                 (a, b) => getContentDateTime(b.date, b.updatedAt) - getContentDateTime(a.date, a.updatedAt)
             )
@@ -255,13 +258,14 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
                         <div className="flex-1 hidden md:block" />
 
                         {/* Right Controls */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-wrap items-center justify-end gap-2">
 
                             {/* Explicit Sort Segmented Control */}
                             <SegmentedControl
                                 options={[
-                                    { value: 'recent', label: <span className="flex items-center gap-1.5">🆕 {t.articlesPage.sort.recent}</span> },
-                                    { value: 'trending', label: <span className="flex items-center gap-1.5">🔥 {t.articlesPage.sort.trending}</span> }
+                                    { value: 'published', label: <span className="flex items-center gap-1.5">📅 {t.articlesPage.sort.published}</span> },
+                                    { value: 'trending', label: <span className="flex items-center gap-1.5">🔥 {t.articlesPage.sort.trending}</span> },
+                                    { value: 'updated', label: <span className="flex items-center gap-1.5">🆕 {t.articlesPage.sort.updated}</span> }
                                 ]}
                                 value={sortBy}
                                 onChange={(val) => { setSortBy(val as SortOption); setCurrentPage(1); }}

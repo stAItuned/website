@@ -8,7 +8,7 @@ seoDescription: >-
 author: Daniele Moltisanti
 target: Expert
 language: English
-cover: imarena_cover.webp
+cover: lmarena_cover.webp
 meta: >-
   LMArena explained: anonymous battles, Elo-style ratings, confidence intervals,
   category leaderboards, caveats, and a practical workflow to choose LLMs using
