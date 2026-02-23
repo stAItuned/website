@@ -9,9 +9,6 @@ export const revalidate = 3600; // Revalidate every hour
 
 const baseUrl = "https://staituned.com";
 
-// Current date for static pages (updated on each build/revalidation)
-const buildDate = new Date().toISOString();
-
 // Escape special XML chars
 function escapeXml(text: string | null | undefined): string {
   const t = String(text ?? "");
@@ -21,6 +18,13 @@ function escapeXml(text: string | null | undefined): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function toIsoDate(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const timestamp = new Date(value).getTime();
+  if (!Number.isFinite(timestamp)) return null;
+  return new Date(timestamp).toISOString();
 }
 
 // Robust slugify for author URLs
@@ -37,18 +41,22 @@ function authorSlug(name: string) {
 }
 
 // Find the most recent post date for a category/section
-function getMostRecentPostDate(posts: typeof allPosts, section?: string): string {
+function getMostRecentPostDate(posts: typeof allPosts, section?: string): string | null {
   const filtered = section
     ? posts.filter(p => (p.target || "general").toLowerCase() === section.toLowerCase())
     : posts;
 
-  if (filtered.length === 0) return buildDate;
+  if (filtered.length === 0) return null;
 
-  const dates = filtered.map(p => new Date(p.updatedAt || p.date || 0).getTime());
+  const dates = filtered
+    .map((p) => toIsoDate(p.updatedAt || p.date))
+    .filter((date): date is string => Boolean(date))
+    .map((date) => new Date(date).getTime());
+  if (dates.length === 0) return null;
   return new Date(Math.max(...dates)).toISOString();
 }
 
-function getMostRecentPostDateForTopic(posts: typeof allPosts, topicSlug: string): string {
+function getMostRecentPostDateForTopic(posts: typeof allPosts, topicSlug: string): string | null {
   const normalizedTopic = topicSlug.toLowerCase();
   const filtered = posts.filter((post) => {
     const primaryTopic = (post.primaryTopic ?? "").toLowerCase();
@@ -56,9 +64,13 @@ function getMostRecentPostDateForTopic(posts: typeof allPosts, topicSlug: string
     return primaryTopic === normalizedTopic || topics.includes(normalizedTopic);
   });
 
-  if (filtered.length === 0) return buildDate;
+  if (filtered.length === 0) return null;
 
-  const dates = filtered.map((post) => new Date(post.updatedAt || post.date || 0).getTime());
+  const dates = filtered
+    .map((post) => toIsoDate(post.updatedAt || post.date))
+    .filter((date): date is string => Boolean(date))
+    .map((date) => new Date(date).getTime());
+  if (dates.length === 0) return null;
   return new Date(Math.max(...dates)).toISOString();
 }
 
@@ -82,8 +94,9 @@ function getLatestFileMtime(relativePaths: string[]): string | null {
 }
 
 export async function GET() {
-  // Only published posts (explicit true to exclude drafts/null)
-  const posts = allPosts.filter((p) => p.published === true);
+  // Include all posts that are not explicitly unpublished.
+  // This matches page rendering logic across the Learn routes.
+  const posts = allPosts.filter((p) => p.published !== false);
 
   // Exclude preview/draft routes from sitemap (defense in depth)
   const excludedPathPrefixes = ["/preview", "/contribute/draft"];
@@ -107,51 +120,58 @@ export async function GET() {
   const midwayLastmod = getMostRecentPostDate(posts, "midway");
   const expertLastmod = getMostRecentPostDate(posts, "expert");
 
-  // Static pages: rely on buildDate as safe fallback for now, since file mtime
-  // is unreliable on Vercel (resets on deploy). Ideally these should be manually updated.
-  const staticPageLastmod = buildDate;
+  // Static page lastmod values use source file mtimes when available.
+  // If unavailable, we omit <lastmod> instead of emitting low-confidence values.
+  const staticPageLastmodByPath: Record<string, string | null> = {
+    "/": getLatestFileMtime(["app/page.tsx"]),
+    "/topics": getLatestFileMtime(["app/(public)/topics/page.tsx"]),
+    "/career-os": getLatestFileMtime(["app/(public)/career-os/page.tsx"]),
+    "/role-fit-audit": getLatestFileMtime(["app/(public)/role-fit-audit/page.tsx"]),
+    "/prodotti": getLatestFileMtime(["app/(public)/prodotti/page.tsx"]),
+    "/meet": getLatestFileMtime(["app/(public)/meet/page.tsx"]),
+    "/contribute": getLatestFileMtime(["app/(public)/contribute/page.tsx"]),
+    "/contributor": getLatestFileMtime(["app/(public)/contributor/page.tsx"]),
+    "/author": getLatestFileMtime(["app/(public)/author/page.tsx"]),
+    "/terms": getLatestFileMtime(["app/(public)/terms/page.tsx"]),
+    "/privacy": getLatestFileMtime(["app/(public)/privacy/page.tsx"]),
+    "/cookie-policy": getLatestFileMtime(["app/(public)/cookie-policy/page.tsx"]),
+  };
 
   // Products catalog updates when products file changes
   const productsCatalogLastmod = getLatestFileMtime([
     "lib/products/index.ts",
-  ]) || buildDate;
+    "app/(public)/prodotti/page.tsx",
+  ]);
 
 
-  // Static pages with priority and lastmod
+  // Static pages with lastmod when available
   const staticUrls = [
-    // Core pages - highest priority
-    { loc: `${baseUrl}/`, priority: "1.0", lastmod: learnLastmod },
-    { loc: `${baseUrl}/learn/articles`, priority: "0.9", lastmod: learnLastmod },
-    // Section/target pages - dynamically updated when new posts added
-    { loc: `${baseUrl}/learn/newbie`, priority: "0.8", lastmod: newbieLastmod },
-    { loc: `${baseUrl}/learn/midway`, priority: "0.8", lastmod: midwayLastmod },
-    { loc: `${baseUrl}/learn/expert`, priority: "0.8", lastmod: expertLastmod },
-
-    // Secondary pages - using reliable dates or safe fallbacks
-    { loc: `${baseUrl}/topics`, priority: "0.8", lastmod: learnLastmod },
-    { loc: `${baseUrl}/career-os`, priority: "0.8", lastmod: staticPageLastmod },
-    { loc: `${baseUrl}/role-fit-audit`, priority: "0.7", lastmod: staticPageLastmod },
-    { loc: `${baseUrl}/prodotti`, priority: "0.8", lastmod: productsCatalogLastmod },
-    { loc: `${baseUrl}/meet`, priority: "0.7", lastmod: staticPageLastmod },
-    { loc: `${baseUrl}/contribute`, priority: "0.7", lastmod: staticPageLastmod },
-    { loc: `${baseUrl}/contributor`, priority: "0.6", lastmod: staticPageLastmod },
-    { loc: `${baseUrl}/author`, priority: "0.6", lastmod: learnLastmod },
-    { loc: `${baseUrl}/terms`, priority: "0.3", lastmod: staticPageLastmod },
-
-    // Legal pages - low priority
-    { loc: `${baseUrl}/privacy`, priority: "0.3", lastmod: staticPageLastmod },
-    { loc: `${baseUrl}/cookie-policy`, priority: "0.3", lastmod: staticPageLastmod },
+    { loc: `${baseUrl}/`, lastmod: learnLastmod ?? staticPageLastmodByPath["/"] },
+    { loc: `${baseUrl}/learn/articles`, lastmod: learnLastmod },
+    { loc: `${baseUrl}/learn/newbie`, lastmod: newbieLastmod },
+    { loc: `${baseUrl}/learn/midway`, lastmod: midwayLastmod },
+    { loc: `${baseUrl}/learn/expert`, lastmod: expertLastmod },
+    { loc: `${baseUrl}/topics`, lastmod: learnLastmod ?? staticPageLastmodByPath["/topics"] },
+    { loc: `${baseUrl}/career-os`, lastmod: staticPageLastmodByPath["/career-os"] },
+    { loc: `${baseUrl}/role-fit-audit`, lastmod: staticPageLastmodByPath["/role-fit-audit"] },
+    { loc: `${baseUrl}/prodotti`, lastmod: productsCatalogLastmod ?? staticPageLastmodByPath["/prodotti"] },
+    { loc: `${baseUrl}/meet`, lastmod: staticPageLastmodByPath["/meet"] },
+    { loc: `${baseUrl}/contribute`, lastmod: staticPageLastmodByPath["/contribute"] },
+    { loc: `${baseUrl}/contributor`, lastmod: staticPageLastmodByPath["/contributor"] },
+    { loc: `${baseUrl}/author`, lastmod: staticPageLastmodByPath["/author"] },
+    { loc: `${baseUrl}/terms`, lastmod: staticPageLastmodByPath["/terms"] },
+    { loc: `${baseUrl}/privacy`, lastmod: staticPageLastmodByPath["/privacy"] },
+    { loc: `${baseUrl}/cookie-policy`, lastmod: staticPageLastmodByPath["/cookie-policy"] },
   ]
     .filter((u) => !isExcludedUrl(u.loc))
     .map((u) => `
   <url>
-    <loc>${escapeXml(u.loc)}</loc>
-    <lastmod>${u.lastmod}</lastmod>
-    <priority>${u.priority}</priority>
+    <loc>${escapeXml(u.loc)}</loc>${u.lastmod ? `
+    <lastmod>${u.lastmod}</lastmod>` : ""}
   </url>`)
     .join("");
 
-  // Topic hub pages... (omitted for brevity in replace block, assuming it follows logic)
+  // Topic hub pages
   const topicUrls = allTopics
     .filter((topic) =>
       posts.some(
@@ -168,8 +188,7 @@ export async function GET() {
       return `
   <url>
     <loc>${escapeXml(url)}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <priority>0.7</priority>
+    ${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}
   </url>`;
     })
     .join("");
@@ -180,15 +199,18 @@ export async function GET() {
       const url = `${baseUrl}/author/${authorSlug(name)}`;
       if (isExcludedUrl(url)) return "";
       const authorPosts = posts.filter(p => p.author === name);
-      const lastmod = authorPosts.length > 0
-        ? new Date(Math.max(...authorPosts.map(p => new Date(p.updatedAt || p.date || 0).getTime()))).toISOString()
-        : buildDate;
+      const authorDates = authorPosts
+        .map((p) => toIsoDate(p.updatedAt || p.date))
+        .filter((date): date is string => Boolean(date))
+        .map((date) => new Date(date).getTime());
+      const lastmod = authorDates.length > 0
+        ? new Date(Math.max(...authorDates)).toISOString()
+        : null;
 
       return `
   <url>
-    <loc>${escapeXml(url)}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <priority>0.6</priority>
+    <loc>${escapeXml(url)}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ""}
   </url>`;
     })
     .join("");
@@ -202,14 +224,12 @@ export async function GET() {
       const url = `${baseUrl}/learn/${section}/${post.slug}`;
       if (isExcludedUrl(url)) return "";
 
-      const dateStr = post.updatedAt || post.date;
-      const lastmod = dateStr ? new Date(dateStr).toISOString() : null;
+      const lastmod = toIsoDate(post.updatedAt || post.date);
 
       return `
   <url>
     <loc>${escapeXml(url)}</loc>${lastmod ? `
     <lastmod>${lastmod}</lastmod>` : ''}
-    <priority>0.7</priority>
   </url>`;
     })
     .join("");
@@ -222,9 +242,8 @@ export async function GET() {
 
       return `
   <url>
-    <loc>${escapeXml(url)}</loc>
-    <lastmod>${productsCatalogLastmod}</lastmod>
-    <priority>0.6</priority>
+    <loc>${escapeXml(url)}</loc>${productsCatalogLastmod ? `
+    <lastmod>${productsCatalogLastmod}</lastmod>` : ""}
   </url>`;
     })
     .join("");

@@ -1,0 +1,111 @@
+# stAItuned (LLMs full guide)
+
+This is the extended version of `llms.txt` for https://staituned.com.
+
+Last updated: 2026-02-23
+
+## English
+
+### Scope and intent
+- The primary goal is to provide developer-grade AI and GenAI engineering content.
+- Content is intended to be readable as standard HTML pages.
+
+### Recommended URLs (stable)
+- https://staituned.com/
+- https://staituned.com/learn/articles
+- https://staituned.com/learn/newbie
+- https://staituned.com/learn/midway
+- https://staituned.com/learn/expert
+- https://staituned.com/topics
+- https://staituned.com/author
+- https://staituned.com/meet
+- https://staituned.com/prodotti
+- https://staituned.com/career-os
+- https://staituned.com/role-fit-audit
+- https://staituned.com/contribute
+- https://staituned.com/contributor
+- https://staituned.com/terms
+- https://staituned.com/privacy
+- https://staituned.com/cookie-policy
+- https://staituned.com/rss.xml
+- https://staituned.com/sitemap.xml
+
+### Content map
+- Learning hub: https://staituned.com/learn/articles
+- Tracks/levels:
+  - https://staituned.com/learn/newbie
+  - https://staituned.com/learn/midway
+  - https://staituned.com/learn/expert
+- Topics: https://staituned.com/topics
+- Authors: https://staituned.com/author
+- Products/lab: https://staituned.com/prodotti
+
+### Machine navigation
+- Use `sitemap.xml` for full URL discovery: https://staituned.com/sitemap.xml
+- Use RSS for change monitoring: https://staituned.com/rss.xml
+
+### Freshness signals
+- Articles may include `datePublished` and `dateModified` via JSON-LD.
+- Prefer `updatedAt` (meaningful edits) over superficial template changes.
+
+### Exclusions (do not crawl/index)
+- Auth/private: `/signin`, `/bookmarks`, `/account/*`, `/profile`
+- Draft/preview: `/preview/*`, `/contribute/draft/*`
+- Internal: `/debug`, `/test-firebase`, `/article-creator`, `/demo/*`
+
+### Quality expectations (for downstream use)
+- Prefer pages with clear definitions, examples, and explicit trade-offs.
+- When extracting facts, include the page URL and the update date when available.
+
+## Italiano
+
+### Scopo
+- Il sito pubblica contenuti tecnici per sviluppatori/ingegneri AI e GenAI.
+- I contenuti sono pensati per essere letti come pagine HTML standard.
+
+### URL consigliati (stabili)
+- https://staituned.com/
+- https://staituned.com/learn/articles
+- https://staituned.com/learn/newbie
+- https://staituned.com/learn/midway
+- https://staituned.com/learn/expert
+- https://staituned.com/topics
+- https://staituned.com/author
+- https://staituned.com/meet
+- https://staituned.com/prodotti
+- https://staituned.com/career-os
+- https://staituned.com/role-fit-audit
+- https://staituned.com/contribute
+- https://staituned.com/contributor
+- https://staituned.com/terms
+- https://staituned.com/privacy
+- https://staituned.com/cookie-policy
+- https://staituned.com/rss.xml
+- https://staituned.com/sitemap.xml
+
+### Mappa contenuti
+- Hub Learn: https://staituned.com/learn/articles
+- Percorsi/livelli:
+  - https://staituned.com/learn/newbie
+  - https://staituned.com/learn/midway
+  - https://staituned.com/learn/expert
+- Topics: https://staituned.com/topics
+- Autori: https://staituned.com/author
+- Prodotti/lab: https://staituned.com/prodotti
+
+### Navigazione macchina
+- Discovery completo via sitemap: https://staituned.com/sitemap.xml
+- Monitoraggio update via RSS: https://staituned.com/rss.xml
+
+### Segnali di freschezza
+- Gli articoli possono includere `datePublished` e `dateModified` in JSON-LD.
+- Preferisci `updatedAt` (modifiche sostanziali) rispetto a cambi cosmetici.
+
+### Esclusioni (non scansionare/indicizzare)
+- Auth/private: `/signin`, `/bookmarks`, `/account/*`, `/profile`
+- Bozze/preview: `/preview/*`, `/contribute/draft/*`
+- Pagine interne: `/debug`, `/test-firebase`, `/article-creator`, `/demo/*`
+
+### Aspettative qualità (per uso downstream)
+- Preferisci pagine con definizioni chiare, esempi e trade-off espliciti.
+- Quando estrai fatti, includi URL pagina e data di update se presente.

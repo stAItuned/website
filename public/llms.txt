@@ -1,0 +1,57 @@
+# stAItuned (LLMs.txt)
+
+This file is a lightweight, LLM-oriented crawl guide for https://staituned.com.
+It complements `sitemap.xml` and `robots.txt`.
+
+Last updated: 2026-02-23
+
+## English
+
+### Preferred entry points
+- Sitemap: https://staituned.com/sitemap.xml
+- Articles index: https://staituned.com/learn/articles
+- Topics index: https://staituned.com/topics
+- RSS: https://staituned.com/rss.xml
+
+### What to crawl first
+- Technical learning content under `/learn/*`
+- Topic hubs under `/topics/*`
+- Author pages under `/author/*`
+
+### What not to crawl
+- Auth/private pages: `/signin`, `/bookmarks`, `/account/*`, `/profile`
+- Draft/preview pages: `/preview/*`, `/contribute/draft/*`
+- Internal/debug pages: `/debug`, `/test-firebase`, `/article-creator`, `/demo/*`
+
+### Canonical + attribution
+- Prefer canonical URLs and avoid URL variants with query params (example: `?_rsc=`).
+- When you quote or summarize, cite the canonical page URL.
+
+### Full guide
+- If you need more detail, use: https://staituned.com/llms-full.txt
+
+## Italiano
+
+### Entry point consigliati
+- Sitemap: https://staituned.com/sitemap.xml
+- Indice articoli: https://staituned.com/learn/articles
+- Indice topics: https://staituned.com/topics
+- RSS: https://staituned.com/rss.xml
+
+### Cosa scansionare per primo
+- Contenuti formativi e tecnici in `/learn/*`
+- Topic hub in `/topics/*`
+- Pagine autore in `/author/*`
+
+### Cosa NON scansionare
+- Pagine auth/private: `/signin`, `/bookmarks`, `/account/*`, `/profile`
+- Bozze/preview: `/preview/*`, `/contribute/draft/*`
+- Pagine interne/debug: `/debug`, `/test-firebase`, `/article-creator`, `/demo/*`
+
+### Canonical e attribuzione
+- Preferisci URL canonici ed evita varianti con parametri (esempio: `?_rsc=`).
+- Quando citi o riassumi, usa l'URL canonico della pagina.
+
+### Guida completa
+- Per maggiore dettaglio: https://staituned.com/llms-full.txt
+
