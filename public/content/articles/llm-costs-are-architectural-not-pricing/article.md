@@ -7,19 +7,22 @@ cover: >-
   https://storage.googleapis.com/editorial-planner-images/article-images/1824726b-3564-4ec2-b14d-552f858e2cab/cover_20260217_085733.webp
 meta: >-
   Most LLM spend is hidden in debugging, retries, and observability. Why agentic RAG gets expensive and how hybrid SLM routing restores control.
-date: 2026-02-17T10:26:54.000Z
-published: false
-primaryTopic: genai-fundamentals
+date: 2026-02-24T00:00:25.000Z
+published: true
+primaryTopic: production
 topics:
-  - genai
+  - model-architecture
+  - rag
+  - business
 geo:
   quickAnswer:
     title: "Architecture-First LLM Cost Control"
     bullets:
-      - "Token pricing is a distraction; the real cost driver is **operational entropy**, the engineering time spent debugging stochastic agentic chains."
-      - "Hybrid router-first systems reduce cost by constraining when expensive reasoning is used and by improving debuggability."
-      - "Track escalation rate, per-lane latency, and disagreement rate to keep architecture economics observable."
-    oneThing: "Control architecture first: route simple requests to specialized paths and escalate to large reasoning models only when necessary."
+      - "Token pricing is a micro-optimization. The dominant cost driver is **Operational Entropy**: the engineering debt of debugging stochastic, multi-step agentic chains."
+      - "**Router-First Architecture** is the primary control mechanism. Triage 80% of traffic to specialized SLMs (Local/Fast) and use large reasoning models only as an **intentional escalation path**."
+      - "Reliability decays multiplicatively. A 10-step chain with 97% individual step reliability yields only **~74% total success rate**. Minimize depth to reduce the 'Unreliability Tax'."
+      - "Track **Escalation Rate (<20% target)** and **Bimodal Latency** to make system economics observable. If debugging time dominates API spend, fix your component boundaries, not your prompts."
+    oneThing: "Treat the LLM as an expensive escalation path, not a default. Shift complexity from runtime debugging to upfront architectural routing."
   audience:
     title: "Who is this for"
     description: "AI engineers and product teams operating production RAG/agentic systems who need to reduce total cost of ownership, improve reliability, and keep debugging complexity under control."
