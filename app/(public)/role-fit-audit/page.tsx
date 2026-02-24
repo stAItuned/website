@@ -137,7 +137,7 @@ export default async function RoleFitAuditPage({
           <RoleFitMiniFAQ locale={locale} />
         </section>
       </main>
-      <AuditModal />
+      <AuditModal locale={locale} />
     </CareerOSProvider>
   )
 }

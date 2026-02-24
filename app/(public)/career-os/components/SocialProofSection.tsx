@@ -1,5 +1,6 @@
-import { Code2, FileText, FileCheck2, CheckCircle2, Users } from 'lucide-react'
+import { Code2, FileText, FileCheck2, CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
+import { careerOSTranslations, type CareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 /**
  * SocialProofSection - Process Proof & Output Standards
@@ -44,13 +45,6 @@ const PROCESS_PROOF: ProcessProofItem[] = [
         articleLink: 'https://staituned.com/learn/expert/cag-vs-rag',
         articleLabel: 'CAG vs RAG: Which Enterprise AI Approach Wins?',
     },
-]
-
-const QUALITY_STANDARDS = [
-    'Definition of Done',
-    'Evaluation Harness',
-    'Decision Log',
-    'Peer Review',
 ]
 
 /**
@@ -124,26 +118,34 @@ function ProofCard({ item }: { item: ProcessProofItem }) {
     )
 }
 
-export default function SocialProofSection() {
+export default function SocialProofSection({ locale }: { locale: CareerOSLocale }) {
+    const t = careerOSTranslations[locale].socialProof
+    const proofItems = PROCESS_PROOF.map((item, index) => ({
+        ...item,
+        title: t.cards[index]?.title ?? item.title,
+        description: t.cards[index]?.description ?? item.description,
+        articleLabel: t.cards[index]?.articleLabel ?? item.articleLabel,
+    }))
+
     return (
         <section id="social-proof" className="py-16 md:py-20 px-6 bg-white dark:bg-[#0F1117]">
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <span className="inline-block px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-4">
-                        🎯 Cosa Costruirai
+                        🎯 {t.badge}
                     </span>
                     <h2 className="text-2xl md:text-3xl font-bold text-[#1A1E3B] dark:text-white mb-3">
-                        Output tangibili, non slide
+                        {t.title}
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        Ogni partecipante esce con asset verificabili che riducono il rischio percepito per l'hiring manager.
+                        {t.subtitle}
                     </p>
                 </div>
 
                 {/* Process Proof Grid */}
                 <div className="grid md:grid-cols-3 gap-6 mb-10">
-                    {PROCESS_PROOF.map((item, i) => (
+                    {proofItems.map((item, i) => (
                         <ProofCard key={i} item={item} />
                     ))}
                 </div>
@@ -153,14 +155,14 @@ export default function SocialProofSection() {
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
                             <h3 className="text-lg font-bold text-[#1A1E3B] dark:text-white mb-1">
-                                Standard di qualità inclusi
+                                {t.qualityTitle}
                             </h3>
                             <p className="text-sm text-slate-600 dark:text-slate-400">
-                                Ogni progetto segue checklist da engineering professionale.
+                                {t.qualitySubtitle}
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            {QUALITY_STANDARDS.map((standard, i) => (
+                            {t.standards.map((standard, i) => (
                                 <span
                                     key={i}
                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#0F1117] border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-300"
@@ -194,7 +196,7 @@ export default function SocialProofSection() {
                         href="#journey"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1A1E3B] dark:bg-white/10 text-white font-semibold hover:bg-[#383F74] dark:hover:bg-white/20 transition-colors"
                     >
-                        Scopri il percorso →
+                        {t.cta}
                     </a>
                 </div>
             </div>

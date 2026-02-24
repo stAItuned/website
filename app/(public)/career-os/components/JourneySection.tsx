@@ -22,6 +22,7 @@ import { Tooltip } from '@/components/ui/Tooltip'
 import { HoverCard } from '@/components/ui/HoverCard'
 import { useCareerOS, type ObjectiveType } from '../context/CareerOSContext'
 import { trackSelectContent } from '@/lib/analytics/trackEvent'
+import { careerOSTranslations, type CareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 
 /**
@@ -1412,9 +1413,10 @@ function ModeSelectionCard({ onSelect }: { onSelect: (mode: 'classe' | '1to1') =
  * JourneySection - Main unified timeline component with progressive disclosure
  * Now with gamified step-by-step journey
  */
-export default function JourneySection() {
+export default function JourneySection({ locale }: { locale: CareerOSLocale }) {
     // Context State
     const { objective, setObjective, setMode, scrollToSection } = useCareerOS()
+    const t = careerOSTranslations[locale].journey
 
     // Local UI State
     const [selectedWeek, setSelectedWeek] = useState<number | null>(1)
@@ -1488,7 +1490,7 @@ export default function JourneySection() {
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF272]/20 text-[#1A1E3B] dark:text-[#FFF272] text-sm font-semibold mb-6">
                         <Sparkles className="w-4 h-4" />
-                        Il percorso
+                        {t.sectionTitle}
                     </div>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1A1E3B] dark:text-white mb-4">
                         Cosa porti a casa{' '}

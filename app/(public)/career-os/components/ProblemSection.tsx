@@ -1,24 +1,26 @@
 import { UserX, FileQuestion, VideoOff } from 'lucide-react'
+import { careerOSTranslations, type CareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 /**
  * ProblemSection - 3 pain cards (simplified, compact)
  */
-export default function ProblemSection() {
+export default function ProblemSection({ locale }: { locale: CareerOSLocale }) {
+    const t = careerOSTranslations[locale].problem
     const problems = [
         {
             icon: UserX,
-            title: 'Nessun target',
-            desc: '"Cerco un ruolo AI" non basta. Serve: RAG Engineer, Agent Engineer, GenAI Product.'
+            title: t.items[0].title,
+            desc: t.items[0].description,
         },
         {
             icon: FileQuestion,
-            title: 'CV generico',
-            desc: 'I recruiter cercano: RAG, Agents, Evaluation. "Appassionato di AI" = cestino.'
+            title: t.items[1].title,
+            desc: t.items[1].description,
         },
         {
             icon: VideoOff,
-            title: 'Zero proof',
-            desc: 'Servono: demo funzionante, repo pulita, evaluation con metriche reali.'
+            title: t.items[2].title,
+            desc: t.items[2].description,
         }
     ]
 
@@ -26,7 +28,7 @@ export default function ProblemSection() {
         <section className="py-16 bg-slate-50 dark:bg-[#151925]">
             <div className="max-w-5xl mx-auto px-6">
                 <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-[#1A1E3B] dark:text-white">
-                    Perché non ti chiamano <span className="text-rose-500">(anche se sai programmare)</span>
+                    {t.title} <span className="text-rose-500">{t.titleAccent}</span>
                 </h2>
 
                 <div className="grid md:grid-cols-3 gap-6">

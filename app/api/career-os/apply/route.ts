@@ -1,11 +1,12 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { db } from '@/lib/firebase/admin'
 import { NextRequest, NextResponse } from 'next/server'
+import { careerOSTranslations, normalizeCareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-function buildCalendlyLink(baseUrl: string, email: string, name: string) {
-    if (!baseUrl) return 'Non configurato'
+function buildCalendlyLink(baseUrl: string, email: string, name: string, notConfiguredLabel: string) {
+    if (!baseUrl) return notConfiguredLabel
     const normalizedBaseUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`
     try {
         const url = new URL(normalizedBaseUrl)
@@ -43,12 +44,16 @@ export async function POST(req: NextRequest) {
             pricingTier,
             page,
             userAgent,
+            locale: rawLocale,
         } = body || {}
-        if (!name || typeof name !== 'string' || !name.trim()) return NextResponse.json({ error: 'Nome richiesto.' }, { status: 400 })
-        if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) return NextResponse.json({ error: 'Email non valida.' }, { status: 400 })
-        if (!background || typeof background !== 'string') return NextResponse.json({ error: 'Background richiesto.' }, { status: 400 })
-        if (!roleTarget || typeof roleTarget !== 'string') return NextResponse.json({ error: 'Ruolo richiesto.' }, { status: 400 })
-        if (!acceptedPrivacy) return NextResponse.json({ error: 'Accettazione privacy richiesta.' }, { status: 400 })
+        const locale = normalizeCareerOSLocale(rawLocale)
+        const t = careerOSTranslations[locale].apiErrors.apply
+
+        if (!name || typeof name !== 'string' || !name.trim()) return NextResponse.json({ error: t.nameRequired }, { status: 400 })
+        if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) return NextResponse.json({ error: t.invalidEmail }, { status: 400 })
+        if (!background || typeof background !== 'string') return NextResponse.json({ error: t.backgroundRequired }, { status: 400 })
+        if (!roleTarget || typeof roleTarget !== 'string') return NextResponse.json({ error: t.roleRequired }, { status: 400 })
+        if (!acceptedPrivacy) return NextResponse.json({ error: t.privacyRequired }, { status: 400 })
 
         const normalizedEmail = email.trim().toLowerCase()
         const calendlyBaseUrl =
@@ -83,25 +88,25 @@ export async function POST(req: NextRequest) {
         }
 
         // 3. Telegram Notification
-        const calendlyLink = `${calendlyBaseUrl}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(name.trim())}`
+        const calendlyLink = buildCalendlyLink(calendlyBaseUrl, normalizedEmail, name.trim(), t.notConfigured)
 
         const telegramMessage = [
-            '🆕 Nuova Application Career OS',
+            locale === 'en' ? '🆕 New Career OS Application' : '🆕 Nuova Application Career OS',
             '',
-            `👤 Nome: ${name.trim()}`,
+            `${locale === 'en' ? '👤 Name' : '👤 Nome'}: ${name.trim()}`,
             `📧 Email: ${normalizedEmail}`,
-            phone ? `📱 Telefono: ${phone.trim()}` : '',
-            `🎓 Background: ${background.trim()}`,
-            `🎯 Ruolo Target: ${roleTarget}`,
+            phone ? `${locale === 'en' ? '📱 Phone' : '📱 Telefono'}: ${phone.trim()}` : '',
+            `🎓 ${locale === 'en' ? 'Background' : 'Background'}: ${background.trim()}`,
+            `🎯 ${locale === 'en' ? 'Target Role' : 'Ruolo Target'}: ${roleTarget}`,
             `⏳ Timeline: ${timeline}`,
-            `🚧 Blocco: ${mainBlock}`,
-            `� Candidature/mese: ${applicationsLastMonth}`,
+            `${locale === 'en' ? '🚧 Main Blocker' : '🚧 Blocco'}: ${mainBlock}`,
+            `${locale === 'en' ? '📨 Applications/month' : '📨 Candidature/mese'}: ${applicationsLastMonth}`,
             linkedinUrl ? `🔗 LinkedIn: ${linkedinUrl}` : '',
-            pricingTier ? `💎 Interesse: ${pricingTier}` : '',
+            pricingTier ? `${locale === 'en' ? '💎 Interest' : '💎 Interesse'}: ${pricingTier}` : '',
             source ? `📍 Source: ${source}` : '',
-            notes?.trim() ? `🗒 Note: ${notes.trim()}` : '',
+            notes?.trim() ? `${locale === 'en' ? '🗒 Notes' : '🗒 Note'}: ${notes.trim()}` : '',
             '',
-            `📅 Prenota call: ${calendlyLink}`,
+            `${locale === 'en' ? '📅 Book call' : '📅 Prenota call'}: ${calendlyLink}`,
         ]
             .filter(Boolean)
             .join('\n')
@@ -117,6 +122,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true }, { status: 200 })
     } catch (err) {
         console.error('Career OS application error:', err)
-        return NextResponse.json({ error: 'Server error' }, { status: 500 })
+        return NextResponse.json({ error: careerOSTranslations.it.apiErrors.apply.serverError }, { status: 500 })
     }
 }

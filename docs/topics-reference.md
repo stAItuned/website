@@ -24,7 +24,7 @@ This document provides a comprehensive list of the official topic tags used acro
 
 | Nome Topic | Tag (Slug) | Descrizione |
 | :--- | :--- | :--- |
-| **AI Career & Learning** | `ai-career` | GenAI Fit Check, Career OS e strategie di apprendimento nell'era AI. |
+| **AI Career & Learning** | `ai-career` | GenAI Fit Check, Career OS (bilingue `it/en`) e strategie di apprendimento nell'era AI. |
 
 ## Operations (Ingegneria e Produzione)
 
@@ -35,4 +35,4 @@ This document provides a comprehensive list of the official topic tags used acro
 | **LLM Evaluation & Benchmarks** | `llm-evaluation` | Misurazione delle performance, ELO rating, benchmark e framework di valutazione. |
 
 ---
-*Ultimo aggiornamento: 17 Febbraio 2026*
+*Ultimo aggiornamento: 24 Febbraio 2026*

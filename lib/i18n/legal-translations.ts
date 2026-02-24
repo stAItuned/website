@@ -115,7 +115,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Contratto di licenza e termini d’uso per Career OS.',
             badge: 'stAItuned',
             intro: "Il presente contratto regola l'accesso e l'utilizzo di Career OS, il percorso formativo avanzato per carriere in ambito AI. Acquistando il servizio o accedendo ai materiali, l'utente accetta integralmente le seguenti condizioni.",
-            lastUpdate: 'Ultimo aggiornamento: 16 gennaio 2026',
+            lastUpdate: 'Ultimo aggiornamento: 24 febbraio 2026',
             sections: [
                 {
                     title: '1. Oggetto del Servizio',
@@ -204,6 +204,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     items: [
                         'Dati di autenticazione: email, nome, foto profilo e identificativi tecnici;',
                         'Dati Role Fit Audit: risposte al questionario, risultati, archetipo e suggerimenti di carriera generati;',
+                        'Dati Waitlist Career OS: email, tier/mode di interesse, consenso privacy obbligatorio e consenso marketing (se fornito);',
                         'Dati Contributor Path: pitch, bozze, interviste, outline e accordo legale firmato (nome legale, codice fiscale, data di firma);',
                         'Questi dati sono utilizzati esclusivamente per migliorare il servizio, fornire supporto e gestire le funzionalità della piattaforma.'
                     ]
@@ -219,7 +220,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             badge: 'stAItuned',
             intro: 'Tutte le interazioni con il sito stAItuned sono gestite con rispetto per la tua riservatezza. Questa pagina spiega come trattiamo i dati raccolti dai visitatori del blog, dalle aziende interessate ai nostri servizi AI, dalle persone che prenotano una call e da chi decide di unirsi alla nostra community o newsletter.',
             controller: 'Il titolare del trattamento è Daniele Moltisanti. Email di contatto: info@staituned.com.',
-            lastUpdate: 'Ultimo aggiornamento: 16 gennaio 2026',
+            lastUpdate: 'Ultimo aggiornamento: 24 febbraio 2026',
             audience: {
                 title: 'A chi è rivolta questa informativa',
                 intro: 'Per chiarezza, la rendiamo disponibile a quattro gruppi principali:',
@@ -272,11 +273,16 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate.'
                     },
                     {
+                        title: 'Waitlist Career OS',
+                        content: 'Quando entri in lista di attesa su Career OS raccogliamo email, piano/modalità di interesse (intent), consenso privacy obbligatorio e consenso marketing opzionale. Usiamo questi dati per ricontattarti con disponibilità, pricing e aggiornamenti coerenti con il consenso espresso.'
+                    },
+                    {
                         title: 'Accesso Amministrativo ai Dati',
                         content: 'Per garantire la qualità del servizio e gestire efficacemente le funzionalità della piattaforma, il team amministrativo di stAItuned ha accesso ai seguenti dati:',
                         items: [
                             'Dati di autenticazione: email, nome, foto profilo e User ID associati al tuo account;',
                             'Dati Role Fit Audit: risposte al questionario, risultati dell\'analisi, archetipo assegnato e suggerimenti di carriera;',
+                            'Dati Waitlist Career OS: email, intent (tier/mode), fonte della richiesta e stato dei consensi;',
                             'Dati Contributor Path: pitch, bozze, risposte alle interviste, outline generati e stato dell\'accordo legale firmato (nome legale, codice fiscale, data di firma).'
                         ]
                     }
@@ -301,7 +307,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             retention: {
                 title: 'Conservazione e cancellazione',
-                content1: 'Le richieste di contatto sono archiviate per 12-24 mesi. I dati newsletter sono conservati finché il consenso è attivo.',
+                content1: 'Le richieste di contatto sono archiviate per 12-24 mesi. I dati newsletter sono conservati finché il consenso è attivo. I lead waitlist Career OS sono conservati per 12 mesi salvo obblighi diversi di legge.',
                 content2: 'Candidature e collaborazioni vengono conservate per 12-24 mesi per valutazioni future.'
             },
             rights: {
@@ -364,7 +370,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'License agreement and terms of use for Career OS.',
             badge: 'stAItuned',
             intro: "This agreement governs access to and use of Career OS, the advanced training path for AI careers. By purchasing the service or accessing the materials, the user fully accepts the following conditions.",
-            lastUpdate: 'Last update: January 16, 2026',
+            lastUpdate: 'Last update: February 24, 2026',
             sections: [
                 {
                     title: '1. Subject of the Service',
@@ -453,6 +459,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     items: [
                         'Authentication data: email, name, profile picture, and technical identifiers;',
                         'Role Fit Audit data: questionnaire responses, results, archetype, and generated career suggestions;',
+                        'Career OS waitlist data: email, selected intent (tier/mode), mandatory privacy consent, and marketing consent (if provided);',
                         'Contributor Path data: pitches, drafts, interviews, outlines, and signed legal agreement (legal name, tax ID, signing date);',
                         'This data is used exclusively to improve the service, provide support, and manage platform features.'
                     ]
@@ -468,7 +475,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             badge: 'stAItuned',
             intro: 'All interactions with the stAItuned site are managed with respect for your privacy. This page explains how we process data collected from blog visitors, businesses interested in our AI services, people booking calls, and those joining our community or newsletter.',
             controller: 'The data controller is Daniele Moltisanti. Contact email: info@staituned.com.',
-            lastUpdate: 'Last update: January 16, 2026',
+            lastUpdate: 'Last update: February 24, 2026',
             audience: {
                 title: 'Who this policy is for',
                 intro: 'For clarity, we make it available to four main groups:',
@@ -521,11 +528,16 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends.'
                     },
                     {
+                        title: 'Career OS Waitlist',
+                        content: 'When you join the Career OS waitlist, we collect your email, selected plan/mode intent, mandatory privacy consent, and optional marketing consent. We use this data to contact you about availability, pricing, and updates aligned with your consent.'
+                    },
+                    {
                         title: 'Administrative Access to Data',
                         content: 'To ensure service quality and effectively manage platform features, the stAItuned administrative team has access to the following data:',
                         items: [
                             'Authentication data: email, name, profile picture, and User ID associated with your account;',
                             'Role Fit Audit data: questionnaire responses, analysis results, assigned archetype, and career suggestions;',
+                            'Career OS waitlist data: email, intent (tier/mode), lead source, and consent status;',
                             'Contributor Path data: pitches, drafts, interview responses, generated outlines, and signed legal agreement status (legal name, tax ID, signing date).'
                         ]
                     }
@@ -550,7 +562,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             retention: {
                 title: 'Retention and Deletion',
-                content1: 'Contact requests are stored for 12-24 months. Newsletter data is kept as long as consent is active.',
+                content1: 'Contact requests are stored for 12-24 months. Newsletter data is kept as long as consent is active. Career OS waitlist leads are retained for 12 months unless legal obligations require otherwise.',
                 content2: 'Applications and collaborations are kept for 12-24 months for future evaluations.'
             },
             rights: {

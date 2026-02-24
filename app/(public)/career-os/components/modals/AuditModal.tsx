@@ -2,13 +2,16 @@
 
 import { FormEvent, useState, useEffect } from 'react'
 import { useCareerOS } from '../../context/CareerOSContext'
+import { careerOSTranslations, normalizeCareerOSLocale, type CareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error'
 
 import { trackAuditModalOpen, trackAuditModalAbandon, trackAuditModalSubmit, trackEvent } from '@/lib/analytics/trackEvent'
 
-export default function AuditModal() {
+export default function AuditModal({ locale = 'it' }: { locale?: CareerOSLocale }) {
     const { isAuditModalOpen, closeAuditModal } = useCareerOS()
+    const resolvedLocale = normalizeCareerOSLocale(locale)
+    const t = careerOSTranslations[resolvedLocale].auditModal
     const [status, setStatus] = useState<FormStatus>('idle')
     const [message, setMessage] = useState('')
 
@@ -68,7 +71,7 @@ export default function AuditModal() {
         setCurrentSlot('') // Reset input
         // Update availability string automatically
         handleChange('availability', newSlots.map(s =>
-            new Date(s).toLocaleString('it-IT', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+            new Date(s).toLocaleString(resolvedLocale === 'en' ? 'en-US' : 'it-IT', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
         ).join('\n'))
     }
 
@@ -76,7 +79,7 @@ export default function AuditModal() {
         const newSlots = slots.filter((_, i) => i !== idx)
         setSlots(newSlots)
         handleChange('availability', newSlots.map(s =>
-            new Date(s).toLocaleString('it-IT', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+            new Date(s).toLocaleString(resolvedLocale === 'en' ? 'en-US' : 'it-IT', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
         ).join('\n'))
     }
 
@@ -94,7 +97,8 @@ export default function AuditModal() {
                     phone: formData.phone,
                     acceptedPrivacy: formData.acceptedPrivacy,
                     source: 'audit-modal',
-                    userAgent: navigator.userAgent
+                    userAgent: navigator.userAgent,
+                    locale: resolvedLocale,
                 })
             })
 
@@ -111,7 +115,7 @@ export default function AuditModal() {
             })
         } catch (err) {
             setStatus('error')
-            setMessage('Qualcosa è andato storto. Riprova o scrivici direttamente.')
+            setMessage(t.errors.generic)
         }
     }
 
@@ -127,13 +131,13 @@ export default function AuditModal() {
                 <div className="flex items-start justify-between gap-4 mb-6">
                     <div>
                         <span className="inline-block px-2 py-1 rounded-md bg-amber-500/10 text-amber-600 text-[10px] font-bold uppercase tracking-wider mb-2">
-                            Parliamone
+                            {t.badge}
                         </span>
                         <h3 className="text-xl font-bold text-[#1A1E3B] dark:text-white">
-                            Hai ancora dei dubbi? Parliamone.
+                            {t.title}
                         </h3>
                         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            Prenota una video-call gratuita di 15 minuti per capire se Career OS è il percorso giusto per i tuoi obiettivi.
+                            {t.subtitle}
                         </p>
                     </div>
                     <button
@@ -142,6 +146,7 @@ export default function AuditModal() {
                             closeAuditModal()
                         }}
                         className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800"
+                        aria-label={t.close}
                     >
                         ✕
                     </button>
@@ -153,22 +158,22 @@ export default function AuditModal() {
                         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
                             <span className="text-2xl">✓</span>
                         </div>
-                        <h4 className="text-lg font-bold text-[#1A1E3B] dark:text-white">Richiesta ricevuta</h4>
+                        <h4 className="text-lg font-bold text-[#1A1E3B] dark:text-white">{t.successTitle}</h4>
                         <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-                            Un mentor ti contatterà a breve sulla mail indicata.
+                            {t.successSubtitle}
                         </p>
                         <button
                             onClick={closeAuditModal}
                             className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white hover:bg-slate-800"
                         >
-                            Chiudi
+                            {t.closeCta}
                         </button>
                     </div>
                 ) : (
                     /* Form State */
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Nome e Cognome</label>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">{t.labels.fullName}</label>
                             <input
                                 type="text"
                                 required
@@ -178,7 +183,7 @@ export default function AuditModal() {
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Email</label>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">{t.labels.email}</label>
                             <input
                                 type="email"
                                 required
@@ -188,12 +193,12 @@ export default function AuditModal() {
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Cosa ti frena?</label>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">{t.labels.doubt}</label>
                             <textarea
                                 required
                                 rows={3}
                                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-amber-500 dark:border-slate-800 dark:bg-slate-900"
-                                placeholder="Es: Ho poco tempo / Non so se ho il background giusto..."
+                                placeholder={t.labels.doubtPlaceholder}
                                 value={formData.doubt}
                                 onChange={e => handleChange('doubt', e.target.value)}
                             />
@@ -201,14 +206,14 @@ export default function AuditModal() {
 
                         <div>
                             <label className="block text-xs font-semibold text-slate-500 mb-2">
-                                Disponibilità per call (Proponi 2-3 orari)
+                                {t.labels.availability}
                             </label>
 
                             {/* Slot List */}
                             <div className="mb-3 flex flex-wrap gap-2">
                                 {slots.map((slot, idx) => (
                                     <div key={idx} className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-1.5 text-xs text-amber-900 border border-amber-100">
-                                        <span>{new Date(slot).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' })}</span>
+                                        <span>{new Date(slot).toLocaleString(resolvedLocale === 'en' ? 'en-US' : 'it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short' })}</span>
                                         <button
                                             type="button"
                                             onClick={() => removeSlot(idx)}
@@ -235,13 +240,13 @@ export default function AuditModal() {
                                     disabled={!currentSlot}
                                     className="rounded-xl bg-slate-900 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800 disabled:opacity-50"
                                 >
-                                    Aggiungi
+                                    {t.addSlot}
                                 </button>
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Numero di Telefono (Opzionale)</label>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">{t.labels.phoneOptional}</label>
                             <input
                                 type="tel"
                                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-amber-500 dark:border-slate-800 dark:bg-slate-900"
@@ -260,7 +265,9 @@ export default function AuditModal() {
                                 onChange={e => setFormData(prev => ({ ...prev, acceptedPrivacy: e.target.checked }))}
                             />
                             <label htmlFor="privacy-audit" className="text-xs text-slate-500">
-                                Accetto il trattamento dei dati personali come descritto nella <a href="/privacy" className="underline hover:text-amber-500" target="_blank">Privacy Policy</a> e nei <a href="/terms" className="underline hover:text-amber-500" target="_blank">Termini</a>
+                                {t.labels.privacyLabelPrefix}{' '}
+                                <a href="/privacy" className="underline hover:text-amber-500" target="_blank">{t.labels.privacyPolicy}</a>{' '}
+                                {resolvedLocale === 'en' ? 'and in the' : 'e nei'} <a href="/terms" className="underline hover:text-amber-500" target="_blank">{t.labels.terms}</a>
                             </label>
                         </div>
 
@@ -283,7 +290,7 @@ export default function AuditModal() {
                             disabled={status === 'loading'}
                             className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white hover:bg-slate-800 disabled:opacity-50"
                         >
-                            {status === 'loading' ? 'Invio...' : 'Prenota Call'}
+                            {status === 'loading' ? t.submitting : t.submit}
                         </button>
                     </form>
                 )}

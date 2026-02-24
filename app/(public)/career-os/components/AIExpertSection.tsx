@@ -5,27 +5,39 @@ import Image from 'next/image'
 
 import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
 import { useCareerOS } from '../context/CareerOSContext'
+import { careerOSTranslations, type CareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 /**
  * AIExpertSection - Differentiator section showing AI Expert Guidance value
  * Includes mentor placeholder for future photo/bio
  */
-export default function AIExpertSection() {
+export default function AIExpertSection({ locale }: { locale: CareerOSLocale }) {
     const { openAuditModal } = useCareerOS()
+    const t = careerOSTranslations[locale].aiExpert
 
     return (
         <section id="ai-expert" className="py-24 bg-gradient-to-br from-[#1A1E3B] to-[#383F74] text-white">
             <div className="max-w-5xl mx-auto px-6">
                 <div className="text-center mb-12">
                     <span className="inline-block px-4 py-2 rounded-full bg-[#FCD34D]/20 text-[#FCD34D] text-sm font-semibold mb-6">
-                        🏆 Il Nostro Differenziatore
+                        🏆 {t.badge}
                     </span>
                     <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                        AI Expert Guidance
+                        {t.title}
                     </h2>
                     <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-                        Impari da <strong>chi assume per questi ruoli</strong>, non da career coach generici.<br />
-                        <em>Insider knowledge reale, non teoria.</em>
+                        {locale === 'en' ? (
+                            <>
+                                Learn from <strong>people hiring for these roles</strong>, not generic career coaches.
+                                <br />
+                                <em>Real insider knowledge, not theory.</em>
+                            </>
+                        ) : (
+                            <>
+                                Impari da <strong>chi assume per questi ruoli</strong>, non da career coach generici.<br />
+                                <em>Insider knowledge reale, non teoria.</em>
+                            </>
+                        )}
                     </p>
                 </div>
 
@@ -86,7 +98,7 @@ export default function AIExpertSection() {
                         <div className="pt-6 border-t border-white/10">
                             <p className="text-xs uppercase tracking-widest text-slate-500 font-semibold mb-3">Proven Roles</p>
                             <div className="flex flex-wrap gap-2">
-                                <span className="px-2 py-1 rounded bg-white/10 text-xs text-slate-300">Principal Data Scientist</span>
+                        <span className="px-2 py-1 rounded bg-white/10 text-xs text-slate-300">Principal Data Scientist</span>
                                 <span className="px-2 py-1 rounded bg-white/10 text-xs text-slate-300">AI Research Engineer</span>
                             </div>
                         </div>
@@ -134,7 +146,7 @@ export default function AIExpertSection() {
                         onClick={() => trackCareerOSCTAClicked('expert', 'vedi_cosa_costruirai')}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FCD34D] text-[#1A1E3B] font-bold hover:bg-[#F59E0B] transition-colors shadow-lg w-full sm:w-auto justify-center"
                     >
-                        Vedi cosa costruirai →
+                        {t.ctaPrimary}
                     </a>
                     <button
                         onClick={() => {
@@ -143,7 +155,7 @@ export default function AIExpertSection() {
                         }}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-[#FCD34D]/30 text-white font-bold hover:bg-white/10 transition-colors shadow-lg w-full sm:w-auto justify-center"
                     >
-                        Hai dei dubbi? Parliamone
+                        {t.ctaSecondary}
                     </button>
                 </div>
             </div>

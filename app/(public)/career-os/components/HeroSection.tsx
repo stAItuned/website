@@ -10,34 +10,36 @@ import { motion } from 'framer-motion'
 
 import { trackCareerOSCTAClicked } from '@/lib/analytics/trackEvent'
 import { useCareerOS } from '../context/CareerOSContext'
+import { careerOSTranslations, type CareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 /**
  * HeroSection - Career OS landing page hero
  * REVISED: Problem-focused headline with attention-grabbing stats
  * Layout: Message + Hook Stats + CTAs (above fold), Market stats (right on desktop)
  */
-export default function HeroSection() {
+export default function HeroSection({ locale }: { locale: CareerOSLocale }) {
     const { openAuditModal } = useCareerOS()
+    const t = careerOSTranslations[locale]
 
     const marketStats = [
         {
             value: '+88%',
-            label: 'Domanda GenAI 2024',
-            subLabel: 'vs 2023',
+            label: locale === 'en' ? 'GenAI demand 2024' : 'Domanda GenAI 2024',
+            subLabel: locale === 'en' ? 'vs 2023' : 'vs 2023',
             source: 'Hays Salary Guide 2024',
             link: 'https://www.hays.it/press-release/content/gen-ia-cresce-richiesta-profili'
         },
         {
             value: '+73%',
-            label: 'Skill AI richieste',
-            subLabel: 'Negli annunci IT',
+            label: locale === 'en' ? 'AI skills requested' : 'Skill AI richieste',
+            subLabel: locale === 'en' ? 'In IT job posts' : 'Negli annunci IT',
             source: 'Osservatorio Competenze 2024',
             link: 'https://www.assintel.it/wp-content/uploads/2024/12/Competenze-Digitali-Unopportunita-per-lo-sviluppo-del-Paese.pdf'
         },
         {
             value: '21k+',
-            label: 'Posizioni aperte',
-            subLabel: 'Settore AI/Data',
+            label: locale === 'en' ? 'Open positions' : 'Posizioni aperte',
+            subLabel: locale === 'en' ? 'AI/Data sector' : 'Settore AI/Data',
             source: 'Anitec-Assinform 2024',
             link: 'https://www.assintel.it/wp-content/uploads/2024/12/Competenze-Digitali-Unopportunita-per-lo-sviluppo-del-Paese.pdf'
         }
@@ -88,9 +90,17 @@ export default function HeroSection() {
                             variants={itemVariants}
                             className="text-[1.75rem] sm:text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl font-black leading-[1.15] text-white"
                         >
-                            <span className="sm:whitespace-nowrap">Tutti vogliono ruoli <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF272] to-[#F59E0B]">GenAI</span></span>
+                            <span className="sm:whitespace-nowrap">
+                                {locale === 'en' ? 'Everyone wants ' : 'Tutti vogliono ruoli '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF272] to-[#F59E0B]">GenAI</span>
+                            </span>
                             <br className="hidden sm:block" />
-                            <span className="block sm:ml-2">Tu come<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-500"> ti distingui?</span></span>
+                            <span className="block sm:ml-2">
+                                {locale === 'en' ? 'How will you ' : 'Tu come'}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-500">
+                                    {locale === 'en' ? ' stand out?' : ' ti distingui?'}
+                                </span>
+                            </span>
                         </motion.h1>
 
                         {/* HOOK STATS - Stack on mobile, side-by-side on larger */}
@@ -101,15 +111,15 @@ export default function HeroSection() {
                             {[
                                 {
                                     value: "7s",
-                                    label: "Prima scrematura del CV",
-                                    subLabel: "È tutto quello che hai, prima di essere cestinato.",
+                                    label: locale === 'en' ? 'First CV screening' : 'Prima scrematura del CV',
+                                    subLabel: locale === 'en' ? 'This is all the time you get before rejection.' : 'È tutto quello che hai, prima di essere cestinato.',
                                     source: "TheLadders – Eye-Tracking Study",
                                     link: "https://www.theladders.com/static/images/basicSite/pdfs/TheLadders-EyeTracking-StudyC2.pdf"
                                 },
                                 {
                                     value: "55%",
-                                    label: "dei candidati Personalizza il CV",
-                                    subLabel: "Sei tu quello che non lo fa?",
+                                    label: locale === 'en' ? 'of candidates tailor their CV' : 'dei candidati Personalizza il CV',
+                                    subLabel: locale === 'en' ? 'Are you still not doing it?' : 'Sei tu quello che non lo fa?',
                                     source: "Indeed (multiple resume analysis)",
                                     link: "https://www.indeed.com/news/releases/indeed-launches-ai-powered-smart-sourcing-to-make-hiring-faster-by-matching-and-connecting-people-with-relevant-jobs"
                                 }
@@ -137,7 +147,7 @@ export default function HeroSection() {
                                             </span>
                                         </div>
                                         <div className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-widest flex items-center justify-center gap-1.5 mt-auto pt-1 w-full group-hover:text-rose-300 transition-colors px-2 text-center">
-                                            Fonte: {stat.source} <ArrowRight className="w-2.5 h-2.5 shrink-0" />
+                                            {locale === 'en' ? 'Source' : 'Fonte'}: {stat.source} <ArrowRight className="w-2.5 h-2.5 shrink-0" />
                                         </div>
                                     </div>
                                 </a>
@@ -149,8 +159,17 @@ export default function HeroSection() {
                             variants={itemVariants}
                             className="text-base sm:text-lg md:text-xl text-white/80 max-w-xl mx-auto lg:mx-0 leading-relaxed"
                         >
-                            In <strong className="text-[#FFF272]">4–8 settimane</strong> costruisci{' '}
-                            <strong className="text-white">CV, Prove Concrete e Interview Skills</strong> che ti fanno notare dai recruiter GenAI, guidato da esperti in questo settore.
+                            {locale === 'en' ? (
+                                <>
+                                    In <strong className="text-[#FFF272]">4–8 weeks</strong> you build{' '}
+                                    <strong className="text-white">CV, tangible proof, and interview skills</strong> that make you visible to GenAI recruiters.
+                                </>
+                            ) : (
+                                <>
+                                    In <strong className="text-[#FFF272]">4–8 settimane</strong> costruisci{' '}
+                                    <strong className="text-white">CV, Prove Concrete e Interview Skills</strong> che ti fanno notare dai recruiter GenAI, guidato da esperti in questo settore.
+                                </>
+                            )}
                         </motion.p>
 
                         {/* Target roles - Specificity */}
@@ -178,7 +197,7 @@ export default function HeroSection() {
                                 onClick={() => trackCareerOSCTAClicked('hero', 'vedi_cosa_costruirai')}
                                 className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] text-[#1A1E3B] font-bold text-base sm:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto"
                             >
-                                Vedi cosa costruirai
+                                {t.hero.ctaPrimary}
                                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                             </a>
                             <button
@@ -188,7 +207,7 @@ export default function HeroSection() {
                                 }}
                                 className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-white/5 border border-white/20 text-white font-bold text-base sm:text-lg hover:bg-white/10 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
                             >
-                                📞  Richiedi un audit gratuito (15 min)
+                                📞  {t.hero.ctaSecondary}
                             </button>
                         </motion.div>
                     </div>
@@ -206,7 +225,7 @@ export default function HeroSection() {
                             <div className="relative space-y-6">
                                 {/* Header */}
                                 <p className="text-xs text-[#FFF272] font-bold uppercase tracking-widest text-center">
-                                    🔥 Mercato AI in Italia
+                                    🔥 {t.hero.marketLabel}
                                 </p>
 
                                 {/* Big number 1 */}
@@ -217,7 +236,7 @@ export default function HeroSection() {
                                         </div>
                                         <div className="text-sm font-bold text-white mb-1">{marketStats[0].label}</div>
                                         <div className="inline-flex items-center gap-1 text-[10px] text-white/40 uppercase tracking-wide group-hover:text-[#FFF272] transition-colors">
-                                            Fonte: {marketStats[0].source} ↗
+                                            {locale === 'en' ? 'Source' : 'Fonte'}: {marketStats[0].source} ↗
                                         </div>
                                     </a>
                                 </div>

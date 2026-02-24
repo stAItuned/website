@@ -1,5 +1,6 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { NextRequest, NextResponse } from 'next/server'
+import { careerOSTranslations, normalizeCareerOSLocale } from '@/lib/i18n/career-os-translations'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -21,37 +22,41 @@ export async function POST(req: NextRequest) {
             acceptedPrivacy,
             source,
             userAgent,
+            locale: rawLocale,
         } = body || {}
+        const locale = normalizeCareerOSLocale(rawLocale)
+        const t = careerOSTranslations[locale].apiErrors.audit
 
         if (!name || typeof name !== 'string' || !name.trim()) {
-            return NextResponse.json({ error: 'Name is required' }, { status: 400 })
+            return NextResponse.json({ error: t.nameRequired }, { status: 400 })
         }
 
         if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
-            return NextResponse.json({ error: 'Valid email is required' }, { status: 400 })
+            return NextResponse.json({ error: t.invalidEmail }, { status: 400 })
         }
 
         if (!acceptedPrivacy) {
-            return NextResponse.json({ error: 'Privacy acceptance is required' }, { status: 400 })
+            return NextResponse.json({ error: t.privacyRequired }, { status: 400 })
         }
 
         if (!doubt || typeof doubt !== 'string' || !doubt.trim()) {
-            return NextResponse.json({ error: 'Doubt is required' }, { status: 400 })
+            return NextResponse.json({ error: t.doubtRequired }, { status: 400 })
         }
 
         const normalizedEmail = email.trim().toLowerCase()
 
         // Send Telegram first as primary notification
         const telegramMessage = [
-            '🆘 Richiesta Audit Career OS',
+            locale === 'en' ? '🆘 Career OS Audit Request' : '🆘 Richiesta Audit Career OS',
             '',
-            `👤 Nome: ${name.trim()}`,
+            `${locale === 'en' ? '👤 Name' : '👤 Nome'}: ${name.trim()}`,
             `📧 Email: ${normalizedEmail}`,
-            phone ? `📱 Telefono: ${phone.trim()}` : '',
-            `❓ Dubbio: ${doubt.trim()}`,
-            availability ? `📅 Disponibilità: ${availability.trim()}` : '',
+            phone ? `${locale === 'en' ? '📱 Phone' : '📱 Telefono'}: ${phone.trim()}` : '',
+            `${locale === 'en' ? '❓ Doubt' : '❓ Dubbio'}: ${doubt.trim()}`,
+            availability ? `${locale === 'en' ? '📅 Availability' : '📅 Disponibilità'}: ${availability.trim()}` : '',
+            source ? `📍 Source: ${source}` : '',
             '',
-            'Richiede contatto per chiarimenti.'
+            locale === 'en' ? 'Requested follow-up contact.' : 'Richiede contatto per chiarimenti.'
         ]
             .filter(Boolean)
             .join('\n')
@@ -79,6 +84,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true }, { status: 200 })
     } catch (err) {
         console.error('Career OS audit error:', err)
-        return NextResponse.json({ error: 'Server error' }, { status: 500 })
+        return NextResponse.json({ error: careerOSTranslations.it.apiErrors.audit.serverError }, { status: 500 })
     }
 }
