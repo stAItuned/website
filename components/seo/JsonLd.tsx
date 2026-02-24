@@ -21,11 +21,13 @@ interface JsonLdProps {
  * <JsonLd data={generateOrganizationSchema()} />
  */
 export function JsonLd({ data, id }: JsonLdProps) {
+    const jsonLd = JSON.stringify(data).replace(/</g, '\\u003c')
+
     return (
         <script
             id={id}
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(data, null, 0) }}
+            dangerouslySetInnerHTML={{ __html: jsonLd }}
         />
     )
 }
