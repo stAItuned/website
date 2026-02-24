@@ -2,6 +2,7 @@
 
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useFastAnalytics, formatAnalyticsNumber } from '@/lib/hooks/useFastAnalytics'
 
@@ -152,11 +153,13 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
   const isNewArticle = isArticleNew(article.date)
 
   const target = article.target?.toLowerCase() || article.topics?.[0]?.toLowerCase() || 'general'
+  const articleHref = `/learn/${target}/${article.slug}`
 
   return (
-    <div
-      onClick={() => (window.location.href = `/learn/${target}/${article.slug}`)}
-      className="text-primary-600 hover:cursor-pointer h-full group"
+    <Link
+      href={articleHref}
+      aria-label={`Read article: ${article.title}`}
+      className="text-primary-600 hover:cursor-pointer h-full group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950"
     >
       <div
         className="relative flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-900 overflow-hidden transition-all duration-500 ease-out hover:shadow-xl hover:-translate-y-1 hover:border-primary-300 dark:hover:border-primary-700"
@@ -269,6 +272,6 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

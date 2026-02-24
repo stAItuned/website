@@ -6,6 +6,12 @@ Applica sempre anche i controlli di autenticità (manuali o automatizzati): vedi
 
 ---
 
+## UX note (Card articoli)
+- Le card articolo nelle liste usano link semantici (`<a>`/`next/link`) sull'intera card.
+- Evita redirect JS (`window.location.href`) per la navigazione delle card: peggiora accessibilità, SEO e comportamento browser standard.
+
+---
+
 ## 1) Deve essere (MUST)
 
 ### 1.0 Metadati (date) — pubblicazione vs aggiornamento
