@@ -2,8 +2,13 @@ import { sendTelegramFeedback } from '@/lib/telegram'
 import { sendRoleFitAuditReportEmail } from '@/lib/email/roleFitAuditEmail'
 import { db } from '@/lib/firebase/admin'
 import { generateAIAuditResult } from '@/lib/ai/roleFitAuditAI'
-import { QUESTIONS } from '@/app/(public)/role-fit-audit/lib/questions'
+import { getAnswerLabelByQuestionId } from '@/app/(public)/role-fit-audit/lib/questions'
 import { NextRequest, NextResponse } from 'next/server'
+import {
+    normalizeRoleFitLocale,
+    roleFitAuditTranslations,
+    type RoleFitLocale,
+} from '@/lib/i18n/role-fit-audit-translations'
 
 // =============================================================================
 // Validation
@@ -16,9 +21,10 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // =============================================================================
 
 export async function POST(req: NextRequest) {
-    console.log('[API Route] Key present:', !!process.env.GOOGLE_AI_API_KEY)
     try {
         const body = await req.json()
+        const locale = normalizeRoleFitLocale(body?.locale) as RoleFitLocale
+        const i18n = roleFitAuditTranslations[locale]
 
         const { answers, email, name, linkedinUrl, marketingConsent, website, paypalOrderId } = body || {}
 
@@ -30,11 +36,11 @@ export async function POST(req: NextRequest) {
 
         // Validate required fields
         if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
-            return NextResponse.json({ error: 'Email non valida.' }, { status: 400 })
+            return NextResponse.json({ error: i18n.apiErrors.invalidEmail }, { status: 400 })
         }
 
         if (!answers || typeof answers !== 'object') {
-            return NextResponse.json({ error: 'Risposte mancanti.' }, { status: 400 })
+            return NextResponse.json({ error: i18n.apiErrors.missingAnswers }, { status: 400 })
         }
 
         const normalizedEmail = email.trim().toLowerCase()
@@ -46,6 +52,7 @@ export async function POST(req: NextRequest) {
         const result = await generateAIAuditResult(
             answers,
             name?.trim(),
+            locale,
             {
                 userEmail: normalizedEmail,
                 endpoint: 'role-fit-audit'
@@ -66,11 +73,11 @@ export async function POST(req: NextRequest) {
                 paypalOrderId: paypalOrderId || null,
                 answers,
                 answersText: Object.entries(answers).reduce((acc, [qId, val]) => {
-                    const q = QUESTIONS.find(q => q.id === qId)
-                    const opt = q?.options.find(o => o.value === val)
-                    if (opt) acc[qId] = opt.label
+                    const label = getAnswerLabelByQuestionId(qId, Number(val), locale)
+                    if (label) acc[qId] = label
                     return acc
                 }, {} as Record<string, string>),
+                locale,
                 result: {
                     generatedBy: result.generatedBy,
                     scores: result.scores,
@@ -143,6 +150,7 @@ export async function POST(req: NextRequest) {
                 email: normalizedEmail,
                 name: name?.trim(),
                 result,
+                locale,
             })
         } catch (emailError) {
             console.error('EMAIL ERROR (role-fit-audit):', emailError)
@@ -153,6 +161,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true, result }, { status: 200 })
     } catch (err) {
         console.error('GenAI Fit Check submit error:', err)
-        return NextResponse.json({ error: 'Server error' }, { status: 500 })
+        return NextResponse.json({ error: roleFitAuditTranslations.it.apiErrors.serverError }, { status: 500 })
     }
 }

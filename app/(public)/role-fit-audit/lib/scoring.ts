@@ -5,6 +5,7 @@
  */
 
 import { QUESTIONS, type Dimension } from './questions'
+import type { RoleFitLocale } from '@/lib/i18n/role-fit-audit-translations'
 
 // =============================================================================
 // Types
@@ -526,6 +527,200 @@ const DIAGNOSIS_TEMPLATES: Record<ArchetypeId, string> = {
     SPECIALIST: 'Sei **Specialist**: profondità reale; aggiungi 1-2 bridge skills per essere spendibile su ruoli GenAI applied.',
 }
 
+const ARCHETYPES_EN: Record<ArchetypeId, Omit<Archetype, 'id'>> = {
+    BUILDER: {
+        name: 'Pragmatic Builder',
+        tagline: 'You ship working systems.',
+        superpower: 'Fast execution, concrete prototypes, shipping mindset.',
+        risk: 'Without narrative and proof, your profile looks "just dev".',
+        lever: 'Live demo + architecture-focused README.',
+    },
+    DATA_DRIVEN: {
+        name: 'Data-Driven',
+        tagline: 'You measure before believing.',
+        superpower: 'Metrics-first reasoning and evaluation mindset.',
+        risk: 'You can overanalyze and under-show visible proof.',
+        lever: 'Public eval report with a replicable harness.',
+    },
+    PRODUCT_MINDED: {
+        name: 'Product-Minded',
+        tagline: 'You focus on what users actually need.',
+        superpower: 'Problem framing, scope clarity, and prioritization.',
+        risk: 'Without technical proof you may look too high-level.',
+        lever: 'Case study with decisions + minimal working demo.',
+    },
+    FULL_STACK_HYBRID: {
+        name: 'Full-Stack Hybrid',
+        tagline: 'You build and communicate effectively.',
+        superpower: 'End-to-end ownership with solid execution and narrative.',
+        risk: 'You can appear too general if focus is unclear.',
+        lever: 'One flagship project with clear scope and outcomes.',
+    },
+    ML_ISH_APPLIED: {
+        name: 'ML-ish Applied',
+        tagline: 'You bridge ML and software execution.',
+        superpower: 'Strong on retrieval, eval, and integration workflows.',
+        risk: 'You may look abstract without readable artifacts.',
+        lever: 'Notebook -> report -> production-style demo.',
+    },
+    OPERATOR: {
+        name: 'Operator',
+        tagline: 'You make AI useful and reliable.',
+        superpower: 'Operational reliability, delivery consistency, process rigor.',
+        risk: 'You need a standout artifact to differentiate.',
+        lever: 'Operational playbook + polished micro-tool.',
+    },
+    EXPLORER: {
+        name: 'Explorer',
+        tagline: 'High potential, limited direction.',
+        superpower: 'Curiosity and learning speed.',
+        risk: 'You risk scattered work and a generic profile.',
+        lever: 'Pick one role now and one proof project.',
+    },
+    SPECIALIST: {
+        name: 'Specialist',
+        tagline: 'Strong depth in one domain.',
+        superpower: 'Recognizable expertise in a focused area.',
+        risk: 'Mismatch on end-to-end roles without bridge skills.',
+        lever: 'Add 1-2 bridge skills to widen fit.',
+    },
+}
+
+const GAPS_EN: Record<string, Gap> = {
+    GAP_PROOF: {
+        id: 'GAP_PROOF',
+        title: 'No public proof yet',
+        whyBlocks: 'Without public artifacts, recruiters cannot verify your level.',
+        fix7Days: 'Build one mini-tool and publish repo + clear README.',
+        output: 'Public repo + README + demo link',
+    },
+    GAP_SHIPPING: {
+        id: 'GAP_SHIPPING',
+        title: '"Works on my machine" risk',
+        whyBlocks: 'You cannot demonstrate production readiness.',
+        fix7Days: 'Deploy to Vercel/Firebase/Render with env/secrets and basic logs.',
+        output: 'Live HTTPS URL + env template',
+    },
+    GAP_GENAI_FOUNDATION: {
+        id: 'GAP_GENAI_FOUNDATION',
+        title: 'Fragmented GenAI fundamentals',
+        whyBlocks: 'Core foundations are not stable for LLM app roles.',
+        fix7Days: 'Ship one end-to-end RAG baseline with simple eval set.',
+        output: 'Architecture note + small eval dataset',
+    },
+    GAP_EVAL_DATA: {
+        id: 'GAP_EVAL_DATA',
+        title: 'Missing quality measurement',
+        whyBlocks: 'You cannot prove system quality objectively.',
+        fix7Days: 'Create 20 benchmark queries + rubric + baseline metrics.',
+        output: 'Eval sheet + score report',
+    },
+    GAP_ENGINEERING: {
+        id: 'GAP_ENGINEERING',
+        title: 'Weak engineering foundations',
+        whyBlocks: 'Systems may not be maintainable or production-safe.',
+        fix7Days: 'Build API + error handling + minimum tests + docs.',
+        output: 'Backend repo with tests and usage docs',
+    },
+    GAP_STORY_SCOPE: {
+        id: 'GAP_STORY_SCOPE',
+        title: 'Unclear narrative of your work',
+        whyBlocks: 'Your impact is hard to understand for evaluators.',
+        fix7Days: 'Write a short case study (problem -> approach -> trade-offs -> results).',
+        output: 'Public case-study page/README section',
+    },
+    GAP_QUALITY: {
+        id: 'GAP_QUALITY',
+        title: 'Missing quality standards',
+        whyBlocks: 'Code quality appears below professional expectations.',
+        fix7Days: 'Enable lint + formatter + unit tests on critical functions.',
+        output: 'CI passing with test evidence',
+    },
+    GAP_DEPLOY: {
+        id: 'GAP_DEPLOY',
+        title: 'No cloud deployment',
+        whyBlocks: 'No live artifact to validate execution capability.',
+        fix7Days: 'Deploy and document runtime env + monitoring basics.',
+        output: 'Live link + deploy guide',
+    },
+    GAP_NARRATIVE: {
+        id: 'GAP_NARRATIVE',
+        title: 'Strong tech but weak impact story',
+        whyBlocks: 'Technical depth does not translate into perceived business impact.',
+        fix7Days: 'Rewrite CV/README with decisions, trade-offs, and measurable impact.',
+        output: 'Updated CV bullets + decision-focused README',
+    },
+    GAP_IMPLEMENTATION: {
+        id: 'GAP_IMPLEMENTATION',
+        title: 'Strong ideas but weak execution proof',
+        whyBlocks: 'Good thinking is not backed by shipped evidence.',
+        fix7Days: 'Build a working skeleton app and ship one core feature.',
+        output: 'Working demo + repository',
+    },
+}
+
+const RECOMMENDATIONS_EN: Record<ArchetypeId, RoleRecommendation> = {
+    BUILDER: {
+        now: 'LLM Apps Dev / RAG Dev',
+        next: 'GenAI Engineer (Applied)',
+        nowReasons: ['Strong execution and shipping behavior', 'End-to-end implementation capability', 'Solid technical baseline'],
+        requirements: ['Live demo with RAG or agents', 'Architecture-focused README', 'CV bullets with metrics'],
+    },
+    DATA_DRIVEN: {
+        now: 'Applied GenAI (Eval/RAG)',
+        next: 'GenAI Engineer (Eval focus)',
+        nowReasons: ['Metrics-first mindset', 'Objective evaluation capabilities', 'Strong data fundamentals'],
+        requirements: ['Eval harness with results', 'Public benchmark report', 'Replicable notebook/demo'],
+    },
+    PRODUCT_MINDED: {
+        now: 'AI Product Engineer (Junior)',
+        next: 'GenAI Product Engineer',
+        nowReasons: ['Strong problem framing and scope', 'User-value orientation', 'Clear trade-off communication'],
+        requirements: ['Decision-oriented case study', 'Simple working demo', 'Impact-focused write-up'],
+    },
+    FULL_STACK_HYBRID: {
+        now: 'GenAI Engineer (Junior)',
+        next: 'GenAI Engineer (Mid)',
+        nowReasons: ['Natural end-to-end ownership', 'Balanced technical + product judgment', 'Strong execution clarity'],
+        requirements: ['One complete flagship project', 'Live demo + detailed README', 'Technical storytelling discipline'],
+    },
+    ML_ISH_APPLIED: {
+        now: 'RAG Engineer / Applied GenAI',
+        next: 'GenAI Engineer',
+        nowReasons: ['Pipeline and integration strength', 'Strong data+code reasoning', 'Good fit for eval/retrieval workflows'],
+        requirements: ['Documented pipeline repository', 'Metric-driven eval report', 'Working production-style demo'],
+    },
+    OPERATOR: {
+        now: 'GenAI Solutions / Implementation',
+        next: 'GenAI Engineer (after technical focus)',
+        nowReasons: ['Reliable delivery behavior', 'Process and coordination strength', 'Operational consistency'],
+        requirements: ['Documented playbook', 'Polished utility tool', 'Quantified results in CV'],
+    },
+    EXPLORER: {
+        now: 'Start Track: pick one focused role',
+        next: 'LLM Apps Dev / RAG Dev (after focus)',
+        nowReasons: ['High curiosity and growth potential', 'Good adaptability', 'Strong learning capacity'],
+        requirements: ['Pick one clear direction', 'Ship one complete project', 'Focused non-generic CV'],
+    },
+    SPECIALIST: {
+        now: 'Bridge role near your strongest axis',
+        next: 'More hybrid end-to-end profile',
+        nowReasons: ['Recognizable depth in one area', 'Strong differentiator potential', 'Technical credibility'],
+        requirements: ['Add 1-2 bridge skills', 'Public proof around your strength', 'Clear positioning statement'],
+    },
+}
+
+const DIAGNOSIS_TEMPLATES_EN: Record<ArchetypeId, string> = {
+    BUILDER: 'You are a **Pragmatic Builder**: strong execution, now convert it into **public proof**.',
+    DATA_DRIVEN: 'You are **Data-Driven**: your edge is **measurement**; add a visible artifact (demo/report).',
+    PRODUCT_MINDED: 'You are **Product-Minded**: strong prioritization, now prove **technical execution**.',
+    FULL_STACK_HYBRID: 'You are **Full-Stack Hybrid**: natural end-to-end ownership; add focus with one flagship project.',
+    ML_ISH_APPLIED: 'You are **ML-ish Applied**: strong data+code fit; push **eval + deployment** to increase credibility.',
+    OPERATOR: 'You are an **Operator**: reliable and concrete; add one standout artifact to differentiate.',
+    EXPLORER: 'You are an **Explorer**: high potential but low direction; pick one role and build one proof artifact.',
+    SPECIALIST: 'You are a **Specialist**: deep in one axis; add bridge skills for broader GenAI role fit.',
+}
+
 // =============================================================================
 // Next Steps Generation
 // =============================================================================
@@ -539,21 +734,68 @@ function generateNextSteps(archetype: Archetype, gaps: Gap[]): string[] {
     return steps
 }
 
+function getLocalizedReadinessLabel(readiness: number, locale: RoleFitLocale): string {
+    if (locale === 'en') {
+        if (readiness < 45) return 'Not Ready Yet'
+        if (readiness < 60) return 'Early Ready'
+        if (readiness < 75) return 'Interview Ready'
+        return 'Production Ready'
+    }
+
+    if (readiness < 45) return 'Non pronto'
+    if (readiness < 60) return 'Pronto (base)'
+    if (readiness < 75) return 'Pronto per colloqui'
+    return 'Pronto per produzione'
+}
+
+function localizeAuditResult(result: AuditResult, locale: RoleFitLocale): AuditResult {
+    if (locale === 'it') {
+        return {
+            ...result,
+            readinessLabel: getLocalizedReadinessLabel(result.normalizedScores.readiness, 'it'),
+        }
+    }
+
+    const archetypeEn = ARCHETYPES_EN[result.archetype.id]
+    const roleRecommendation = RECOMMENDATIONS_EN[result.archetype.id]
+
+    return {
+        ...result,
+        archetype: {
+            ...result.archetype,
+            name: archetypeEn.name,
+            tagline: archetypeEn.tagline,
+            superpower: archetypeEn.superpower,
+            risk: archetypeEn.risk,
+            lever: archetypeEn.lever,
+        },
+        roleRecommendation,
+        topGaps: result.topGaps.map((gap) => GAPS_EN[gap.id] ?? gap),
+        readinessLabel: getLocalizedReadinessLabel(result.normalizedScores.readiness, 'en'),
+        oneLineDiagnosis: DIAGNOSIS_TEMPLATES_EN[result.archetype.id],
+        nextSteps: [
+            `Day 1-2: ${(GAPS_EN[result.topGaps[0]?.id]?.fix7Days) ?? 'Define your target role.'}`,
+            `Day 3-5: ${(GAPS_EN[result.topGaps[1]?.id]?.fix7Days) ?? 'Build your first public proof artifact.'}`,
+            `Day 6-7: ${(GAPS_EN[result.topGaps[2]?.id]?.fix7Days) ?? 'Update CV and LinkedIn with concrete outcomes.'}`,
+        ],
+    }
+}
+
 // =============================================================================
 // Main Calculation Function
 // =============================================================================
 
-export function calculateAuditResult(answers: Record<string, number>): AuditResult {
+export function calculateAuditResult(answers: Record<string, number>, locale: RoleFitLocale = 'it'): AuditResult {
     const rawScores = calculateRawScores(answers)
     const normalizedScores = normalizeScores(rawScores)
     const archetype = determineArchetype(normalizedScores)
     const roleRecommendation = getRoleRecommendation(archetype, normalizedScores)
     const topGaps = identifyGaps(normalizedScores)
-    const readinessLabel = getReadinessLabel(normalizedScores.readiness)
+    const readinessLabel = getLocalizedReadinessLabel(normalizedScores.readiness, 'it')
     const oneLineDiagnosis = DIAGNOSIS_TEMPLATES[archetype.id]
     const nextSteps = generateNextSteps(archetype, topGaps)
 
-    return {
+    const result: AuditResult = {
         scores: rawScores,
         normalizedScores,
         archetype,
@@ -563,4 +805,6 @@ export function calculateAuditResult(answers: Record<string, number>): AuditResu
         oneLineDiagnosis,
         nextSteps,
     }
+
+    return localizeAuditResult(result, locale)
 }

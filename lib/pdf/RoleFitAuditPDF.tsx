@@ -12,6 +12,7 @@ import {
     Image,
 } from '@react-pdf/renderer'
 import type { AuditResult } from '@/app/(public)/role-fit-audit/lib/scoring'
+import { roleFitAuditTranslations, type RoleFitLocale } from '@/lib/i18n/role-fit-audit-translations'
 
 // =============================================================================
 // Font Registration
@@ -509,9 +510,11 @@ function DiagnosisText({ text }: { text: string }) {
 interface PDFProps {
     result: AuditResult
     name?: string
+    locale: RoleFitLocale
 }
 
-export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
+export function RoleFitAuditPDFDocument({ result, name, locale }: PDFProps) {
+    const t = roleFitAuditTranslations[locale].pdf
     const {
         normalizedScores,
         archetype,
@@ -550,19 +553,21 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                             style={{ width: 120, height: 'auto', marginBottom: 4 }}
                         />
                         <Text style={styles.headerDate}>
-                            {new Date().toLocaleDateString('it-IT')}
+                            {new Date().toLocaleDateString(locale === 'en' ? 'en-US' : 'it-IT')}
                         </Text>
                     </View>
                     <Text style={{ fontSize: 9, color: colors.textMuted }}>
-                        Report Personale per {name || 'Te'}
+                        {name
+                            ? t.personalReportFor.replace('{name}', name)
+                            : t.personalReportForYou}
                     </Text>
                 </View>
 
                 {/* Main Title */}
                 <View style={styles.titleSection}>
-                    <Text style={styles.mainTitle}>Il tuo Role Fit Audit</Text>
+                    <Text style={styles.mainTitle}>{t.title}</Text>
                     <Text style={styles.subtitle}>
-                        Analisi di compatibilità per ruoli AI & GenAI
+                        {t.subtitle}
                     </Text>
                 </View>
 
@@ -578,16 +583,28 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                         </View>
                         <View>
                             <Text style={styles.archetypeName}>{archetype.name}</Text>
-                            <Text style={styles.archetypeTagline}>"{archetype.tagline}"</Text>
+                            <Text style={styles.archetypeTagline}>
+                                "
+                                {archetype.tagline.split(/\*\*(.*?)\*\*/g).map((part, i) =>
+                                    i % 2 === 1 ? (
+                                        <Text key={i} style={{ fontWeight: 700, color: colors.accent }}>
+                                            {part}
+                                        </Text>
+                                    ) : (
+                                        part
+                                    )
+                                )}
+                                "
+                            </Text>
                         </View>
                     </View>
                     <View style={styles.archetypeGrid}>
                         <View style={styles.archetypeColumn}>
-                            <Text style={styles.archetypeLabel}>Superpower</Text>
+                            <Text style={styles.archetypeLabel}>{t.superpower}</Text>
                             <Text style={styles.archetypeValue}>{archetype.superpower}</Text>
                         </View>
                         <View style={styles.archetypeColumn}>
-                            <Text style={styles.archetypeLabel}>Rischio</Text>
+                            <Text style={styles.archetypeLabel}>{t.risk}</Text>
                             <Text style={styles.archetypeValue}>{archetype.risk}</Text>
                         </View>
                     </View>
@@ -595,7 +612,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                 {/* Scores Snapshot */}
                 <View style={styles.scoresSection}>
-                    <Text style={styles.sectionTitle}>SCORE SNAPSHOT</Text>
+                    <Text style={styles.sectionTitle}>{t.snapshot}</Text>
                     <View style={styles.scoreRow}>
                         <ScoreBar
                             label="Code / Engineering"
@@ -621,7 +638,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                     {/* Readiness */}
                     <View style={styles.readinessBox}>
-                        <Text style={{ fontSize: 10, fontWeight: 600 }}>GenAI Readiness</Text>
+                        <Text style={{ fontSize: 10, fontWeight: 600 }}>{t.readiness}</Text>
                         <View
                             style={[
                                 styles.readinessBadge,
@@ -635,7 +652,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                 {/* Roles */}
                 <View style={styles.rolesSection}>
-                    <Text style={styles.sectionTitle}>RUOLI CONSIGLIATI</Text>
+                    <Text style={styles.sectionTitle}>{t.roles}</Text>
                     <View style={styles.rolesGrid}>
                         {/* NOW */}
                         <View style={styles.roleCard}>
@@ -645,7 +662,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                                 </Text>
                             </View>
                             <Text style={styles.roleTitle}>{roleRecommendation.now}</Text>
-                            <Text style={styles.roleReasonLabel}>Perché sei un fit:</Text>
+                            <Text style={styles.roleReasonLabel}>{t.whyFit}</Text>
                             {/* Use AI Rationale if available, otherwise static list */}
                             {result.aiEnhancements?.nowRationale ? (
                                 <Text style={styles.roleReason}>{result.aiEnhancements.nowRationale}</Text>
@@ -666,7 +683,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                                 </Text>
                             </View>
                             <Text style={styles.roleTitle}>{roleRecommendation.next}</Text>
-                            <Text style={styles.roleReasonLabel}>Cosa ti serve:</Text>
+                            <Text style={styles.roleReasonLabel}>{t.needs}</Text>
                             {/* Use AI Rationale if available, otherwise static list */}
                             {result.aiEnhancements?.nextRationale ? (
                                 <Text style={styles.roleReason}>{result.aiEnhancements.nextRationale}</Text>
@@ -684,7 +701,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                 {/* Top Gaps */}
                 {topGaps.length > 0 && (
                     <View style={styles.gapsSection}>
-                        <Text style={styles.sectionTitle}>TOP 3 GAP DA COLMARE</Text>
+                        <Text style={styles.sectionTitle}>{t.topGaps}</Text>
                         {topGaps.map((gap, i) => {
                             const aiGap = result.aiEnhancements?.personalizedGaps?.find(g => g.id === gap.id);
                             return (
@@ -704,11 +721,11 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                                         )}
 
                                         <View style={styles.gapFixBox}>
-                                            <Text style={styles.gapFixLabel}>Fix in 7 giorni</Text>
+                                            <Text style={styles.gapFixLabel}>{t.fixIn7Days}</Text>
                                             <Text style={styles.gapFixText}>{aiGap?.personalizedFix || gap.fix7Days}</Text>
                                             {!aiGap && (
                                                 <Text style={styles.gapOutput}>
-                                                    Output: {gap.output}
+                                                    {t.output}: {gap.output}
                                                 </Text>
                                             )}
                                         </View>
@@ -726,7 +743,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                         {/* Executive Summary */}
                         <View style={styles.deepDiveBox}>
-                            <Text style={styles.deepDiveTitle}>Executive Summary</Text>
+                            <Text style={styles.deepDiveTitle}>{t.executiveSummary}</Text>
                             <Text style={styles.deepDiveText}>
                                 {pdfAnalysis.executiveSummary}
                             </Text>
@@ -734,7 +751,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                         {/* Strengths */}
                         <View style={styles.deepDiveSection}>
-                            <Text style={styles.deepDiveTitle}>Punti di Forza</Text>
+                            <Text style={styles.deepDiveTitle}>{t.strengths}</Text>
                             <Text style={styles.deepDiveText}>
                                 {pdfAnalysis.strengthsAnalysis}
                             </Text>
@@ -742,7 +759,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                         {/* Weaknesses */}
                         <View style={styles.deepDiveSection}>
-                            <Text style={styles.deepDiveTitle}>Aree di Miglioramento</Text>
+                            <Text style={styles.deepDiveTitle}>{t.weaknesses}</Text>
                             <Text style={styles.deepDiveText}>
                                 {pdfAnalysis.weaknessesAnalysis}
                             </Text>
@@ -751,7 +768,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
                         {/* Career Strategy */}
                         <View style={[styles.deepDiveBox, { backgroundColor: colors.indigoLight, marginTop: 10 }]}>
                             <Text style={[styles.deepDiveTitle, { color: colors.indigo, borderBottomColor: '#c7d2fe' }]}>
-                                Strategia di Carriera
+                                {t.strategy}
                             </Text>
                             <Text style={styles.deepDiveText}>
                                 {pdfAnalysis.careerStrategy}
@@ -762,7 +779,7 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                 {/* Next Steps */}
                 <View style={styles.stepsSection}>
-                    <Text style={styles.sectionTitle}>I PROSSIMI 7 GIORNI</Text>
+                    <Text style={styles.sectionTitle}>{t.next7Days}</Text>
                     {nextSteps.map((step, i) => (
                         <View key={i} style={styles.stepRow}>
                             <View style={styles.stepNumber}>
@@ -775,19 +792,17 @@ export function RoleFitAuditPDFDocument({ result, name }: PDFProps) {
 
                 {/* CTA */}
                 <View style={styles.ctaSection}>
-                    <Text style={styles.ctaTitle}>Prenota il tuo 1:1 per avere un feedback personalizzato sul tuo Role Fit Audit</Text>
-                    <Text style={styles.ctaText}>
-                        Una call <strong>gratuita</strong> di 15 minuti, in cui i nostri esperti AI saranno a <strong>tua completa disposizione</strong> per darti feedback, chiarire dubbi, darti consigli.
-                    </Text>
+                    <Text style={styles.ctaTitle}>{t.ctaTitle}</Text>
+                    <Text style={styles.ctaText}>{t.ctaText}</Text>
                     <Link src="https://staituned.com/career-os#candidati" style={styles.ctaButton}>
-                        <Text style={styles.ctaButtonText}>Candidati al Career OS →</Text>
+                        <Text style={styles.ctaButtonText}>{t.ctaButton}</Text>
                     </Link>
                 </View>
 
                 {/* Footer */}
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>
-                        © {new Date().getFullYear()} stAItuned. Tutti i diritti riservati.
+                        © {new Date().getFullYear()} stAItuned. {t.footer}
                     </Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                         <Link src="https://www.linkedin.com/company/stai-tuned">

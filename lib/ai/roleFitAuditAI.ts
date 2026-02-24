@@ -7,10 +7,11 @@
 
 import { generateJSON, isGeminiAvailable } from './gemini'
 import { UsageLogContext } from './usage-logger'
-import { QUESTIONS, SECTIONS, ROLE_OPTIONS } from '@/app/(public)/role-fit-audit/lib/questions'
+import { getLocalizedQuestions } from '@/app/(public)/role-fit-audit/lib/questions'
 import { calculateAuditResult, type AuditResult, type Archetype, type Gap, type RoleRecommendation, type Scores } from '@/app/(public)/role-fit-audit/lib/scoring'
 import { db } from '@/lib/firebase/admin'
 import crypto from 'crypto'
+import type { RoleFitLocale } from '@/lib/i18n/role-fit-audit-translations'
 
 // =============================================================================
 // Types
@@ -165,16 +166,20 @@ Il programma serve a colmare i gap di:
 // Prompt Builder
 // =============================================================================
 
-function buildPrompt(answers: Record<string, number>, userName?: string): string {
+function buildPrompt(answers: Record<string, number>, locale: RoleFitLocale, userName?: string): string {
+    const localizedQuestions = getLocalizedQuestions(locale)
     // Format answers with question context
-    const formattedAnswers = QUESTIONS.map((q) => {
+    const formattedAnswers = localizedQuestions.map((q) => {
         const answerValue = answers[q.id]
         const selectedOption = q.options.find(o => o.value === answerValue)
         return `${q.id} (${q.sectionTitle}): "${q.question}"
-   Risposta: ${selectedOption?.label || 'Non risposta'} (valore: ${answerValue ?? 'N/A'})`
+   Answer: ${selectedOption?.label || 'Not answered'} (value: ${answerValue ?? 'N/A'})`
     }).join('\n\n')
 
-    const userContext = userName ? `Nome utente: ${userName}` : 'Utente anonimo'
+    const userContext = userName ? `User name: ${userName}` : 'Anonymous user'
+    const languageInstruction = locale === 'en'
+        ? 'CRITICAL: write every textual field in English.'
+        : 'CRITICAL: scrivi tutti i campi testuali in italiano.'
 
     return `Sei un career coach esperto in ruoli GenAI/AI. Analizza le risposte di questo Role Fit Audit e genera un report personalizzato.
 
@@ -196,6 +201,9 @@ ${ROLES_CONTEXT}
 
 ---
 ${CAREER_OS_CONTEXT}
+
+---
+${languageInstruction}
 
 ---
 ISTRUZIONI:
@@ -353,6 +361,40 @@ const ARCHETYPE_STATIC_DATA: Record<string, Omit<Archetype, 'id'>> = {
     },
 }
 
+const ARCHETYPE_NAME_EN: Record<string, string> = {
+    BUILDER: 'Pragmatic Builder',
+    DATA_DRIVEN: 'Data-Driven',
+    PRODUCT_MINDED: 'Product-Minded',
+    FULL_STACK_HYBRID: 'Full-Stack Hybrid',
+    ML_ISH_APPLIED: 'ML-ish Applied',
+    OPERATOR: 'Operator',
+    EXPLORER: 'Explorer',
+    SPECIALIST: 'Specialist',
+}
+
+function isLikelyLocaleMatch(result: GeminiAuditResponse, locale: RoleFitLocale): boolean {
+    const sample = [
+        result.oneLineDiagnosis,
+        result.coachingNote,
+        result.topGaps[0]?.title ?? '',
+        result.roleRecommendation.nowRationale,
+    ]
+        .join(' ')
+        .toLowerCase()
+
+    const italianMarkers = [' il ', ' la ', ' che ', ' per ', ' con ', ' ruolo ', ' giorni ']
+    const englishMarkers = [' the ', ' and ', ' with ', ' role ', ' days ', ' for ', ' your ']
+
+    const italianHits = italianMarkers.reduce((count, marker) => count + (sample.includes(marker) ? 1 : 0), 0)
+    const englishHits = englishMarkers.reduce((count, marker) => count + (sample.includes(marker) ? 1 : 0), 0)
+
+    if (locale === 'en') {
+        return englishHits >= italianHits
+    }
+
+    return italianHits >= englishHits
+}
+
 // =============================================================================
 // Main Function
 // =============================================================================
@@ -364,8 +406,10 @@ const ARCHETYPE_STATIC_DATA: Record<string, Omit<Archetype, 'id'>> = {
 export async function generateAIAuditResult(
     answers: Record<string, number>,
     userName?: string,
+    locale: RoleFitLocale = 'it',
     context?: UsageLogContext
 ): Promise<AIAuditResult> {
+    const localizedFallback = calculateAuditResult(answers, locale)
     // -------------------------------------------------------------------------
     // 1. Check Cache
     // -------------------------------------------------------------------------
@@ -374,7 +418,7 @@ export async function generateAIAuditResult(
         // Deterministic hash of answers
         answersHash = crypto
             .createHash('sha256')
-            .update(JSON.stringify(answers, Object.keys(answers).sort()))
+            .update(JSON.stringify({ locale, answers }))
             .digest('hex')
 
         const cacheDoc = await db().collection('role_fit_audit_ai_cache_v4').doc(answersHash).get()
@@ -395,14 +439,14 @@ export async function generateAIAuditResult(
     if (!isGeminiAvailable()) {
         console.log('[RoleFitAudit AI] ⚠️ Gemini is NOT available (API Key missing). Using static fallback.')
         return {
-            ...calculateAuditResult(answers),
+            ...localizedFallback,
             generatedBy: 'static',
         }
     }
 
     try {
         console.log('[RoleFitAudit AI] 🚀 Starting Gemini generation...')
-        const prompt = buildPrompt(answers, userName)
+        const prompt = buildPrompt(answers, locale, userName)
 
         const response = await generateJSON<GeminiAuditResponse>(prompt, context)
 
@@ -410,12 +454,19 @@ export async function generateAIAuditResult(
             console.error('[RoleFitAudit AI] ❌ Gemini generation failed. Reason:', response.error)
             console.log('[RoleFitAudit AI] ↩️ Falling back to static calculation')
             return {
-                ...calculateAuditResult(answers),
+                ...localizedFallback,
                 generatedBy: 'static',
             }
         }
 
         const aiData = response.data
+        if (!isLikelyLocaleMatch(aiData, locale)) {
+            console.warn('[RoleFitAudit AI] Locale mismatch detected, using localized static fallback.')
+            return {
+                ...localizedFallback,
+                generatedBy: 'static',
+            }
+        }
         console.log('[RoleFitAudit AI] ✅ Gemini report generated successfully!')
 
         // Build the result from AI response
@@ -425,7 +476,12 @@ export async function generateAIAuditResult(
         // Construct archetype with AI-enhanced fields
         const archetype: Archetype = {
             id: archetypeId as Archetype['id'],
-            name: archetypeStatic.name, // Keep name static for consistency
+            name:
+                localizedFallback.archetype.id === archetypeId
+                    ? localizedFallback.archetype.name
+                    : locale === 'en'
+                        ? (ARCHETYPE_NAME_EN[archetypeId] ?? archetypeStatic.name)
+                        : archetypeStatic.name,
             tagline: aiData.archetype.personalizedTagline || archetypeStatic.tagline,
             superpower: aiData.archetype.personalizedSuperpower || archetypeStatic.superpower,
             risk: aiData.archetype.personalizedRisk || archetypeStatic.risk,
@@ -500,7 +556,7 @@ export async function generateAIAuditResult(
     } catch (error) {
         console.error('[RoleFitAudit AI] Unexpected error:', error)
         return {
-            ...calculateAuditResult(answers),
+            ...localizedFallback,
             generatedBy: 'static',
         }
     }

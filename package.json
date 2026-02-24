@@ -15,6 +15,7 @@
 		"typecheck": "tsc --noEmit",
 		"start": "next start",
 		"lint": "eslint .",
+		"check:role-fit-i18n": "vitest run lib/i18n/role-fit-audit-i18n.test.ts -t \"passes i18n parity validator\"",
 		"test": "vitest",
 		"deploy:prod": "bash scripts/deploy-hosting-target.sh production",
 		"deploy:test": "bash scripts/deploy-hosting-target.sh development",

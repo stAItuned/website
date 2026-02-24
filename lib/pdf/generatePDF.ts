@@ -1,18 +1,20 @@
 import { renderToBuffer } from '@react-pdf/renderer'
 import type { AuditResult } from '@/app/(public)/role-fit-audit/lib/scoring'
+import type { RoleFitLocale } from '@/lib/i18n/role-fit-audit-translations'
 
 /**
  * Generate a PDF buffer for the Role Fit Audit report
  */
 export async function generateRoleFitAuditPDF(
     result: AuditResult,
+    locale: RoleFitLocale,
     name?: string
 ): Promise<Buffer> {
     // Dynamic import to avoid Next.js Server Action inference on the component
     const { RoleFitAuditPDFDocument } = await import('./RoleFitAuditPDF')
 
     const pdfBuffer = await renderToBuffer(
-        RoleFitAuditPDFDocument({ result, name })
+        RoleFitAuditPDFDocument({ result, name, locale })
     )
     return Buffer.from(pdfBuffer)
 }

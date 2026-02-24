@@ -32,6 +32,7 @@ export function Header() {
   const { t } = useLearnLocale()
   const pathname = useSafePathname()
   const isHomepage = pathname === '/'
+  const isRoleFitPage = pathname?.startsWith('/role-fit-audit')
   const admin = user?.email ? isAdmin(user.email) : false
   const identity = user
     ? resolveProfileIdentity({
@@ -182,7 +183,7 @@ export function Header() {
                 loading={isHomepage ? "eager" : "lazy"}
               />
             </Link>
-            {!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2 ? (
+            {!isRoleFitPage && (!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2) ? (
               <div className="flex items-center">
                 <LearnLocaleToggle />
               </div>
