@@ -1,3 +1,5 @@
+import brandPalette from '@/config/brand-palette.json'
+
 /**
  * stAItuned Brand Configuration
  * 
@@ -27,39 +29,11 @@ export const BRAND = {
         heroBg: '/assets/general/home_bg.webp',
     },
 
-    // Color Palette (matching Tailwind config)
-    colors: {
-        primary: {
-            300: '#4d84d4',
-            400: '#566096',
-            500: '#383F74',
-            600: '#1A1E3B',
-        },
-        secondary: {
-            400: '#FFF7A8',
-            500: '#FFF272',
-            600: '#FFE700',
-        },
-        accent: {
-            50: '#FFFBEB',
-            100: '#FEF3C7',
-            200: '#FDE68A',
-            300: '#FCD34D',
-            400: '#FBBF24',
-            500: '#F59E0B',
-            600: '#D97706',
-            700: '#B45309',
-        },
-    },
+    // Color Palette (single source: config/brand-palette.json)
+    colors: brandPalette.colors,
 
-    // Gradient Definitions
-    gradients: {
-        brand: 'from-amber-400 via-amber-500 to-orange-500',
-        brandSubtle: 'from-amber-400/20 to-orange-500/20',
-        hero: 'from-slate-900/75 via-slate-900/85 to-slate-900/75',
-        text: 'from-amber-400 via-amber-500 to-orange-600',
-        lab: 'from-blue-600 via-purple-600 to-indigo-600',
-    },
+    // Gradient Definitions (single source: config/brand-palette.json)
+    gradients: brandPalette.gradients,
 
     // Animation Timings (matching Tailwind config)
     animations: {

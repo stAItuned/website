@@ -1,3 +1,5 @@
+const brandPalette = require('./config/brand-palette.json')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
@@ -24,35 +26,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: {
-          300: '#4d84d4',
-          400: '#566096',
-          500: '#383F74',
-          600: '#1A1E3B'
-        },
-        secondary: {
-          400: '#FFF7A8',
-          500: '#FFF272',
-          600: '#FFE700'
-        },
-        // Accent colors for brand highlights
-        accent: {
-          50: '#FFFBEB',
-          100: '#FEF3C7',
-          200: '#FDE68A',
-          300: '#FCD34D',
-          400: '#FBBF24',
-          500: '#F59E0B',
-          600: '#D97706',
-          700: '#B45309',
-        },
-        // Brand-specific named colors
-        brand: {
-          navy: '#1A1E3B',
-          blue: '#383F74',
-          gold: '#FFF272',
-          amber: '#F59E0B',
-        }
+        primary: brandPalette.colors.primary,
+        secondary: brandPalette.colors.secondary,
+        accent: brandPalette.colors.accent,
+        brand: brandPalette.colors.brand,
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out',

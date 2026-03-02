@@ -25,3 +25,13 @@ export {
   normalizeCareerOSLocale,
 } from './career-os-translations'
 export type { CareerOSLocale, CareerOSTranslations } from './career-os-translations'
+
+// AI EU Act translations
+export {
+  aiEuActTranslations,
+  AI_EU_ACT_DEFAULT_LOCALE,
+  AI_EU_ACT_QUERY_PARAM,
+  isAiEuActLocale,
+  normalizeAiEuActLocale,
+} from './ai-eu-act-translations'
+export type { AiEuActLocale, AiEuActTranslations } from './ai-eu-act-translations'

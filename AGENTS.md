@@ -94,6 +94,7 @@ Required practices:
 - Use `font-sans` (Montserrat variable) consistently.
 - Maintain a premium but readable visual language: clear hierarchy, restrained motion, consistent spacing.
 - Include meaningful micro-interactions with existing animations (`animate-fade-in`, `animate-slide-up`, etc.) only when they improve comprehension.
+- Follow the centralized style system first (`tailwind.config.cjs`, `lib/brand.ts`, shared UI primitives) and keep every new UI/content surface consistent with the brand kit; avoid ad-hoc visual patterns.
 
 ## Responsiveness and Accessibility
 Minimum acceptance for every UI change:
