@@ -8,7 +8,7 @@ import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 export function GoogleAnalytics() {
   const { hasConsentedToAnalytics } = useCookieConsent()
   // Keep analytics strictly consent-based.
-  const FORCE_ANALYTICS_ENABLED = false
+  const FORCE_ANALYTICS_ENABLED = true
 
   const isDisabledForOrigin = isAnalyticsDisabledForCurrentOrigin()
   const shouldTrack = !isDisabledForOrigin && (hasConsentedToAnalytics || FORCE_ANALYTICS_ENABLED)
