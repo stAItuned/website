@@ -12,7 +12,6 @@ primaryTopic: 'ai-coding'
 topics:
   - 'agents'
   - 'production'
-  - 'llm-evaluation'
 changelog:
   - date: '2026-03-10'
     version: "1.0"
