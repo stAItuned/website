@@ -128,7 +128,7 @@ Il risultato: stress per HR, frustrazione per i dipendenti, e copertura del lavo
   liveUrl: undefined,
   githubUrl: undefined,
   
-  image: '/assets/products/leave_tracker.jpeg',
+  // image: '/assets/products/leave_tracker.jpeg',
   images: [
     '/assets/products/leave_tracker_dashboard.jpeg',
     '/assets/products/leave_tracker_calendar.jpeg',

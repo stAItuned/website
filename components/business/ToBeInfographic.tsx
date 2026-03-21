@@ -1,0 +1,303 @@
+import {
+  ArrowRight,
+  CheckCircle2,
+  Database,
+  Monitor,
+  Smartphone,
+  Activity,
+  type LucideIcon,
+} from 'lucide-react'
+import type { BusinessLocale } from '@/lib/i18n/business-translations'
+
+type NodeKind = 'app' | 'dashboard' | 'database' | 'monitor'
+
+type NodeProps = {
+  x: string
+  y: string
+  title: string
+  subtitle: string
+  icon: NodeKind
+  status: string
+  tone: 'blue' | 'indigo' | 'emerald' | 'teal' | 'slate'
+}
+
+type Copy = {
+  eyebrow: string
+  title: string
+  subtitle: string
+  swimlanes: [string, string, string, string, string]
+  nodes: {
+    first: [string, string, string, string, string]
+    second: [string]
+  }
+  legendTitle: string
+  flowLabel: string
+  truthLabel: string
+}
+
+const copy: Record<BusinessLocale, Copy> = {
+  it: {
+    eyebrow: 'Dopo',
+    title: 'Workflow centralizzato stAItuned',
+    subtitle:
+      'Un solo sistema raccoglie inserimento, approvazione, controllo ed export. Web e mobile restano allineati, ogni passaggio ha uno stato e ogni ruolo vede solo quello che gli serve.',
+    swimlanes: ['Dipendente', 'Manager', 'Admin', 'Ufficio Tecnico', 'Consulente del lavoro'],
+    nodes: {
+      first: [
+        'Inserimento unico',
+        'Approvazione con contesto',
+        'Pannello di controllo',
+        'Vista operativa',
+        'Export finale',
+      ],
+      second: ['Single source of truth'],
+    },
+    legendTitle: 'Legenda Criticita:',
+    flowLabel: 'Flusso dati automatico',
+    truthLabel: 'Single Source of Truth',
+  },
+  en: {
+    eyebrow: 'After',
+    title: 'Centralized stAItuned workflow',
+    subtitle:
+      'One system handles intake, approval, control and export. Web and mobile stay aligned, every handoff has a status, and each role sees exactly what it needs to act.',
+    swimlanes: ['Employee', 'Manager', 'Admin', 'Technical Office', 'Payroll consultant'],
+    nodes: {
+      first: [
+        'Single intake',
+        'Approval with context',
+        'Control panel',
+        'Operational view',
+        'Final export',
+      ],
+      second: ['Single source of truth'],
+    },
+    legendTitle: 'Critical legend:',
+    flowLabel: 'Automated data flow',
+    truthLabel: 'Single Source of Truth',
+  },
+}
+
+const ICON_MAP: Record<
+  NodeKind,
+  {
+    Icon: LucideIcon
+    iconClass: string
+    badgeClass: string
+  }
+> = {
+  app: {
+    Icon: Smartphone,
+    iconClass: 'text-blue-600',
+    badgeClass: 'bg-blue-100 text-blue-700 dark:bg-blue-400/10 dark:text-blue-200',
+  },
+  dashboard: {
+    Icon: Activity,
+    iconClass: 'text-indigo-600',
+    badgeClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-200',
+  },
+  database: {
+    Icon: Database,
+    iconClass: 'text-emerald-600',
+    badgeClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200',
+  },
+  monitor: {
+    Icon: Monitor,
+    iconClass: 'text-teal-600',
+    badgeClass: 'bg-teal-100 text-teal-700 dark:bg-teal-400/10 dark:text-teal-200',
+  },
+}
+
+function Node({ x, y, title, subtitle, icon, status, tone }: NodeProps) {
+  const { Icon, iconClass, badgeClass } = ICON_MAP[icon]
+  const toneClasses: Record<NodeProps['tone'], string> = {
+    blue: 'border-blue-200 bg-white dark:border-blue-900/30',
+    indigo: 'border-indigo-200 bg-white dark:border-indigo-900/30',
+    emerald: 'border-emerald-200 bg-white dark:border-emerald-900/30',
+    teal: 'border-teal-200 bg-white dark:border-teal-900/30',
+    slate: 'border-slate-200 bg-white dark:border-slate-800',
+  }
+
+  return (
+    <div
+      className={`absolute z-10 flex w-44 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-xl border-2 p-4 text-center shadow-md transition-all hover:shadow-lg ${toneClasses[tone]}`}
+      style={{ left: x, top: y, minHeight: '120px' }}
+    >
+      <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-full ${badgeClass}`}>
+        <Icon size={28} className={iconClass} />
+      </div>
+
+      <span className="mb-1 font-bold leading-tight text-slate-800 dark:text-white">{title}</span>
+      <span className="mb-3 text-xs text-slate-500 dark:text-slate-400">{subtitle}</span>
+
+      <div className="mt-auto flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 dark:border-slate-800 dark:bg-slate-900">
+        <CheckCircle2 size={12} className="text-emerald-500" />
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+          {status}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export interface ToBeInfographicProps {
+  locale?: BusinessLocale
+  className?: string
+}
+
+export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicProps) {
+  const t = copy[locale]
+
+  return (
+    <section
+      className={`rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-5 ${className ?? ''}`}
+      aria-label={t.title}
+    >
+      <header className="mb-6 space-y-3 text-center">
+        <p className="text-[11px] font-black uppercase tracking-[0.24em] text-emerald-500 dark:text-emerald-400">
+          {t.eyebrow}
+        </p>
+        <h3 className="text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-2xl lg:text-[2rem]">
+          {t.title}
+        </h3>
+        <p className="mx-auto max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
+      </header>
+
+      <div className="overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950">
+        <div className="relative min-w-[960px] h-[680px]">
+          <div className="grid h-14 grid-cols-5 bg-emerald-600 text-white shadow-sm">
+            {t.swimlanes.map((lane, index) => (
+              <div
+                key={lane}
+                className={`flex items-center justify-center font-bold tracking-wide ${
+                  index < t.swimlanes.length - 1 ? 'border-r border-white/20' : ''
+                }`}
+              >
+                {lane}
+              </div>
+            ))}
+          </div>
+
+          <div className="pointer-events-none absolute inset-0 top-14 grid grid-cols-5">
+            <div className="border-r border-slate-200 bg-slate-50/40" />
+            <div className="border-r border-slate-200" />
+            <div className="border-r border-slate-200 bg-emerald-50/30" />
+            <div className="border-r border-slate-200" />
+            <div className="bg-slate-50/20" />
+          </div>
+
+          <div className="absolute inset-0 top-14">
+            <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full">
+              <defs>
+                <marker
+                  id="arrow-sync"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="85"
+                  refY="3.5"
+                  orient="auto"
+                  markerUnits="userSpaceOnUse"
+                >
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+                </marker>
+                <marker
+                  id="arrow-sync-v"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="55"
+                  refY="3.5"
+                  orient="auto"
+                  markerUnits="userSpaceOnUse"
+                >
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+                </marker>
+              </defs>
+
+              <line x1="10%" y1="35%" x2="30%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
+              <line x1="30%" y1="35%" x2="50%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
+              <line x1="50%" y1="35%" x2="70%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" strokeDasharray="4 4" />
+              <line x1="50%" y1="35%" x2="50%" y2="70%" stroke="#10b981" strokeWidth="3" />
+              <line x1="50%" y1="70%" x2="90%" y2="70%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
+              <path d="M 70% 35% C 80% 35%, 80% 70%, 90% 70%" stroke="#10b981" strokeWidth="1" strokeDasharray="2 4" fill="none" opacity="0.35" />
+            </svg>
+
+            <Node
+              x="10%"
+              y="35%"
+              title={t.nodes.first[0]}
+              subtitle={locale === 'it' ? 'Ore, note e assenze da un solo punto' : 'Hours, notes and absences from one place'}
+              icon="app"
+              status={locale === 'it' ? 'Inviato' : 'Sent'}
+              tone="blue"
+            />
+            <Node
+              x="30%"
+              y="35%"
+              title={t.nodes.first[1]}
+              subtitle={locale === 'it' ? 'Con storico, contesto e motivazione' : 'With history, context and reason'}
+              icon="app"
+              status={locale === 'it' ? 'Approvato' : 'Approved'}
+              tone="indigo"
+            />
+            <Node
+              x="50%"
+              y="35%"
+              title={t.nodes.first[2]}
+              subtitle={locale === 'it' ? 'Vede tutto: anomalie, blocchi, ore' : 'Sees anomalies, blockers and hours'}
+              icon="dashboard"
+              status={locale === 'it' ? 'Verificato' : 'Verified'}
+              tone="emerald"
+            />
+            <Node
+              x="70%"
+              y="35%"
+              title={t.nodes.first[3]}
+              subtitle={locale === 'it' ? 'Dati aggiornati in tempo reale' : 'Real-time updated data'}
+              icon="monitor"
+              status={locale === 'it' ? 'Sincronizzato' : 'Synced'}
+              tone="teal"
+            />
+            <Node
+              x="90%"
+              y="70%"
+              title={t.nodes.first[4]}
+              subtitle={locale === 'it' ? 'Export diretto, pulito e senza errori' : 'Direct export, clean and error-free'}
+              icon="database"
+              status={locale === 'it' ? "Pronto all'uso" : 'Ready to use'}
+              tone="slate"
+            />
+
+            <Node
+              x="50%"
+              y="82%"
+              title={t.nodes.second[0]}
+              subtitle={locale === 'it' ? 'Lo stesso dato, piu viste operative' : 'Same data, more operational views'}
+              icon="database"
+              status={t.truthLabel}
+              tone="emerald"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <span className="font-bold uppercase tracking-wide text-slate-800">{t.legendTitle}</span>
+
+        <div className="flex items-center gap-3">
+          <div className="h-1 w-8 rounded border-t-2 border-dashed border-white bg-emerald-500" />
+          <span className="font-medium text-slate-700 dark:text-slate-300">{t.flowLabel}</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Database size={16} className="text-emerald-500" />
+          <span className="font-medium text-slate-700 dark:text-slate-300">{t.truthLabel}</span>
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:hidden">
+        <ArrowRight className="h-4 w-4" aria-hidden />
+        <span>{locale === 'it' ? 'Scorri orizzontalmente per vedere il flusso' : 'Scroll horizontally to see the flow'}</span>
+      </div>
+    </section>
+  )
+}
