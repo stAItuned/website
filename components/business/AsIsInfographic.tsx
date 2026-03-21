@@ -37,6 +37,8 @@ type Copy = {
   manualFlow: string
   errorRisk: string
   untrackedData: string
+  mobileTitle: string
+  mobilePainTitle: string
 }
 
 const copy: Record<BusinessLocale, Copy> = {
@@ -66,6 +68,8 @@ const copy: Record<BusinessLocale, Copy> = {
     manualFlow: 'Flusso dati manuale (Copia-Incolla)',
     errorRisk: 'Rischio errore / Riconciliazione complessa',
     untrackedData: 'Dati in canali non tracciabili',
+    mobileTitle: 'Versione mobile del flusso attuale',
+    mobilePainTitle: 'Dove il flusso si rompe',
   },
   en: {
     eyebrow: 'Current state',
@@ -93,6 +97,8 @@ const copy: Record<BusinessLocale, Copy> = {
     manualFlow: 'Manual data flow (copy-paste)',
     errorRisk: 'Error risk / Complex reconciliation',
     untrackedData: 'Data in untracked channels',
+    mobileTitle: 'Mobile version of the current flow',
+    mobilePainTitle: 'Where the flow breaks',
   },
 }
 
@@ -182,6 +188,58 @@ export interface AsIsInfographicProps {
 
 export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicProps) {
   const t = copy[locale]
+  const mobileSteps = [
+    {
+      role: t.swimlanes[0],
+      title: t.nodes.firstRow[0],
+      icon: 'app' as const,
+      badgeOverride: locale === 'it' ? 'App dipendente' : 'Employee app',
+      pain: false,
+    },
+    {
+      role: t.swimlanes[1],
+      title: t.nodes.firstRow[1],
+      icon: 'app' as const,
+      badgeOverride: locale === 'it' ? 'App manager' : 'Manager app',
+      pain: false,
+    },
+    {
+      role: t.swimlanes[2],
+      title: t.nodes.firstRow[2],
+      icon: 'monitor' as const,
+      pain: false,
+    },
+    {
+      role: t.swimlanes[2],
+      title: t.nodes.secondRow[0],
+      icon: 'excel' as const,
+      pain: true,
+    },
+    {
+      role: t.swimlanes[3],
+      title: t.nodes.secondRow[1],
+      icon: 'excel' as const,
+      pain: false,
+    },
+    {
+      role: t.swimlanes[0],
+      title: t.nodes.fourthRow[0],
+      icon: 'whatsapp' as const,
+      pain: true,
+    },
+    {
+      role: t.swimlanes[2],
+      title: t.nodes.thirdRow[1],
+      icon: 'excel' as const,
+      pain: true,
+    },
+    {
+      role: t.swimlanes[4],
+      title: t.nodes.thirdRow[2],
+      icon: 'excel' as const,
+      pain: true,
+    },
+  ]
 
   return (
     <section
@@ -198,7 +256,58 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
         <p className="mx-auto max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
       </header>
 
-      <div className="overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950">
+      <div className="space-y-4 md:hidden">
+        <div className="rounded-[1.25rem] border border-slate-300 bg-white p-4 shadow-lg dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+            {t.mobileTitle}
+          </p>
+          <div className="mt-4 space-y-3">
+            {mobileSteps.map((step, index) => (
+              <div key={`${step.role}-${step.title}`} className="space-y-3">
+                <div className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+                  {step.role}
+                </div>
+                <div className="relative">
+                  <Node
+                    x="50%"
+                    y="50%"
+                    title={step.title}
+                    icon={step.icon}
+                    locale={locale}
+                    isPainPoint={step.pain}
+                    badgeOverride={step.badgeOverride}
+                  />
+                  <div className="invisible h-[118px]" />
+                </div>
+                {index < mobileSteps.length - 1 ? (
+                  <div className="flex justify-center">
+                    <ArrowRight className="h-4 w-4 rotate-90 text-slate-400" aria-hidden />
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-rose-200 bg-rose-50/70 p-4 dark:border-rose-900/40 dark:bg-rose-400/10">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-rose-600 dark:text-rose-300">
+            {t.mobilePainTitle}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="rounded-full border border-red-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 dark:border-red-900/40 dark:bg-slate-950 dark:text-slate-200">
+              {t.manualFlow}
+            </span>
+            <span className="rounded-full border border-red-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 dark:border-red-900/40 dark:bg-slate-950 dark:text-slate-200">
+              {t.errorRisk}
+            </span>
+            <span className="rounded-full border border-red-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 dark:border-red-900/40 dark:bg-slate-950 dark:text-slate-200">
+              {t.untrackedData}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
         <div className="relative h-[680px] min-w-[960px]">
           <div className="grid h-14 grid-cols-5 bg-[#3b5998] text-white shadow-sm">
             {t.swimlanes.map((lane, index) => (
@@ -332,7 +441,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <div className="mt-4 hidden flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950 md:flex">
         <span className="font-bold text-slate-800 uppercase text-sm tracking-wide">{t.legendTitle}</span>
 
         <div className="flex items-center gap-3">
@@ -353,7 +462,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:hidden">
+      <div className="mt-3 hidden items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:flex">
         <ArrowRight className="h-4 w-4" aria-hidden />
         <span>{locale === 'it' ? 'Scorri orizzontalmente per vedere tutto il flusso' : 'Scroll horizontally to see the full flow'}</span>
       </div>

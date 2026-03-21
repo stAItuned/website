@@ -19,6 +19,7 @@ type NodeProps = {
   icon: NodeKind
   status: string
   tone: 'blue' | 'indigo' | 'emerald' | 'teal' | 'slate'
+  mobile?: boolean
 }
 
 type Copy = {
@@ -33,6 +34,7 @@ type Copy = {
   legendTitle: string
   flowLabel: string
   truthLabel: string
+  mobileTitle: string
 }
 
 const copy: Record<BusinessLocale, Copy> = {
@@ -55,6 +57,7 @@ const copy: Record<BusinessLocale, Copy> = {
     legendTitle: 'Legenda Criticita:',
     flowLabel: 'Flusso dati automatico',
     truthLabel: 'Single Source of Truth',
+    mobileTitle: 'Versione mobile del flusso futuro',
   },
   en: {
     eyebrow: 'After',
@@ -75,6 +78,7 @@ const copy: Record<BusinessLocale, Copy> = {
     legendTitle: 'Critical legend:',
     flowLabel: 'Automated data flow',
     truthLabel: 'Single Source of Truth',
+    mobileTitle: 'Mobile version of the future flow',
   },
 }
 
@@ -88,51 +92,53 @@ const ICON_MAP: Record<
 > = {
   app: {
     Icon: Smartphone,
-    iconClass: 'text-blue-600',
-    badgeClass: 'bg-blue-100 text-blue-700 dark:bg-blue-400/10 dark:text-blue-200',
+    iconClass: 'text-blue-600 dark:text-blue-300',
+    badgeClass: 'bg-blue-100 text-blue-700 dark:bg-blue-500/12 dark:text-blue-200',
   },
   dashboard: {
     Icon: Activity,
-    iconClass: 'text-indigo-600',
-    badgeClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-200',
+    iconClass: 'text-indigo-600 dark:text-indigo-300',
+    badgeClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/12 dark:text-indigo-200',
   },
   database: {
     Icon: Database,
-    iconClass: 'text-emerald-600',
-    badgeClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200',
+    iconClass: 'text-emerald-600 dark:text-emerald-300',
+    badgeClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/12 dark:text-emerald-200',
   },
   monitor: {
     Icon: Monitor,
-    iconClass: 'text-teal-600',
-    badgeClass: 'bg-teal-100 text-teal-700 dark:bg-teal-400/10 dark:text-teal-200',
+    iconClass: 'text-teal-600 dark:text-teal-300',
+    badgeClass: 'bg-teal-100 text-teal-700 dark:bg-teal-500/12 dark:text-teal-200',
   },
 }
 
-function Node({ x, y, title, subtitle, icon, status, tone }: NodeProps) {
+function Node({ x, y, title, subtitle, icon, status, tone, mobile = false }: NodeProps) {
   const { Icon, iconClass, badgeClass } = ICON_MAP[icon]
   const toneClasses: Record<NodeProps['tone'], string> = {
-    blue: 'border-blue-200 bg-white dark:border-blue-900/30',
-    indigo: 'border-indigo-200 bg-white dark:border-indigo-900/30',
-    emerald: 'border-emerald-200 bg-white dark:border-emerald-900/30',
-    teal: 'border-teal-200 bg-white dark:border-teal-900/30',
-    slate: 'border-slate-200 bg-white dark:border-slate-800',
+    blue: 'border-blue-200 bg-white dark:border-blue-500/30 dark:bg-slate-900/95',
+    indigo: 'border-indigo-200 bg-white dark:border-indigo-500/30 dark:bg-slate-900/95',
+    emerald: 'border-emerald-200 bg-white dark:border-emerald-500/30 dark:bg-slate-900/95',
+    teal: 'border-teal-200 bg-white dark:border-teal-500/30 dark:bg-slate-900/95',
+    slate: 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/95',
   }
 
   return (
     <div
-      className={`absolute z-10 flex w-44 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-xl border-2 p-4 text-center shadow-md transition-all hover:shadow-lg ${toneClasses[tone]}`}
-      style={{ left: x, top: y, minHeight: '120px' }}
+      className={`flex flex-col items-center justify-start rounded-xl border-2 p-4 text-center shadow-md transition-all hover:shadow-lg ${toneClasses[tone]} ${
+        mobile ? 'relative w-full max-w-none translate-x-0 translate-y-0' : 'absolute z-10 w-44 -translate-x-1/2 -translate-y-1/2'
+      }`}
+      style={mobile ? { minHeight: '120px' } : { left: x, top: y, minHeight: '120px' }}
     >
       <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-full ${badgeClass}`}>
         <Icon size={28} className={iconClass} />
       </div>
 
-      <span className="mb-1 font-bold leading-tight text-slate-800 dark:text-white">{title}</span>
-      <span className="mb-3 text-xs text-slate-500 dark:text-slate-400">{subtitle}</span>
+      <span className="mb-1 font-bold leading-tight text-slate-800 dark:text-slate-50">{title}</span>
+      <span className="mb-3 text-xs text-slate-500 dark:text-slate-300">{subtitle}</span>
 
-      <div className="mt-auto flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 dark:border-slate-800 dark:bg-slate-900">
+      <div className="mt-auto flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 dark:border-emerald-500/20 dark:bg-slate-950">
         <CheckCircle2 size={12} className="text-emerald-500" />
-        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-200">
           {status}
         </span>
       </div>
@@ -147,6 +153,48 @@ export interface ToBeInfographicProps {
 
 export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicProps) {
   const t = copy[locale]
+  const mobileSteps = [
+    {
+      role: t.swimlanes[0],
+      title: t.nodes.first[0],
+      subtitle: locale === 'it' ? 'Ore, note e assenze da un solo punto' : 'Hours, notes and absences from one place',
+      icon: 'app' as const,
+      status: locale === 'it' ? 'Inviato' : 'Sent',
+      tone: 'blue' as const,
+    },
+    {
+      role: t.swimlanes[1],
+      title: t.nodes.first[1],
+      subtitle: locale === 'it' ? 'Con storico, contesto e motivazione' : 'With history, context and reason',
+      icon: 'app' as const,
+      status: locale === 'it' ? 'Approvato' : 'Approved',
+      tone: 'indigo' as const,
+    },
+    {
+      role: t.swimlanes[2],
+      title: t.nodes.first[2],
+      subtitle: locale === 'it' ? 'Vede tutto: anomalie, blocchi, ore' : 'Sees anomalies, blockers and hours',
+      icon: 'dashboard' as const,
+      status: locale === 'it' ? 'Verificato' : 'Verified',
+      tone: 'emerald' as const,
+    },
+    {
+      role: t.swimlanes[3],
+      title: t.nodes.first[3],
+      subtitle: locale === 'it' ? 'Dati aggiornati in tempo reale' : 'Real-time updated data',
+      icon: 'monitor' as const,
+      status: locale === 'it' ? 'Sincronizzato' : 'Synced',
+      tone: 'teal' as const,
+    },
+    {
+      role: t.swimlanes[4],
+      title: t.nodes.first[4],
+      subtitle: locale === 'it' ? 'Export diretto, pulito e senza errori' : 'Direct export, clean and error-free',
+      icon: 'database' as const,
+      status: locale === 'it' ? "Pronto all'uso" : 'Ready to use',
+      tone: 'slate' as const,
+    },
+  ]
 
   return (
     <section
@@ -163,7 +211,52 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
         <p className="mx-auto max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
       </header>
 
-      <div className="overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950">
+      <div className="space-y-4 md:hidden">
+        <div className="rounded-[1.25rem] border border-slate-300 bg-white p-4 shadow-lg dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+            {t.mobileTitle}
+          </p>
+          <div className="mt-4 space-y-3">
+            {mobileSteps.map((step, index) => (
+              <div key={`${step.role}-${step.title}`} className="space-y-3">
+                <div className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">
+                  {step.role}
+                </div>
+                <div className="relative">
+                  <Node
+                    x="50%"
+                    y="50%"
+                    title={step.title}
+                    subtitle={step.subtitle}
+                    icon={step.icon}
+                    status={step.status}
+                    tone={step.tone}
+                    mobile
+                  />
+                </div>
+                {index < mobileSteps.length - 1 ? (
+                  <div className="flex justify-center">
+                    <ArrowRight className="h-4 w-4 rotate-90 text-emerald-400" aria-hidden />
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-4 dark:border-emerald-500/20 dark:bg-emerald-500/8">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
+            {t.truthLabel}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
+            {locale === 'it'
+              ? 'Tutti i ruoli lavorano sullo stesso dato, con viste diverse ma senza copie parallele.'
+              : 'Every role works on the same data, with different views but no parallel copies.'}
+          </p>
+        </div>
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
         <div className="relative min-w-[960px] h-[680px]">
           <div className="grid h-14 grid-cols-5 bg-emerald-600 text-white shadow-sm">
             {t.swimlanes.map((lane, index) => (
@@ -179,11 +272,11 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
           </div>
 
           <div className="pointer-events-none absolute inset-0 top-14 grid grid-cols-5">
-            <div className="border-r border-slate-200 bg-slate-50/40" />
-            <div className="border-r border-slate-200" />
-            <div className="border-r border-slate-200 bg-emerald-50/30" />
-            <div className="border-r border-slate-200" />
-            <div className="bg-slate-50/20" />
+            <div className="border-r border-slate-200 bg-slate-50/40 dark:border-slate-800 dark:bg-slate-900/45" />
+            <div className="border-r border-slate-200 dark:border-slate-800 dark:bg-slate-950" />
+            <div className="border-r border-slate-200 bg-emerald-50/30 dark:border-slate-800 dark:bg-emerald-950/14" />
+            <div className="border-r border-slate-200 dark:border-slate-800 dark:bg-slate-950" />
+            <div className="bg-slate-50/20 dark:bg-slate-900/35" />
           </div>
 
           <div className="absolute inset-0 top-14">
@@ -218,7 +311,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               <line x1="50%" y1="35%" x2="70%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" strokeDasharray="4 4" />
               <line x1="50%" y1="35%" x2="50%" y2="70%" stroke="#10b981" strokeWidth="3" />
               <line x1="50%" y1="70%" x2="90%" y2="70%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
-              <path d="M 70% 35% C 80% 35%, 80% 70%, 90% 70%" stroke="#10b981" strokeWidth="1" strokeDasharray="2 4" fill="none" opacity="0.35" />
+              <path d="M 70% 35% C 80% 35%, 80% 70%, 90% 70%" stroke="#34d399" strokeWidth="1" strokeDasharray="2 4" fill="none" opacity="0.4" />
             </svg>
 
             <Node
@@ -280,7 +373,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <div className="mt-4 hidden flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950 md:flex">
         <span className="font-bold uppercase tracking-wide text-slate-800">{t.legendTitle}</span>
 
         <div className="flex items-center gap-3">
@@ -294,7 +387,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:hidden">
+      <div className="mt-3 hidden items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:flex">
         <ArrowRight className="h-4 w-4" aria-hidden />
         <span>{locale === 'it' ? 'Scorri orizzontalmente per vedere il flusso' : 'Scroll horizontally to see the flow'}</span>
       </div>

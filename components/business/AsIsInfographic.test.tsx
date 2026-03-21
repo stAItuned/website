@@ -7,17 +7,17 @@ describe('AsIsInfographic', () => {
     render(<AsIsInfographic locale="it" />)
 
     expect(screen.getByRole('heading', { level: 3, name: 'Tre ruoli, nessun filo comune' })).toBeTruthy()
-    expect(screen.getByText('Dipendente')).toBeTruthy()
+    expect(screen.getAllByText('Dipendente').length).toBeGreaterThan(0)
     expect(screen.getByText('Legenda Criticità:')).toBeTruthy()
-    expect(screen.getByText('Flusso dati manuale (Copia-Incolla)')).toBeTruthy()
+    expect(screen.getAllByText('Flusso dati manuale (Copia-Incolla)').length).toBeGreaterThan(0)
   })
 
   it('renders the English as-is flowchart', () => {
     render(<AsIsInfographic locale="en" />)
 
     expect(screen.getByRole('heading', { level: 3, name: 'Three roles, no shared thread' })).toBeTruthy()
-    expect(screen.getByText('Employee')).toBeTruthy()
+    expect(screen.getAllByText('Employee').length).toBeGreaterThan(0)
     expect(screen.getByText('Critical legend:')).toBeTruthy()
-    expect(screen.getByText('Manual data flow (copy-paste)')).toBeTruthy()
+    expect(screen.getAllByText('Manual data flow (copy-paste)').length).toBeGreaterThan(0)
   })
 })
