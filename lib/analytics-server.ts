@@ -19,6 +19,13 @@ export interface ArticleAnalytics {
   updatedAt: string | null;
 }
 
+function resolvePageViews(data: Record<string, unknown> | undefined): number {
+  if (!data) return 0
+  const firstParty = data.pageViewsFirstParty
+  if (typeof firstParty === 'number') return firstParty
+  return 0
+}
+
 export interface GlobalAnalytics {
   totalStats: {
     pageViews: number;
@@ -62,7 +69,7 @@ export async function fetchArticleAnalytics(slug: string): Promise<ArticleAnalyt
       const data = snap.data();
       if (data) {
         return {
-          pageViews: data.pageViews ?? 0,
+          pageViews: resolvePageViews(data as Record<string, unknown>),
           users: data.users ?? 0,
           sessions: data.sessions ?? 0,
           avgTimeOnPage: data.avgTimeOnPage ?? 0,

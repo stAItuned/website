@@ -113,6 +113,13 @@ class AnalyticsCache {
 // Global cache instance
 const analyticsCache = new AnalyticsCache()
 
+function resolvePageViews(data: Record<string, unknown> | undefined): number {
+  if (!data) return 0
+  const firstParty = data.pageViewsFirstParty
+  if (typeof firstParty === 'number') return firstParty
+  return 0
+}
+
 // Optimized analytics queries
 export class OptimizedAnalytics {
   
@@ -132,7 +139,11 @@ export class OptimizedAnalytics {
             likes: 0
           }
         }
-        return doc.data()
+        const data = (doc.data() ?? {}) as Record<string, unknown>
+        return {
+          ...data,
+          pageViews: resolvePageViews(data),
+        }
       },
       {
         ttl: 3600, // 1 hour
@@ -177,14 +188,19 @@ export class OptimizedAnalytics {
         
         return docs.map((doc, index) => ({
           slug: slugs[index],
-          data: doc.exists ? doc.data() : {
-            pageViews: 0,
-            users: 0,
-            sessions: 0,
-            avgTimeOnPage: 0,
-            bounceRate: 0,
-            likes: 0
-          }
+          data: doc.exists
+            ? {
+                ...(doc.data() ?? {}),
+                pageViews: resolvePageViews((doc.data() ?? {}) as Record<string, unknown>),
+              }
+            : {
+                pageViews: 0,
+                users: 0,
+                sessions: 0,
+                avgTimeOnPage: 0,
+                bounceRate: 0,
+                likes: 0,
+              }
         }))
       },
       {
@@ -237,7 +253,7 @@ export class FirestoreOptimizer {
       async () => {
         const snapshot = await db()
           .collection('articles')
-          .orderBy('pageViews', 'desc')
+          .orderBy('pageViewsFirstParty', 'desc')
           .limit(limit)
           .get()
         
