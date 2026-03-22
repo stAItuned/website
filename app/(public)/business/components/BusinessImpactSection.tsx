@@ -9,13 +9,15 @@ export function BusinessImpactSection({ t }: { t: BusinessTranslations }) {
         <div className="max-w-2xl space-y-3">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-secondary-500">{t.benefits.eyebrow}</p>
           <h2 className="text-2xl font-bold tracking-tight xs:text-3xl">{t.benefits.title}</h2>
-          <p className="text-base leading-7 text-slate-200">{t.benefits.lead}</p>
+          <p className="text-base leading-6 text-slate-200">{t.benefits.lead}</p>
         </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {t.benefits.items.slice(0, 3).map((item) => (
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {t.benefits.items.map((item) => (
             <article key={item.label} className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-              <p className="text-3xl font-black tracking-tight text-secondary-500">{item.value}</p>
-              <h3 className="mt-2 text-base font-semibold text-white">{item.label}</h3>
+              {item.value ? (
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary-500">{item.value}</p>
+              ) : null}
+              <h3 className={`${item.value ? 'mt-3' : ''} text-lg font-semibold text-white`}>{item.label}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-200">{item.note}</p>
             </article>
           ))}

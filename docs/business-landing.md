@@ -22,8 +22,11 @@ Il selettore lingua è mostrato solo nell'header globale; la hero non contiene c
 - `starting-point`: confronto visivo tra processo frammentato attuale e workflow centralizzato stAI tuned con sync web/mobile e viste per ruolo
   Il lato problema usa come riferimento esplicito l'esempio `public/assets/business/as-is.md` e il flowchart as-is in `components/business/AsIsInfographic.tsx`; il lato dopo usa il flowchart centralizzato in `components/business/ToBeInfographic.tsx`.
   La testata del confronto è stata compattata: toggle inline al titolo, badge sintetici per evidenziare i punti chiave di ciascun workflow e cue visivo con freccia per guidare la lettura da as-is a to-be.
+  Nel diagramma `to-be` il nodo admin centrale è trattato come motore del sistema, con enfasi esplicita su dato unico condiviso, sincronizzazione continua tra ruoli e export letto come conseguenza diretta del flusso invece che come file ricostruito a valle. Una micro-riga anti-caos esplicita quali attriti spariscono: niente copia-incolla tra file, niente passaggi persi in chat/email, niente riallineamenti manuali.
 - `evidence`: blocco problema con 3 evidenze esterne e link fonte autorevoli
+  La sezione è stata compressa per lettura da colpo d'occhio: titolo netto, sottotitolo breve, 3 card dati asciutte e una sola riga finale che esplicita il costo della frammentazione.
 - `workflow`: sezione centrale con confronto prima/dopo, carosello di 5 screenshot (2 operatore, 1 manager/approvatore, 2 admin) e workflow map testuale in 5 step
+- `starting-point` e `impact` seguono una regola di scansione rapida: due righe chiave per capire il cambiamento, massimo 3 bullet per leggere il "dopo" e card beneficio con una sola frase operativa ciascuna.
 - `bridge-to-other-processes`: blocco ponte che chiarisce che HR/Admin è solo il caso dimostrativo; il valore sta nel pattern di richieste sparse, approvazioni fuori sistema, file duplicati e controllo tardivo, applicabile anche ad altri workflow
 - `business-request`: form dedicato inline per richiedere una demo business contestualizzata al processo descritto dall azienda
 - `faq`: chiarisce onboarding, scope del pilot e impatto operativo

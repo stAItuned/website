@@ -71,6 +71,9 @@ export function BusinessHeroSection({ t }: { t: BusinessTranslations }) {
             <p className="mx-auto max-w-2xl text-base leading-7 text-slate-300 xs:text-lg">
               {renderHighlightedText(t.hero.subtitle, t.hero.subtitleHighlights)}
             </p>
+            <p className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-medium leading-7 text-slate-100 backdrop-blur-sm xs:text-base">
+              {t.hero.positioning}
+            </p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">

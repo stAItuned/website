@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { FormEvent, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ArrowRight } from 'lucide-react'
 import type { BusinessLocale, BusinessTranslations } from '@/lib/i18n/business-translations'
 import { BusinessSectionEyebrow } from './BusinessSectionEyebrow'
@@ -44,6 +45,7 @@ export function BusinessRequestSection({
   const [status, setStatus] = useState<FormStatus>('idle')
   const [message, setMessage] = useState('')
   const [formData, setFormData] = useState<BusinessRequestFormData>(INITIAL_FORM_DATA)
+  const [isMounted, setIsMounted] = useState(false)
 
   const handleChange = (field: keyof BusinessRequestFormData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -110,10 +112,25 @@ export function BusinessRequestSection({
   }
 
   useEffect(() => {
+    setIsMounted(true)
     const handler = () => setIsModalOpen(true)
     window.addEventListener('open-business-request-modal', handler)
     return () => window.removeEventListener('open-business-request-modal', handler)
   }, [])
+
+  useEffect(() => {
+    if (!isMounted) return
+
+    const originalOverflow = document.body.style.overflow
+
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [isModalOpen, isMounted])
 
   const formContent =
     status === 'success' ? (
@@ -287,30 +304,33 @@ export function BusinessRequestSection({
         </div>
       </div>
 
-      {isModalOpen ? (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4" aria-modal="true" role="dialog">
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={closeModal} />
-          <div className="relative z-10 flex max-h-[82vh] w-full max-w-2xl flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-800 dark:bg-[#0F1117]">
-            <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 dark:border-slate-800">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">{formT.eyebrow}</p>
-                <h3 className="mt-2 text-lg font-bold text-slate-900 dark:text-white">{formT.formTitle}</h3>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{formT.formDescription}</p>
-              </div>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800"
-                aria-label="Close"
-              >
-                <span className="block h-5 w-5">✕</span>
-              </button>
-            </div>
+      {isMounted && isModalOpen
+        ? createPortal(
+            <div className="fixed inset-0 z-[140] flex items-center justify-center px-4" aria-modal="true" role="dialog">
+              <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={closeModal} />
+              <div className="relative z-10 flex max-h-[82vh] w-full max-w-2xl flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-800 dark:bg-[#0F1117]">
+                <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">{formT.eyebrow}</p>
+                    <h3 className="mt-2 text-lg font-bold text-slate-900 dark:text-white">{formT.formTitle}</h3>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{formT.formDescription}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800"
+                    aria-label="Close"
+                  >
+                    <span className="block h-5 w-5">✕</span>
+                  </button>
+                </div>
 
-            <div className="overflow-y-auto px-5 py-4 sm:px-6">{formContent}</div>
-          </div>
-        </div>
-      ) : null}
+                <div className="overflow-y-auto px-5 py-4 sm:px-6">{formContent}</div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </section>
   )
 }

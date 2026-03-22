@@ -14,6 +14,7 @@ type HeroTranslation = {
   highlight: string
   subtitle: string
   subtitleHighlights: string[]
+  positioning: string
   primaryCta: string
   secondaryCta: string
   trustSignals: Array<{
@@ -128,6 +129,7 @@ export interface BusinessTranslations {
     title: string
     items: EvidenceTranslation[]
     lead: string
+    closing: string
   }
   painPoints: {
     eyebrow: string
@@ -286,6 +288,8 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         'automatizza',
         'errori, rincorse e ritardi',
       ],
+      positioning:
+        'stAI tuned trasforma processi operativi gestiti tra Excel, email e chat in workflow unificati, tracciati e pronti all azione.',
       primaryCta: 'Guarda cosa potresti fare',
       secondaryCta: 'Candidati per una demo',
       trustSignals: [
@@ -349,33 +353,35 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     evidence: {
       eyebrow: 'Perché questo problema conta',
-      title: 'Il punto non è avere più software. Il punto è evitare che il lavoro si perda tra strumenti diversi.',
+      title: 'Il problema è strutturale, non episodico.',
       items: [
         {
           value: '73%',
-          label: 'Le PMI hanno già strumenti digitali. Il problema è che spesso non lavorano come un unico flusso.',
-          note: 'Se richieste, approvazioni e controllo restano distribuiti tra tool diversi, la digitalizzazione non riduce davvero il lavoro operativo: lo sposta da una persona all’altra.',
+          label: 'PMI UE con intensita digitale almeno base, ancora sotto il target UE 2030.',
+          note: 'La presenza di tool non basta se il processo resta frammentato.',
           sourceLabel: 'Fonte: Eurostat Digitalisation in Europe 2025',
           sourceHref: 'https://ec.europa.eu/eurostat/web/interactive-publications/digitalisation-2025',
         },
         {
-          value: '58%',
-          label: 'Più di metà del tempo può finire in coordinamento, follow-up e riallineamenti.',
-          note: 'Quando non esiste uno stato condiviso, manager e admin passano la giornata a rincorrere aggiornamenti invece di chiudere il lavoro.',
-          sourceLabel: 'Fonte: Asana Anatomy of Work',
-          sourceHref: 'https://asana.com/id/resources/pandemic-paradigm-shift',
+          value: '76,1%',
+          label: 'PMI UE ancora a livello low o very low di intensita digitale nel 2023.',
+          note: 'Il gap non è solo adottare software, ma collegare ruoli e dati nello stesso flusso.',
+          sourceLabel: 'Fonte: Digital Decade 2024',
+          sourceHref: 'https://digital-strategy.ec.europa.eu/en/library/digital-decade-2024-strategic-foresight-report',
         },
         {
-          value: '5h/settimana',
-          label: 'Ogni settimana si perdono ore solo per ritrovare informazioni già esistenti.',
-          note: 'Se dati, allegati e approvazioni sono sparsi, il team non governa il processo: prima deve ricostruirlo ogni volta.',
+          value: '60%',
+          label: 'Del tempo lavorativo assorbito da coordinamento, follow-up e lavoro accessorio.',
+          note: 'Quando gli stati non sono condivisi, il tempo va in rincorse invece che in chiusura operativa.',
           sourceLabel: 'Fonte: McKinsey High Tech Practice',
           sourceHref:
             'https://www.mckinsey.com/~/media/mckinsey/dotcom/client_service/high%20tech/pdfs/impact_of_internet_technologies_search_final2.ashx',
         },
       ],
       lead:
-        'Il costo vero non nasce dal singolo foglio Excel. Nasce quando dati, richieste e approvazioni passano tra sistemi diversi e costringono il team a coordinarsi a mano.',
+        'Molte PMI lavorano ancora con processi frammentati, strumenti scollegati e coordinamento manuale.',
+      closing:
+        'Quando dati, richieste e approvazioni vivono in posti diversi, il lavoro non scala: si frammenta.',
     },
     painPoints: {
       eyebrow: 'Ti suona familiare?',
@@ -403,7 +409,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       eyebrow: 'Come lo abbiamo già tradotto nel concreto',
       title: 'Un esempio reale: da processo HR/Admin frammentato a workflow unico già modellato.',
       lead:
-        'Partiamo da un caso già messo a terra: ore, assenze, approvazioni e payroll gestiti su canali separati. Da qui mostriamo come lo stesso processo può essere ridisegnato in un flusso unico, tracciato e governato per ruoli.',
+        'Un caso concreto, letto in pochi secondi: prima le rotture del flusso, poi lo stesso processo ricomposto in un sistema unico.',
       exampleLabel: 'Esempio reale di partenza',
       exampleTitle: 'Gestione HR di rendicontazione ore, approvazione e reportistica su sistemi separati.',
       exampleBody:
@@ -414,7 +420,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       chaoticLabel: 'Prima',
       chaoticTitle: 'Processo frammentato',
       chaoticBody:
-        'Le informazioni passano tra chat, fogli, telefonate, allegati e sistemi diversi. Ogni ruolo vede solo un pezzo, quindi admin e operations ricostruiscono il contesto troppo tardi.',
+        'Ore, assenze, approvazioni e controlli passano tra app, file Excel, chat, email ed export manuali.',
       fragmentedToolsLabel: 'Canali che si accumulano',
       fragmentedTools: ['WhatsApp', 'Excel locali', 'Email con allegati', 'Chiamate e vocali', 'File condivisi', 'Tool separati'],
       lanes: [
@@ -437,12 +443,12 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       centralizedLabel: 'Dopo',
       centralizedTitle: 'Workflow centralizzato stAI tuned',
       centralizedBody:
-        'Un solo sistema raccoglie inserimento, approvazione, controllo e export. Web e mobile restano allineati, ogni passaggio ha uno stato e ogni ruolo vede solo quello che gli serve per agire.',
+        'Lo stesso processo viene gestito in un flusso unico, con dati sincronizzati, stati tracciati e output gia pronti.',
       centralizedPoints: [
-        'Inserimento semplice da mobile per operatori e team sul campo',
-        'Coda manager con contesto, motivazioni e storico approvazioni',
-        'Controllo admin con anomalie, blocchi, documenti e consolidamento',
-        'Dati sempre sincronizzati tra web, mobile e funzioni per ruolo',
+        'Un inserimento, più viste per ruolo',
+        'Approvazioni contestualizzate',
+        'Export finale senza ricopia manuale',
+        'Dati sincronizzati tra ruoli e funzioni',
       ],
       syncNote: 'Stesso dato, più viste operative: campo, manager, admin e operations lavorano in tempo reale sullo stesso flusso.',
       asIsIntro: 'Mappa rapida di dove il flusso attuale si rompe.',
@@ -587,14 +593,14 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     benefits: {
       eyebrow: 'Impatto operativo',
-      title: 'Quando il flusso è unico, il controllo arriva prima.',
+      title: 'Impatto atteso sul processo',
       lead:
-        'Questi sono i segnali che contano davvero: più visibilità, meno lavoro manuale, approvazioni più rapide.',
+        'Indicazioni di miglioramento potenziale su flussi oggi gestiti tra app, file Excel, messaggi e passaggi manuali. I valori variano in base al livello di frammentazione iniziale.',
       items: [
-        { value: '+85%', label: 'visibilità operativa', note: 'stato chiaro delle richieste in ogni momento', progress: 85 },
-        { value: '-70%', label: 'lavoro manuale amministrativo', note: 'meno copia-incolla e meno ricostruzioni finali', progress: 70 },
-        { value: '+60%', label: 'velocità di approvazione', note: 'il manager decide con contesto e storico', progress: 60 },
-        { value: '+1', label: 'vista unica', note: 'più dati centralizzati per admin e operations', progress: 92 },
+        { value: '', label: 'Meno tempo speso nel consolidare dati', note: 'Il team smette di ricostruire il quadro partendo da file e fonti diverse.', progress: 85 },
+        { value: '', label: 'Meno passaggi manuali tra ruoli', note: 'Richieste, approvazioni e verifiche scorrono nello stesso flusso.', progress: 70 },
+        { value: '', label: 'Più visibilità su anomalie e blocchi', note: 'Admin e manager vedono prima dove il processo si ferma.', progress: 60 },
+        { value: '', label: 'Export finale più pulito e rapido', note: 'L output arriva già strutturato, con meno interventi di sistemazione.', progress: 92 },
       ],
     },
     faq: {
@@ -723,6 +729,8 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         'automate the manual handoffs',
         'errors, chasing and delays',
       ],
+      positioning:
+        'stAItuned turns operational processes managed across spreadsheets, email and chat into unified, traceable workflows ready for action.',
       primaryCta: 'See what you could do',
       secondaryCta: 'Apply for a demo',
       trustSignals: [
@@ -786,33 +794,35 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     evidence: {
       eyebrow: 'Why this problem matters',
-      title: 'The issue is not a lack of software. The issue is work getting lost across disconnected tools.',
+      title: 'The problem is structural, not occasional.',
       items: [
         {
           value: '73%',
-          label: 'Most SMEs already have digital tools. The gap is turning them into one governed workflow.',
-          note: 'When requests, approvals and controls stay split across tools, digitization does not remove operational work. It just passes it from one person to another.',
+          label: 'EU SMEs with at least basic digital intensity, still below the EU 2030 target.',
+          note: 'Having tools is not enough if the process stays fragmented.',
           sourceLabel: 'Source: Eurostat Digitalisation in Europe 2025',
           sourceHref: 'https://ec.europa.eu/eurostat/web/interactive-publications/digitalisation-2025',
         },
         {
-          value: '58%',
-          label: 'More than half of work time can disappear into coordination, follow-ups and alignment.',
-          note: 'Without a shared status model, managers and admin teams spend the day chasing updates instead of moving the process forward.',
-          sourceLabel: 'Source: Asana Anatomy of Work',
-          sourceHref: 'https://asana.com/id/resources/pandemic-paradigm-shift',
+          value: '76.1%',
+          label: 'EU SMEs still at low or very low digital intensity in 2023.',
+          note: 'The gap is not just software adoption, but linking roles and data in one flow.',
+          sourceLabel: 'Source: Digital Decade 2024',
+          sourceHref: 'https://digital-strategy.ec.europa.eu/en/library/digital-decade-2024-strategic-foresight-report',
         },
         {
-          value: '5h/week',
-          label: 'Hours are lost every week just to find information the company already has.',
-          note: 'When data, files and approvals are scattered, teams are not governing the process. They are rebuilding it from scratch each time.',
+          value: '60%',
+          label: 'Of work time absorbed by coordination, follow-up and accessory work.',
+          note: 'When statuses are not shared, time goes into chasing instead of operational closure.',
           sourceLabel: 'Source: McKinsey High Tech Practice',
           sourceHref:
             'https://www.mckinsey.com/~/media/mckinsey/dotcom/client_service/high%20tech/pdfs/impact_of_internet_technologies_search_final2.ashx',
         },
       ],
       lead:
-        'The real cost is not the spreadsheet itself. It is what happens when data, requests and approvals move across disconnected systems and force the team to coordinate by hand.',
+        'Many SMEs still run on fragmented processes, disconnected tools and manual coordination.',
+      closing:
+        'When data, requests and approvals live in different places, work does not scale. It fragments.',
     },
     painPoints: {
       eyebrow: 'Does this sound familiar?',
@@ -840,7 +850,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       eyebrow: 'How we already translated this into a concrete flow',
       title: 'One real example: from fragmented HR/Admin process to one modeled workflow.',
       lead:
-        'We start from a case already modeled: time, absences, approvals and payroll handled across separate channels. From there, we show how the same process can be redesigned into one tracked flow managed by roles.',
+        'One concrete case, readable in seconds: first the breakpoints, then the same process rebuilt into one shared system.',
       exampleLabel: 'Real starting example',
       exampleTitle: 'HR time reporting, approval and reporting spread across separate systems.',
       exampleBody:
@@ -851,7 +861,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       chaoticLabel: 'Before',
       chaoticTitle: 'Fragmented process',
       chaoticBody:
-        'Information moves through chat, spreadsheets, calls, files and separate systems. Each role only sees one slice, so admin and operations rebuild context too late.',
+        'Hours, absences, approvals and checks move across apps, spreadsheets, chat, email and manual exports.',
       fragmentedToolsLabel: 'Channels that pile up',
       fragmentedTools: ['WhatsApp', 'Local spreadsheets', 'Email attachments', 'Calls and voice notes', 'Shared files', 'Separate tools'],
       lanes: [
@@ -874,12 +884,12 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       centralizedLabel: 'After',
       centralizedTitle: 'Centralized stAItuned workflow',
       centralizedBody:
-        'One system handles submission, approval, control and export. Web and mobile stay aligned, every handoff has a status, and each role sees exactly what it needs to act.',
+        'The same process runs in one flow, with synced data, tracked states and outputs already ready.',
       centralizedPoints: [
-        'Simple mobile entry for workers and field teams',
-        'Manager queue with context, reasons and approval history',
-        'Admin control for anomalies, blockers, documents and consolidation',
-        'Data always synchronized across web, mobile and role-based views',
+        'One intake, multiple role-based views',
+        'Approvals with context',
+        'Final export without manual re-entry',
+        'Synced data across roles and functions',
       ],
       syncNote: 'One shared dataset, multiple operational views: field, manager, admin and operations work in real time on the same flow.',
       asIsIntro: 'Quick map of where the current flow still breaks.',
@@ -1024,14 +1034,14 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     benefits: {
       eyebrow: 'Operational impact',
-      title: 'When the workflow is unified, control arrives earlier.',
+      title: 'Expected process impact',
       lead:
-        'These are the signals that actually matter: more visibility, less manual work, faster approvals.',
+        'Directional improvement signals for workflows still managed across apps, spreadsheets, messages and manual handoffs. Actual values depend on the starting level of fragmentation.',
       items: [
-        { value: '+85%', label: 'operational visibility', note: 'clear request status at any moment', progress: 85 },
-        { value: '-70%', label: 'manual admin work', note: 'less copy-paste and less end-of-month reconstruction', progress: 70 },
-        { value: '+60%', label: 'approval speed', note: 'managers decide with context and history', progress: 60 },
-        { value: '+1', label: 'single control view', note: 'more centralized data for admin and operations', progress: 92 },
+        { value: '', label: 'Less time spent consolidating data', note: 'The team stops rebuilding the picture from disconnected files and sources.', progress: 85 },
+        { value: '', label: 'Fewer manual handoffs across roles', note: 'Requests, approvals and checks move inside the same flow.', progress: 70 },
+        { value: '', label: 'More visibility on anomalies and blockers', note: 'Admin and managers see earlier where the process is getting stuck.', progress: 60 },
+        { value: '', label: 'Cleaner and faster final export', note: 'The output arrives already structured, with less manual cleanup.', progress: 92 },
       ],
     },
     faq: {
