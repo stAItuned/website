@@ -41,9 +41,9 @@ export function BusinessHeroSection({ t }: { t: BusinessTranslations }) {
       <div className="absolute bottom-1/4 right-1/4 h-56 w-56 rounded-full bg-[#FFF272]/10 blur-3xl" />
       <div className="absolute top-1/2 right-1/6 h-40 w-40 rounded-full bg-[#F59E0B]/15 blur-2xl" />
 
-      <div className="relative mx-auto max-w-5xl px-4 pb-14 xs:px-6 lg:pb-16">
-        <div className="mx-auto max-w-3xl space-y-5 text-center">
-          <div className="flex flex-wrap items-center gap-3">
+      <div className="relative mx-auto max-w-5xl px-4 pb-16 xs:px-6 lg:pb-20">
+        <div className="mx-auto max-w-4xl space-y-8 text-center lg:space-y-10">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-amber-300 backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
@@ -61,22 +61,22 @@ export function BusinessHeroSection({ t }: { t: BusinessTranslations }) {
             <span className="font-medium text-slate-200">{t.breadcrumb.business}</span>
           </nav>
 
-          <div className="space-y-4">
-            <h1 className="text-3xl font-black leading-[1.08] tracking-tight text-white xs:text-4xl lg:text-5xl">
+          <div className="space-y-6 lg:space-y-7">
+            <h1 className="text-3xl font-black leading-[1.04] tracking-tight text-white xs:text-4xl lg:text-6xl">
               {t.hero.title}{' '}
               <span className="bg-gradient-to-r from-[#FFF272] via-[#FCD34D] to-[#F59E0B] bg-clip-text text-transparent">
                 {t.hero.highlight}
               </span>
             </h1>
-            <p className="mx-auto max-w-2xl text-base leading-7 text-slate-300 xs:text-lg">
+            <p className="mx-auto max-w-2xl text-base leading-8 text-slate-300 xs:text-lg">
               {renderHighlightedText(t.hero.subtitle, t.hero.subtitleHighlights)}
             </p>
-            <p className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-medium leading-7 text-slate-100 backdrop-blur-sm xs:text-base">
+            <p className="mx-auto max-w-[52rem] rounded-[1.6rem] border border-white/10 bg-white/5 px-6 py-5 text-sm font-medium leading-8 text-slate-100 backdrop-blur-sm xs:text-base">
               {t.hero.positioning}
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:justify-center sm:gap-4">
             <a
               href="#workflow"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] px-5 py-3.5 text-sm font-bold text-[#1A1E3B] shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
@@ -91,11 +91,11 @@ export function BusinessHeroSection({ t }: { t: BusinessTranslations }) {
             </OpenBusinessRequestButton>
           </div>
 
-          <ul className="grid gap-3 text-left md:grid-cols-3">
+          <ul className="grid gap-4 pt-2 text-left md:grid-cols-3">
             {t.hero.trustSignals.map((item) => (
               <li
                 key={item.title}
-                className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.09)_0%,rgba(255,255,255,0.03)_100%)] px-4 py-4 backdrop-blur-sm transition-colors hover:bg-white/[0.08]"
+                className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.09)_0%,rgba(255,255,255,0.03)_100%)] px-5 py-5 backdrop-blur-sm transition-colors hover:bg-white/[0.08]"
               >
                 <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-300">{item.title}</p>
                 <p className="mt-2 text-sm font-medium leading-6 text-slate-200">{item.description}</p>
