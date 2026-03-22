@@ -88,19 +88,6 @@ export interface HomeTranslations {
         dismiss: string
         keepReading: string
     }
-    newsletter: {
-        title: string
-        description: string
-        placeholder: string
-        button: string
-        loading: string
-        success: string
-        error: string
-        consent: string
-        privacyPolicy: string
-        termsConditions: string
-        benefits: string[]
-    }
     pwa: {
         title: string
         subtitle: string
@@ -249,8 +236,8 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pathExpert: "Percorso Expert",
             midSection: {
                 title: "L'era della GenAI non aspetta.",
-                subtitle: "Ricevi contenuti pratici su AI e GenAI, scritti da chi lavora nel settore.",
-                cta: "Unisciti alla Newsletter",
+                subtitle: "Scegli gli argomenti che ti interessano ed entra direttamente nei percorsi giusti.",
+                cta: "Esplora i topic",
                 socialProof: "Unisciti a +2.000 AI Builder"
             },
             wantDeeper: "Vuoi approfondire un percorso specifico?"
@@ -269,23 +256,6 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             ctaLeadMagnet: "Scarica CV Rubric Gratis",
             dismiss: "Non ora",
             keepReading: "Continua a leggere"
-        },
-        newsletter: {
-            title: "📬 Resta aggiornato",
-            description: "Nuovi articoli, tool e casi d'uso AI direttamente nella tua inbox.",
-            placeholder: "La tua email",
-            button: "Iscriviti alla newsletter",
-            loading: "Un momento...",
-            success: "🎉 Iscrizione completata!",
-            error: "Errore. Riprova.",
-            consent: "Iscrivendomi accetto i ",
-            privacyPolicy: "Privacy Policy",
-            termsConditions: "Termini e Condizioni",
-            benefits: [
-                "Deep-dive tecnici settimanali",
-                "Strategie di carriera per AI Engineers",
-                "Casi studio reali di implementazione"
-            ]
         },
         pwa: {
             title: "Porta stAI tuned su mobile",
@@ -378,7 +348,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             manageCookies: "Gestisci cookie",
             disclaimer: "stAI tuned è un progetto indipendente di formazione e sperimentazione su AI. Le attività vengono svolte al di fuori dell'orario di lavoro dipendente e senza utilizzo di informazioni riservate o progetti interni ad altri datori di lavoro.",
             stayUpdated: "Resta aggiornato",
-            noSpam: "Niente spam · Disiscriviti quando vuoi",
+            noSpam: "Naviga per argomento e trova subito i contenuti piu utili per il tuo percorso.",
             privacyPolicy: "Privacy Policy",
             termsConditions: "Termini e Condizioni",
             cookiePolicy: "Cookie Policy"
@@ -447,8 +417,8 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             pathExpert: "Expert Path",
             midSection: {
                 title: "The GenAI era won't wait.",
-                subtitle: "Get practical AI and GenAI content, written by industry practitioners.",
-                cta: "Join the Newsletter",
+                subtitle: "Pick the topics you care about and jump straight into the right learning paths.",
+                cta: "Explore topics",
                 socialProof: "Join 2,000+ AI Builders"
             },
             wantDeeper: "Want to go deep on a specific path?"
@@ -467,23 +437,6 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             ctaLeadMagnet: "Download Free CV Rubric",
             dismiss: "Not now",
             keepReading: "Keep Reading"
-        },
-        newsletter: {
-            title: "📬 Stay updated",
-            description: "New articles, tools, and AI use cases directly in your inbox.",
-            placeholder: "Your email",
-            button: "Subscribe to newsletter",
-            loading: "One moment...",
-            success: "🎉 Subscription complete!",
-            error: "Error. Try again.",
-            consent: "By subscribing I accept the ",
-            privacyPolicy: "Privacy Policy",
-            termsConditions: "Terms and Conditions",
-            benefits: [
-                "Weekly technical deep-dives",
-                "Career strategies for AI Engineers",
-                "Real implementation case studies"
-            ]
         },
         pwa: {
             title: "Take stAI tuned on mobile",
@@ -576,7 +529,7 @@ export const homeTranslations: Record<'en' | 'it', HomeTranslations> = {
             manageCookies: "Manage Cookies",
             disclaimer: "stAI tuned is an independent project for training and experimentation on AI. Activities are carried out outside of employee working hours and without the use of confidential information or internal projects of other employers.",
             stayUpdated: "Stay Updated",
-            noSpam: "No spam · Unsubscribe anytime",
+            noSpam: "Browse by topic and quickly find the most relevant content for your path.",
             privacyPolicy: "Privacy Policy",
             termsConditions: "Terms and Conditions",
             cookiePolicy: "Cookie Policy"

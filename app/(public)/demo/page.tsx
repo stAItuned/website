@@ -99,13 +99,13 @@ export default function DemoPage() {
                 Stiamo costruendo le prime demo
               </h4>
               <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                Le prime webapp nasceranno dai progetti pilota in corso. Torna presto o iscriviti alla newsletter per essere aggiornato.
+                Le prime webapp nasceranno dai progetti pilota in corso. Torna presto oppure esplora i topic per seguire gli argomenti che ti interessano.
               </p>
               <Link
-                href="/newsletter"
+                href="/topics"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-white font-semibold transition-all shadow-md hover:scale-105"
               >
-                <span>Iscriviti alla newsletter</span>
+                <span>Esplora i topic</span>
                 <span>→</span>
               </Link>
             </div>

@@ -61,9 +61,6 @@ export {
     trackTargetLevelSelected,
     trackSearchPerformed,
     trackSearchResultClicked,
-    trackNewsletterSubscribe,
-    trackNewsletterSubscribeSuccess,
-    trackNewsletterSubscribeError,
     trackLikeAdded,
     trackLikeRemoved,
 } from './trackEvent'

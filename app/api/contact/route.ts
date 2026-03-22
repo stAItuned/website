@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     await sendTelegramFeedback({
       category: 'contact',
-      message: `Nome: ${name || 'n/a'}\nAzienda: ${company || 'n/a'}\nNewsletter/marketing: ${marketingConsent ? 'Sì' : 'No'}\n\n${message}`,
+      message: `Nome: ${name || 'n/a'}\nAzienda: ${company || 'n/a'}\nConsenso marketing: ${marketingConsent ? 'Sì' : 'No'}\n\n${message}`,
       email,
       page: page || '/?source=contact-modal',
       userAgent,

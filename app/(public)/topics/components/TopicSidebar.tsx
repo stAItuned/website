@@ -46,7 +46,7 @@ export function TopicSidebar({ startHereArticles, accentColor }: TopicSidebarPro
                 </div>
             </div>
 
-            {/* Newsletter / CTA Placeholder - Could be added here later */}
+            {/* CTA Placeholder */}
 
             {/* View All Link */}
             <Link

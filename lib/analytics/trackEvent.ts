@@ -73,9 +73,6 @@ export type UserJourneyEvent =
     | 'target_level_selected'
     | 'search_performed'
     | 'search_result_clicked'
-    | 'newsletter_subscribe'
-    | 'newsletter_subscribe_success'
-    | 'newsletter_subscribe_error'
     | 'like_added'
     | 'like_removed'
 
@@ -283,7 +280,6 @@ function inferCategory(eventName: AnalyticsEventName): EventCategory {
     if (eventName.startsWith('pwa_')) return 'pwa'
     if (eventName.startsWith('push_')) return 'notifications'
     if (eventName.startsWith('article_')) return 'article'
-    if (eventName.startsWith('newsletter_')) return 'conversion'
     if (eventName.startsWith('search_')) return 'user_journey'
     if (eventName.startsWith('target_')) return 'user_journey'
     if (eventName.startsWith('like_')) return 'engagement'
@@ -442,26 +438,6 @@ export function trackSearchResultClicked(searchQuery: string, articleSlug: strin
         articleSlug,
         label: articleSlug
     })
-}
-
-export function trackNewsletterSubscribe(source: string) {
-    trackEvent('newsletter_subscribe', { category: 'conversion', source })
-}
-
-export function trackNewsletterSubscribeSuccess(source: string) {
-    trackEvent('newsletter_subscribe_success', { category: 'conversion', source })
-    // Also track as standard lead
-    trackEvent('generate_lead', {
-        category: 'conversion',
-        currency: 'EUR',
-        value: 0,
-        source: source,
-        label: 'newsletter'
-    })
-}
-
-export function trackNewsletterSubscribeError(source: string) {
-    trackEvent('newsletter_subscribe_error', { category: 'conversion', source })
 }
 
 export function trackLikeAdded(articleSlug: string) {

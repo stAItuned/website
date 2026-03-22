@@ -6,7 +6,6 @@ import { LinkedInIcon } from '@/components/icons/SocialIcons'
 import { trackExternalLinkClicked } from '@/lib/analytics/trackEvent'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 import { ScrollReveal, FadeIn } from '@/components/ui/Animations'
-import { NewsletterSignup } from '@/components/ui/NewsletterSignup'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
 
 // =============================================================================
@@ -201,14 +200,23 @@ export function Footer() {
               </FadeIn>
             </div>
 
-            {/* Right Column: Newsletter (Compact) */}
+            {/* Right Column: Topics CTA */}
             <div className="lg:col-span-4 flex flex-col gap-2">
               <div className="flex items-center gap-2 text-slate-200 mb-1">
-                <span className="text-sm">📬</span>
+                <span className="text-sm">🧭</span>
                 <h3 className="text-xs font-semibold uppercase tracking-wider">{t.stayUpdated}</h3>
               </div>
-              <div className="w-full">
-                <NewsletterSignup source="footer" variant="inline" showHeader={false} className="transform scale-95 origin-top-left" />
+              <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
+                {t.noSpam}
+              </p>
+              <div>
+                <Link
+                  href="/topics"
+                  className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 transition-colors hover:bg-amber-500/20 hover:text-amber-200"
+                >
+                  <span>{locale === 'it' ? 'Esplora i topic' : 'Explore topics'}</span>
+                  <span aria-hidden>→</span>
+                </Link>
               </div>
             </div>
 

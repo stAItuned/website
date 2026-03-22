@@ -30,7 +30,7 @@ export function LearnContributorSection({ className = '' }: LearnContributorSect
             {
                 icon: '📢',
                 title: 'Distribuzione massima',
-                description: 'Homepage, newsletter, LinkedIn con 10k+ follower'
+                description: 'Homepage, hub topics, LinkedIn con 10k+ follower'
             },
             {
                 icon: '✏️',
@@ -66,7 +66,7 @@ export function LearnContributorSection({ className = '' }: LearnContributorSect
             {
                 icon: '📢',
                 title: 'Maximum distribution',
-                description: 'Homepage, newsletter, LinkedIn with 10k+ followers'
+                description: 'Homepage, topics hub, LinkedIn with 10k+ followers'
             },
             {
                 icon: '✏️',
