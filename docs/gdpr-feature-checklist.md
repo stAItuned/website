@@ -84,6 +84,88 @@ Use this checklist before implementing any feature or change that introduces or 
 - Decision: `approved`
 - Notes: approval is implementation-complete; production delete execution remains operational step with evidence capture.
 
+## Latest Completed Review (Role Fit Audit - Strategy A Hardening)
+
+### 1. Processing Snapshot
+- Feature/change: Workstream 3 Strategy A hardening on `role_fit_audit` flow
+- Date: 2026-03-22
+- Owner: stAItuned engineering
+- Status: `approved`
+- Related brainstorming/spec: `plan.md` -> "Workstream 3 - Role Fit Audit conforme e ridotto nel rischio"
+
+### 2. Processing Activity
+- Trigger: user submits Role Fit Audit form
+- Purpose: generate personalized report and operate follow-up service flow with minimized internal notifications
+- Type: hardening of existing processing activity
+- Systems: Next.js API submit route + Firestore + AI generation + email delivery + Telegram metadata alerts
+
+### 3. Data Inventory
+- Personal data categories: email, optional name, optional social link, questionnaire answers, result scores
+- Special-category data involved: `no`
+- User identifiers involved: email, submission id
+- Free-text fields involved: `limited` (name/link)
+- Data source: `user provided` + `inferred` (AI report output)
+
+### 4. Role and Legal Basis
+- stAItuned role: `controller`
+- Legal basis assumption: consent for Role Fit submission/report + legitimate interest for service operations safeguards
+- Is consent required: `yes`
+- Consent handling: server enforces `acceptedPrivacy === true`, stores structured consent (`consent.privacy.acceptedAt/version`) and marketing request flag
+
+### 5. Transparency
+- Privacy policy update required: `yes` (Role Fit section + retention + minimized internal channels)
+- Cookie policy update required: `no`
+- Terms/UX disclosure update required: `yes` (form microcopy and legal wording)
+- User-facing disclosure copy updated: admin access scope, 12-month retention, revocation/deletion contact
+
+### 6. Retention and Lifecycle
+- Retention window: 12 months (`retentionUntil` on each submission)
+- Deletion/anonymization rule: lifecycle hook deferred to WS5, retention marker active now
+- Export/access implications: unchanged in this wave
+- Rectification implications: unchanged in this wave
+- End-of-contract / end-of-purpose handling: record-level retention marker applied
+
+### 7. Vendors and Transfers
+- Vendors/subprocessors involved: Firebase/Firestore, Resend, Telegram, Google Gemini
+- Countries/transfer implications: unchanged from existing vendor stack
+- Cleartext access by vendor/internal team: reduced (Telegram moved to metadata-only, no full report CC)
+- Additional contracts or DPA checks required: no new providers introduced
+
+### 8. Security and Minimization
+- Minimum required fields: consent fields, scores/result summary, operational metadata
+- Optional fields that can be removed: future reduction of raw answers (not in this wave per product decision)
+- Logging/telemetry impact: internal notifications minimized to metadata-only
+- Access control requirements: admin route remains auth+admin guarded
+- Secrets/config changes: none required
+
+### 9. User Rights and Operations
+- DSAR impact: improved traceability through consent/version/retention metadata
+- Support/runbook impact: DPIA screening doc added
+- Backfill/migration impact: legacy submissions may lack new compliance fields
+- Monitoring/audit trail needs: submission-level compliance fields now persisted
+
+### 10. Risk Review
+- Main privacy risks: legacy records without new compliance fields; admin exposure of raw answers
+- Main legal/accountability risks: delayed lifecycle deletion job (WS5 dependency)
+- Mitigations required before release: API consent enforcement + legal text alignment + metadata-only internal channels
+- DPIA screening needed: `yes` (completed screening artifact in repo)
+- Blocking unknowns: none for this wave
+
+### 11. Documentation Updates
+- Docs to update:
+  - `plan.md`
+  - `docs/dpia-screening-role-fit-audit.md`
+- Legal text files to update:
+  - `lib/i18n/legal-translations.ts`
+  - `lib/i18n/role-fit-audit-translations.ts`
+- Runbooks/specs to update:
+  - `docs/gdpr-feature-checklist.md`
+
+### 12. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + bilingual parity gate (`localized-page-change-check`)
+- Decision: `approved`
+- Notes: Strategy A hardening completed for current scope; retention lifecycle automation remains in WS5 backlog.
+
 ## 1. Processing Snapshot
 - Feature/change:
 - Date:

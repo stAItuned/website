@@ -192,9 +192,10 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     content: 'Utilizzando i servizi di stAItuned, l\'utente prende atto e accetta che il team amministrativo abbia accesso ai dati sottomessi per garantire la qualità del servizio:',
                     items: [
                         'Dati di autenticazione: email, nome, foto profilo e identificativi tecnici;',
-                        'Dati Role Fit Audit: risposte al questionario, risultati, archetipo e suggerimenti di carriera generati;',
+                        'Dati Role Fit Audit: risposte al questionario, risultati, archetipo e suggerimenti di carriera generati (con retention standard di 12 mesi, salvo obblighi di legge);',
                         'Dati Waitlist Career OS: email, tier/mode di interesse, consenso privacy obbligatorio e consenso marketing (se fornito);',
                         'Dati Contributor Path: pitch, bozze, interviste, outline e accordo legale firmato (nome legale, codice fiscale, data di firma);',
+                        'I canali interni operativi (es. alert Telegram) usano notifiche minimizzate a metadati per ridurre l\'esposizione di dati personali.',
                         'Questi dati sono utilizzati esclusivamente per migliorare il servizio, fornire supporto e gestire le funzionalità della piattaforma.'
                     ]
                 }
@@ -259,7 +260,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate.'
+                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate. I record del Role Fit Audit sono conservati per 12 mesi, salvo obblighi di legge.'
                     },
                     {
                         title: 'Waitlist Career OS',
@@ -297,7 +298,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             retention: {
                 title: 'Conservazione e cancellazione',
-                content1: 'Le richieste di contatto sono archiviate per 12-24 mesi. I lead waitlist Career OS sono conservati per 12 mesi salvo obblighi diversi di legge.',
+                content1: 'Le richieste di contatto sono archiviate per 12-24 mesi. I record Role Fit Audit e i lead waitlist Career OS sono conservati per 12 mesi salvo obblighi diversi di legge.',
                 content2: 'Candidature e collaborazioni vengono conservate per 12-24 mesi per valutazioni future.'
             },
             rights: {
@@ -442,9 +443,10 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     content: 'By using stAItuned services, the user acknowledges and agrees that the administrative team has access to submitted data to ensure service quality:',
                     items: [
                         'Authentication data: email, name, profile picture, and technical identifiers;',
-                        'Role Fit Audit data: questionnaire responses, results, archetype, and generated career suggestions;',
+                        'Role Fit Audit data: questionnaire responses, results, archetype, and generated career suggestions (with a standard retention of 12 months unless legal obligations apply);',
                         'Career OS waitlist data: email, selected intent (tier/mode), mandatory privacy consent, and marketing consent (if provided);',
                         'Contributor Path data: pitches, drafts, interviews, outlines, and signed legal agreement (legal name, tax ID, signing date);',
+                        'Internal operational channels (e.g., Telegram alerts) use metadata-only notifications to reduce personal data exposure.',
                         'This data is used exclusively to improve the service, provide support, and manage platform features.'
                     ]
                 }
@@ -509,7 +511,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends.'
+                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends. Role Fit Audit records are retained for 12 months unless legal obligations require otherwise.'
                     },
                     {
                         title: 'Career OS Waitlist',
@@ -547,7 +549,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             retention: {
                 title: 'Retention and Deletion',
-                content1: 'Contact requests are stored for 12-24 months. Career OS waitlist leads are retained for 12 months unless legal obligations require otherwise.',
+                content1: 'Contact requests are stored for 12-24 months. Role Fit Audit records and Career OS waitlist leads are retained for 12 months unless legal obligations require otherwise.',
                 content2: 'Applications and collaborations are kept for 12-24 months for future evaluations.'
             },
             rights: {

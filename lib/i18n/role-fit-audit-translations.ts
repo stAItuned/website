@@ -199,6 +199,7 @@ export interface RoleFitTranslations {
   apiErrors: {
     invalidEmail: string
     missingAnswers: string
+    privacyRequired: string
     serverError: string
     submitError: string
   }
@@ -388,7 +389,8 @@ export const roleFitAuditTranslations: Record<RoleFitLocale, RoleFitTranslations
       privacyConsent:
         'Acconsento al trattamento dei dati per ricevere il report via email. I dati delle risposte e i risultati saranno visibili al team stAItuned per migliorare il servizio. Leggi Privacy e Terms.',
       marketingConsent: 'Voglio ricevere aggiornamenti e offerte su Career OS via email (facoltativo).',
-      microcopy: 'Niente spam. 1 email con il tuo report PDF (e solo se vuoi, aggiornamenti occasionali).',
+      microcopy:
+        'Niente spam. 1 email con il tuo report PDF (e solo se vuoi, aggiornamenti occasionali). I dati audit sono accessibili al team admin stAItuned per finalita di servizio e conservati per 12 mesi. Per revoca/cancellazione: info@staituned.com.',
       back: '← Indietro',
       next: 'Avanti →',
       continue: 'Continua →',
@@ -518,6 +520,7 @@ export const roleFitAuditTranslations: Record<RoleFitLocale, RoleFitTranslations
     apiErrors: {
       invalidEmail: 'Email non valida.',
       missingAnswers: 'Risposte mancanti.',
+      privacyRequired: 'Devi accettare la privacy per inviare il Role Fit Audit.',
       serverError: 'Server error',
       submitError: "Errore durante l'invio",
     },
@@ -682,7 +685,8 @@ export const roleFitAuditTranslations: Record<RoleFitLocale, RoleFitTranslations
       privacyConsent:
         'I consent to data processing to receive the report by email. Answers and results may be visible to the stAItuned team to improve the service. Read Privacy and Terms.',
       marketingConsent: 'I want to receive Career OS updates and offers by email (optional).',
-      microcopy: 'No spam. 1 email with your PDF report (and occasional updates only if you want).',
+      microcopy:
+        'No spam. 1 email with your PDF report (and occasional updates only if you want). Audit data can be accessed by the stAItuned admin team for service operations and retained for 12 months. For revocation/deletion: info@staituned.com.',
       back: '← Back',
       next: 'Next →',
       continue: 'Continue →',
@@ -812,6 +816,7 @@ export const roleFitAuditTranslations: Record<RoleFitLocale, RoleFitTranslations
     apiErrors: {
       invalidEmail: 'Invalid email.',
       missingAnswers: 'Missing answers.',
+      privacyRequired: 'You must accept privacy consent to submit the Role Fit Audit.',
       serverError: 'Server error',
       submitError: 'Submission error',
     },

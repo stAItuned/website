@@ -92,7 +92,37 @@ Rimane da fare:
 
 ### Workstream 3 - Role Fit Audit conforme e ridotto nel rischio
 
-Stato: `Non avviato`
+Stato: `In corso (hardening implementato, in attesa rollout e monitoraggio)`
+
+Decisione:
+- adottata `Strategia A` (hardening completo mantenendo il prodotto live).
+
+Fatto:
+- enforcement consenso privacy lato server su submit audit (`acceptedPrivacy` obbligatorio);
+- payload client submit allineato con `acceptedPrivacy`;
+- persistenza Firestore estesa con campi compliance:
+  - `status`
+  - `retentionUntil` (12 mesi)
+  - `consent.privacy.*`
+  - `consent.marketing.requested`
+  - `privacyVersion`
+  - `dataMinimizationVersion`
+- notifiche Telegram ridotte a metadata-only (niente email/nome/link/risposte/paypal);
+- invio report email senza CC interno completo;
+- introdotto alert interno separato metadata-only per tracking operativo;
+- admin API/UI estesi con campi compliance e filtro base `expiring soon`.
+- checklist GDPR WS3 aggiornata a `approved` (`docs/gdpr-feature-checklist.md`);
+- screening DPIA interno creato (`docs/dpia-screening-role-fit-audit.md`);
+- test WS3 aggiunti/aggiornati:
+  - API submit: enforcement `acceptedPrivacy` + campi compliance + telegram metadata-only;
+  - email report: assenza `cc` interno + alert metadata-only separato.
+- verifiche tecniche eseguite con esito positivo:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `pnpm exec vitest run app/api/role-fit-audit/submit/route.test.ts lib/email/roleFitAuditEmail.test.ts`
+
+Rimane da fare:
+- eseguire rollout + monitoraggio 7 giorni.
 
 ### Workstream 4 - Trasparenza e documentazione
 

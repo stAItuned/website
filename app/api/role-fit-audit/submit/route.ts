@@ -15,6 +15,8 @@ import {
 // =============================================================================
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const ROLE_FIT_PRIVACY_VERSION = '2026-03-22'
+const ROLE_FIT_RETENTION_DAYS = 365
 
 // =============================================================================
 // POST Handler
@@ -26,7 +28,7 @@ export async function POST(req: NextRequest) {
         const locale = normalizeRoleFitLocale(body?.locale) as RoleFitLocale
         const i18n = roleFitAuditTranslations[locale]
 
-        const { answers, email, name, linkedinUrl, marketingConsent, website, paypalOrderId } = body || {}
+        const { answers, email, name, linkedinUrl, marketingConsent, acceptedPrivacy, website, paypalOrderId } = body || {}
 
         // Honeypot check - silently accept but don't process bot submissions
         if (website && typeof website === 'string' && website.trim() !== '') {
@@ -42,8 +44,13 @@ export async function POST(req: NextRequest) {
         if (!answers || typeof answers !== 'object') {
             return NextResponse.json({ error: i18n.apiErrors.missingAnswers }, { status: 400 })
         }
+        if (!acceptedPrivacy) {
+            return NextResponse.json({ error: i18n.apiErrors.privacyRequired }, { status: 400 })
+        }
 
         const normalizedEmail = email.trim().toLowerCase()
+        const nowIso = new Date().toISOString()
+        const retentionUntil = new Date(Date.now() + 1000 * 60 * 60 * 24 * ROLE_FIT_RETENTION_DAYS).toISOString()
 
         // -------------------------------------------------------------------------
         // Generate AI Result (with static fallback)
@@ -63,9 +70,10 @@ export async function POST(req: NextRequest) {
         // -------------------------------------------------------------------------
         // Save to Firestore
         // -------------------------------------------------------------------------
+        let submissionId: string | null = null
         try {
             const submissionsRef = db().collection('role_fit_audit_submissions')
-            await submissionsRef.add({
+            const created = await submissionsRef.add({
                 email: normalizedEmail,
                 name: name?.trim() || null,
                 linkedinUrl: linkedinUrl?.trim() || null,
@@ -91,9 +99,25 @@ export async function POST(req: NextRequest) {
                     // AI enhancements if available
                     aiEnhancements: result.aiEnhancements || null,
                 },
+                status: 'active',
+                consent: {
+                    privacy: {
+                        accepted: true,
+                        acceptedAt: nowIso,
+                        version: ROLE_FIT_PRIVACY_VERSION,
+                    },
+                    marketing: {
+                        requested: Boolean(marketingConsent),
+                    },
+                },
+                privacyVersion: ROLE_FIT_PRIVACY_VERSION,
+                dataMinimizationVersion: 'v1',
+                retentionUntil,
                 userAgent: req.headers.get('user-agent') || null,
-                createdAt: new Date().toISOString(),
+                createdAt: nowIso,
+                updatedAt: nowIso,
             })
+            submissionId = created.id
         } catch (dbError) {
             console.error('FIREBASE SAVE ERROR (role-fit-audit):', dbError)
             // Continue even if DB fails
@@ -104,28 +128,20 @@ export async function POST(req: NextRequest) {
         // -------------------------------------------------------------------------
         try {
             const telegramMessage = [
-                `🎯 Nuovo GenAI Fit Check completato (${result.generatedBy.toUpperCase()})`,
+                `🎯 Nuovo GenAI Fit Check completato`,
                 '',
-                name ? `👤 Nome: ${name.trim()}` : '',
-                `📧 Email: ${normalizedEmail}`,
-                paypalOrderId ? `💰 PayPal ID: ${paypalOrderId}` : '',
-                linkedinUrl ? `🔗 LinkedIn: ${linkedinUrl.trim()}` : '',
+                `🆔 Submission: ${submissionId || 'not_persisted'}`,
+                `⚙️ Engine: ${result.generatedBy.toUpperCase()}`,
+                `🌐 Locale: ${locale}`,
                 `📣 Marketing: ${Boolean(marketingConsent) ? 'Sì' : 'No'}`,
+                `🕒 CreatedAt: ${nowIso}`,
                 '',
                 `🏷 Archetipo: ${result.archetype?.name || 'N/A'}`,
                 `📊 Readiness: ${result.readinessLabel || 'N/A'}`,
-                `🎯 NOW: ${result.roleRecommendation?.now || 'N/A'}`,
-                `⏭ NEXT: ${result.roleRecommendation?.next || 'N/A'}`,
-                '',
-                `📈 Scores:`,
-                `   Code: ${result.normalizedScores?.code || 0}/100`,
-                `   Data: ${result.normalizedScores?.data || 0}/100`,
-                `   Product: ${result.normalizedScores?.product || 0}/100`,
-                `   GenAI: ${result.normalizedScores?.genai || 0}/100`,
-                '',
-                `🚧 Top Gaps: ${result.topGaps?.map((g: { title: string }) => g.title).join(', ') || 'Nessuno'}`,
-                '',
-                result.aiEnhancements?.coachingNote ? `💬 AI Note: ${result.aiEnhancements.coachingNote.substring(0, 100)}...` : '',
+                `📈 Code: ${result.normalizedScores?.code || 0}/100`,
+                `📈 Data: ${result.normalizedScores?.data || 0}/100`,
+                `📈 Product: ${result.normalizedScores?.product || 0}/100`,
+                `📈 GenAI: ${result.normalizedScores?.genai || 0}/100`,
             ]
                 .filter(Boolean)
                 .join('\n')
@@ -133,7 +149,6 @@ export async function POST(req: NextRequest) {
             await sendTelegramFeedback({
                 category: 'role_fit_audit',
                 message: telegramMessage,
-                email: normalizedEmail,
                 page: '/role-fit-audit',
                 userAgent: req.headers.get('user-agent') || undefined,
             })
@@ -151,6 +166,13 @@ export async function POST(req: NextRequest) {
                 name: name?.trim(),
                 result,
                 locale,
+                internalAlert: {
+                    submissionId: submissionId || 'not_persisted',
+                    generatedBy: result.generatedBy,
+                    readinessLabel: result.readinessLabel || 'N/A',
+                    archetypeId: result.archetype?.id || 'N/A',
+                    createdAt: nowIso,
+                },
             })
         } catch (emailError) {
             console.error('EMAIL ERROR (role-fit-audit):', emailError)

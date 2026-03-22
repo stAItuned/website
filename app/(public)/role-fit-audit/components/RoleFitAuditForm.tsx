@@ -182,6 +182,7 @@ export default function RoleFitAuditForm({
           email: formState.email,
           name: formState.name,
           linkedinUrl: formState.linkedinUrl,
+          acceptedPrivacy: formState.acceptedPrivacy,
           marketingConsent: formState.marketingConsent,
           website: formState.website,
           paypalOrderId,

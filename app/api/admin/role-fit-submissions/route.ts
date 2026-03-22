@@ -10,6 +10,19 @@ interface RoleFitSubmission {
     linkedinUrl?: string;
     marketingConsent?: boolean;
     paypalOrderId?: string;
+    status?: string;
+    retentionUntil?: string;
+    privacyVersion?: string;
+    consent?: {
+        privacy?: {
+            accepted?: boolean;
+            acceptedAt?: string;
+            version?: string;
+        };
+        marketing?: {
+            requested?: boolean;
+        };
+    };
     createdAt: string;
     result?: {
         readinessLabel?: string;
@@ -64,6 +77,19 @@ export async function GET(request: NextRequest) {
                 linkedinUrl?: string;
                 marketingConsent?: boolean;
                 paypalOrderId?: string;
+                status?: string;
+                retentionUntil?: unknown;
+                privacyVersion?: string;
+                consent?: {
+                    privacy?: {
+                        accepted?: boolean;
+                        acceptedAt?: unknown;
+                        version?: string;
+                    };
+                    marketing?: {
+                        requested?: boolean;
+                    };
+                };
                 createdAt?: unknown;
                 result?: {
                     readinessLabel?: string;
@@ -83,6 +109,19 @@ export async function GET(request: NextRequest) {
                 linkedinUrl: data.linkedinUrl,
                 marketingConsent: data.marketingConsent,
                 paypalOrderId: data.paypalOrderId,
+                status: data.status,
+                retentionUntil: toIsoString(data.retentionUntil),
+                privacyVersion: data.privacyVersion,
+                consent: {
+                    privacy: {
+                        accepted: data.consent?.privacy?.accepted,
+                        acceptedAt: toIsoString(data.consent?.privacy?.acceptedAt),
+                        version: data.consent?.privacy?.version,
+                    },
+                    marketing: {
+                        requested: data.consent?.marketing?.requested,
+                    },
+                },
                 createdAt: toIsoString(data.createdAt),
                 result: data.result ? {
                     readinessLabel: data.result.readinessLabel,
