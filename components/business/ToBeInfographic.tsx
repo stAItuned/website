@@ -19,6 +19,8 @@ type NodeProps = {
   icon: NodeKind
   status: string
   tone: 'blue' | 'indigo' | 'emerald' | 'teal' | 'slate'
+  eyebrow?: string
+  featured?: boolean
   mobile?: boolean
 }
 
@@ -27,11 +29,16 @@ type Copy = {
   title: string
   highlights: [string, string, string, string]
   subtitle: string
+  painKillers: [string, string, string]
   swimlanes: [string, string, string, string, string]
   nodes: {
     first: [string, string, string, string, string]
     second: [string]
   }
+  engineLabel: string
+  sharedDataLabel: string
+  syncLabel: string
+  exportOutcomeLabel: string
   legendTitle: string
   flowLabel: string
   truthLabel: string
@@ -42,9 +49,14 @@ const copy: Record<BusinessLocale, Copy> = {
   it: {
     eyebrow: 'Dopo',
     title: 'Workflow centralizzato stAI tuned',
-    highlights: ['Un solo flusso', 'Stati tracciati', 'Dati sempre sincronizzati', 'Export pulito'],
+    highlights: ['Dato unico, viste diverse', 'Stati tracciati', 'Dati sempre sincronizzati', 'Export conseguente'],
     subtitle:
       'Un solo sistema raccoglie inserimento, approvazione, controllo ed export. Web e mobile restano allineati, ogni passaggio ha uno stato e ogni ruolo vede solo quello che gli serve.',
+    painKillers: [
+      'Nessun copia-incolla tra file',
+      'Nessun passaggio perso in chat o mail',
+      'Nessun riallineamento manuale tra ruoli',
+    ],
     swimlanes: ['Dipendente', 'Manager', 'Admin', 'Ufficio Tecnico', 'Consulente del lavoro'],
     nodes: {
       first: [
@@ -56,6 +68,10 @@ const copy: Record<BusinessLocale, Copy> = {
       ],
       second: ['Single source of truth'],
     },
+    engineLabel: 'Motore condiviso',
+    sharedDataLabel: 'Dato unico, viste diverse',
+    syncLabel: 'Sincronizzazione continua',
+    exportOutcomeLabel: 'L export nasce direttamente dal sistema',
     legendTitle: 'Legenda Criticita:',
     flowLabel: 'Flusso dati automatico',
     truthLabel: 'Single Source of Truth',
@@ -64,9 +80,14 @@ const copy: Record<BusinessLocale, Copy> = {
   en: {
     eyebrow: 'After',
     title: 'Centralized stAItuned workflow',
-    highlights: ['One shared flow', 'Tracked states', 'Always synced data', 'Clean export'],
+    highlights: ['One data source, different views', 'Tracked states', 'Always synced data', 'Export as an outcome'],
     subtitle:
       'One system handles intake, approval, control and export. Web and mobile stay aligned, every handoff has a status, and each role sees exactly what it needs to act.',
+    painKillers: [
+      'No copy-paste across files',
+      'No missed handoffs in chat or email',
+      'No manual realignment across roles',
+    ],
     swimlanes: ['Employee', 'Manager', 'Admin', 'Technical Office', 'Payroll consultant'],
     nodes: {
       first: [
@@ -78,6 +99,10 @@ const copy: Record<BusinessLocale, Copy> = {
       ],
       second: ['Single source of truth'],
     },
+    engineLabel: 'Shared system engine',
+    sharedDataLabel: 'One data source, different views',
+    syncLabel: 'Continuous sync',
+    exportOutcomeLabel: 'Export comes straight from the system',
     legendTitle: 'Critical legend:',
     flowLabel: 'Automated data flow',
     truthLabel: 'Single Source of Truth',
@@ -115,7 +140,7 @@ const ICON_MAP: Record<
   },
 }
 
-function Node({ x, y, title, subtitle, icon, status, tone, mobile = false }: NodeProps) {
+function Node({ x, y, title, subtitle, icon, status, tone, eyebrow, featured = false, mobile = false }: NodeProps) {
   const { Icon, iconClass, badgeClass } = ICON_MAP[icon]
   const toneClasses: Record<NodeProps['tone'], string> = {
     blue: 'border-blue-200 bg-white dark:border-blue-500/30 dark:bg-slate-900/95',
@@ -128,10 +153,19 @@ function Node({ x, y, title, subtitle, icon, status, tone, mobile = false }: Nod
   return (
     <div
       className={`flex flex-col items-center justify-start rounded-xl border-2 p-3 text-center shadow-md transition-all hover:shadow-lg ${toneClasses[tone]} ${
+        featured
+          ? 'ring-4 ring-emerald-100 shadow-[0_18px_40px_rgba(16,185,129,0.16)] dark:ring-emerald-500/20'
+          : ''
+      } ${
         mobile ? 'relative w-full max-w-none translate-x-0 translate-y-0' : 'absolute z-10 w-40 -translate-x-1/2 -translate-y-1/2'
       }`}
       style={mobile ? { minHeight: '104px' } : { left: x, top: y, minHeight: '104px' }}
     >
+      {eyebrow ? (
+        <span className="mb-2 inline-flex rounded-full bg-emerald-50 px-2 py-1 text-[9px] font-black uppercase tracking-[0.18em] text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">
+          {eyebrow}
+        </span>
+      ) : null}
       <div className={`mb-2.5 flex h-9 w-9 items-center justify-center rounded-full ${badgeClass}`}>
         <Icon size={24} className={iconClass} />
       </div>
@@ -176,7 +210,10 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
     {
       role: t.swimlanes[2],
       title: t.nodes.first[2],
-      subtitle: locale === 'it' ? 'Vede tutto: anomalie, blocchi, ore' : 'Sees anomalies, blockers and hours',
+      subtitle:
+        locale === 'it'
+          ? 'Il sistema sincronizza stati, anomalie e ore per tutti i ruoli'
+          : 'The system syncs statuses, anomalies and hours across roles',
       icon: 'dashboard' as const,
       status: locale === 'it' ? 'Verificato' : 'Verified',
       tone: 'emerald' as const,
@@ -192,7 +229,10 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
     {
       role: t.swimlanes[4],
       title: t.nodes.first[4],
-      subtitle: locale === 'it' ? 'Export diretto, pulito e senza errori' : 'Direct export, clean and error-free',
+      subtitle:
+        locale === 'it'
+          ? 'Generato dal flusso condiviso, senza ricostruzioni manuali'
+          : 'Generated from the shared flow, with no manual rebuild',
       icon: 'database' as const,
       status: locale === 'it' ? "Pronto all'uso" : 'Ready to use',
       tone: 'slate' as const,
@@ -221,6 +261,16 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
             </span>
           ))}
         </div>
+        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-2">
+          {t.painKillers.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
         <p className="mx-auto max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
       </header>
 
@@ -244,9 +294,19 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
                     icon={step.icon}
                     status={step.status}
                     tone={step.tone}
+                    eyebrow={index === 2 ? t.engineLabel : undefined}
+                    featured={index === 2}
                     mobile
                   />
                 </div>
+                {index === 2 ? (
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-3 text-center dark:border-emerald-500/20 dark:bg-emerald-500/10">
+                    <p className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-200">
+                      {t.sharedDataLabel}
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-700 dark:text-slate-300">{t.syncLabel}</p>
+                  </div>
+                ) : null}
                 {index < mobileSteps.length - 1 ? (
                   <div className="flex justify-center">
                     <ArrowRight className="h-4 w-4 rotate-90 text-emerald-400" aria-hidden />
@@ -320,11 +380,12 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               </defs>
 
               <line x1="10%" y1="35%" x2="30%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
-              <line x1="30%" y1="35%" x2="50%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
-              <line x1="50%" y1="35%" x2="70%" y2="35%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" strokeDasharray="4 4" />
-              <line x1="50%" y1="35%" x2="50%" y2="70%" stroke="#10b981" strokeWidth="3" />
-              <line x1="50%" y1="70%" x2="90%" y2="70%" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow-sync)" />
-              <path d="M 70% 35% C 80% 35%, 80% 70%, 90% 70%" stroke="#34d399" strokeWidth="1" strokeDasharray="2 4" fill="none" opacity="0.4" />
+              <line x1="30%" y1="35%" x2="50%" y2="35%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
+              <line x1="50%" y1="35%" x2="70%" y2="35%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
+              <line x1="50%" y1="35%" x2="50%" y2="70%" stroke="#10b981" strokeWidth="4" />
+              <line x1="50%" y1="70%" x2="90%" y2="70%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
+              <path d="M 50% 35% C 64% 35%, 72% 35%, 90% 70%" stroke="#34d399" strokeWidth="2" strokeDasharray="6 6" fill="none" opacity="0.8" />
+              <path d="M 50% 35% C 50% 48%, 50% 58%, 50% 70%" stroke="#6ee7b7" strokeWidth="8" fill="none" opacity="0.18" />
             </svg>
 
             <Node
@@ -349,10 +410,16 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               x="50%"
               y="35%"
               title={t.nodes.first[2]}
-              subtitle={locale === 'it' ? 'Vede tutto: anomalie, blocchi, ore' : 'Sees anomalies, blockers and hours'}
+              subtitle={
+                locale === 'it'
+                  ? 'Il sistema sincronizza stati, anomalie e ore per tutti i ruoli'
+                  : 'The system syncs statuses, anomalies and hours across roles'
+              }
               icon="dashboard"
               status={locale === 'it' ? 'Verificato' : 'Verified'}
               tone="emerald"
+              eyebrow={t.engineLabel}
+              featured
             />
             <Node
               x="70%"
@@ -367,7 +434,11 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               x="90%"
               y="70%"
               title={t.nodes.first[4]}
-              subtitle={locale === 'it' ? 'Export diretto, pulito e senza errori' : 'Direct export, clean and error-free'}
+              subtitle={
+                locale === 'it'
+                  ? 'Generato dal flusso condiviso, senza ricostruzioni manuali'
+                  : 'Generated from the shared flow, with no manual rebuild'
+              }
               icon="database"
               status={locale === 'it' ? "Pronto all'uso" : 'Ready to use'}
               tone="slate"
@@ -382,6 +453,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               status={t.truthLabel}
               tone="emerald"
             />
+
           </div>
         </div>
       </div>
