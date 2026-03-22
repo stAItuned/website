@@ -93,6 +93,19 @@ type FaqTranslation = {
   answer: string
 }
 
+type BusinessRequestFieldTranslations = {
+  name: string
+  email: string
+  company: string
+  role: string
+  processName: string
+  mainPain: string
+  notes: string
+  privacyLabelPrefix: string
+  privacyPolicy: string
+  submit: string
+}
+
 export interface BusinessTranslations {
   meta: {
     title: string
@@ -141,6 +154,9 @@ export interface BusinessTranslations {
     centralizedBody: string
     centralizedPoints: string[]
     syncNote: string
+    asIsIntro: string
+    toBeIntro: string
+    transitionCue: string
   }
   metrics: {
     eyebrow: string
@@ -164,7 +180,15 @@ export interface BusinessTranslations {
   useCases: {
     eyebrow: string
     title: string
+    lead: string
+    patternsTitle: string
+    patterns: string[]
     items: ItemTranslation[]
+    closing: string
+    ctas: Array<{
+      title: string
+      action: string
+    }>
   }
   benefits: {
     eyebrow: string
@@ -176,6 +200,46 @@ export interface BusinessTranslations {
     eyebrow: string
     title: string
     items: FaqTranslation[]
+  }
+  requestSection: {
+    eyebrow: string
+    title: string
+    description: string
+    bullets: string[]
+    formTitle: string
+    formDescription: string
+    successTitle: string
+    successSubtitle: string
+    resetCta: string
+    fields: BusinessRequestFieldTranslations
+    placeholders: {
+      role: string
+      processName: string
+      mainPain: string
+      notes: string
+    }
+    errors: {
+      nameRequired: string
+      emailRequired: string
+      invalidEmail: string
+      companyRequired: string
+      processNameRequired: string
+      mainPainRequired: string
+      privacyRequired: string
+      submitFailed: string
+    }
+  }
+  apiErrors: {
+    apply: {
+      nameRequired: string
+      invalidEmail: string
+      companyRequired: string
+      processNameRequired: string
+      mainPainRequired: string
+      privacyRequired: string
+      serverError: string
+      notConfigured: string
+    }
   }
   finalCta: {
     title: string
@@ -222,8 +286,8 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         'automatizza',
         'errori, rincorse e ritardi',
       ],
-      primaryCta: 'Guarda come funzionerebbe nel tuo caso',
-      secondaryCta: 'Vedi il flusso completo',
+      primaryCta: 'Guarda cosa potresti fare',
+      secondaryCta: 'Candidati per una demo',
       trustSignals: [
         {
           title: 'Un solo flusso',
@@ -235,14 +299,14 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         },
         {
           title: 'Chiusura senza rincorse',
-          description: 'Riconciliazioni pronte prima dell export',
+          description: 'Riconciliazioni pronte prima dell’export',
         },
       ],
       priorityCard: {
         eyebrow: 'Use case concreto',
         title: 'Esempio HR/Admin: ore, assenze, approvazioni e payroll nello stesso flusso.',
         body:
-          'Partiamo da un caso reale: prima canali sparsi e merge manuali, poi un workflow unico dal campo all export finale.',
+          'Partiamo da un caso reale: prima canali sparsi e merge manuali, poi un workflow unico dal campo all’export finale.',
       },
       demoCard: {
         eyebrow: 'Mappa operativa',
@@ -260,7 +324,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
           {
             title: 'Manager in coda',
             value: '6',
-            description: 'con priorita e storico',
+            description: 'con priorità e storico',
           },
           {
             title: 'Eccezioni admin',
@@ -270,48 +334,48 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
           {
             title: 'Export pronti',
             value: '24',
-            description: 'gia verificati e consolidati',
+            description: 'già verificati e consolidati',
           },
         ],
         stepsTitle: 'Cosa rende la demo utile',
         steps: [
-          'L operatore inserisce richiesta, ore e allegati.',
-          'Il manager vede contesto, storico e priorita.',
-          'L admin intercetta anomalie e blocchi operativi.',
-          'L export finale parte da dati gia controllati.',
+          'L’operatore inserisce richiesta, ore e allegati.',
+          'Il manager vede contesto, storico e priorità.',
+          'L’admin intercetta anomalie e blocchi operativi.',
+          'L’export finale parte da dati già controllati.',
         ],
-        proofNote: 'Non e un mock generico: la logica e costruita sui passaggi critici del processo HR/Admin.',
+        proofNote: 'Non è un mock generico: la logica è costruita sui passaggi critici del processo HR/Admin.',
       },
     },
     evidence: {
-      eyebrow: 'Perche questo problema conta',
-      title: 'Il problema non è raro e non è marginale: molte aziende hanno strumenti digitali, ma non ancora un flusso governato.',
+      eyebrow: 'Perché questo problema conta',
+      title: 'Il punto non è avere più software. Il punto è evitare che il lavoro si perda tra strumenti diversi.',
       items: [
         {
           value: '73%',
-          label: 'PMI UE con intensita digitale almeno base nel 2024',
-          note: 'Avere strumenti digitali non significa avere un workflow governato: molte PMI hanno software, ma non ancora un flusso unico affidabile.',
+          label: 'Le PMI hanno già strumenti digitali. Il problema è che spesso non lavorano come un unico flusso.',
+          note: 'Se richieste, approvazioni e controllo restano distribuiti tra tool diversi, la digitalizzazione non riduce davvero il lavoro operativo: lo sposta da una persona all’altra.',
           sourceLabel: 'Fonte: Eurostat Digitalisation in Europe 2025',
           sourceHref: 'https://ec.europa.eu/eurostat/web/interactive-publications/digitalisation-2025',
         },
         {
           value: '58%',
-          label: 'Tempo di lavoro assorbito da coordinamento e work about work',
-          note: 'Quando manca uno stato condiviso, il team spende tempo in follow-up, riallineamenti e controlli invece che sull esecuzione.',
+          label: 'Più di metà del tempo può finire in coordinamento, follow-up e riallineamenti.',
+          note: 'Quando non esiste uno stato condiviso, manager e admin passano la giornata a rincorrere aggiornamenti invece di chiudere il lavoro.',
           sourceLabel: 'Fonte: Asana Anatomy of Work',
           sourceHref: 'https://asana.com/id/resources/pandemic-paradigm-shift',
         },
         {
           value: '5h/settimana',
-          label: 'Tempo medio speso a cercare informazioni dai knowledge worker',
-          note: 'Se il dato vive in troppi file e canali, il team non lavora sul processo: lavora per ritrovare il processo.',
+          label: 'Ogni settimana si perdono ore solo per ritrovare informazioni già esistenti.',
+          note: 'Se dati, allegati e approvazioni sono sparsi, il team non governa il processo: prima deve ricostruirlo ogni volta.',
           sourceLabel: 'Fonte: McKinsey High Tech Practice',
           sourceHref:
             'https://www.mckinsey.com/~/media/mckinsey/dotcom/client_service/high%20tech/pdfs/impact_of_internet_technologies_search_final2.ashx',
         },
       ],
       lead:
-        'Il problema non è solo tecnologico. È organizzativo: quando dati, richieste e approvazioni vivono in strumenti diversi, il costo si sposta su coordinamento, ricerca di informazioni e controllo tardivo.',
+        'Il costo vero non nasce dal singolo foglio Excel. Nasce quando dati, richieste e approvazioni passano tra sistemi diversi e costringono il team a coordinarsi a mano.',
     },
     painPoints: {
       eyebrow: 'Ti suona familiare?',
@@ -323,7 +387,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         },
         {
           title: 'File in piu versioni',
-          description: 'Admin e manager lavorano su copie diverse e nessuno sa qual e quella aggiornata.',
+          description: 'Admin e manager lavorano su copie diverse e nessuno sa qual è quella aggiornata.',
         },
         {
           title: 'Riconciliazioni incoerenti',
@@ -336,16 +400,16 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       ],
     },
     currentState: {
-      eyebrow: 'Come lo abbiamo gia tradotto nel concreto',
-      title: 'Un esempio reale: da processo HR/Admin frammentato a workflow unico gia modellato.',
+      eyebrow: 'Come lo abbiamo già tradotto nel concreto',
+      title: 'Un esempio reale: da processo HR/Admin frammentato a workflow unico già modellato.',
       lead:
-        'Partiamo da un caso gia messo a terra: ore, assenze, approvazioni e payroll gestiti su canali separati. Da qui mostriamo come lo stesso processo puo essere ridisegnato in un flusso unico, tracciato e governato per ruoli.',
+        'Partiamo da un caso già messo a terra: ore, assenze, approvazioni e payroll gestiti su canali separati. Da qui mostriamo come lo stesso processo può essere ridisegnato in un flusso unico, tracciato e governato per ruoli.',
       exampleLabel: 'Esempio reale di partenza',
       exampleTitle: 'Gestione HR di rendicontazione ore, approvazione e reportistica su sistemi separati.',
       exampleBody:
         'Dipendente, manager e HR lavorano su applicativi diversi. Poi i dati vengono scaricati in Excel, uniti con altri fogli, arricchiti con database separati e trasformati in ulteriori file per assenze e payroll.',
       exampleImageCaption:
-        'Schema as-is: piu passaggi manuali, piu file e piu sistemi da allineare prima di arrivare a un dato affidabile.',
+        'Schema as-is: più passaggi manuali, più file e più sistemi da allineare prima di arrivare a un dato affidabile.',
       riskLabels: ['Rischio errori alto', 'Incongruenze tra file', 'Controllo tardivo', 'Dipendenza da merge manuali'],
       chaoticLabel: 'Prima',
       chaoticTitle: 'Processo frammentato',
@@ -371,7 +435,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         },
       ],
       centralizedLabel: 'Dopo',
-      centralizedTitle: 'Workflow centralizzato stAItuned',
+      centralizedTitle: 'Workflow centralizzato stAI tuned',
       centralizedBody:
         'Un solo sistema raccoglie inserimento, approvazione, controllo e export. Web e mobile restano allineati, ogni passaggio ha uno stato e ogni ruolo vede solo quello che gli serve per agire.',
       centralizedPoints: [
@@ -380,14 +444,17 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         'Controllo admin con anomalie, blocchi, documenti e consolidamento',
         'Dati sempre sincronizzati tra web, mobile e funzioni per ruolo',
       ],
-      syncNote: 'Stesso dato, piu viste operative: campo, manager, admin e operations lavorano in tempo reale sullo stesso flusso.',
+      syncNote: 'Stesso dato, più viste operative: campo, manager, admin e operations lavorano in tempo reale sullo stesso flusso.',
+      asIsIntro: 'Mappa rapida di dove il flusso attuale si rompe.',
+      toBeIntro: 'Stessi ruoli, ma su un flusso unico e tracciato.',
+      transitionCue: 'Dall’as-is al to-be',
     },
     metrics: {
-      eyebrow: 'Perche intervenire ora',
+      eyebrow: 'Perché intervenire ora',
       title: 'Ogni passaggio manuale moltiplica ritardi, errori e lavoro amministrativo.',
       items: [
         { value: '1 sola', label: 'fonte dati operativa', note: 'per evitare doppie copie e rincorse manuali' },
-        { value: '3 ruoli', label: 'coinvolti nello stesso flusso', note: 'operatore, manager, admin con responsabilita chiare' },
+        { value: '3 ruoli', label: 'coinvolti nello stesso flusso', note: 'operatore, manager, admin con responsabilità chiare' },
         { value: '0 passaggi', label: 'non tracciati', note: 'tutte le azioni devono lasciare uno stato e una data' },
       ],
     },
@@ -410,9 +477,9 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
           'Ogni richiesta nasce in un punto unico e segue stati chiari.',
           'Il manager approva con storico, contesto e motivazione.',
           'Admin vede tutto: ore, anomalie, blocchi e documenti.',
-          'Export e controllo finale partono da dati gia verificati.',
+          'Export e controllo finale partono da dati già verificati.',
         ],
-        footer: 'Meno coordinamento, piu controllo operativo.',
+        footer: 'Meno coordinamento, più controllo operativo.',
       },
     },
     flow: {
@@ -423,15 +490,15 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
       steps: [
         {
           title: 'Richiesta operatore',
-          description: 'Inserimento ore, note di lavoro e allegati dal campo o dall ufficio.',
+          description: 'Inserimento ore, note di lavoro e allegati dal campo o dall’ufficio.',
         },
         {
           title: 'Coda del manager',
-          description: 'Vista delle richieste pendenti con priorita, storico e segnalazioni.',
+          description: 'Vista delle richieste pendenti con priorità, storico e segnalazioni.',
         },
         {
           title: 'Approva o correggi',
-          description: 'Decisione rapida con motivazione e ritorno all operatore se manca qualcosa.',
+          description: 'Decisione rapida con motivazione e ritorno all’operatore se manca qualcosa.',
         },
         {
           title: 'Controllo admin',
@@ -446,17 +513,17 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         operator: {
           label: 'Operatore',
           title: 'Inserimento semplice, dal campo al sistema.',
-          summary: 'L operatore invia ore, note e allegati da mobile senza passare da chat, fogli o recap manuali.',
+          summary: 'L’operatore invia ore, note e allegati da mobile senza passare da chat, fogli o recap manuali.',
           highlights: [
             'Compila e invia in un solo punto',
-            'Vede subito cosa e stato approvato o respinto',
+            'Vede subito cosa è stato approvato o respinto',
             'Riduce messaggi dispersi e correzioni a fine mese',
           ],
         },
         manager: {
           label: 'Manager',
           title: 'Approvazione con contesto, non per rincorsa.',
-          summary: 'Il manager lavora su una coda unica con stato, dettagli e storico, cosi puo approvare o correggere subito.',
+          summary: 'Il manager lavora su una coda unica con stato, dettagli e storico, così può approvare o correggere subito.',
           highlights: [
             'Richieste pendenti in una sola vista',
             'Storico e motivazioni sempre disponibili',
@@ -466,7 +533,7 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         admin: {
           label: 'Admin',
           title: 'Controllo finale su dati gia riconciliati.',
-          summary: 'L admin verifica anomalie, consolidamento ed export partendo da un flusso gia tracciato e coerente.',
+          summary: 'L’admin verifica anomalie, consolidamento ed export partendo da un flusso già tracciato e coerente.',
           highlights: [
             'Eccezioni e blocchi visibili prima della chiusura',
             'Stessa base dati per controllo ed export',
@@ -477,7 +544,16 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     useCases: {
       eyebrow: 'Dove lo applichiamo',
-      title: 'Di solito partiamo da un flusso concreto, poi estendiamo la stessa logica ad altri processi.',
+      title: 'HR/Admin è un esempio concreto. La logica vale per molti altri processi manuali.',
+      lead:
+        'Quello che hai visto non è limitato a un reparto. Il valore sta nel pattern: richieste sparse, approvazioni fuori flusso, dati duplicati e controllo che arriva troppo tardi. Se riconosci questi segnali in un altro processo, possiamo lavorare anche su quello.',
+      patternsTitle: 'Segnali che il problema non è solo HR/Admin',
+      patterns: [
+        'Dati che arrivano da canali diversi',
+        'Approvazioni gestite fuori sistema',
+        'File duplicati o versioni incoerenti',
+        'Controlli che emergono solo a fine processo',
+      ],
       items: [
         {
           title: 'Rendicontazione ore operai',
@@ -496,17 +572,29 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
           description: 'Mantiene la stessa logica operativa anche quando manager e admin lavorano da sedi diverse.',
         },
       ],
+      closing:
+        'Hai un processo che oggi ti fa perdere tempo in manualità, rincorse e ricostruzione del contesto? È esattamente il tipo di flusso da cui partiamo.',
+      ctas: [
+        {
+          title: 'Vorresti provare questo use case anche da te?',
+          action: 'Prova questo use case',
+        },
+        {
+          title: 'Hai un processo diverso a cui voler provare questo approccio?',
+          action: 'Raccontami il tuo processo',
+        },
+      ],
     },
     benefits: {
       eyebrow: 'Impatto operativo',
       title: 'Quando il flusso è unico, il controllo arriva prima.',
       lead:
-        'Questi sono i segnali che contano davvero: piu visibilita, meno lavoro manuale, approvazioni piu rapide.',
+        'Questi sono i segnali che contano davvero: più visibilità, meno lavoro manuale, approvazioni più rapide.',
       items: [
-        { value: '+85%', label: 'visibilita operativa', note: 'stato chiaro delle richieste in ogni momento', progress: 85 },
+        { value: '+85%', label: 'visibilità operativa', note: 'stato chiaro delle richieste in ogni momento', progress: 85 },
         { value: '-70%', label: 'lavoro manuale amministrativo', note: 'meno copia-incolla e meno ricostruzioni finali', progress: 70 },
-        { value: '+60%', label: 'velocita di approvazione', note: 'il manager decide con contesto e storico', progress: 60 },
-        { value: '+1', label: 'vista unica', note: 'piu dati centralizzati per admin e operations', progress: 92 },
+        { value: '+60%', label: 'velocità di approvazione', note: 'il manager decide con contesto e storico', progress: 60 },
+        { value: '+1', label: 'vista unica', note: 'più dati centralizzati per admin e operations', progress: 92 },
       ],
     },
     faq: {
@@ -516,27 +604,83 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         {
           question: 'Si parte da zero o dalla demo esistente?',
           answer:
-            'Partiamo dalla demo gia validata in ambito HR/Admin e la adattiamo al tuo processo reale: campi, ruoli, stati, regole di approvazione e output finali.',
+            'Partiamo dalla demo già validata in ambito HR/Admin e la adattiamo al tuo processo reale: campi, ruoli, stati, regole di approvazione e output finali.',
         },
         {
           question: 'Serve cambiare tutti i sistemi esistenti?',
           answer:
-            'No. Il punto iniziale e togliere attrito dai passaggi manuali. Possiamo partire su un flusso circoscritto e poi collegarlo agli strumenti gia presenti.',
+            'No. Il punto iniziale è togliere attrito dai passaggi manuali. Possiamo partire su un flusso circoscritto e poi collegarlo agli strumenti già presenti.',
         },
         {
           question: 'Chi usa davvero la soluzione?',
           answer:
-            'Gli operatori inseriscono dati e allegati, i manager approvano o correggono, l admin controlla eccezioni, blocchi ed export finale.',
+            'Gli operatori inseriscono dati e allegati, i manager approvano o correggono, l’admin controlla eccezioni, blocchi ed export finale.',
         },
         {
           question: 'Quanto velocemente si vede qualcosa di concreto?',
           answer:
-            'L obiettivo e mostrare un workflow funzionante in tempi brevi, con dati e schermate che riflettono il processo operativo reale della tua azienda.',
+            'L’obiettivo è mostrare un workflow funzionante in tempi brevi, con dati e schermate che riflettono il processo operativo reale della tua azienda.',
         },
       ],
     },
+    requestSection: {
+      eyebrow: 'Richiesta demo',
+      title: 'Raccontami il processo che vuoi centralizzare.',
+      description:
+        'Compila questa richiesta e ti ricontatto con una demo mirata sul tuo caso, non con una call generica.',
+      bullets: [
+        'Partiamo dal processo che oggi ti crea rincorse, eccezioni o ricopia manuale',
+        'Adattiamo la demo al tuo contesto operativo e ai ruoli coinvolti',
+        'Ricevi un riscontro concreto su cosa ha senso provare per primo',
+      ],
+      formTitle: 'Richiedi una demo business',
+      formDescription: 'Bastano poche informazioni per capire se il workflow va modellato su questo use case o su un altro.',
+      successTitle: 'Richiesta inviata.',
+      successSubtitle: 'Ti ricontatto con un prossimo passo coerente con il processo che hai descritto.',
+      resetCta: 'Invia un’altra richiesta',
+      fields: {
+        name: 'Nome',
+        email: 'Email',
+        company: 'Azienda',
+        role: 'Ruolo',
+        processName: 'Processo da rivedere',
+        mainPain: 'Problema principale',
+        notes: 'Note aggiuntive',
+        privacyLabelPrefix: 'Accetto il trattamento dei dati personali come descritto nella',
+        privacyPolicy: 'Privacy Policy',
+        submit: 'Invia richiesta demo',
+      },
+      placeholders: {
+        role: 'Es. HR Manager, Operations, Amministrazione',
+        processName: 'Es. ore operai, assenze, onboarding documentale',
+        mainPain: 'Dove si rompe oggi il processo? Cosa vi fa perdere più tempo?',
+        notes: 'Vincoli, sistemi già usati, sedi, team coinvolti, tempistiche...',
+      },
+      errors: {
+        nameRequired: 'Nome richiesto.',
+        emailRequired: 'Email richiesta.',
+        invalidEmail: 'Inserisci un indirizzo email valido.',
+        companyRequired: 'Azienda richiesta.',
+        processNameRequired: 'Descrivi il processo da rivedere.',
+        mainPainRequired: 'Descrivi il problema principale.',
+        privacyRequired: 'Devi accettare la privacy policy per procedere.',
+        submitFailed: "Errore nell'invio. Riprova.",
+      },
+    },
+    apiErrors: {
+      apply: {
+        nameRequired: 'Nome richiesto.',
+        invalidEmail: 'Email non valida.',
+        companyRequired: 'Azienda richiesta.',
+        processNameRequired: 'Processo richiesto.',
+        mainPainRequired: 'Problema principale richiesto.',
+        privacyRequired: 'Accettazione privacy richiesta.',
+        serverError: 'Errore server.',
+        notConfigured: 'Calendly non configurato',
+      },
+    },
     finalCta: {
-      title: 'Ti mostro in 20 minuti come questo flusso puo funzionare nel tuo caso.',
+      title: 'Ti mostro in 20 minuti come questo flusso può funzionare nel tuo caso.',
       description:
         'Nessun impianto teorico: partiamo dal tuo processo attuale, individuiamo dove si spezza e ti faccio vedere come centralizzarlo.',
       primaryCta: 'Prenota la tua demo',
@@ -579,8 +723,8 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         'automate the manual handoffs',
         'errors, chasing and delays',
       ],
-      primaryCta: 'See how this would work in your process',
-      secondaryCta: 'See the full workflow',
+      primaryCta: 'See what you could do',
+      secondaryCta: 'Apply for a demo',
       trustSignals: [
         {
           title: 'One flow',
@@ -642,33 +786,33 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     evidence: {
       eyebrow: 'Why this problem matters',
-      title: 'This is not a niche issue: many companies have digital tools, but still no governed workflow.',
+      title: 'The issue is not a lack of software. The issue is work getting lost across disconnected tools.',
       items: [
         {
           value: '73%',
-          label: 'EU SMEs reaching at least basic digital intensity in 2024',
-          note: 'Having digital tools does not mean having a governed workflow: many SMEs have software, but still no reliable shared flow.',
+          label: 'Most SMEs already have digital tools. The gap is turning them into one governed workflow.',
+          note: 'When requests, approvals and controls stay split across tools, digitization does not remove operational work. It just passes it from one person to another.',
           sourceLabel: 'Source: Eurostat Digitalisation in Europe 2025',
           sourceHref: 'https://ec.europa.eu/eurostat/web/interactive-publications/digitalisation-2025',
         },
         {
           value: '58%',
-          label: 'Work time absorbed by coordination and work about work',
-          note: 'Without a shared status model, teams spend time on follow-ups, alignment loops and checks instead of execution.',
+          label: 'More than half of work time can disappear into coordination, follow-ups and alignment.',
+          note: 'Without a shared status model, managers and admin teams spend the day chasing updates instead of moving the process forward.',
           sourceLabel: 'Source: Asana Anatomy of Work',
           sourceHref: 'https://asana.com/id/resources/pandemic-paradigm-shift',
         },
         {
           value: '5h/week',
-          label: 'Average time knowledge workers spend searching for information',
-          note: 'When data lives across too many files and channels, teams are working to reconstruct the process before they can improve it.',
+          label: 'Hours are lost every week just to find information the company already has.',
+          note: 'When data, files and approvals are scattered, teams are not governing the process. They are rebuilding it from scratch each time.',
           sourceLabel: 'Source: McKinsey High Tech Practice',
           sourceHref:
             'https://www.mckinsey.com/~/media/mckinsey/dotcom/client_service/high%20tech/pdfs/impact_of_internet_technologies_search_final2.ashx',
         },
       ],
       lead:
-        'This is not only a tooling issue. It is an operating model issue: when data, requests and approvals live in different tools, the cost shows up as coordination overhead, search time and late control.',
+        'The real cost is not the spreadsheet itself. It is what happens when data, requests and approvals move across disconnected systems and force the team to coordinate by hand.',
     },
     painPoints: {
       eyebrow: 'Does this sound familiar?',
@@ -738,6 +882,9 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         'Data always synchronized across web, mobile and role-based views',
       ],
       syncNote: 'One shared dataset, multiple operational views: field, manager, admin and operations work in real time on the same flow.',
+      asIsIntro: 'Quick map of where the current flow still breaks.',
+      toBeIntro: 'Same roles, but on one shared, tracked flow.',
+      transitionCue: 'From as-is to to-be',
     },
     metrics: {
       eyebrow: 'Why fix it now',
@@ -834,7 +981,16 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
     },
     useCases: {
       eyebrow: 'Where we apply it',
-      title: 'We usually start from one concrete workflow, then extend the same logic to adjacent processes.',
+      title: 'HR/Admin is one concrete example. The same logic applies to many other manual workflows.',
+      lead:
+        'What you saw is not limited to one department. The value is in the pattern: scattered requests, approvals outside the flow, duplicated data, and control that arrives too late. If you recognize these signals in another process, we can work on that too.',
+      patternsTitle: 'Signals that the issue is not only HR/Admin',
+      patterns: [
+        'Data arriving from different channels',
+        'Approvals handled outside the system',
+        'Duplicated files or inconsistent versions',
+        'Controls appearing only at the end of the process',
+      ],
       items: [
         {
           title: 'Worker time reporting',
@@ -851,6 +1007,18 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
         {
           title: 'Multi-site operations',
           description: 'Keeps the same workflow logic when managers and admin work across locations.',
+        },
+      ],
+      closing:
+        'Do you have a process that is wasting time in manual steps, chasing and context rebuilding? That is exactly the kind of workflow we start from.',
+      ctas: [
+        {
+          title: 'Would you like to try this use case in your company?',
+          action: 'Try this use case',
+        },
+        {
+          title: 'Do you have a different process where you want to test this approach?',
+          action: 'Tell me about your process',
         },
       ],
     },
@@ -891,6 +1059,62 @@ export const businessTranslations: Record<BusinessLocale, BusinessTranslations> 
             'The goal is to show a working workflow quickly, using data and screens that reflect the real operational process of your company.',
         },
       ],
+    },
+    requestSection: {
+      eyebrow: 'Demo request',
+      title: 'Tell me which process you want to centralize.',
+      description:
+        'Submit this request and I will come back with a demo tailored to your case, not a generic intro call.',
+      bullets: [
+        'We start from the process currently causing chase work, exceptions or manual re-entry',
+        'We adapt the demo to your operating context and the roles involved',
+        'You get a concrete recommendation on what makes sense to test first',
+      ],
+      formTitle: 'Request a business demo',
+      formDescription: 'A few details are enough to understand whether the workflow should be modeled around this use case or a different one.',
+      successTitle: 'Request sent.',
+      successSubtitle: 'I will get back to you with a next step aligned with the process you described.',
+      resetCta: 'Send another request',
+      fields: {
+        name: 'Name',
+        email: 'Email',
+        company: 'Company',
+        role: 'Role',
+        processName: 'Process to review',
+        mainPain: 'Main pain point',
+        notes: 'Additional notes',
+        privacyLabelPrefix: 'I accept personal data processing as described in the',
+        privacyPolicy: 'Privacy Policy',
+        submit: 'Send demo request',
+      },
+      placeholders: {
+        role: 'e.g. HR Manager, Operations, Admin',
+        processName: 'e.g. worker time reporting, absences, document onboarding',
+        mainPain: 'Where does the process break today? What costs you the most time?',
+        notes: 'Constraints, systems already in use, locations, teams involved, timing...',
+      },
+      errors: {
+        nameRequired: 'Name is required.',
+        emailRequired: 'Email is required.',
+        invalidEmail: 'Enter a valid email address.',
+        companyRequired: 'Company is required.',
+        processNameRequired: 'Describe the process to review.',
+        mainPainRequired: 'Describe the main pain point.',
+        privacyRequired: 'You must accept the privacy policy to continue.',
+        submitFailed: 'Submission failed. Please try again.',
+      },
+    },
+    apiErrors: {
+      apply: {
+        nameRequired: 'Name is required.',
+        invalidEmail: 'Invalid email.',
+        companyRequired: 'Company is required.',
+        processNameRequired: 'Process is required.',
+        mainPainRequired: 'Main pain point is required.',
+        privacyRequired: 'Privacy acceptance is required.',
+        serverError: 'Server error.',
+        notConfigured: 'Calendly not configured',
+      },
     },
     finalCta: {
       title: 'In 20 minutes I can show how this flow would work in your case.',

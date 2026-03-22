@@ -160,10 +160,12 @@ export interface LearnTranslations {
             openMenu: string
             closeMenu: string
             themeToggle: string
+            themeToggleNext: string
             themeToggleShort: string
             themeNames: {
                 light: string
                 dark: string
+                system: string
             }
         }
         localeToggle: {
@@ -395,11 +397,13 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 searchShortcut: "Search (⌘K / Ctrl+K)",
                 openMenu: "Open menu",
                 closeMenu: "Close menu",
-                themeToggle: "Current theme: {theme}. Click to toggle.",
+                themeToggle: "Theme: {theme}.",
+                themeToggleNext: "Next mode: {theme}.",
                 themeToggleShort: "Toggle theme",
                 themeNames: {
                     light: "light",
-                    dark: "dark"
+                    dark: "dark",
+                    system: "system"
                 }
             },
             localeToggle: {
@@ -658,11 +662,13 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 searchShortcut: "Cerca (⌘K / Ctrl+K)",
                 openMenu: "Apri menu",
                 closeMenu: "Chiudi menu",
-                themeToggle: "Tema attuale: {theme}. Tocca per cambiare.",
+                themeToggle: "Tema: {theme}.",
+                themeToggleNext: "Prossima modalita: {theme}.",
                 themeToggleShort: "Cambia tema",
                 themeNames: {
                     light: "chiaro",
-                    dark: "scuro"
+                    dark: "scuro",
+                    system: "sistema"
                 }
             },
             localeToggle: {

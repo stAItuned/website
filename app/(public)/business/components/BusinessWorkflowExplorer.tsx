@@ -32,10 +32,14 @@ export function BusinessWorkflowExplorer({
   const roleConfig = flow.roles[activeRole]
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-stretch">
-      <article className="h-full rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+    <div className="grid gap-5 lg:grid-cols-[minmax(0,1.28fr)_minmax(320px,0.72fr)] lg:items-stretch">
+      <div className="order-2 lg:order-1">
+        <WorkflowScreensCarousel key={activeRole} screens={filteredScreens} locale={locale} />
+      </div>
+
+      <article className="order-1 h-full rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/70 lg:order-2 lg:p-4">
         <div className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-500 dark:text-amber-300">
               {flow.selectorLabel}
             </p>
@@ -51,35 +55,27 @@ export function BusinessWorkflowExplorer({
             />
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/40">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-                  {roleConfig.title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  {roleConfig.summary}
-                </p>
-              </div>
-            </div>
+          <div className="rounded-[1.6rem] border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/40">
+            <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+              {roleConfig.title}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              {roleConfig.summary}
+            </p>
 
-            <div className="mt-4 grid gap-3">
+            <div className="mt-4 flex flex-wrap gap-2">
               {roleConfig.highlights.map((highlight) => (
-                <div
+                <span
                   key={highlight}
-                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900"
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                 >
-                  <p className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-200">
-                    {highlight}
-                  </p>
-                </div>
+                  {highlight}
+                </span>
               ))}
             </div>
           </div>
         </div>
       </article>
-
-      <WorkflowScreensCarousel key={activeRole} screens={filteredScreens} locale={locale} />
     </div>
   )
 }

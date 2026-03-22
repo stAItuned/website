@@ -14,6 +14,7 @@ import { BusinessFaqSection, BusinessFinalCtaSection } from './components/Busine
 import { BusinessHeroSection } from './components/BusinessHeroSection'
 import { BusinessImpactSection } from './components/BusinessImpactSection'
 import { BusinessPainPointsSection } from './components/BusinessPainPointsSection'
+import { BusinessRequestSection } from './components/BusinessRequestSection'
 import { BusinessUseCasesSection } from './components/BusinessUseCasesSection'
 import { BusinessWorkflowSection } from './components/BusinessWorkflowSection'
 
@@ -101,6 +102,7 @@ export default async function BusinessPage({
         <BusinessCurrentStateSection t={t} locale={locale} />
         <BusinessWorkflowSection t={t} locale={locale} />
         <BusinessUseCasesSection t={t} />
+        <BusinessRequestSection t={t} locale={locale} />
         <BusinessImpactSection t={t} />
         <BusinessFaqSection t={t} />
         <BusinessFinalCtaSection t={t} />

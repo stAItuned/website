@@ -25,6 +25,7 @@ type NodeProps = {
 type Copy = {
   eyebrow: string
   title: string
+  highlights: [string, string, string, string]
   subtitle: string
   swimlanes: [string, string, string, string, string]
   nodes: {
@@ -40,7 +41,8 @@ type Copy = {
 const copy: Record<BusinessLocale, Copy> = {
   it: {
     eyebrow: 'Dopo',
-    title: 'Workflow centralizzato stAItuned',
+    title: 'Workflow centralizzato stAI tuned',
+    highlights: ['Un solo flusso', 'Stati tracciati', 'Dati sempre sincronizzati', 'Export pulito'],
     subtitle:
       'Un solo sistema raccoglie inserimento, approvazione, controllo ed export. Web e mobile restano allineati, ogni passaggio ha uno stato e ogni ruolo vede solo quello che gli serve.',
     swimlanes: ['Dipendente', 'Manager', 'Admin', 'Ufficio Tecnico', 'Consulente del lavoro'],
@@ -62,6 +64,7 @@ const copy: Record<BusinessLocale, Copy> = {
   en: {
     eyebrow: 'After',
     title: 'Centralized stAItuned workflow',
+    highlights: ['One shared flow', 'Tracked states', 'Always synced data', 'Clean export'],
     subtitle:
       'One system handles intake, approval, control and export. Web and mobile stay aligned, every handoff has a status, and each role sees exactly what it needs to act.',
     swimlanes: ['Employee', 'Manager', 'Admin', 'Technical Office', 'Payroll consultant'],
@@ -124,21 +127,21 @@ function Node({ x, y, title, subtitle, icon, status, tone, mobile = false }: Nod
 
   return (
     <div
-      className={`flex flex-col items-center justify-start rounded-xl border-2 p-4 text-center shadow-md transition-all hover:shadow-lg ${toneClasses[tone]} ${
-        mobile ? 'relative w-full max-w-none translate-x-0 translate-y-0' : 'absolute z-10 w-44 -translate-x-1/2 -translate-y-1/2'
+      className={`flex flex-col items-center justify-start rounded-xl border-2 p-3 text-center shadow-md transition-all hover:shadow-lg ${toneClasses[tone]} ${
+        mobile ? 'relative w-full max-w-none translate-x-0 translate-y-0' : 'absolute z-10 w-40 -translate-x-1/2 -translate-y-1/2'
       }`}
-      style={mobile ? { minHeight: '120px' } : { left: x, top: y, minHeight: '120px' }}
+      style={mobile ? { minHeight: '104px' } : { left: x, top: y, minHeight: '104px' }}
     >
-      <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-full ${badgeClass}`}>
-        <Icon size={28} className={iconClass} />
+      <div className={`mb-2.5 flex h-9 w-9 items-center justify-center rounded-full ${badgeClass}`}>
+        <Icon size={24} className={iconClass} />
       </div>
 
-      <span className="mb-1 font-bold leading-tight text-slate-800 dark:text-slate-50">{title}</span>
-      <span className="mb-3 text-xs text-slate-500 dark:text-slate-300">{subtitle}</span>
+      <span className="mb-1 font-bold leading-tight text-[13px] text-slate-800 dark:text-slate-50">{title}</span>
+      <span className="mb-2.5 text-[11px] leading-5 text-slate-500 dark:text-slate-300">{subtitle}</span>
 
-      <div className="mt-auto flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 dark:border-emerald-500/20 dark:bg-slate-950">
-        <CheckCircle2 size={12} className="text-emerald-500" />
-        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-200">
+      <div className="mt-auto flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-[3px] dark:border-emerald-500/20 dark:bg-slate-950">
+        <CheckCircle2 size={11} className="text-emerald-500" />
+        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-200">
           {status}
         </span>
       </div>
@@ -201,13 +204,23 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
       className={`rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-5 ${className ?? ''}`}
       aria-label={t.title}
     >
-      <header className="mb-6 space-y-3 text-center">
+      <header className="mb-4 space-y-2 text-center">
         <p className="text-[11px] font-black uppercase tracking-[0.24em] text-emerald-500 dark:text-emerald-400">
           {t.eyebrow}
         </p>
-        <h3 className="text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-2xl lg:text-[2rem]">
+        <h3 className="text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-2xl lg:text-[1.9rem]">
           {t.title}
         </h3>
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-2">
+          {t.highlights.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-200"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
         <p className="mx-auto max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
       </header>
 
@@ -257,8 +270,8 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
       </div>
 
       <div className="hidden overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
-        <div className="relative min-w-[960px] h-[680px]">
-          <div className="grid h-14 grid-cols-5 bg-emerald-600 text-white shadow-sm">
+        <div className="relative h-[560px] min-w-[960px]">
+          <div className="grid h-12 grid-cols-5 bg-emerald-600 text-white shadow-sm">
             {t.swimlanes.map((lane, index) => (
               <div
                 key={lane}
@@ -271,7 +284,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
             ))}
           </div>
 
-          <div className="pointer-events-none absolute inset-0 top-14 grid grid-cols-5">
+          <div className="pointer-events-none absolute inset-0 top-12 grid grid-cols-5">
             <div className="border-r border-slate-200 bg-slate-50/40 dark:border-slate-800 dark:bg-slate-900/45" />
             <div className="border-r border-slate-200 dark:border-slate-800 dark:bg-slate-950" />
             <div className="border-r border-slate-200 bg-emerald-50/30 dark:border-slate-800 dark:bg-emerald-950/14" />
@@ -279,7 +292,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
             <div className="bg-slate-50/20 dark:bg-slate-900/35" />
           </div>
 
-          <div className="absolute inset-0 top-14">
+          <div className="absolute inset-0 top-12">
             <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full">
               <defs>
                 <marker

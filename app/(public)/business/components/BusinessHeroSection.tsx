@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import type { BusinessTranslations } from '@/lib/i18n/business-translations'
+import { OpenBusinessRequestButton } from './OpenBusinessRequestButton'
 
 function renderHighlightedText(text: string, highlights: string[]) {
   if (!highlights.length) return text
@@ -73,19 +74,18 @@ export function BusinessHeroSection({ t }: { t: BusinessTranslations }) {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/demo"
+            <a
+              href="#workflow"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FFF272] to-[#F59E0B] px-5 py-3.5 text-sm font-bold text-[#1A1E3B] shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
             >
               {t.hero.primaryCta}
               <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-            <a
-              href="#workflow"
+            </a>
+            <OpenBusinessRequestButton
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:bg-white/10"
             >
               {t.hero.secondaryCta}
-            </a>
+            </OpenBusinessRequestButton>
           </div>
 
           <ul className="grid gap-3 text-left md:grid-cols-3">

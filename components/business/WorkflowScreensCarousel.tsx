@@ -133,21 +133,28 @@ export function WorkflowScreensCarousel({ screens, locale }: WorkflowScreensCaro
   return (
     <section
       aria-label={localizedUi.regionLabel}
-      className="relative mx-auto flex h-full w-full max-w-[390px] flex-col rounded-[2rem] border border-slate-200 bg-white/90 p-3 xl:max-w-[410px] dark:border-slate-800 dark:bg-slate-900/70 dark:shadow-none"
+      className="relative flex h-full w-full flex-col rounded-[2rem] border border-slate-200 bg-white/90 p-3 shadow-sm xl:p-4 dark:border-slate-800 dark:bg-slate-900/70 dark:shadow-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
       onBlurCapture={() => setIsPaused(false)}
     >
-      <div className="mb-3 flex items-center justify-between gap-4 px-1">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-500 dark:text-amber-300">
-          {locale === 'it' ? 'Schermate reali' : 'Real screenshots'}
-        </p>
+      <div className="mb-3 flex items-center justify-between gap-3 px-1 sm:mb-4">
+        <div className="flex min-w-0 items-center gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-500 dark:text-amber-300">
+            {locale === 'it' ? 'Schermate reali' : 'Real screenshots'}
+          </p>
+          {hasScreens ? (
+            <span className="truncate rounded-full bg-slate-200/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+              {ROLE_LABELS[locale][screens[activeIndex]?.role ?? screens[0].role]}
+            </span>
+          ) : null}
+        </div>
         <button
           type="button"
           aria-label={isPaused ? localizedUi.resume : localizedUi.pause}
           onClick={() => setIsPaused((value) => !value)}
-          className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-slate-200 bg-white px-2 text-slate-600 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+          className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white px-2 text-slate-600 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
         >
           {isPaused ? <Play className="h-4 w-4" aria-hidden /> : <Pause className="h-4 w-4" aria-hidden />}
         </button>
@@ -157,7 +164,7 @@ export function WorkflowScreensCarousel({ screens, locale }: WorkflowScreensCaro
         <div
           ref={containerRef}
           tabIndex={0}
-          className="scrollbar-hide flex h-full snap-x snap-mandatory overflow-x-auto rounded-[1.5rem] bg-slate-100/70 outline-none dark:bg-slate-950/70"
+          className="scrollbar-hide flex h-full min-h-[500px] snap-x snap-mandatory overflow-x-auto rounded-[1.6rem] bg-[linear-gradient(180deg,_rgba(15,23,42,0.05)_0%,_rgba(15,23,42,0.14)_100%)] outline-none lg:min-h-[700px] dark:bg-[linear-gradient(180deg,_rgba(2,6,23,0.85)_0%,_rgba(2,6,23,1)_100%)]"
           onKeyDown={(event) => {
             if (event.key === 'ArrowLeft') {
               event.preventDefault()
@@ -187,18 +194,12 @@ export function WorkflowScreensCarousel({ screens, locale }: WorkflowScreensCaro
           {screens.map((screen, index) => (
             <article
               key={screen.id}
-              className="relative flex h-full w-full min-w-full shrink-0 snap-center flex-col px-3 py-3"
+              className="relative flex h-full w-full min-w-full shrink-0 snap-center flex-col px-3 py-3 sm:px-5 sm:py-5"
               aria-label={`${localizedUi.screen} ${index + 1}`}
             >
-              <div className="mb-3 flex items-center justify-end gap-2">
-                <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                  {ROLE_LABELS[locale][screen.role]}
-                </span>
-              </div>
-
-              <div className="mx-auto flex h-full w-full max-w-[320px] overflow-hidden rounded-[1.25rem] border border-slate-200 bg-white shadow-sm xl:max-w-[330px] dark:border-slate-700 dark:bg-slate-900">
+              <div className="mx-auto flex h-full w-full max-w-[420px] overflow-hidden rounded-[1.6rem] border border-slate-200 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.18)] xl:max-w-[460px] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_30px_90px_rgba(2,6,23,0.55)]">
                 {failedScreens[screen.id] ? (
-                  <div className="flex min-h-[420px] w-full flex-1 flex-col items-center justify-center gap-3 bg-[linear-gradient(160deg,_rgba(248,250,252,0.95)_0%,_rgba(241,245,249,0.92)_100%)] p-6 text-center lg:min-h-0 dark:bg-[linear-gradient(160deg,_rgba(15,23,42,0.9)_0%,_rgba(2,6,23,0.9)_100%)]">
+                  <div className="flex min-h-[460px] w-full flex-1 flex-col items-center justify-center gap-3 bg-[linear-gradient(160deg,_rgba(248,250,252,0.95)_0%,_rgba(241,245,249,0.92)_100%)] p-6 text-center lg:min-h-0 dark:bg-[linear-gradient(160deg,_rgba(15,23,42,0.9)_0%,_rgba(2,6,23,0.9)_100%)]">
                     <p className="text-sm font-bold uppercase tracking-[0.16em] text-slate-700 dark:text-slate-200">
                       {localizedUi.missingTitle}
                     </p>
@@ -207,15 +208,15 @@ export function WorkflowScreensCarousel({ screens, locale }: WorkflowScreensCaro
                     </p>
                   </div>
                 ) : (
-                  <div className="relative min-h-[420px] w-full flex-1 bg-slate-50 lg:min-h-0 dark:bg-slate-950">
+                  <div className="relative min-h-[460px] w-full flex-1 bg-slate-50 lg:min-h-0 dark:bg-slate-950">
                     <Image
                       src={screen.src}
                       alt={screen.alt[locale]}
                       width={1080}
                       height={2340}
                       unoptimized
-                      className="absolute inset-0 block h-full w-full object-contain"
-                      sizes="(max-width: 768px) 82vw, 330px"
+                      className="absolute inset-0 block h-full w-full object-contain p-2 sm:p-3"
+                      sizes="(max-width: 768px) 88vw, (max-width: 1280px) 44vw, 460px"
                       priority={index === 0}
                       onError={() => markFailed(screen.id, screen.src)}
                       onLoad={(event) => {
@@ -239,7 +240,7 @@ export function WorkflowScreensCarousel({ screens, locale }: WorkflowScreensCaro
               type="button"
               aria-label={localizedUi.previous}
               onClick={goToPrevious}
-              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-sm transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-100 dark:hover:bg-slate-800"
+              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-sm transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               <ChevronLeft className="h-4 w-4" aria-hidden />
             </button>
@@ -247,7 +248,7 @@ export function WorkflowScreensCarousel({ screens, locale }: WorkflowScreensCaro
               type="button"
               aria-label={localizedUi.next}
               onClick={goToNext}
-              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-sm transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-100 dark:hover:bg-slate-800"
+              className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-sm transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               <ChevronRight className="h-4 w-4" aria-hidden />
             </button>

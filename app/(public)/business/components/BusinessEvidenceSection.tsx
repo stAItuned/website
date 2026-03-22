@@ -3,7 +3,7 @@ import { BusinessSectionEyebrow } from './BusinessSectionEyebrow'
 
 export function BusinessEvidenceSection({ t }: { t: BusinessTranslations }) {
   return (
-    <section className="border-b border-slate-200 bg-slate-50 py-14 dark:border-slate-800 dark:bg-[#151925]">
+    <section className="border-b border-slate-200 bg-gradient-to-b from-amber-50/70 to-slate-50 py-14 dark:border-slate-800 dark:bg-[linear-gradient(180deg,rgba(255,242,114,0.06)_0%,rgba(21,25,37,1)_55%)]">
       <div className="mx-auto max-w-5xl px-4 xs:px-6">
         <div className="max-w-3xl space-y-3">
           <BusinessSectionEyebrow>{t.evidence.eyebrow}</BusinessSectionEyebrow>

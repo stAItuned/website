@@ -24,6 +24,7 @@ type NodeProps = {
 type Copy = {
   eyebrow: string
   title: string
+  highlights: [string, string, string]
   subtitle: string
   swimlanes: [string, string, string, string, string]
   laneLabels: [string, string, string, string, string]
@@ -45,6 +46,7 @@ const copy: Record<BusinessLocale, Copy> = {
   it: {
     eyebrow: 'Situazione attuale',
     title: 'Tre ruoli, nessun filo comune',
+    highlights: ['Passaggi manuali', 'Canali sparsi', 'Controllo tardivo'],
     subtitle:
       'Mappatura del flusso As-Is. I nodi evidenziati in rosso mostrano i passaggi manuali e i canali non strutturati che creano colli di bottiglia e rischio di errore nella riconciliazione finale.',
     swimlanes: ['Dipendente', 'Manager', 'Admin', 'Ufficio Tecnico', 'Consulente del lavoro'],
@@ -74,6 +76,7 @@ const copy: Record<BusinessLocale, Copy> = {
   en: {
     eyebrow: 'Current state',
     title: 'Three roles, no shared thread',
+    highlights: ['Manual handoffs', 'Scattered channels', 'Late control'],
     subtitle:
       'As-is flow mapping. Red nodes mark the manual handoffs and unstructured channels that create bottlenecks and a high reconciliation error risk.',
     swimlanes: ['Employee', 'Manager', 'Admin', 'Technical Office', 'Payroll consultant'],
@@ -149,23 +152,23 @@ function Node({ x, y, title, icon, isPainPoint, locale, badgeOverride }: NodePro
 
   return (
     <div
-      className={`absolute z-10 flex w-40 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-lg border-2 p-3 text-center text-sm shadow-sm transition-all hover:shadow-md ${
+      className={`absolute z-10 flex w-36 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-lg border-2 p-2.5 text-center text-xs shadow-sm transition-all hover:shadow-md ${
         isPainPoint ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white'
       }`}
-      style={{ left: x, top: y, minHeight: '100px' }}
+      style={{ left: x, top: y, minHeight: '88px' }}
     >
       {isPainPoint ? (
-        <div className="absolute -top-3 -right-3 rounded-full bg-red-500 p-1.5 text-white shadow-md animate-pulse">
+        <div className="absolute -top-2.5 -right-2.5 rounded-full bg-red-500 p-1 text-white shadow-md animate-pulse">
           <AlertTriangle size={16} />
         </div>
       ) : null}
 
-      <span className="mb-3 font-semibold leading-snug text-slate-800">{title}</span>
+      <span className="mb-2 font-semibold leading-snug text-slate-800">{title}</span>
 
       <div className="mt-auto flex flex-col items-center gap-1">
-        <Icon size={24} className={color} />
+        <Icon size={20} className={color} />
         <span
-          className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+          className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
             isPainPoint ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-500'
           }`}
         >
@@ -246,13 +249,23 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
       className={`rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-5 ${className ?? ''}`}
       aria-label={t.title}
     >
-      <header className="mb-6 space-y-3 text-center">
+      <header className="mb-4 space-y-2 text-center">
         <p className="text-[11px] font-black uppercase tracking-[0.24em] text-rose-500 dark:text-rose-400">
           {t.eyebrow}
         </p>
-        <h3 className="text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-2xl lg:text-[2rem]">
+        <h3 className="text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-2xl lg:text-[1.9rem]">
           {t.title}
         </h3>
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-2">
+          {t.highlights.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-200"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
         <p className="mx-auto max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
       </header>
 
@@ -308,8 +321,8 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
       </div>
 
       <div className="hidden overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
-        <div className="relative h-[680px] min-w-[960px]">
-          <div className="grid h-14 grid-cols-5 bg-[#3b5998] text-white shadow-sm">
+        <div className="relative h-[560px] min-w-[960px]">
+          <div className="grid h-12 grid-cols-5 bg-[#3b5998] text-white shadow-sm">
             {t.swimlanes.map((lane, index) => (
               <div
                 key={lane}
@@ -322,7 +335,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
             ))}
           </div>
 
-        <div className="pointer-events-none absolute inset-0 top-14 grid grid-cols-5">
+        <div className="pointer-events-none absolute inset-0 top-12 grid grid-cols-5">
             <div className="border-r border-slate-200 bg-slate-50/50" />
             <div className="border-r border-slate-200" />
             <div className="border-r border-slate-200 bg-slate-50/50" />
@@ -330,7 +343,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
             <div className="bg-slate-50/20" />
           </div>
 
-          <div className="absolute inset-0 top-14">
+          <div className="absolute inset-0 top-12">
             <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full">
               <defs>
                 <marker

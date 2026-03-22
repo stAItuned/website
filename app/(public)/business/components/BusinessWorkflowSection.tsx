@@ -1,7 +1,6 @@
 import { type WorkflowScreen } from '@/components/business/WorkflowScreensCarousel'
 import type { BusinessLocale, BusinessTranslations } from '@/lib/i18n/business-translations'
 import { BusinessWorkflowExplorer } from './BusinessWorkflowExplorer'
-import { BusinessSectionEyebrow } from './BusinessSectionEyebrow'
 
 export const BUSINESS_WORKFLOW_SCREENS: WorkflowScreen[] = [
   {
@@ -61,17 +60,21 @@ export function BusinessWorkflowSection({
   return (
     <section
       id="workflow"
-      className="border-y border-slate-200 bg-[linear-gradient(180deg,_rgba(255,247,168,0.16)_0%,_rgba(248,250,252,1)_60%)] dark:border-slate-800 dark:bg-[linear-gradient(180deg,_rgba(255,242,114,0.06)_0%,_rgba(15,17,23,1)_60%)]"
+      className="relative overflow-hidden border-y border-slate-900/10 bg-[linear-gradient(180deg,_#172033_0%,_#111827_100%)] text-white dark:border-slate-700 dark:bg-[linear-gradient(180deg,_#111827_0%,_#0F1117_100%)]"
     >
+      <div className="pointer-events-none absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+
       <div className="mx-auto max-w-5xl px-4 py-14 xs:px-6 lg:py-16">
-        <div className="mb-6 max-w-2xl space-y-3">
-          <BusinessSectionEyebrow>{t.flow.eyebrow}</BusinessSectionEyebrow>
-          <h2 className="text-2xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white xs:text-3xl">
+        <div className="relative mb-6 max-w-2xl space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-300">{t.flow.eyebrow}</p>
+          <h2 className="text-2xl font-bold leading-tight tracking-tight text-white xs:text-3xl">
             {t.flow.title}
           </h2>
-          <p className="text-sm leading-7 text-slate-600 dark:text-slate-400">{t.flow.lead}</p>
+          <p className="text-sm leading-7 text-slate-300">{t.flow.lead}</p>
         </div>
-        <BusinessWorkflowExplorer flow={t.flow} locale={locale} screens={BUSINESS_WORKFLOW_SCREENS} />
+        <div className="relative">
+          <BusinessWorkflowExplorer flow={t.flow} locale={locale} screens={BUSINESS_WORKFLOW_SCREENS} />
+        </div>
       </div>
     </section>
   )
