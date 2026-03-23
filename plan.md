@@ -221,7 +221,7 @@ Fatto:
 Rimane da fare (operativo, fuori implementazione codice):
 - deploy in ambiente test e smoke test admin PWA register/unregister + ricezione push;
 - rollout produzione + monitor 7 giorni (error rate endpoint admin notifications, delivery push, assenza PII payload);
-- aggiornare eventuali runbook operativi con troubleshooting push admin.
+- eseguire checklist runbook `docs/runbooks/admin-pwa-operational-notifications.md` durante rollout.
 
 Ambito di questo piano:
 - P1 `Critico`: consenso analytics

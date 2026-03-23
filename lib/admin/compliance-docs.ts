@@ -69,6 +69,12 @@ const COMPLIANCE_DOCS: ComplianceDocDefinition[] = [
     description: 'Procedura dry-run/apply per purge retention e audit evidence.',
     relativePath: 'docs/runbooks/retention-lifecycle.md',
   },
+  {
+    id: 'admin-pwa-ops-notifications-runbook',
+    title: 'Admin PWA Operational Notifications Runbook',
+    description: 'Procedura operativa per attivazione, smoke test e troubleshooting WS6 admin push.',
+    relativePath: 'docs/runbooks/admin-pwa-operational-notifications.md',
+  },
 ];
 
 function resolveWorkspacePath(relativePath: string): string {

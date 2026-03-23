@@ -66,3 +66,5 @@ UpdatedAt: 2026-03-23
   - contributors apply
 - Ridotti payload Telegram/Slack dei form a modalità metadata-only (niente email/nome/free-text).
 - Esteso WS5 retention scope con dataset `fcm_admin_tokens` (TTL 90 giorni, hard delete).
+- Aggiunto runbook operativo WS6 per activation/smoke/troubleshooting:
+  - `docs/runbooks/admin-pwa-operational-notifications.md`

@@ -305,7 +305,7 @@ If any item above is missing, gate decision must be `needs changes`.
 
 ### 9. User Rights and Operations
 - DSAR impact: ridotte copie in canali terzi; dettaglio concentrato in storage applicativo/admin
-- Support/runbook impact: retention WS5 estesa a `fcm_admin_tokens`
+- Support/runbook impact: retention WS5 estesa a `fcm_admin_tokens` + runbook operativo WS6 admin push
 - Monitoring/audit trail needs: monitor delivery/error rate admin push + verifica assenza PII nei payload
 
 ### 10. Risk Review
@@ -321,6 +321,7 @@ If any item above is missing, gate decision must be `needs changes`.
   - `docs/privacy-processing-inventory.md`
   - `docs/compliance-changelog.md`
   - `docs/privacy-retention-schedule.md`
+  - `docs/runbooks/admin-pwa-operational-notifications.md`
 - Legal text files to update:
   - `lib/i18n/legal-translations.ts`
 
