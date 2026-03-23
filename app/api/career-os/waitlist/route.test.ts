@@ -6,8 +6,15 @@ import { sendTelegramFeedback } from '@/lib/telegram'
 import { sendCareerOSWaitlistInternalEmail } from '@/lib/email/careerOSWaitlistEmail'
 import { sendCareerOSWaitlistOptInEmail } from '@/lib/email/careerOSWaitlistOptInEmail'
 
+const sendAdminOpsNotificationMock = vi.fn()
+
 vi.mock('@/lib/firebase/admin', () => ({
   db: vi.fn(),
+}))
+
+vi.mock('@/lib/notifications/adminOpsPush', () => ({
+  inferEnvironmentFromHost: () => 'test',
+  sendAdminOpsNotification: (...args: unknown[]) => sendAdminOpsNotificationMock(...args),
 }))
 
 vi.mock('@/lib/telegram', () => ({
@@ -98,7 +105,12 @@ describe('api/career-os/waitlist route', () => {
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'career_os_waitlist',
-        email: 'john@example.com',
+        message: expect.stringContaining('metadata-only'),
+      }),
+    )
+    expect(sendAdminOpsNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: 'career_os_waitlist_submitted',
       }),
     )
     expect(sendCareerOSWaitlistInternalEmail).toHaveBeenCalledWith(

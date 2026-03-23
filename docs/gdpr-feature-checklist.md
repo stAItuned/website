@@ -250,6 +250,85 @@ If any item above is missing, gate decision must be `needs changes`.
 - Decision: `in-review`
 - Notes: default purge policy is hard delete; legal exceptions not active in MVP. Operational validation completed with zero expired records in current snapshot.
 
+## Latest Completed Review (Workstream 6 - Strategy B Admin-Only PWA Notifications)
+
+### 1. Processing Snapshot
+- Feature/change: minimizzazione notifiche operative con canale admin-only PWA e dashboard come fonte unica dettaglio
+- Date: 2026-03-23
+- Owner: stAItuned engineering
+- Status: `approved`
+- Related brainstorming/spec: `plan.md` -> "Workstream 6. Minimizzazione dei dati verso canali terzi e interni"
+
+### 2. Processing Activity
+- Trigger: nuovi submit su form principali (role fit, waitlist, business, contact, feedback, contributors)
+- Purpose: notificare il team admin senza propagare dati personali in canali esterni
+- Type: hardening di processing esistente con minimizzazione dei payload
+- Systems: route API form + FCM topic `admin-ops` + Firestore `fcm_admin_tokens` + dashboard admin
+
+### 3. Data Inventory
+- Personal data categories: token tecnico FCM, email admin allowlist, uid admin; eventi form restano in storage applicativo
+- Special-category data involved: `no`
+- User identifiers involved: token FCM tecnico, submission id
+- Free-text fields involved: `no` nei payload notifiche
+- Data source: `user provided` (form submit) + `technical generated` (token)
+
+### 4. Role and Legal Basis
+- stAItuned role: `controller`
+- Legal basis assumption: legittimo interesse operativo con minimizzazione e controllo accessi admin
+- Is consent required: `no` per canale operativo admin-only; permesso push browser richiesto lato admin device
+- Consent handling: opt-in esplicito nel browser admin, register/unregister protetto da `verifyAdmin`
+
+### 5. Transparency
+- Privacy policy update required: `yes` (push admin-only metadata disclosed)
+- Cookie policy update required: `yes` (sezione push aggiornata con distinzione editoriale/admin)
+- Terms/UX disclosure update required: `yes` (card admin dedicata)
+- User-facing disclosure copy updated: admin operational notifications keep metadata-only payloads; details remain in admin dashboard
+
+### 6. Retention and Lifecycle
+- Retention window: `fcm_admin_tokens` 90 giorni
+- Deletion/anonymization rule: hard delete tramite WS5 lifecycle job
+- Export/access implications: accesso limitato a admin autentificati in allowlist
+- End-of-purpose handling: unregister imposta token inattivo, lifecycle rimuove record scaduti
+
+### 7. Vendors and Transfers
+- Vendors/subprocessors involved: Firebase/Firestore, Firebase Cloud Messaging, Telegram/Slack (metadata-only)
+- Countries/transfer implications: invariato rispetto stack esistente
+- Cleartext access by vendor/internal team: ridotto; payload notifiche senza PII utente
+- Additional contracts or DPA checks required: no nuovi vendor
+
+### 8. Security and Minimization
+- Minimum required fields: `eventType`, `entityId`, `source`, `createdAt`, `url`, token tecnico admin
+- Optional fields removed: email, nome, testo libero, userAgent dai payload notifiche operative
+- Logging/telemetry impact: log tecnici senza PII
+- Access control requirements: endpoint admin notifications protetti con bearer token Firebase + allowlist admin
+- Secrets/config changes: nessuno oltre chiave VAPID già esistente
+
+### 9. User Rights and Operations
+- DSAR impact: ridotte copie in canali terzi; dettaglio concentrato in storage applicativo/admin
+- Support/runbook impact: retention WS5 estesa a `fcm_admin_tokens`
+- Monitoring/audit trail needs: monitor delivery/error rate admin push + verifica assenza PII nei payload
+
+### 10. Risk Review
+- Main privacy risks: admin token lifecycle non eseguito in apply finché assenza record expired
+- Main legal/accountability risks: regressione futura su payload notifiche se non rispettata policy metadata-only
+- Mitigations required before release: test unit payload + test API auth topic allowlist + docs inventory/changelog
+- DPIA screening needed: `no` (riduzione del rischio e minimizzazione di processing esistente)
+- Blocking unknowns: nessuno
+
+### 11. Documentation Updates
+- Docs to update:
+  - `plan.md`
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `docs/privacy-retention-schedule.md`
+- Legal text files to update:
+  - `lib/i18n/legal-translations.ts`
+
+### 12. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + engineering owner
+- Decision: `approved`
+- Notes: push utenti `/learn` resta separata (`new-articles`), canale operativo admin-only isolato su topic `admin-ops`.
+
 ## 1. Processing Snapshot
 - Feature/change:
 - Date:

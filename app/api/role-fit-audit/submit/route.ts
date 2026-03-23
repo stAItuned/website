@@ -5,6 +5,7 @@ import { generateAIAuditResult } from '@/lib/ai/roleFitAuditAI'
 import { getAnswerLabelByQuestionId } from '@/app/(public)/role-fit-audit/lib/questions'
 import { applyRetentionMetadata } from '@/lib/privacy/retention'
 import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
+import { inferEnvironmentFromHost, sendAdminOpsNotification } from '@/lib/notifications/adminOpsPush'
 import { NextRequest, NextResponse } from 'next/server'
 import {
     normalizeRoleFitLocale,
@@ -126,6 +127,23 @@ export async function POST(req: NextRequest) {
         }
 
         // -------------------------------------------------------------------------
+        // Admin PWA Notification (metadata-only)
+        // -------------------------------------------------------------------------
+        try {
+            await sendAdminOpsNotification({
+                eventType: 'role_fit_audit_submitted',
+                entityId: submissionId || 'not_persisted',
+                source: '/api/role-fit-audit/submit',
+                createdAt: nowIso,
+                locale,
+                environment: inferEnvironmentFromHost(req.headers.get('host')),
+            })
+        } catch (pushError) {
+            console.error('ADMIN PUSH ERROR (role-fit-audit):', pushError)
+            // Continue even if admin push fails
+        }
+
+        // -------------------------------------------------------------------------
         // Telegram Notification
         // -------------------------------------------------------------------------
         try {
@@ -152,7 +170,6 @@ export async function POST(req: NextRequest) {
                 category: 'role_fit_audit',
                 message: telegramMessage,
                 page: '/role-fit-audit',
-                userAgent: req.headers.get('user-agent') || undefined,
             })
         } catch (telegramError) {
             console.error('TELEGRAM ERROR (role-fit-audit):', telegramError)

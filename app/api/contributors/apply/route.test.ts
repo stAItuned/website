@@ -4,8 +4,15 @@ import { POST } from './route'
 import { db } from '@/lib/firebase/admin'
 import { sendTelegramFeedback } from '@/lib/telegram'
 
+const sendAdminOpsNotificationMock = vi.fn()
+
 vi.mock('@/lib/firebase/admin', () => ({
   db: vi.fn(),
+}))
+
+vi.mock('@/lib/notifications/adminOpsPush', () => ({
+  inferEnvironmentFromHost: () => 'test',
+  sendAdminOpsNotification: (...args: unknown[]) => sendAdminOpsNotificationMock(...args),
 }))
 
 vi.mock('@/lib/telegram', () => ({
@@ -23,7 +30,7 @@ describe('api/contributors/apply route', () => {
   beforeEach(() => {
     vi.resetAllMocks()
 
-    const add = vi.fn(async () => undefined)
+    const add = vi.fn(async () => ({ id: 'contrib_123' }))
     const get = vi.fn(async () => ({ empty: true }))
     const limit = vi.fn(() => ({ get }))
     const where = vi.fn(() => ({ limit }))
@@ -63,7 +70,11 @@ describe('api/contributors/apply route', () => {
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'contributor_application',
-        email: 'jane@example.com',
+      }),
+    )
+    expect(sendAdminOpsNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: 'contributors_apply_submitted',
       }),
     )
   })

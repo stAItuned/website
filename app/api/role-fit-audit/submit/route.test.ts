@@ -5,6 +5,7 @@ const addMock = vi.fn()
 const sendTelegramFeedbackMock = vi.fn()
 const sendRoleFitAuditReportEmailMock = vi.fn()
 const generateAIAuditResultMock = vi.fn()
+const sendAdminOpsNotificationMock = vi.fn()
 
 vi.mock('@/lib/firebase/admin', () => ({
   db: () => ({
@@ -16,6 +17,11 @@ vi.mock('@/lib/firebase/admin', () => ({
 
 vi.mock('@/lib/telegram', () => ({
   sendTelegramFeedback: (...args: unknown[]) => sendTelegramFeedbackMock(...args),
+}))
+
+vi.mock('@/lib/notifications/adminOpsPush', () => ({
+  inferEnvironmentFromHost: () => 'test',
+  sendAdminOpsNotification: (...args: unknown[]) => sendAdminOpsNotificationMock(...args),
 }))
 
 vi.mock('@/lib/email/roleFitAuditEmail', () => ({
@@ -136,6 +142,12 @@ describe('POST /api/role-fit-audit/submit', () => {
         internalAlert: expect.objectContaining({
           submissionId: 'submission_123',
         }),
+      }),
+    )
+    expect(sendAdminOpsNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: 'role_fit_audit_submitted',
+        entityId: 'submission_123',
       }),
     )
   })

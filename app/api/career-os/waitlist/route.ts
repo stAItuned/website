@@ -7,6 +7,7 @@ import { careerOSTranslations, normalizeCareerOSLocale } from '@/lib/i18n/career
 import { createWaitlistOptInToken } from '@/lib/security/waitlistDoubleOptIn'
 import { applyRetentionMetadata } from '@/lib/privacy/retention'
 import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
+import { inferEnvironmentFromHost, sendAdminOpsNotification } from '@/lib/notifications/adminOpsPush'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const WAITLIST_TERMS_VERSION = '2026-02-24'
@@ -111,6 +112,19 @@ export async function POST(req: NextRequest) {
       { merge: true },
     )
 
+    try {
+      await sendAdminOpsNotification({
+        eventType: 'career_os_waitlist_submitted',
+        entityId: waitlistRef.id,
+        source: '/api/career-os/waitlist',
+        createdAt: nowIso,
+        locale,
+        environment: inferEnvironmentFromHost(req.headers.get('host')),
+      })
+    } catch (pushError) {
+      console.error('[Career OS Waitlist] admin push error:', pushError)
+    }
+
     if (requestedMarketingConsent) {
       const token = createWaitlistOptInToken({
         email,
@@ -130,21 +144,21 @@ export async function POST(req: NextRequest) {
     await sendTelegramFeedback({
       category: 'career_os_waitlist',
       message: [
-        locale === 'en' ? '📥 New Career OS waitlist lead' : '📥 Nuovo lead waitlist Career OS',
+        locale === 'en' ? '📥 New Career OS waitlist lead (metadata-only)' : '📥 Nuovo lead waitlist Career OS (metadata-only)',
         '',
-        `📧 Email: ${email}`,
+        `🆔 Submission: ${waitlistRef.id}`,
         `🎯 Tier: ${pricingTier}`,
         `🧩 Mode: ${pricingMode}`,
         objective ? `🚀 Objective: ${objective}` : '',
         `📬 Marketing consent requested: ${requestedMarketingConsent ? (locale === 'en' ? 'Yes' : 'Sì') : 'No'}`,
         requestedMarketingConsent ? `✉️ Double opt-in email sent: ${marketingOptInEmailSent ? 'Yes' : 'No'}` : '',
         `📍 Source: ${source}`,
+        `🕒 CreatedAt: ${nowIso}`,
+        '🔐 Open Admin dashboard for full details.',
       ]
         .filter(Boolean)
         .join('\n'),
-      email,
       page,
-      userAgent: userAgent || undefined,
     })
 
     const emailSent = await sendCareerOSWaitlistInternalEmail({

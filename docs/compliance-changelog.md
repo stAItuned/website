@@ -1,6 +1,6 @@
 # Compliance Changelog
 
-UpdatedAt: 2026-03-22
+UpdatedAt: 2026-03-23
 
 ## Maintenance Rules
 
@@ -49,3 +49,20 @@ UpdatedAt: 2026-03-22
   - `contributor_applications`: 1
 - Rieseguito dry-run retention post-backfill:
   - `missingRetentionCount = 0` su tutti i dataset.
+
+## 2026-03-23 (WS6 strategy B admin-only operational notifications)
+
+- Introdotto canale notifiche operative admin-only via PWA:
+  - topic separato `admin-ops`
+  - collection dedicata `fcm_admin_tokens`
+  - endpoint protetti `POST /api/admin/notifications/{register,unregister,subscribe,unsubscribe}`
+- Aggiunta card opt-in/disattivazione notifiche in dashboard admin (`/admin`).
+- Introdotto dispatcher centralizzato metadata-only (`lib/notifications/adminOpsPush.ts`) integrato in tutti i form principali:
+  - role fit audit
+  - career os waitlist
+  - business apply
+  - contact
+  - feedback
+  - contributors apply
+- Ridotti payload Telegram/Slack dei form a modalità metadata-only (niente email/nome/free-text).
+- Esteso WS5 retention scope con dataset `fcm_admin_tokens` (TTL 90 giorni, hard delete).

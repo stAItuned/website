@@ -1,6 +1,6 @@
 # Privacy Processing Inventory (Repo-Driven)
 
-UpdatedAt: 2026-03-22
+UpdatedAt: 2026-03-23
 
 ## Purpose
 
@@ -23,6 +23,7 @@ Ogni riga del registro deve includere obbligatoriamente:
 - 2026-03-22: prima versione strutturata (WS4 Strategia A), allineata ai trattamenti ad alto rischio.
 - 2026-03-22: sweep di chiusura WS4 completato (matrice P4, normalizzazione wording retention con tagging WS5).
 - 2026-03-22: avvio WS5 Strategia A (MVP): retention contract centralizzato + lifecycle runbook + standardizzazione retention su dataset in scope.
+- 2026-03-23: WS6 Strategia B avviata con notifiche operative admin-only PWA (metadata-only) e canali terzi ridotti a eventi minimizzati.
 
 ## WS4 Closure Sweep Matrix (P4 Alto)
 
@@ -42,10 +43,11 @@ Ogni riga del registro deve includere obbligatoriamente:
 | Article views first-party | `POST /api/analytics/page-view` | article slug, timestamp, contatore aggregato | metriche editoriali aggregate senza GA | legittimo interesse (misurazione minima) | Firebase/Firestore | contatore cumulativo (no profilo utente) | privacy page (blog visits section) |
 | Google Analytics (consent-gated) | client analytics | cookie analytics, eventi navigazione | analisi traffico e performance marketing | consenso | Google Analytics | secondo policy GA/config banner | cookie banner + cookie policy |
 | Role Fit Audit submit | `POST /api/role-fit-audit/submit` + `/role-fit-audit` | email, nome opzionale, social opzionale, answers, risultato AI, consenso | generazione report personalizzato e follow-up operativo | consenso (submit/report) + legittimo interesse operativo | Firebase/Firestore, Google Gemini, Resend, Telegram (metadata-only) | 12 mesi (`retentionUntil`) | checkbox privacy + microcopy contestuale |
-| Career OS waitlist | `POST /api/career-os/waitlist` + `/career-os` pricing modal | email, intent (tier/mode/objective), consensi privacy/terms/marketing, metadata source/page | gestire lista attesa e ricontatto coerente al consenso | consenso (privacy + terms, marketing opzionale) | Firebase/Firestore, Resend, Telegram | 12 mesi (`retentionUntil`) | checkbox privacy/terms + notice contestuale |
-| Business request | `POST /api/business/apply` + `/business` | email, nome, azienda, messaggio, consenso privacy | gestione richieste commerciali | consenso + legittimo interesse precontrattuale | Firebase/Firestore, Telegram | 12 mesi (`retentionUntil`) | form consent copy + privacy/terms links |
-| Contact / feedback forms | `POST /api/contact`, `POST /api/feedbacks` | dati contatto e testo libero | supporto e risposta richieste | consenso / legittimo interesse a rispondere | Firebase/Firestore, Telegram, Slack (feedback webhook opzionale) | 12 mesi (`retentionUntil`) | notice nel form + privacy policy |
-| Contributor applications | `POST /api/contributors/apply` | profilo candidato, portfolio, note | valutazione candidatura collaborazione | misure precontrattuali + consenso informativo | Firebase/Firestore, Telegram | 12-24 mesi (policy) | disclosure nella pagina contributore |
+| Career OS waitlist | `POST /api/career-os/waitlist` + `/career-os` pricing modal | email, intent (tier/mode/objective), consensi privacy/terms/marketing, metadata source/page | gestire lista attesa e ricontatto coerente al consenso | consenso (privacy + terms, marketing opzionale) | Firebase/Firestore, Resend, Telegram (metadata-only), FCM admin-ops (metadata-only) | 12 mesi (`retentionUntil`) | checkbox privacy/terms + notice contestuale |
+| Business request | `POST /api/business/apply` + `/business` | email, nome, azienda, messaggio, consenso privacy | gestione richieste commerciali | consenso + legittimo interesse precontrattuale | Firebase/Firestore, Telegram (metadata-only), FCM admin-ops (metadata-only) | 12 mesi (`retentionUntil`) | form consent copy + privacy/terms links |
+| Contact / feedback forms | `POST /api/contact`, `POST /api/feedbacks` | dati contatto e testo libero | supporto e risposta richieste | consenso / legittimo interesse a rispondere | Firebase/Firestore, Telegram (metadata-only), Slack (metadata-only, opzionale), FCM admin-ops (metadata-only) | 12 mesi (`retentionUntil`) | notice nel form + privacy policy |
+| Contributor applications | `POST /api/contributors/apply` | profilo candidato, portfolio, note | valutazione candidatura collaborazione | misure precontrattuali + consenso informativo | Firebase/Firestore, Telegram (metadata-only), FCM admin-ops (metadata-only) | 12-24 mesi (policy) | disclosure nella pagina contributore |
+| Admin operational push notifications | `/api/admin/notifications/*` + `/admin` | token FCM tecnico, email admin allowlist, uid admin, topic tecnico | notifiche operative admin-only con dettaglio in dashboard protetta | legittimo interesse operativo + sicurezza accessi admin | Firebase/Firestore, Firebase Cloud Messaging | 90 giorni (`retentionUntil`) | card admin dedicata + privacy policy |
 
 ## Governance Rules
 

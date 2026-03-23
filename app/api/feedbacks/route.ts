@@ -3,6 +3,7 @@ import { feedbackPayloadSchema } from '@/lib/validation/feedback'
 import { db } from '@/lib/firebase/admin'
 import { applyRetentionMetadata } from '@/lib/privacy/retention'
 import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
+import { inferEnvironmentFromHost, sendAdminOpsNotification } from '@/lib/notifications/adminOpsPush'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -28,41 +29,12 @@ export async function POST(req: NextRequest) {
 
         const { category, message, email, page, userAgent } = parsed.data
         const nowIso = new Date().toISOString()
-
-        // Send to Telegram
-        await sendTelegramFeedback({
-            category,
-            message,
-            email: email || undefined,
-            page,
-            userAgent,
-        })
-
-        // 1) (Default) Send to Slack webhook if present
-        const webhook = process.env.SLACK_WEBHOOK_FEEDBACK
-        if (webhook) {
-            const text = [
-                '*New stAI Tuned feedback*',
-                `*Category*: ${category ?? 'n/a'}`,
-                `*Message*: ${message}`,
-                email ? `*Email*: ${email}` : null,
-                page ? `*Page*: ${page}` : null,
-                userAgent ? `*UA*: ${userAgent}` : null,
-            ]
-                .filter(Boolean)
-                .join('\n')
-
-            await fetch(webhook, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text }),
-            })
-        }
+        let submissionId: string | null = null
 
         // Persist feedback with retention metadata (best-effort, non-blocking)
         try {
             const retentionPolicy = getRetentionPolicy('feedback_submissions')
-            await db().collection('feedback_submissions').add(
+            const created = await db().collection('feedback_submissions').add(
                 applyRetentionMetadata(
                     {
                         category,
@@ -76,8 +48,55 @@ export async function POST(req: NextRequest) {
                     new Date(nowIso),
                 ),
             )
+            submissionId = typeof created?.id === 'string' ? created.id : null
         } catch (dbError) {
             console.error('FEEDBACK FIREBASE SAVE ERROR:', dbError)
+        }
+
+        // Send metadata-only notifications (no personal data content)
+        await sendTelegramFeedback({
+            category,
+            message: [
+                '🆕 New feedback submission (metadata-only)',
+                '',
+                `🆔 Submission: ${submissionId || 'not_persisted'}`,
+                `🏷 Category: ${category}`,
+                `🕒 CreatedAt: ${nowIso}`,
+                '🔐 Open Admin dashboard for full details.',
+            ].join('\n'),
+            page,
+        })
+
+        const webhook = process.env.SLACK_WEBHOOK_FEEDBACK
+        if (webhook) {
+            const text = [
+                '*New stAI Tuned feedback (metadata-only)*',
+                `*Submission*: ${submissionId || 'not_persisted'}`,
+                `*Category*: ${category ?? 'n/a'}`,
+                page ? `*Page*: ${page}` : null,
+                `*CreatedAt*: ${nowIso}`,
+                '*Open admin dashboard for details*',
+            ]
+                .filter(Boolean)
+                .join('\n')
+
+            await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text }),
+            })
+        }
+
+        try {
+            await sendAdminOpsNotification({
+                eventType: 'feedback_submitted',
+                entityId: submissionId || 'not_persisted',
+                source: '/api/feedbacks',
+                createdAt: nowIso,
+                environment: inferEnvironmentFromHost(req.headers.get('host')),
+            })
+        } catch (pushError) {
+            console.error('ADMIN PUSH ERROR (feedback):', pushError)
         }
 
         return NextResponse.json({ ok: true }, { status: 200 })

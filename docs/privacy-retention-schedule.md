@@ -17,6 +17,7 @@ Default operativo: `hard_delete` sui record scaduti.
 | `contact_requests` | 365 | `hard_delete` | richieste contatto con minimizzazione temporale | standardizzato in MVP |
 | `feedback_submissions` | 365 | `hard_delete` | feedback operativo non necessario oltre finestra annuale | standardizzato in MVP |
 | `contributor_applications` | 540 | `hard_delete` | finestra policy 12-24 mesi (impostata 18 mesi) | midpoint operativo |
+| `fcm_admin_tokens` | 90 | `hard_delete` | token push tecnici admin-only per notifiche operative | WS6 Strategy B |
 
 ## Contract Fields
 

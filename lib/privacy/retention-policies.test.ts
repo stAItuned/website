@@ -16,6 +16,7 @@ describe('retention policies', () => {
         'contact_requests',
         'feedback_submissions',
         'contributor_applications',
+        'fcm_admin_tokens',
       ]),
     )
   })

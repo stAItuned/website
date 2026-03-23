@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/components/auth/AuthContext';
+import { AdminPushNotificationsCard } from '@/components/admin/AdminPushNotificationsCard';
 
 interface CostData {
     period: string;
@@ -66,6 +67,8 @@ export default function AdminDashboard() {
                     Current month estimated costs and usage.
                 </p>
             </div>
+
+            <AdminPushNotificationsCard />
 
             <dl className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow dark:bg-slate-800 sm:p-6">

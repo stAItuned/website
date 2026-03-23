@@ -248,7 +248,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Notifiche push',
-                        content: 'Se abiliti le notifiche push, generiamo un token identificativo del dispositivo tramite Firebase Cloud Messaging (Google LLC). Il token è un identificativo tecnico, non associato alla tua identità personale.'
+                        content: 'Se abiliti le notifiche push, generiamo un token identificativo del dispositivo tramite Firebase Cloud Messaging (Google LLC). Il token è un identificativo tecnico. Le notifiche editoriali sono separate dalle notifiche operative admin-only (metadata-only) usate dal team interno autenticato.'
                     },
                     {
                         title: 'Candidature per collaborazioni',
@@ -499,7 +499,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Push Notifications',
-                        content: 'If enabled, we generate a device identification token via Firebase Cloud Messaging. This is a technical identifier, not linked to your personal identity.'
+                        content: 'If enabled, we generate a device identification token via Firebase Cloud Messaging. This is a technical identifier. Editorial notifications are separated from admin-only operational metadata alerts used by authenticated internal staff.'
                     },
                     {
                         title: 'Collaboration Applications',
@@ -590,7 +590,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Push Notifications (Firebase Cloud Messaging)',
-                        content: 'Generate a unique token to send alerts about new content.',
+                        content: 'Generate a unique token for editorial alerts and admin-only operational metadata alerts on protected dashboards.',
                         details: { label: 'Collected data', value: 'FCM Token (technical identifier)' }
                     }
                 ]

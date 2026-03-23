@@ -4,6 +4,7 @@ import { businessTranslations, normalizeBusinessLocale } from '@/lib/i18n/busine
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { applyRetentionMetadata } from '@/lib/privacy/retention'
 import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
+import { inferEnvironmentFromHost, sendAdminOpsNotification } from '@/lib/notifications/adminOpsPush'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
     const normalizedEmail = email.trim().toLowerCase()
     const nowIso = new Date().toISOString()
     const retentionPolicy = getRetentionPolicy('business_demo_requests')
+    let submissionId: string | null = null
 
     try {
       const requestsRef = db().collection('business_demo_requests')
@@ -71,22 +73,33 @@ export async function POST(req: NextRequest) {
         page: page || '/business',
         userAgent: userAgent || req.headers.get('user-agent') || null,
       }
-      await requestsRef.add(applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)))
+      const created = await requestsRef.add(applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)))
+      submissionId = typeof created?.id === 'string' ? created.id : null
     } catch (dbError) {
       console.error('BUSINESS REQUEST FIREBASE SAVE ERROR:', dbError)
     }
 
+    try {
+      await sendAdminOpsNotification({
+        eventType: 'business_apply_submitted',
+        entityId: submissionId || 'not_persisted',
+        source: '/api/business/apply',
+        createdAt: nowIso,
+        locale,
+        environment: inferEnvironmentFromHost(req.headers.get('host')),
+      })
+    } catch (pushError) {
+      console.error('ADMIN PUSH ERROR (business/apply):', pushError)
+    }
+
     const telegramMessage = [
-      locale === 'en' ? '🆕 New Business Demo Request' : '🆕 Nuova richiesta demo business',
+      locale === 'en' ? '🆕 New Business Demo Request (metadata-only)' : '🆕 Nuova richiesta demo business (metadata-only)',
       '',
-      `${locale === 'en' ? '👤 Name' : '👤 Nome'}: ${name.trim()}`,
-      `📧 Email: ${normalizedEmail}`,
-      `${locale === 'en' ? '🏢 Company' : '🏢 Azienda'}: ${company.trim()}`,
-      role?.trim() ? `${locale === 'en' ? '🧩 Role' : '🧩 Ruolo'}: ${role.trim()}` : '',
-      `${locale === 'en' ? '⚙️ Process' : '⚙️ Processo'}: ${processName.trim()}`,
-      `${locale === 'en' ? '🚧 Main pain' : '🚧 Problema principale'}: ${mainPain.trim()}`,
-      notes?.trim() ? `${locale === 'en' ? '🗒 Notes' : '🗒 Note'}: ${notes.trim()}` : '',
+      `🆔 Submission: ${submissionId || 'not_persisted'}`,
+      `🌐 Locale: ${locale}`,
       source ? `📍 Source: ${source}` : '',
+      `🕒 CreatedAt: ${nowIso}`,
+      '🔐 Open Admin dashboard for full details.',
     ]
       .filter(Boolean)
       .join('\n')
@@ -94,9 +107,7 @@ export async function POST(req: NextRequest) {
     await sendTelegramFeedback({
       category: 'business_demo_request',
       message: telegramMessage,
-      email: normalizedEmail,
       page: page || '/business',
-      userAgent: userAgent || req.headers.get('user-agent') || undefined,
     })
 
     return NextResponse.json({ ok: true }, { status: 200 })

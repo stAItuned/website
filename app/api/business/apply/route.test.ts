@@ -4,8 +4,15 @@ import { POST } from './route'
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { db } from '@/lib/firebase/admin'
 
+const sendAdminOpsNotificationMock = vi.fn()
+
 vi.mock('@/lib/telegram', () => ({
   sendTelegramFeedback: vi.fn(),
+}))
+
+vi.mock('@/lib/notifications/adminOpsPush', () => ({
+  inferEnvironmentFromHost: () => 'test',
+  sendAdminOpsNotification: (...args: unknown[]) => sendAdminOpsNotificationMock(...args),
 }))
 
 vi.mock('@/lib/firebase/admin', () => ({
@@ -23,7 +30,7 @@ describe('api/business/apply route', () => {
   beforeEach(() => {
     vi.resetAllMocks()
 
-    const add = vi.fn(async () => undefined)
+    const add = vi.fn(async () => ({ id: 'business_123' }))
     const collection = vi.fn(() => ({ add }))
     vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
   })
@@ -71,7 +78,11 @@ describe('api/business/apply route', () => {
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'business_demo_request',
-        email: 'jane@example.com',
+      }),
+    )
+    expect(sendAdminOpsNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: 'business_apply_submitted',
       }),
     )
   })

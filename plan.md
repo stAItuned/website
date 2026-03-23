@@ -8,7 +8,7 @@ Obiettivo: regolarizzare tutti i rilievi classificati `Critico` o `Alto` nell'au
 
 ## Tracking operativo
 
-Ultimo aggiornamento: 2026-03-22
+Ultimo aggiornamento: 2026-03-23
 
 ### Workstream 1 - Analytics e consenso cookie
 
@@ -184,7 +184,44 @@ Rimane da fare:
 
 ### Workstream 6 - Minimizzazione dei dati verso canali terzi e interni
 
-Stato: `Non avviato`
+Stato: `Chiuso lato implementazione (rollout operativo pending)`
+
+Decisione:
+- adottata `Strategia B` con dashboard admin come punto unico di dettaglio;
+- notifiche operative separate in canale admin-only PWA (`admin-ops`);
+- canali terzi (Telegram/Slack) ridotti a metadata-only per i form principali.
+
+Fatto:
+- introdotto modulo centralizzato notifiche operative metadata-only:
+  - `lib/notifications/adminOpsPush.ts`
+- introdotto topic separato `admin-ops` + collection dedicata `fcm_admin_tokens`;
+- introdotti endpoint protetti admin-only:
+  - `POST /api/admin/notifications/register`
+  - `POST /api/admin/notifications/unregister`
+  - `POST /api/admin/notifications/subscribe`
+  - `POST /api/admin/notifications/unsubscribe`
+- aggiunta UI admin per opt-in/disattivazione notifiche operative:
+  - `components/admin/AdminPushNotificationsCard.tsx`
+  - integrazione in `/admin` (`app/admin/page.tsx`)
+- integrazione dispatcher admin push su tutti i form principali:
+  - `app/api/role-fit-audit/submit/route.ts`
+  - `app/api/career-os/waitlist/route.ts`
+  - `app/api/business/apply/route.ts`
+  - `app/api/contact/route.ts`
+  - `app/api/feedbacks/route.ts`
+  - `app/api/contributors/apply/route.ts`
+- ridotti payload Telegram/Slack a metadata-only nei flussi sopra (dettaglio in admin dashboard);
+- estesa retention WS5 a `fcm_admin_tokens` (TTL 90 giorni, hard delete);
+- aggiornati artefatti governance:
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `docs/gdpr-feature-checklist.md`
+  - `docs/privacy-retention-schedule.md`.
+
+Rimane da fare (operativo, fuori implementazione codice):
+- deploy in ambiente test e smoke test admin PWA register/unregister + ricezione push;
+- rollout produzione + monitor 7 giorni (error rate endpoint admin notifications, delivery push, assenza PII payload);
+- aggiornare eventuali runbook operativi con troubleshooting push admin.
 
 Ambito di questo piano:
 - P1 `Critico`: consenso analytics

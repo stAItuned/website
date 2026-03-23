@@ -7,6 +7,7 @@ export type RetentionDataset =
   | 'contact_requests'
   | 'feedback_submissions'
   | 'contributor_applications'
+  | 'fcm_admin_tokens'
 
 export const RETENTION_POLICIES: Record<RetentionDataset, RetentionPolicy> = {
   role_fit_audit_submissions: {
@@ -38,6 +39,11 @@ export const RETENTION_POLICIES: Record<RetentionDataset, RetentionPolicy> = {
     ttlDays: 540,
     action: 'hard_delete',
     rationale: 'Contributor applications retained in 12-24 month policy window (set to 18 months).',
+  },
+  fcm_admin_tokens: {
+    ttlDays: 90,
+    action: 'hard_delete',
+    rationale: 'Admin operational push tokens retained for a short technical window.',
   },
 }
 

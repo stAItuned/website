@@ -27,6 +27,15 @@ Output:
 - `missingRetentionCount`
 - `deletedCount` (sempre 0 in dry-run)
 
+Dataset correnti in scope MVP:
+- `role_fit_audit_submissions`
+- `career_os_waitlist`
+- `business_demo_requests`
+- `contact_requests`
+- `feedback_submissions`
+- `contributor_applications`
+- `fcm_admin_tokens` (WS6 admin push tokens)
+
 ## Modalita Apply (prod only)
 
 Cancella i record scaduti in batch:
