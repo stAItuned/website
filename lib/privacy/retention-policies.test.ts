@@ -12,10 +12,14 @@ describe('retention policies', () => {
       expect.arrayContaining([
         'role_fit_audit_submissions',
         'career_os_waitlist',
+        'career_os_applications',
+        'career_os_audit',
+        'leads_ai_act_tools',
         'business_demo_requests',
         'contact_requests',
         'feedback_submissions',
         'contributor_applications',
+        'fcm_tokens',
         'fcm_admin_tokens',
       ]),
     )

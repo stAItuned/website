@@ -2,6 +2,77 @@
 
 Use this checklist before implementing any feature or change that introduces or modifies analytics, tracking, auth, forms, personal data processing, storage, sharing, retention, export, deletion, consent, or third-party integrations.
 
+## Latest Completed Review (Workstream 7 - Residual Gaps Closure + WS7-E)
+
+### 1. Processing Snapshot
+- Feature/change: WS7 execution wave (`A -> D -> B -> C -> E`)
+- Date: 2026-03-23
+- Owner: stAItuned engineering
+- Status: `approved_with_go_live_gate`
+- Related spec: `plan.md` -> "Workstream 7 - Chiusura gap residui fuori governance"
+
+### 2. Included Surfaces
+- Lead flows:
+  - `POST /api/leads/ai-act`
+  - `POST /api/career-os/apply`
+  - `POST /api/career-os/audit`
+- Rights/account:
+  - `POST /api/account/delete`
+- Public push:
+  - `POST /api/notifications/register`
+  - `DELETE /api/notifications/register`
+  - `POST /api/notifications/subscribe`
+  - `POST /api/notifications/unsubscribe`
+- Contributor lifecycle:
+  - `POST /api/contributor/save-progress` (policy/deletion alignment)
+
+### 3. Data Inventory / Retention Delta
+- Added in retention policy map:
+  - `leads_ai_act_tools`
+  - `career_os_applications`
+  - `career_os_audit`
+  - `fcm_tokens`
+- Added token lifecycle check for AI EU Act access token expiry.
+- Added DSAR mapping output in account deletion response (`datasetCoverage`).
+
+### 4. Minimization and Rights
+- Telegram payloads in WS7-A flows moved to metadata-only.
+- Public push tokens now have explicit retention lifecycle and status transitions.
+- Account deletion now separates:
+  - self-service automatic cleanup on account-bound datasets
+  - assisted DSAR for non account-bound datasets (`fcm_tokens`, `leads_ai_act_tools`).
+- Contributor agreement signed evidence follows default `legal_exception`.
+
+### 5. Documentation Artifacts Updated In Wave
+- `docs/privacy-processing-inventory.md`
+- `docs/privacy-retention-schedule.md`
+- `docs/compliance-changelog.md`
+- `docs/ai-eu-act-landing.md`
+- `docs/contributor-agreement-policy.md`
+- `docs/runbooks/dsar-account-deletion.md`
+
+### 6. Open Validation Before Approval
+- Completed validations:
+  - lint/typecheck and targeted route tests passed for WS7 touched surfaces
+  - legal copy parity `it/en` updated on WS7-E impacted sections
+  - retention dry-run confirmed `missingRetentionCount=0` on WS7 datasets
+  - contributor agreement legal exception metadata persisted with review due date
+  - `account/delete` includes evidence-minimum retention and dataset-specific error tracking
+
+### 7. DPIA Screening (WS7-E)
+- Screening decision: `DPIA not required (current scope)`
+- Rationale:
+  - no new high-risk profiling or automated decisioning introduced by WS7-E;
+  - changes reduce risk by minimization, retention-bound legal exception, and stronger DSAR accountability;
+  - no new special-category processing introduced.
+- Re-open trigger:
+  - if contributor/legal-evidence flow expands to new categories, large-scale enrichment, or automated high-impact decisions.
+
+### 8. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + bilingual parity gate (`localized-page-change-check`)
+- Decision: `approved_with_go_live_gate`
+- Notes: technical/documental GDPR gate passed; production go-live remains conditional on completing `docs/runbooks/ws7e-go-no-go-prod.md`.
+
 ## WS4 Enforcement Rule (Blocking for privacy-related PRs)
 
 For any GDPR/privacy-related PR, approval is allowed only if all are true:

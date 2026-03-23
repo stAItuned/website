@@ -1,8 +1,12 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { NextRequest, NextResponse } from 'next/server'
 import { careerOSTranslations, normalizeCareerOSLocale } from '@/lib/i18n/career-os-translations'
+import { db } from '@/lib/firebase/admin'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const CAREER_OS_AUDIT_PRIVACY_VERSION = '2026-03-23'
 
 export async function POST(req: NextRequest) {
     try {
@@ -44,19 +48,54 @@ export async function POST(req: NextRequest) {
         }
 
         const normalizedEmail = email.trim().toLowerCase()
+        const nowIso = new Date().toISOString()
+        const nowDate = new Date(nowIso)
+        const retentionPolicy = getRetentionPolicy('career_os_audit')
+        let submissionId: string | null = null
 
-        // Send Telegram first as primary notification
+        try {
+            const auditRef = db().collection('career_os_audit')
+            const created = await auditRef.add(
+                applyRetentionMetadata(
+                    {
+                        email: normalizedEmail,
+                        name: name.trim(),
+                        phone: phone?.trim() || null,
+                        doubt: doubt.trim(),
+                        availability: availability?.trim() || null,
+                        acceptedPrivacy: true,
+                        privacyVersion: CAREER_OS_AUDIT_PRIVACY_VERSION,
+                        consent: {
+                            privacy: {
+                                accepted: true,
+                                acceptedAt: nowIso,
+                                version: CAREER_OS_AUDIT_PRIVACY_VERSION,
+                            },
+                        },
+                        source: source || 'unknown',
+                        page: '/career-os',
+                        userAgent: userAgent || req.headers.get('user-agent') || null,
+                        status: 'active',
+                    },
+                    retentionPolicy,
+                    nowDate,
+                ),
+            )
+            submissionId = created.id
+        } catch (dbError) {
+            console.error('CAREER OS AUDIT FIREBASE SAVE ERROR:', dbError)
+        }
+
         const telegramMessage = [
-            locale === 'en' ? '🆘 Career OS Audit Request' : '🆘 Richiesta Audit Career OS',
+            locale === 'en'
+                ? '🆘 Career OS Audit Request (metadata-only)'
+                : '🆘 Richiesta Audit Career OS (metadata-only)',
             '',
-            `${locale === 'en' ? '👤 Name' : '👤 Nome'}: ${name.trim()}`,
-            `📧 Email: ${normalizedEmail}`,
-            phone ? `${locale === 'en' ? '📱 Phone' : '📱 Telefono'}: ${phone.trim()}` : '',
-            `${locale === 'en' ? '❓ Doubt' : '❓ Dubbio'}: ${doubt.trim()}`,
-            availability ? `${locale === 'en' ? '📅 Availability' : '📅 Disponibilità'}: ${availability.trim()}` : '',
+            `🆔 Submission: ${submissionId || 'not_persisted'}`,
+            `🌐 Locale: ${locale}`,
             source ? `📍 Source: ${source}` : '',
-            '',
-            locale === 'en' ? 'Requested follow-up contact.' : 'Richiede contatto per chiarimenti.'
+            `🕒 CreatedAt: ${nowIso}`,
+            '🔐 Open Admin dashboard for full details.'
         ]
             .filter(Boolean)
             .join('\n')
@@ -65,21 +104,12 @@ export async function POST(req: NextRequest) {
             await sendTelegramFeedback({
                 category: 'career_os_audit',
                 message: telegramMessage,
-                email: normalizedEmail,
                 page: '/career-os',
-                userAgent: userAgent || req.headers.get('user-agent') || undefined,
             })
         } catch (tgError) {
             console.error('TELEGRAM ERROR:', tgError)
-            // If Telegram fails, we really have no backup. But we return 200 to user? 
-            // Ideally return 500 if both fail. But let's assume Telegram is critical.
-            // Actually, the original request was about Server Error often caused by Firebase.
-            // Since Audit Modal DOES NOT SAVE TO DB currently (only Telegram),
-            // the error must be Telegram-related or env-related there.
-            // But if I want to make it robust, I should catch.
-            throw tgError // Re-throw to be caught by outer catch and return 500
+            throw tgError
         }
-
 
         return NextResponse.json({ ok: true }, { status: 200 })
     } catch (err) {

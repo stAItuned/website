@@ -9,6 +9,27 @@ import {
 } from '@/lib/i18n/ai-eu-act-translations'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com'
+const LEGACY_TOKEN_FALLBACK_TTL_DAYS = 30
+
+function isTokenActive(record: Record<string, unknown>, now: Date): boolean {
+  const expiryRaw = record.accessTokenExpiresAt ?? record.access_token_expires_at
+  if (typeof expiryRaw === 'string') {
+    const expiryDate = new Date(expiryRaw)
+    if (!Number.isNaN(expiryDate.getTime())) {
+      return expiryDate.getTime() > now.getTime()
+    }
+  }
+
+  // Backward compatibility for legacy records without explicit expiry.
+  const createdRaw = record.createdAt ?? record.created_at
+  if (typeof createdRaw !== 'string') return true
+
+  const createdDate = new Date(createdRaw)
+  if (Number.isNaN(createdDate.getTime())) return true
+
+  const maxMs = LEGACY_TOKEN_FALLBACK_TTL_DAYS * 24 * 60 * 60 * 1000
+  return (createdDate.getTime() + maxMs) > now.getTime()
+}
 
 export async function generateMetadata({
   searchParams,
@@ -62,7 +83,10 @@ export default async function AiEuActResourcesPage({
         .where('access_token', '==', token)
         .limit(1)
         .get()
-      hasValidAccess = !querySnapshot.empty
+      const now = new Date()
+      hasValidAccess = querySnapshot.docs.some((docSnap) =>
+        isTokenActive((docSnap.data() ?? {}) as Record<string, unknown>, now),
+      )
     } catch (error) {
       console.error('AI EU Act resources token validation error:', error)
     }

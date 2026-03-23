@@ -27,13 +27,17 @@ Output:
 - `missingRetentionCount`
 - `deletedCount` (sempre 0 in dry-run)
 
-Dataset correnti in scope MVP:
+Dataset correnti in scope:
 - `role_fit_audit_submissions`
 - `career_os_waitlist`
+- `career_os_applications` (WS7-A)
+- `career_os_audit` (WS7-A)
+- `leads_ai_act_tools` (WS7-A)
 - `business_demo_requests`
 - `contact_requests`
 - `feedback_submissions`
 - `contributor_applications`
+- `fcm_tokens` (WS7-B public editorial push tokens)
 - `fcm_admin_tokens` (WS6 admin push tokens)
 
 ## Modalita Apply (prod only)
@@ -79,6 +83,10 @@ poi rieseguire `dry-run` retention lifecycle per conferma.
   - dry-run retention eseguito in test/prod (`expiredCount = 0`)
   - backfill metadata legacy applicato in test
   - dry-run post-backfill con `missingRetentionCount = 0` su tutti i dataset
+  - WS7 pre-rollout execution:
+    - dry-run retention `dataset=all` ha rilevato `missingRetentionCount=2` su `fcm_tokens`
+    - backfill mirato `fcm_tokens` eseguito in apply (`updatedCount=2`)
+    - dry-run retention di verifica finale `dataset=all`: `missingRetentionCount=0` su tutti i dataset, inclusi WS7 (`leads_ai_act_tools`, `career_os_applications`, `career_os_audit`, `fcm_tokens`)
 
 ## Rollback
 

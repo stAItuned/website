@@ -2,9 +2,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { NextRequest } from 'next/server'
 import { POST } from './route'
 import { sendTelegramFeedback } from '@/lib/telegram'
+import { db } from '@/lib/firebase/admin'
 
 vi.mock('@/lib/telegram', () => ({
   sendTelegramFeedback: vi.fn(),
+}))
+
+vi.mock('@/lib/firebase/admin', () => ({
+  db: vi.fn(),
 }))
 
 function createReq(body: unknown): NextRequest {
@@ -15,8 +20,12 @@ function createReq(body: unknown): NextRequest {
 }
 
 describe('api/career-os/audit route', () => {
+  const add = vi.fn(async () => ({ id: 'audit_123' }))
+  const collection = vi.fn(() => ({ add }))
+
   beforeEach(() => {
     vi.resetAllMocks()
+    vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
   })
 
   it('returns ok when honeypot is filled', async () => {
@@ -72,8 +81,16 @@ describe('api/career-os/audit route', () => {
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'career_os_audit',
-        email: 'john@example.com',
+        page: '/career-os',
       })
     )
+
+    const payload = (add as unknown as { mock: { calls: unknown[][] } }).mock.calls[0]?.[0] as Record<string, unknown>
+    expect(payload).toMatchObject({
+      email: 'john@example.com',
+      status: 'active',
+      retentionUntil: expect.any(String),
+      privacyVersion: '2026-03-23',
+    })
   })
 })

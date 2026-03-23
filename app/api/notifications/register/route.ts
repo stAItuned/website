@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
-import { getFirestore } from 'firebase-admin/firestore'
 import { db } from '@/lib/firebase/admin'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 
 /**
  * POST /api/notifications/register
@@ -21,15 +22,32 @@ export async function POST(request: Request) {
 
         const firestore = db()
         const tokenRef = firestore.collection('fcm_tokens').doc(token)
+        const now = new Date()
+        const nowIso = now.toISOString()
+        const retentionPolicy = getRetentionPolicy('fcm_tokens')
+        const existing = await tokenRef.get()
+        const existingData = existing.exists ? existing.data() as { createdAt?: unknown } : undefined
 
-        // Store token with metadata
+        // Store token with retention metadata
         await tokenRef.set({
-            token,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            platform: 'web',
-            topics: ['new-articles'], // Default subscription
-            active: true
+            ...applyRetentionMetadata(
+                {
+                    token,
+                    platform: 'web',
+                    topics: ['new-articles'],
+                    active: true,
+                    subscriptionStatus: 'subscribed',
+                    registeredAt: nowIso,
+                    lastSeenAt: nowIso,
+                    status: 'active',
+                    createdAt:
+                        typeof existingData?.createdAt === 'string'
+                            ? existingData.createdAt
+                            : nowIso,
+                },
+                retentionPolicy,
+                now,
+            ),
         }, { merge: true })
 
         console.log('[FCM] Token registered:', token.substring(0, 20) + '...')
@@ -62,12 +80,33 @@ export async function DELETE(request: Request) {
 
         const firestore = db()
         const tokenRef = firestore.collection('fcm_tokens').doc(token)
+        const now = new Date()
+        const nowIso = now.toISOString()
+        const retentionPolicy = getRetentionPolicy('fcm_tokens')
+        const existing = await tokenRef.get()
+        const existingData = existing.exists ? existing.data() as { createdAt?: unknown } : undefined
 
-        // Mark as inactive instead of deleting (for analytics)
-        await tokenRef.update({
-            active: false,
-            unregisteredAt: new Date().toISOString()
-        })
+        await tokenRef.set(
+            applyRetentionMetadata(
+                {
+                    token,
+                    platform: 'web',
+                    active: false,
+                    subscriptionStatus: 'unregistered',
+                    topics: [],
+                    status: 'active',
+                    unregisteredAt: nowIso,
+                    lastSeenAt: nowIso,
+                    createdAt:
+                        typeof existingData?.createdAt === 'string'
+                            ? existingData.createdAt
+                            : nowIso,
+                },
+                retentionPolicy,
+                now,
+            ),
+            { merge: true },
+        )
 
         return NextResponse.json({ success: true })
     } catch (error) {

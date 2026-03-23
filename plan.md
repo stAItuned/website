@@ -2,13 +2,27 @@
 
 Data: 2026-03-22
 
+Ultimo aggiornamento piano: 2026-03-23
+
 Fonte: [docs/gdpr-audit-webapp-2026-03-22.md](docs/gdpr-audit-webapp-2026-03-22.md)
 
-Obiettivo: regolarizzare tutti i rilievi classificati `Critico` o `Alto` nell'audit GDPR della webapp, con priorita a blocco del rischio, riallineamento codice-policy e introduzione di controlli strutturali riusabili.
+Brainstorming retrospettivo di riferimento: [docs/brainstorms/2026-03-23-gdpr-webapp-compliance-retrospective.md](docs/brainstorms/2026-03-23-gdpr-webapp-compliance-retrospective.md)
+
+Obiettivo: chiudere i rilievi dell'audit GDPR del 2026-03-22 e i gap residui emersi dal re-check statico del 2026-03-23, fino a raggiungere uno stato GDPR difendibile sull'intero perimetro della webapp, con priorita a blocco del rischio, riallineamento codice-policy e introduzione di controlli strutturali riusabili.
+
+## Nuove evidenze 2026-03-23
+
+- il re-check conferma che analytics, Role Fit Audit e Career OS waitlist sono nettamente migliorati rispetto alla baseline audit;
+- i gap residui non si concentrano sui workstream gia chiusi, ma su superfici rimaste fuori dal perimetro originario;
+- per questo il piano viene esteso con un nuovo `Workstream 7`, dedicato alla chiusura dei residual gaps non ancora governati da inventory, retention, policy e DSAR handling.
 
 ## Tracking operativo
 
 Ultimo aggiornamento: 2026-03-23
+
+Nota trasversale:
+- alcuni gap emersi il 2026-03-23 non sono regressioni dei workstream chiusi;
+- sono superfici rimaste fuori dal perimetro originario del piano e vengono tracciate nel nuovo [Workstream 7](#workstream-7---chiusura-gap-residui-fuori-governance).
 
 ### Workstream 1 - Analytics e consenso cookie
 
@@ -222,6 +236,132 @@ Rimane da fare (operativo, fuori implementazione codice):
 - deploy in ambiente test e smoke test admin PWA register/unregister + ricezione push;
 - rollout produzione + monitor 7 giorni (error rate endpoint admin notifications, delivery push, assenza PII payload);
 - eseguire checklist runbook `docs/runbooks/admin-pwa-operational-notifications.md` durante rollout.
+- eseguire checklist pre-rollout WS7 (`docs/runbooks/ws7-rollout-checklist.md`) con dry-run retention e smoke API nell'ordine `WS7-A -> WS7-D -> WS7-B -> WS7-C -> WS7-E`.
+- eseguire sign-off finale go/no-go WS7-E in `docs/runbooks/ws7e-go-no-go-prod.md` prima del deploy produzione.
+
+### Workstream 7 - Chiusura gap residui fuori governance
+
+Stato: `In corso (WS7-A/WS7-D/WS7-B implementati, WS7-C allineato su policy + runtime, WS7-E implementato con go-live gate, rollout operativo pending)`
+
+Decisione:
+- chiudere i trattamenti personali ancora fuori da inventory + retention + policy + minimizzazione + DSAR handling;
+- non aprire nuove feature che introducono form, tracking, token persistenti o log personal data finche questi flussi non adottano il modello WS4/WS5/WS6;
+- usare come baseline il pattern gia consolidato su `Career OS waitlist`, `Role Fit Audit` e `fcm_admin_tokens`.
+
+#### WS7-A - Lead flows uncovered
+
+Priorita: `Alta`
+
+Scope:
+- `leads_ai_act_tools`
+- `career_os_applications`
+- `career_os_audit`
+
+Problemi da chiudere:
+- niente retention WS5 sui dataset residuali;
+- inventory mancante o incompleta;
+- disclosure pubblica incompleta su finalita, retention, vendor e diritti;
+- Telegram non metadata-only in alcuni flussi;
+- consenso/versioning non uniformi;
+- token lifecycle `AI EU Act` non esplicitato.
+
+Done criteria:
+- tutti e tre i flussi compaiono in `docs/privacy-processing-inventory.md`;
+- tutti i dataset persistenti hanno policy in `docs/privacy-retention-schedule.md` e `lib/privacy/retention-policies.ts`;
+- nessun payload Telegram contiene PII/free-text se non formalmente giustificato;
+- `AI EU Act` documenta retention e lifecycle token;
+- notice/policy `it/en` coerenti con il comportamento reale.
+
+#### WS7-B - Public editorial push notification governance
+
+Priorita: `Alta`
+
+Scope:
+- `fcm_tokens`
+- `POST /api/notifications/register`
+- `POST /api/notifications/subscribe`
+- `POST /api/notifications/unsubscribe`
+- prompt/editorial push PWA
+
+Problemi da chiudere:
+- token persistenti senza retention esplicita;
+- unregister soft-only;
+- inventory e retention schedule non coprono il dataset;
+- privacy/cookie copy troppo generica sul canale editoriale.
+
+Done criteria:
+- dataset `fcm_tokens` formalizzato in inventory e retention schedule;
+- TTL definita e tracciata nel framework WS5;
+- lifecycle job WS5 applicabile anche ai token push pubblici;
+- policy pubblica distingue chiaramente push editoriali vs admin-only push;
+- account/DSAR flow chiarisce il trattamento dei token non account-bound.
+
+#### WS7-C - Contributor agreement lifecycle e legal exception
+
+Priorita: `Alta`
+
+Scope:
+- `POST /api/contributor/save-progress`
+- contributor agreement storage
+- contributor agreement deletion policy
+
+Problemi da chiudere:
+- raccolta di legal name / fiscal code / IP / hash / view URL con disclosure troppo generica;
+- nessuna scelta documentata su retention per prova contrattuale;
+- possibile conflitto tra hard delete account e necessita di conservazione difensiva.
+
+Done criteria:
+- decisione esplicita `hard_delete` oppure `legal_exception` documentata;
+- contributor agreement rappresentato in inventory/privacy docs in modo specifico;
+- `plan.md` e brainstorming spiegano il razionale giuridico-operativo;
+- eventuale eccezione aggiunta a `lib/privacy/retention-policies.ts` tracciata come dipendenza futura prima della chiusura definitiva.
+
+#### WS7-D - DSAR e account deletion completion
+
+Priorita: `Medio-Alta`
+
+Scope:
+- `POST /api/account/delete`
+- mapping dataset -> coverage deletion/export
+
+Problemi da chiudere:
+- cleanup limitato a pochi dataset account-linked;
+- assenza di coverage esplicita per dataset email-based / token-based;
+- export/erasure non industrializzati end-to-end.
+
+Done criteria:
+- matrice `dataset -> owner -> delete path -> export path -> manual/automatic`;
+- account deletion documenta cosa copre e cosa richiede support workflow;
+- il piano distingue chiaramente self-service deletion vs DSAR assisted deletion.
+
+#### WS7-E - Legal hardening post-review
+
+Priorita: `Alta`
+
+Stato avanzamento:
+- implementazione tecnica completata su `POST /api/account/delete` e `POST /api/contributor/save-progress`;
+- aggiornamento policy/docs `it/en` completato;
+- verifica operativa post-deploy e monitoraggio pending.
+
+Scope:
+- eccezione legale contributor agreement
+- policy privacy/cookie `it/en`
+- inventory recipients vendor-level
+- audit trail dataset-specific in `POST /api/account/delete`
+
+Problemi da chiudere:
+- eccezione legale applicata su payload contributor troppo ampio rispetto ai soli campi probatori;
+- assenza durata esplicita (o trigger riesame) per legal exception;
+- trasparenza incompleta su Career OS apply/audit e AI EU Act lead nella policy `it/en`;
+- recipient agreement flow troppo generico ("provider email");
+- audit trail DSAR non sempre dataset-specifico in caso errore parziale.
+
+Done criteria:
+- `contributions` con agreement firmato conserva solo evidenza probatoria minima (documentata);
+- retention/legal exception contributor include durata o regola di riesame esplicita in schedule/policy;
+- privacy policy `it/en` include sezioni dedicate a Career OS apply/audit e AI EU Act lead con finalita, base giuridica, retention e recipient;
+- inventory nomina vendor specifici per agreement flow;
+- `POST /api/account/delete` restituisce errori dataset-specifici in `datasetCoverage` senza bucket generico ambiguo.
 
 Ambito di questo piano:
 - P1 `Critico`: consenso analytics
@@ -230,10 +370,15 @@ Ambito di questo piano:
 - P4 `Alto`: informative non aderenti al codice
 - P5 `Alto`: retention e cancellazione non uniformi
 - P6 `Alto`: dati personali replicati su Telegram, Slack e inbox interne
+- P7 `Alto`: lead flows fuori governance (`AI EU Act`, `Career OS apply`, `Career OS audit`)
+- P8 `Alto`: editorial push tokens senza retention/lifecycle
+- P9 `Alto`: contributor agreement lifecycle e legal exception
+- P10 `Medio-Alto`: DSAR/account deletion completion
+- P11 `Alto`: legal hardening post-review (scope eccezione, durata retention, trasparenza policy/vendor, audit trail DSAR)
 
-Fuori ambito di questo piano:
-- rischi `Medio` e `Basso`, da trattare in una wave successiva;
-- revisione legale formale del testo policy, che resta comunque raccomandata a valle delle modifiche.
+Nota di ambito:
+- il piano include anche gap residui `Medio-Alto` necessari a una posizione GDPR difendibile end-to-end;
+- la revisione legale formale del testo policy resta raccomandata a valle delle modifiche.
 
 ## Principi di esecuzione
 
@@ -879,12 +1024,21 @@ Ordine consigliato:
 4. `Role Fit Audit`
 5. `Policy/documentazione`
 6. `Retention standard`
+7. `Residual gaps closure (WS7)`
 
 Motivo:
 - il primo blocca il rischio normativo immediato;
 - il secondo riduce la superficie privacy mentre gli altri flussi restano in lavorazione;
 - newsletter e role-fit sono i due trattamenti lead/profiling piu delicati;
-- policy e retention vanno chiuse dopo che il comportamento tecnico e stabilizzato.
+- policy e retention vanno chiuse dopo che il comportamento tecnico e stabilizzato;
+- i residual gaps del 2026-03-23 vanno affrontati dopo WS1-WS6 per convergere verso una governance completa, non solo verso la chiusura dell'audit storico.
+
+Dipendenze specifiche WS7:
+- ordine esecuzione WS7 confermato: `WS7-A -> WS7-D -> WS7-B -> WS7-C -> WS7-E`;
+- `WS7-A` e `WS7-B` dipendono da estensione del framework WS5 a dataset oggi fuori scope;
+- `WS7-C` dipende da una decisione esplicita su eccezione legale vs hard delete per prova contrattuale;
+- `WS7-D` dipende da inventory dataset completa e da una mappa chiara dei delete/export path.
+- `WS7-E` dipende da chiusura tecnica minima WS7-C/WS7-D e da allineamento formale legal+privacy docs `it/en`.
 
 ## Ownership consigliata
 
