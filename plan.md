@@ -158,6 +158,9 @@ Fatto:
   - `lib/privacy/retention-policies.ts`
 - creato job lifecycle retention:
   - `scripts/retention-lifecycle.ts` (`--dry-run`, `--apply`, `--dataset`, `--batch-size`, `--env`, `--project`)
+- introdotto script operativo backfill metadata legacy:
+  - `scripts/backfill-retention-metadata.ts`
+  - evidenza commit: `c8b814e` (`chore(gdpr): add ws5 retention metadata backfill script`)
 - standardizzata metadata retention (`retentionUntil`, lifecycle fields) nei dataset MVP:
   - `role_fit_audit_submissions`
   - `career_os_waitlist`
@@ -169,11 +172,14 @@ Fatto:
   - `docs/privacy-retention-schedule.md`
   - `docs/runbooks/retention-lifecycle.md`
   - review WS5 `in-review` su `docs/gdpr-feature-checklist.md`.
+- esecuzioni operative completate:
+  - dry-run retention test/prod: `expiredCount=0`
+  - backfill legacy metadata in test: `role_fit_audit_submissions=20`, `career_os_waitlist=1`, `contributor_applications=1`
+  - dry-run post-backfill: `missingRetentionCount=0` su tutti i dataset
 
 Rimane da fare:
-- eseguire `dry-run` retention in test e validare summary per dataset;
-- eseguire `apply` retention in test e verificare evidenze audit;
 - pianificare run prod controllata + monitor 7 giorni;
+- eseguire prima run `apply` retention quando esistono record `expired` (attualmente nessuno);
 - chiudere review WS5 (`in-review -> approved`) dopo esecuzioni operative.
 
 ### Workstream 6 - Minimizzazione dei dati verso canali terzi e interni

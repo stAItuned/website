@@ -239,15 +239,16 @@ If any item above is missing, gate decision must be `needs changes`.
 - Route writes standardized with `retentionUntil` + lifecycle metadata in scope datasets
 
 ### 5. Open Validation Before Approval
-- Execute dry-run in test environment and verify summaries (`expiredCount`, `missingRetentionCount`)
-- Execute controlled apply in test and confirm only expired records are deleted
-- Validate audit evidence write in `compliance_ops/retention_runs/runs/{runId}`
-- Confirm no route regressions after metadata standardization
+- Dry-run eseguito in test/prod e validato (`expiredCount = 0`; mismatch metadata iniziali identificati)
+- Backfill metadata retention eseguito in test su record legacy (script dedicato)
+- Dry-run post-backfill validato (`missingRetentionCount = 0` su tutti i dataset)
+- Route regressions check completato (lint/typecheck/tests mirati verdi)
+- Pending: first apply retention run con record effettivamente expired (attualmente nessun record scaduto)
 
 ### 6. Approval Gate
 - Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + engineering owner
 - Decision: `in-review`
-- Notes: default purge policy is hard delete; legal exceptions not active in MVP.
+- Notes: default purge policy is hard delete; legal exceptions not active in MVP. Operational validation completed with zero expired records in current snapshot.
 
 ## 1. Processing Snapshot
 - Feature/change:

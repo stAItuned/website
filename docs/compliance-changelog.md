@@ -34,3 +34,18 @@ UpdatedAt: 2026-03-22
   - `contact_requests`
   - `feedback_submissions`
   - `contributor_applications`
+
+## 2026-03-23 (WS5 operational validation)
+
+- Eseguito `dry-run` retention lifecycle (`dataset=all`) in test/prod con esito:
+  - `expiredCount = 0` su tutti i dataset
+  - `missingRetentionCount` iniziale rilevato su record legacy
+- Introdotto script operativo di backfill metadata:
+  - `scripts/backfill-retention-metadata.ts`
+  - commit evidenza: `c8b814e`
+- Eseguito backfill in apply (test) con allineamento record legacy:
+  - `role_fit_audit_submissions`: 20
+  - `career_os_waitlist`: 1
+  - `contributor_applications`: 1
+- Rieseguito dry-run retention post-backfill:
+  - `missingRetentionCount = 0` su tutti i dataset.

@@ -4,6 +4,9 @@ Obiettivo: eseguire purge retention in modo controllato con modalita `dry-run` e
 
 Script: `scripts/retention-lifecycle.ts`
 
+Companion script per legacy metadata:
+- `scripts/backfill-retention-metadata.ts`
+
 ## Prerequisiti
 
 - accesso al progetto Firebase corretto
@@ -52,7 +55,21 @@ Nessun payload PII viene salvato nell’evidenza.
 ## Error handling
 
 - failure parziale batch: rilanciare lo stesso comando (idempotenza pratica sul subset rimanente)
-- `missingRetentionCount > 0`: aprire task di backfill metadata per dataset coinvolto
+- `missingRetentionCount > 0`: eseguire backfill metadata:
+
+```bash
+pnpm exec tsx scripts/backfill-retention-metadata.ts --dry-run --env test --project <project-id> --dataset all
+pnpm exec tsx scripts/backfill-retention-metadata.ts --apply --env test --project <project-id> --dataset all
+```
+
+poi rieseguire `dry-run` retention lifecycle per conferma.
+
+## Operational Evidence (current)
+
+- 2026-03-23:
+  - dry-run retention eseguito in test/prod (`expiredCount = 0`)
+  - backfill metadata legacy applicato in test
+  - dry-run post-backfill con `missingRetentionCount = 0` su tutti i dataset
 
 ## Rollback
 
