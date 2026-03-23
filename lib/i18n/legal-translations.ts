@@ -160,7 +160,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     subsections: [
                         {
                             title: 'Provider di pagamento:',
-                            content: 'i pagamenti possono essere gestiti tramite fornitori terzi (es. Stripe) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.'
+                            content: 'i pagamenti possono essere gestiti tramite fornitori terzi (es. Stripe e/o PayPal) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.'
                         },
                         {
                             title: 'Garanzia Soddisfatti o Rimborsati (ove applicabile):',
@@ -291,7 +291,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'Misurazione audience first-party su infrastruttura Firebase (conteggio visualizzazioni articoli)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
-                    'Payments (Stripe)',
+                    'Payments (Stripe, PayPal)',
                     'Feedback tools (Telegram/Slack)',
                     'Static resources (Google Fonts)'
                 ]
@@ -411,7 +411,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     subsections: [
                         {
                             title: 'Payment Providers:',
-                            content: 'Payments may be handled through third-party providers (e.g., Stripe) via external links or checkouts. In these cases, some data necessary for the transaction (e.g., amount, technical identifiers, and payment data) are processed by the provider according to their own terms.'
+                            content: 'Payments may be handled through third-party providers (e.g., Stripe and/or PayPal) via external links or checkouts. In these cases, some data necessary for the transaction (e.g., amount, technical identifiers, and payment data) are processed by the provider according to their own terms.'
                         },
                         {
                             title: 'Money-Back Guarantee (where applicable):',
@@ -542,7 +542,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'First-party audience measurement on Firebase infrastructure (article view counting)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
-                    'Payments (Stripe)',
+                    'Payments (Stripe, PayPal)',
                     'Feedback tools (Telegram/Slack)',
                     'Static resources (Google Fonts)'
                 ]

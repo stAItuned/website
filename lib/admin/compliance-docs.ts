@@ -45,6 +45,18 @@ const COMPLIANCE_DOCS: ComplianceDocDefinition[] = [
     description: 'Piano operativo per workstream, stato avanzamento e backlog.',
     relativePath: 'plan.md',
   },
+  {
+    id: 'privacy-processing-inventory',
+    title: 'Privacy Processing Inventory',
+    description: 'Inventario trattamenti repo-driven per controllo continuo codice/policy.',
+    relativePath: 'docs/privacy-processing-inventory.md',
+  },
+  {
+    id: 'compliance-changelog',
+    title: 'Compliance Changelog',
+    description: 'Registro sintetico degli aggiornamenti GDPR/compliance nel tempo.',
+    relativePath: 'docs/compliance-changelog.md',
+  },
 ];
 
 function resolveWorkspacePath(relativePath: string): string {

@@ -126,7 +126,22 @@ Rimane da fare:
 
 ### Workstream 4 - Trasparenza e documentazione
 
-Stato: `Non avviato`
+Stato: `Chiuso (Strategia A + C completate)`
+
+Decisione:
+- adottata combinazione `Strategia A` (repo-driven) + `Strategia C` (layered notices sui form a rischio).
+
+Fatto:
+- creato inventario trattamenti repo-driven: `docs/privacy-processing-inventory.md`;
+- creato changelog compliance: `docs/compliance-changelog.md`;
+- estesa skill unica GDPR `gdpr-feature-gate` con workflow WS4 repo-driven, output standard ed enforcement bloccante su PR privacy-related;
+- aggiornato legal copy `it/en` per provider pagamenti reali (`Stripe, PayPal`);
+- aggiunto notice contestuale privacy nel flusso waitlist Career OS (`it/en`);
+- pubblicati artefatti compliance nel nuovo hub admin `/admin/compliance`.
+
+Rimane da fare:
+- nessun task WS4 aperto.
+- i temi di standardizzazione tecnica retention rimasti sono formalmente delegati a WS5.
 
 ### Workstream 5 - Retention, cancellazione e lifecycle dei dataset
 

@@ -2,6 +2,15 @@
 
 Use this checklist before implementing any feature or change that introduces or modifies analytics, tracking, auth, forms, personal data processing, storage, sharing, retention, export, deletion, consent, or third-party integrations.
 
+## WS4 Enforcement Rule (Blocking for privacy-related PRs)
+
+For any GDPR/privacy-related PR, approval is allowed only if all are true:
+- `docs/privacy-processing-inventory.md` is updated for touched high-risk flows.
+- `docs/compliance-changelog.md` includes the current wave entry.
+- legal/i18n parity checks are completed (including `localized-page-change-check` when user-facing copy changed).
+
+If any item above is missing, gate decision must be `needs changes`.
+
 ## Latest Completed Review (Newsletter Decommission)
 
 ### 1. Processing Snapshot
@@ -165,6 +174,39 @@ Use this checklist before implementing any feature or change that introduces or 
 - Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + bilingual parity gate (`localized-page-change-check`)
 - Decision: `approved`
 - Notes: Strategy A hardening completed for current scope; retention lifecycle automation remains in WS5 backlog.
+
+## Latest Completed Review (Workstream 4 - Strategy A + C)
+
+### 1. Processing Snapshot
+- Feature/change: repo-driven transparency model + layered notices for high-risk flows
+- Date: 2026-03-22
+- Owner: stAItuned engineering
+- Status: `approved`
+- Related brainstorming/spec: `plan.md` -> "Workstream 4. Trasparenza e documentazione"
+
+### 2. Processing Activity
+- Trigger: maintenance updates on legal docs, i18n notices and compliance inventory
+- Purpose: keep policy/disclosure aligned with real code and vendors
+- Type: governance hardening (no new data collection)
+- Systems: legal i18n, form copy, compliance docs in admin, inventory docs in repo
+
+### 3. Key Outputs In This Wave
+- Added repo-driven inventory: `docs/privacy-processing-inventory.md`
+- Added compliance changelog: `docs/compliance-changelog.md`
+- Added contextual waitlist notice (`it/en`) in Career OS pricing modal
+- Aligned payment providers in legal copy to `Stripe, PayPal`
+- Added admin compliance hub entrypoints for operational documents
+- Added WS4 blocking enforcement rule for privacy-related PR approvals
+
+### 4. Open Validation Before Approval
+- Completed manual code-vs-policy review for all `P4 Alto` flows (see matrix in `docs/privacy-processing-inventory.md`)
+- Retention wording normalized for flows without technical lifecycle and explicitly tagged as WS5 tracked
+- Final bilingual parity review completed on contextual/legal privacy copy touched in WS4
+
+### 5. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + bilingual parity gate (`localized-page-change-check`)
+- Decision: `approved`
+- Notes: WS4 closed for transparency/documentation scope. Residual risk is limited to WS5 lifecycle automation (retention technical standardization), not documentation mismatch.
 
 ## 1. Processing Snapshot
 - Feature/change:

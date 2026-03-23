@@ -88,6 +88,7 @@ export interface CareerOSTranslations {
     revealEmailLabel: string
     revealPrivacyLabelPrefix: string
     revealMarketingLabel: string
+    revealComplianceNotice: string
     revealPrivacyPolicy: string
     revealTerms: string
     revealTermsConsentLabel: string
@@ -333,6 +334,8 @@ export const careerOSTranslations: Record<CareerOSLocale, CareerOSTranslations> 
       revealEmailLabel: 'Email',
       revealPrivacyLabelPrefix: 'Accetto il trattamento dei dati personali come descritto nella',
       revealMarketingLabel: 'Voglio ricevere aggiornamenti e offerte su Career OS via email (facoltativo).',
+      revealComplianceNotice:
+        'Nota privacy: i dati waitlist sono gestiti dal team admin stAItuned per finalita di servizio e conservati per 12 mesi. Provider operativi: Firebase/Firestore, Resend e alert interni minimizzati. Revoca/cancellazione: info@staituned.com.',
       revealPrivacyPolicy: 'Privacy Policy',
       revealTerms: 'Termini',
       revealTermsConsentLabel: 'Accetto i Termini e Condizioni del servizio.',
@@ -646,6 +649,8 @@ export const careerOSTranslations: Record<CareerOSLocale, CareerOSTranslations> 
       revealEmailLabel: 'Email',
       revealPrivacyLabelPrefix: 'I accept personal data processing as described in the',
       revealMarketingLabel: 'I want to receive Career OS updates and offers by email (optional).',
+      revealComplianceNotice:
+        'Privacy notice: waitlist data is handled by the stAItuned admin team for service operations and retained for 12 months. Operational providers: Firebase/Firestore, Resend, and minimized internal alerts. Revocation/deletion: info@staituned.com.',
       revealPrivacyPolicy: 'Privacy Policy',
       revealTerms: 'Terms',
       revealTermsConsentLabel: 'I accept the Terms and Conditions of the service.',
