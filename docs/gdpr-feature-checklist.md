@@ -208,6 +208,47 @@ If any item above is missing, gate decision must be `needs changes`.
 - Decision: `approved`
 - Notes: WS4 closed for transparency/documentation scope. Residual risk is limited to WS5 lifecycle automation (retention technical standardization), not documentation mismatch.
 
+## Latest In-Progress Review (Workstream 5 - Strategy A MVP)
+
+### 1. Processing Snapshot
+- Feature/change: retention lifecycle framework centralization (MVP)
+- Date: 2026-03-22
+- Owner: stAItuned engineering
+- Status: `in-review`
+- Related brainstorming/spec: `plan.md` -> "Workstream 5. Retention, cancellazione e lifecycle dei dataset"
+
+### 2. Processing Activity
+- Trigger: lifecycle job execution (`dry-run` / `apply`) on in-scope collections
+- Purpose: enforce explicit retention and delete expired records
+- Type: governance + data lifecycle hardening
+- Systems: Firestore collections + retention policy map + lifecycle script + runbook
+
+### 3. Data Inventory (MVP Scope)
+- `role_fit_audit_submissions`
+- `career_os_waitlist`
+- `business_demo_requests`
+- `contact_requests`
+- `feedback_submissions`
+- `contributor_applications`
+
+### 4. Key Outputs In This Wave
+- Shared retention contract (`lib/privacy/retention.ts`)
+- Dataset policy map (`lib/privacy/retention-policies.ts`)
+- Lifecycle job with apply guardrails (`scripts/retention-lifecycle.ts`)
+- Runbook + retention schedule docs
+- Route writes standardized with `retentionUntil` + lifecycle metadata in scope datasets
+
+### 5. Open Validation Before Approval
+- Execute dry-run in test environment and verify summaries (`expiredCount`, `missingRetentionCount`)
+- Execute controlled apply in test and confirm only expired records are deleted
+- Validate audit evidence write in `compliance_ops/retention_runs/runs/{runId}`
+- Confirm no route regressions after metadata standardization
+
+### 6. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`) + engineering owner
+- Decision: `in-review`
+- Notes: default purge policy is hard delete; legal exceptions not active in MVP.
+
 ## 1. Processing Snapshot
 - Feature/change:
 - Date:

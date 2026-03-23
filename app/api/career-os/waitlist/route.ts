@@ -5,6 +5,8 @@ import { sendCareerOSWaitlistInternalEmail } from '@/lib/email/careerOSWaitlistE
 import { sendCareerOSWaitlistOptInEmail } from '@/lib/email/careerOSWaitlistOptInEmail'
 import { careerOSTranslations, normalizeCareerOSLocale } from '@/lib/i18n/career-os-translations'
 import { createWaitlistOptInToken } from '@/lib/security/waitlistDoubleOptIn'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const WAITLIST_TERMS_VERSION = '2026-02-24'
@@ -59,15 +61,14 @@ export async function POST(req: NextRequest) {
 
     const intentKey = `${pricingMode}:${pricingTier}`
     const nowIso = new Date().toISOString()
-    const retentionUntil = new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toISOString()
+    const retentionPolicy = getRetentionPolicy('career_os_waitlist')
     const requestedMarketingConsent = marketingConsent
     const marketingConsentStatus = requestedMarketingConsent ? 'pending_confirmation' : 'not_requested'
     const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
     let marketingOptInEmailSent = false
 
     const waitlistRef = db().collection('career_os_waitlist').doc(buildDocId(email, intentKey))
-    await waitlistRef.set(
-      {
+    const basePayload = {
         email,
         intent: {
           pricingTier,
@@ -103,10 +104,10 @@ export async function POST(req: NextRequest) {
         },
         termsVersion: WAITLIST_TERMS_VERSION,
         privacyVersion: WAITLIST_PRIVACY_VERSION,
-        retentionUntil,
-        createdAt: nowIso,
-        updatedAt: nowIso,
-      },
+    }
+
+    await waitlistRef.set(
+      applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)),
       { merge: true },
     )
 

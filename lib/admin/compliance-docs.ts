@@ -57,6 +57,18 @@ const COMPLIANCE_DOCS: ComplianceDocDefinition[] = [
     description: 'Registro sintetico degli aggiornamenti GDPR/compliance nel tempo.',
     relativePath: 'docs/compliance-changelog.md',
   },
+  {
+    id: 'privacy-retention-schedule',
+    title: 'Privacy Retention Schedule',
+    description: 'Schedule centrale retention per dataset e rationale operativo.',
+    relativePath: 'docs/privacy-retention-schedule.md',
+  },
+  {
+    id: 'retention-lifecycle-runbook',
+    title: 'Retention Lifecycle Runbook',
+    description: 'Procedura dry-run/apply per purge retention e audit evidence.',
+    relativePath: 'docs/runbooks/retention-lifecycle.md',
+  },
 ];
 
 function resolveWorkspacePath(relativePath: string): string {

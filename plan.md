@@ -138,6 +138,7 @@ Fatto:
 - aggiornato legal copy `it/en` per provider pagamenti reali (`Stripe, PayPal`);
 - aggiunto notice contestuale privacy nel flusso waitlist Career OS (`it/en`);
 - pubblicati artefatti compliance nel nuovo hub admin `/admin/compliance`.
+- evidenza commit WS4: `4ffbc99` (`chore(gdpr): close ws4 transparency gate and repo-driven governance`).
 
 Rimane da fare:
 - nessun task WS4 aperto.
@@ -145,7 +146,35 @@ Rimane da fare:
 
 ### Workstream 5 - Retention, cancellazione e lifecycle dei dataset
 
-Stato: `Non avviato`
+Stato: `In corso (Strategia A MVP avviata)`
+
+Decisione:
+- adottata `Strategia A` in modalita MVP strutturale con purge default `hard_delete`.
+
+Fatto:
+- introdotto contratto retention condiviso:
+  - `lib/privacy/retention.ts`
+- introdotta policy map dataset:
+  - `lib/privacy/retention-policies.ts`
+- creato job lifecycle retention:
+  - `scripts/retention-lifecycle.ts` (`--dry-run`, `--apply`, `--dataset`, `--batch-size`, `--env`, `--project`)
+- standardizzata metadata retention (`retentionUntil`, lifecycle fields) nei dataset MVP:
+  - `role_fit_audit_submissions`
+  - `career_os_waitlist`
+  - `business_demo_requests`
+  - `contact_requests`
+  - `feedback_submissions`
+  - `contributor_applications`
+- creati artefatti WS5:
+  - `docs/privacy-retention-schedule.md`
+  - `docs/runbooks/retention-lifecycle.md`
+  - review WS5 `in-review` su `docs/gdpr-feature-checklist.md`.
+
+Rimane da fare:
+- eseguire `dry-run` retention in test e validare summary per dataset;
+- eseguire `apply` retention in test e verificare evidenze audit;
+- pianificare run prod controllata + monitor 7 giorni;
+- chiudere review WS5 (`in-review -> approved`) dopo esecuzioni operative.
 
 ### Workstream 6 - Minimizzazione dei dati verso canali terzi e interni
 

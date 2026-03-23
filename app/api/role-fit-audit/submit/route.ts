@@ -3,6 +3,8 @@ import { sendRoleFitAuditReportEmail } from '@/lib/email/roleFitAuditEmail'
 import { db } from '@/lib/firebase/admin'
 import { generateAIAuditResult } from '@/lib/ai/roleFitAuditAI'
 import { getAnswerLabelByQuestionId } from '@/app/(public)/role-fit-audit/lib/questions'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 import { NextRequest, NextResponse } from 'next/server'
 import {
     normalizeRoleFitLocale,
@@ -16,7 +18,6 @@ import {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const ROLE_FIT_PRIVACY_VERSION = '2026-03-22'
-const ROLE_FIT_RETENTION_DAYS = 365
 
 // =============================================================================
 // POST Handler
@@ -50,7 +51,7 @@ export async function POST(req: NextRequest) {
 
         const normalizedEmail = email.trim().toLowerCase()
         const nowIso = new Date().toISOString()
-        const retentionUntil = new Date(Date.now() + 1000 * 60 * 60 * 24 * ROLE_FIT_RETENTION_DAYS).toISOString()
+        const retentionPolicy = getRetentionPolicy('role_fit_audit_submissions')
 
         // -------------------------------------------------------------------------
         // Generate AI Result (with static fallback)
@@ -73,7 +74,7 @@ export async function POST(req: NextRequest) {
         let submissionId: string | null = null
         try {
             const submissionsRef = db().collection('role_fit_audit_submissions')
-            const created = await submissionsRef.add({
+            const basePayload = {
                 email: normalizedEmail,
                 name: name?.trim() || null,
                 linkedinUrl: linkedinUrl?.trim() || null,
@@ -112,11 +113,12 @@ export async function POST(req: NextRequest) {
                 },
                 privacyVersion: ROLE_FIT_PRIVACY_VERSION,
                 dataMinimizationVersion: 'v1',
-                retentionUntil,
                 userAgent: req.headers.get('user-agent') || null,
-                createdAt: nowIso,
-                updatedAt: nowIso,
-            })
+            }
+
+            const created = await submissionsRef.add(
+                applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)),
+            )
             submissionId = created.id
         } catch (dbError) {
             console.error('FIREBASE SAVE ERROR (role-fit-audit):', dbError)

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/firebase/admin'
 import { businessTranslations, normalizeBusinessLocale } from '@/lib/i18n/business-translations'
 import { sendTelegramFeedback } from '@/lib/telegram'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -51,10 +53,12 @@ export async function POST(req: NextRequest) {
     }
 
     const normalizedEmail = email.trim().toLowerCase()
+    const nowIso = new Date().toISOString()
+    const retentionPolicy = getRetentionPolicy('business_demo_requests')
 
     try {
       const requestsRef = db().collection('business_demo_requests')
-      await requestsRef.add({
+      const basePayload = {
         name: name.trim(),
         email: normalizedEmail,
         company: company.trim(),
@@ -66,8 +70,8 @@ export async function POST(req: NextRequest) {
         source: source || 'unknown',
         page: page || '/business',
         userAgent: userAgent || req.headers.get('user-agent') || null,
-        createdAt: new Date().toISOString(),
-      })
+      }
+      await requestsRef.add(applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)))
     } catch (dbError) {
       console.error('BUSINESS REQUEST FIREBASE SAVE ERROR:', dbError)
     }

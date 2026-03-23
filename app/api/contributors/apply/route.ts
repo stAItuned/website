@@ -1,5 +1,7 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { db } from '@/lib/firebase/admin'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -39,6 +41,8 @@ export async function POST(req: NextRequest) {
         }
 
         const normalizedEmail = email.trim().toLowerCase()
+        const nowIso = new Date().toISOString()
+        const retentionPolicy = getRetentionPolicy('contributor_applications')
 
         // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -62,7 +66,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Add new application
-        await applicationsRef.add({
+        const basePayload = {
             name: name.trim(),
             email: normalizedEmail,
             linkedinUrl: linkedinUrl?.trim() || null,
@@ -70,11 +74,13 @@ export async function POST(req: NextRequest) {
             bio: bio.trim(),
             source: source || 'website',
             status: 'pending',
-            appliedAt: new Date().toISOString(),
+            appliedAt: nowIso,
             // Track additional metadata
             userAgent: req.headers.get('user-agent') || null,
             referrer: req.headers.get('referer') || null,
-        })
+        }
+
+        await applicationsRef.add(applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)))
 
         // Send Telegram notification
         await sendTelegramFeedback({

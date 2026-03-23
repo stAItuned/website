@@ -1,5 +1,8 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { feedbackPayloadSchema } from '@/lib/validation/feedback'
+import { db } from '@/lib/firebase/admin'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -24,6 +27,7 @@ export async function POST(req: NextRequest) {
         }
 
         const { category, message, email, page, userAgent } = parsed.data
+        const nowIso = new Date().toISOString()
 
         // Send to Telegram
         await sendTelegramFeedback({
@@ -55,7 +59,26 @@ export async function POST(req: NextRequest) {
             })
         }
 
-        // 2) (Optional) Firestore/Admin, Resend, etc. — add here if you want
+        // Persist feedback with retention metadata (best-effort, non-blocking)
+        try {
+            const retentionPolicy = getRetentionPolicy('feedback_submissions')
+            await db().collection('feedback_submissions').add(
+                applyRetentionMetadata(
+                    {
+                        category,
+                        message,
+                        email: email || null,
+                        page: page || null,
+                        userAgent: userAgent || null,
+                        consent: true,
+                    },
+                    retentionPolicy,
+                    new Date(nowIso),
+                ),
+            )
+        } catch (dbError) {
+            console.error('FEEDBACK FIREBASE SAVE ERROR:', dbError)
+        }
 
         return NextResponse.json({ ok: true }, { status: 200 })
     } catch (err) {

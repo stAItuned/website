@@ -2,9 +2,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { NextRequest } from 'next/server'
 import { POST } from './route'
 import { sendTelegramFeedback } from '@/lib/telegram'
+import { db } from '@/lib/firebase/admin'
 
 vi.mock('@/lib/telegram', () => ({
   sendTelegramFeedback: vi.fn(),
+}))
+
+vi.mock('@/lib/firebase/admin', () => ({
+  db: vi.fn(),
 }))
 
 function createReq(body: unknown): NextRequest {
@@ -36,6 +41,9 @@ describe('api/feedbacks route', () => {
 
   beforeEach(() => {
     vi.resetAllMocks()
+    const add = vi.fn(async () => undefined)
+    const collection = vi.fn(() => ({ add }))
+    vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
     restoreSlackWebhookEnv()
   })
 

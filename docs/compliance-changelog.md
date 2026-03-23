@@ -21,3 +21,16 @@ UpdatedAt: 2026-03-22
 - Esito sweep tracciato in `docs/privacy-processing-inventory.md` con matrice `OK | WS5 Gap`.
 - Gap residui formalmente delegati a WS5: standardizzazione tecnica retention lifecycle per Business apply e Contact+feedback.
 - Review WS4 aggiornata a `approved` in `docs/gdpr-feature-checklist.md`.
+
+## 2026-03-22 (WS5 strategy A MVP started)
+
+- Introdotto contratto retention condiviso in `lib/privacy/retention.ts`.
+- Introdotta policy map dataset in `lib/privacy/retention-policies.ts`.
+- Creato job operativo `scripts/retention-lifecycle.ts` con modalita `--dry-run`/`--apply` e audit aggregato.
+- Standardizzata metadata retention nelle route in scope MVP:
+  - `role_fit_audit_submissions`
+  - `career_os_waitlist`
+  - `business_demo_requests`
+  - `contact_requests`
+  - `feedback_submissions`
+  - `contributor_applications`
