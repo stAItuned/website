@@ -61,7 +61,7 @@ export const contributeTranslations = {
             valueSectionTitle: 'Perché scrivere su stAI tuned',
             value: {
                 authority: { title: 'Posizionati come esperto', desc: 'Raggiungi una audience tecnica e business qualificata.' },
-                distribution: { title: 'Distribuzione Amplificata', desc: 'Newsletter, LinkedIn e ottimizzazione SEO/GEO inclusa.' },
+                distribution: { title: 'Distribuzione Amplificata', desc: 'Homepage, hub topics, LinkedIn e ottimizzazione SEO/GEO inclusa.' },
                 ownership: { title: 'Piena Paternità', desc: 'Tu mantieni i diritti morali e la firma. Noi siamo la piattaforma.' }
             },
             pathSection: {
@@ -592,7 +592,7 @@ export const contributeTranslations = {
             valueSectionTitle: 'Why write on stAItuned',
             value: {
                 authority: { title: 'Position yourself as expert', desc: 'Reach a qualified technical and business audience.' },
-                distribution: { title: 'Amplified Distribution', desc: 'Newsletter, LinkedIn, and SEO/GEO optimization included.' },
+                distribution: { title: 'Amplified Distribution', desc: 'Homepage, topics hub, LinkedIn, and SEO/GEO optimization included.' },
                 ownership: { title: 'Full Ownership', desc: 'You keep moral rights and byline. We are the platform.' }
             },
             pathSection: {

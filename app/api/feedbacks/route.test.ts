@@ -2,14 +2,27 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { NextRequest } from 'next/server'
 import { POST } from './route'
 import { sendTelegramFeedback } from '@/lib/telegram'
+import { db } from '@/lib/firebase/admin'
+
+const sendAdminOpsNotificationMock = vi.fn()
 
 vi.mock('@/lib/telegram', () => ({
   sendTelegramFeedback: vi.fn(),
 }))
 
+vi.mock('@/lib/notifications/adminOpsPush', () => ({
+  inferEnvironmentFromHost: () => 'test',
+  sendAdminOpsNotification: (...args: unknown[]) => sendAdminOpsNotificationMock(...args),
+}))
+
+vi.mock('@/lib/firebase/admin', () => ({
+  db: vi.fn(),
+}))
+
 function createReq(body: unknown): NextRequest {
   return {
     json: vi.fn(async () => body),
+    headers: new Headers({ 'user-agent': 'test-agent' }),
   } as unknown as NextRequest
 }
 
@@ -36,6 +49,9 @@ describe('api/feedbacks route', () => {
 
   beforeEach(() => {
     vi.resetAllMocks()
+    const add = vi.fn(async () => ({ id: 'feedback_123' }))
+    const collection = vi.fn(() => ({ add }))
+    vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
     restoreSlackWebhookEnv()
   })
 
@@ -96,11 +112,14 @@ describe('api/feedbacks route', () => {
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'bug',
-        message: 'Something is not working on mobile.',
-        email: 'mario@example.com',
+        message: expect.stringContaining('metadata-only'),
         page: '/en/learn',
-        userAgent: 'UA',
       })
+    )
+    expect(sendAdminOpsNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: 'feedback_submitted',
+      }),
     )
   })
 

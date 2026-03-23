@@ -1,5 +1,8 @@
 import { sendTelegramFeedback } from '@/lib/telegram'
 import { db } from '@/lib/firebase/admin'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
+import { inferEnvironmentFromHost, sendAdminOpsNotification } from '@/lib/notifications/adminOpsPush'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -39,6 +42,8 @@ export async function POST(req: NextRequest) {
         }
 
         const normalizedEmail = email.trim().toLowerCase()
+        const nowIso = new Date().toISOString()
+        const retentionPolicy = getRetentionPolicy('contributor_applications')
 
         // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -62,7 +67,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Add new application
-        await applicationsRef.add({
+        const basePayload = {
             name: name.trim(),
             email: normalizedEmail,
             linkedinUrl: linkedinUrl?.trim() || null,
@@ -70,19 +75,39 @@ export async function POST(req: NextRequest) {
             bio: bio.trim(),
             source: source || 'website',
             status: 'pending',
-            appliedAt: new Date().toISOString(),
+            appliedAt: nowIso,
             // Track additional metadata
             userAgent: req.headers.get('user-agent') || null,
             referrer: req.headers.get('referer') || null,
-        })
+        }
+
+        const created = await applicationsRef.add(applyRetentionMetadata(basePayload, retentionPolicy, new Date(nowIso)))
+        const submissionId = typeof created?.id === 'string' ? created.id : 'not_persisted'
+
+        try {
+            await sendAdminOpsNotification({
+                eventType: 'contributors_apply_submitted',
+                entityId: submissionId,
+                source: '/api/contributors/apply',
+                createdAt: nowIso,
+                environment: inferEnvironmentFromHost(req.headers.get('host')),
+            })
+        } catch (pushError) {
+            console.error('ADMIN PUSH ERROR (contributors/apply):', pushError)
+        }
 
         // Send Telegram notification
         await sendTelegramFeedback({
             category: 'contributor_application',
-            message: `✍️ Nuova richiesta di contributor!\n\n👤 Nome: ${name.trim()}\n📧 Email: ${normalizedEmail}\n🔗 LinkedIn: ${linkedinUrl?.trim() || 'N/A'}\n🎯 Expertise: ${expertise.trim()}\n\n📝 Bio:\n${bio.trim()}\n\nFonte: ${source || 'website'}`,
-            email: normalizedEmail,
+            message: [
+                '✍️ Nuova richiesta contributor (metadata-only)',
+                '',
+                `🆔 Submission: ${submissionId}`,
+                `📍 Source: ${source || 'website'}`,
+                `🕒 CreatedAt: ${nowIso}`,
+                '🔐 Open Admin dashboard for full details.',
+            ].join('\n'),
             page: source || '/contributor-apply',
-            userAgent: req.headers.get('user-agent') || undefined,
         })
 
         return NextResponse.json({ ok: true, message: 'Application submitted!' }, { status: 200 })

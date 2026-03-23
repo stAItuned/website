@@ -115,7 +115,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Contratto di licenza e termini d’uso per Career OS.',
             badge: 'stAItuned',
             intro: "Il presente contratto regola l'accesso e l'utilizzo di Career OS, il percorso formativo avanzato per carriere in ambito AI. Acquistando il servizio o accedendo ai materiali, l'utente accetta integralmente le seguenti condizioni.",
-            lastUpdate: 'Ultimo aggiornamento: 24 febbraio 2026',
+            lastUpdate: 'Ultimo aggiornamento: 23 marzo 2026',
             sections: [
                 {
                     title: '1. Oggetto del Servizio',
@@ -160,7 +160,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     subsections: [
                         {
                             title: 'Provider di pagamento:',
-                            content: 'i pagamenti possono essere gestiti tramite fornitori terzi (es. Stripe) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.'
+                            content: 'i pagamenti possono essere gestiti tramite fornitori terzi (es. Stripe e/o PayPal) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.'
                         },
                         {
                             title: 'Garanzia Soddisfatti o Rimborsati (ove applicabile):',
@@ -184,28 +184,18 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     ]
                 },
                 {
-                    title: '7. Servizio di Newsletter',
-                    content: 'Iscrivendosi alla newsletter di stAItuned, l\'utente accetta di ricevere comunicazioni periodiche via email riguardanti:',
-                    items: [
-                        'Aggiornamenti sui nuovi articoli e contenuti tecnici del blog;',
-                        'Approfondimenti su strategie di carriera e trend del mercato AI;',
-                        'Informazioni su nuovi prodotti, servizi o iniziative di stAItuned.'
-                    ],
-                    subsections: [
-                        {
-                            title: 'Frequenza e Cancellazione:',
-                            content: 'La frequenza standard è di un invio settimanale. L\'utente ha il diritto di disiscriversi in qualsiasi momento cliccando sul link "Unsubscribe" presente in calce a ogni email o contattando l\'assistenza.'
-                        }
-                    ]
+                    title: '7. Comunicazioni di servizio',
+                    content: 'stAItuned non gestisce un servizio newsletter marketing attivo. Le eventuali comunicazioni via email sono limitate a messaggi di servizio o follow-up richiesti esplicitamente dall’utente nei flussi applicativi (es. richieste di contatto, waitlist, percorsi attivati).'
                 },
                 {
                     title: '8. Accesso Amministrativo e Trattamento Dati',
                     content: 'Utilizzando i servizi di stAItuned, l\'utente prende atto e accetta che il team amministrativo abbia accesso ai dati sottomessi per garantire la qualità del servizio:',
                     items: [
                         'Dati di autenticazione: email, nome, foto profilo e identificativi tecnici;',
-                        'Dati Role Fit Audit: risposte al questionario, risultati, archetipo e suggerimenti di carriera generati;',
+                        'Dati Role Fit Audit: risposte al questionario, risultati, archetipo e suggerimenti di carriera generati (con retention standard di 12 mesi, salvo obblighi di legge);',
                         'Dati Waitlist Career OS: email, tier/mode di interesse, consenso privacy obbligatorio e consenso marketing (se fornito);',
                         'Dati Contributor Path: pitch, bozze, interviste, outline e accordo legale firmato (nome legale, codice fiscale, data di firma);',
+                        'I canali interni operativi (es. alert Telegram) usano notifiche minimizzate a metadati per ridurre l\'esposizione di dati personali.',
                         'Questi dati sono utilizzati esclusivamente per migliorare il servizio, fornire supporto e gestire le funzionalità della piattaforma.'
                     ]
                 }
@@ -216,18 +206,18 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
         privacy: {
             title: 'Informativa sulla privacy',
             metaTitle: 'Privacy Policy | stAItuned',
-            metaDescription: 'Come raccogliamo e utilizziamo i dati di chi visita il blog, richiede una call o desidera ricevere aggiornamenti.',
+            metaDescription: 'Come raccogliamo e utilizziamo i dati di chi visita il blog, richiede una call o attiva percorsi e servizi.',
             badge: 'stAItuned',
-            intro: 'Tutte le interazioni con il sito stAItuned sono gestite con rispetto per la tua riservatezza. Questa pagina spiega come trattiamo i dati raccolti dai visitatori del blog, dalle aziende interessate ai nostri servizi AI, dalle persone che prenotano una call e da chi decide di unirsi alla nostra community o newsletter.',
+            intro: 'Tutte le interazioni con il sito stAItuned sono gestite con rispetto per la tua riservatezza. Questa pagina spiega come trattiamo i dati raccolti dai visitatori del blog, dalle aziende interessate ai nostri servizi AI, dalle persone che prenotano una call e da chi partecipa ai nostri percorsi e strumenti.',
             controller: 'Il titolare del trattamento è Daniele Moltisanti. Email di contatto: info@staituned.com.',
-            lastUpdate: 'Ultimo aggiornamento: 24 febbraio 2026',
+            lastUpdate: 'Ultimo aggiornamento: 23 marzo 2026',
             audience: {
                 title: 'A chi è rivolta questa informativa',
                 intro: 'Per chiarezza, la rendiamo disponibile a quattro gruppi principali:',
                 items: [
                     'i lettori del blog e i membri della community che consumano contenuti pubblici;',
                     'le PMI e i team che richiedono una call o una consulenza personalizzata;',
-                    'chi si iscrive alla newsletter o alle comunicazioni di aggiornamento (marketing) con consenso esplicito;',
+                    'chi richiede aggiornamenti legati a servizi o percorsi attivati, secondo i consensi raccolti nei relativi flussi;',
                     'chi si candida a collaborare con stAItuned o propone una partnership.'
                 ]
             },
@@ -236,7 +226,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                 sections: [
                     {
                         title: 'Visite al blog e alle pagine pubbliche',
-                        content: 'Registriamo solo dati tecnici necessari per mantenere il sito online (es. richieste HTTP, informazioni sul browser). I cookie non tecnici (es. Google Analytics) e le misurazioni di performance lato client (es. Core Web Vitals) sono attivati solo dopo il tuo consenso. Alcune risorse (es. font) possono essere caricate da fornitori terzi per motivi di resa grafica.'
+                        content: 'Registriamo solo dati tecnici necessari per mantenere il sito online (es. richieste HTTP, informazioni sul browser). I cookie non tecnici (es. Google Analytics) e le misurazioni di performance lato client (es. Core Web Vitals) sono attivati solo dopo il tuo consenso. In parallelo utilizziamo un conteggio first-party delle visualizzazioni degli articoli, separato da Google Analytics, basato su eventi minimi e senza cookie di marketing. Alcune risorse (es. font) possono essere caricate da fornitori terzi per motivi di resa grafica.'
                     },
                     {
                         title: 'Autenticazione e funzionalità personalizzate',
@@ -253,12 +243,12 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         content: 'Quando compili il modulo di contatto raccogliamo nome, email, eventuale numero di telefono, azienda, messaggio e la tua preferenza sul marketing. Inviare la richiesta equivale ad accettare la presente informativa.'
                     },
                     {
-                        title: 'Newsletter, community e aggiornamenti',
-                        content: 'Se scegli di ricevere aggiornamenti, li inviamo via email solo previa autorizzazione separatata. Puoi revocare il consenso in qualsiasi momento.'
+                        title: 'Community e comunicazioni di servizio',
+                        content: 'Non utilizziamo una newsletter marketing attiva. Le comunicazioni email sono inviate solo quando necessarie per erogare un servizio richiesto o per follow-up coerenti con i consensi raccolti nei flussi dedicati.'
                     },
                     {
                         title: 'Notifiche push',
-                        content: 'Se abiliti le notifiche push, generiamo un token identificativo del dispositivo tramite Firebase Cloud Messaging (Google LLC). Il token è un identificativo tecnico, non associato alla tua identità personale.'
+                        content: 'Se abiliti le notifiche push, generiamo un token identificativo del dispositivo tramite Firebase Cloud Messaging (Google LLC). Il token è un identificativo tecnico. Le notifiche editoriali pubbliche e le notifiche operative admin-only sono trattate su canali separati, entrambe in modalità metadata-only e con retention tecnica dedicata.'
                     },
                     {
                         title: 'Candidature per collaborazioni',
@@ -266,15 +256,27 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Dati dei Contributor (Programma Editoriale)',
-                        content: 'Raccogliamo informazioni account, contributi editoriali, risposte alle interviste e preferenze di pubblicazione per gestire il ciclo di vita dell\'articolo. I tuoi contributi, le risposte alle interviste e lo stato dell\'accordo legale sono visibili al team amministrativo di stAItuned per garantire la qualità editoriale e gestire correttamente il processo di pubblicazione.'
+                        content: 'Raccogliamo informazioni account, contributi editoriali, risposte alle interviste e preferenze di pubblicazione per gestire il ciclo di vita dell\'articolo. I tuoi contributi, le risposte alle interviste e lo stato dell\'accordo legale sono visibili al team amministrativo di stAItuned per garantire la qualità editoriale e gestire correttamente il processo di pubblicazione. In caso di richiesta cancellazione account, l\'evidenza di accordi firmati può essere trattenuta come eccezione legale per accountability contrattuale.'
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate.'
+                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate. I record del Role Fit Audit sono conservati per 12 mesi, salvo obblighi di legge.'
                     },
                     {
                         title: 'Waitlist Career OS',
                         content: 'Quando entri in lista di attesa su Career OS raccogliamo email, piano/modalità di interesse (intent), consenso privacy obbligatorio e consenso marketing opzionale. Usiamo questi dati per ricontattarti con disponibilità, pricing e aggiornamenti coerenti con il consenso espresso.'
+                    },
+                    {
+                        title: 'Career OS Apply',
+                        content: 'Nel form Career OS Apply raccogliamo nome, email, telefono opzionale, background professionale e informazioni orientative sul tuo obiettivo. I dati sono usati per valutare l\'intake precontrattuale, organizzare follow-up e gestire la candidatura in modo strutturato.'
+                    },
+                    {
+                        title: 'Career OS Audit Request',
+                        content: 'Nel form Career OS Audit raccogliamo nome, email, eventuale telefono e il dubbio principale espresso. Il trattamento serve per analizzare la richiesta, proporre supporto orientativo e ricontattarti sul percorso richiesto.'
+                    },
+                    {
+                        title: 'AI EU Act Lead e accesso risorse',
+                        content: 'Nel flusso AI EU Act raccogliamo nome, email, ruolo, azienda (opzionale), consensi e metadati tecnici minimi (es. hash IP, source). Generiamo un token tecnico temporaneo per consentire accesso alle risorse richieste e prevenire accessi non autorizzati.'
                     },
                     {
                         title: 'Accesso Amministrativo ai Dati',
@@ -283,6 +285,8 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                             'Dati di autenticazione: email, nome, foto profilo e User ID associati al tuo account;',
                             'Dati Role Fit Audit: risposte al questionario, risultati dell\'analisi, archetipo assegnato e suggerimenti di carriera;',
                             'Dati Waitlist Career OS: email, intent (tier/mode), fonte della richiesta e stato dei consensi;',
+                            'Dati Career OS Apply/Audit: dati di intake e richiesta supporto con metadata retention;',
+                            'Dati AI EU Act lead: contatto, contesto richiesta e token lifecycle tecnico;',
                             'Dati Contributor Path: pitch, bozze, risposte alle interviste, outline generati e stato dell\'accordo legale firmato (nome legale, codice fiscale, data di firma).'
                         ]
                     }
@@ -297,18 +301,19 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'Fornitori di hosting (Firebase)',
                     'Servizi email (Resend)',
                     'AI Services (Google Gemini)',
-                    'Analytics (Google Analytics)',
+                    'Analytics (Google Analytics, solo dopo consenso)',
+                    'Misurazione audience first-party su infrastruttura Firebase (conteggio visualizzazioni articoli)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
-                    'Payments (Stripe)',
+                    'Payments (Stripe, PayPal)',
                     'Feedback tools (Telegram/Slack)',
                     'Static resources (Google Fonts)'
                 ]
             },
             retention: {
                 title: 'Conservazione e cancellazione',
-                content1: 'Le richieste di contatto sono archiviate per 12-24 mesi. I dati newsletter sono conservati finché il consenso è attivo. I lead waitlist Career OS sono conservati per 12 mesi salvo obblighi diversi di legge.',
-                content2: 'Candidature e collaborazioni vengono conservate per 12-24 mesi per valutazioni future.'
+                content1: 'Le richieste di contatto sono archiviate per 12-24 mesi. I record Role Fit Audit, Career OS apply/audit, waitlist e AI EU Act lead sono conservati in finestra standard di 12 mesi salvo obblighi diversi di legge.',
+                content2: 'I token push (editoriali e admin-only) hanno retention tecnica breve (90 giorni). Candidature e collaborazioni seguono policy 12-24 mesi; gli accordi contributor firmati possono prevedere eccezione legale documentata.'
             },
             rights: {
                 title: 'Diritti dell’interessato',
@@ -323,7 +328,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Dettagli sui cookie tecnici e analitici usati da stAItuned e su come gestire il consenso.',
             badge: 'stAItuned',
             intro: 'Il banner di consenso gestisce i cookie non essenziali e mantiene attivo solo quanto serve a far funzionare il sito. Qui trovi le informazioni dettagliate su quali cookie usiamo e perché.',
-            lastUpdate: 'Ultimo aggiornamento: 16 gennaio 2026',
+            lastUpdate: 'Ultimo aggiornamento: 23 marzo 2026',
             technicalSection: {
                 title: 'Cookie tecnici e banner',
                 content: 'Alcuni cookie sono indispensabili per garantire la sicurezza e la navigazione (es. Next.js). Gli altri vengono attivati solo dopo il consenso esplicito dal banner.'
@@ -342,9 +347,14 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         details: { label: 'Cookie principali', value: '_ga (24 mesi), _gid (24 ore)' }
                     },
                     {
+                        title: 'Misurazione audience first-party (senza cookie marketing)',
+                        content: 'Conteggia le visualizzazioni degli articoli su infrastruttura stAItuned/Firebase con eventi minimi separati da Google Analytics.',
+                        details: { label: 'Cookie principali', value: 'Nessun cookie aggiuntivo di marketing' }
+                    },
+                    {
                         title: 'Notifiche push (Firebase Cloud Messaging)',
-                        content: 'Generano un token univoco per inviare avvisi su nuovi contenuti.',
-                        details: { label: 'Dati raccolti', value: 'Token FCM (identificativo tecnico)' }
+                        content: 'Generano token tecnici per notifiche editoriali pubbliche e canali operativi admin-only separati.',
+                        details: { label: 'Dati raccolti', value: 'Token FCM (identificativo tecnico), topic, stato iscrizione' }
                     }
                 ]
             },
@@ -370,7 +380,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'License agreement and terms of use for Career OS.',
             badge: 'stAItuned',
             intro: "This agreement governs access to and use of Career OS, the advanced training path for AI careers. By purchasing the service or accessing the materials, the user fully accepts the following conditions.",
-            lastUpdate: 'Last update: February 24, 2026',
+            lastUpdate: 'Last update: March 23, 2026',
             sections: [
                 {
                     title: '1. Subject of the Service',
@@ -415,7 +425,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     subsections: [
                         {
                             title: 'Payment Providers:',
-                            content: 'Payments may be handled through third-party providers (e.g., Stripe) via external links or checkouts. In these cases, some data necessary for the transaction (e.g., amount, technical identifiers, and payment data) are processed by the provider according to their own terms.'
+                            content: 'Payments may be handled through third-party providers (e.g., Stripe and/or PayPal) via external links or checkouts. In these cases, some data necessary for the transaction (e.g., amount, technical identifiers, and payment data) are processed by the provider according to their own terms.'
                         },
                         {
                             title: 'Money-Back Guarantee (where applicable):',
@@ -439,28 +449,18 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     ]
                 },
                 {
-                    title: '7. Newsletter Service',
-                    content: 'By subscribing to the stAItuned newsletter, the user agrees to receive periodic email communications regarding:',
-                    items: [
-                        'Updates on new articles and technical blog content;',
-                        'Insights into career strategies and AI market trends;',
-                        'Information about new stAItuned products, services, or initiatives.'
-                    ],
-                    subsections: [
-                        {
-                            title: 'Frequency and Cancellation:',
-                            content: 'Standard frequency is once a week. The user has the right to unsubscribe at any time via the "Unsubscribe" link or by contacting support.'
-                        }
-                    ]
+                    title: '7. Service Communications',
+                    content: 'stAItuned does not currently run an active marketing newsletter service. Any email communication is limited to service messages or follow-ups explicitly requested by the user within product flows (e.g., contact requests, waitlist, activated paths).'
                 },
                 {
                     title: '8. Administrative Access and Data Processing',
                     content: 'By using stAItuned services, the user acknowledges and agrees that the administrative team has access to submitted data to ensure service quality:',
                     items: [
                         'Authentication data: email, name, profile picture, and technical identifiers;',
-                        'Role Fit Audit data: questionnaire responses, results, archetype, and generated career suggestions;',
+                        'Role Fit Audit data: questionnaire responses, results, archetype, and generated career suggestions (with a standard retention of 12 months unless legal obligations apply);',
                         'Career OS waitlist data: email, selected intent (tier/mode), mandatory privacy consent, and marketing consent (if provided);',
                         'Contributor Path data: pitches, drafts, interviews, outlines, and signed legal agreement (legal name, tax ID, signing date);',
+                        'Internal operational channels (e.g., Telegram alerts) use metadata-only notifications to reduce personal data exposure.',
                         'This data is used exclusively to improve the service, provide support, and manage platform features.'
                     ]
                 }
@@ -471,18 +471,18 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
         privacy: {
             title: 'Privacy Policy',
             metaTitle: 'Privacy Policy | stAItuned',
-            metaDescription: 'How we collect and use data from visitors, call requests, and update subscribers.',
+            metaDescription: 'How we collect and use data from visitors, call requests, and activated service flows.',
             badge: 'stAItuned',
-            intro: 'All interactions with the stAItuned site are managed with respect for your privacy. This page explains how we process data collected from blog visitors, businesses interested in our AI services, people booking calls, and those joining our community or newsletter.',
+            intro: 'All interactions with the stAItuned site are managed with respect for your privacy. This page explains how we process data collected from blog visitors, businesses interested in our AI services, people booking calls, and users participating in our products and service flows.',
             controller: 'The data controller is Daniele Moltisanti. Contact email: info@staituned.com.',
-            lastUpdate: 'Last update: February 24, 2026',
+            lastUpdate: 'Last update: March 23, 2026',
             audience: {
                 title: 'Who this policy is for',
                 intro: 'For clarity, we make it available to four main groups:',
                 items: [
                     'blog readers and community members consuming public content;',
                     'SMEs and teams requesting calls or personalized consulting;',
-                    'those subscribing to the newsletter or marketing updates with explicit consent;',
+                    'those requesting service-related updates within activated product flows, according to collected consent;',
                     'those applying to collaborate with stAItuned or proposing a partnership.'
                 ]
             },
@@ -491,7 +491,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                 sections: [
                     {
                         title: 'Blog Visits and Public Pages',
-                        content: 'We record only technical data necessary to keep the site online. Non-technical cookies (e.g., Google Analytics) and client-side performance measurements are activated only after your consent.'
+                        content: 'We record only technical data necessary to keep the site online. Non-technical cookies (e.g., Google Analytics) and client-side performance measurements are activated only after your consent. In parallel, we use a first-party article view counter separated from Google Analytics, based on minimal events and without marketing cookies.'
                     },
                     {
                         title: 'Authentication and Personalized Features',
@@ -508,12 +508,12 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         content: 'When you fill out a contact form, we collect name, email, phone (optional), company, message, and marketing preference. Sending the request implies acceptance of this policy.'
                     },
                     {
-                        title: 'Newsletter, Community, and Updates',
-                        content: 'Marketing updates are sent via email only with separate authorization. You can revoke consent at any time.'
+                        title: 'Community and Service Communications',
+                        content: 'We do not run an active marketing newsletter. Emails are sent only when needed to deliver requested services or follow-up communications aligned with consent captured in dedicated flows.'
                     },
                     {
                         title: 'Push Notifications',
-                        content: 'If enabled, we generate a device identification token via Firebase Cloud Messaging. This is a technical identifier, not linked to your personal identity.'
+                        content: 'If enabled, we generate a device identification token via Firebase Cloud Messaging. This is a technical identifier. Public editorial notifications and admin-only operational notifications are processed on separate channels, both metadata-only and with dedicated technical retention.'
                     },
                     {
                         title: 'Collaboration Applications',
@@ -521,15 +521,27 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Contributor Data (Editorial Program)',
-                        content: 'We collect account info, editorial contributions, interview responses, and publishing preferences to manage the article lifecycle. Your contributions, interview responses, and agreement status are visible to the stAItuned administrative team to ensure editorial quality and properly manage the publication process.'
+                        content: 'We collect account info, editorial contributions, interview responses, and publishing preferences to manage the article lifecycle. Your contributions, interview responses, and agreement status are visible to the stAItuned administrative team to ensure editorial quality and properly manage the publication process. If account deletion is requested, signed agreement evidence may be retained under a documented legal exception for contractual accountability.'
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends.'
+                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends. Role Fit Audit records are retained for 12 months unless legal obligations require otherwise.'
                     },
                     {
                         title: 'Career OS Waitlist',
                         content: 'When you join the Career OS waitlist, we collect your email, selected plan/mode intent, mandatory privacy consent, and optional marketing consent. We use this data to contact you about availability, pricing, and updates aligned with your consent.'
+                    },
+                    {
+                        title: 'Career OS Apply',
+                        content: 'In the Career OS Apply form, we collect name, email, optional phone, professional background, and orientation details about your target role. This data is used for pre-contractual intake assessment, structured follow-up, and application handling.'
+                    },
+                    {
+                        title: 'Career OS Audit Request',
+                        content: 'In the Career OS Audit form, we collect name, email, optional phone, and your main doubt/request. Processing is used to assess the request, provide orientation support, and contact you regarding the requested path.'
+                    },
+                    {
+                        title: 'AI EU Act Lead and resources access',
+                        content: 'In the AI EU Act flow, we collect name, email, role, optional company, consent flags, and minimal technical metadata (e.g., IP hash, source). We generate a temporary technical token to grant access to requested resources and prevent unauthorized access.'
                     },
                     {
                         title: 'Administrative Access to Data',
@@ -538,6 +550,8 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                             'Authentication data: email, name, profile picture, and User ID associated with your account;',
                             'Role Fit Audit data: questionnaire responses, analysis results, assigned archetype, and career suggestions;',
                             'Career OS waitlist data: email, intent (tier/mode), lead source, and consent status;',
+                            'Career OS Apply/Audit data: intake and support-request data with retention metadata;',
+                            'AI EU Act lead data: contact details, request context, and technical token lifecycle metadata;',
                             'Contributor Path data: pitches, drafts, interview responses, generated outlines, and signed legal agreement status (legal name, tax ID, signing date).'
                         ]
                     }
@@ -552,18 +566,19 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'Hosting providers (Firebase)',
                     'Email services (Resend)',
                     'AI Services (Google Gemini)',
-                    'Analytics (Google Analytics)',
+                    'Analytics (Google Analytics, consent-only)',
+                    'First-party audience measurement on Firebase infrastructure (article view counting)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
-                    'Payments (Stripe)',
+                    'Payments (Stripe, PayPal)',
                     'Feedback tools (Telegram/Slack)',
                     'Static resources (Google Fonts)'
                 ]
             },
             retention: {
                 title: 'Retention and Deletion',
-                content1: 'Contact requests are stored for 12-24 months. Newsletter data is kept as long as consent is active. Career OS waitlist leads are retained for 12 months unless legal obligations require otherwise.',
-                content2: 'Applications and collaborations are kept for 12-24 months for future evaluations.'
+                content1: 'Contact requests are stored for 12-24 months. Role Fit Audit, Career OS apply/audit, waitlist, and AI EU Act lead records follow a standard 12-month retention window unless legal obligations require otherwise.',
+                content2: 'Push tokens (editorial and admin-only) have short technical retention (90 days). Applications and collaborations are kept for 12-24 months; signed contributor agreements may be retained under a documented legal exception.'
             },
             rights: {
                 title: 'Data Subject Rights',
@@ -578,7 +593,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Details on technical and analytical cookies used by stAItuned and how to manage consent.',
             badge: 'stAItuned',
             intro: 'The consent banner manages non-essential cookies and keeps active only what is needed for the site to function. Here you will find detailed information on which cookies we use and why.',
-            lastUpdate: 'Last update: January 16, 2026',
+            lastUpdate: 'Last update: March 23, 2026',
             technicalSection: {
                 title: 'Technical Cookies and Banner',
                 content: 'Some cookies are essential for security and navigation (e.g., Next.js). Others are activated only after explicit consent from the banner.'
@@ -597,9 +612,14 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                         details: { label: 'Main cookies', value: '_ga (24 months), _gid (24 hours)' }
                     },
                     {
+                        title: 'First-party audience measurement (no marketing cookies)',
+                        content: 'Counts article views on stAItuned/Firebase infrastructure with minimal events separated from Google Analytics.',
+                        details: { label: 'Main cookies', value: 'No additional marketing cookies' }
+                    },
+                    {
                         title: 'Push Notifications (Firebase Cloud Messaging)',
-                        content: 'Generate a unique token to send alerts about new content.',
-                        details: { label: 'Collected data', value: 'FCM Token (technical identifier)' }
+                        content: 'Generate a unique token for editorial alerts and admin-only operational metadata alerts on protected dashboards.',
+                        details: { label: 'Collected data', value: 'FCM token (technical identifier), topic, subscription status' }
                     }
                 ]
             },

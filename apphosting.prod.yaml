@@ -23,6 +23,11 @@ env:
     availability:
       - BUILD
       - RUNTIME
+  - variable: PAGE_VIEW_ALLOWED_HOSTS
+    value: "staituned.com,www.staituned.com"
+    availability:
+      - BUILD
+      - RUNTIME
   - variable: NEXT_PUBLIC_GA_MEASUREMENT_ID
     value: "G-LBSYL8WF8M"
     availability:

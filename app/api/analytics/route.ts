@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { allPosts } from '@/lib/contentlayer'
 import { dbDefault } from '@/lib/firebase/admin'
+import { sanitizeSlug } from '@/lib/sanitizeSlug'
+
+function resolvePageViews(data: Record<string, unknown> | undefined): number {
+  if (!data) return 0
+  const firstParty = data.pageViewsFirstParty
+  if (typeof firstParty === 'number') return firstParty
+  return 0
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -32,6 +40,7 @@ export async function GET(request: NextRequest) {
         const { updatedAt, ...rest } = data;
         safeData = {
           ...rest,
+          pageViews: resolvePageViews(data as Record<string, unknown>),
           updatedAt: updatedAt instanceof Date ? updatedAt.toISOString() : updatedAt ?? null,
           articleUrl: `/learn/${data.target}/${data.originalSlug || articleSlug}`,
         };
@@ -62,11 +71,25 @@ export async function GET(request: NextRequest) {
       }
       // Merge with CMS data for full article info
       const publishedPosts = allPosts.filter(post => post.published !== false)
+      const sanitizedSlugs = publishedPosts.map((post) => sanitizeSlug(post.slug))
+      const refs = sanitizedSlugs.map((slug) => dbDefault().collection('articles').doc(slug))
+      const articleSnaps = refs.length > 0 ? await dbDefault().getAll(...refs) : []
+      const firstPartyViewsBySlug = new Map<string, number>()
+
+      articleSnaps.forEach((articleSnap, index) => {
+        if (!articleSnap.exists) return
+        const originalSlug = publishedPosts[index]?.slug
+        if (!originalSlug) return
+        const articleData = articleSnap.data() as Record<string, unknown> | undefined
+        firstPartyViewsBySlug.set(originalSlug, resolvePageViews(articleData))
+      })
+
       const articles = publishedPosts.map(post => {
         const rawTarget = post.target || 'Midway'
         const urlTarget = rawTarget.toLowerCase()
         const slug = post.slug
         const stats = daily.articlesStats?.[slug] || {}
+        const firstPartyViews = firstPartyViewsBySlug.get(slug)
         // Ensure all values are JSON-serializable (convert Date to ISO string)
         return {
           articleUrl: `/learn/${urlTarget}/${slug}`,
@@ -79,8 +102,8 @@ export async function GET(request: NextRequest) {
           topics: post.topics || [],
           readingTime: post.readingTime || 5,
           published: post.published !== false,
-          // Analytics data (if available)
-          pageViews: stats.pageViews || 0,
+          // pageViews now come from first-party article counters.
+          pageViews: typeof firstPartyViews === 'number' ? firstPartyViews : 0,
           uniquePageViews: stats.users || 0, // Use users as uniquePageViews
           avgTimeOnPage: stats.avgTimeOnPage || 0,
           bounceRate: stats.bounceRate || 0,

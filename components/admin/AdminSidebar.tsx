@@ -10,6 +10,7 @@ import {
     Award,
     Target,
     ClipboardCheck,
+    ShieldCheck,
     Menu,
     X,
     LogOut
@@ -28,6 +29,7 @@ export function AdminSidebar() {
         { name: 'Contributions', href: '/admin/contributions', icon: FileText },
         { name: 'Reviews', href: '/admin/reviews', icon: ClipboardCheck },
         { name: 'Role Fit', href: '/admin/role-fit', icon: Target },
+        { name: 'Compliance', href: '/admin/compliance', icon: ShieldCheck },
         { name: 'Badges', href: '/admin/badges', icon: Award },
     ], []);
 

@@ -23,11 +23,12 @@ function createReq(body: unknown): NextRequest {
 }
 
 describe('api/leads/ai-act route', () => {
+  const set = vi.fn(async () => undefined)
+  const doc = vi.fn(() => ({ set }))
+  const collection = vi.fn(() => ({ doc }))
+
   beforeEach(() => {
     vi.resetAllMocks()
-    const set = vi.fn(async () => undefined)
-    const doc = vi.fn(() => ({ set }))
-    const collection = vi.fn(() => ({ doc }))
     vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
   })
 
@@ -74,10 +75,20 @@ describe('api/leads/ai-act route', () => {
     expect(payload.ok).toBe(true)
     expect(typeof payload.redirectUrl).toBe('string')
     expect(payload.redirectUrl).toContain('/ai-eu-act/risorse?token=')
+    expect(set).toHaveBeenCalledWith(
+      expect.objectContaining({
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        retentionUntil: expect.any(String),
+        accessTokenExpiresAt: expect.any(String),
+        access_token: expect.any(String),
+        status: 'active',
+      }),
+    )
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'ai_act_tools',
-        email: 'mario@example.com',
+        page: '/ai-eu-act',
       }),
     )
   })

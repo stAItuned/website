@@ -2,23 +2,11 @@ import { sendTelegramFeedback } from '@/lib/telegram'
 import { db } from '@/lib/firebase/admin'
 import { NextRequest, NextResponse } from 'next/server'
 import { careerOSTranslations, normalizeCareerOSLocale } from '@/lib/i18n/career-os-translations'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-function buildCalendlyLink(baseUrl: string, email: string, name: string, notConfiguredLabel: string) {
-    if (!baseUrl) return notConfiguredLabel
-    const normalizedBaseUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`
-    try {
-        const url = new URL(normalizedBaseUrl)
-        url.searchParams.set('email', email)
-        if (name) {
-            url.searchParams.set('name', name)
-        }
-        return url.toString()
-    } catch {
-        return normalizedBaseUrl
-    }
-}
+const CAREER_OS_APPLY_PRIVACY_VERSION = '2026-03-23'
 
 export async function POST(req: NextRequest) {
     try {
@@ -56,15 +44,15 @@ export async function POST(req: NextRequest) {
         if (!acceptedPrivacy) return NextResponse.json({ error: t.privacyRequired }, { status: 400 })
 
         const normalizedEmail = email.trim().toLowerCase()
-        const calendlyBaseUrl =
-            process.env.CAREER_OS_CALENDLY_URL ||
-            process.env.NEXT_PUBLIC_CAREER_OS_CALENDLY_URL ||
-            ''
+        const nowIso = new Date().toISOString()
+        const nowDate = new Date(nowIso)
+        const retentionPolicy = getRetentionPolicy('career_os_applications')
+        let submissionId: string | null = null
 
         // DB Saving (Fail-safe)
         try {
             const applicationsRef = db().collection('career_os_applications')
-            await applicationsRef.add({
+            const basePayload = {
                 name: name.trim(),
                 email: normalizedEmail,
                 phone: phone?.trim() || null,
@@ -76,37 +64,41 @@ export async function POST(req: NextRequest) {
                 linkedinUrl: linkedinUrl?.trim() || null,
                 notes: notes?.trim() || null,
                 acceptedPrivacy: true,
+                privacyVersion: CAREER_OS_APPLY_PRIVACY_VERSION,
+                consent: {
+                    privacy: {
+                        accepted: true,
+                        acceptedAt: nowIso,
+                        version: CAREER_OS_APPLY_PRIVACY_VERSION,
+                    },
+                },
                 source: source || 'unknown',
                 pricingTier: pricingTier || null,
-                userAgent,
-                page,
-                createdAt: new Date().toISOString(), // Use ISO string for broader compatibility
-            })
+                userAgent: userAgent || req.headers.get('user-agent') || null,
+                page: page || '/career-os',
+                status: 'active',
+            }
+
+            const created = await applicationsRef.add(
+                applyRetentionMetadata(basePayload, retentionPolicy, nowDate),
+            )
+            submissionId = created.id
         } catch (dbError) {
             console.error('FIREBASE SAVE ERROR:', dbError)
-            // We continue even if DB fails, as we want to send Telegram at least
+            // Continue even if DB fails.
         }
 
-        // 3. Telegram Notification
-        const calendlyLink = buildCalendlyLink(calendlyBaseUrl, normalizedEmail, name.trim(), t.notConfigured)
-
         const telegramMessage = [
-            locale === 'en' ? '🆕 New Career OS Application' : '🆕 Nuova Application Career OS',
+            locale === 'en'
+                ? '🆕 New Career OS Application (metadata-only)'
+                : '🆕 Nuova Application Career OS (metadata-only)',
             '',
-            `${locale === 'en' ? '👤 Name' : '👤 Nome'}: ${name.trim()}`,
-            `📧 Email: ${normalizedEmail}`,
-            phone ? `${locale === 'en' ? '📱 Phone' : '📱 Telefono'}: ${phone.trim()}` : '',
-            `🎓 ${locale === 'en' ? 'Background' : 'Background'}: ${background.trim()}`,
-            `🎯 ${locale === 'en' ? 'Target Role' : 'Ruolo Target'}: ${roleTarget}`,
-            `⏳ Timeline: ${timeline}`,
-            `${locale === 'en' ? '🚧 Main Blocker' : '🚧 Blocco'}: ${mainBlock}`,
-            `${locale === 'en' ? '📨 Applications/month' : '📨 Candidature/mese'}: ${applicationsLastMonth}`,
-            linkedinUrl ? `🔗 LinkedIn: ${linkedinUrl}` : '',
+            `🆔 Submission: ${submissionId || 'not_persisted'}`,
+            `🌐 Locale: ${locale}`,
             pricingTier ? `${locale === 'en' ? '💎 Interest' : '💎 Interesse'}: ${pricingTier}` : '',
             source ? `📍 Source: ${source}` : '',
-            notes?.trim() ? `${locale === 'en' ? '🗒 Notes' : '🗒 Note'}: ${notes.trim()}` : '',
-            '',
-            `${locale === 'en' ? '📅 Book call' : '📅 Prenota call'}: ${calendlyLink}`,
+            `🕒 CreatedAt: ${nowIso}`,
+            '🔐 Open Admin dashboard for full details.',
         ]
             .filter(Boolean)
             .join('\n')
@@ -114,9 +106,7 @@ export async function POST(req: NextRequest) {
         await sendTelegramFeedback({
             category: 'career_os_application',
             message: telegramMessage,
-            email: normalizedEmail,
             page: page || '/career-os',
-            userAgent: userAgent || req.headers.get('user-agent') || undefined,
         })
 
         return NextResponse.json({ ok: true }, { status: 200 })

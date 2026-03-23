@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { getMessaging } from 'firebase-admin/messaging'
 import { db } from '@/lib/firebase/admin'
+import { applyRetentionMetadata } from '@/lib/privacy/retention'
+import { getRetentionPolicy } from '@/lib/privacy/retention-policies'
 
 /**
  * POST /api/notifications/unsubscribe
@@ -26,10 +28,32 @@ export async function POST(request: Request) {
         // Update Firestore
         const firestore = db()
         const tokenRef = firestore.collection('fcm_tokens').doc(token)
-        await tokenRef.update({
-            topics: FieldValue.arrayRemove(topic),
-            updatedAt: new Date().toISOString()
-        })
+        const now = new Date()
+        const nowIso = now.toISOString()
+        const retentionPolicy = getRetentionPolicy('fcm_tokens')
+        const existing = await tokenRef.get()
+        const existingData = existing.exists ? existing.data() as { createdAt?: unknown } : undefined
+
+        await tokenRef.set(
+            applyRetentionMetadata(
+                {
+                    token,
+                    platform: 'web',
+                    active: false,
+                    subscriptionStatus: 'unsubscribed',
+                    topics: FieldValue.arrayRemove(topic),
+                    lastSeenAt: nowIso,
+                    status: 'active',
+                    createdAt:
+                        typeof existingData?.createdAt === 'string'
+                            ? existingData.createdAt
+                            : nowIso,
+                },
+                retentionPolicy,
+                now,
+            ),
+            { merge: true },
+        )
 
         console.log(`[FCM] Token unsubscribed from topic: ${topic}`)
 

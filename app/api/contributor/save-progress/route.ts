@@ -6,6 +6,10 @@ import { headers } from 'next/headers';
 import { evaluateAgreementSignaturePolicy, AgreementPolicyDecision } from '@/lib/contributor/agreementPolicy';
 import { dbDefault } from '@/lib/firebase/admin';
 import { isWriterPublishEnabled, resolveWriterOnboardingState } from '@/lib/writer/onboarding-state';
+import {
+    CONTRIBUTOR_AGREEMENT_LEGAL_EXCEPTION,
+    computeContributorAgreementLegalReviewDueAt
+} from '@/lib/privacy/retention-policies';
 
 const DEFAULT_AGREEMENT_VERSION = '1.1';
 
@@ -93,7 +97,15 @@ export async function POST(request: NextRequest) {
                 author_name: dataToSave.agreement.legalName || dataToSave.agreement.author_name,
                 author_email: user.email || '',
                 ip: ip,
-                user_agent: userAgent
+                user_agent: userAgent,
+                legal_retention_mode: 'legal_exception',
+                legal_retention_rationale: CONTRIBUTOR_AGREEMENT_LEGAL_EXCEPTION,
+                legal_retention_updated_at: lastSaved,
+                legal_retention_review_due_at: computeContributorAgreementLegalReviewDueAt(
+                    dataToSave.agreement.agreedAt || dataToSave.agreement.accepted_at || lastSaved
+                ),
+                dsar_delete_mode: 'assisted_only',
+                dsar_delete_notes: 'Signed agreement evidence follows legal exception; contact support for assisted DSAR handling.'
             };
         } else if (agreementPolicyDecision === 'already_signed_same_version') {
             dataToSave = {

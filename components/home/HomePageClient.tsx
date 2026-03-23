@@ -6,7 +6,6 @@ import { WhoWeAreSection } from './WhoWeAreSection'
 import { DifferentiatorsSection } from './DifferentiatorsSection'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { TickerArticle } from '@/components/ui/ArticleTicker'
-import { NewsletterModal } from '@/components/ui/NewsletterModal'
 import { ArticleCard } from '@/components/ArticleCard'
 import Link from 'next/link'
 import { useLearnLocale, homeTranslations } from '@/lib/i18n'
@@ -28,7 +27,6 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
 
     const [articleFilter, setArticleFilter] = useState<ArticleFilter>('recent')
     const [trendingArticles, setTrendingArticles] = useState<TickerArticle[] | null>(null)
-    const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false)
 
     // Limit to 6 articles (3 top, 3 bottom)
     const latestPosts = tickerArticles.slice(0, 6)
@@ -152,7 +150,7 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
                         ))}
                     </div>
 
-                    {/* Mid-Grid Newsletter CTA - High Contrast & Ultra Slim */}
+                    {/* Mid-Grid Topics CTA - High Contrast & Ultra Slim */}
                     <div className="w-full my-6 relative group">
                         {/* Animated Outer Glow (Subtle) */}
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/50 via-orange-500/50 to-amber-500/50 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div>
@@ -183,15 +181,15 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
                                     </p>
                                 </div>
 
-                                <button
-                                    onClick={() => setIsNewsletterModalOpen(true)}
+                                <Link
+                                    href="/topics"
                                     className="w-full sm:w-auto shrink-0 group/btn relative inline-flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-lg bg-white text-slate-900 font-bold text-sm transition-all hover:bg-amber-50 hover:scale-105 active:scale-95 shadow-lg shadow-amber-900/20"
                                 >
                                     <span>{t.articles.midSection.cta}</span>
                                     <svg className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -269,11 +267,6 @@ export function HomePageClient({ tickerArticles, contributorCount, articleCount 
             </section >
 
 
-            {/* Newsletter Modal */}
-            <NewsletterModal
-                isOpen={isNewsletterModalOpen}
-                onClose={() => setIsNewsletterModalOpen(false)}
-            />
         </>
     )
 }

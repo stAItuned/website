@@ -18,15 +18,24 @@ Landing page pubblica su `/ai-eu-act` per spiegare:
 Collection Firestore: `leads_ai_act_tools`
 
 Campi principali:
-- `created_at` (ISO string)
+- `createdAt` / `created_at` (compatibilita legacy)
+- `updatedAt`
+- `retentionUntil`
+- `status`
 - `name`, `email`, `company`, `role`
 - `privacy_consent`
 - `marketing_consent`
 - `privacy_policy_version`
 - `ip_hash` (SHA256)
 - `source`
-- `access_token`
+- `access_token` / `accessToken` (compatibilita legacy)
+- `accessTokenExpiresAt` / `access_token_expires_at` (expiry esplicita)
 - `locale`
+
+Retention e lifecycle:
+- dataset `leads_ai_act_tools`: TTL 12 mesi (`retentionUntil`, WS5 framework)
+- token accesso risorse: TTL 30 giorni (`accessTokenExpiresAt`)
+- `/ai-eu-act/risorse` concede accesso solo a token esistente e non scaduto.
 
 ## UX States
 - `idle`: form pronto

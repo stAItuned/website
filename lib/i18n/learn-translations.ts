@@ -329,7 +329,7 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 features: [
                     "Clear brief + guidelines",
                     "Editorial + technical review",
-                    "Distribution: homepage + newsletter + LinkedIn"
+                    "Distribution: homepage + topics hub + LinkedIn"
                 ],
                 cta: "Apply as contributor →"
             },
@@ -594,7 +594,7 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 features: [
                     "Brief chiaro + linee guida",
                     "Review editoriale + tecnica",
-                    "Distribuzione: homepage + newsletter + LinkedIn"
+                    "Distribuzione: homepage + hub topics + LinkedIn"
                 ],
                 cta: "Candidati come contributor →"
             },

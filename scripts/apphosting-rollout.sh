@@ -35,7 +35,38 @@ echo "[apphosting] target: $TARGET"
 echo "[apphosting] backend: $BACKEND_ID"
 echo "[apphosting] branch: $GIT_BRANCH"
 
-firebase apphosting:rollouts:create "$BACKEND_ID" \
-  --project "$PROJECT_ID" \
-  --git-branch "$GIT_BRANCH"
+MAX_RETRIES="${APPHOSTING_ROLLOUT_MAX_RETRIES:-12}"
+RETRY_DELAY_SECONDS="${APPHOSTING_ROLLOUT_RETRY_DELAY_SECONDS:-30}"
 
+attempt=1
+while true; do
+  set +e
+  output="$(
+    firebase apphosting:rollouts:create "$BACKEND_ID" \
+      --project "$PROJECT_ID" \
+      --git-branch "$GIT_BRANCH" 2>&1
+  )"
+  status=$?
+  set -e
+
+  if [ "$status" -eq 0 ]; then
+    echo "$output"
+    break
+  fi
+
+  if echo "$output" | grep -q "HTTP Error: 409, unable to queue the operation"; then
+    if [ "$attempt" -ge "$MAX_RETRIES" ]; then
+      echo "$output"
+      echo "[apphosting] ERROR: rollout queue still busy after $attempt attempts." >&2
+      exit 1
+    fi
+
+    echo "[apphosting] rollout queue busy (attempt $attempt/$MAX_RETRIES), retry in ${RETRY_DELAY_SECONDS}s..."
+    attempt=$((attempt + 1))
+    sleep "$RETRY_DELAY_SECONDS"
+    continue
+  fi
+
+  echo "$output"
+  exit "$status"
+done

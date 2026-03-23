@@ -6,6 +6,7 @@ import { Resend } from 'resend'
 import type { AuditResult } from '@/app/(public)/role-fit-audit/lib/scoring'
 import { generateRoleFitAuditPDF } from '../pdf/generatePDF'
 import { roleFitAuditTranslations, type RoleFitLocale } from '@/lib/i18n/role-fit-audit-translations'
+import { sendTelegramFeedback } from '@/lib/telegram'
 
 function getResendClient(): Resend | null {
   const apiKey = process.env.RESEND_API_KEY
@@ -14,13 +15,18 @@ function getResendClient(): Resend | null {
 }
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'stAItuned <noreply@staituned.com>'
-const INTERNAL_CC_EMAIL = 'info@staituned.com'
-
 interface SendReportEmailParams {
   email: string
   name?: string
   result: AuditResult
   locale: RoleFitLocale
+  internalAlert: {
+    submissionId: string
+    generatedBy: string
+    readinessLabel: string
+    archetypeId: string
+    createdAt: string
+  }
 }
 
 function formatGreeting(locale: RoleFitLocale, name?: string): string {
@@ -164,7 +170,7 @@ https://staituned.com
 }
 
 export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams): Promise<boolean> {
-  const { email, name, result, locale } = params
+  const { email, name, result, locale, internalAlert } = params
   const resend = getResendClient()
 
   if (!resend) {
@@ -185,7 +191,6 @@ export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams)
     const payloadBase = {
       from: FROM_EMAIL,
       to: email,
-      cc: INTERNAL_CC_EMAIL,
       subject: `🎯 ${emailT.subjectPrefix}: ${result.archetype.name}`,
       html: generateReportEmailHtml(name, result, locale),
       text: generateReportEmailText(name, result, locale),
@@ -209,6 +214,22 @@ export async function sendRoleFitAuditReportEmail(params: SendReportEmailParams)
       console.error('Resend error:', error)
       return false
     }
+
+    const internalMessage = [
+      '🎯 Role Fit report sent',
+      '',
+      `🆔 Submission: ${internalAlert.submissionId}`,
+      `⚙️ Engine: ${internalAlert.generatedBy}`,
+      `📊 Readiness: ${internalAlert.readinessLabel}`,
+      `🏷 Archetype: ${internalAlert.archetypeId}`,
+      `🕒 CreatedAt: ${internalAlert.createdAt}`,
+    ].join('\n')
+
+    await sendTelegramFeedback({
+      category: 'role_fit_audit_internal',
+      message: internalMessage,
+      page: '/role-fit-audit',
+    })
 
     console.log(`[Role Fit Audit] Email sent successfully to: ${email} (PDF attached: ${!!pdfBuffer})`)
     return true

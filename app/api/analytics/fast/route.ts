@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import { dbDefault } from "@/lib/firebase/admin";
 import { sanitizeSlug } from '@/lib/sanitizeSlug';
 
+function resolvePageViews(data: Record<string, unknown> | undefined): number {
+  if (!data) return 0
+  const firstParty = data.pageViewsFirstParty
+  if (typeof firstParty === 'number') return firstParty
+  return 0
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug');
@@ -29,7 +36,7 @@ export async function GET(request: Request) {
         if (snap.exists) {
           const data = snap.data();
           results[originalSlug] = {
-            pageViews: data?.pageViews ?? 0,
+            pageViews: resolvePageViews(data as Record<string, unknown>),
             users: data?.users ?? 0,
             sessions: data?.sessions ?? 0,
             avgTimeOnPage: data?.avgTimeOnPage ?? 0,
@@ -90,7 +97,7 @@ export async function GET(request: Request) {
         return NextResponse.json({
           success: true,
           data: {
-            pageViews: data.pageViews ?? 0,
+            pageViews: resolvePageViews(data as Record<string, unknown>),
             users: data.users ?? 0,
             sessions: data.sessions ?? 0,
             avgTimeOnPage: data.avgTimeOnPage ?? 0,

@@ -20,11 +20,11 @@ function createReq(body: unknown): NextRequest {
 }
 
 describe('api/career-os/apply route', () => {
+  const add = vi.fn(async () => ({ id: 'apply_123' }))
+  const collection = vi.fn(() => ({ add }))
+
   beforeEach(() => {
     vi.resetAllMocks()
-
-    const add = vi.fn(async () => undefined)
-    const collection = vi.fn(() => ({ add }))
     vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
   })
 
@@ -88,8 +88,15 @@ describe('api/career-os/apply route', () => {
     expect(sendTelegramFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
         category: 'career_os_application',
-        email: 'john@example.com',
+        page: '/career-os',
       })
     )
+    const payload = (add as unknown as { mock: { calls: unknown[][] } }).mock.calls[0]?.[0] as Record<string, unknown>
+    expect(payload).toMatchObject({
+      email: 'john@example.com',
+      status: 'active',
+      retentionUntil: expect.any(String),
+      privacyVersion: '2026-03-23',
+    })
   })
 })

@@ -168,6 +168,12 @@ export interface Contribution {
         user_agent: string;
         agreement_hash_sha256: string;
         agreement_view_url?: string;
+        legal_retention_mode?: 'legal_exception';
+        legal_retention_rationale?: string;
+        legal_retention_updated_at?: string;
+        legal_retention_review_due_at?: string;
+        dsar_delete_mode?: 'assisted_only';
+        dsar_delete_notes?: string;
 
         // Legacy/compatibility fields (optional)
         agreed?: boolean;

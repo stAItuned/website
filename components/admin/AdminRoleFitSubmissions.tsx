@@ -8,6 +8,19 @@ interface RoleFitSubmission {
     email: string
     name?: string
     linkedinUrl?: string
+    status?: string
+    retentionUntil?: string
+    privacyVersion?: string
+    consent?: {
+        privacy?: {
+            accepted?: boolean
+            acceptedAt?: string
+            version?: string
+        }
+        marketing?: {
+            requested?: boolean
+        }
+    }
     createdAt: string
     result?: {
         readinessLabel?: string
@@ -25,6 +38,7 @@ export function AdminRoleFitSubmissions() {
     const [loading, setLoading] = useState(true)
     const [selectedSubmission, setSelectedSubmission] = useState<RoleFitSubmission | null>(null)
     const [error, setError] = useState('')
+    const [showExpiringSoon, setShowExpiringSoon] = useState(false)
 
     useEffect(() => {
         const fetchSubmissions = async () => {
@@ -75,12 +89,36 @@ export function AdminRoleFitSubmissions() {
         return Number.isNaN(date.getTime()) ? 'N/A' : date.toLocaleString()
     }
 
+    const isExpiringSoon = (retentionUntil?: string) => {
+        if (!retentionUntil) return false
+        const expiry = new Date(retentionUntil).getTime()
+        if (Number.isNaN(expiry)) return false
+        const now = Date.now()
+        const in30Days = now + (1000 * 60 * 60 * 24 * 30)
+        return expiry >= now && expiry <= in30Days
+    }
+
+    const visibleSubmissions = showExpiringSoon
+        ? submissions.filter((s) => isExpiringSoon(s.retentionUntil))
+        : submissions
+
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">GenAI Fit Checks</h3>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                    Total: {submissions.length}
+                <div className="flex items-center gap-4">
+                    <label className="text-xs text-gray-600 dark:text-gray-300 inline-flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            checked={showExpiringSoon}
+                            onChange={(e) => setShowExpiringSoon(e.target.checked)}
+                            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                        />
+                        Show expiring in 30 days
+                    </label>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                        Total: {visibleSubmissions.length}
+                    </div>
                 </div>
             </div>
 
@@ -92,12 +130,13 @@ export function AdminRoleFitSubmissions() {
                                 <th className="px-4 py-3 font-medium">User</th>
                                 <th className="px-4 py-3 font-medium">Role Fit</th>
                                 <th className="px-4 py-3 font-medium">Archetype</th>
+                                <th className="px-4 py-3 font-medium">Compliance</th>
                                 <th className="px-4 py-3 font-medium">LinkedIn</th>
                                 <th className="px-4 py-3 font-medium text-right">Date</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
-                            {submissions.map((sub) => (
+                            {visibleSubmissions.map((sub) => (
                                 <tr key={sub.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
                                     <td className="px-4 py-3 text-gray-900 dark:text-white">
                                         <div className="font-medium">{sub.name || 'Anonymous'}</div>
@@ -115,6 +154,13 @@ export function AdminRoleFitSubmissions() {
                                         <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
                                             {sub.result?.archetypeName || 'N/A'}
                                         </span>
+                                    </td>
+                                    <td className="px-4 py-3 text-xs text-gray-600 dark:text-gray-300">
+                                        <div className="space-y-1">
+                                            <div>Status: <span className="font-medium">{sub.status || 'legacy'}</span></div>
+                                            <div>Privacy v: <span className="font-medium">{sub.consent?.privacy?.version || sub.privacyVersion || 'n/a'}</span></div>
+                                            <div>Retention: <span className="font-medium">{formatDate(sub.retentionUntil || '')}</span></div>
+                                        </div>
                                     </td>
                                     <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
                                         {sub.linkedinUrl ? (
@@ -146,7 +192,7 @@ export function AdminRoleFitSubmissions() {
                             ))}
                             {submissions.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                                    <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
                                         No role fit audits found
                                     </td>
                                 </tr>
@@ -200,6 +246,20 @@ export function AdminRoleFitSubmissions() {
                                             <div className="flex justify-between">
                                                 <dt className="text-slate-500">Archetype:</dt>
                                                 <dd className="font-medium text-purple-600 dark:text-purple-400">{selectedSubmission.result?.archetypeName || 'N/A'}</dd>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <dt className="text-slate-500">Status:</dt>
+                                                <dd className="font-medium text-slate-900 dark:text-white">{selectedSubmission.status || 'legacy'}</dd>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <dt className="text-slate-500">Retention:</dt>
+                                                <dd className="font-medium text-slate-900 dark:text-white">{formatDate(selectedSubmission.retentionUntil || '')}</dd>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <dt className="text-slate-500">Privacy version:</dt>
+                                                <dd className="font-medium text-slate-900 dark:text-white">
+                                                    {selectedSubmission.consent?.privacy?.version || selectedSubmission.privacyVersion || 'N/A'}
+                                                </dd>
                                             </div>
                                         </dl>
                                     </div>
