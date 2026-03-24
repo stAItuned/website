@@ -150,7 +150,7 @@ function Node({ x, y, title, icon, isPainPoint, locale, badgeOverride }: NodePro
 
   return (
     <div
-      className={`absolute z-10 flex w-36 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-lg border-2 p-2.5 text-center text-xs shadow-sm transition-all hover:shadow-md ${
+      className={`absolute z-10 flex w-32 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-lg border-2 p-2.5 text-center text-xs shadow-sm transition-all hover:shadow-md lg:w-36 ${
         isPainPoint ? 'border-red-400 bg-red-50' : 'border-slate-300 bg-white'
       }`}
       style={{ left: x, top: y, minHeight: '88px' }}
@@ -312,8 +312,8 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
         </div>
       </div>
 
-      <div className="hidden overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
-        <div className="relative h-[560px] min-w-[960px]">
+      <div className="hidden overflow-hidden rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
+        <div className="relative h-[560px] min-w-full">
           <div className="grid h-12 grid-cols-5 bg-[#3b5998] text-white shadow-sm">
             {t.swimlanes.map((lane, index) => (
               <div
@@ -377,7 +377,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
               <line x1="30%" y1="15%" x2="50%" y2="15%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
               <line x1="50%" y1="15%" x2="50%" y2="38%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-v)" />
               <line x1="70%" y1="15%" x2="70%" y2="38%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-v)" />
-              <line x1="30%" y1="65%" x2="90%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
+              <line x1="30%" y1="65%" x2="88%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
               <line x1="10%" y1="85%" x2="30%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
 
               <line
@@ -395,7 +395,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
               <line
                 x1="60%"
                 y1="65%"
-                x2="90%"
+                x2="88%"
                 y2="65%"
                 stroke="#ef4444"
                 strokeWidth="3"
@@ -427,7 +427,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
             <Node x="70%" y="38%" title={t.nodes.secondRow[1]} icon="excel" locale={locale} />
 
             <Node x="30%" y="65%" title={t.nodes.thirdRow[0]} icon="whatsapp" isPainPoint locale={locale} />
-            <Node x="90%" y="65%" title={t.nodes.thirdRow[1]} icon="excel" isPainPoint locale={locale} />
+            <Node x="88%" y="65%" title={t.nodes.thirdRow[1]} icon="excel" isPainPoint locale={locale} />
 
             <Node x="10%" y="85%" title={t.nodes.fourthRow[0]} icon="whatsapp" isPainPoint locale={locale} />
           </div>
@@ -457,7 +457,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
 
       <div className="mt-3 hidden items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:flex">
         <ArrowRight className="h-4 w-4" aria-hidden />
-        <span>{locale === 'it' ? 'Scorri orizzontalmente per vedere tutto il flusso' : 'Scroll horizontally to see the full flow'}</span>
+        <span>{locale === 'it' ? 'Flusso completo visibile senza scroll orizzontale' : 'Full flow visible without horizontal scroll'}</span>
       </div>
     </section>
   )

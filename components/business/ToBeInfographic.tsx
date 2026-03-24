@@ -157,7 +157,7 @@ function Node({ x, y, title, subtitle, icon, status, tone, eyebrow, featured = f
           ? 'ring-4 ring-emerald-100 shadow-[0_18px_40px_rgba(16,185,129,0.16)] dark:ring-emerald-500/20'
           : ''
       } ${
-        mobile ? 'relative w-full max-w-none translate-x-0 translate-y-0' : 'absolute z-10 w-40 -translate-x-1/2 -translate-y-1/2'
+        mobile ? 'relative w-full max-w-none translate-x-0 translate-y-0' : 'absolute z-10 w-36 -translate-x-1/2 -translate-y-1/2 lg:w-40'
       }`}
       style={mobile ? { minHeight: '104px' } : { left: x, top: y, minHeight: '104px' }}
     >
@@ -329,8 +329,8 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
         </div>
       </div>
 
-      <div className="hidden overflow-x-auto rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
-        <div className="relative h-[560px] min-w-[960px]">
+      <div className="hidden overflow-hidden rounded-[1.25rem] border border-slate-300 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950 md:block">
+        <div className="relative h-[560px] min-w-full">
           <div className="grid h-12 grid-cols-5 bg-emerald-600 text-white shadow-sm">
             {t.swimlanes.map((lane, index) => (
               <div
@@ -383,8 +383,8 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               <line x1="30%" y1="35%" x2="50%" y2="35%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
               <line x1="50%" y1="35%" x2="70%" y2="35%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
               <line x1="50%" y1="35%" x2="50%" y2="70%" stroke="#10b981" strokeWidth="4" />
-              <line x1="50%" y1="70%" x2="90%" y2="70%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
-              <path d="M 50% 35% C 64% 35%, 72% 35%, 90% 70%" stroke="#34d399" strokeWidth="2" strokeDasharray="6 6" fill="none" opacity="0.8" />
+              <line x1="50%" y1="70%" x2="88%" y2="70%" stroke="#10b981" strokeWidth="4" markerEnd="url(#arrow-sync)" />
+              <path d="M 50% 35% C 64% 35%, 72% 35%, 88% 70%" stroke="#34d399" strokeWidth="2" strokeDasharray="6 6" fill="none" opacity="0.8" />
               <path d="M 50% 35% C 50% 48%, 50% 58%, 50% 70%" stroke="#6ee7b7" strokeWidth="8" fill="none" opacity="0.18" />
             </svg>
 
@@ -431,7 +431,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
               tone="teal"
             />
             <Node
-              x="90%"
+              x="88%"
               y="70%"
               title={t.nodes.first[4]}
               subtitle={
@@ -474,7 +474,7 @@ export function ToBeInfographic({ locale = 'it', className }: ToBeInfographicPro
 
       <div className="mt-3 hidden items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400 md:flex">
         <ArrowRight className="h-4 w-4" aria-hidden />
-        <span>{locale === 'it' ? 'Scorri orizzontalmente per vedere il flusso' : 'Scroll horizontally to see the flow'}</span>
+        <span>{locale === 'it' ? 'Flusso completo visibile senza scroll orizzontale' : 'Full flow visible without horizontal scroll'}</span>
       </div>
     </section>
   )
