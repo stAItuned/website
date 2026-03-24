@@ -121,16 +121,22 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme') || 
-                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                  const storedTheme = localStorage.getItem('theme');
+                  const themePreference =
+                    storedTheme === 'light' || storedTheme === 'dark'
+                      ? storedTheme
+                      : 'light';
+                  const theme = themePreference;
                   const root = document.documentElement;
                   if (theme === 'dark') {
                     root.classList.add('dark');
                     root.dataset.theme = 'dark';
+                    root.dataset.themePreference = themePreference;
                     root.style.colorScheme = 'dark';
                   } else {
                     root.classList.remove('dark');
                     root.dataset.theme = 'light';
+                    root.dataset.themePreference = themePreference;
                     root.style.colorScheme = 'light';
                   }
                 } catch (e) {}
@@ -147,6 +153,7 @@ export default function RootLayout({
           title="stAI tuned RSS Feed"
           href="/rss.xml"
         />
+        <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async />
         {/* Preload critical resources */}
         <link
           rel="preload"

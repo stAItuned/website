@@ -4,25 +4,31 @@ import { useTheme } from './ThemeProvider'
 import { useLearnLocale } from '@/lib/i18n'
 
 export function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { theme, cycleTheme, resolvedTheme } = useTheme()
   const { t } = useLearnLocale()
 
-  const handleToggle = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light')
-  }
+  const themeLabels = {
+    light: t.header.actions.themeNames.light,
+    dark: t.header.actions.themeNames.dark,
+  } as const
+
+  const nextTheme = theme === 'light' ? 'dark' : 'light'
+  const currentThemeLabel = themeLabels[theme]
+  const nextThemeLabel = themeLabels[nextTheme]
+  const ariaLabel = `${t.header.actions.themeToggle.replace('{theme}', currentThemeLabel)} ${t.header.actions.themeToggleNext.replace('{theme}', nextThemeLabel)}`
+  const title = `${t.header.actions.themeToggleShort}: ${currentThemeLabel}`
 
   return (
     <button
       type="button"
-      onClick={handleToggle}
+      onClick={cycleTheme}
       className="stai-icon-button group relative"
-      aria-label={t.header.actions.themeToggle.replace('{theme}', resolvedTheme === 'dark' ? t.header.actions.themeNames.dark : t.header.actions.themeNames.light)}
-      title={t.header.actions.themeToggle.replace('{theme}', resolvedTheme === 'dark' ? t.header.actions.themeNames.dark : t.header.actions.themeNames.light)}
+      aria-label={ariaLabel}
+      title={title}
     >
-      {/* Sun icon for light mode */}
       {resolvedTheme === 'light' && (
-        <svg 
-          className="w-6 h-6 text-[color:var(--stai-text)] transition-transform group-hover:rotate-45" 
+        <svg
+          className="h-6 w-6 text-[color:var(--stai-text)] transition-transform group-hover:rotate-45"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -34,18 +40,18 @@ export function ThemeToggle() {
           <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
         </svg>
       )}
-      
-      {/* Moon icon for dark mode */}
+
       {resolvedTheme === 'dark' && (
-        <svg 
-          className="w-6 h-6 text-[color:var(--stai-text)] transition-transform group-hover:rotate-12" 
-          fill="currentColor" 
+        <svg
+          className="h-6 w-6 text-[color:var(--stai-text)] transition-transform group-hover:rotate-12"
+          fill="currentColor"
           viewBox="0 0 24 24"
         >
           <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
         </svg>
       )}
-      
+
+      <span className="sr-only">{ariaLabel}</span>
     </button>
   )
 }

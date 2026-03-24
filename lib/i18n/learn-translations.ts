@@ -165,7 +165,6 @@ export interface LearnTranslations {
             themeNames: {
                 light: string
                 dark: string
-                system: string
             }
         }
         localeToggle: {
@@ -402,8 +401,7 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 themeToggleShort: "Toggle theme",
                 themeNames: {
                     light: "light",
-                    dark: "dark",
-                    system: "system"
+                    dark: "dark"
                 }
             },
             localeToggle: {
@@ -667,8 +665,7 @@ export const translations: Record<LearnLocale, LearnTranslations> = {
                 themeToggleShort: "Cambia tema",
                 themeNames: {
                     light: "chiaro",
-                    dark: "scuro",
-                    system: "sistema"
+                    dark: "scuro"
                 }
             },
             localeToggle: {

@@ -6,52 +6,56 @@ type Theme = 'light' | 'dark'
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
-  resolvedTheme: 'light' | 'dark'
+  cycleTheme: () => void
+  resolvedTheme: Theme
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+const THEME_STORAGE_KEY = 'theme'
+const THEME_CYCLE_ORDER: Theme[] = ['light', 'dark']
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light'
-  
-  // Check if theme was already set by the inline script in layout.tsx
-  const root = document.documentElement
-  if (root.classList.contains('dark')) return 'dark'
-  
-  // Fallback to localStorage or system preference
-  const stored = localStorage.getItem('theme')
+
+  const stored = localStorage.getItem(THEME_STORAGE_KEY)
   if (stored === 'light' || stored === 'dark') return stored
-  
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  return prefersDark ? 'dark' : 'light'
+  return 'light'
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Initialize from browser storage/preference to avoid logo/theme flicker after mount.
   const [theme, setThemeState] = useState<Theme>(getInitialTheme)
-  const resolvedTheme: 'light' | 'dark' = theme
+  const resolvedTheme: Theme = theme
 
   useEffect(() => {
     const root = document.documentElement
 
-    if (theme === 'dark') {
+    if (resolvedTheme === 'dark') {
       root.classList.add('dark')
-      root.dataset.theme = 'dark'
+      root.dataset.theme = resolvedTheme
+      root.dataset.themePreference = theme
       root.style.colorScheme = 'dark'
     } else {
       root.classList.remove('dark')
-      root.dataset.theme = 'light'
+      root.dataset.theme = resolvedTheme
+      root.dataset.themePreference = theme
       root.style.colorScheme = 'light'
     }
-  }, [theme])
+  }, [resolvedTheme, theme])
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme)
-    localStorage.setItem('theme', newTheme)
+    localStorage.setItem(THEME_STORAGE_KEY, newTheme)
+  }
+
+  const cycleTheme = () => {
+    const currentIndex = THEME_CYCLE_ORDER.indexOf(theme)
+    const nextIndex = (currentIndex + 1) % THEME_CYCLE_ORDER.length
+    const nextTheme = THEME_CYCLE_ORDER[nextIndex]
+    setTheme(nextTheme)
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, cycleTheme, resolvedTheme }}>
       {children}
     </ThemeContext.Provider>
   )
