@@ -57,7 +57,7 @@ const copy: Record<BusinessLocale, Copy> = {
       'Nessun passaggio perso in chat o mail',
       'Nessun riallineamento manuale tra ruoli',
     ],
-    swimlanes: ['Dipendente', 'Manager', 'Admin', 'Ufficio Tecnico', 'Consulente del lavoro'],
+    swimlanes: ['Dipendente', 'Manager', 'Admin', 'Controllo di gestione', 'Consulente del lavoro'],
     nodes: {
       first: [
         'Inserimento unico',
@@ -88,7 +88,7 @@ const copy: Record<BusinessLocale, Copy> = {
       'No missed handoffs in chat or email',
       'No manual realignment across roles',
     ],
-    swimlanes: ['Employee', 'Manager', 'Admin', 'Technical Office', 'Payroll consultant'],
+    swimlanes: ['Employee', 'Manager', 'Admin', 'Management Control', 'Payroll consultant'],
     nodes: {
       first: [
         'Single intake',

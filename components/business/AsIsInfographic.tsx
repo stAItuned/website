@@ -31,7 +31,7 @@ type Copy = {
   nodes: {
     firstRow: [string, string, string, string]
     secondRow: [string, string]
-    thirdRow: [string, string, string]
+    thirdRow: [string, string]
     fourthRow: [string]
   }
   legendTitle: string
@@ -49,7 +49,7 @@ const copy: Record<BusinessLocale, Copy> = {
     highlights: ['Passaggi manuali', 'Canali sparsi', 'Controllo tardivo'],
     subtitle:
       'Mappatura del flusso As-Is. I nodi evidenziati in rosso mostrano i passaggi manuali e i canali non strutturati che creano colli di bottiglia e rischio di errore nella riconciliazione finale.',
-    swimlanes: ['Dipendente', 'Manager', 'Admin', 'Ufficio Tecnico', 'Consulente del lavoro'],
+    swimlanes: ['Dipendente', 'Manager', 'Admin', 'Controllo di gestione', 'Consulente del lavoro'],
     laneLabels: ['App Dipendente', 'App Manager', 'Sistema HR', 'File Locale', 'File Locale'],
     nodes: {
       firstRow: [
@@ -58,13 +58,12 @@ const copy: Record<BusinessLocale, Copy> = {
         'Scarica il report',
         'Aggiorna le informazioni',
       ],
-      secondRow: ['Copia e incolla i dati nel database', 'Verifica i dati operativi'],
+      secondRow: ['Copia e incolla i dati su Excel', 'Verifica i dati operativi'],
       thirdRow: [
         'Gestisce ferie, permessi e malattie',
-        'Compila il foglio presenze',
         'Elabora il cedolino paghe',
       ],
-      fourthRow: ['Invia richieste e aggiornamenti'],
+      fourthRow: ['Richiede ferie e permessi, segnala assenze per malattia'],
     },
     legendTitle: 'Legenda Criticità:',
     manualFlow: 'Flusso dati manuale (Copia-Incolla)',
@@ -79,7 +78,7 @@ const copy: Record<BusinessLocale, Copy> = {
     highlights: ['Manual handoffs', 'Scattered channels', 'Late control'],
     subtitle:
       'As-is flow mapping. Red nodes mark the manual handoffs and unstructured channels that create bottlenecks and a high reconciliation error risk.',
-    swimlanes: ['Employee', 'Manager', 'Admin', 'Technical Office', 'Payroll consultant'],
+    swimlanes: ['Employee', 'Manager', 'Admin', 'Management Control', 'Payroll consultant'],
     laneLabels: ['App', 'App', 'System', 'Local file', 'Local file'],
     nodes: {
       firstRow: [
@@ -88,13 +87,12 @@ const copy: Record<BusinessLocale, Copy> = {
         'Downloads the report',
         'Updates the information',
       ],
-      secondRow: ['Copies and pastes data into the database', 'Checks operational data'],
+      secondRow: ['Copies and pastes data into Excel', 'Checks operational data'],
       thirdRow: [
         'Manages leave, permissions and sickness',
-        'Fills in the attendance sheet',
         'Prepares the payroll slip',
       ],
-      fourthRow: ['Sends requests and updates'],
+      fourthRow: ['Requests leave and permissions, reports sickness absences'],
     },
     legendTitle: 'Critical legend:',
     manualFlow: 'Manual data flow (copy-paste)',
@@ -231,14 +229,8 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
       pain: true,
     },
     {
-      role: t.swimlanes[2],
-      title: t.nodes.thirdRow[1],
-      icon: 'excel' as const,
-      pain: true,
-    },
-    {
       role: t.swimlanes[4],
-      title: t.nodes.thirdRow[2],
+      title: t.nodes.thirdRow[1],
       icon: 'excel' as const,
       pain: true,
     },
@@ -385,9 +377,8 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
               <line x1="30%" y1="15%" x2="50%" y2="15%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
               <line x1="50%" y1="15%" x2="50%" y2="38%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-v)" />
               <line x1="70%" y1="15%" x2="70%" y2="38%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-v)" />
-              <line x1="30%" y1="65%" x2="50%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
-              <line x1="10%" y1="85%" x2="50%" y2="85%" stroke="#94a3b8" strokeWidth="2" />
-              <line x1="50%" y1="85%" x2="50%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-v)" />
+              <line x1="30%" y1="65%" x2="90%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
+              <line x1="10%" y1="85%" x2="30%" y2="65%" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow-h)" />
 
               <line
                 x1="50%"
@@ -405,16 +396,6 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
                 x1="60%"
                 y1="65%"
                 x2="90%"
-                y2="65%"
-                stroke="#ef4444"
-                strokeWidth="3"
-                strokeDasharray="6 4"
-                markerEnd="url(#arrow-red-h)"
-              />
-              <line
-                x1="50%"
-                y1="38%"
-                x2="50%"
                 y2="65%"
                 stroke="#ef4444"
                 strokeWidth="3"
@@ -446,8 +427,7 @@ export function AsIsInfographic({ locale = 'it', className }: AsIsInfographicPro
             <Node x="70%" y="38%" title={t.nodes.secondRow[1]} icon="excel" locale={locale} />
 
             <Node x="30%" y="65%" title={t.nodes.thirdRow[0]} icon="whatsapp" isPainPoint locale={locale} />
-            <Node x="50%" y="65%" title={t.nodes.thirdRow[1]} icon="excel" isPainPoint locale={locale} />
-            <Node x="90%" y="65%" title={t.nodes.thirdRow[2]} icon="excel" isPainPoint locale={locale} />
+            <Node x="90%" y="65%" title={t.nodes.thirdRow[1]} icon="excel" isPainPoint locale={locale} />
 
             <Node x="10%" y="85%" title={t.nodes.fourthRow[0]} icon="whatsapp" isPainPoint locale={locale} />
           </div>
