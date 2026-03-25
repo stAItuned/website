@@ -1,5 +1,36 @@
 # spec_dev.md
 
+## Current Change Snapshot
+- Feature name: Admin server-side auth for `/admin/*`
+- Owner: stAItuned engineering
+- Date: 2026-03-25
+- Status: `in-progress`
+- Brainstorming doc: `docs/brainstorms/2026-03-25-admin-server-side-auth.md`
+- Problem statement:
+  - `/admin/*` previously relied mainly on client-side gating while `/api/admin/*` was already server-protected.
+- Goals:
+  - add Firebase-backed `httpOnly` session cookies
+  - enforce admin access before admin page render
+  - preserve redirect-back login flow
+  - keep `/api/admin/*` checks as defense in depth
+- Technical design:
+  - `POST /api/auth/session` exchanges Firebase ID token for secure session cookie
+  - `POST /api/auth/session/logout` clears the cookie
+  - `proxy.ts` enforces admin access on `/admin/*`
+  - `app/admin/layout.tsx` verifies the session server-side before render
+- Privacy/GDPR:
+  - personal data involved: `yes`
+  - new processing: short-lived authentication session cookie for protected admin areas
+  - reference checklist: `docs/gdpr-feature-checklist.md`
+- Testing strategy:
+  - route tests for session create/logout
+  - helper tests for server auth session verification
+  - proxy tests for anonymous/non-admin/admin routing
+- Rollout:
+  - deploy to `development` first
+  - validate anonymous/admin/non-admin flows on `/admin/*`
+  - then promote to `production`
+
 ## Feature Specification Template
 Use this template for every meaningful feature, refactor, or architectural update.
 

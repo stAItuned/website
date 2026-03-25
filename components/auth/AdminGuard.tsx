@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthContext'
 import { isAdmin } from '@/lib/firebase/admin-emails'
+import { getSafeInternalRedirect } from '@/lib/auth/session'
 
 interface AdminGuardProps {
     children: React.ReactNode
@@ -19,13 +20,16 @@ export function AdminGuard({ children, fallback }: AdminGuardProps) {
         if (loading) return
 
         if (!user) {
-            router.push('/signin?redirect=' + encodeURIComponent(window.location.pathname))
+            const redirectTarget = getSafeInternalRedirect(
+                window.location.pathname + window.location.search,
+                '/admin',
+            )
+            router.replace('/signin?redirect=' + encodeURIComponent(redirectTarget))
             return
         }
 
         if (!isAdmin(user.email)) {
-            // Optional: Redirect to a 403 page or home
-            router.push('/')
+            router.replace('/403')
         }
     }, [user, loading, router])
 

@@ -1,6 +1,6 @@
 # Privacy Processing Inventory (Repo-Driven)
 
-UpdatedAt: 2026-03-23
+UpdatedAt: 2026-03-25
 
 ## Purpose
 
@@ -25,6 +25,7 @@ Ogni riga del registro deve includere obbligatoriamente:
 - 2026-03-22: avvio WS5 Strategia A (MVP): retention contract centralizzato + lifecycle runbook + standardizzazione retention su dataset in scope.
 - 2026-03-23: WS6 Strategia B avviata con notifiche operative admin-only PWA (metadata-only) e canali terzi ridotti a eventi minimizzati.
 - 2026-03-23: WS7-A/B/D avviati: lead flows AI EU Act/Career OS portati in governance retention + minimizzazione Telegram, push editoriali `fcm_tokens` sotto lifecycle, matrice DSAR/account deletion estesa.
+- 2026-03-25: enforcement server-side delle route `/admin/*` con session cookie `httpOnly` Firebase e deny flow dedicato.
 
 ## WS4 Closure Sweep Matrix (P4 Alto)
 
@@ -54,6 +55,7 @@ Ogni riga del registro deve includere obbligatoriamente:
 | Career OS audit requests | `POST /api/career-os/audit` | nome, email, phone opzionale, dubbio, disponibilita, consenso privacy | richiesta supporto audit e contatto successivo | misure precontrattuali + consenso informativo | Firebase/Firestore, Telegram (metadata-only) | 12 mesi (`retentionUntil`) | form Career OS audit + privacy policy |
 | Editorial push notifications (public) | `/api/notifications/register`, `/api/notifications/subscribe`, `/api/notifications/unsubscribe`, `DELETE /api/notifications/register` | token FCM tecnico, topic editoriale, stato iscrizione, metadata lifecycle | invio notifiche editoriali su nuovi contenuti | consenso browser push + legittimo interesse editoriale | Firebase/Firestore, Firebase Cloud Messaging | 90 giorni (`retentionUntil`) | prompt PWA + cookie/privacy policy |
 | Admin operational push notifications | `/api/admin/notifications/*` + `/admin` | token FCM tecnico, email admin allowlist, uid admin, topic tecnico | notifiche operative admin-only con dettaglio in dashboard protetta | legittimo interesse operativo + sicurezza accessi admin | Firebase/Firestore, Firebase Cloud Messaging | 90 giorni (`retentionUntil`) | card admin dedicata + privacy policy |
+| Account auth and admin session gating | `Google Sign-In`, `POST /api/auth/session`, `POST /api/auth/session/logout`, `/admin/*` | email, name, profile picture, uid, Firebase ID token, session cookie tecnico `httpOnly` | autenticazione account e enforcement server-side delle aree admin | esecuzione del servizio + legittimo interesse di sicurezza e controllo accessi | Firebase Authentication, Firebase Admin SDK | cookie sessione admin max 12 ore o fino a logout; nessun datastore persistente dedicato | privacy policy (auth section) + cookie policy |
 
 ## DSAR / Account Deletion Mapping Note
 

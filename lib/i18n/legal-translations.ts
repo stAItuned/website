@@ -115,7 +115,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Contratto di licenza e termini d’uso per Career OS.',
             badge: 'stAItuned',
             intro: "Il presente contratto regola l'accesso e l'utilizzo di Career OS, il percorso formativo avanzato per carriere in ambito AI. Acquistando il servizio o accedendo ai materiali, l'utente accetta integralmente le seguenti condizioni.",
-            lastUpdate: 'Ultimo aggiornamento: 23 marzo 2026',
+            lastUpdate: 'Ultimo aggiornamento: 25 marzo 2026',
             sections: [
                 {
                     title: '1. Oggetto del Servizio',
@@ -230,7 +230,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Autenticazione e funzionalità personalizzate',
-                        content: 'Se decidi di registrarti al sito tramite Google Sign-In, raccogliamo e conserviamo i seguenti dati dal tuo profilo Google: indirizzo email, nome e cognome, foto profilo, User ID.',
+                        content: 'Se decidi di registrarti al sito tramite Google Sign-In, raccogliamo e conserviamo i seguenti dati dal tuo profilo Google: indirizzo email, nome e cognome, foto profilo, User ID. Per proteggere le aree riservate e amministrative possiamo inoltre creare un cookie tecnico di sessione server-side, `httpOnly`, con durata limitata.',
                         subsections: [
                             {
                                 title: 'Finalità:',
@@ -328,10 +328,10 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Dettagli sui cookie tecnici e analitici usati da stAItuned e su come gestire il consenso.',
             badge: 'stAItuned',
             intro: 'Il banner di consenso gestisce i cookie non essenziali e mantiene attivo solo quanto serve a far funzionare il sito. Qui trovi le informazioni dettagliate su quali cookie usiamo e perché.',
-            lastUpdate: 'Ultimo aggiornamento: 23 marzo 2026',
+            lastUpdate: 'Ultimo aggiornamento: 25 marzo 2026',
             technicalSection: {
                 title: 'Cookie tecnici e banner',
-                content: 'Alcuni cookie sono indispensabili per garantire la sicurezza e la navigazione (es. Next.js). Gli altri vengono attivati solo dopo il consenso esplicito dal banner.'
+                content: 'Alcuni cookie sono indispensabili per garantire la sicurezza e la navigazione (es. Next.js). Quando accedi a funzionalità riservate o amministrative possiamo impostare anche un cookie tecnico di sessione `httpOnly`, con durata limitata, per verificare l’accesso lato server. Gli altri cookie vengono attivati solo dopo il consenso esplicito dal banner.'
             },
             categoriesSection: {
                 title: 'Categorie di cookie',
@@ -380,7 +380,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'License agreement and terms of use for Career OS.',
             badge: 'stAItuned',
             intro: "This agreement governs access to and use of Career OS, the advanced training path for AI careers. By purchasing the service or accessing the materials, the user fully accepts the following conditions.",
-            lastUpdate: 'Last update: March 23, 2026',
+            lastUpdate: 'Last update: March 25, 2026',
             sections: [
                 {
                     title: '1. Subject of the Service',
@@ -495,7 +495,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Authentication and Personalized Features',
-                        content: 'If you register via Google Sign-In, we collect your email, name, profile picture, and User ID.',
+                        content: 'If you register via Google Sign-In, we collect your email, name, profile picture, and User ID. To protect reserved and administrative areas, we may also create a limited-lifetime, server-side `httpOnly` session cookie.',
                         subsections: [
                             {
                                 title: 'Purpose:',
@@ -593,10 +593,10 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             metaDescription: 'Details on technical and analytical cookies used by stAItuned and how to manage consent.',
             badge: 'stAItuned',
             intro: 'The consent banner manages non-essential cookies and keeps active only what is needed for the site to function. Here you will find detailed information on which cookies we use and why.',
-            lastUpdate: 'Last update: March 23, 2026',
+            lastUpdate: 'Last update: March 25, 2026',
             technicalSection: {
                 title: 'Technical Cookies and Banner',
-                content: 'Some cookies are essential for security and navigation (e.g., Next.js). Others are activated only after explicit consent from the banner.'
+                content: 'Some cookies are essential for security and navigation (e.g., Next.js). When you access reserved or administrative functionality, we may also set a limited-lifetime `httpOnly` technical session cookie so the server can verify access. Others are activated only after explicit consent from the banner.'
             },
             categoriesSection: {
                 title: 'Cookie Categories',

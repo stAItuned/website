@@ -174,6 +174,18 @@ UpdatedAt: 2026-03-24
 - Rimossa inclusione globale dello script Figma HTML-to-design dal layout pubblico:
   - `app/layout.tsx`
 - Hardening route admin:
-  - `app/admin/layout.tsx` ora delega a un wrapper client-only (`components/admin/AdminLayoutClient.tsx`) per evitare che il contenuto `/admin/*` venga serializzato nell'HTML pubblico prima del controllo auth.
+  - `app/admin/layout.tsx` usa enforcement server-side con session cookie Firebase e render protetto della shell admin.
 - Aggiornata documentazione hub compliance con note esplicite su rendering protetto e `noindex`:
   - `docs/admin-compliance-hub.md`
+
+## 2026-03-25 (Admin server-side auth and session gating)
+
+- Introdotti cookie di sessione `httpOnly` Firebase per enforcement server-side delle route `/admin/*`.
+- Aggiunti endpoint auth dedicati:
+  - `POST /api/auth/session`
+  - `POST /api/auth/session/logout`
+- `proxy.ts` ora blocca utenti anonimi e utenti autenticati non-admin prima del render delle route admin.
+- `app/admin/layout.tsx` verifica la sessione server-side come ulteriore enforcement prima del render.
+- Aggiunta deny page dedicata:
+  - `app/403/page.tsx`
+- Aggiornati inventario privacy, checklist GDPR, legal copy auth/cookie e spec per riflettere il nuovo lifecycle di sessione admin.

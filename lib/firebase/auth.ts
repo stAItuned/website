@@ -9,6 +9,17 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from './client';
 
+async function clearServerSessionCookie() {
+  try {
+    await fetch('/api/auth/session/logout', {
+      method: 'POST',
+      credentials: 'same-origin',
+    });
+  } catch (error) {
+    console.error('Failed to clear server session cookie:', error);
+  }
+}
+
 // Sign in with Google using popup
 export const signInWithGooglePopup = async () => {
   try {
@@ -90,6 +101,7 @@ export const handleRedirectResult = async () => {
 // Sign out
 export const signOutUser = async () => {
   try {
+    await clearServerSessionCookie();
     await signOut(auth);
     console.log("User signed out successfully");
     return { success: true };

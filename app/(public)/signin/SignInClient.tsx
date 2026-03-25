@@ -9,6 +9,7 @@ import { ArrowLeft, ShieldCheck, Zap, BookOpen } from 'lucide-react'
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
 import { type User } from 'firebase/auth'
 import { useLearnLocale, LearnLocaleToggle } from '@/lib/i18n'
+import { getSafeInternalRedirect } from '@/lib/auth/session'
 
 export default function SignInClient() {
     const router = useRouter()
@@ -18,8 +19,9 @@ export default function SignInClient() {
 
     const handleSignInSuccess = (user: User) => {
         // Redirect to home or previous page
-        const redirectParam = searchParams.get('redirect')
-        const redirectUrl = redirectParam || localStorage.getItem('redirectAfterLogin') || '/profile'
+        const redirectParam = getSafeInternalRedirect(searchParams.get('redirect'), '')
+        const redirectFromStorage = getSafeInternalRedirect(localStorage.getItem('redirectAfterLogin'), '')
+        const redirectUrl = redirectParam || redirectFromStorage || '/profile'
 
         // Clear legacy stored redirect if it exists
         if (localStorage.getItem('redirectAfterLogin')) {
