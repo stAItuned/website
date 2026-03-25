@@ -125,6 +125,7 @@ export default function SignInClient() {
                                 className="w-full justify-center py-3 text-base shadow-sm hover:shadow-md transition-shadow"
                                 onSignInSuccess={handleSignInSuccess}
                                 onSignInError={handleSignInError}
+                                restoreServerSessionOnMount
                             />
 
                             <div className="relative">

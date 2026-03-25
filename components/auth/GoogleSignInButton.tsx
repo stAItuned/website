@@ -16,6 +16,7 @@ interface GoogleSignInButtonProps {
   onSignInError?: (error: AuthError) => void
   className?: string
   useRedirect?: boolean
+  restoreServerSessionOnMount?: boolean
 }
 
 interface SessionCreateResponse {
@@ -27,7 +28,8 @@ export default function GoogleSignInButton({
   onSignInSuccess, 
   onSignInError, 
   className = "",
-  useRedirect = false 
+  useRedirect = false,
+  restoreServerSessionOnMount = false,
 }: GoogleSignInButtonProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
@@ -70,8 +72,30 @@ export default function GoogleSignInButton({
       await handleRedirect()
 
       // Listen for auth state changes
-      const unsubscribe = onAuthStateChange((user) => {
+      const unsubscribe = onAuthStateChange(async (user) => {
         setUser(user)
+
+        if (user && restoreServerSessionOnMount) {
+          try {
+            const token = await user.getIdToken()
+            const sessionResult = await createServerSession(token)
+
+            if (!sessionResult.success) {
+              onSignInError?.({
+                code: 'session_creation_failed',
+                message: sessionResult.error || 'Failed to create secure session',
+              })
+            } else {
+              onSignInSuccess?.(user)
+            }
+          } catch (error) {
+            onSignInError?.({
+              code: 'session_creation_failed',
+              message: error instanceof Error ? error.message : 'Failed to create secure session',
+            })
+          }
+        }
+
         setInitialLoading(false)
       })
 
@@ -79,7 +103,7 @@ export default function GoogleSignInButton({
     }
     
     initAuth()
-  }, [useRedirect, onSignInSuccess, onSignInError, DISABLE_AUTH])
+  }, [useRedirect, onSignInSuccess, onSignInError, restoreServerSessionOnMount, DISABLE_AUTH])
 
   const getRedirectFromQuery = () => {
     if (typeof window === 'undefined') return null
