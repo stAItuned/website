@@ -4,11 +4,11 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { AuthContext } from '@/components/auth/AuthContext'
 import SignInClient from './SignInClient'
 
-const replaceMock = vi.fn()
+const locationReplaceMock = vi.fn()
 const searchParams = new URLSearchParams()
 
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ replace: replaceMock, push: vi.fn() }),
+  useRouter: () => ({ replace: vi.fn(), push: vi.fn() }),
   useSearchParams: () => searchParams,
 }))
 
@@ -68,7 +68,7 @@ vi.mock('@/components/auth/GoogleSignInButton', () => ({
 
 describe('SignInClient', () => {
   beforeEach(() => {
-    replaceMock.mockReset()
+    locationReplaceMock.mockReset()
     searchParams.delete('redirect')
     const storageData = new Map<string, string>()
     Object.defineProperty(window, 'localStorage', {
@@ -90,6 +90,12 @@ describe('SignInClient', () => {
         },
       } satisfies Storage,
     })
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: {
+        replace: locationReplaceMock,
+      },
+    })
   })
 
   it('redirects authenticated users once the server session is ready', async () => {
@@ -109,7 +115,7 @@ describe('SignInClient', () => {
     )
 
     await waitFor(() => {
-      expect(replaceMock).toHaveBeenCalledWith('/admin')
+      expect(locationReplaceMock).toHaveBeenCalledWith('/admin')
     })
   })
 })

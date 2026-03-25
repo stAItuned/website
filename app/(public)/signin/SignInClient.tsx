@@ -33,8 +33,8 @@ export default function SignInClient() {
             localStorage.removeItem('redirectAfterLogin')
         }
 
-        router.replace(redirectUrl)
-    }, [loading, user, sessionReady, router, searchParams])
+        window.location.replace(redirectUrl)
+    }, [loading, user, sessionReady, searchParams])
 
     const handleSignInSuccess = (user: User) => {
         // Redirect to home or previous page
