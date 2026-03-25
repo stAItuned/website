@@ -3,18 +3,20 @@
 ## Purpose
 This file defines execution skills used to implement features consistently in this repository.
 
-Use these skills as checklists. For each feature, apply only the necessary skills, but always include `Documentation` at the end. For every new feature or page, start with `Feature Brainstorming & Confirmation`. For any change with data/privacy impact, include `Privacy & GDPR Readiness` before implementation. For any AI-enabled feature or AI behavior change, include `AI Act Readiness` before implementation.
+Use these skills as checklists. For each feature, apply only the necessary skills, but always include `Documentation` at the end. For every new feature or page, start with `Feature Brainstorming & Confirmation`. For any change with data/privacy impact, include `Privacy & GDPR Readiness` before implementation. For any AI-enabled feature or AI behavior change, include `AI Act Readiness` before implementation. For bug fixes, issue remediation, regressions, and suspicious workarounds, explicitly perform a root-cause pass and an architecture-fit pass before implementation by using the general review skills `root-cause-reviewer` and `repo-architecture-reviewer`.
 
 ## Skill 1: Architecture & Modularity
 When to use:
 - New feature or refactor touching multiple components.
 - Existing duplication across UI or logic layers.
+- Bug fix or issue resolution that may belong in a shared or lower-level architectural boundary.
 
 Required actions:
 1. Map the feature to atomic layers: atom, molecule, organism, page.
 2. Extract shared logic into `lib/` and shared UI into `components/ui/`.
 3. Keep route files focused on composition, not heavy business logic.
 4. Add typed extension points instead of duplicating components.
+5. Confirm the change is implemented in the owning layer and does not create new cross-layer leakage or duplicated rules.
 
 Output:
 - Clear component boundaries.
@@ -23,6 +25,7 @@ Output:
 DoD:
 - [ ] No copy-pasted UI blocks when a base component can be extended.
 - [ ] Extension implemented via typed props/variants.
+- [ ] Logic is placed in the architectural layer that owns the behavior.
 
 ## Skill 2: UX/UI System & Brand Consistency
 When to use:
@@ -153,17 +156,19 @@ When to use:
 - Backend function changes and API route updates.
 
 Required actions:
-1. Add or update unit tests for transformed/business data.
-2. Add backend/API tests for server functions and route handlers.
-3. Add component/UI tests for critical interactive and usability behavior.
-4. Add/maintain E2E coverage for the most important user journeys.
-5. Run `npm run lint` and relevant tests.
-6. If agent-assisted: require self-check + evidence (commands + outputs summary).
+1. For bug fixes and issue remediation, identify the root cause and confirm the proposed change fixes the cause, not only the symptom.
+2. Add or update unit tests for transformed/business data.
+3. Add backend/API tests for server functions and route handlers.
+4. Add component/UI tests for critical interactive and usability behavior.
+5. Add/maintain E2E coverage for the most important user journeys.
+6. Run `npm run lint` and relevant tests.
+7. If agent-assisted: require self-check + evidence (commands + outputs summary).
 
 Output:
 - Changes protected against known regressions.
 
 DoD:
+- [ ] The fix addresses the identified root cause or the temporary workaround is documented with recurrence risk.
 - [ ] Backend/API functions touched by the change are tested.
 - [ ] UI usability interactions touched by the change are tested.
 - [ ] Critical journey E2E coverage is present or updated.

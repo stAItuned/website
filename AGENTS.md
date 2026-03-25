@@ -52,6 +52,7 @@ Rules:
 11. Any change that introduces or modifies analytics, tracking, personal data, user identifiers, forms, auth, third-party integrations, storage, retention, deletion, export, consent, or data sharing must include an explicit GDPR implementation review before coding and the resulting decisions must be documented.
 12. Every request for a new feature or page must start with a brainstorming markdown document and must not proceed to implementation until the user has reviewed it and confirmed direction.
 13. Any change that introduces or modifies AI-enabled behavior, GenAI features, model integrations, scoring, recommendations, automated outputs, or user-facing AI claims must include an explicit AI Act implementation review before coding and the resulting decisions must be documented.
+14. Every fix, issue resolution, and behavioral change must address the root cause at the correct architectural layer. Do not ship patch-only workarounds unless they are explicitly documented as temporary, include follow-up ownership, and are justified by delivery constraints.
 
 ## Project Structure Rules
 - `app/`: routes, layouts, server-first page composition.
@@ -144,6 +145,15 @@ Apply these rules to every indexable route and content page:
 - Defer non-critical client logic.
 - Keep component files focused and ideally under ~200 lines; split concerns early.
 
+## Structural Change Standard
+Apply this standard to bug fixes, refactors, and behavioral changes:
+- Start from the root cause, not only the visible symptom.
+- Fix the problem in the layer that owns the rule or failure mode.
+- Prefer the smallest durable structural change over local duplication or defensive patching.
+- Check repository fit before coding: boundaries, ownership, reuse, and placement of logic must remain coherent with the repo architecture.
+- Use the general review skills `repo-architecture-reviewer` and `root-cause-reviewer` when a change affects architectural placement, shared logic, regressions, incidents, or issue remediation.
+- If a temporary workaround is unavoidable, document why it is temporary, what risk remains, who owns the follow-up, and what condition will remove it.
+
 ## Testing Standards
 - Unit tests for utilities and non-trivial transformations.
 - Backend/API function tests are mandatory for every new/changed server route or business function.
@@ -192,6 +202,7 @@ For AI-enabled changes:
 
 ## Delivery Checklist (Definition of Done)
 A task is complete only when all are true:
+- [ ] The change addresses the root cause at the appropriate layer, or any temporary workaround is explicitly documented with follow-up.
 - [ ] Reuses or extends atomic components instead of duplicating UI logic.
 - [ ] Aligns with brand tokens and visual language.
 - [ ] Verified responsive at mobile and desktop breakpoints.

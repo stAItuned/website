@@ -153,7 +153,6 @@ export default function RootLayout({
           title="stAI tuned RSS Feed"
           href="/rss.xml"
         />
-        <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async />
         {/* Preload critical resources */}
         <link
           rel="preload"

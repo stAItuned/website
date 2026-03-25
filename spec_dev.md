@@ -16,6 +16,10 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - Current behavior:
 - Pain points:
 - Why this matters for users/business:
+- Suspected root cause:
+- Earliest plausible failure point:
+- Problem classification: `local | systemic | unknown`
+- Why a structural fix is preferred over a local patch:
 
 ## 3. Goals and Non-Goals
 ### Goals
@@ -58,6 +62,8 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - Route scope (`app/...`):
 - Server vs Client component split:
 - Data flow and state ownership:
+- Owning architectural layer for the fix/change:
+- Architecture fit check (why this logic belongs here and not elsewhere):
 - External dependencies/apis:
 - Validation strategy (Zod schemas, runtime guards):
 - Error handling strategy:
@@ -180,6 +186,8 @@ Use this template for every meaningful feature, refactor, or architectural updat
 
 ## 16. Acceptance Criteria (Definition of Done)
 - [ ] Architecture is modular and atomic; no unnecessary duplication.
+- [ ] The change addresses the root cause at the correct architectural layer, not only the visible symptom.
+- [ ] Any temporary workaround is explicitly marked, justified, and assigned follow-up ownership.
 - [ ] Reusable components are extended via typed variants/props.
 - [ ] Visual design uses approved brand tokens and style conventions.
 - [ ] UX is complete across loading/empty/error/success states.

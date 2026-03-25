@@ -168,3 +168,12 @@ UpdatedAt: 2026-03-24
   - `Copy markdown`
 - Aggiunta documentazione dedicata hub:
   - `docs/admin-compliance-hub.md`
+
+## 2026-03-25 (Admin surface and prod bundle hardening)
+
+- Rimossa inclusione globale dello script Figma HTML-to-design dal layout pubblico:
+  - `app/layout.tsx`
+- Hardening route admin:
+  - `app/admin/layout.tsx` ora delega a un wrapper client-only (`components/admin/AdminLayoutClient.tsx`) per evitare che il contenuto `/admin/*` venga serializzato nell'HTML pubblico prima del controllo auth.
+- Aggiornata documentazione hub compliance con note esplicite su rendering protetto e `noindex`:
+  - `docs/admin-compliance-hub.md`

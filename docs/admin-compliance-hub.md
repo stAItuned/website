@@ -1,11 +1,12 @@
 # Admin Compliance Hub (`/admin/compliance`)
 
-UpdatedAt: 2026-03-24
+UpdatedAt: 2026-03-25
 
 ## Purpose and Scope
 
 Questa pagina admin centralizza gli artefatti operativi GDPR e AI Act usati come evidenza interna/external-audit.
 L'accesso e protetto da autenticazione Firebase e controllo `isAdmin`.
+Il layout admin non viene piu server-rendered per utenti anonimi: le route `/admin/*` delegano il rendering al client shell protetto, evitando che il contenuto della pagina venga serializzato nell'HTML pubblico prima del controllo auth.
 
 ## Surfaced Artifacts
 
@@ -44,5 +45,5 @@ La pagina espone documenti Markdown repo-driven tramite `GET /api/admin/complian
 ## PWA / SEO / Bilingual Impact
 
 - Nessun impatto su PWA scope `/learn`.
-- Nessun impatto su SEO/GEO (route admin non indexabile).
+- Nessun impatto su SEO/GEO (route admin non indexabile; `robots` impostato a `noindex, nofollow` nel layout admin).
 - Nessun impatto `it/en` pubblico: superficie interna admin.
