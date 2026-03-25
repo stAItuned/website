@@ -10,7 +10,7 @@ export default function AdminCompliancePage() {
           Compliance Documents
         </h1>
         <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-          Access GDPR operational artifacts (DPIA screening, checklist, audit and remediation plan) from one admin section.
+          Access GDPR and AI Act artifacts (checklists, audits, runbooks, evidence) from one protected admin section.
         </p>
       </div>
       <AdminComplianceDocs />

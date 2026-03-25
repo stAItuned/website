@@ -48,6 +48,10 @@ Rules:
 7. SEO and GEO requirements are mandatory for discoverable pages/content.
 8. Articles must include update signals: `updatedAt` (last meaningful update) and a human-readable changelog section/field; keep `it/en` parity when applicable.
 9. Data-driven/snapshot articles must include `asOf` (date of external data observation). `asOf` is not a substitute for `updatedAt`.
+10. Every new feature and every modification to an existing page or feature must update documentation for each affected page, feature, flow, or contract in the same change.
+11. Any change that introduces or modifies analytics, tracking, personal data, user identifiers, forms, auth, third-party integrations, storage, retention, deletion, export, consent, or data sharing must include an explicit GDPR implementation review before coding and the resulting decisions must be documented.
+12. Every request for a new feature or page must start with a brainstorming markdown document and must not proceed to implementation until the user has reviewed it and confirmed direction.
+13. Any change that introduces or modifies AI-enabled behavior, GenAI features, model integrations, scoring, recommendations, automated outputs, or user-facing AI claims must include an explicit AI Act implementation review before coding and the resulting decisions must be documented.
 
 ## Project Structure Rules
 - `app/`: routes, layouts, server-first page composition.
@@ -153,17 +157,38 @@ Apply these rules to every indexable route and content page:
 For each meaningful feature/change, update docs in the same PR:
 - Feature purpose and scope.
 - Architecture decisions and extension points.
+- Every affected page/route and every affected feature surface, including changed entry points, dependencies, and operational notes.
 - Data contracts and validation rules.
 - UX states (loading, empty, error, success).
 - Mobile behavior and accessibility notes.
 - PWA impact (if any).
 - SEO/GEO impact.
 - Bilingual (`it/en`) impact and translation notes.
+- Privacy/GDPR impact when data handling changes, including lawful basis assumptions, consent implications, retention/deletion/export impact, vendors or subprocessors involved, and any required policy/runbook updates.
+- AI Act impact when AI-enabled behavior changes, including likely posture, transparency notices, human oversight needs, vendor/model dependencies, and required product/legal/runbook updates.
 
 Use:
 - TSDoc/JSDoc for exported components and complex functions.
 - `spec_dev.md` as the canonical feature specification template.
 - `SKILLS.md` as the implementation workflow checklist.
+
+Documentation coverage is not optional:
+- If a page changes, update the page documentation for that page.
+- If a feature changes, update the feature documentation for that feature.
+- If shared behavior changes multiple pages/features, update every affected document, not only a central summary.
+
+For new feature/page requests:
+- Create a brainstorming file before implementation in `docs/brainstorms/YYYY-MM-DD-<slug>.md`.
+- Capture goal, constraints, assumptions, affected routes/components/data, privacy/GDPR impact, SEO/GEO impact, bilingual impact, and open questions.
+- Ask for explicit user confirmation after sharing the brainstorming document and before coding.
+
+For data/privacy-impacting changes:
+- Treat GDPR review as a delivery gate, not a post-implementation note.
+- Document the processing activity, data categories, purpose, lawful basis assumptions, retention/deletion expectations, data-subject-rights implications, and third-party/vendor exposure before implementation proceeds.
+
+For AI-enabled changes:
+- Treat AI Act review as a delivery gate, not a marketing or post-launch note.
+- Document the use case, likely posture, user transparency obligations, human oversight/override needs, vendor/model dependencies, and release blockers before implementation proceeds.
 
 ## Delivery Checklist (Definition of Done)
 A task is complete only when all are true:
@@ -174,6 +199,10 @@ A task is complete only when all are true:
 - [ ] PWA constraints respected when feature touches `/learn`.
 - [ ] SEO/GEO constraints respected for indexable pages/content.
 - [ ] Bilingual `it/en` parity preserved for user-facing changes.
+- [ ] Documentation updated for every affected page and feature, not just the primary implementation file.
+- [ ] New feature/page work started from a brainstorming `.md` and received explicit confirmation before implementation.
+- [ ] GDPR/privacy review completed and documented for any data-handling or tracking change.
+- [ ] AI Act review completed and documented for any AI-enabled feature or material AI behavior change.
 - [ ] Backend/API functions are covered by tests.
 - [ ] UI usability interactions are covered by tests.
 - [ ] Critical E2E journeys are tested and consistent end-to-end.

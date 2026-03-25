@@ -11,6 +11,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTheme } from '@/components/ThemeProvider'
 import { LearnLocaleToggle, useLearnLocale } from '@/lib/i18n'
 import CareerOSLocaleToggle from '@/app/(public)/career-os/components/CareerOSLocaleToggle'
+import BusinessLocaleToggle from '@/app/(public)/business/components/BusinessLocaleToggle'
 import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 
 
@@ -35,6 +36,7 @@ export function Header() {
   const isHomepage = pathname === '/'
   const isRoleFitPage = pathname?.startsWith('/role-fit-audit')
   const isCareerOSPage = pathname?.startsWith('/career-os')
+  const isBusinessPage = pathname?.startsWith('/business')
   const admin = user?.email ? isAdmin(user.email) : false
   const identity = user
     ? resolveProfileIdentity({
@@ -188,6 +190,10 @@ export function Header() {
             {isCareerOSPage ? (
               <div className="flex items-center">
                 <CareerOSLocaleToggle />
+              </div>
+            ) : isBusinessPage ? (
+              <div className="flex items-center">
+                <BusinessLocaleToggle />
               </div>
             ) : !isRoleFitPage && (!pathname?.includes('/learn/') || pathname.split('/').filter(Boolean).length <= 2) ? (
               <div className="flex items-center">

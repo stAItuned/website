@@ -154,6 +154,13 @@ body {
   box-shadow: 0 12px 25px rgba(var(--stai-card-shadow-rgb), 0.25);
 }
 
+.stai-icon-button:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--brand-secondary-500) 90%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-secondary-500) 28%, transparent),
+    0 18px 30px rgba(var(--stai-card-shadow-rgb), 0.25);
+}
+
 .stai-nav {
   color: var(--stai-text);
 }
@@ -225,10 +232,16 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
 
+  body,
   .stai-body,
   .stai-icon-button,
   .stai-link::after {
     transition: none !important;
+  }
+
+  .stai-icon-button:hover,
+  .stai-icon-button:active {
+    transform: none;
   }
 }
 

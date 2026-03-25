@@ -3,7 +3,7 @@
 ## Purpose
 This file defines execution skills used to implement features consistently in this repository.
 
-Use these skills as checklists. For each feature, apply only the necessary skills, but always include `Documentation` at the end.
+Use these skills as checklists. For each feature, apply only the necessary skills, but always include `Documentation` at the end. For every new feature or page, start with `Feature Brainstorming & Confirmation`. For any change with data/privacy impact, include `Privacy & GDPR Readiness` before implementation. For any AI-enabled feature or AI behavior change, include `AI Act Readiness` before implementation.
 
 ## Skill 1: Architecture & Modularity
 When to use:
@@ -176,23 +176,62 @@ When to use:
 
 Required actions:
 1. Create/update feature spec using `spec_dev.md`.
-2. Document architecture decisions and extension points.
-3. Document UX states and responsive behavior.
-4. Document PWA impact when relevant.
-5. Document SEO/GEO impact and discoverability decisions.
-6. Document bilingual `it/en` impact and localization notes.
-7. Update `README.md` for user-facing setup or workflow changes.
-8. If agent-assisted: record (a) what quality gates were used, (b) what was verified.
-9. For article/content updates: bump `updatedAt`, keep `asOf` in sync for snapshot-driven pages, add a changelog entry, and keep `it/en` parity for both metadata and changelog when the article is localized.
+2. Update documentation for every affected page and every affected feature, not only the main implementation area.
+3. Document architecture decisions and extension points.
+4. Document UX states and responsive behavior.
+5. Document PWA impact when relevant.
+6. Document SEO/GEO impact and discoverability decisions.
+7. Document bilingual `it/en` impact and localization notes.
+8. Document privacy/GDPR impact whenever data handling, tracking, consent, retention, export, deletion, or third-party exposure changes.
+9. Update `README.md` for user-facing setup or workflow changes.
+10. If agent-assisted: record (a) what quality gates were used, (b) what was verified.
+11. For article/content updates: bump `updatedAt`, keep `asOf` in sync for snapshot-driven pages, add a changelog entry, and keep `it/en` parity for both metadata and changelog when the article is localized.
 
 Output:
 - Feature is maintainable by future contributors without tribal knowledge.
 
 DoD:
 - [ ] Documentation updated in the same change.
+- [ ] Every affected page/feature document is updated or explicitly created.
 - [ ] Rationale captured (why), not only implementation details (what).
 
-## Skill 11: Environments & Deployments (Test vs Prod)
+## Skill 11: Privacy & GDPR Readiness
+When to use:
+- Any change that introduces or modifies analytics, tracking, personal data, user identifiers, forms, auth, third-party integrations, storage, retention, deletion, export, consent, or data sharing.
+
+Required actions:
+1. Identify the processing activity and the data categories involved.
+2. Record purpose, role assumptions (controller/processor where relevant), and lawful basis assumptions.
+3. Check consent, disclosure, retention, deletion, export, and user-rights handling impacts.
+4. Check vendor/subprocessor exposure, transfers, and telemetry leakage risks.
+5. Document the implementation constraints and required privacy artifacts before coding continues.
+
+Output:
+- Feature has an explicit GDPR implementation path instead of an implicit post-hoc review.
+
+DoD:
+- [ ] GDPR-relevant data flows and obligations are documented before implementation.
+- [ ] Open privacy decisions or missing legal/operational inputs are surfaced explicitly.
+
+## Skill 12: AI Act Readiness
+When to use:
+- Any change that introduces or modifies AI systems, GenAI features, model integrations, recommendations, scoring, automated outputs, agentic workflows, synthetic content, or user-facing AI claims.
+
+Required actions:
+1. Identify whether the feature is AI-enabled and what workflow or decision the AI output influences.
+2. Record the likely practical posture: prohibited-risk concern, high-risk concern, transparency-limited-risk concern, minimal-risk/internal tooling concern, or unclear-needs-review.
+3. Check user transparency, labeling, human oversight, override/fallback, and operational escalation requirements.
+4. Check vendor/model dependencies, prompt sensitivity, auditability, and documentation obligations.
+5. Document the implementation constraints and required AI Act artifacts before coding continues.
+
+Output:
+- Feature has an explicit AI Act implementation path instead of an implicit post-hoc review.
+
+DoD:
+- [ ] AI-enabled posture and obligations are documented before implementation.
+- [ ] Open AI governance, transparency, or oversight gaps are surfaced explicitly.
+
+## Skill 13: Environments & Deployments (Test vs Prod)
 When to use:
 - Any change that affects config, external integrations, or runtime behavior.
 - Any backend route that touches third-party services or secrets.
@@ -210,16 +249,37 @@ DoD:
 - [ ] Deploy target(s) and env var notes documented.
 - [ ] Deploy commands verified for the intended target.
 
+## Skill 14: Feature Brainstorming & Confirmation
+When to use:
+- Every request for a new feature or a new page.
+
+Required actions:
+1. Create a brainstorming markdown file at `docs/brainstorms/YYYY-MM-DD-<slug>.md` before implementation.
+2. Capture goal, non-goals, assumptions, constraints, affected routes/components/data, SEO/GEO implications, bilingual implications, and testing approach.
+3. If the feature touches data/privacy, include the initial GDPR implementation analysis in the brainstorming document.
+4. If the feature is AI-enabled, include the initial AI Act implementation analysis in the brainstorming document.
+5. Share the proposed direction and ask the user for confirmation before writing implementation code.
+
+Output:
+- A reviewable implementation direction with explicit assumptions and risks.
+
+DoD:
+- [ ] Brainstorming `.md` created before coding.
+- [ ] User confirmation obtained before implementation.
+
 ## Recommended Skill Sequence
 For most product features:
-1. Architecture & Modularity
-2. Type Safety & Validation
-3. UX/UI System & Brand Consistency
-4. Responsive & Accessible Experience
-5. PWA Readiness (if `/learn` scope)
-6. SEO + GEO Discoverability
-7. Bilingual Localization (`it/en`)
-8. Performance Engineering
-9. Testing & Regression Safety
-10. Documentation
-11. Environments & Deployments (when relevant)
+1. Feature Brainstorming & Confirmation (new feature/page only)
+2. Architecture & Modularity
+3. Type Safety & Validation
+4. Privacy & GDPR Readiness (when data/privacy is involved)
+5. AI Act Readiness (when AI-enabled behavior is involved)
+6. UX/UI System & Brand Consistency
+7. Responsive & Accessible Experience
+8. PWA Readiness (if `/learn` scope)
+9. SEO + GEO Discoverability
+10. Bilingual Localization (`it/en`)
+11. Performance Engineering
+12. Testing & Regression Safety
+13. Documentation
+14. Environments & Deployments (when relevant)

@@ -1,6 +1,6 @@
 # Compliance Changelog
 
-UpdatedAt: 2026-03-23
+UpdatedAt: 2026-03-24
 
 ## Maintenance Rules
 
@@ -151,3 +151,20 @@ UpdatedAt: 2026-03-23
 - Privacy policy `it/en` `lastUpdate` riallineata al 23 marzo 2026 dopo remediation WS7-E.
 - `docs/gdpr-feature-checklist.md` aggiornato a stato `approved_with_go_live_gate` con screening DPIA esplicito (`not required` per scope attuale).
 - Runbook DSAR esteso con workflow assisted-export operativo (owner, SLA, formato output) per chiudere gap accountability su export path.
+
+## 2026-03-24 (Admin compliance hub hardening)
+
+- `/admin/compliance` esteso da sola vista GDPR a hub GDPR + AI Act.
+- Added AI Act and accountability artifacts to protected list:
+  - `docs/ai-act-feature-checklist.md`
+  - `docs/ai-eu-act-landing.md`
+  - `docs/runbooks/dsar-account-deletion.md`
+  - `docs/runbooks/gdpr-ws1-ws7-test-report-2026-03-23.md`
+  - `docs/runbooks/ws7-smoke-test-test-env-2026-03-23.md`
+  - `docs/runbooks/ws7e-go-no-go-prod.md`
+- Rendering documenti aggiornato: da plain `<pre>` a Markdown renderer con supporto tabelle/checklist.
+- Aggiunte azioni operative per audit handoff:
+  - `Download .md`
+  - `Copy markdown`
+- Aggiunta documentazione dedicata hub:
+  - `docs/admin-compliance-hub.md`

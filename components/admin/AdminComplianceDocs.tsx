@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useAuth } from '@/components/auth/AuthContext';
 
 interface ComplianceDocSummary {
@@ -23,6 +25,7 @@ export function AdminComplianceDocs() {
   const [loadingList, setLoadingList] = useState(true);
   const [loadingDoc, setLoadingDoc] = useState(false);
   const [error, setError] = useState('');
+  const [copyState, setCopyState] = useState<'idle' | 'done' | 'error'>('idle');
 
   useEffect(() => {
     const loadDocs = async () => {
@@ -97,6 +100,41 @@ export function AdminComplianceDocs() {
     loadDoc();
   }, [selectedDocId, user]);
 
+  useEffect(() => {
+    setCopyState('idle');
+  }, [selectedDocId]);
+
+  const handleDownloadMarkdown = () => {
+    if (!selectedDoc) return;
+
+    const blob = new Blob([selectedDoc.content], { type: 'text/markdown;charset=utf-8' });
+    const objectUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    const fallbackFileName = `${selectedDoc.id}.md`;
+    const markdownFileName = selectedDoc.relativePath.split('/').pop() || fallbackFileName;
+
+    anchor.href = objectUrl;
+    anchor.download = markdownFileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(objectUrl);
+  };
+
+  const handleCopyMarkdown = async () => {
+    if (!selectedDoc) return;
+
+    try {
+      await navigator.clipboard.writeText(selectedDoc.content);
+      setCopyState('done');
+      window.setTimeout(() => setCopyState('idle'), 1500);
+    } catch (copyError) {
+      console.error('Failed to copy markdown:', copyError);
+      setCopyState('error');
+      window.setTimeout(() => setCopyState('idle'), 2000);
+    }
+  };
+
   const formatDateTime = (value: string) => {
     if (!value) return 'N/A';
     const date = new Date(value);
@@ -158,11 +196,37 @@ export function AdminComplianceDocs() {
                   <span>{selectedDoc.relativePath}</span>
                   <span>Updated: {formatDateTime(selectedDoc.updatedAt)}</span>
                 </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDownloadMarkdown}
+                    className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700"
+                  >
+                    Download .md
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void handleCopyMarkdown();
+                    }}
+                    className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700"
+                  >
+                    Copy markdown
+                  </button>
+                  {copyState === 'done' && (
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400">Copied</span>
+                  )}
+                  {copyState === 'error' && (
+                    <span className="text-xs text-red-600 dark:text-red-400">Copy failed</span>
+                  )}
+                </div>
               </header>
               <div className="max-h-[70vh] overflow-auto p-5">
-                <pre className="whitespace-pre-wrap text-xs leading-6 text-slate-700 dark:text-slate-200">
-                  {selectedDoc.content}
-                </pre>
+                <article className="prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {selectedDoc.content}
+                  </ReactMarkdown>
+                </article>
               </div>
             </>
           )}

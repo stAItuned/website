@@ -28,6 +28,12 @@ const COMPLIANCE_DOCS: ComplianceDocDefinition[] = [
     relativePath: 'docs/gdpr-feature-checklist.md',
   },
   {
+    id: 'ai-act-feature-checklist',
+    title: 'AI Act Feature Checklist',
+    description: 'Gate operativo AI Act con classificazione rischio, trasparenza e oversight.',
+    relativePath: 'docs/ai-act-feature-checklist.md',
+  },
+  {
     id: 'dpia-role-fit-audit',
     title: 'DPIA Screening - Role Fit Audit',
     description: 'Screening DPIA interno per Workstream 3 (Strategia A).',
@@ -64,10 +70,40 @@ const COMPLIANCE_DOCS: ComplianceDocDefinition[] = [
     relativePath: 'docs/privacy-retention-schedule.md',
   },
   {
+    id: 'dsar-account-deletion-runbook',
+    title: 'DSAR and Account Deletion Matrix',
+    description: 'Coverage matrix tra self-service deletion e assisted DSAR/export.',
+    relativePath: 'docs/runbooks/dsar-account-deletion.md',
+  },
+  {
     id: 'retention-lifecycle-runbook',
     title: 'Retention Lifecycle Runbook',
     description: 'Procedura dry-run/apply per purge retention e audit evidence.',
     relativePath: 'docs/runbooks/retention-lifecycle.md',
+  },
+  {
+    id: 'ai-eu-act-landing-doc',
+    title: 'AI EU Act Landing Spec',
+    description: 'Documentazione funzionale del flow AI EU Act lead + risorse gated.',
+    relativePath: 'docs/ai-eu-act-landing.md',
+  },
+  {
+    id: 'gdpr-ws1-ws7-test-report',
+    title: 'GDPR WS1-WS7 Test Report (2026-03-23)',
+    description: 'Evidenze test/lint/route per validazione wave GDPR WS1-WS7.',
+    relativePath: 'docs/runbooks/gdpr-ws1-ws7-test-report-2026-03-23.md',
+  },
+  {
+    id: 'ws7-smoke-test-test-env',
+    title: 'WS7 Smoke Test (Test Env, 2026-03-23)',
+    description: 'Risultati smoke test ambiente test su endpoint/workflow WS7.',
+    relativePath: 'docs/runbooks/ws7-smoke-test-test-env-2026-03-23.md',
+  },
+  {
+    id: 'ws7e-go-no-go-prod',
+    title: 'WS7-E Go/No-Go Production',
+    description: 'Gate decisionale pre-produzione con check e firma operativa.',
+    relativePath: 'docs/runbooks/ws7e-go-no-go-prod.md',
   },
   {
     id: 'admin-pwa-ops-notifications-runbook',

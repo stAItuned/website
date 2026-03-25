@@ -20,7 +20,7 @@ function isValidFirestoreDocPath(path) {
     return segments.length % 2 === 0 && segments.length > 0 && segments.every(segment => segment.length > 0);
 }
 export const dailyAnalytics = onSchedule({
-    schedule: "0 6 * * *", // ogni giorno alle 06:00
+    schedule: "0 6 * * *",
     timeZone: "Europe/Rome",
     region: "europe-west1"
 }, async () => {
@@ -121,7 +121,6 @@ export const dailyAnalytics = onSchedule({
                 console.log(`✅ Matched slug: "${slug}" from path: "${path}"`);
                 // If this slug already exists, aggregate the metrics
                 if (articlesStats[slug]) {
-                    articlesStats[slug].pageViews += Number(r.metricValues?.[0]?.value ?? 0);
                     articlesStats[slug].users += Number(r.metricValues?.[1]?.value ?? 0);
                     articlesStats[slug].sessions += Number(r.metricValues?.[2]?.value ?? 0);
                     // For avgTimeOnPage and bounceRate, take the weighted average or max
@@ -131,7 +130,6 @@ export const dailyAnalytics = onSchedule({
                 }
                 else {
                     articlesStats[slug] = {
-                        pageViews: Number(r.metricValues?.[0]?.value ?? 0),
                         users: Number(r.metricValues?.[1]?.value ?? 0),
                         sessions: Number(r.metricValues?.[2]?.value ?? 0),
                         avgTimeOnPage: Number(r.metricValues?.[3]?.value ?? 0),

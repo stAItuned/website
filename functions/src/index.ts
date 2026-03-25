@@ -140,7 +140,6 @@ export const dailyAnalytics = onSchedule(
 
           // If this slug already exists, aggregate the metrics
           if (articlesStats[slug]) {
-            articlesStats[slug].pageViews += Number(r.metricValues?.[0]?.value ?? 0);
             articlesStats[slug].users += Number(r.metricValues?.[1]?.value ?? 0);
             articlesStats[slug].sessions += Number(r.metricValues?.[2]?.value ?? 0);
             // For avgTimeOnPage and bounceRate, take the weighted average or max
@@ -149,7 +148,6 @@ export const dailyAnalytics = onSchedule(
             console.log(`🔄 Aggregated data for existing slug: "${slug}"`);
           } else {
             articlesStats[slug] = {
-              pageViews: Number(r.metricValues?.[0]?.value ?? 0),
               users: Number(r.metricValues?.[1]?.value ?? 0),
               sessions: Number(r.metricValues?.[2]?.value ?? 0),
               avgTimeOnPage: Number(r.metricValues?.[3]?.value ?? 0),

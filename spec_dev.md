@@ -9,6 +9,8 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - Date:
 - Status: `draft | in-progress | review | done`
 - Related issue/PR:
+- Brainstorming doc: `docs/brainstorms/YYYY-MM-DD-<slug>.md`
+- Requires explicit implementation confirmation from requester: `yes/no`
 
 ## 2. Problem Statement
 - Current behavior:
@@ -63,6 +65,28 @@ Use this template for every meaningful feature, refactor, or architectural updat
   - New/updated fields (e.g., `updatedAt`, `asOf`, `changelog`):
   - Field types/format (ISO dates, versioning scheme):
   - Backward compatibility and migration plan for existing content:
+
+## 7A. Privacy and GDPR Review
+- Personal data involved: `yes/no`
+- Processing activity summary:
+- Data categories and identifiers:
+- Controller/processor role assumption:
+- Legal basis/consent assumption:
+- Retention/deletion/export impact:
+- Vendors/subprocessors and transfer notes:
+- Required policy/disclosure updates:
+- DPIA screening required: `yes/no`
+- Reference checklist: `docs/gdpr-feature-checklist.md`
+
+## 7B. AI Act Review
+- AI-enabled feature: `yes/no`
+- AI system/use-case summary:
+- Practical posture: `prohibited-risk concern | high-risk concern | transparency-limited-risk concern | minimal-risk/internal tooling concern | unclear-needs-review`
+- User transparency notice needed: `yes/no`
+- Human oversight/override needed: `yes/no`
+- Vendor/model dependency notes:
+- Required product/legal/runbook updates:
+- Reference checklist: `docs/ai-act-feature-checklist.md`
 
 ## 8. Responsiveness and Accessibility
 - Breakpoints validated: `xs`, `sm`, `md`, `lg`, `xl`
@@ -137,6 +161,8 @@ Use this template for every meaningful feature, refactor, or architectural updat
 
 ## 14. Documentation Deliverables
 - Files to update in `docs/`:
+- Affected page docs to update:
+- Affected feature docs to update:
 - README updates required: `yes/no`
 - TSDoc/JSDoc targets:
 - Runbook or support notes:
@@ -171,6 +197,10 @@ Use this template for every meaningful feature, refactor, or architectural updat
 - [ ] UI usability for key interactions is tested.
 - [ ] Most important E2E journeys are tested and consistent.
 - [ ] TDD evidence is documented with RED/GREEN/REFACTOR traceability.
+- [ ] Brainstorming document created and approved before implementation.
+- [ ] Every affected page and feature document is updated in the same change.
+- [ ] GDPR/privacy review completed and documented when data handling changes.
+- [ ] AI Act review completed and documented when the feature introduces or changes AI-enabled behavior.
 - [ ] Documentation updated and maintainable.
 
 ## 17. Implementation Log (Optional During Execution)
