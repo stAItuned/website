@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { User } from 'firebase/auth'
 import { getSafeInternalRedirect } from '@/lib/auth/session'
+import { createServerSession } from '@/lib/firebase/auth'
 
 interface AuthError {
   code: string
@@ -16,12 +17,6 @@ interface GoogleSignInButtonProps {
   onSignInError?: (error: AuthError) => void
   className?: string
   useRedirect?: boolean
-  restoreServerSessionOnMount?: boolean
-}
-
-interface SessionCreateResponse {
-  success: boolean
-  error?: string
 }
 
 export default function GoogleSignInButton({ 
@@ -29,7 +24,6 @@ export default function GoogleSignInButton({
   onSignInError, 
   className = "",
   useRedirect = false,
-  restoreServerSessionOnMount = false,
 }: GoogleSignInButtonProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
@@ -72,30 +66,8 @@ export default function GoogleSignInButton({
       await handleRedirect()
 
       // Listen for auth state changes
-      const unsubscribe = onAuthStateChange(async (user) => {
+      const unsubscribe = onAuthStateChange((user) => {
         setUser(user)
-
-        if (user && restoreServerSessionOnMount) {
-          try {
-            const token = await user.getIdToken()
-            const sessionResult = await createServerSession(token)
-
-            if (!sessionResult.success) {
-              onSignInError?.({
-                code: 'session_creation_failed',
-                message: sessionResult.error || 'Failed to create secure session',
-              })
-            } else {
-              onSignInSuccess?.(user)
-            }
-          } catch (error) {
-            onSignInError?.({
-              code: 'session_creation_failed',
-              message: error instanceof Error ? error.message : 'Failed to create secure session',
-            })
-          }
-        }
-
         setInitialLoading(false)
       })
 
@@ -103,33 +75,12 @@ export default function GoogleSignInButton({
     }
     
     initAuth()
-  }, [useRedirect, onSignInSuccess, onSignInError, restoreServerSessionOnMount, DISABLE_AUTH])
+  }, [useRedirect, onSignInSuccess, onSignInError, DISABLE_AUTH])
 
   const getRedirectFromQuery = () => {
     if (typeof window === 'undefined') return null
     const param = new URLSearchParams(window.location.search).get('redirect')
     return getSafeInternalRedirect(param, '')
-  }
-
-  const createServerSession = async (idToken: string): Promise<SessionCreateResponse> => {
-    const response = await fetch('/api/auth/session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({ idToken }),
-    })
-
-    const payload = (await response.json()) as SessionCreateResponse
-    if (!response.ok || !payload.success) {
-      return {
-        success: false,
-        error: payload.error || 'Failed to create secure session',
-      }
-    }
-
-    return { success: true }
   }
 
   const handleSignIn = async () => {

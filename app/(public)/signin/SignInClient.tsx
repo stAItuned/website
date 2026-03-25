@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,12 +10,31 @@ import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
 import { type User } from 'firebase/auth'
 import { useLearnLocale, LearnLocaleToggle } from '@/lib/i18n'
 import { getSafeInternalRedirect } from '@/lib/auth/session'
+import { useAuth } from '@/components/auth/AuthContext'
 
 export default function SignInClient() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const { t } = useLearnLocale()
     const [error, setError] = useState<string | null>(null)
+    const { user, loading, sessionReady, sessionError } = useAuth()
+    const displayedError = error ?? sessionError
+
+    useEffect(() => {
+        if (loading || !user || !sessionReady) {
+            return
+        }
+
+        const redirectParam = getSafeInternalRedirect(searchParams.get('redirect'), '')
+        const redirectFromStorage = getSafeInternalRedirect(localStorage.getItem('redirectAfterLogin'), '')
+        const redirectUrl = redirectParam || redirectFromStorage || '/profile'
+
+        if (redirectFromStorage) {
+            localStorage.removeItem('redirectAfterLogin')
+        }
+
+        router.replace(redirectUrl)
+    }, [loading, user, sessionReady, router, searchParams])
 
     const handleSignInSuccess = (user: User) => {
         // Redirect to home or previous page
@@ -115,9 +134,9 @@ export default function SignInClient() {
 
                     <div className="mt-8 space-y-6">
                         <div className="space-y-4">
-                            {error && (
+                            {displayedError && (
                                 <div className="p-3 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-100 dark:border-red-900/20">
-                                    {error}
+                                    {displayedError}
                                 </div>
                             )}
 
@@ -125,7 +144,6 @@ export default function SignInClient() {
                                 className="w-full justify-center py-3 text-base shadow-sm hover:shadow-md transition-shadow"
                                 onSignInSuccess={handleSignInSuccess}
                                 onSignInError={handleSignInError}
-                                restoreServerSessionOnMount
                             />
 
                             <div className="relative">
