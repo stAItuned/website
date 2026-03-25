@@ -7,6 +7,8 @@
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { AUTH_SESSION_COOKIE_NAME } from '@/lib/auth/session'
+import { verifyProxyAdminSession } from '@/lib/auth/proxy-admin-session'
 
 /**
  * Internal Next.js parameters that should trigger a redirect to clean URL.
@@ -17,7 +19,7 @@ const INTERNAL_PARAMS_TO_STRIP = [
   '_rsc_d',
 ]
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const url = request.nextUrl.clone()
 
   // Skip internal Next.js requests (prefetch, RSC internal calls).
@@ -46,6 +48,34 @@ export function proxy(request: NextRequest) {
 
   if (hasInternalParams) {
     return NextResponse.redirect(url, 308)
+  }
+
+  const isAdminRoute = url.pathname === '/admin' || url.pathname.startsWith('/admin/')
+  if (isAdminRoute) {
+    const sessionCookie = request.cookies.get(AUTH_SESSION_COOKIE_NAME)?.value ?? null
+    const authState = await verifyProxyAdminSession(sessionCookie)
+
+    if (authState === 'unauthenticated') {
+      const redirectUrl = new URL('/signin', request.url)
+      redirectUrl.searchParams.set('redirect', `${url.pathname}${url.search}`)
+      const response = NextResponse.redirect(redirectUrl)
+      if (sessionCookie) {
+        response.cookies.set({
+          name: AUTH_SESSION_COOKIE_NAME,
+          value: '',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          path: '/',
+          maxAge: 0,
+        })
+      }
+      return response
+    }
+
+    if (authState === 'non_admin') {
+      return NextResponse.redirect(new URL('/403', request.url))
+    }
   }
 
   return NextResponse.next()

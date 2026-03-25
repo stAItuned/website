@@ -2,6 +2,89 @@
 
 Use this checklist before implementing any feature or change that introduces or modifies analytics, tracking, auth, forms, personal data processing, storage, sharing, retention, export, deletion, consent, or third-party integrations.
 
+## Latest Completed Review (Admin Server-Side Auth)
+
+### 1. Processing Snapshot
+- Feature/change: Firebase-backed server-side auth and authorization for `/admin/*`
+- Date: 2026-03-25
+- Owner: stAItuned engineering
+- Status: `approved`
+- Related brainstorming/spec: `docs/brainstorms/2026-03-25-admin-server-side-auth.md`
+
+### 2. Processing Activity
+- Trigger: authenticated user attempts to access `/admin/*`
+- Purpose: block anonymous and non-admin users before admin page render, align page access control with existing server-side API controls
+- Type: auth/session processing hardening
+- Systems: Firebase Auth client sign-in, server-side session cookie issuance/revocation, proxy-based admin gating, server-side admin layout verification
+
+### 3. Data Inventory
+- Personal data categories: account email, name, profile picture, uid, Firebase ID token, technical session cookie
+- Special-category data involved: `no`
+- User identifiers involved: email, uid, session cookie identifier
+- Free-text fields involved: `no`
+- Data source: Google Sign-In / Firebase Authentication
+
+### 4. Role and Legal Basis
+- stAItuned role: `controller`
+- Legal basis assumption: service authentication + legitimate interest for security and access control on internal admin areas
+- Is consent required: `no`
+- Consent handling: not applicable; this is security/authentication processing required to operate protected admin routes
+
+### 5. Transparency
+- Privacy policy update required: `yes`
+- Cookie policy update required: `yes`
+- Terms/UX disclosure update required: `no`
+- User-facing disclosure copy updated: auth section and technical cookie section now mention secure session cookies for authenticated/reserved areas
+
+### 6. Retention and Lifecycle
+- Retention window: session cookie max 12 hours
+- Deletion/anonymization rule: immediate cookie clear on logout and on invalidation path
+- Export/access implications: none beyond existing account auth data
+- Rectification implications: unchanged
+- End-of-contract / end-of-purpose handling: no dedicated persistent session datastore introduced in this iteration
+
+### 7. Vendors and Transfers
+- Vendors/subprocessors involved: Firebase Authentication, Firebase Admin SDK
+- Countries/transfer implications: unchanged from existing Firebase setup
+- Cleartext access by vendor/internal team: limited to authentication/session infrastructure already in use
+- Additional contracts or DPA checks required: `no` new providers introduced
+
+### 8. Security and Minimization
+- Minimum required fields: Firebase session cookie plus existing Firebase user identifiers
+- Optional fields removed: none
+- Logging/telemetry impact: no new analytics introduced
+- Access control requirements: `/admin/*` now gated before render, with `/api/admin/*` checks preserved as defense in depth
+- Secrets/config changes: no new secrets beyond existing Firebase Admin credentials
+
+### 9. User Rights and Operations
+- DSAR impact: negligible incremental impact; auth/session processing remains bounded and ephemeral
+- Support/runbook impact: admin access troubleshooting should consider session cookie creation/logout behavior
+- Backfill/migration impact: none
+- Monitoring/audit trail needs: rely on existing auth/provider logs; no new session database
+
+### 10. Risk Review
+- Main privacy risks: stale or invalid session cookies causing inconsistent access expectations
+- Main legal/accountability risks: missing disclosure of secure auth/session cookie usage
+- Mitigations required before release: privacy/cookie policy wording updated, session TTL bounded to 12h, logout clears cookie
+- DPIA screening needed: `no`
+- Blocking unknowns: none
+
+### 11. Documentation Updates
+- Docs to update:
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `docs/admin-compliance-hub.md`
+  - `spec_dev.md`
+- Legal text files to update:
+  - `lib/i18n/legal-translations.ts`
+- Runbooks/specs to update:
+  - `docs/gdpr-feature-checklist.md`
+
+### 12. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`)
+- Decision: `approved`
+- Notes: admin-only surface does not require bilingual parity, but public legal/cookie copy remains aligned `it/en`.
+
 ## Latest Completed Review (Workstream 7 - Residual Gaps Closure + WS7-E)
 
 ### 1. Processing Snapshot

@@ -5,8 +5,8 @@ UpdatedAt: 2026-03-25
 ## Purpose and Scope
 
 Questa pagina admin centralizza gli artefatti operativi GDPR e AI Act usati come evidenza interna/external-audit.
-L'accesso e protetto da autenticazione Firebase e controllo `isAdmin`.
-Il layout admin non viene piu server-rendered per utenti anonimi: le route `/admin/*` delegano il rendering al client shell protetto, evitando che il contenuto della pagina venga serializzato nell'HTML pubblico prima del controllo auth.
+L'accesso e protetto da autenticazione Firebase, session cookie server-side `httpOnly` e controllo `isAdmin`.
+Le route `/admin/*` vengono bloccate prima del render tramite enforcement server-side, con Bearer-token auth mantenuta sulle API admin come defense in depth.
 
 ## Surfaced Artifacts
 
