@@ -8,6 +8,8 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true) // Start with loading=true to initialize auth
   const [initialized, setInitialized] = useState(false)
+  const [sessionReady, setSessionReady] = useState(false)
+  const [sessionError, setSessionError] = useState<string | null>(null)
 
   // Initialize auth on mount with a delay to unblock main thread
   useEffect(() => {
@@ -17,11 +19,35 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const initializeAuth = async () => {
         try {
           // Dynamic import Firebase only when needed
-          const { onAuthStateChange } = await import('@/lib/firebase/auth')
+          const { onAuthStateChange, createServerSession } = await import('@/lib/firebase/auth')
 
-          const unsubscribe = onAuthStateChange((user) => {
+          const unsubscribe = onAuthStateChange(async (user) => {
             setUser(user)
-            setLoading(false)
+
+            if (!user) {
+              setSessionReady(false)
+              setSessionError(null)
+              setLoading(false)
+              return
+            }
+
+            try {
+              const token = await user.getIdToken()
+              const sessionResult = await createServerSession(token)
+
+              if (!sessionResult.success) {
+                setSessionReady(false)
+                setSessionError(sessionResult.error || 'Failed to create secure session')
+              } else {
+                setSessionReady(true)
+                setSessionError(null)
+              }
+            } catch (error) {
+              setSessionReady(false)
+              setSessionError(error instanceof Error ? error.message : 'Failed to create secure session')
+            } finally {
+              setLoading(false)
+            }
           })
 
           setInitialized(true)
@@ -52,6 +78,8 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
     <AuthContext.Provider value={{
       user,
       loading,
+      sessionReady,
+      sessionError,
       signIn: async () => { await signIn() },
       signOut: async () => { await signOut() }
     }}>

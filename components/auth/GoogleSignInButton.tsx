@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { User } from 'firebase/auth'
 import { getSafeInternalRedirect } from '@/lib/auth/session'
+import { createServerSession } from '@/lib/firebase/auth'
 
 interface AuthError {
   code: string
@@ -27,7 +28,7 @@ export default function GoogleSignInButton({
   onSignInSuccess, 
   onSignInError, 
   className = "",
-  useRedirect = false 
+  useRedirect = false,
 }: GoogleSignInButtonProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
@@ -85,27 +86,6 @@ export default function GoogleSignInButton({
     if (typeof window === 'undefined') return null
     const param = new URLSearchParams(window.location.search).get('redirect')
     return getSafeInternalRedirect(param, '')
-  }
-
-  const createServerSession = async (idToken: string): Promise<SessionCreateResponse> => {
-    const response = await fetch('/api/auth/session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({ idToken }),
-    })
-
-    const payload = (await response.json()) as SessionCreateResponse
-    if (!response.ok || !payload.success) {
-      return {
-        success: false,
-        error: payload.error || 'Failed to create secure session',
-      }
-    }
-
-    return { success: true }
   }
 
   const handleSignIn = async () => {

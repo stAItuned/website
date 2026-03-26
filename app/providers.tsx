@@ -8,7 +8,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [loading] = useState(false)
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, sessionReady: false, sessionError: null }}>
       {children}
     </AuthContext.Provider>
   )

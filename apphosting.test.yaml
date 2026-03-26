@@ -14,7 +14,7 @@ env:
       - BUILD
       - RUNTIME
   - variable: NEXT_PUBLIC_DISABLE_AUTH
-    value: "true"
+    value: "false"
     availability:
       - BUILD
       - RUNTIME

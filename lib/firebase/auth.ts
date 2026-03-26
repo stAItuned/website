@@ -9,6 +9,38 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from './client';
 
+interface SessionCreateResponse {
+  success: boolean;
+  error?: string;
+}
+
+export async function createServerSession(idToken: string): Promise<SessionCreateResponse> {
+  try {
+    const response = await fetch('/api/auth/session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ idToken }),
+    });
+
+    const payload = (await response.json()) as SessionCreateResponse;
+    if (!response.ok || !payload.success) {
+      return {
+        success: false,
+        error: payload.error || 'Failed to create secure session',
+      };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create secure session',
+    };
+  }
+}
 async function clearServerSessionCookie() {
   try {
     await fetch('/api/auth/session/logout', {
