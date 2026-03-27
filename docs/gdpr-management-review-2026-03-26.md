@@ -1,6 +1,6 @@
 # GDPR Management Review
 
-UpdatedAt: 2026-03-26
+UpdatedAt: 2026-03-27
 
 ## Review Metadata
 
@@ -50,7 +50,10 @@ I punti forti sono evidenti:
 - esiste una matrice DSAR/delete che distingue bene tra self-service e assisted path (`docs/runbooks/dsar-account-deletion.md`)
 - esiste una baseline condivisa esterna ora integrata nella review stack (`docs/gdpr-review-source-stack.md`)
 
-Il quadro resta pero `amber / needs changes` perche, pur avendo chiuso la formalizzazione repo-local delle basi giuridiche, del registro vendor/subprocessor, della transfer assessment scenario-based, dell'end-of-contract handling, del breach escalation path e dell'indice DPIA centrale, manca ancora almeno un artifact repo-local esplicito che la baseline condivisa considera utile quando il prodotto tratta dati personali in modo continuativo.
+Il quadro resta pero `amber / needs changes` perche, pur avendo chiuso la formalizzazione repo-local delle basi giuridiche, del registro vendor/subprocessor, della transfer assessment scenario-based, dell'end-of-contract handling, del breach escalation path e dell'indice DPIA centrale, restano ancora gap di accountability su:
+
+- formalizzazione controller/processor posture in un artifact centrale dedicato
+- chiusura documentata del lifecycle del Firestore legacy `(default)` rimasto in `NAM5` dopo il cutover del main runtime verso `eu-primary`
 
 ## Accountability Findings
 
@@ -83,6 +86,7 @@ Valutazione:
 - End-of-contract: esiste ora un documento repo-local dedicato (`docs/privacy-end-of-contract-data-handling.md`) che raccorda retention, DSAR, unsubscribe/offboarding e legal exception.
 - Subprocessors: esiste ora un registro centralizzato repo-local (`docs/privacy-subprocessors-register.md`), ma il suo `DPA status` resta in parte `TBD` e deve alimentare la successiva transfer assessment.
 - Transfers: esiste ora una transfer assessment dedicata (`docs/privacy-transfer-assessment.md`), ma molti scenari restano `TBD` su meccanismo e regione effettiva e richiedono follow-up legal/ops.
+- Firestore legacy decommission: il main runtime e stato spostato su `eu-primary` e anche il package `functions` e stato riallineato al database EU; esistono ora evidenze GCP su regioni ed export finale del legacy, ma resta un rischio residuo di posture e accountability finche non viene chiuso il `go/no-go` finale e la delete/decommission del `(default)`.
 
 Valutazione:
 - retention: `good`
@@ -127,6 +131,7 @@ Se rimangono implicite, indeboliscono l'auditability.
 Gap prioritari da chiudere:
 
 1. valutare se formalizzare la postura controller/processor in un artifact centrale separato
+2. chiudere con runbook + audit finale il lifecycle del Firestore legacy `(default)` dopo il cutover EU
 
 ## Required Documentation Updates Applied In This Change
 
@@ -136,6 +141,7 @@ Gap prioritari da chiudere:
 - aggiunto documento repo-specifico di end-of-contract/offboarding data handling (`docs/privacy-end-of-contract-data-handling.md`)
 - aggiunto runbook repo-specifico per breach escalation e incident path privacy (`docs/privacy-breach-escalation.md`)
 - aggiunto indice repo-specifico degli screening DPIA e dei trigger di riapertura (`docs/privacy-dpia-index.md`)
+- aggiunto piano operativo repo-specifico per decommission del Firestore legacy `(default)` (`docs/firestore-default-legacy-decommission-plan.md`)
 - aggiunto questo review doc
 - ampliato l'hub `/admin/compliance` per includere baseline condivisa + repo docs GDPR necessari
 - aggiunti `focus` e `objective` per ogni documento mostrato nell'hub

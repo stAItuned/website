@@ -1,6 +1,6 @@
 # GDPR Management Execution Plan
 
-UpdatedAt: 2026-03-26
+UpdatedAt: 2026-03-27
 
 ## Plan Metadata
 
@@ -30,6 +30,7 @@ UpdatedAt: 2026-03-26
 | Breach escalation path | `done` | `docs/privacy-breach-escalation.md` or runbook equivalent | `P2` |
 | DPIA index and re-open triggers | `done` | `docs/privacy-dpia-index.md` | `P2` |
 | Hub/admin alignment | `done` | `/admin/compliance` document set | `P1` |
+| Legacy Firestore decommission | `in-progress` | `docs/firestore-default-legacy-decommission-plan.md` | `P1` |
 
 ## Workstream 1. Lawful Basis Matrix
 
@@ -206,6 +207,37 @@ UpdatedAt: 2026-03-26
   - `components/admin/AdminComplianceDocs.tsx`
 - Next step: nessuno per WS7; trattare `/admin/compliance` come source-of-truth interno a livelli per baseline condivisa, governance, operations ed evidence
 
+## Workstream 8. Legacy Firestore `(default)` Decommission
+
+- Status: `in-progress`
+- Scope: chiudere in modo controllato il lifecycle del database Firestore legacy `(default)` rimasto in `NAM5` dopo il cutover del main runtime su `eu-primary`
+- Target deliverable: `docs/firestore-default-legacy-decommission-plan.md`
+- Inputs:
+  - `docs/privacy-subprocessors-register.md`
+  - `docs/privacy-transfer-assessment.md`
+  - `docs/deployments.md`
+  - smoke evidence su `eu-primary`
+  - export path e audit finale del database legacy
+- Definition of done:
+  - il legacy database e auditato
+  - esiste export finale verificato
+  - esiste decisione go/no-go esplicita prima della delete
+  - la documentazione privacy/ops riflette lo stato finale del legacy
+  - `/admin/compliance` espone il runbook di decommission
+- Strategie possibili:
+  - `Strategia A - delete immediata dopo cutover`: chiudere rapidamente il legacy DB appena il main runtime EU e stabile. Pro: riduce subito il rischio di rientro. Contro: troppo fragile se esistono dipendenze manuali o script non mappati.
+  - `Strategia B - freeze + audit + export + delete`: introdurre una fase esplicita di audit finale, export verificato e go/no-go prima del delete. Pro: e la strategia piu robusta e auditabile. Contro: richiede una wave operativa in piu.
+  - `Strategia C - legacy retained indefinitely`: lasciare il database legacy acceso ma non usato. Pro: zero rischio distruttivo immediato. Contro: lascia aperto un rischio di residency/transfer non necessario e indebolisce la posture GDPR.
+- Strategia consigliata: `Strategia B`, con delete solo dopo audit finale e finestra operativa controllata.
+- Evidence:
+  - `docs/firestore-default-legacy-decommission-plan.md`
+  - `scripts/smoke-firestore-main.ts`
+  - final export evidence del legacy DB
+- Next step:
+  - eseguire legacy audit
+  - registrare export finale
+  - produrre decisione go/no-go prima di qualsiasi delete
+
 ## Progress Log
 
 ### 2026-03-26
@@ -222,6 +254,22 @@ UpdatedAt: 2026-03-26
 - WS5 chiuso con Strategia A: creato `docs/privacy-breach-escalation.md` con trigger, owner, incident record minimo e decision path privacy/legal
 - WS6 chiuso con Strategia A: creato `docs/privacy-dpia-index.md` per centralizzare screening attivi, stato dei flow e trigger di riapertura
 - WS7 chiuso con Strategia C: `/admin/compliance` confermato come hub a livelli completo per baseline condivisa, governance repo, operations ed evidence
+
+### 2026-03-27
+
+- formalizzato `WS8` per il decommission del Firestore legacy `(default)` dopo il cutover del main runtime su `eu-primary`
+- aggiunto piano operativo dedicato:
+  - `docs/firestore-default-legacy-decommission-plan.md`
+- chiuso il blocker di codice sul package `functions`, che prima inizializzava Firestore senza `databaseId` e quindi sarebbe ricaduto sul legacy `(default)`
+- raccolta evidenza GCP completata su identita database e export legacy:
+  - `(default)` confermato in `nam5`
+  - `eu-primary` confermato in `europe-west1`
+  - export finale legacy verificato in `gs://staituned-firestore-export-us/firestore-export-final-20260327-121729`
+  - copia archivio EU verificata in `gs://staituned-firestore-archive-eu/firestore-export-final-20260327-121729`
+- inventory top-level comparativo completato con `scripts/audit-firestore-database.ts`:
+  - `(default)` e `eu-primary` mostrano gli stessi `21` collection paths e `4633` document refs enumerati
+- decisione corrente: `no-go for now` finche non viene chiusa la conferma finale su manual ops / console usage prima della delete
+- `WS8` resta `in-progress` fino a audit finale, export verificato e decisione go/no-go prima della delete
 
 ## Update Checklist For Each Future Step
 

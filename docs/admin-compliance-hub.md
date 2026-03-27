@@ -1,6 +1,6 @@
 # Admin Compliance Hub (`/admin/compliance`)
 
-UpdatedAt: 2026-03-26
+UpdatedAt: 2026-03-27
 
 ## Purpose and Scope
 
@@ -53,6 +53,7 @@ Documenti letti dal pacchetto condiviso `/Users/moltisantid/Personal/repo_templa
 
 - `docs/privacy-retention-schedule.md`
 - `docs/privacy-breach-escalation.md`
+- `docs/firestore-default-legacy-decommission-plan.md`
 - `docs/runbooks/dsar-account-deletion.md`
 - `docs/runbooks/retention-lifecycle.md`
 
@@ -102,6 +103,7 @@ Documenti letti dal pacchetto condiviso `/Users/moltisantid/Personal/repo_templa
 - Per `docs/privacy-end-of-contract-data-handling.md`, l'hub espone il documento di raccordo che spiega cosa succede ai dati tra account deletion, retention expiry, unsubscribe/offboarding e legal exception.
 - Per `docs/privacy-dpia-index.md`, l'hub espone l'indice centrale degli screening DPIA e dei trigger di riapertura, senza duplicare il contenuto dei singoli assessment.
 - Per `docs/privacy-breach-escalation.md`, l'hub espone il runbook GDPR per incidenti privacy e breach candidate, con trigger, owner e decision path di escalation.
+- Per `docs/firestore-default-legacy-decommission-plan.md`, l'hub espone il piano operativo che governa audit, export finale, go/no-go e delete del Firestore legacy `(default)` rimasto in `NAM5` dopo il cutover EU.
 
 ## PWA / SEO / Bilingual Impact
 

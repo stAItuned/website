@@ -281,6 +281,16 @@ const COMPLIANCE_DOCS: ComplianceDocDefinition[] = [
     source: 'repo',
   },
   {
+    id: 'firestore-default-legacy-decommission-plan',
+    title: 'Firestore Legacy Decommission Plan',
+    description: 'Piano operativo per audit, export finale e decommission del Firestore `(default)` legacy.',
+    focus: 'Freeze, legacy audit, export verificato, go/no-go e finestra distruttiva del database US non piu usato dal main runtime.',
+    objective: 'Evitare che il datastore legacy in `NAM5` venga lasciato indefinitamente aperto o cancellato senza rollback ed evidenza operativa.',
+    path: 'docs/firestore-default-legacy-decommission-plan.md',
+    category: 'gdpr-operations',
+    source: 'repo',
+  },
+  {
     id: 'gdpr-feature-checklist',
     title: 'GDPR Feature Checklist',
     description: 'Gate operativo GDPR con review dei workstream e decisioni di approvazione.',

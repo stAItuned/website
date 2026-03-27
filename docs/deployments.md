@@ -31,6 +31,7 @@ Using Firebase CLI directly:
 - Firestore main runtime cutover:
   - `FIRESTORE_MAIN_DATABASE_ID=eu-primary`
   - `NEXT_PUBLIC_FIRESTORE_MAIN_DATABASE_ID=eu-primary`
+- The same `FIRESTORE_MAIN_DATABASE_ID=eu-primary` setting must also be present for Firebase Functions deployments, otherwise the `functions` package can fall back to the legacy Firestore database path.
 - The main app layer must not point back to Firestore `(default)`. The current repo code treats `(default)` as a blocked legacy database for the main runtime path.
 
 ## Build-Time Firestore Note

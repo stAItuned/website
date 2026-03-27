@@ -8,6 +8,29 @@ UpdatedAt: 2026-03-27
 - Ogni entry deve citare workstream e superfici impattate (API, form, legal copy, dataset, vendor).
 - Nessuna release privacy-related deve chiudersi senza update di questo file.
 
+## 2026-03-27 (Firestore legacy `(default)` decommission planning)
+
+- Formalizzato il workstream operativo per la chiusura del Firestore legacy `(default)` rimasto in `NAM5` dopo il cutover del main runtime verso `eu-primary`.
+- Aggiunto piano dedicato:
+  - `docs/firestore-default-legacy-decommission-plan.md`
+- Chiuso il blocker di codice residuo nel package `functions`, che inizializzava Firestore senza `databaseId` e avrebbe continuato a usare il `(default)` deployabile.
+- Raccolta evidenza GCP completata:
+  - `(default)` confermato in `nam5`
+  - `eu-primary` confermato in `europe-west1`
+  - export finale legacy verificato in `gs://staituned-firestore-export-us/firestore-export-final-20260327-121729`
+  - copia archivio EU verificata in `gs://staituned-firestore-archive-eu/firestore-export-final-20260327-121729`
+- Aggiunto audit script repo-local per inventory Firestore:
+  - `scripts/audit-firestore-database.ts`
+- Inventory top-level comparativo eseguito su `(default)` ed `eu-primary`:
+  - stesso numero di collection paths (`21`)
+  - stesso numero di document refs enumerati (`4633`)
+  - nessun delta osservato a livello top-level
+- Il gate finale di decommission resta comunque aperto: stato corrente `no-go for now` finche non viene chiuso il deep inventory/manual-ops check prima della delete.
+- Aggiornati gli artifact di tracking GDPR:
+  - `docs/gdpr-management-execution-plan-2026-03-26.md`
+  - `docs/gdpr-management-review-2026-03-26.md`
+- Aggiornato `/admin/compliance` per esporre anche il piano di decommission del legacy database come runbook operativo GDPR.
+
 ## 2026-03-27 (Firestore main database switch smoke test)
 
 - Aggiunto smoke test operativo read-only per validare il puntamento del database Firestore principale tramite il layer del repo:
