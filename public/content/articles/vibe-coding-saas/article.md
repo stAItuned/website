@@ -1,6 +1,6 @@
 ---
 title: 'Vibe coding gets you a demo, not a production SaaS'
-author: Daniele Moltisanti
+author: Salvatore Arancio Febbo
 target: Midway
 language: English
 meta: >-
