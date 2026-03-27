@@ -28,6 +28,10 @@ Using Firebase CLI directly:
 ## Environment/Secrets Notes
 - Keep test/staging integrations isolated from production (tokens, webhooks, analytics IDs).
 - If full data isolation is required, create a separate Firebase project and map a new project alias + targets in `.firebaserc`.
+- Firestore main runtime cutover:
+  - `FIRESTORE_MAIN_DATABASE_ID=eu-primary`
+  - `NEXT_PUBLIC_FIRESTORE_MAIN_DATABASE_ID=eu-primary`
+- The main app layer must not point back to Firestore `(default)`. The current repo code treats `(default)` as a blocked legacy database for the main runtime path.
 
 ## Build-Time Firestore Note
 `next build` can prerender Server Components for static routes. If your build environment has restricted DNS/egress, Firestore (Admin SDK) calls can fail with `14 UNAVAILABLE` (name resolution).

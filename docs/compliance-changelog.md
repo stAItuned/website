@@ -1,12 +1,100 @@
 # Compliance Changelog
 
-UpdatedAt: 2026-03-24
+UpdatedAt: 2026-03-27
 
 ## Maintenance Rules
 
 - Aggiungere una entry per ogni wave GDPR/privacy-related.
 - Ogni entry deve citare workstream e superfici impattate (API, form, legal copy, dataset, vendor).
 - Nessuna release privacy-related deve chiudersi senza update di questo file.
+
+## 2026-03-27 (Firestore main database switch smoke test)
+
+- Aggiunto smoke test operativo read-only per validare il puntamento del database Firestore principale tramite il layer del repo:
+  - `scripts/smoke-firestore-main.ts`
+- Lo smoke test usa `dbDefault()` e quindi verifica realmente l'effetto di:
+  - `FIRESTORE_MAIN_DATABASE_ID`
+  - credenziali Admin attive del repo
+- Aggiunto comando rapido:
+  - `npm run smoke:firestore-main`
+- Scope del controllo:
+  - `config/ai_settings`
+  - `analytics/daily`
+  - sample read su collection `articles`
+  - sample read su collection `users`
+
+## 2026-03-27 (Firestore EU main-database hard cutover)
+
+- Il layer Firestore principale non usa piu il fallback al database legacy `(default)` in US.
+- `lib/firebase/admin.ts` ora tratta `eu-primary` come database main canonico e blocca esplicitamente `FIRESTORE_MAIN_DATABASE_ID=(default)`.
+- `lib/firebase/client.ts` ora tratta `eu-primary` come database main canonico e blocca esplicitamente `NEXT_PUBLIC_FIRESTORE_MAIN_DATABASE_ID=(default)`.
+- Riallineato lo script operativo di push token test:
+  - `scripts/send-test-to-token.js`
+- Aggiornati gli artifact GDPR repo-local per riflettere il cambio di residency del datastore principale:
+  - `docs/privacy-subprocessors-register.md`
+  - `docs/privacy-transfer-assessment.md`
+
+## 2026-03-26 (GDPR governance source-stack hardening)
+
+- La skill locale `gdpr-feature-gate` ora richiede revisione obbligatoria contro il pacchetto condiviso `repo_template/docs/04-privacy-gdpr` prima della verifica repo-specifica.
+- Introdotta gerarchia formale delle fonti GDPR con modalita esplicite `full_mode` e `degraded_mode`.
+- Aggiunto documento operativo:
+  - `docs/gdpr-review-source-stack.md`
+- Rafforzato il checklist repo-driven con enforcement su source-stack review e blocco dei cambi high-risk se il pacchetto condiviso non e disponibile.
+
+## 2026-03-26 (GDPR management review and admin compliance hub expansion)
+
+- Aggiunta review end-to-end dello stato GDPR del repo:
+  - `docs/gdpr-management-review-2026-03-26.md`
+- Aggiunto piano esecutivo di tracciamento per i gap residui:
+  - `docs/gdpr-management-execution-plan-2026-03-26.md`
+- Avviato `WS1 / Strategia A` con matrice repo-specifica delle basi giuridiche:
+  - `docs/privacy-lawful-basis-matrix.md`
+- Chiuso `WS1 / Strategia A` con purpose split canonico:
+  - inventory flow-level riallineata a riferimenti purpose-level
+  - legal copy aggiornata dove il wording aggregato restava ambiguo
+- Chiuso `WS2 / Strategia A` con registro repo-specifico vendor/subprocessors:
+  - `docs/privacy-subprocessors-register.md`
+  - owner, transfer implication e `DPA status` esplicitati anche dove ancora `TBD`
+- Chiuso `WS3 / Strategia B` con transfer assessment scenario-based:
+  - `docs/privacy-transfer-assessment.md`
+  - scenari reali di trasferimento, accesso in chiaro, controlli supplementari, escalation e rischio residuo espliciti
+- Chiuso `WS4 / Strategia A` con documento repo-specifico di end-of-contract handling:
+  - `docs/privacy-end-of-contract-data-handling.md`
+  - distinti account deletion, retention expiry, channel offboarding e legal exception sui contributor agreement
+- Chiuso `WS5 / Strategia A` con runbook repo-specifico per incidenti privacy e breach candidate:
+  - `docs/privacy-breach-escalation.md`
+  - definiti trigger, owner, incident record minimo, severity guidance e decision path privacy/legal
+- Chiuso `WS6 / Strategia A` con indice centrale degli screening DPIA:
+  - `docs/privacy-dpia-index.md`
+  - mappati flow, stato screening, source artifact e trigger di riapertura senza duplicare gli assessment dedicati
+- Chiuso `WS7 / Strategia C` con consolidamento dell'hub `/admin/compliance`:
+  - tassonomia stabile `baseline / governance / operations / evidence / AI Act related`
+  - hub confermato come source-of-truth interno per il source stack GDPR del repo
+- `/admin/compliance` ora espone l'intero source stack GDPR necessario:
+  - baseline condivisa `repo_template/docs/04-privacy-gdpr`
+  - artefatti repo-specifici di governance, operations ed evidence
+- Ogni documento dell'hub ora espone anche:
+  - `focus`
+  - `objective`
+  - `category`
+  - `source`
+- Aggiornata la documentazione dell'hub:
+  - `docs/admin-compliance-hub.md`
+
+## 2026-03-26 (Vendor register and notification cleanup)
+
+- Rimossa integrazione runtime Slack dal feedback flow:
+  - `app/api/feedbacks/route.ts`
+  - `app/api/feedbacks/route.test.ts`
+- Riallineati i documenti GDPR correnti rimuovendo `Slack` dal runtime register e dagli scenari di transfer:
+  - `docs/privacy-processing-inventory.md`
+  - `docs/privacy-subprocessors-register.md`
+  - `docs/privacy-transfer-assessment.md`
+  - `docs/gdpr-management-review-2026-03-26.md`
+- Rimossa `Stripe` dalle note legali/compliance correnti dove non esiste evidenza runtime attiva:
+  - `lib/i18n/legal-translations.ts`
+  - `docs/gdpr-feature-checklist.md`
 
 ## 2026-03-22
 

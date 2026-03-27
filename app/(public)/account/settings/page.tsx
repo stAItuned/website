@@ -2,9 +2,9 @@
 
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '@/components/auth/AuthContext'
-import { app } from '@/lib/firebase/client'
+import { getClientDbMain } from '@/lib/firebase/client'
 import { useWriterStatus } from '@/components/auth/WriterStatusContext'
 import { AgreementModal } from '@/components/account/AgreementModal'
 import { AccountSettingsLoading } from '@/components/account/settings/AccountSettingsLoading'
@@ -115,7 +115,7 @@ function AccountSettingsContent() {
     const fetchUserData = async () => {
       if (!user) return
       try {
-        const db = getFirestore(app)
+        const db = getClientDbMain()
         const userDocRef = doc(db, 'users', user.uid)
         const userDoc = await getDoc(userDocRef)
         if (userDoc.exists()) {

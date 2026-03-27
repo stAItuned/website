@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/auth/AuthContext'
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
-import { app } from '@/lib/firebase/client'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { getClientDbMain } from '@/lib/firebase/client'
 
 import { PRICING } from '@/lib/ai/pricing'
 
@@ -27,7 +27,7 @@ export function AdminModelConfig() {
         const fetchConfig = async () => {
             if (!user) return
             try {
-                const db = getFirestore(app)
+                const db = getClientDbMain()
                 const docRef = doc(db, 'config', 'ai_settings')
                 const snapshot = await getDoc(docRef)
                 if (snapshot.exists() && snapshot.data().geminiModel) {
@@ -46,7 +46,7 @@ export function AdminModelConfig() {
         if (!user) return
         setSaving(true)
         try {
-            const db = getFirestore(app)
+            const db = getClientDbMain()
             await setDoc(doc(db, 'config', 'ai_settings'), {
                 geminiModel: modelId,
                 updatedAt: new Date().toISOString(),

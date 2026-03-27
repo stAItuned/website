@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/auth/AuthContext'
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
-import { app } from '@/lib/firebase/client'
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
+import { getClientDbMain } from '@/lib/firebase/client'
 import { trackBookmarkAdded, trackBookmarkRemoved } from '@/lib/analytics'
 import { event } from '@/lib/gtag'
 import { useToast } from './ui/Toast'
@@ -25,7 +25,7 @@ export function BookmarkButton({ articleSlug, className = '', showCount = false 
         if (user) {
             const checkBookmark = async () => {
                 try {
-                    const db = getFirestore(app)
+                    const db = getClientDbMain()
                     const userDocRef = doc(db, 'users', user.uid)
                     const userDoc = await getDoc(userDocRef)
 
@@ -54,7 +54,7 @@ export function BookmarkButton({ articleSlug, className = '', showCount = false 
 
         setLoading(true)
         try {
-            const db = getFirestore(app)
+            const db = getClientDbMain()
             const userDocRef = doc(db, 'users', user.uid)
             const articleStatsRef = doc(db, 'articleStats', articleSlug)
 

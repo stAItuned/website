@@ -5,10 +5,10 @@ import type { ComponentProps } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '@/components/auth/AuthContext'
 import { useWriterStatus } from '@/components/auth/WriterStatusContext'
-import { app } from '@/lib/firebase/client'
+import { getClientDbMain } from '@/lib/firebase/client'
 import { ArticleCard } from '@/components/ArticleCard'
 import { resolveProfileIdentity } from '@/lib/auth/profileIdentity'
 import { BookMarked, Compass, Home, Sparkles } from 'lucide-react'
@@ -43,7 +43,7 @@ export default function BookmarksPage() {
       if (!user) return
 
       try {
-        const db = getFirestore(app)
+        const db = getClientDbMain()
         const userDocRef = doc(db, 'users', user.uid)
         const userDoc = await getDoc(userDocRef)
 

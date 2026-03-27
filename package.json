@@ -10,6 +10,7 @@
 		"contentlayer:build:safe": "node scripts/contentlayer-build-safe.mjs",
 		"dev": "next dev --turbo",
 		"dev:poll": "cross-env CHOKIDAR_USEPOLLING=true CHOKIDAR_INTERVAL=100 next dev --turbo",
+		"smoke:firestore-main": "tsx scripts/smoke-firestore-main.ts",
 		"prebuild": "rm -f tsconfig-next.tsbuildinfo",
 		"build": "next build --turbopack",
 		"typecheck": "tsc --noEmit",

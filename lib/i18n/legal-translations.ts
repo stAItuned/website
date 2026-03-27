@@ -160,7 +160,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     subsections: [
                         {
                             title: 'Provider di pagamento:',
-                            content: 'i pagamenti possono essere gestiti tramite fornitori terzi (es. Stripe e/o PayPal) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.'
+                            content: 'i pagamenti possono essere gestiti tramite fornitori terzi (es. PayPal) attraverso link o checkout esterni. In questi casi, alcuni dati necessari alla transazione (es. importo, identificativi tecnici e dati di pagamento) sono trattati dal provider secondo i propri termini e informative.'
                         },
                         {
                             title: 'Garanzia Soddisfatti o Rimborsati (ove applicabile):',
@@ -260,7 +260,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per migliorare il servizio, personalizzare eventuali comunicazioni di follow-up e analizzare tendenze aggregate. I record del Role Fit Audit sono conservati per 12 mesi, salvo obblighi di legge.'
+                        content: 'Raccogliamo email, nome (opzionale), link social (opzionale) e le risposte al questionario per generare il report personalizzato richiesto. Le tue risposte e i risultati dell\'audit sono accessibili al team amministrativo di stAItuned per erogare il report, gestire follow-up di servizio strettamente collegati alla richiesta e analizzare tendenze aggregate. Eventuali comunicazioni marketing restano separate e dipendono da un consenso dedicato. I record del Role Fit Audit sono conservati per 12 mesi, salvo obblighi di legge.'
                     },
                     {
                         title: 'Waitlist Career OS',
@@ -268,15 +268,15 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Career OS Apply',
-                        content: 'Nel form Career OS Apply raccogliamo nome, email, telefono opzionale, background professionale e informazioni orientative sul tuo obiettivo. I dati sono usati per valutare l\'intake precontrattuale, organizzare follow-up e gestire la candidatura in modo strutturato.'
+                        content: 'Nel form Career OS Apply raccogliamo nome, email, telefono opzionale, background professionale e informazioni orientative sul tuo obiettivo. I dati sono usati per valutare l\'intake precontrattuale, organizzare il follow-up collegato alla candidatura e gestire la domanda in modo strutturato. Eventuali comunicazioni non strettamente legate alla candidatura richiedono una base separata.'
                     },
                     {
                         title: 'Career OS Audit Request',
-                        content: 'Nel form Career OS Audit raccogliamo nome, email, eventuale telefono e il dubbio principale espresso. Il trattamento serve per analizzare la richiesta, proporre supporto orientativo e ricontattarti sul percorso richiesto.'
+                        content: 'Nel form Career OS Audit raccogliamo nome, email, eventuale telefono e il dubbio principale espresso. Il trattamento serve per analizzare la richiesta, proporre supporto orientativo e ricontattarti sul percorso richiesto. Eventuali comunicazioni ulteriori non necessarie alla gestione della richiesta restano separate.'
                     },
                     {
                         title: 'AI EU Act Lead e accesso risorse',
-                        content: 'Nel flusso AI EU Act raccogliamo nome, email, ruolo, azienda (opzionale), consensi e metadati tecnici minimi (es. hash IP, source). Generiamo un token tecnico temporaneo per consentire accesso alle risorse richieste e prevenire accessi non autorizzati.'
+                        content: 'Nel flusso AI EU Act raccogliamo nome, email, ruolo, azienda (opzionale), consensi e metadati tecnici minimi (es. hash IP, source). Usiamo questi dati per fornire accesso alle risorse richieste; in parallelo generiamo un token tecnico temporaneo per controllare l\'accesso e prevenire abusi. Eventuali follow-up marketing restano separati e dipendono dal consenso dedicato.'
                     },
                     {
                         title: 'Accesso Amministrativo ai Dati',
@@ -294,7 +294,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             legalBase: {
                 title: 'Base giuridica, trasferimenti e destinatari',
-                content1: 'Il trattamento avviene su base di consenso (art. 6 GDPR) per marketing e analisi, mentre per la risposta alle richieste commerciali e per l\'erogazione dei servizi ci basiamo sul legittimo interesse.',
+                content1: 'Il trattamento si basa su piu basi giuridiche a seconda della finalita: consenso per analytics, marketing opzionale e flussi che richiedono un opt-in esplicito; misure precontrattuali quando ci chiedi una valutazione o un contatto orientato a un possibile servizio; legittimo interesse per rispondere a richieste inbound, gestire follow-up operativi strettamente collegati al servizio richiesto e applicare misure tecniche di sicurezza e access control.',
                 content2: 'Non vendiamo dati a terzi e li condividiamo solo con fornitori necessari al funzionamento del sito.',
                 recipientsTitle: 'Possibili destinatari/categorie:',
                 recipients: [
@@ -305,8 +305,8 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'Misurazione audience first-party su infrastruttura Firebase (conteggio visualizzazioni articoli)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
-                    'Payments (Stripe, PayPal)',
-                    'Feedback tools (Telegram/Slack)',
+                    'Payments (PayPal)',
+                    'Operational notifications (Telegram)',
                     'Static resources (Google Fonts)'
                 ]
             },
@@ -366,7 +366,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             thirdPartiesSection: {
                 title: 'Terze parti',
-                content1: 'Collaboriamo con partner come Google, Telegram e Stripe per offrire i nostri servizi.',
+                content1: 'Collaboriamo con partner come Google, Telegram e PayPal per offrire i nostri servizi.',
                 content2: 'Non vendiamo informazioni e limitiamo gli scambi al minimo necessario.'
             },
             footerTitle: 'Hai bisogno di altri dettagli?',
@@ -425,7 +425,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     subsections: [
                         {
                             title: 'Payment Providers:',
-                            content: 'Payments may be handled through third-party providers (e.g., Stripe and/or PayPal) via external links or checkouts. In these cases, some data necessary for the transaction (e.g., amount, technical identifiers, and payment data) are processed by the provider according to their own terms.'
+                            content: 'Payments may be handled through third-party providers (e.g., PayPal) via external links or checkouts. In these cases, some data necessary for the transaction (e.g., amount, technical identifiers, and payment data) are processed by the provider according to their own terms.'
                         },
                         {
                             title: 'Money-Back Guarantee (where applicable):',
@@ -525,7 +525,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Role Fit Audit',
-                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the personalized report. Your responses and audit results are accessible to the stAItuned administrative team to improve the service, personalize any follow-up communications, and analyze aggregate trends. Role Fit Audit records are retained for 12 months unless legal obligations require otherwise.'
+                        content: 'We collect email, name (optional), social links (optional), and questionnaire responses to generate the requested personalized report. Your responses and audit results are accessible to the stAItuned administrative team to deliver the report, handle service-related follow-up strictly connected to the request, and analyze aggregate trends. Any marketing communication remains separate and depends on dedicated consent. Role Fit Audit records are retained for 12 months unless legal obligations require otherwise.'
                     },
                     {
                         title: 'Career OS Waitlist',
@@ -533,15 +533,15 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Career OS Apply',
-                        content: 'In the Career OS Apply form, we collect name, email, optional phone, professional background, and orientation details about your target role. This data is used for pre-contractual intake assessment, structured follow-up, and application handling.'
+                        content: 'In the Career OS Apply form, we collect name, email, optional phone, professional background, and orientation details about your target role. This data is used for pre-contractual intake assessment, follow-up tied to the application, and structured application handling. Any communication not strictly related to the application requires a separate basis.'
                     },
                     {
                         title: 'Career OS Audit Request',
-                        content: 'In the Career OS Audit form, we collect name, email, optional phone, and your main doubt/request. Processing is used to assess the request, provide orientation support, and contact you regarding the requested path.'
+                        content: 'In the Career OS Audit form, we collect name, email, optional phone, and your main doubt/request. Processing is used to assess the request, provide orientation support, and contact you regarding the requested path. Any additional communication not necessary to handle the request remains separate.'
                     },
                     {
                         title: 'AI EU Act Lead and resources access',
-                        content: 'In the AI EU Act flow, we collect name, email, role, optional company, consent flags, and minimal technical metadata (e.g., IP hash, source). We generate a temporary technical token to grant access to requested resources and prevent unauthorized access.'
+                        content: 'In the AI EU Act flow, we collect name, email, role, optional company, consent flags, and minimal technical metadata (e.g., IP hash, source). We use this data to provide access to the requested resources; in parallel, we generate a temporary technical token to control access and prevent abuse. Any marketing follow-up remains separate and depends on dedicated consent.'
                     },
                     {
                         title: 'Administrative Access to Data',
@@ -559,7 +559,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             legalBase: {
                 title: 'Legal Basis, Transfers, and Recipients',
-                content1: 'Processing is based on consent (Art. 6 GDPR) for marketing and analysis, and legitimate interest for responding to business requests and service delivery.',
+                content1: 'Processing relies on different lawful bases depending on the purpose: consent for analytics, optional marketing, and flows that require explicit opt-in; pre-contract steps when you ask us to evaluate or contact you about a possible service; and legitimate interest for replying to inbound requests, handling service-related operational follow-up, and applying technical security and access-control measures.',
                 content2: 'We do not sell data to third parties and share it only with providers necessary for site operations.',
                 recipientsTitle: 'Possible recipients/categories:',
                 recipients: [
@@ -570,8 +570,8 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'First-party audience measurement on Firebase infrastructure (article view counting)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
-                    'Payments (Stripe, PayPal)',
-                    'Feedback tools (Telegram/Slack)',
+                    'Payments (PayPal)',
+                    'Operational notifications (Telegram)',
                     'Static resources (Google Fonts)'
                 ]
             },
@@ -631,7 +631,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             },
             thirdPartiesSection: {
                 title: 'Third Parties',
-                content1: 'We collaborate with partners like Google, Telegram, and Stripe to offer our services.',
+                content1: 'We collaborate with partners like Google, Telegram, and PayPal to offer our services.',
                 content2: 'We do not sell information and limit exchanges to the minimum necessary.'
             },
             footerTitle: 'Need More Details?',

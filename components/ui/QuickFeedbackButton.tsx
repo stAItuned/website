@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { event } from '@/lib/gtag'
-import { getFirestore, collection, addDoc } from 'firebase/firestore'
-import { app } from '@/lib/firebase/client'
+import { collection, addDoc } from 'firebase/firestore'
+import { getClientDbMain } from '@/lib/firebase/client'
 
 interface QuickFeedbackButtonProps {
   articleSlug: string
@@ -66,7 +66,7 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
 
     // Also save to Firestore for analytics
     try {
-      const db = getFirestore(app)
+      const db = getClientDbMain()
       await addDoc(collection(db, 'article_feedback'), {
         articleSlug,
         articleTitle,
@@ -130,7 +130,7 @@ export function QuickFeedbackButton({ articleSlug, articleTitle }: QuickFeedback
 
     // Also save to Firestore for analytics
     try {
-      const db = getFirestore(app)
+      const db = getClientDbMain()
       await addDoc(collection(db, 'article_feedback'), {
         articleSlug,
         articleTitle,

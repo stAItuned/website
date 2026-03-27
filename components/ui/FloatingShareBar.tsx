@@ -5,8 +5,8 @@ import { event } from '@/lib/gtag'
 import { trackArticleShare, trackArticleCopyLink, trackBookmarkAdded, trackBookmarkRemoved, trackLikeAdded, trackLikeRemoved } from '@/lib/analytics'
 import { useToast } from '@/components/ui/Toast'
 import { useAuth } from '@/components/auth/AuthContext'
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
-import { app } from '@/lib/firebase/client'
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
+import { getClientDbMain } from '@/lib/firebase/client'
 import Link from 'next/link'
 
 interface FloatingShareBarProps {
@@ -119,7 +119,7 @@ export function FloatingShareBar(props: FloatingShareBarProps) {
     if (user) {
       const checkBookmark = async () => {
         try {
-          const db = getFirestore(app)
+          const db = getClientDbMain()
           const userDocRef = doc(db, 'users', user.uid)
           const userDoc = await getDoc(userDocRef)
 
@@ -139,7 +139,7 @@ export function FloatingShareBar(props: FloatingShareBarProps) {
     // Fetch bookmark count for this article
     const fetchBookmarkCount = async () => {
       try {
-        const db = getFirestore(app)
+        const db = getClientDbMain()
         const articleStatsRef = doc(db, 'articleStats', articleSlug)
         const articleStatsDoc = await getDoc(articleStatsRef)
 
@@ -219,7 +219,7 @@ export function FloatingShareBar(props: FloatingShareBarProps) {
     }
 
     try {
-      const db = getFirestore(app)
+      const db = getClientDbMain()
       const userDocRef = doc(db, 'users', user.uid)
       const articleStatsRef = doc(db, 'articleStats', articleSlug)
 

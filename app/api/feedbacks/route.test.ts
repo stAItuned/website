@@ -27,36 +27,14 @@ function createReq(body: unknown): NextRequest {
 }
 
 describe('api/feedbacks route', () => {
-  const hadSlackWebhook = Object.prototype.hasOwnProperty.call(
-    process.env,
-    'SLACK_WEBHOOK_FEEDBACK'
-  )
-  const originalSlackWebhook = process.env.SLACK_WEBHOOK_FEEDBACK
-
-  function restoreSlackWebhookEnv() {
-    if (!hadSlackWebhook) {
-      delete process.env.SLACK_WEBHOOK_FEEDBACK
-      return
-    }
-
-    if (typeof originalSlackWebhook === 'string') {
-      process.env.SLACK_WEBHOOK_FEEDBACK = originalSlackWebhook
-      return
-    }
-
-    delete process.env.SLACK_WEBHOOK_FEEDBACK
-  }
-
   beforeEach(() => {
     vi.resetAllMocks()
     const add = vi.fn(async () => ({ id: 'feedback_123' }))
     const collection = vi.fn(() => ({ add }))
     vi.mocked(db).mockReturnValue({ collection } as unknown as ReturnType<typeof db>)
-    restoreSlackWebhookEnv()
   })
 
   afterEach(() => {
-    restoreSlackWebhookEnv()
     vi.unstubAllGlobals()
   })
 
@@ -120,30 +98,6 @@ describe('api/feedbacks route', () => {
       expect.objectContaining({
         eventType: 'feedback_submitted',
       }),
-    )
-  })
-
-  it('forwards feedback to Slack when webhook is configured', async () => {
-    process.env.SLACK_WEBHOOK_FEEDBACK = 'https://hooks.slack.test'
-
-    const fetchMock = vi.fn(async () => ({ ok: true }))
-    vi.stubGlobal('fetch', fetchMock)
-
-    const response = await POST(
-      createReq({
-        category: 'idea',
-        message: 'Add a dark mode toggle.',
-        page: '/it',
-        consent: true,
-        website: '',
-      })
-    )
-
-    expect(response.status).toBe(200)
-    await expect(response.json()).resolves.toEqual({ ok: true })
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://hooks.slack.test',
-      expect.objectContaining({ method: 'POST' })
     )
   })
 })

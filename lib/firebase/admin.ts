@@ -8,6 +8,10 @@ let cachedDb: Firestore | null = null;
 let cachedDbDefault: Firestore | null = null;
 let cachedStorage: Storage | null = null;
 
+const ROLE_FIT_AUDIT_DATABASE_ID = 'role-fit-audit';
+const LEGACY_FIRESTORE_DATABASE_ID = '(default)';
+const MAIN_FIRESTORE_DATABASE_ID = 'eu-primary';
+
 type ServiceAccountLike = {
   project_id?: string;
   [key: string]: unknown;
@@ -106,7 +110,7 @@ function getDb(): Firestore {
     return cachedDb;
   }
 
-  cachedDb = getFirestore(getFirebaseApp(), 'role-fit-audit');
+  cachedDb = getFirestore(getFirebaseApp(), ROLE_FIT_AUDIT_DATABASE_ID);
   try {
     cachedDb.settings({ ignoreUndefinedProperties: true });
   } catch (e) {
@@ -116,7 +120,8 @@ function getDb(): Firestore {
 }
 
 /**
- * Get the default Firestore database
+ * Get the main Firestore database for app data.
+ * Controlled by FIRESTORE_MAIN_DATABASE_ID and falls back to the default database.
  * Used for: analytics, articles, likes, page views
  */
 function getDbDefault(): Firestore {
@@ -124,7 +129,14 @@ function getDbDefault(): Firestore {
     return cachedDbDefault;
   }
 
-  cachedDbDefault = getFirestore(getFirebaseApp());
+  const databaseId = process.env.FIRESTORE_MAIN_DATABASE_ID || MAIN_FIRESTORE_DATABASE_ID;
+  if (databaseId === LEGACY_FIRESTORE_DATABASE_ID) {
+    throw new Error(
+      'FIRESTORE_MAIN_DATABASE_ID cannot point to "(default)". The main app database is now the EU named database "eu-primary".'
+    );
+  }
+
+  cachedDbDefault = getFirestore(getFirebaseApp(), databaseId);
   try {
     cachedDbDefault.settings({ ignoreUndefinedProperties: true });
   } catch (e) {

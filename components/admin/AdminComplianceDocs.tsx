@@ -5,17 +5,41 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useAuth } from '@/components/auth/AuthContext';
 
+type ComplianceDocCategory =
+  | 'gdpr-shared-baseline'
+  | 'gdpr-repo-governance'
+  | 'gdpr-operations'
+  | 'gdpr-evidence'
+  | 'ai-act-related';
+
 interface ComplianceDocSummary {
   id: string;
   title: string;
   description: string;
-  relativePath: string;
+  focus: string;
+  objective: string;
+  path: string;
+  category: ComplianceDocCategory;
+  source: 'shared-baseline' | 'repo';
   updatedAt: string;
 }
 
 interface ComplianceDocDetail extends ComplianceDocSummary {
   content: string;
 }
+
+const CATEGORY_LABELS: Record<ComplianceDocCategory, string> = {
+  'gdpr-shared-baseline': 'GDPR Shared Baseline',
+  'gdpr-repo-governance': 'GDPR Repo Governance',
+  'gdpr-operations': 'GDPR Operations',
+  'gdpr-evidence': 'GDPR Evidence',
+  'ai-act-related': 'AI Act Related',
+};
+
+const SOURCE_LABELS: Record<ComplianceDocSummary['source'], string> = {
+  'shared-baseline': 'Shared baseline',
+  repo: 'Repo',
+};
 
 export function AdminComplianceDocs() {
   const { user } = useAuth();
@@ -62,7 +86,7 @@ export function AdminComplianceDocs() {
       }
     };
 
-    loadDocs();
+    void loadDocs();
   }, [user]);
 
   useEffect(() => {
@@ -97,7 +121,7 @@ export function AdminComplianceDocs() {
       }
     };
 
-    loadDoc();
+    void loadDoc();
   }, [selectedDocId, user]);
 
   useEffect(() => {
@@ -111,7 +135,7 @@ export function AdminComplianceDocs() {
     const objectUrl = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     const fallbackFileName = `${selectedDoc.id}.md`;
-    const markdownFileName = selectedDoc.relativePath.split('/').pop() || fallbackFileName;
+    const markdownFileName = selectedDoc.path.split('/').pop() || fallbackFileName;
 
     anchor.href = objectUrl;
     anchor.download = markdownFileName;
@@ -141,6 +165,20 @@ export function AdminComplianceDocs() {
     return Number.isNaN(date.getTime()) ? 'N/A' : date.toLocaleString();
   };
 
+  const docsByCategory = docs.reduce<Record<ComplianceDocCategory, ComplianceDocSummary[]>>(
+    (groups, doc) => {
+      groups[doc.category].push(doc);
+      return groups;
+    },
+    {
+      'gdpr-shared-baseline': [],
+      'gdpr-repo-governance': [],
+      'gdpr-operations': [],
+      'gdpr-evidence': [],
+      'ai-act-related': [],
+    },
+  );
+
   if (loadingList) {
     return <div className="h-64 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" />;
   }
@@ -158,25 +196,49 @@ export function AdminComplianceDocs() {
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Compliance Docs
           </h2>
-          <div className="space-y-2">
-            {docs.map((doc) => {
-              const selected = selectedDocId === doc.id;
+          <div className="space-y-4">
+            {Object.entries(docsByCategory).map(([category, categoryDocs]) => {
+              if (categoryDocs.length === 0) return null;
+
               return (
-                <button
-                  key={doc.id}
-                  type="button"
-                  onClick={() => setSelectedDocId(doc.id)}
-                  className={[
-                    'w-full rounded-lg border p-3 text-left transition',
-                    selected
-                      ? 'border-primary-600 bg-primary-50 dark:border-primary-400 dark:bg-primary-500/10'
-                      : 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700/50',
-                  ].join(' ')}
-                >
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{doc.title}</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{doc.description}</p>
-                  <p className="mt-2 text-[11px] text-slate-400 dark:text-slate-500">{doc.relativePath}</p>
-                </button>
+                <section key={category} className="space-y-2">
+                  <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                    {CATEGORY_LABELS[category as ComplianceDocCategory]}
+                  </h3>
+                  <div className="space-y-2">
+                    {categoryDocs.map((doc) => {
+                      const selected = selectedDocId === doc.id;
+                      return (
+                        <button
+                          key={doc.id}
+                          type="button"
+                          onClick={() => setSelectedDocId(doc.id)}
+                          className={[
+                            'w-full rounded-lg border p-3 text-left transition',
+                            selected
+                              ? 'border-primary-600 bg-primary-50 dark:border-primary-400 dark:bg-primary-500/10'
+                              : 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700/50',
+                          ].join(' ')}
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="text-sm font-semibold text-slate-900 dark:text-white">{doc.title}</p>
+                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:bg-slate-700 dark:text-slate-300">
+                              {SOURCE_LABELS[doc.source]}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{doc.description}</p>
+                          <p className="mt-2 text-[11px] font-medium text-slate-600 dark:text-slate-300">
+                            Focus: <span className="font-normal">{doc.focus}</span>
+                          </p>
+                          <p className="mt-1 text-[11px] font-medium text-slate-600 dark:text-slate-300">
+                            Objective: <span className="font-normal">{doc.objective}</span>
+                          </p>
+                          <p className="mt-2 text-[11px] text-slate-400 dark:text-slate-500">{doc.path}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
               );
             })}
           </div>
@@ -192,8 +254,18 @@ export function AdminComplianceDocs() {
               <header className="border-b border-slate-200 px-5 py-4 dark:border-slate-700">
                 <h3 className="text-base font-semibold text-slate-900 dark:text-white">{selectedDoc.title}</h3>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{selectedDoc.description}</p>
+                <div className="mt-3 grid gap-2 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 dark:bg-slate-900/40 dark:text-slate-300">
+                  <p>
+                    <span className="font-semibold">Focus:</span> {selectedDoc.focus}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Objective:</span> {selectedDoc.objective}
+                  </p>
+                </div>
                 <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                  <span>{selectedDoc.relativePath}</span>
+                  <span>{selectedDoc.path}</span>
+                  <span>{CATEGORY_LABELS[selectedDoc.category]}</span>
+                  <span>{SOURCE_LABELS[selectedDoc.source]}</span>
                   <span>Updated: {formatDateTime(selectedDoc.updatedAt)}</span>
                 </div>
                 <div className="mt-3 flex flex-wrap items-center gap-2">

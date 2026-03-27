@@ -2,6 +2,7 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import type { Analytics } from "firebase/analytics";
+import { getFirestore, type Firestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,6 +20,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app: FirebaseApp = initializeApp(firebaseConfig);
+const LEGACY_FIRESTORE_DATABASE_ID = "(default)";
+const MAIN_FIRESTORE_DATABASE_ID = "eu-primary";
+const FIRESTORE_MAIN_DATABASE_ID =
+  process.env.NEXT_PUBLIC_FIRESTORE_MAIN_DATABASE_ID ||
+  MAIN_FIRESTORE_DATABASE_ID;
+let clientMainDb: Firestore | null = null;
 
 // Initialize Auth
 const auth: Auth = getAuth(app);
@@ -71,6 +78,20 @@ export async function setFirebaseAnalyticsEnabled(enabled: boolean): Promise<voi
   const instance = await initFirebaseAnalytics();
   if (!instance) return;
   mod.setAnalyticsCollectionEnabled(instance, true);
+}
+
+export function getClientDbMain(): Firestore {
+  if (clientMainDb) return clientMainDb;
+
+  if (FIRESTORE_MAIN_DATABASE_ID === LEGACY_FIRESTORE_DATABASE_ID) {
+    throw new Error(
+      'NEXT_PUBLIC_FIRESTORE_MAIN_DATABASE_ID cannot point to "(default)". The main client database is now the EU named database "eu-primary".'
+    );
+  }
+
+  clientMainDb = getFirestore(app, FIRESTORE_MAIN_DATABASE_ID);
+
+  return clientMainDb;
 }
 
 // Create Google Auth Provider

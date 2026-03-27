@@ -3,6 +3,7 @@ import { cert, getApps, initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
 let db: any;
+const MAIN_FIRESTORE_DATABASE_ID = process.env.FIRESTORE_MAIN_DATABASE_ID || 'eu-primary'
 
 try {
   // Try to initialize Firebase Admin
@@ -12,8 +13,12 @@ try {
     const app = getApps()[0] ?? initializeApp({
       credential: cert(JSON.parse(serviceAccountKey)),
     });
-    
-    db = getFirestore(app);
+
+    if (MAIN_FIRESTORE_DATABASE_ID === '(default)') {
+      throw new Error('FIRESTORE_MAIN_DATABASE_ID cannot be "(default)". Use the EU main database "eu-primary".')
+    }
+
+    db = getFirestore(app, MAIN_FIRESTORE_DATABASE_ID);
     console.log('✅ Firebase Admin SDK initialized successfully');
   } else {
     throw new Error('Service account key not available or contains placeholders');

@@ -2,6 +2,27 @@
 
 Use this checklist before implementing any feature or change that introduces or modifies analytics, tracking, auth, forms, personal data processing, storage, sharing, retention, export, deletion, consent, or third-party integrations.
 
+## Source Hierarchy (Mandatory)
+
+Every GDPR/privacy review in this repo must consult both layers:
+
+1. Shared baseline pack in `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/`
+2. Repo-specific operational docs in `website/docs/` and the actual code/config
+
+Use [docs/gdpr-review-source-stack.md](/Users/moltisantid/Personal/website/docs/gdpr-review-source-stack.md) to decide which shared files are mandatory for the change.
+
+Minimum expectation for every review:
+- consult `README.md`, `privacy-baseline.md`, and `gdpr-control-matrix.md` from the shared pack
+- consult the topic-specific shared file for lawful basis, retention, DSAR, vendors, transfers, or DPIA
+- then validate repo-local artifacts:
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `lib/i18n/legal-translations.ts`
+  - affected route/page/feature docs
+
+If the shared pack is unavailable, the review must declare `degraded_mode`.
+In `degraded_mode`, changes that introduce new processing, new vendors/transfers, new consent patterns, or new retention/DSAR behavior must not be approved.
+
 ## Latest Completed Review (Admin Server-Side Auth)
 
 ### 1. Processing Snapshot
@@ -159,6 +180,7 @@ Use this checklist before implementing any feature or change that introduces or 
 ## WS4 Enforcement Rule (Blocking for privacy-related PRs)
 
 For any GDPR/privacy-related PR, approval is allowed only if all are true:
+- shared source hierarchy review is completed and declared in the review output.
 - `docs/privacy-processing-inventory.md` is updated for touched high-risk flows.
 - `docs/compliance-changelog.md` includes the current wave entry.
 - legal/i18n parity checks are completed (including `localized-page-change-check` when user-facing copy changed).
@@ -348,7 +370,7 @@ If any item above is missing, gate decision must be `needs changes`.
 - Added repo-driven inventory: `docs/privacy-processing-inventory.md`
 - Added compliance changelog: `docs/compliance-changelog.md`
 - Added contextual waitlist notice (`it/en`) in Career OS pricing modal
-- Aligned payment providers in legal copy to `Stripe, PayPal`
+- Aligned payment provider in legal copy to `PayPal`
 - Added admin compliance hub entrypoints for operational documents
 - Added WS4 blocking enforcement rule for privacy-related PR approvals
 
@@ -445,7 +467,7 @@ If any item above is missing, gate decision must be `needs changes`.
 - End-of-purpose handling: unregister imposta token inattivo, lifecycle rimuove record scaduti
 
 ### 7. Vendors and Transfers
-- Vendors/subprocessors involved: Firebase/Firestore, Firebase Cloud Messaging, Telegram/Slack (metadata-only)
+- Vendors/subprocessors involved: Firebase/Firestore, Firebase Cloud Messaging, Telegram (metadata-only)
 - Countries/transfer implications: invariato rispetto stack esistente
 - Cleartext access by vendor/internal team: ridotto; payload notifiche senza PII utente
 - Additional contracts or DPA checks required: no nuovi vendor

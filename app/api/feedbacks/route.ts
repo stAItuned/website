@@ -67,26 +67,6 @@ export async function POST(req: NextRequest) {
             page,
         })
 
-        const webhook = process.env.SLACK_WEBHOOK_FEEDBACK
-        if (webhook) {
-            const text = [
-                '*New stAI Tuned feedback (metadata-only)*',
-                `*Submission*: ${submissionId || 'not_persisted'}`,
-                `*Category*: ${category ?? 'n/a'}`,
-                page ? `*Page*: ${page}` : null,
-                `*CreatedAt*: ${nowIso}`,
-                '*Open admin dashboard for details*',
-            ]
-                .filter(Boolean)
-                .join('\n')
-
-            await fetch(webhook, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text }),
-            })
-        }
-
         try {
             await sendAdminOpsNotification({
                 eventType: 'feedback_submitted',

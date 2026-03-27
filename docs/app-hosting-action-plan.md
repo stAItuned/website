@@ -56,8 +56,8 @@ Deliverable:
    - `firebase-admin` (service account / ADC)
    - Google APIs / Gemini / OpenAI
    - Resend
-   - Stripe/PayPal (se presenti)
-   - Slack webhook, Telegram bot
+   - PayPal (se presente)
+   - Telegram bot
 2. Catalogare dipendenze "native" e requisiti runtime:
    - `sharp` (native bindings)
 3. Catalogare i punti critici di packaging gia' emersi:
@@ -80,7 +80,7 @@ Deliverable:
    - documentare quali variabili sono `BUILD` vs `RUNTIME`.
 4. Hardening librerie:
    - applicare le regole della sezione "Strategia Librerie & Packaging (robusta)".
-   - isolare i client di terze parti (Resend/Stripe/OpenAI/Slack/Telegram) con lazy init e mocking nei test.
+   - isolare i client di terze parti (Resend/OpenAI/Telegram/PayPal) con lazy init e mocking nei test.
    - validare native deps (es. `sharp`) in un ambiente Linux.
 
 Deliverable:

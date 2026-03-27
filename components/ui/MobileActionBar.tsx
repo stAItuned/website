@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { LikeButton } from '@/components/LikeButton'
 import { event } from '@/lib/gtag'
 import { useAuth } from '@/components/auth/AuthContext'
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
-import { app } from '@/lib/firebase/client'
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import { getClientDbMain } from '@/lib/firebase/client'
 import { useHaptics } from '@/lib/hooks/useHaptics'
 import { TimeRemainingIndicator } from './TimeRemainingIndicator'
 
@@ -61,7 +61,7 @@ export function MobileActionBar({
     if (user) {
       const checkBookmark = async () => {
         try {
-          const db = getFirestore(app)
+          const db = getClientDbMain()
           const userDocRef = doc(db, 'users', user.uid)
           const userDoc = await getDoc(userDocRef)
 
@@ -93,7 +93,7 @@ export function MobileActionBar({
     }
 
     try {
-      const db = getFirestore(app)
+      const db = getClientDbMain()
       const userDocRef = doc(db, 'users', user.uid)
 
       if (isBookmarked) {
