@@ -6,7 +6,7 @@ language: English
 meta: >-
   Vibe coding can ship a working prototype fast, but a production-ready SaaS needs more: authentication, tenant isolation, secrets management, billing logic, observability, compliance, and support.
 date: 2026-03-26T00:00:00.000Z
-updatedAt: 2026-03-27T09:25:00.000Z
+updatedAt: 2026-03-27T16:53:00.000Z
 cover: ./assets/cover-option-1.png
 published: true
 primaryTopic: production
@@ -63,7 +63,17 @@ geo:
 
 ## A working demo is not a SaaS
 
-**Vibe coding** is *prompt-driven software development*: you describe the outcome in natural language, and an AI tool generates code, configuration, or even a working prototype. What feels production-ready in a demo, however, often hides the systems that make a real SaaS safe and reliable.
+**Vibe coding** is *prompt-driven software development*: you describe the outcome in natural language, and an AI tool generates code, configuration, or even a working prototype.
+
+In the version this article is talking about, vibe coding is not structured software engineering assisted by AI. It is building through loosely specified prompts, fast iterations, and visible results, often without a clear model of the full system behind them.
+
+That is where the risk begins. If a random or underspecified prompt can generate a feature that looks finished, it becomes easy to confuse output with architecture, and a working demo with a production-ready SaaS.
+
+What feels production-ready in a demo, however, often hides the systems that make a real SaaS safe and reliable.
+
+This article is not about disciplined AI-assisted development. It is about the moment prompting becomes a substitute for architecture, and visible output creates the illusion that the product is almost done.
+
+This gap is especially dangerous for **people who can now assemble a working feature without yet knowing how the full system works end to end**. If you do not already think in terms of identity, state, failure modes, data flows, and operational boundaries, a successful demo can look much closer to a real SaaS than it actually is.
 
 A demo proves a feature. A SaaS proves **reliability, control, and trust**.
 
@@ -75,7 +85,7 @@ That is the **invisible gap** this article is about: the distance between *“it
 
 This article has a simple goal: to make that invisible gap visible.
 
-The point is not to argue that vibe coding is useless, or that demos do not matter. The point is to show why a convincing demo can make teams feel much closer to a production SaaS than they really are.
+The point is not to argue that vibe coding is useless, or that demos do not matter. The point is to show why a convincing demo can make people feel much closer to a production SaaS than they really are — especially when they can generate the visible product layer without yet understanding the full end-to-end system behind it.
 
 Each section below isolates one layer that a demo usually hides: access control, data lifecycle, billing logic, reliability under load, and trust when the happy path breaks. If even one of those layers is still undefined, what you have is not an almost-finished SaaS. It is still a prototype.
 
@@ -95,6 +105,8 @@ That is the gap.
 The demo shows that the workflow works. It does not show whether the product survives contact with reality.
 
 A working demo proves that something can work in a *controlled flow*. It does not prove that it can handle **real users, real load, real errors, real data, real payments, or real responsibility**.
+
+![Demo vs real SaaS](./assets/demo-saas.png)
 
 ### Before you call something a SaaS, there are five things the demo still hasn’t proved:
 
@@ -120,6 +132,8 @@ If these five are still undefined, the product is **not production-ready yet**.
 
 The rest of this article breaks that gap into the layers demos usually hide: security, data responsibility, billing logic, production reliability, and user trust under failure.
 
+![Access control](./assets/access.png)
+
 ---
 
 
@@ -130,6 +144,10 @@ That is why **vibe coding can be deceptive**.
 It gives immediate feedback. You describe something, generate code, test a flow, and quickly get a result that feels tangible. The product starts to look real very early, and that changes how people judge progress.
 
 The problem is that speed on the visible layer creates the **illusion of completeness**.
+
+That illusion is strongest when prompting replaces specification. If the product is being shaped through loosely defined requests instead of explicit system design, the visible success of the feature can hide how much of the product is still missing.
+
+That effect is even stronger when **the person building the product does not already know what sits behind the visible flow**. If you have never had to design tenant isolation, retention rules, entitlement logic, or observability, it is easy to mistake a polished interface for a nearly finished product.
 
 If the interface works, the core action works, and the output looks good, it becomes easy to think the product is mostly there. When the UI already exists and the main workflow already works, people stop feeling like they are prototyping and start feeling like they are **almost done**. But what feels *“almost finished”* is often just the part that is easiest to show.
 
@@ -327,6 +345,8 @@ Vibe coding makes it easier than ever to build something visible. But the visibl
 **Vibe coding** can compress prototyping. It does not compress operations, which is why the roadmap to [**engineered reliability**](https://staituned.com/learn/midway/generative-ai-roadmap-2026-enterprise-playbook) starts with **verifiable trust**.
 
 Before calling a vibe-coded app a SaaS, ask **five questions**: who can access it, where the data goes, how billing is enforced, what happens under load, and which guardrails prevent unsafe changes from reaching production. If you cannot answer all five, you’re still building a demo.
+
+This is especially true if you are using vibe coding to build software without a strong background in engineering systems. The feature may be real. The missing part is everything end to end that turns software into a product people can safely use and trust.
 
 ---
 
