@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard,
+    BarChart3,
     Users,
     FileText,
     Award,
@@ -25,6 +26,7 @@ export function AdminSidebar() {
 
     const navigation = useMemo(() => [
         { name: 'Overview', href: '/admin', icon: LayoutDashboard },
+        { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
         { name: 'Users', href: '/admin/users', icon: Users },
         { name: 'Contributions', href: '/admin/contributions', icon: FileText },
         { name: 'Reviews', href: '/admin/reviews', icon: ClipboardCheck },

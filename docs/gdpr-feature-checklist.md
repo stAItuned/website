@@ -23,6 +23,97 @@ Minimum expectation for every review:
 If the shared pack is unavailable, the review must declare `degraded_mode`.
 In `degraded_mode`, changes that introduce new processing, new vendors/transfers, new consent patterns, or new retention/DSAR behavior must not be approved.
 
+## Latest Completed Review (Admin First-Party Page Views Ranking)
+
+### 1. Processing Snapshot
+- Feature/change: admin-only first-party page views ranking (`/admin/analytics`, `GET /api/admin/analytics/pages`)
+- Date: 2026-03-27
+- Owner: stAItuned engineering
+- Status: `approved`
+- Related brainstorming/spec: `docs/brainstorms/2026-03-27-admin-page-views-ranking.md`
+
+### 2. Review Mode and Sources
+- Review mode: `full_mode`
+- Shared-pack files reviewed:
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/README.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/privacy-baseline.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/gdpr-control-matrix.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/data-inventory.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/lawful-basis-matrix.md`
+- Repo-local files reviewed:
+  - `docs/gdpr-review-source-stack.md`
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `docs/admin-dashboard-mobile-navigation.md`
+  - `docs/brainstorms/2026-03-27-admin-page-views-ranking.md`
+  - `app/api/analytics/page-view/route.ts`
+  - `app/api/admin/analytics/pages/route.ts`
+
+### 3. Processing Activity
+- Trigger: authenticated admin opens `/admin/analytics` or the UI fetches `GET /api/admin/analytics/pages`
+- Purpose: internal editorial/operational visibility on content performance using already persisted first-party page-view counters
+- Type: read-only internal reporting surface on existing analytics processing
+- Systems: admin route shell, admin API bearer-token auth, Firestore `articles/*` counters
+
+### 4. Data Inventory
+- Personal data categories: aggregate page-view counters, content metadata (slug/title/author/locale/target), admin auth identifiers already required for route access
+- Special-category data involved: `no`
+- User identifiers involved: none in the reporting payload beyond existing admin authentication
+- Free-text fields involved: `no`
+- Data source: existing first-party article view counters stored in Firestore
+
+### 5. Role and Legal Basis
+- stAItuned role: `controller`
+- Legal basis assumption: legitimate interest for internal aggregate reporting on owned content performance
+- Is consent required: `no` new consent
+- Consent handling: unchanged; the feature reads only first-party counters already documented as separate from consent-gated GA analytics
+
+### 6. Transparency
+- Privacy policy update required: `no`
+- Cookie policy update required: `no`
+- Terms/UX disclosure update required: `no`
+- User-facing disclosure copy updated: `no` (admin-only internal surface)
+
+### 7. Retention and Lifecycle
+- Retention window: unchanged from the existing first-party article-counter model (`contatore cumulativo`, no user profile)
+- Deletion/anonymization rule: no new raw event store introduced
+- Export/access implications: no new DSAR surface; admin page reads aggregate counters only
+- End-of-contract / end-of-purpose handling: unchanged
+
+### 8. Vendors and Transfers
+- Vendors/subprocessors involved: Firebase / Firestore only
+- Countries/transfer implications: unchanged from the current Firestore setup
+- Cleartext access by vendor/internal team: limited to existing Firestore operational access
+- Additional contracts or DPA checks required: `no`
+
+### 9. Security and Minimization
+- Minimum required fields: `slug`, `title`, `author`, `language`, `target`, `pageViews`, `updatedAt`
+- Optional fields removed: no user-level analytics dimensions exposed
+- Logging/telemetry impact: no new analytics collection; read-only admin reporting on existing dataset
+- Access control requirements: page protected by `/admin/*` session gating and API protected by `verifyAdmin`
+- Secrets/config changes: none
+
+### 10. Risk Review
+- Main privacy risks: internal overreach if this surface later expands from aggregate counters to user-level analytics without a new gate
+- Main legal/accountability risks: silent scope expansion beyond first-party counters
+- Mitigations required before release: keep route explicitly first-party-only; document the scope in feature docs and inventory
+- DPIA screening needed: `no`
+- Repo-local divergences from shared baseline: none observed for the current scope
+- Blocking unknowns: none for the implemented scope
+
+### 11. Documentation Updates
+- Docs to update:
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `docs/admin-dashboard-mobile-navigation.md`
+  - `docs/admin-first-party-analytics.md`
+  - `spec_dev.md`
+
+### 12. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`)
+- Decision: `approved`
+- Notes: the feature is acceptable because it adds only an internal read surface over already-governed first-party aggregate counters and does not expand vendor, consent, retention, or DSAR scope.
+
 ## Latest Completed Review (Admin Server-Side Auth)
 
 ### 1. Processing Snapshot

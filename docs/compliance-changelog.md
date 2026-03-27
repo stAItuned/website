@@ -31,6 +31,20 @@ UpdatedAt: 2026-03-27
   - `docs/gdpr-management-review-2026-03-26.md`
 - Aggiornato `/admin/compliance` per esporre anche il piano di decommission del legacy database come runbook operativo GDPR.
 
+## 2026-03-27 (Admin first-party page views ranking)
+
+- Aggiunta superficie admin-only per il ranking delle views first-party:
+  - `/admin/analytics`
+  - `GET /api/admin/analytics/pages`
+- Lo scope resta intenzionalmente limitato ai soli contatori first-party gia persistiti in `articles/*`.
+- Nessun nuovo vendor, nessun nuovo consenso, nessuna nuova retention o DSAR branch introdotti.
+- Aggiornati gli artifact GDPR repo-local:
+  - `docs/gdpr-feature-checklist.md`
+  - `docs/privacy-processing-inventory.md`
+  - `docs/admin-dashboard-mobile-navigation.md`
+  - `docs/admin-first-party-analytics.md`
+
+
 ## 2026-03-27 (Firestore main database switch smoke test)
 
 - Aggiunto smoke test operativo read-only per validare il puntamento del database Firestore principale tramite il layer del repo:

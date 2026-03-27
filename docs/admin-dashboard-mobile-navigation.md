@@ -10,6 +10,7 @@ Implemented in `components/admin/AdminSidebar.tsx`.
   - quick horizontal navigation tabs
   - an expandable navigation menu (overlay drawer)
 - Preserved desktop sidebar behavior (`lg` and above).
+- Added `Analytics` (`/admin/analytics`) to the shared navigation map so the first-party page-view ranking is reachable on both mobile and desktop.
 - Extended navigation map with `Reviews` (`/admin/reviews`) so review flows are reachable directly.
 - Consolidated admin operations inside the admin dashboard:
   - removed admin tools from `/account/settings`

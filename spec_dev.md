@@ -1,34 +1,34 @@
 # spec_dev.md
 
 ## Current Change Snapshot
-- Feature name: Admin server-side auth for `/admin/*`
+- Feature name: Admin first-party page views ranking
 - Owner: stAItuned engineering
-- Date: 2026-03-25
+- Date: 2026-03-27
 - Status: `in-progress`
-- Brainstorming doc: `docs/brainstorms/2026-03-25-admin-server-side-auth.md`
+- Brainstorming doc: `docs/brainstorms/2026-03-27-admin-page-views-ranking.md`
 - Problem statement:
-  - `/admin/*` previously relied mainly on client-side gating while `/api/admin/*` was already server-protected.
+  - The admin area lacked a dedicated internal section to inspect and rank page performance using the existing first-party view counters.
 - Goals:
-  - add Firebase-backed `httpOnly` session cookies
-  - enforce admin access before admin page render
-  - preserve redirect-back login flow
-  - keep `/api/admin/*` checks as defense in depth
+  - add a dedicated `/admin/analytics` route for first-party page-view ranking
+  - expose only persisted first-party counters
+  - keep admin API access protected with bearer-token checks
+  - preserve mobile and desktop navigation parity in the admin shell
 - Technical design:
-  - `POST /api/auth/session` exchanges Firebase ID token for secure session cookie
-  - `POST /api/auth/session/logout` clears the cookie
-  - `proxy.ts` enforces admin access on `/admin/*`
-  - `app/admin/layout.tsx` verifies the session server-side before render
+  - `lib/admin/firstPartyPageViews.ts` centralizes first-party ranking assembly from `articles/*`
+  - `GET /api/admin/analytics/pages` returns admin-only ranking data
+  - `app/admin/analytics/page.tsx` renders the protected ranking UI
+  - `components/admin/AdminSidebar.tsx` exposes the route on mobile and desktop
 - Privacy/GDPR:
   - personal data involved: `yes`
-  - new processing: short-lived authentication session cookie for protected admin areas
+  - processing summary: internal read-only reporting on existing first-party aggregate counters
   - reference checklist: `docs/gdpr-feature-checklist.md`
 - Testing strategy:
-  - route tests for session create/logout
-  - helper tests for server auth session verification
-  - proxy tests for anonymous/non-admin/admin routing
+  - route tests for `GET /api/admin/analytics/pages`
+  - manual admin UI verification on mobile and desktop breakpoints
 - Rollout:
   - deploy to `development` first
-  - validate anonymous/admin/non-admin flows on `/admin/*`
+  - validate anonymous/admin/non-admin access on `/admin/analytics`
+  - validate ranking order against Firestore sample docs
   - then promote to `production`
 
 ## Feature Specification Template
