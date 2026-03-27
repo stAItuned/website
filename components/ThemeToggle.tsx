@@ -2,18 +2,28 @@
 
 import { useTheme } from './ThemeProvider'
 import { useLearnLocale } from '@/lib/i18n'
+import { useState, useEffect } from 'react'
 
 export function ThemeToggle() {
+  const [mounted, setMounted] = useState(false)
   const { theme, cycleTheme, resolvedTheme } = useTheme()
   const { t } = useLearnLocale()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const themeLabels = {
     light: t.header.actions.themeNames.light,
     dark: t.header.actions.themeNames.dark,
   } as const
 
-  const nextTheme = theme === 'light' ? 'dark' : 'light'
-  const currentThemeLabel = themeLabels[theme]
+  // Default to light for SSR and initial client render to avoid hydration mismatch
+  const activeTheme = mounted ? theme : 'light'
+  const activeResolvedTheme = mounted ? resolvedTheme : 'light'
+
+  const nextTheme = activeTheme === 'light' ? 'dark' : 'light'
+  const currentThemeLabel = themeLabels[activeTheme]
   const nextThemeLabel = themeLabels[nextTheme]
   const ariaLabel = `${t.header.actions.themeToggle.replace('{theme}', currentThemeLabel)} ${t.header.actions.themeToggleNext.replace('{theme}', nextThemeLabel)}`
   const title = `${t.header.actions.themeToggleShort}: ${currentThemeLabel}`
@@ -26,7 +36,7 @@ export function ThemeToggle() {
       aria-label={ariaLabel}
       title={title}
     >
-      {resolvedTheme === 'light' && (
+      {activeResolvedTheme === 'light' && (
         <svg
           className="h-6 w-6 text-[color:var(--stai-text)] transition-transform group-hover:rotate-45"
           fill="none"
@@ -41,7 +51,7 @@ export function ThemeToggle() {
         </svg>
       )}
 
-      {resolvedTheme === 'dark' && (
+      {activeResolvedTheme === 'dark' && (
         <svg
           className="h-6 w-6 text-[color:var(--stai-text)] transition-transform group-hover:rotate-12"
           fill="currentColor"
