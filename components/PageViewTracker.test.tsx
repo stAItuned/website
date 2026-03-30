@@ -79,16 +79,28 @@ describe('PageViewTracker', () => {
     expect(mockPageview).toHaveBeenCalledWith('/learn/newbie/test-article?q=1')
   })
 
-  it('does not send first-party page view outside /learn article routes', () => {
+  it('sends first-party page view on other public pages', () => {
     mockHasConsentedToAnalytics = true
     mockPathname = '/career-os'
     mockSendBeacon.mockReturnValue(true)
 
     render(<PageViewTracker />)
 
-    expect(mockSendBeacon).not.toHaveBeenCalled()
+    expect(mockSendBeacon).toHaveBeenCalledTimes(1)
     expect(mockPageview).toHaveBeenCalledTimes(1)
     expect(mockPageview).toHaveBeenCalledWith('/career-os')
+  })
+
+  it('still skips excluded pages server-side but sends only one request per pathname client-side', () => {
+    mockHasConsentedToAnalytics = true
+    mockPathname = '/admin/analytics'
+    mockSendBeacon.mockReturnValue(true)
+
+    render(<PageViewTracker />)
+
+    expect(mockSendBeacon).toHaveBeenCalledTimes(1)
+    expect(mockPageview).toHaveBeenCalledTimes(1)
+    expect(mockPageview).toHaveBeenCalledWith('/admin/analytics')
   })
 
   it('falls back to fetch keepalive when sendBeacon fails', () => {

@@ -1,6 +1,6 @@
 # Compliance Changelog
 
-UpdatedAt: 2026-03-27
+UpdatedAt: 2026-03-30
 
 ## Maintenance Rules
 
@@ -43,6 +43,25 @@ UpdatedAt: 2026-03-27
   - `docs/privacy-processing-inventory.md`
   - `docs/admin-dashboard-mobile-navigation.md`
   - `docs/admin-first-party-analytics.md`
+
+## 2026-03-30 (Admin all-public-pages first-party analytics coverage)
+
+- Esteso il tracking first-party da ranking solo-articoli a copertura delle pagine pubbliche tracciate:
+  - `POST /api/analytics/page-view`
+  - `GET /api/admin/analytics/pages`
+  - `/admin/analytics`
+- Introdotta canonicalizzazione condivisa delle pagine pubbliche:
+  - `lib/analytics/publicPageTracking.ts`
+- Gli articoli `/learn/*` continuano a usare il contatore legacy su `articles/*` per preservare lo storico.
+- Le altre pagine pubbliche usano il nuovo dataset page-level:
+  - `page_views_first_party/*`
+- Nessun nuovo vendor, nessuna nuova base di consenso, nessun raw event store utente introdotto.
+- Aggiornati gli artifact GDPR e feature docs:
+  - `docs/gdpr-feature-checklist.md`
+  - `docs/privacy-processing-inventory.md`
+  - `docs/admin-first-party-analytics.md`
+  - `spec_dev.md`
+  - `lib/i18n/legal-translations.ts`
 
 
 ## 2026-03-27 (Firestore main database switch smoke test)

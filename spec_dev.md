@@ -1,34 +1,38 @@
 # spec_dev.md
 
 ## Current Change Snapshot
-- Feature name: Admin first-party page views ranking
+- Feature name: Admin first-party public page views coverage
 - Owner: stAItuned engineering
-- Date: 2026-03-27
-- Status: `in-progress`
-- Brainstorming doc: `docs/brainstorms/2026-03-27-admin-page-views-ranking.md`
+- Date: 2026-03-30
+- Status: `review`
+- Brainstorming doc: `docs/brainstorms/2026-03-30-admin-all-pages-analytics.md`
 - Problem statement:
-  - The admin area lacked a dedicated internal section to inspect and rank page performance using the existing first-party view counters.
+  - The admin analytics area could inspect only `/learn/*` article counters, so it did not provide visibility across the rest of the public site pages.
 - Goals:
-  - add a dedicated `/admin/analytics` route for first-party page-view ranking
-  - expose only persisted first-party counters
+  - extend `/admin/analytics` from article-only coverage to tracked public pages across the site
+  - preserve article counter history already stored in `articles/*`
+  - keep analytics aggregate-only and first-party
   - keep admin API access protected with bearer-token checks
-  - preserve mobile and desktop navigation parity in the admin shell
 - Technical design:
-  - `lib/admin/firstPartyPageViews.ts` centralizes first-party ranking assembly from `articles/*`
+  - `lib/analytics/publicPageTracking.ts` centralizes canonical public-page identification and metadata
+  - `lib/admin/firstPartyPageViews.ts` assembles a mixed ranking from article legacy counters and page-level counters for non-article public pages
   - `GET /api/admin/analytics/pages` returns admin-only ranking data
-  - `app/admin/analytics/page.tsx` renders the protected ranking UI
-  - `components/admin/AdminSidebar.tsx` exposes the route on mobile and desktop
+  - `POST /api/analytics/page-view` now resolves tracked public pages by canonical pathname and updates the correct aggregate store
+  - `components/PageViewTracker.tsx` emits page pathname events for public navigation while GA consent behavior remains unchanged
 - Privacy/GDPR:
   - personal data involved: `yes`
-  - processing summary: internal read-only reporting on existing first-party aggregate counters
+  - processing summary: aggregate first-party measurement of public pages for internal reporting, without raw user-level event persistence
   - reference checklist: `docs/gdpr-feature-checklist.md`
 - Testing strategy:
+  - unit tests for public-page canonicalization
+  - route tests for `POST /api/analytics/page-view`
   - route tests for `GET /api/admin/analytics/pages`
-  - manual admin UI verification on mobile and desktop breakpoints
+  - tracker component tests
 - Rollout:
   - deploy to `development` first
+  - validate article and non-article counters in `/admin/analytics`
   - validate anonymous/admin/non-admin access on `/admin/analytics`
-  - validate ranking order against Firestore sample docs
+  - validate excluded routes are not persisted
   - then promote to `production`
 
 ## Feature Specification Template

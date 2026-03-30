@@ -7,10 +7,10 @@ export default function AdminAnalyticsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold leading-6 text-slate-900 dark:text-white">
-          First-Party Page Views
+          First-Party Public Page Views
         </h1>
         <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-          Internal ranking of published pages using only first-party view counters already stored by the app.
+          Internal ranking of tracked public pages using only first-party counters already stored by the app.
         </p>
       </div>
 

@@ -226,7 +226,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                 sections: [
                     {
                         title: 'Visite al blog e alle pagine pubbliche',
-                        content: 'Registriamo solo dati tecnici necessari per mantenere il sito online (es. richieste HTTP, informazioni sul browser). I cookie non tecnici (es. Google Analytics) e le misurazioni di performance lato client (es. Core Web Vitals) sono attivati solo dopo il tuo consenso. In parallelo utilizziamo un conteggio first-party delle visualizzazioni degli articoli, separato da Google Analytics, basato su eventi minimi e senza cookie di marketing. Alcune risorse (es. font) possono essere caricate da fornitori terzi per motivi di resa grafica.'
+                        content: 'Registriamo solo dati tecnici necessari per mantenere il sito online (es. richieste HTTP, informazioni sul browser). I cookie non tecnici (es. Google Analytics) e le misurazioni di performance lato client (es. Core Web Vitals) sono attivati solo dopo il tuo consenso. In parallelo utilizziamo un conteggio first-party delle visualizzazioni delle pagine pubbliche tracciate, separato da Google Analytics, basato su eventi minimi e senza cookie di marketing. Alcune risorse (es. font) possono essere caricate da fornitori terzi per motivi di resa grafica.'
                     },
                     {
                         title: 'Autenticazione e funzionalità personalizzate',
@@ -302,7 +302,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     'Servizi email (Resend)',
                     'AI Services (Google Gemini)',
                     'Analytics (Google Analytics, solo dopo consenso)',
-                    'Misurazione audience first-party su infrastruttura Firebase (conteggio visualizzazioni articoli)',
+                    'Misurazione audience first-party su infrastruttura Firebase (conteggio visualizzazioni pagine pubbliche tracciate)',
                     'Push Notifications (FCM)',
                     'Booking (Calendly)',
                     'Payments (PayPal)',
@@ -348,7 +348,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'Misurazione audience first-party (senza cookie marketing)',
-                        content: 'Conteggia le visualizzazioni degli articoli su infrastruttura stAItuned/Firebase con eventi minimi separati da Google Analytics.',
+                        content: 'Conteggia le visualizzazioni delle pagine pubbliche tracciate su infrastruttura stAItuned/Firebase con eventi minimi separati da Google Analytics.',
                         details: { label: 'Cookie principali', value: 'Nessun cookie aggiuntivo di marketing' }
                     },
                     {
@@ -491,7 +491,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                 sections: [
                     {
                         title: 'Blog Visits and Public Pages',
-                        content: 'We record only technical data necessary to keep the site online. Non-technical cookies (e.g., Google Analytics) and client-side performance measurements are activated only after your consent. In parallel, we use a first-party article view counter separated from Google Analytics, based on minimal events and without marketing cookies.'
+                        content: 'We record only technical data necessary to keep the site online. Non-technical cookies (e.g., Google Analytics) and client-side performance measurements are activated only after your consent. In parallel, we use a first-party tracked public-page view counter separated from Google Analytics, based on minimal events and without marketing cookies.'
                     },
                     {
                         title: 'Authentication and Personalized Features',
@@ -613,7 +613,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     },
                     {
                         title: 'First-party audience measurement (no marketing cookies)',
-                        content: 'Counts article views on stAItuned/Firebase infrastructure with minimal events separated from Google Analytics.',
+                        content: 'Counts tracked public-page views on stAItuned/Firebase infrastructure with minimal events separated from Google Analytics.',
                         details: { label: 'Main cookies', value: 'No additional marketing cookies' }
                     },
                     {

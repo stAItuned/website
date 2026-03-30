@@ -5,12 +5,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/components/auth/AuthContext'
 
 interface AdminFirstPartyPageViewRow {
-  slug: string
-  articleUrl: string
+  id: string
+  path: string
+  pageUrl: string
   title: string
-  author: string
+  pageType: string
+  author: string | null
   language: string | null
-  target: string
+  target: string | null
   pageViews: number
   updatedAt: string | null
 }
@@ -95,8 +97,9 @@ export function AdminFirstPartyAnalytics() {
     return rows.filter((row) => {
       return (
         row.title.toLowerCase().includes(normalizedQuery) ||
-        row.slug.toLowerCase().includes(normalizedQuery) ||
-        row.author.toLowerCase().includes(normalizedQuery)
+        row.path.toLowerCase().includes(normalizedQuery) ||
+        row.pageType.toLowerCase().includes(normalizedQuery) ||
+        (row.author || '').toLowerCase().includes(normalizedQuery)
       )
     })
   }, [query, rows])
@@ -164,7 +167,7 @@ export function AdminFirstPartyAnalytics() {
           <div>
             <p className="text-sm font-medium text-slate-900 dark:text-white">Source</p>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Only persisted first-party counters are included. Source: <span className="font-medium">{source}</span>
+              Only persisted first-party counters are included for public pages. Source: <span className="font-medium">{source}</span>
             </p>
             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
               Generated at {formatDate(generatedAt)}
@@ -180,7 +183,7 @@ export function AdminFirstPartyAnalytics() {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search by title, slug or author"
+              placeholder="Search by title, path, type or author"
               className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
             />
           </div>
@@ -190,7 +193,7 @@ export function AdminFirstPartyAnalytics() {
       <div className="space-y-3 md:hidden">
         {filteredRows.map((row, index) => (
           <article
-            key={row.slug}
+            key={row.id}
             className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
           >
             <div className="flex items-start justify-between gap-4">
@@ -210,12 +213,12 @@ export function AdminFirstPartyAnalytics() {
 
             <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Author</dt>
-                <dd className="mt-1 text-slate-900 dark:text-white">{row.author}</dd>
+                <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Type</dt>
+                <dd className="mt-1 text-slate-900 dark:text-white">{row.pageType}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Target</dt>
-                <dd className="mt-1 text-slate-900 dark:text-white">{row.target}</dd>
+                <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Author</dt>
+                <dd className="mt-1 text-slate-900 dark:text-white">{row.author || '-'}</dd>
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Language</dt>
@@ -228,9 +231,9 @@ export function AdminFirstPartyAnalytics() {
             </dl>
 
             <div className="mt-4 flex items-center justify-between gap-3">
-              <p className="truncate text-xs text-slate-500 dark:text-slate-400">{row.articleUrl}</p>
+              <p className="truncate text-xs text-slate-500 dark:text-slate-400">{row.pageUrl}</p>
               <Link
-                href={row.articleUrl}
+                href={row.pageUrl}
                 className="shrink-0 rounded-lg bg-primary-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-primary-500"
               >
                 Open page
@@ -252,10 +255,10 @@ export function AdminFirstPartyAnalytics() {
                   Page
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Author
+                  Type
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Target
+                  Author
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   Language
@@ -273,19 +276,19 @@ export function AdminFirstPartyAnalytics() {
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
               {filteredRows.map((row, index) => (
-                <tr key={row.slug}>
+                <tr key={row.id}>
                   <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold text-slate-900 dark:text-white">
                     #{index + 1}
                   </td>
                   <td className="px-4 py-4 text-sm">
                     <div className="font-medium text-slate-900 dark:text-white">{row.title}</div>
-                    <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">{row.articleUrl}</div>
+                    <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">{row.pageUrl}</div>
                   </td>
                   <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600 dark:text-slate-300">
-                    {row.author}
+                    {row.pageType}
                   </td>
                   <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600 dark:text-slate-300">
-                    {row.target}
+                    {row.author || '-'}
                   </td>
                   <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600 dark:text-slate-300">
                     {row.language || '-'}
@@ -298,7 +301,7 @@ export function AdminFirstPartyAnalytics() {
                   </td>
                   <td className="whitespace-nowrap px-4 py-4 text-right text-sm">
                     <Link
-                      href={row.articleUrl}
+                      href={row.pageUrl}
                       className="inline-flex rounded-lg bg-primary-600 px-3 py-2 font-semibold text-white transition hover:bg-primary-500"
                     >
                       Open
@@ -313,7 +316,7 @@ export function AdminFirstPartyAnalytics() {
 
       {filteredRows.length === 0 && (
         <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-          No first-party pages matched the current filter.
+          No tracked public pages matched the current filter.
         </div>
       )}
     </div>

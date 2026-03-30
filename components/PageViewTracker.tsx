@@ -6,13 +6,6 @@ import { pageview } from '@/lib/gtag'
 import { ClientOnly } from '@/components/SafeNavigation'
 import { useCookieConsent } from '@/components/cookies/CookieConsentProvider'
 
-function extractLearnArticleSlug(pathname: string): string | null {
-  const parts = pathname.split('/').filter(Boolean)
-  if (parts.length < 3) return null
-  if (parts[0] !== 'learn') return null
-  return parts[2] || null
-}
-
 function isProductionHost(hostname: string): boolean {
   const normalizedHost = hostname.trim().toLowerCase()
   if (!normalizedHost) return false
@@ -42,7 +35,7 @@ function isProductionHost(hostname: string): boolean {
   return allowedHosts.has(normalizedHost)
 }
 
-function sendFirstPartyPageView(payload: { slug: string }) {
+function sendFirstPartyPageView(payload: { path: string }) {
   const body = JSON.stringify(payload)
   if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
     const blob = new Blob([body], { type: 'application/json' })
@@ -71,16 +64,13 @@ export function PageViewTracker() {
 
   useEffect(() => {
     if (!pathname) return
-
-    const slug = extractLearnArticleSlug(pathname)
-    if (!slug) return
     if (typeof window === 'undefined') return
     if (!isProductionHost(window.location.hostname)) return
     if (firstPartyLastPathRef.current === pathname) return
 
     firstPartyLastPathRef.current = pathname
     sendFirstPartyPageView({
-      slug,
+      path: pathname,
     })
   }, [pathname])
 

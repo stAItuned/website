@@ -1,21 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { dbDefault } from '@/lib/firebase/admin'
-import { sanitizeSlug } from '@/lib/sanitizeSlug'
-import { allPosts } from '@/lib/contentlayer'
+import {
+  getTrackedArticlePageBySlug,
+  getTrackedPublicPage,
+  PUBLIC_PAGE_VIEWS_COLLECTION,
+} from '@/lib/analytics/publicPageTracking'
 
 type PageViewPayload = {
+  path?: unknown
   slug?: unknown
 }
 
 const REQUEST_DEDUPE_WINDOW_MS = 30_000
 const requestDedupeStore = new Map<string, number>()
-
-const VALID_ARTICLE_SLUGS = new Set(
-  allPosts
-    .filter((post) => post.published !== false)
-    .map((post) => sanitizeSlug(String(post.slug || '').toLowerCase())),
-)
 
 function isBotUserAgent(userAgent: string | null): boolean {
   if (!userAgent) return false
@@ -136,33 +134,52 @@ export async function POST(request: NextRequest) {
     }
 
     const body = (await request.json()) as PageViewPayload
-    const rawSlug = typeof body.slug === 'string' ? body.slug.trim().toLowerCase() : ''
-    const sanitizedSlug = sanitizeSlug(rawSlug)
+    const descriptor =
+      typeof body.path === 'string' && body.path.trim()
+        ? getTrackedPublicPage(body.path)
+        : typeof body.slug === 'string' && body.slug.trim()
+          ? getTrackedArticlePageBySlug(body.slug)
+          : null
 
-    if (!sanitizedSlug) {
-      return jsonNoStore({ error: 'Invalid slug' }, 400)
+    if (!descriptor) {
+      return jsonNoStore({ ok: true, skipped: 'unknown_or_untracked_page' }, 202)
     }
 
-    if (!VALID_ARTICLE_SLUGS.has(sanitizedSlug)) {
-      return jsonNoStore({ ok: true, skipped: 'unknown_slug' }, 202)
-    }
-
-    const dedupeKey = `${getClientIp(request)}::${sanitizedSlug}`
+    const dedupeKey = `${getClientIp(request)}::${descriptor.key}`
     if (shouldSkipByDedupe(dedupeKey)) {
       return jsonNoStore({ ok: true, skipped: 'deduped' }, 202)
     }
 
-    await dbDefault()
-      .collection('articles')
-      .doc(sanitizedSlug)
-      .set(
-        {
-          originalSlug: rawSlug,
-          pageViewsFirstParty: FieldValue.increment(1),
-          updatedAt: new Date().toISOString(),
-        },
-        { merge: true },
-      )
+    if (descriptor.articleSlug) {
+      await dbDefault()
+        .collection('articles')
+        .doc(descriptor.articleSlug)
+        .set(
+          {
+            originalSlug: descriptor.articleSlug,
+            pageViewsFirstParty: FieldValue.increment(1),
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true },
+        )
+    } else {
+      await dbDefault()
+        .collection(PUBLIC_PAGE_VIEWS_COLLECTION)
+        .doc(descriptor.docId)
+        .set(
+          {
+            path: descriptor.path,
+            title: descriptor.title,
+            pageType: descriptor.pageType,
+            author: descriptor.author,
+            language: descriptor.language,
+            target: descriptor.target,
+            pageViewsFirstParty: FieldValue.increment(1),
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true },
+        )
+    }
 
     return jsonNoStore({ ok: true })
   } catch (error) {

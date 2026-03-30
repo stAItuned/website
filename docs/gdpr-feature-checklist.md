@@ -23,6 +23,115 @@ Minimum expectation for every review:
 If the shared pack is unavailable, the review must declare `degraded_mode`.
 In `degraded_mode`, changes that introduce new processing, new vendors/transfers, new consent patterns, or new retention/DSAR behavior must not be approved.
 
+## Pending Review (Admin all-pages analytics coverage)
+
+### 1. Processing Snapshot
+- Feature/change: extend first-party page-view tracking so `/admin/analytics` can report views for all public pages, not only `/learn/*` articles
+- Date: 2026-03-30
+- Owner: stAItuned engineering
+- Status: `approved`
+- Related brainstorming/spec: `docs/brainstorms/2026-03-30-admin-all-pages-analytics.md`
+
+### 2. Review Mode and Sources
+- Review mode: `full_mode`
+- Shared-pack files reviewed:
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/README.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/privacy-baseline.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/gdpr-control-matrix.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/data-inventory.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/lawful-basis-matrix.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/retention-policy.md`
+  - `/Users/moltisantid/Personal/repo_template/docs/04-privacy-gdpr/transfer-assessment.md`
+- Repo-local files reviewed:
+  - `docs/gdpr-review-source-stack.md`
+  - `docs/gdpr-feature-checklist.md`
+  - `docs/privacy-processing-inventory.md`
+  - `docs/admin-first-party-analytics.md`
+  - `docs/brainstorms/2026-03-30-admin-all-pages-analytics.md`
+  - `app/api/analytics/page-view/route.ts`
+  - `app/api/admin/analytics/pages/route.ts`
+  - `components/PageViewTracker.tsx`
+  - `lib/admin/firstPartyPageViews.ts`
+  - `lib/i18n/legal-translations.ts`
+
+### 3. Processing Activity
+- Trigger: public visitor opens a tracked public page; authenticated admin later reads the aggregate ranking in `/admin/analytics`
+- Purpose: broaden internal aggregate reporting from article-only page counters to a wider public-page coverage
+- Type: scope expansion of an existing first-party analytics processing activity
+- Systems: client page-view emitter, server-side tracking endpoint, Firestore aggregate counters, protected admin reporting API/UI
+
+### 4. Data Inventory
+- Personal data categories: canonical pathname or route key, aggregate view counters, technical request metadata used for bot filtering and dedupe
+- Special-category data involved: `no`
+- User identifiers involved: no user identifier should be persisted in the target model; existing transient IP-based dedupe must not expand into stored user-level analytics
+- Free-text fields involved: `no`
+- Data source: first-party page requests on public pages
+
+### 5. Role and Legal Basis
+- stAItuned role: `controller`
+- Legal basis assumption: legitimate interest for aggregate internal measurement of owned public content/pages
+- Is consent required: `no` for the first-party aggregate counter model, assuming the implementation remains separate from consent-gated GA and does not introduce non-essential cookies or identifiable behavioral profiling
+- Consent handling: unchanged only if the new scope stays on aggregate first-party counters with no additional third-party sharing
+
+### 6. Transparency
+- Privacy policy update required: `yes`
+- Cookie policy update required: `likely no`, unless the implementation changes cookie/storage behavior
+- Terms/UX disclosure update required: `no`
+- User-facing disclosure copy updated: `yes`
+- Reason: repo-local legal wording and inventory were widened from article-only first-party counters to tracked public-page first-party counters
+
+### 7. Retention and Lifecycle
+- Retention window: cumulative aggregate-only counter model for both legacy article counters and the new page-level public-page counters
+- Deletion/anonymization rule: no user-level raw event store should be introduced in this feature
+- Export/access implications: expected unchanged if only aggregate counters are stored
+- End-of-contract / end-of-purpose handling: unchanged in principle, but the page-level dataset needs an explicit inventory/retention note if introduced
+
+### 8. Vendors and Transfers
+- Vendors/subprocessors involved: Firebase / Firestore only
+- Countries/transfer implications: unchanged from the current Firebase posture already documented in repo-local artifacts
+- Cleartext access by vendor/internal team: limited to existing Firestore operational/admin access
+- Additional contracts or DPA checks required: `no`, assuming no new vendor is introduced
+
+### 9. Security and Minimization
+- Minimum required fields: canonical page key/pathname, aggregate view count, page label/type metadata needed for admin reporting, updated timestamp
+- Optional fields to avoid: user id, raw IP address persistence, full referrer history, user-agent persistence beyond transient filtering logic
+- Logging/telemetry impact: should remain aggregate-only; logs must not begin storing route-level personal data with identifiers
+- Access control requirements: `/admin/analytics` and its API remain admin-protected; public emission endpoint must reject or ignore excluded routes
+- Secrets/config changes: none expected
+
+### 10. Risk Review
+- Main privacy risks:
+  - silent scope expansion from “article views” to “all public page views” without disclosure updates
+  - accidental over-collection if every pathname is tracked without an explicit exclusion/canonicalization model
+  - future temptation to persist raw identifiers while generalizing the model
+- Main legal/accountability risks:
+  - repo-local legal and inventory docs becoming inaccurate if implementation proceeds without wording updates
+  - ambiguity around what “all pages” includes
+- Mitigations required before release:
+  - confirm exact public-route scope
+  - keep the model aggregate-only
+  - update inventory/legal wording if the scope widens beyond articles
+  - document retention for any new page-level dataset
+- DPIA screening needed: `no`, based on the currently proposed aggregate-only internal reporting scope
+- Repo-local divergences from shared baseline:
+  - none after aligning the repo-local inventory and legal wording with the implemented aggregate-only public-page scope
+- Blocking unknowns:
+  - none for the implemented scope
+
+### 11. Documentation Updates Required Before Approval
+- Docs to update:
+  - `docs/privacy-processing-inventory.md`
+  - `docs/compliance-changelog.md`
+  - `docs/admin-first-party-analytics.md`
+  - `spec_dev.md`
+- Legal text files to review/update:
+  - `lib/i18n/legal-translations.ts`
+
+### 12. Approval Gate
+- Reviewer: GDPR/privacy implementation gate (`gdpr-feature-gate`)
+- Decision: `approved`
+- Notes: approved because the implementation stays aggregate-only, keeps Google Analytics consent behavior separate, introduces no new vendor, and updates repo-local privacy disclosures in the same change.
+
 ## Latest Completed Review (Admin First-Party Page Views Ranking)
 
 ### 1. Processing Snapshot

@@ -87,7 +87,7 @@ describe('GET /api/admin/analytics/pages', () => {
       pagesWithViews: 2,
       totalViews: 160,
     })
-    expect(json.source).toBe('firestore:first-party')
+    expect(json.source).toBe('firestore:first-party-mixed')
     expect(typeof json.generatedAt).toBe('string')
   })
 

@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
         pagesWithViews,
         totalViews,
       },
-      source: 'firestore:first-party',
+      source: 'firestore:first-party-mixed',
       generatedAt: new Date().toISOString(),
     })
   } catch (error) {
