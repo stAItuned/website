@@ -24,6 +24,12 @@ interface Article {
     language?: string
     primaryTopic?: string
     pageViews?: number
+    users?: number
+}
+
+interface ArticleListAnalytics {
+    pageViews: number
+    users: number
 }
 
 interface Level {
@@ -84,7 +90,7 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
     const [currentPage, setCurrentPage] = useState(1)
     const [searchQuery, setSearchQuery] = useState(initialShareQuery)
     const [sortBy, setSortBy] = useState<SortOption>('published')
-    const [analyticsData, setAnalyticsData] = useState<Record<string, number>>({})
+    const [analyticsData, setAnalyticsData] = useState<Record<string, ArticleListAnalytics>>({})
     const [showFilters, setShowFilters] = useState(false)
 
     // Fetch analytics data for trending
@@ -95,14 +101,17 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
                 if (!res.ok) return
                 const json = await res.json()
                 if (json.success && Array.isArray(json.data)) {
-                    const viewsMap: Record<string, number> = {}
+                    const analyticsMap: Record<string, ArticleListAnalytics> = {}
                     json.data.forEach((item: any) => {
                         const slug = item.articleUrl?.split('/').pop()
                         if (slug) {
-                            viewsMap[slug] = item.pageViews || 0
+                            analyticsMap[slug] = {
+                                pageViews: item.pageViews || 0,
+                                users: item.users || 0,
+                            }
                         }
                     })
-                    setAnalyticsData(viewsMap)
+                    setAnalyticsData(analyticsMap)
                 }
             } catch (e) {
                 console.error('Failed to fetch analytics', e)
@@ -122,7 +131,8 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
     const filteredArticles = useMemo(() => {
         let result = articles.map(a => ({
             ...a,
-            pageViews: analyticsData[a.slug] || 0
+            pageViews: analyticsData[a.slug]?.pageViews || 0,
+            users: analyticsData[a.slug]?.users || 0,
         }))
 
         if (selectedLevel) {
@@ -354,7 +364,11 @@ export function ArticlesPageClient({ articles, levels, articleCounts, topTopics,
                                 className="animate-in fade-in slide-in-from-bottom-4 duration-500"
                                 style={{ animationDelay: `${index * 50}ms` }}
                             >
-                                <ArticleCard article={article} />
+                                <ArticleCard
+                                    article={article}
+                                    pageViews={article.pageViews}
+                                    uniqueVisitors={article.users}
+                                />
                             </div>
                         ))}
                     </div>

@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { allPosts } from '@/lib/contentlayer'
-import { dbDefault } from '@/lib/firebase/admin'
-import { sanitizeSlug } from '@/lib/sanitizeSlug'
-
-function resolvePageViews(data: Record<string, unknown> | undefined): number {
-  if (!data) return 0
-  const firstParty = data.pageViewsFirstParty
-  if (typeof firstParty === 'number') return firstParty
-  return 0
-}
+import { fetchArticleAnalytics, fetchMultipleArticlesAnalytics } from '@/lib/analytics-server'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -17,79 +9,43 @@ export async function GET(request: NextRequest) {
   // (You can extend this to support custom ranges if you store history in Firestore)
   try {
     if (articleSlug) {
-      // Single article: read from articles/{slug}
-      // Slug is sanitized in Firestore (slashes replaced with hyphens, special chars removed)
-      const sanitizedSlug = articleSlug
-        .replace(/[/\\]/g, '-')
-        .replace(/[^a-zA-Z0-9\-_]/g, '')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      const docRef = dbDefault().collection('articles').doc(sanitizedSlug)
-      const snap = await docRef.get()
-      if (!snap.exists) {
+      const article = allPosts.find((post) => post.slug === articleSlug)
+      const analytics = await fetchArticleAnalytics(articleSlug)
+      if (
+        !article &&
+        analytics.pageViews === 0 &&
+        analytics.users === 0 &&
+        analytics.sessions === 0 &&
+        analytics.avgTimeOnPage === 0 &&
+        analytics.bounceRate === 0 &&
+        analytics.likes === 0 &&
+        analytics.updatedAt === null
+      ) {
         return NextResponse.json({
           success: true,
           data: null,
-          source: 'firestore',
+          source: 'firestore-canonical',
         })
-      }
-      const data = snap.data()
-      // Ensure all values are JSON-serializable (convert Date to ISO string)
-      let safeData = null;
-      if (data) {
-        const { updatedAt, ...rest } = data;
-        safeData = {
-          ...rest,
-          pageViews: resolvePageViews(data as Record<string, unknown>),
-          updatedAt: updatedAt instanceof Date ? updatedAt.toISOString() : updatedAt ?? null,
-          articleUrl: `/learn/${data.target}/${data.originalSlug || articleSlug}`,
-        };
       }
       return NextResponse.json({
         success: true,
-        data: safeData,
-        source: 'firestore',
+        data: {
+          ...analytics,
+          articleUrl: article
+            ? `/learn/${(article.target || 'midway').toLowerCase()}/${article.slug}`
+            : null,
+        },
+        source: 'firestore-canonical',
       })
     } else {
-      // All articles: read from analytics/daily (or analytics/summaries)
-      const docRef = dbDefault().doc('analytics/daily')
-      const snap = await docRef.get()
-      if (!snap.exists) {
-        return NextResponse.json({
-          success: true,
-          data: [],
-          source: 'firestore',
-        })
-      }
-      const daily = snap.data()
-      if (!daily) {
-        return NextResponse.json({
-          success: true,
-          data: [],
-          source: 'firestore',
-        })
-      }
-      // Merge with CMS data for full article info
       const publishedPosts = allPosts.filter(post => post.published !== false)
-      const sanitizedSlugs = publishedPosts.map((post) => sanitizeSlug(post.slug))
-      const refs = sanitizedSlugs.map((slug) => dbDefault().collection('articles').doc(slug))
-      const articleSnaps = refs.length > 0 ? await dbDefault().getAll(...refs) : []
-      const firstPartyViewsBySlug = new Map<string, number>()
-
-      articleSnaps.forEach((articleSnap, index) => {
-        if (!articleSnap.exists) return
-        const originalSlug = publishedPosts[index]?.slug
-        if (!originalSlug) return
-        const articleData = articleSnap.data() as Record<string, unknown> | undefined
-        firstPartyViewsBySlug.set(originalSlug, resolvePageViews(articleData))
-      })
+      const analyticsBySlug = await fetchMultipleArticlesAnalytics(publishedPosts.map((post) => post.slug))
 
       const articles = publishedPosts.map(post => {
         const rawTarget = post.target || 'Midway'
         const urlTarget = rawTarget.toLowerCase()
         const slug = post.slug
-        const stats = daily.articlesStats?.[slug] || {}
-        const firstPartyViews = firstPartyViewsBySlug.get(slug)
+        const stats = analyticsBySlug[slug]
         // Ensure all values are JSON-serializable (convert Date to ISO string)
         return {
           articleUrl: `/learn/${urlTarget}/${slug}`,
@@ -102,14 +58,13 @@ export async function GET(request: NextRequest) {
           topics: post.topics || [],
           readingTime: post.readingTime || 5,
           published: post.published !== false,
-          // pageViews now come from first-party article counters.
-          pageViews: typeof firstPartyViews === 'number' ? firstPartyViews : 0,
-          uniquePageViews: stats.users || 0, // Use users as uniquePageViews
-          avgTimeOnPage: stats.avgTimeOnPage || 0,
-          bounceRate: stats.bounceRate || 0,
-          users: stats.users || 0,
-          sessions: stats.sessions || 0,
-          updatedAt: stats.updatedAt instanceof Date ? stats.updatedAt.toISOString() : stats.updatedAt ?? null,
+          pageViews: stats?.pageViews || 0,
+          uniquePageViews: stats?.users || 0,
+          avgTimeOnPage: stats?.avgTimeOnPage || 0,
+          bounceRate: stats?.bounceRate || 0,
+          users: stats?.users || 0,
+          sessions: stats?.sessions || 0,
+          updatedAt: stats?.updatedAt ?? null,
         }
       })
       // Sort by page views (descending), then by title

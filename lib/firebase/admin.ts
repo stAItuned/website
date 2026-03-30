@@ -6,6 +6,7 @@ import { getStorage, Storage } from 'firebase-admin/storage';
 let cachedApp: App | null = null;
 let cachedDb: Firestore | null = null;
 let cachedDbDefault: Firestore | null = null;
+let cachedDbLegacyDefault: Firestore | null = null;
 let cachedStorage: Storage | null = null;
 
 const ROLE_FIT_AUDIT_DATABASE_ID = 'role-fit-audit';
@@ -145,6 +146,24 @@ function getDbDefault(): Firestore {
   return cachedDbDefault;
 }
 
+/**
+ * Get the legacy default Firestore database.
+ * Read-only compatibility path for analytics during the eu-primary migration.
+ */
+function getDbLegacyDefault(): Firestore {
+  if (cachedDbLegacyDefault) {
+    return cachedDbLegacyDefault;
+  }
+
+  cachedDbLegacyDefault = getFirestore(getFirebaseApp(), LEGACY_FIRESTORE_DATABASE_ID);
+  try {
+    cachedDbLegacyDefault.settings({ ignoreUndefinedProperties: true });
+  } catch (e) {
+    // Ignore "Firestore has already been initialized" error
+  }
+  return cachedDbLegacyDefault;
+}
+
 // Export getter functions
 export function db() {
   return getDb();
@@ -153,6 +172,10 @@ export function db() {
 // Export default database getter for analytics
 export function dbDefault() {
   return getDbDefault();
+}
+
+export function dbLegacyDefault() {
+  return getDbLegacyDefault();
 }
 
 /**

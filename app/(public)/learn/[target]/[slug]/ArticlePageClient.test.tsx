@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type React from 'react'
 import ArticlePageClient from './ArticlePageClient'
 import type { ContentPost } from '@/lib/contentlayer'
+
+const floatingShareBarSpy = vi.fn()
 
 vi.mock('@/lib/hooks/useScreenSize', () => ({
   useScreenSize: () => true,
@@ -39,7 +41,12 @@ vi.mock('@/components/BackToTopButton', () => ({ BackToTopButton: () => <div /> 
 vi.mock('@/components/ui/PageTransition', () => ({ PageTransition: ({ children }: { children: React.ReactNode }) => <>{children}</> }))
 vi.mock('@/components/RelatedArticles', () => ({ RelatedArticles: () => <div /> }))
 vi.mock('@/components/ui/ReadingProgress', () => ({ ReadingProgress: () => <div /> }))
-vi.mock('@/components/ui/FloatingShareBar', () => ({ FloatingShareBar: () => <div /> }))
+vi.mock('@/components/ui/FloatingShareBar', () => ({
+  FloatingShareBar: (props: unknown) => {
+    floatingShareBarSpy(props)
+    return <div />
+  },
+}))
 vi.mock('@/components/ui/AuthorBioCard', () => ({ AuthorBioCard: () => <div /> }))
 vi.mock('@/components/ui/ContributorCTA', () => ({ ContributorCTA: () => <div /> }))
 vi.mock('@/components/pwa', () => ({ PWAInstallInline: () => <div /> }))
@@ -138,6 +145,7 @@ function buildArticle(overrides: Partial<ContentPost>): ContentPost {
 
 describe('ArticlePageClient lang semantics', () => {
   beforeEach(() => {
+    floatingShareBarSpy.mockReset()
     vi.stubGlobal('fetch', vi.fn(() => new Promise(() => undefined)))
   })
 
@@ -177,5 +185,72 @@ describe('ArticlePageClient lang semantics', () => {
 
     const article = screen.getByRole('article')
     expect(article.getAttribute('lang')).toBe('it')
+  })
+
+  it('passes unique visitors to the floating KPI rail when analytics are available', () => {
+    render(
+      <ArticlePageClient
+        {...baseProps}
+        analytics={{
+          ...baseProps.analytics,
+          pageViews: 69,
+          users: 14,
+        }}
+        article={buildArticle({
+          slug: 'hero-analytics-article',
+          title: 'Hero analytics article',
+          language: 'English',
+        })}
+      />
+    )
+
+    expect(floatingShareBarSpy).toHaveBeenCalled()
+    const lastCall = floatingShareBarSpy.mock.calls.at(-1)?.[0] as { visitors?: number } | undefined
+    expect(lastCall?.visitors).toBe(14)
+  })
+
+  it('refreshes live analytics and surfaces unique visitors after mount', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: RequestInfo | URL) => {
+        const url = String(input)
+        if (url.includes('/api/analytics/fast?slug=')) {
+          return {
+            ok: true,
+            json: async () => ({
+              success: true,
+              data: {
+                pageViews: 47,
+                users: 14,
+                likes: 0,
+                sessions: 26,
+                avgTimeOnPage: 331.43,
+                bounceRate: 0.11,
+                updatedAt: new Date().toISOString(),
+              },
+            }),
+          } as Response
+        }
+
+        return new Promise(() => undefined)
+      })
+    )
+
+    render(
+      <ArticlePageClient
+        {...baseProps}
+        article={buildArticle({
+          slug: 'vibe-coding-saas',
+          title: 'Vibe coding gets you a demo, not a production SaaS',
+          language: 'English',
+        })}
+      />
+    )
+
+    await waitFor(() => {
+      expect(floatingShareBarSpy).toHaveBeenCalled()
+      const lastCall = floatingShareBarSpy.mock.calls.at(-1)?.[0] as { visitors?: number } | undefined
+      expect(lastCall?.visitors).toBe(14)
+    })
   })
 })

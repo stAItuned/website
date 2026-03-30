@@ -330,13 +330,22 @@ export default function ArticlePageClient({
 
   // Refresh analytics on mount to get fresh data when page is cached
   useEffect(() => {
+    setLiveAnalytics(analytics)
+  }, [analytics])
+
+  useEffect(() => {
     const refreshAnalytics = async () => {
       try {
-        const response = await fetch(`/api/analytics/fast?slug=${encodeURIComponent(article.slug)}`)
+        const response = await fetch(`/api/analytics/fast?slug=${encodeURIComponent(article.slug)}`, {
+          cache: 'no-store',
+        })
         if (response.ok) {
           const result = await response.json()
           if (result.success && result.data) {
-            setLiveAnalytics(result.data)
+            setLiveAnalytics((current) => ({
+              ...current,
+              ...result.data,
+            }))
           }
         }
       } catch (error) {

@@ -23,6 +23,7 @@ interface ArticleCardProps {
     primaryTopic?: string
   }
   pageViews?: number
+  uniqueVisitors?: number
 }
 
 const DEFAULT_AVATAR_SRC = '/assets/general/avatar.png'
@@ -34,7 +35,7 @@ type PublicWriterApiResponse = {
   }
 }
 
-export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCardProps) {
+export function ArticleCard({ article, pageViews: initialPageViews, uniqueVisitors: initialUniqueVisitors }: ArticleCardProps) {
   const [runtimeAuthorAvatars, setRuntimeAuthorAvatars] = useState<Record<string, string | null>>({})
 
   // Fetch analytics for this article (fast endpoint)
@@ -49,7 +50,7 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
 
   // Determine which analytics to use
   const analyticsData = initialPageViews !== undefined
-    ? { pageViews: initialPageViews }
+    ? { pageViews: initialPageViews, users: initialUniqueVisitors ?? 0 }
     : internalAnalytics
   const cleanAuthor = article.author?.trim() || ''
   const normalizedSlug = cleanAuthor
@@ -196,6 +197,15 @@ export function ArticleCard({ article, pageViews: initialPageViews }: ArticleCar
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
                 {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData.pageViews)}
+              </div>
+            )}
+
+            {analyticsData && analyticsData.users >= 5 && (
+              <div className="flex items-center bg-white/90 dark:bg-black/60 text-blue-700 dark:text-blue-200 rounded-lg px-2 py-1 shadow-lg text-[10px] font-semibold gap-1.5 backdrop-blur-md border border-blue-200/70 dark:border-blue-400/20 transition-all duration-300">
+                <svg className="w-3 h-3 text-blue-500 dark:text-blue-300" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {analyticsLoading ? '...' : formatAnalyticsNumber(analyticsData.users)}
               </div>
             )}
           </div>

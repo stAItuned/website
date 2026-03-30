@@ -24,7 +24,7 @@ vi.mock('next/link', () => ({
 
 vi.mock('@/lib/hooks/useFastAnalytics', () => ({
   useFastAnalytics: () => ({
-    data: { pageViews: 0 },
+    data: { pageViews: 0, users: 0 },
     loading: false,
   }),
   formatAnalyticsNumber: (value: number) => String(value),
@@ -102,5 +102,23 @@ describe('ArticleCard', () => {
 
     expect(title.closest('a')).toBe(link)
     expect(cta.closest('a')).toBe(link)
+  })
+
+  it('renders server-provided views and unique visitors when available', () => {
+    render(
+      <ArticleCard
+        article={{
+          title: 'Analytics enriched card',
+          slug: 'analytics-enriched-card',
+          target: 'Midway',
+          date: '2026-01-10',
+        }}
+        pageViews={123}
+        uniqueVisitors={17}
+      />
+    )
+
+    expect(screen.getByText('123')).toBeTruthy()
+    expect(screen.getByText('17')).toBeTruthy()
   })
 })
