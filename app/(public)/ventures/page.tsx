@@ -7,7 +7,7 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').r
 export const metadata: Metadata = {
   title: 'Ventures | AI Venture Building',
   description:
-    'Costruiamo e validiamo prodotti AI-native. Scopri il portfolio stAI tuned Ventures e l’opportunità Founding GTM / Venture Builder.',
+    'Costruiamo prodotti AI, li testiamo sul mercato e capiamo quali meritano di crescere.',
   alternates: {
     canonical: `${SITE_URL}/ventures`,
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/ventures`,
     title: 'stAI tuned Ventures | AI Venture Building',
     description:
-      'AI-native products, working software and a zero-to-one venture engine. Explore the portfolio and the Founding GTM opportunity.',
+      'We build AI products, test them with real users and learn which ones deserve to grow.',
     type: 'website',
   },
 }

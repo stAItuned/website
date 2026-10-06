@@ -41,6 +41,16 @@ The information hierarchy is:
 
 Portfolio media is represented by purpose-built placeholders. These reserve final screenshot/video geometry so future assets can replace placeholders without changing layout.
 
+## Copy principles
+
+Venture copy should stay short, concrete and human:
+- one idea per sentence;
+- prefer everyday language over venture jargon;
+- keep section intros to one short sentence where possible;
+- use short bullets that can be scanned without reading the whole panel;
+- avoid repeating the same positioning across hero, thesis, bridge and role;
+- explain products by what they do, not by abstract category language.
+
 ## Brand decisions
 
 The page follows the existing visual grammar of the stAI tuned Home and Lab surfaces rather than introducing a separate venture-studio aesthetic.
