@@ -3,11 +3,13 @@
 import Link from 'next/link'
 import { FormEvent, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import type { LearnLocale } from '@/lib/i18n'
 import type { VenturesCopy } from './venturesContent'
 
 interface FoundingGtmSectionProps {
   bridge: VenturesCopy['bridge']
   role: VenturesCopy['role']
+  locale: LearnLocale
 }
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error'
@@ -46,7 +48,7 @@ function CheckList({ items }: { items: string[] }) {
   )
 }
 
-export function FoundingGtmSection({ bridge, role }: FoundingGtmSectionProps) {
+export function FoundingGtmSection({ bridge, role, locale }: FoundingGtmSectionProps) {
   const formCopy = role.form
   const [isMounted, setIsMounted] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -92,7 +94,7 @@ export function FoundingGtmSection({ bridge, role }: FoundingGtmSectionProps) {
           source: 'ventures_founding_gtm',
           page: window.location.pathname,
           userAgent: navigator.userAgent,
-          locale: document.documentElement.lang || 'it',
+          locale,
         }),
       })
 

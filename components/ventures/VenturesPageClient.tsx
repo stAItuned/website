@@ -22,7 +22,7 @@ export function VenturesPageClient() {
       <VentureEngineSection thesis={copy.thesis} engine={copy.engine} />
       <VenturePortfolioSection copy={copy.portfolio} />
       <VenturePrinciplesSection copy={copy.principles} />
-      <FoundingGtmSection bridge={copy.bridge} role={copy.role} />
+      <FoundingGtmSection bridge={copy.bridge} role={copy.role} locale={locale} />
     </div>
   )
 }

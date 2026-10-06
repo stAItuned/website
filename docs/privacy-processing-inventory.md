@@ -1,6 +1,6 @@
 # Privacy Processing Inventory (Repo-Driven)
 
-UpdatedAt: 2026-03-26
+UpdatedAt: 2026-10-06
 
 ## Purpose
 
