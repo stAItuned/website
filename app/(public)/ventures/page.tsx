@@ -5,7 +5,7 @@ import { VenturesPageClient } from '@/components/ventures/VenturesPageClient'
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://staituned.com').replace(/\/+$/, '')
 
 export const metadata: Metadata = {
-  title: 'stAI tuned Ventures | AI Venture Building',
+  title: 'Ventures | AI Venture Building',
   description:
     'Costruiamo e validiamo prodotti AI-native. Scopri il portfolio stAI tuned Ventures e l’opportunità Founding GTM / Venture Builder.',
   alternates: {

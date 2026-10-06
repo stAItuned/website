@@ -1,6 +1,6 @@
 # Brainstorm — stAI tuned Ventures landing
 
-Date: 2026-10-06  
+Date: 2026-10-06
 Status: confirmed by user before implementation
 
 ## Goal
