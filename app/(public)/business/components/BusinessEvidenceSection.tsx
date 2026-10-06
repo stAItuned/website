@@ -1,6 +1,4 @@
 import type { BusinessTranslations } from '@/lib/i18n/business-translations'
-import { Button } from '@/components/ui/Button'
-import { Link } from 'lucide-react'
 import { BusinessSectionEyebrow } from './BusinessSectionEyebrow'
 
 export function BusinessEvidenceSection({ t }: { t: BusinessTranslations }) {
@@ -24,10 +22,14 @@ export function BusinessEvidenceSection({ t }: { t: BusinessTranslations }) {
               <p className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">{item.value}</p>
               <h3 className="mt-3 text-base font-bold leading-6 text-slate-900 dark:text-white">{item.label}</h3>
               <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">{item.note}</p>
-<Button as="a" href={item.sourceHref} target="_blank" rel="noreferrer"
-  variant="secondary" className="mt-4 text-xs font-semibold uppercase tracking-[0.16em]">
-  <Link className="h-3 w-3 mr-1" aria-hidden />{item.sourceLabel}
-</Button>
+              <a
+                href={item.sourceHref}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex text-xs font-semibold uppercase tracking-[0.16em] text-primary-500 hover:text-primary-600 dark:text-amber-300 dark:hover:text-amber-200"
+              >
+                {item.sourceLabel}
+              </a>
             </article>
           ))}
         </div>

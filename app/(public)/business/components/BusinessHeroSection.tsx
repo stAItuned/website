@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ArrowRight, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
 import type { BusinessTranslations } from '@/lib/i18n/business-translations'
 import { OpenBusinessRequestButton } from './OpenBusinessRequestButton'
 
