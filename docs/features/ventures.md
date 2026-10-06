@@ -24,6 +24,7 @@ Feature files:
 - `components/ventures/VenturePortfolioSection.tsx`
 - `components/ventures/VenturePrinciplesSection.tsx`
 - `components/ventures/FoundingGtmSection.tsx`
+- `components/ventures/VentureVisualMedia.tsx`
 - `components/ventures/VentureVisualPlaceholder.tsx`
 - `components/ventures/venturesContent.ts`
 
@@ -39,7 +40,7 @@ The information hierarchy is:
 6. Technical-vs-commercial complementarity.
 7. Founding GTM opportunity and conversation CTA.
 
-Portfolio media is represented by purpose-built placeholders. These reserve final screenshot/video geometry so future assets can replace placeholders without changing layout.
+Portfolio media is managed through `VentureVisualMedia`. When real assets are available (such as ClosedRoom at `/assets/ventures/closedroom.png`, Harnex at `/assets/ventures/harnex.png`, and Aura Finance at `/assets/ventures/aura-finance.png`), it renders an optimized responsive image with an accessible click-to-zoom modal; when no asset is provided, purpose-built geometry-preserving placeholders (`VentureVisualPlaceholder`) are used as fallback.
 
 ## Copy principles
 
@@ -102,7 +103,7 @@ No new AI system behavior is introduced. The page describes AI products but does
 
 Future iterations can add:
 
-- real product screenshots/videos by replacing `VentureVisualPlaceholder`;
+- video previews or interactive prototypes for portfolio ventures via `VentureVisualMedia`;
 - detail routes under `/ventures/[venture]`;
 - a dedicated `/ventures/founding-gtm` route;
 - a lightweight application funnel after a separate GDPR review;

@@ -17,6 +17,7 @@ export interface VentureShowcaseItem {
   tags: string[]
   visualLabel: string
   placeholderLabel: string
+  imageSrc?: string
 }
 
 export interface VenturesCopy {
@@ -49,6 +50,8 @@ export interface VenturesCopy {
     ventures: VentureShowcaseItem[]
     pipelineLabel: string
     pipelineText: string
+    zoomLabel?: string
+    closeLabel?: string
   }
   principles: {
     eyebrow: string
@@ -137,6 +140,7 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
           tags: ['Local AI', 'macOS', 'Productivity'],
           visualLabel: 'ClosedRoom product visual',
           placeholderLabel: 'Visual placeholder',
+          imageSrc: '/assets/ventures/closedroom.png',
         },
         {
           id: 'harnex',
@@ -148,6 +152,7 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
           tags: ['Local LLM', 'Android', 'Developer tooling'],
           visualLabel: 'Harnex product visual',
           placeholderLabel: 'Visual placeholder',
+          imageSrc: '/assets/ventures/harnex.png',
         },
         {
           id: 'aura-finance',
@@ -159,11 +164,14 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
           tags: ['Fintech', 'AI', 'Decision support'],
           visualLabel: 'Aura Finance product visual',
           placeholderLabel: 'Visual placeholder',
+          imageSrc: '/assets/ventures/aura-finance.png',
         },
       ],
       pipelineLabel: 'More in progress',
       pipelineText:
         'We test ideas early. Some grow. Some stop.',
+      zoomLabel: 'Zoom',
+      closeLabel: 'Close',
     },
     principles: {
       eyebrow: 'HOW WE WORK',
@@ -295,6 +303,7 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
           tags: ['Local AI', 'macOS', 'Produttività'],
           visualLabel: 'Visual prodotto ClosedRoom',
           placeholderLabel: 'Placeholder visuale',
+          imageSrc: '/assets/ventures/closedroom.png',
         },
         {
           id: 'harnex',
@@ -306,6 +315,7 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
           tags: ['Local LLM', 'Android', 'Developer tooling'],
           visualLabel: 'Visual prodotto Harnex',
           placeholderLabel: 'Placeholder visuale',
+          imageSrc: '/assets/ventures/harnex.png',
         },
         {
           id: 'aura-finance',
@@ -317,11 +327,14 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
           tags: ['Fintech', 'AI', 'Decision support'],
           visualLabel: 'Visual prodotto Aura Finance',
           placeholderLabel: 'Placeholder visuale',
+          imageSrc: '/assets/ventures/aura-finance.png',
         },
       ],
       pipelineLabel: 'Altri esperimenti in corso',
       pipelineText:
         'Testiamo presto. Alcune idee crescono, altre si fermano.',
+      zoomLabel: 'Ingrandisci',
+      closeLabel: 'Chiudi',
     },
     principles: {
       eyebrow: 'COME LAVORIAMO',

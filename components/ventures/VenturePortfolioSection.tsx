@@ -1,4 +1,4 @@
-import { VentureVisualPlaceholder } from './VentureVisualPlaceholder'
+import { VentureVisualMedia } from './VentureVisualMedia'
 import type { VenturesCopy } from './venturesContent'
 
 interface VenturePortfolioSectionProps {
@@ -28,11 +28,14 @@ export function VenturePortfolioSection({ copy }: VenturePortfolioSectionProps) 
                 className="grid gap-7 rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900/60 sm:p-6 lg:grid-cols-2 lg:items-center"
               >
                 <div className={visualFirst ? 'lg:order-1' : 'lg:order-2'}>
-                  <VentureVisualPlaceholder
+                  <VentureVisualMedia
                     title={venture.title}
                     label={venture.visualLabel}
                     index={index}
                     placeholderLabel={venture.placeholderLabel}
+                    imageSrc={venture.imageSrc}
+                    zoomLabel={copy.zoomLabel}
+                    closeLabel={copy.closeLabel}
                   />
                 </div>
 

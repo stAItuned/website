@@ -23,4 +23,24 @@ describe('venturesContent', () => {
       expect(venturesContent[locale].role.ctaSubject.length).toBeGreaterThan(0)
     }
   })
+
+  it('keeps portfolio media and zoom labels aligned across locales', () => {
+    for (const locale of ['en', 'it'] as const) {
+      const closedroom = venturesContent[locale].portfolio.ventures.find((v) => v.id === 'closedroom')
+      expect(closedroom?.imageSrc).toBe('/assets/ventures/closedroom.png')
+
+      const harnex = venturesContent[locale].portfolio.ventures.find((v) => v.id === 'harnex')
+      expect(harnex?.imageSrc).toBe('/assets/ventures/harnex.png')
+
+      const auraFinance = venturesContent[locale].portfolio.ventures.find((v) => v.id === 'aura-finance')
+      expect(auraFinance?.imageSrc).toBe('/assets/ventures/aura-finance.png')
+
+      expect(venturesContent[locale].portfolio.zoomLabel).toBeDefined()
+      expect(venturesContent[locale].portfolio.closeLabel).toBeDefined()
+    }
+  })
 })
+
+
+
+
