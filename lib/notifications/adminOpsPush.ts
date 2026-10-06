@@ -9,6 +9,7 @@ export type AdminOpsEventType =
   | 'contact_submitted'
   | 'feedback_submitted'
   | 'contributors_apply_submitted'
+  | 'ventures_gtm_submitted'
 
 export type AdminOpsPriority = 'normal' | 'high'
 
@@ -51,6 +52,10 @@ const EVENT_CONFIG: Record<AdminOpsEventType, AdminOpsEventConfig> = {
   contributors_apply_submitted: {
     title: 'Nuovo submit: Contributors Apply',
     relativeAdminUrl: '/admin/contributions',
+  },
+  ventures_gtm_submitted: {
+    title: 'Nuovo contatto: Ventures GTM',
+    relativeAdminUrl: '/admin',
   },
 }
 

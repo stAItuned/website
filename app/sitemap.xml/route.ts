@@ -128,6 +128,10 @@ export async function GET() {
     "/career-os": getLatestFileMtime(["app/(public)/career-os/page.tsx"]),
     "/role-fit-audit": getLatestFileMtime(["app/(public)/role-fit-audit/page.tsx"]),
     "/prodotti": getLatestFileMtime(["app/(public)/prodotti/page.tsx"]),
+    "/ventures": getLatestFileMtime([
+      "app/(public)/ventures/page.tsx",
+      "components/ventures/venturesContent.ts",
+    ]),
     "/meet": getLatestFileMtime(["app/(public)/meet/page.tsx"]),
     "/contribute": getLatestFileMtime(["app/(public)/contribute/page.tsx"]),
     "/contributor": getLatestFileMtime(["app/(public)/contributor/page.tsx"]),
@@ -155,6 +159,7 @@ export async function GET() {
     { loc: `${baseUrl}/career-os`, lastmod: staticPageLastmodByPath["/career-os"] },
     { loc: `${baseUrl}/role-fit-audit`, lastmod: staticPageLastmodByPath["/role-fit-audit"] },
     { loc: `${baseUrl}/prodotti`, lastmod: productsCatalogLastmod ?? staticPageLastmodByPath["/prodotti"] },
+    { loc: `${baseUrl}/ventures`, lastmod: staticPageLastmodByPath["/ventures"] },
     { loc: `${baseUrl}/meet`, lastmod: staticPageLastmodByPath["/meet"] },
     { loc: `${baseUrl}/contribute`, lastmod: staticPageLastmodByPath["/contribute"] },
     { loc: `${baseUrl}/contributor`, lastmod: staticPageLastmodByPath["/contributor"] },
