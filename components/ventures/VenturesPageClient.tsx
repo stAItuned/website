@@ -4,7 +4,6 @@ import { useLearnLocale } from '@/lib/i18n'
 import { FoundingGtmSection } from './FoundingGtmSection'
 import { VentureEngineSection } from './VentureEngineSection'
 import { VenturePortfolioSection } from './VenturePortfolioSection'
-import { VenturePrinciplesSection } from './VenturePrinciplesSection'
 import { VenturesHero } from './VenturesHero'
 import { venturesContent } from './venturesContent'
 
@@ -19,9 +18,8 @@ export function VenturesPageClient() {
   return (
     <div className="overflow-hidden">
       <VenturesHero copy={copy.hero} />
-      <VentureEngineSection thesis={copy.thesis} engine={copy.engine} />
       <VenturePortfolioSection copy={copy.portfolio} />
-      <VenturePrinciplesSection copy={copy.principles} />
+      <VentureEngineSection engine={copy.engine} />
       <FoundingGtmSection bridge={copy.bridge} role={copy.role} locale={locale} />
     </div>
   )

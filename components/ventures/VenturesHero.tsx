@@ -6,14 +6,14 @@ interface VenturesHeroProps {
 
 export function VenturesHero({ copy }: VenturesHeroProps) {
   return (
-    <section id="top" className="relative min-h-[70vh] overflow-hidden bg-slate-900 text-white shadow-2xl">
+    <section id="top" className="relative min-h-[62vh] overflow-hidden bg-slate-900 text-white shadow-2xl">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute -left-24 top-12 h-72 w-72 rounded-full bg-primary-400/10 blur-3xl" />
         <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-5xl items-center px-6 pb-16 pt-32 md:pb-24 md:pt-40">
+      <div className="relative z-10 mx-auto flex min-h-[62vh] max-w-5xl items-center px-6 pb-14 pt-28 md:pb-18 md:pt-32">
         <div className="w-full space-y-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-200">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden />

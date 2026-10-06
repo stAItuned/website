@@ -22,7 +22,6 @@ Feature files:
 - `components/ventures/VenturesHero.tsx`
 - `components/ventures/VentureEngineSection.tsx`
 - `components/ventures/VenturePortfolioSection.tsx`
-- `components/ventures/VenturePrinciplesSection.tsx`
 - `components/ventures/FoundingGtmSection.tsx`
 - `components/ventures/VentureVisualMedia.tsx`
 - `components/ventures/VentureVisualPlaceholder.tsx`
@@ -30,15 +29,15 @@ Feature files:
 
 ## UX model
 
-The information hierarchy is:
+The information hierarchy is optimized for cold outreach:
 
 1. Hero / positioning.
-2. Bottleneck thesis.
-3. Venture engine.
-4. Venture portfolio.
-5. Venture decision principles.
-6. Technical-vs-commercial complementarity.
-7. Founding GTM opportunity and conversation CTA.
+2. Venture portfolio as immediate proof.
+3. A compact three-step operating model: Build → Test → Decide.
+4. Technical-vs-commercial complementarity.
+5. Founding GTM opportunity and conversation CTA.
+
+The previous standalone thesis and decision-principles sections are intentionally not rendered: they repeated the same idea and delayed proof for visitors arriving from outreach.
 
 Portfolio media is managed through `VentureVisualMedia`. When real assets are available (such as ClosedRoom at `/assets/ventures/closedroom.png`, Harnex at `/assets/ventures/harnex.png`, and Aura Finance at `/assets/ventures/aura-finance.png`), it renders an optimized responsive image with an accessible click-to-zoom modal; when no asset is provided, purpose-built geometry-preserving placeholders (`VentureVisualPlaceholder`) are used as fallback.
 
@@ -70,7 +69,7 @@ The result should feel like a focused stAI tuned product surface, not a visually
 
 - Mobile: all sections become a single vertical flow; venture visuals stay above their text.
 - Tablet: spacing and type scale increase without changing information order.
-- Desktop: engine steps become horizontal; portfolio alternates visual/content order; GTM section becomes a two-column operating model.
+- Desktop: the three operating steps become horizontal; portfolio alternates visual/content order; GTM section becomes a two-column operating model.
 - All primary CTAs remain visible and tappable at small breakpoints.
 
 ## Accessibility

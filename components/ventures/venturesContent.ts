@@ -78,6 +78,7 @@ export interface VenturesCopy {
     eyebrow: string
     title: string
     intro: string
+    setup: string
     fitItems: string[]
     cta: string
     ctaSubject: string
@@ -129,14 +130,12 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
     },
     engine: {
       eyebrow: 'HOW IT WORKS',
-      title: 'From idea to traction.',
-      subtitle: 'Build. Test. Learn. Then scale or stop.',
+      title: 'Build. Test. Decide.',
+      subtitle: 'Enough process to learn fast.',
       steps: [
-        { label: 'Idea', detail: 'Pick a real problem.', status: 'existing' },
-        { label: 'Build', detail: 'Ship a usable first version.', status: 'existing' },
-        { label: 'Validate', detail: 'Talk to users and test demand.', status: 'focus' },
-        { label: 'Distribute', detail: 'Find a channel that works.', status: 'focus' },
-        { label: 'Scale', detail: 'Invest when the signal is clear.', status: 'next' },
+        { label: 'Build', detail: 'Put something real in front of users.', status: 'existing' },
+        { label: 'Test', detail: 'Talk to customers and test demand.', status: 'focus' },
+        { label: 'Decide', detail: 'Push what works. Stop what doesn’t.', status: 'next' },
       ],
       productSideLabel: 'Product / Engineering',
       gtmSideLabel: 'Founding GTM',
@@ -223,19 +222,14 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
       existingTitle: 'Already here',
       existingItems: [
         'AI product engineering',
-        'Fast prototyping',
         'Working products',
-        'Technical experiments',
         'Budget for early tests',
       ],
       missingTitle: "You'd own",
       missingItems: [
-        'Market selection',
-        'ICP discovery',
-        'Customer conversations',
-        'Outbound and sales',
-        'Offers and pricing',
-        'Growth tests',
+        'ICP and customer discovery',
+        'Outbound and first sales',
+        'Offer, pricing and growth tests',
       ],
       connector: "We're looking for a Founding GTM / Venture Builder.",
     },
@@ -244,6 +238,7 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
       title: 'Take our products to market.',
       intro:
         'Talk to customers, sell, test channels and help us decide what to push.',
+      setup: 'Founding role. We shape commitment and structure together.',
       fitItems: [
         'You’ve found first customers before.',
         'You do the outreach yourself.',
@@ -297,14 +292,12 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
     },
     engine: {
       eyebrow: 'COME FUNZIONA',
-      title: 'Dall’idea alla trazione.',
-      subtitle: 'Costruiamo. Testiamo. Impariamo. Poi scaliamo o ci fermiamo.',
+      title: 'Costruiamo. Testiamo. Decidiamo.',
+      subtitle: 'Il minimo processo che serve per imparare in fretta.',
       steps: [
-        { label: 'Idea', detail: 'Scegliamo un problema reale.', status: 'existing' },
-        { label: 'Build', detail: 'Creiamo una prima versione usabile.', status: 'existing' },
-        { label: 'Validate', detail: 'Parliamo con utenti e testiamo la domanda.', status: 'focus' },
-        { label: 'Distribute', detail: 'Troviamo un canale che funziona.', status: 'focus' },
-        { label: 'Scale', detail: 'Investiamo quando il segnale è chiaro.', status: 'next' },
+        { label: 'Costruire', detail: 'Mettiamo qualcosa di reale davanti agli utenti.', status: 'existing' },
+        { label: 'Testare', detail: 'Parliamo con clienti e testiamo la domanda.', status: 'focus' },
+        { label: 'Decidere', detail: 'Spingiamo ciò che funziona. Fermiamo il resto.', status: 'next' },
       ],
       productSideLabel: 'Product / Engineering',
       gtmSideLabel: 'Founding GTM',
@@ -391,19 +384,14 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
       existingTitle: 'C’è già',
       existingItems: [
         'Product engineering AI',
-        'Prototipazione rapida',
         'Prodotti funzionanti',
-        'Sperimentazione tecnica',
         'Budget per i primi test',
       ],
       missingTitle: 'Te ne occuperesti tu',
       missingItems: [
-        'Scelta del mercato',
-        'ICP',
-        'Customer interview',
-        'Outbound e sales',
-        'Offerta e pricing',
-        'Growth test',
+        'ICP e customer discovery',
+        'Outbound e prime vendite',
+        'Offerta, pricing e growth test',
       ],
       connector: 'Cerchiamo un Founding GTM / Venture Builder.',
     },
@@ -412,6 +400,7 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
       title: 'Porta i prodotti sul mercato.',
       intro:
         'Parla con clienti, vendi, testa canali. Ci aiuti a capire cosa spingere.',
+      setup: 'Ruolo founding. Commitment e formula si definiscono insieme.',
       fitItems: [
         'Hai già trovato i primi clienti.',
         'Fai outreach in prima persona.',
