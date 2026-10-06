@@ -7,22 +7,25 @@ interface VenturePortfolioSectionProps {
 
 export function VenturePortfolioSection({ copy }: VenturePortfolioSectionProps) {
   return (
-    <section id="portfolio" className="bg-slate-950 px-5 py-20 text-white sm:px-6 md:py-28 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-secondary-500">{copy.eyebrow}</p>
-          <h2 className="mt-4 text-4xl font-bold tracking-[-0.035em] sm:text-5xl md:text-6xl">{copy.title}</h2>
-          <p className="mt-5 text-base leading-7 text-slate-300 sm:text-lg">{copy.subtitle}</p>
+    <section id="portfolio" className="bg-white px-4 py-16 dark:bg-slate-950 md:px-6 md:py-20">
+      <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden />
+            {copy.eyebrow}
+          </span>
+          <h2 className="mt-5 text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">{copy.title}</h2>
+          <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-400 md:text-lg">{copy.subtitle}</p>
         </div>
 
-        <div className="mt-16 space-y-10 md:space-y-16">
+        <div className="mt-12 space-y-8">
           {copy.ventures.map((venture, index) => {
             const visualFirst = index % 2 === 0
 
             return (
               <article
                 key={venture.id}
-                className="grid gap-8 rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 shadow-2xl shadow-black/10 sm:p-7 lg:grid-cols-2 lg:items-center lg:p-8"
+                className="grid gap-7 rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900/60 sm:p-6 lg:grid-cols-2 lg:items-center"
               >
                 <div className={visualFirst ? 'lg:order-1' : 'lg:order-2'}>
                   <VentureVisualPlaceholder
@@ -33,25 +36,27 @@ export function VenturePortfolioSection({ copy }: VenturePortfolioSectionProps) 
                   />
                 </div>
 
-                <div className={`px-1 py-2 sm:px-3 lg:px-6 ${visualFirst ? 'lg:order-2' : 'lg:order-1'}`}>
+                <div className={`px-1 py-2 sm:px-3 lg:px-5 ${visualFirst ? 'lg:order-2' : 'lg:order-1'}`}>
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-full border border-secondary-500/30 bg-secondary-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-secondary-500">
+                    <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
                       {venture.stage}
                     </span>
-                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                       0{index + 1}
                     </span>
                   </div>
 
-                  <h3 className="mt-6 text-3xl font-bold tracking-[-0.03em] sm:text-4xl">{venture.title}</h3>
-                  <p className="mt-2 text-lg font-semibold text-secondary-500 sm:text-xl">{venture.proposition}</p>
-                  <p className="mt-5 text-base leading-7 text-slate-300">{venture.description}</p>
+                  <h3 className="mt-5 text-2xl font-bold text-slate-900 dark:text-white md:text-3xl">{venture.title}</h3>
+                  <p className="mt-2 text-lg font-semibold text-amber-600 dark:text-amber-400">{venture.proposition}</p>
+                  <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-base">
+                    {venture.description}
+                  </p>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-5 flex flex-wrap gap-2">
                     {venture.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-300"
+                        className="rounded-md bg-slate-200/70 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300"
                       >
                         {tag}
                       </span>
@@ -63,9 +68,11 @@ export function VenturePortfolioSection({ copy }: VenturePortfolioSectionProps) 
           })}
         </div>
 
-        <div className="mt-12 rounded-3xl border border-dashed border-white/20 bg-white/[0.02] p-7 sm:p-9">
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-secondary-500">{copy.pipelineLabel}</p>
-          <p className="mt-3 max-w-3xl text-base leading-7 text-slate-300">{copy.pipelineText}</p>
+        <div className="mt-8 rounded-2xl border border-dashed border-amber-300 bg-amber-50/60 p-6 dark:border-amber-500/30 dark:bg-amber-500/5">
+          <p className="text-sm font-bold text-amber-700 dark:text-amber-300">{copy.pipelineLabel}</p>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400 md:text-base">
+            {copy.pipelineText}
+          </p>
         </div>
       </div>
     </section>

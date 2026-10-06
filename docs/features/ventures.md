@@ -43,13 +43,17 @@ Portfolio media is represented by purpose-built placeholders. These reserve fina
 
 ## Brand decisions
 
-The page uses existing Tailwind tokens only:
+The page follows the existing visual grammar of the stAI tuned Home and Lab surfaces rather than introducing a separate venture-studio aesthetic.
 
-- `primary` for stAI tuned navy/blue identity;
-- `secondary` for the yellow-gold accent;
-- slate neutrals for high-contrast product surfaces.
+- `primary` is used for institutional navy/blue identity and informational badges.
+- Tailwind `amber` is the operational accent for CTAs, highlights and active venture states, matching the site's existing CTA and gradient patterns.
+- The brighter `secondary` yellow is not used as a large solid text or surface fill; gold emphasis uses the existing `text-gradient-gold` utility.
+- Dark full-width surfaces use `slate-900`, consistent with the homepage hero, rather than near-black `slate-950` as the dominant page color.
+- Section headings follow the site's established scale: generally `text-3xl md:text-4xl`; the hero follows `text-4xl md:text-5xl lg:text-6xl`.
+- Cards use the site's common `rounded-2xl`, light borders and restrained shadows. Full-page dark panels are limited to the hero and the Founding GTM opportunity.
+- Section spacing follows the existing `py-16` / `md:py-20` rhythm and `max-w-5xl/6xl` content widths.
 
-The page deliberately uses fewer emojis, fewer orange/red gradients and more whitespace than the editorial homepage to create a more mature builder/studio feel without introducing a separate brand system.
+The result should feel like a focused stAI tuned product surface, not a visually separate startup microsite.
 
 ## Responsive behavior
 

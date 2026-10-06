@@ -19,46 +19,47 @@ export function VentureVisualPlaceholder({
     <div
       role="img"
       aria-label={label}
-      className="relative min-h-[260px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950 shadow-2xl shadow-slate-950/30 sm:min-h-[320px] lg:min-h-[390px]"
+      className="relative min-h-[250px] overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-100 via-white to-amber-50 shadow-sm dark:border-slate-700 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 sm:min-h-[300px] lg:min-h-[340px]"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-600/40 via-slate-950 to-slate-950" />
-      <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-secondary-500/10 blur-3xl" />
-      <div className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-primary-300/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-primary-300/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl" aria-hidden />
 
-      <div className="absolute inset-5 rounded-2xl border border-white/10 sm:inset-7">
-        <div className="flex h-10 items-center gap-2 border-b border-white/10 px-4">
-          <span className="h-2 w-2 rounded-full bg-secondary-500/70" />
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-          <span className="h-2 w-2 rounded-full bg-white/10" />
+      <div className="absolute inset-5 overflow-hidden rounded-xl border border-slate-200 bg-white/80 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:inset-6">
+        <div className="flex h-9 items-center gap-2 border-b border-slate-200 px-4 dark:border-slate-700">
+          <span className="h-2 w-2 rounded-full bg-amber-400" />
+          <span className="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600" />
+          <span className="h-2 w-2 rounded-full bg-slate-200 dark:bg-slate-700" />
         </div>
-        <div className="grid h-[calc(100%-2.5rem)] grid-cols-[72px_1fr]">
-          <div className="border-r border-white/10 p-3">
+
+        <div className="grid h-[calc(100%-2.25rem)] grid-cols-[64px_1fr]">
+          <div className="border-r border-slate-200 p-3 dark:border-slate-700">
             <div className="space-y-2">
               {Array.from({ length: 5 }).map((_, itemIndex) => (
                 <div
                   key={`${title}-nav-${itemIndex}`}
-                  className={`h-2 rounded-full ${itemIndex === index % 5 ? 'bg-secondary-500/60' : 'bg-white/10'}`}
+                  className={`h-2 rounded-full ${itemIndex === index % 5 ? 'bg-amber-400/80' : 'bg-slate-200 dark:bg-slate-700'}`}
                 />
               ))}
             </div>
           </div>
-          <div className="p-4 sm:p-6">
-            <div className="mb-5 h-3 w-28 rounded-full bg-white/20" />
+
+          <div className="p-4 sm:p-5">
+            <div className="mb-4 h-3 w-24 rounded-full bg-slate-300 dark:bg-slate-600" />
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="h-20 rounded-xl border border-white/10 bg-white/5" />
-              <div className="h-20 rounded-xl border border-white/10 bg-white/5" />
-              <div className="h-24 rounded-xl border border-white/10 bg-white/5 sm:col-span-2" />
+              <div className="h-16 rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800" />
+              <div className="h-16 rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800" />
+              <div className="h-20 rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800 sm:col-span-2" />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 border-t border-white/10 bg-slate-950/80 px-5 py-4 backdrop-blur-sm sm:px-7">
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 border-t border-slate-200 bg-white/90 px-5 py-3 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/90 sm:px-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary-500">{placeholderLabel}</p>
-          <p className="mt-1 text-sm font-semibold text-white">{title}</p>
+          <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">{placeholderLabel}</p>
+          <p className="mt-0.5 text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
         </div>
-        <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-slate-300">
+        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
           {String(index + 1).padStart(2, '0')}
         </span>
       </div>

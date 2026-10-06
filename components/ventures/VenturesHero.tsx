@@ -6,51 +6,46 @@ interface VenturesHeroProps {
 
 export function VenturesHero({ copy }: VenturesHeroProps) {
   return (
-    <section id="top" className="relative isolate overflow-hidden bg-slate-950 text-white">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-[-8rem] top-20 h-80 w-80 rounded-full bg-primary-400/20 blur-3xl" />
-        <div className="absolute right-[-6rem] top-[-4rem] h-96 w-96 rounded-full bg-secondary-500/10 blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-secondary-500/50 to-transparent" />
+    <section id="top" className="relative min-h-[70vh] overflow-hidden bg-slate-900 text-white shadow-2xl">
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute -left-24 top-12 h-72 w-72 rounded-full bg-primary-400/10 blur-3xl" />
+        <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
       </div>
 
-      <div className="mx-auto flex min-h-[82vh] max-w-7xl flex-col justify-center px-5 pb-20 pt-36 sm:px-6 md:pb-24 md:pt-40 lg:px-8">
-        <div className="max-w-5xl">
-          <p className="mb-6 text-xs font-bold uppercase tracking-[0.28em] text-secondary-500 sm:text-sm">
+      <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-5xl items-center px-6 pb-16 pt-32 md:pb-24 md:pt-40">
+        <div className="w-full space-y-8 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden />
             {copy.eyebrow}
-          </p>
+          </div>
 
-          <h1 className="max-w-5xl text-5xl font-bold leading-[0.98] tracking-[-0.045em] sm:text-6xl md:text-7xl lg:text-8xl">
-            <span className="block">{copy.headlineTop}</span>
-            <span className="mt-2 block text-secondary-500">{copy.headlineAccent}</span>
-          </h1>
+          <div className="space-y-5">
+            <h1 className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl">
+              <span className="block">{copy.headlineTop}</span>
+              <span className="mt-2 block text-gradient-gold">{copy.headlineAccent}</span>
+            </h1>
 
-          <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-300 sm:text-xl">
-            {copy.description}
-          </p>
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-200 md:text-xl">
+              {copy.description}
+            </p>
+          </div>
 
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a
-              href="#portfolio"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-secondary-500 px-6 py-3 text-sm font-bold text-primary-600 shadow-lg shadow-secondary-500/10 transition hover:-translate-y-0.5 hover:bg-secondary-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-            >
-              {copy.primaryCta}
+          <div className="flex flex-col justify-center gap-4 pt-2 sm:flex-row">
+            <a href="#portfolio" className="btn-brand-primary">
+              <span>{copy.primaryCta}</span>
               <span aria-hidden>↓</span>
             </a>
-            <a
-              href="#founding-gtm"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-            >
-              {copy.secondaryCta}
+            <a href="#founding-gtm" className="btn-brand-secondary">
+              <span>{copy.secondaryCta}</span>
               <span aria-hidden>→</span>
             </a>
           </div>
 
-          <div className="mt-12 flex flex-wrap gap-3 border-t border-white/10 pt-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 pt-4 text-sm font-medium text-white/75 md:gap-x-10">
             {copy.proof.map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-300"
-              >
+              <span key={item} className="inline-flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-400/80" aria-hidden />
                 {item}
               </span>
             ))}
