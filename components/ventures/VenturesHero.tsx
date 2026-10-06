@@ -13,7 +13,7 @@ export function VenturesHero({ copy }: VenturesHeroProps) {
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[62vh] max-w-5xl items-center px-6 pb-14 pt-28 md:pb-18 md:pt-32">
+      <div className="relative z-10 mx-auto flex min-h-[62vh] max-w-5xl items-center px-6 pb-14 pt-28 md:pb-20 md:pt-32">
         <div className="w-full space-y-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-200">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden />
