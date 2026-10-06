@@ -21,6 +21,7 @@ describe('venturesContent', () => {
       expect(venturesContent[locale].hero.primaryCta.length).toBeGreaterThan(0)
       expect(venturesContent[locale].role.cta.length).toBeGreaterThan(0)
       expect(venturesContent[locale].role.ctaSubject.length).toBeGreaterThan(0)
+      expect(venturesContent[locale].role.fitItems).toHaveLength(3)
     }
   })
 

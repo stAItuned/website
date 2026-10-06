@@ -77,17 +77,8 @@ export interface VenturesCopy {
   role: {
     eyebrow: string
     title: string
-    roleName: string
     intro: string
-    notThis: string[]
-    ownershipLead: string
-    ownership: string
-    fitTitle: string
     fitItems: string[]
-    notFitTitle: string
-    notFitItems: string[]
-    closingTitle: string
-    closingBody: string
     cta: string
     ctaSubject: string
   }
@@ -225,34 +216,14 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
     },
     role: {
       eyebrow: 'FOUNDING GTM / VENTURE BUILDER',
-      title: 'Own go-to-market from zero.',
-      roleName: 'Founding GTM / Venture Builder',
+      title: 'Take our products to market.',
       intro:
-        'Work across the portfolio. Find demand, get first customers and help decide what to push or stop.',
-      notThis: [
-        'No mature funnel.',
-        'No sales team to manage.',
-        'No finished product to simply sell.',
-      ],
-      ownershipLead: 'You own',
-      ownership:
-        'customer discovery, outbound, sales experiments and market signal.',
-      fitTitle: 'Good fit if you…',
+        'Talk to customers, sell, test channels and help us decide what to push.',
       fitItems: [
-        'Have taken something from 0 to first customers.',
-        'Talk to customers before building funnels.',
-        'Can think strategically and still do the outreach yourself.',
-        'Can kill a weak idea.',
+        'You’ve found first customers before.',
+        'You do the outreach yourself.',
+        'You stop what isn’t working.',
       ],
-      notFitTitle: 'Not a fit if you…',
-      notFitItems: [
-        'Want to manage a team from day one.',
-        'Need product-market fit before you start selling.',
-        'Default to paid ads before talking to customers.',
-      ],
-      closingTitle: 'Build the GTM side with us.',
-      closingBody:
-        "If you've sold something before the playbook existed, let's talk.",
       cta: "Let's talk",
       ctaSubject: 'Founding GTM / Venture Builder — stAI tuned Ventures',
     },
@@ -388,34 +359,14 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
     },
     role: {
       eyebrow: 'FOUNDING GTM / VENTURE BUILDER',
-      title: 'Prendi in mano il go-to-market da zero.',
-      roleName: 'Founding GTM / Venture Builder',
+      title: 'Porta i prodotti sul mercato.',
       intro:
-        'Lavori sul portfolio, cerchi domanda, trovi i primi clienti e ci aiuti a decidere cosa spingere e cosa fermare.',
-      notThis: [
-        'Nessun funnel già pronto.',
-        'Nessun team sales da gestire.',
-        'Nessun prodotto finito da vendere e basta.',
-      ],
-      ownershipLead: 'Ti occupi di',
-      ownership:
-        'customer discovery, outbound, esperimenti di vendita e segnali di mercato.',
-      fitTitle: 'Fa per te se…',
+        'Parla con clienti, vendi, testa canali. Ci aiuti a capire cosa spingere.',
       fitItems: [
-        'Hai portato qualcosa da 0 ai primi clienti.',
-        'Parli con i clienti prima di costruire funnel.',
-        'Sai pensare in grande e fare outreach in prima persona.',
-        'Sai fermare un’idea debole.',
+        'Hai già trovato i primi clienti.',
+        'Fai outreach in prima persona.',
+        'Sai fermare ciò che non funziona.',
       ],
-      notFitTitle: 'Non fa per te se…',
-      notFitItems: [
-        'Vuoi gestire un team dal giorno uno.',
-        'Hai bisogno del PMF prima di vendere.',
-        'Parti dalle ads prima di parlare con i clienti.',
-      ],
-      closingTitle: 'Costruiamo insieme il go-to-market.',
-      closingBody:
-        'Se hai già venduto qualcosa prima che esistesse un playbook, parliamone.',
       cta: 'Parliamone',
       ctaSubject: 'Founding GTM / Venture Builder — stAI tuned Ventures',
     },
