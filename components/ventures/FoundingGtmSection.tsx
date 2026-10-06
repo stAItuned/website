@@ -289,11 +289,7 @@ export function FoundingGtmSection({ bridge, role, locale }: FoundingGtmSectionP
           </article>
         </div>
 
-        <p className="mx-auto mt-6 max-w-3xl text-center text-base font-bold text-slate-900 dark:text-white">
-          {bridge.connector}
-        </p>
-
-        <div className="mx-auto mt-10 max-w-4xl rounded-2xl border border-slate-800 bg-slate-900 px-6 py-8 text-white shadow-lg sm:px-8 md:py-9">
+        <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-800 bg-slate-900 px-6 py-8 text-white shadow-lg sm:px-8 md:py-9">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-bold uppercase tracking-wider text-amber-400">
               {role.eyebrow}
@@ -301,6 +297,9 @@ export function FoundingGtmSection({ bridge, role, locale }: FoundingGtmSectionP
             <h2 className="mt-3 text-2xl font-bold md:text-3xl">{role.title}</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-300 md:text-base">
               {role.intro}
+            </p>
+            <p className="mt-3 text-xs font-semibold text-amber-300">
+              {role.setup}
             </p>
           </div>
 
