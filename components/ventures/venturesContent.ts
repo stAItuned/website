@@ -81,6 +81,31 @@ export interface VenturesCopy {
     fitItems: string[]
     cta: string
     ctaSubject: string
+    form: {
+      title: string
+      subtitle: string
+      name: string
+      email: string
+      profile: string
+      profilePlaceholder: string
+      experience: string
+      experiencePlaceholder: string
+      privacyPrefix: string
+      privacyPolicy: string
+      submit: string
+      sending: string
+      successTitle: string
+      successBody: string
+      close: string
+      errors: {
+        nameRequired: string
+        emailRequired: string
+        invalidEmail: string
+        experienceRequired: string
+        privacyRequired: string
+        submitFailed: string
+      }
+    }
   }
 }
 
@@ -226,6 +251,31 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
       ],
       cta: "Let's talk",
       ctaSubject: 'Founding GTM / Venture Builder — stAI tuned Ventures',
+      form: {
+        title: "Let's talk",
+        subtitle: 'A few lines are enough. No CV required.',
+        name: 'Name',
+        email: 'Email',
+        profile: 'LinkedIn or portfolio',
+        profilePlaceholder: 'https://...',
+        experience: 'What have you taken from 0 to first customers?',
+        experiencePlaceholder: 'Two or three lines are enough.',
+        privacyPrefix: 'I have read the',
+        privacyPolicy: 'Privacy Policy',
+        submit: 'Send',
+        sending: 'Sending…',
+        successTitle: 'Got it.',
+        successBody: "Thanks. We'll get back to you if there’s a fit.",
+        close: 'Close',
+        errors: {
+          nameRequired: 'Enter your name.',
+          emailRequired: 'Enter your email.',
+          invalidEmail: 'Enter a valid email.',
+          experienceRequired: 'Tell us briefly what you have taken from 0 to first customers.',
+          privacyRequired: 'Please accept the Privacy Policy.',
+          submitFailed: 'Something went wrong. Please try again.',
+        },
+      },
     },
   },
   it: {
@@ -369,6 +419,31 @@ export const venturesContent: Record<LearnLocale, VenturesCopy> = {
       ],
       cta: 'Parliamone',
       ctaSubject: 'Founding GTM / Venture Builder — stAI tuned Ventures',
+      form: {
+        title: 'Parliamone',
+        subtitle: 'Bastano poche righe. Nessun CV obbligatorio.',
+        name: 'Nome',
+        email: 'Email',
+        profile: 'LinkedIn o portfolio',
+        profilePlaceholder: 'https://...',
+        experience: 'Cosa hai già portato da 0 ai primi clienti?',
+        experiencePlaceholder: 'Bastano due o tre righe.',
+        privacyPrefix: 'Ho letto la',
+        privacyPolicy: 'Privacy Policy',
+        submit: 'Invia',
+        sending: 'Invio…',
+        successTitle: 'Ricevuto.',
+        successBody: 'Grazie. Ti ricontattiamo se vediamo un buon fit.',
+        close: 'Chiudi',
+        errors: {
+          nameRequired: 'Inserisci il nome.',
+          emailRequired: 'Inserisci la tua email.',
+          invalidEmail: 'Inserisci una email valida.',
+          experienceRequired: 'Raccontaci brevemente cosa hai già portato da 0 ai primi clienti.',
+          privacyRequired: 'Accetta la Privacy Policy.',
+          submitFailed: 'Qualcosa non ha funzionato. Riprova.',
+        },
+      },
     },
   },
 }

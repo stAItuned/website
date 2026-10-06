@@ -22,6 +22,9 @@ describe('venturesContent', () => {
       expect(venturesContent[locale].role.cta.length).toBeGreaterThan(0)
       expect(venturesContent[locale].role.ctaSubject.length).toBeGreaterThan(0)
       expect(venturesContent[locale].role.fitItems).toHaveLength(3)
+      expect(venturesContent[locale].role.form.title.length).toBeGreaterThan(0)
+      expect(venturesContent[locale].role.form.experience.length).toBeGreaterThan(0)
+      expect(venturesContent[locale].role.form.privacyPolicy.length).toBeGreaterThan(0)
     }
   })
 

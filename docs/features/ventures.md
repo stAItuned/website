@@ -93,7 +93,16 @@ The sitemap must include `/ventures` and derive its `lastmod` from the route and
 
 ## Privacy / GDPR
 
-No new first-party data collection, storage, tracking event or third-party vendor is introduced. The only conversion action is a `mailto:` link. Existing global analytics and cookie-consent behavior remain unchanged.
+The Founding GTM CTA opens a first-party interest form. It collects only name, email, an optional LinkedIn/portfolio URL, a short zero-to-first-customers example and explicit privacy acceptance.
+
+- Endpoint: `POST /api/ventures/gtm-interest`.
+- Storage: existing `contact_requests` Firestore dataset with `requestType=ventures_founding_gtm`.
+- Retention: 12 months via the existing `contact_requests` retention policy.
+- Legal basis: pre-contract steps for evaluating and responding to a collaboration request.
+- Marketing: no marketing consent is collected and the submission must not be reused for unrelated marketing.
+- Operational notifications remain metadata-only; full form content stays in Firestore.
+- Honeypot protection is enabled.
+- The form links directly to `/privacy`.
 
 ## AI Act
 
