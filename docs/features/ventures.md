@@ -103,6 +103,7 @@ The Founding GTM CTA opens a first-party interest form. It collects only name, e
 - Operational notifications remain metadata-only; full form content stays in Firestore.
 - Honeypot protection is enabled.
 - The form links directly to `/privacy`.
+- The public Privacy Policy explicitly documents the Founding GTM flow, its purpose, legal basis, 12-month retention and no-marketing rule.
 
 ## AI Act
 

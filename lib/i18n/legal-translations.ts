@@ -210,7 +210,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             badge: 'stAItuned',
             intro: 'Tutte le interazioni con il sito stAItuned sono gestite con rispetto per la tua riservatezza. Questa pagina spiega come trattiamo i dati raccolti dai visitatori del blog, dalle aziende interessate ai nostri servizi AI, dalle persone che prenotano una call e da chi partecipa ai nostri percorsi e strumenti.',
             controller: 'Il titolare del trattamento è Daniele Moltisanti. Email di contatto: info@staituned.com.',
-            lastUpdate: 'Ultimo aggiornamento: 23 marzo 2026',
+            lastUpdate: 'Ultimo aggiornamento: 6 ottobre 2026',
             audience: {
                 title: 'A chi è rivolta questa informativa',
                 intro: 'Per chiarezza, la rendiamo disponibile a quattro gruppi principali:',
@@ -253,6 +253,10 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     {
                         title: 'Candidature per collaborazioni',
                         content: 'Raccogliamo nome, email, ruolo, portfolio/LinkedIn e note per valutare la candidatura e organizzare l\'eventuale collaborazione.'
+                    },
+                    {
+                        title: 'Founding GTM / Ventures',
+                        content: 'Nel form “Parliamone” della pagina Ventures raccogliamo nome, email, eventuale link LinkedIn/portfolio e una breve descrizione dell\'esperienza da 0 ai primi clienti. Usiamo questi dati solo per valutare una possibile collaborazione Founding GTM / Venture Builder e ricontattarti sulla richiesta inviata. Il trattamento si basa su misure precontrattuali richieste dall\'interessato. I dati sono conservati per un massimo di 12 mesi e non vengono usati per marketing non collegato senza un consenso separato.'
                     },
                     {
                         title: 'Dati dei Contributor (Programma Editoriale)',
@@ -475,7 +479,7 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
             badge: 'stAItuned',
             intro: 'All interactions with the stAItuned site are managed with respect for your privacy. This page explains how we process data collected from blog visitors, businesses interested in our AI services, people booking calls, and users participating in our products and service flows.',
             controller: 'The data controller is Daniele Moltisanti. Contact email: info@staituned.com.',
-            lastUpdate: 'Last update: March 23, 2026',
+            lastUpdate: 'Last update: October 6, 2026',
             audience: {
                 title: 'Who this policy is for',
                 intro: 'For clarity, we make it available to four main groups:',
@@ -518,6 +522,10 @@ export const legalTranslations: Record<'en' | 'it', LegalTranslations> = {
                     {
                         title: 'Collaboration Applications',
                         content: 'We collect name, email, role, portfolio/LinkedIn, and notes to evaluate applications and organize collaboration.'
+                    },
+                    {
+                        title: 'Founding GTM / Ventures',
+                        content: 'In the “Let\'s talk” form on the Ventures page, we collect name, email, an optional LinkedIn/portfolio link, and a short description of your zero-to-first-customers experience. We use this data only to evaluate a possible Founding GTM / Venture Builder collaboration and to respond to your request. Processing is based on pre-contractual steps requested by you. Data is retained for up to 12 months and is not used for unrelated marketing without separate consent.'
                     },
                     {
                         title: 'Contributor Data (Editorial Program)',
